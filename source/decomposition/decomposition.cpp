@@ -6,5 +6,7 @@ McCAD::Decomp::Decomposition::Decomposition(
     : raw{raw} {
     }
 
-void McCAD::Decomp::Decomposition::run() {}
+void McCAD::Decomp::Decomposition::run() {
+  std::cout << "testing linking of libraries using cmake" << std::endl;
+}
 

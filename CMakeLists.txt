@@ -9,6 +9,8 @@ project(McCAD LANGUAGES CXX)
 # Set version number
 set (McCAD_VERSION_MAJOR 1)
 set (McCAD_VERSION_MINOR 0)
+set (McCAD_VERSION_RELEASE 0)
+
 # configure a header file to pass some of the CMake settings
 # to the source code
 configure_file (
@@ -24,21 +26,30 @@ add_executable(${PROJECT_NAME} "main.cpp")
 target_include_directories(McCAD PUBLIC "${PROJECT_BINARY_DIR}")
 
 # Optional SolidsCollection library
-option (USE_SolidsCollection "Use provided SolidsCollection implementation" ON)
-if (USE_SolidsCollection)
+option (SolidsCollection "Use provided SolidsCollection implementation" ON)
+if (SolidsCollection)
   include_directories ("${PROJECT_SOURCE_DIR}/source/universal")
   add_subdirectory (source/universal)
   set (EXTRA_LIBS ${EXTRA_LIBS} SolidsCollection)
-endif (USE_SolidsCollection)
+endif (SolidsCollection)
 target_link_libraries(McCAD ${EXTRA_LIBS})
 
-# Optional Decomposition library
-option (USE_Decomposition "Use provided Decomposition implementation" ON)
-if (USE_Decomposition)
-  include_directories ("${PROJECT_SOURCE_DIR}/source/decomposition")
-  add_subdirectory (source/decomposition)
-  set (EXTRA_LIBS ${EXTRA_LIBS} Decomposition)
-endif (USE_Decomposition)
+# Decomposition library
+include_directories ("${PROJECT_SOURCE_DIR}/source/decomposition")
+add_subdirectory (source/decomposition)
+set (EXTRA_LIBS ${EXTRA_LIBS} Decomposition)
+target_link_libraries(McCAD ${EXTRA_LIBS})
+
+# Void Generation library
+include_directories ("${PROJECT_SOURCE_DIR}/source/void")
+add_subdirectory (source/void)
+set (EXTRA_LIBS ${EXTRA_LIBS} Void)
+target_link_libraries(McCAD ${EXTRA_LIBS})
+
+# Materials library
+include_directories ("${PROJECT_SOURCE_DIR}/source/materials")
+add_subdirectory (source/materials)
+set (EXTRA_LIBS ${EXTRA_LIBS} Materials)
 target_link_libraries(McCAD ${EXTRA_LIBS})
 
 install (TARGETS McCAD DESTINATION ${PROJECT_BINARY_DIR}/bin)

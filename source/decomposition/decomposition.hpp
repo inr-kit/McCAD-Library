@@ -2,6 +2,7 @@
 #define DECOMPOSITION_HPP
 
 #include "solidscollection.hpp"
+#include <iostream>
 
 namespace McCAD { namespace Decomp {
 
