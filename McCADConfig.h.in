@@ -1,0 +1,5 @@
+// the configured options and settings for McCAD
+#define McCAD_VERSION_MAJOR @McCAD_VERSION_MAJOR@
+#define McCAD_VERSION_MINOR @McCAD_VERSION_MINOR@
+#cmakedefine USE_SolidsCollection
+#cmakedefine USE_Decomposition
