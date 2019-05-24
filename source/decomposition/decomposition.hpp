@@ -1,8 +1,11 @@
 #ifndef DECOMPOSITION_HPP
 #define DECOMPOSITION_HPP
 
-#include "solidscollection.hpp"
+// C++ includes
 #include <iostream>
+
+// McCAD includes
+#include "solidscollection.hpp"
 
 namespace McCAD { namespace Decomp {
 

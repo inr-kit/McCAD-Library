@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.5.1 FATAL_ERROR)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -25,13 +25,10 @@ add_executable(${PROJECT_NAME} "main.cpp")
 # so that we will find McCADConfig.h
 target_include_directories(McCAD PUBLIC "${PROJECT_BINARY_DIR}")
 
-# Optional SolidsCollection library
-option (SolidsCollection "Use provided SolidsCollection implementation" ON)
-if (SolidsCollection)
-  include_directories ("${PROJECT_SOURCE_DIR}/source/universal")
-  add_subdirectory (source/universal)
-  set (EXTRA_LIBS ${EXTRA_LIBS} SolidsCollection)
-endif (SolidsCollection)
+# SolidsCollection library
+include_directories ("${PROJECT_SOURCE_DIR}/source/universal")
+add_subdirectory (source/universal)
+set (EXTRA_LIBS ${EXTRA_LIBS} SolidsCollection)
 target_link_libraries(McCAD ${EXTRA_LIBS})
 
 # Decomposition library
@@ -47,9 +44,12 @@ set (EXTRA_LIBS ${EXTRA_LIBS} Void)
 target_link_libraries(McCAD ${EXTRA_LIBS})
 
 # Materials library
-include_directories ("${PROJECT_SOURCE_DIR}/source/materials")
-add_subdirectory (source/materials)
-set (EXTRA_LIBS ${EXTRA_LIBS} Materials)
+option (Materials "Use provided Materials implementation" ON)
+if (Materials)
+  include_directories ("${PROJECT_SOURCE_DIR}/source/materials")
+  add_subdirectory (source/materials)
+  set (EXTRA_LIBS ${EXTRA_LIBS} Materials)
+endif (Materials)
 target_link_libraries(McCAD ${EXTRA_LIBS})
 
 install (TARGETS McCAD DESTINATION ${PROJECT_BINARY_DIR}/bin)

@@ -1,12 +1,12 @@
 #include <iostream>
-#include <stdlib.h>
 #include <string>
 
 #include "McCADConfig.hpp"
 
-#ifdef SolidsCollection
-#include "solidscollection.hpp"
+#ifdef Materials
+#include "materials.hpp"
 #endif
+#include "solidscollection.hpp"
 #include "decomposition.hpp"
 #include "materials.hpp"
 #include "void.hpp"
@@ -17,9 +17,7 @@ int main () {
     std::cout << "McCAD version: " << McCAD_VERSION_MAJOR << \
               "." << McCAD_VERSION_MAJOR << std::endl;
     std::cout << "intinalizing from namespace" << std::endl;
-    #ifdef SolidsCollection
-      McCAD::Universal::SolidsCollection a;
-    #endif
+    McCAD::Universal::SolidsCollection a;
     McCAD::Decomp::Decomposition b;
     McCAD::Decomp::Decomposition c;
     c.run();
