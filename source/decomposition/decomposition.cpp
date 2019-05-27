@@ -1,7 +1,7 @@
 #include "decomposition.hpp"
 
 McCAD::Decomp::Decomposition::Decomposition(
-    const McCAD::Universal::SolidsCollection &raw) 
+    const McCAD::Interface::SolidsCollection &raw) 
     : raw{raw} {
     }
 

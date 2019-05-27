@@ -12,14 +12,14 @@ namespace McCAD { namespace Decomp {
     class Decomposition {
     public:
       Decomposition() = default;
-      Decomposition(const Universal::SolidsCollection& raw);
+      Decomposition(const Interface::SolidsCollection& raw);
 
       void run();
-      const Universal::SolidsCollection& getDecomposed() const;
+      const Interface::SolidsCollection& getDecomposed() const;
 
     private:
-      Universal::SolidsCollection raw;
-      Universal::SolidsCollection decomposed;
+      Interface::SolidsCollection raw;
+      Interface::SolidsCollection decomposed;
 	
     };
 

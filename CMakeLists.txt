@@ -25,9 +25,15 @@ add_executable(${PROJECT_NAME} "main.cpp")
 # so that we will find McCADConfig.h
 target_include_directories(McCAD PUBLIC "${PROJECT_BINARY_DIR}")
 
-# SolidsCollection library
+# Universal library
 include_directories ("${PROJECT_SOURCE_DIR}/source/universal")
 add_subdirectory (source/universal)
+set (EXTRA_LIBS ${EXTRA_LIBS} Universal)
+target_link_libraries(McCAD ${EXTRA_LIBS})
+
+# SolidsCollection library
+include_directories ("${PROJECT_SOURCE_DIR}/source/interface")
+add_subdirectory (source/interface)
 set (EXTRA_LIBS ${EXTRA_LIBS} SolidsCollection)
 target_link_libraries(McCAD ${EXTRA_LIBS})
 
@@ -44,13 +50,13 @@ set (EXTRA_LIBS ${EXTRA_LIBS} Void)
 target_link_libraries(McCAD ${EXTRA_LIBS})
 
 # Materials library
-option (Materials "Use provided Materials implementation" ON)
+option (Materials "Use provided Materials implementation" Off)
 if (Materials)
   include_directories ("${PROJECT_SOURCE_DIR}/source/materials")
   add_subdirectory (source/materials)
   set (EXTRA_LIBS ${EXTRA_LIBS} Materials)
+  target_link_libraries(McCAD ${EXTRA_LIBS})
 endif (Materials)
-target_link_libraries(McCAD ${EXTRA_LIBS})
 
 install (TARGETS McCAD DESTINATION ${PROJECT_BINARY_DIR}/bin)
 install (FILES "${PROJECT_BINARY_DIR}/McCADConfig.hpp" DESTINATION ${PROJECT_BINARY_DIR}/include)

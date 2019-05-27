@@ -1,0 +1,5 @@
+#include "universal.hpp"
+
+std::string McCAD::Universal::SetFileName::Capitalize(const std::string& name) {
+  return toupper(name, std::locale);
+}

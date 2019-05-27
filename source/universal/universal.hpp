@@ -1,15 +1,18 @@
-#ifndef SOLIDSCOLLECTION_HPP
-#define SOLIDSCOLLECTION_HPP
+#ifndef UNIVERSAL_HPP
+#define UNIVERSAL_HPP
+#include <string>
+#include <locale>
 
 // Define a universal namespace within McCAD. This namespace should host all classes that
 // doesn't belong to the other namespaces (Decomp, Void, materials, conversion, etc.). 
 namespace McCAD { namespace Universal {
 
-    class SolidsCollection {
+    class SetFileName {
     public:
-    private:
+      SetFileName() = default;
+      char Capitalize (const std::string& name);
     };
 
 }}
 
-#endif //SOLIDSCOLLECTION_HPP
+#endif //UNIVERSAL_HPP
