@@ -5,7 +5,7 @@
 #include <iostream>
 
 // McCAD includes
-#include "solidscollection.hpp"
+#include "inputdata.hpp"
 
 namespace McCAD { namespace Decomp {
 

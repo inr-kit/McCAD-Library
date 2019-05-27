@@ -7,12 +7,6 @@
 // doesn't belong to the other namespaces (Decomp, Void, materials, conversion, etc.). 
 namespace McCAD { namespace Universal {
 
-    class SetFileName {
-    public:
-      SetFileName() = default;
-      char Capitalize (const std::string& name);
-    };
-
 }}
 
 #endif //UNIVERSAL_HPP

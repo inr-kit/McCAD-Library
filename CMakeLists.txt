@@ -31,10 +31,10 @@ add_subdirectory (source/universal)
 set (EXTRA_LIBS ${EXTRA_LIBS} Universal)
 target_link_libraries(McCAD ${EXTRA_LIBS})
 
-# SolidsCollection library
+# InputData library
 include_directories ("${PROJECT_SOURCE_DIR}/source/interface")
 add_subdirectory (source/interface)
-set (EXTRA_LIBS ${EXTRA_LIBS} SolidsCollection)
+set (EXTRA_LIBS ${EXTRA_LIBS} InputData)
 target_link_libraries(McCAD ${EXTRA_LIBS})
 
 # Decomposition library
