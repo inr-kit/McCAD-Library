@@ -1,0 +1,5 @@
+# This document hosts mappings of old and new McCAD conventions (class, fns, etc.)
+# and where each lives in the new refactored code.
+
+# McCadDecompose.cxx
+  McCadDecompose::SetFileName >> McCAD::Interface::SetFileName
