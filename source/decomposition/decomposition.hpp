@@ -4,22 +4,15 @@
 // C++ includes
 #include <iostream>
 
-// McCAD includes
-#include "inputdata.hpp"
-
 namespace McCAD { namespace Decomp {
 
     class Decomposition {
     public:
       Decomposition() = default;
-      Decomposition(const Interface::SolidsCollection& raw);
 
       void run();
-      const Interface::SolidsCollection& getDecomposed() const;
 
     private:
-      Interface::SolidsCollection raw;
-      Interface::SolidsCollection decomposed;
 	
     };
 

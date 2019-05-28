@@ -31,32 +31,11 @@ add_subdirectory (source/universal)
 set (EXTRA_LIBS ${EXTRA_LIBS} Universal)
 target_link_libraries(McCAD ${EXTRA_LIBS})
 
-# InputData library
-include_directories ("${PROJECT_SOURCE_DIR}/source/interface")
-add_subdirectory (source/interface)
-set (EXTRA_LIBS ${EXTRA_LIBS} InputData)
-target_link_libraries(McCAD ${EXTRA_LIBS})
-
 # Decomposition library
 include_directories ("${PROJECT_SOURCE_DIR}/source/decomposition")
 add_subdirectory (source/decomposition)
 set (EXTRA_LIBS ${EXTRA_LIBS} Decomposition)
 target_link_libraries(McCAD ${EXTRA_LIBS})
-
-# Void Generation library
-include_directories ("${PROJECT_SOURCE_DIR}/source/void")
-add_subdirectory (source/void)
-set (EXTRA_LIBS ${EXTRA_LIBS} Void)
-target_link_libraries(McCAD ${EXTRA_LIBS})
-
-# Materials library
-option (Materials "Use provided Materials implementation" Off)
-if (Materials)
-  include_directories ("${PROJECT_SOURCE_DIR}/source/materials")
-  add_subdirectory (source/materials)
-  set (EXTRA_LIBS ${EXTRA_LIBS} Materials)
-  target_link_libraries(McCAD ${EXTRA_LIBS})
-endif (Materials)
 
 install (TARGETS McCAD DESTINATION ${PROJECT_BINARY_DIR}/bin)
 install (FILES "${PROJECT_BINARY_DIR}/McCADConfig.hpp" DESTINATION ${PROJECT_BINARY_DIR}/include)
