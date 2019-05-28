@@ -10,8 +10,6 @@ namespace McCAD { namespace Decomp {
     public:
       Decomposition() = default;
 
-      void run();
-
     private:
 	
     };
