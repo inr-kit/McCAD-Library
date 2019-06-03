@@ -28,7 +28,7 @@ target_include_directories(McCAD PUBLIC "${PROJECT_BINARY_DIR}")
 # General library
 include_directories ("${PROJECT_SOURCE_DIR}/source/general")
 add_subdirectory (source/general)
-set (EXTRA_LIBS ${EXTRA_LIBS} General)
+set (EXTRA_LIBS ${EXTRA_LIBS} General GeneralDetail)
 target_link_libraries(McCAD ${EXTRA_LIBS})
 
 # Decomposition library

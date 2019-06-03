@@ -4,6 +4,9 @@
 // C++ includes
 #include <iostream>
 
+// McCAD includes
+#include "general.hpp"
+
 namespace McCAD { namespace Decomposition {
 
     class Decomposition {
