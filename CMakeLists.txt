@@ -25,10 +25,10 @@ add_executable(${PROJECT_NAME} "main.cpp")
 # so that we will find McCADConfig.h
 target_include_directories(McCAD PUBLIC "${PROJECT_BINARY_DIR}")
 
-# Universal library
-include_directories ("${PROJECT_SOURCE_DIR}/source/universal")
-add_subdirectory (source/universal)
-set (EXTRA_LIBS ${EXTRA_LIBS} Universal)
+# General library
+include_directories ("${PROJECT_SOURCE_DIR}/source/general")
+add_subdirectory (source/general)
+set (EXTRA_LIBS ${EXTRA_LIBS} General)
 target_link_libraries(McCAD ${EXTRA_LIBS})
 
 # Decomposition library

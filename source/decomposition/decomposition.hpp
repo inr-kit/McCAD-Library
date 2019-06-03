@@ -4,7 +4,7 @@
 // C++ includes
 #include <iostream>
 
-namespace McCAD { namespace Decomp {
+namespace McCAD { namespace Decomposition {
 
     class Decomposition {
     public:

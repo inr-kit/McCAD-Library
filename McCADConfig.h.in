@@ -2,9 +2,5 @@
 #define McCAD_VERSION_MAJOR @McCAD_VERSION_MAJOR@
 #define McCAD_VERSION_MINOR @McCAD_VERSION_MINOR@
 #define McCAD_VERSION_RELEASE @McCAD_VERSION_RELEASE@
-#cmakedefine Universal
+#cmakedefine General
 #cmakedefine Decomposition
-#cmakedefine Void
-#ifdef Materials
-  #cmakedefine Materials
-#endif
