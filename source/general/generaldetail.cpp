@@ -1,6 +1,20 @@
 // McCAD
 #include "generaldetail.hpp"
 
-void McCAD::General::Detail::InputData_Impl::SetFileName(std::string & FileName){ //TCollection_AsciiString & FileName){
-  InputFileName = FileName;
-  };
+McCAD::General::InputData::Impl::Impl(
+        const std::string& fileName)
+    : fileName{fileName}{
+}
+
+void
+McCAD::General::InputData::Impl::setFileName(
+        const std::string& fileName){
+    this->fileName = fileName;
+};
+
+const std::string&
+McCAD::General::InputData::Impl::getFileName() const{
+    return fileName;
+}
+
+

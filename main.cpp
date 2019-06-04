@@ -7,9 +7,13 @@
 #include "decomposition.hpp"
 
 int main () {
-  std::string FileName = "SomeFileName";
-  McCAD::General::InputData InputDD;
-  InputDD.InputD->SetFileName(FileName);
-  std::cout << "Loading file: " << FileName << std::endl;
-  return 0;
+
+    std::string fileName = "SomeFileName";
+    McCAD::General::InputData inputData;
+    inputData.setFileName(fileName);
+    std::cout << "Loading file: "
+            << inputData.getFileName()
+            << std::endl;
+    return 0;
+
 }

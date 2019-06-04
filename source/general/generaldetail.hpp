@@ -3,20 +3,24 @@
 
 // C++
 #include <string>
+#include "general.hpp"
 // McCAD
 
 // OCC imports
 //#include <TCollection_AsciiString.hxx>
 //#include <TopTools_HSequenceOfShape.hxx>
 
-namespace McCAD { namespace General { namespace Detail {
-    class InputData_Impl {
+namespace McCAD::General{
+    class InputData::Impl {
     public:
-      InputData_Impl() = default;
+        Impl() = default;
+        Impl(const std::string& fileName);
+
+        void setFileName(const std::string& fileName); //TCollection_AsciiString & FileName);
+        const std::string& getFileName() const;
     private:
-      std::string InputFileName; //TCollection_AsciiString InputFileName;
-      void SetFileName(std::string & FileName); //TCollection_AsciiString & FileName);
+        std::string fileName; //TCollection_AsciiString InputFileName;
     };
-    }}}
+}
 
 #endif //GENERALDetail_HPP
