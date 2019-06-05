@@ -1,12 +1,11 @@
-#ifndef GENERALDETAIL_HPP
-#define GENERALDETAIL_HPP
+#ifndef INPUTDATAIMPL_HPP
+#define INPUTDATAIMPL_HPP
 
 // C++
 #include <string>
-#include "general.hpp"
 // McCAD
-
-// OCC imports
+#include "inputdata.hpp"
+// OCC
 //#include <TCollection_AsciiString.hxx>
 //#include <TopTools_HSequenceOfShape.hxx>
 
@@ -21,6 +20,6 @@ namespace McCAD::General{
     private:
         std::string fileName; //TCollection_AsciiString InputFileName;
     };
-}
+  }
 
-#endif //GENERALDetail_HPP
+#endif //INPUTDATAIMPL_HPP

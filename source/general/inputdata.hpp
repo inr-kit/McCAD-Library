@@ -1,14 +1,11 @@
-#ifndef GENERAL_HPP
-#define GENERAL_HPP
+#ifndef INPUTDATA_HPP
+#define INPUTDATA_HPP
 
 // C++
 #include <string>
+#include <memory>
 // McCAD
 
-
-// Define a universal namespace within McCAD. This namespace should host
-// all classes that doesn't belong to the other namespaces (Decomp, Void,
-// materials, etc.).
 namespace McCAD::General {
     class InputData {
     public:
@@ -24,6 +21,6 @@ namespace McCAD::General {
         std::unique_ptr<Impl> pImpl;
 
     };
-}
+  }
 
-#endif //GENERAL_HPP
+#endif //INPUTDATA_HPP
