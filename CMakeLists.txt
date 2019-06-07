@@ -24,7 +24,7 @@ add_executable(${PROJECT_NAME} "main.cpp")
 # add the binary tree to the search path for include files
 # so that we will find McCADConfig.h
 target_include_directories(McCAD PUBLIC "${PROJECT_BINARY_DIR}")
-
+include_directories ("/usr/local/include/oce")
 # General library
 include_directories ("${PROJECT_SOURCE_DIR}/source/general")
 add_subdirectory (source/general)
@@ -32,10 +32,10 @@ set (EXTRA_LIBS ${EXTRA_LIBS} InputData InputData_impl)
 target_link_libraries(McCAD ${EXTRA_LIBS})
 
 # Decomposition library
-#include_directories ("${PROJECT_SOURCE_DIR}/source/decomposition")
-#add_subdirectory (source/decomposition)
-#set (EXTRA_LIBS ${EXTRA_LIBS} Decomposition)
-#target_link_libraries(McCAD ${EXTRA_LIBS})
+include_directories ("${PROJECT_SOURCE_DIR}/source/decomposition")
+add_subdirectory (source/decomposition)
+set (EXTRA_LIBS ${EXTRA_LIBS} Decomposition)
+target_link_libraries(McCAD ${EXTRA_LIBS})
 
 install (TARGETS McCAD DESTINATION ${PROJECT_BINARY_DIR}/bin)
 install (FILES "${PROJECT_BINARY_DIR}/McCADConfig.hpp" DESTINATION ${PROJECT_BINARY_DIR}/include)

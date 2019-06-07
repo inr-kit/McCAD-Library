@@ -9,17 +9,18 @@
 namespace McCAD::General {
     class InputData {
     public:
-        InputData();
-        ~InputData();
-        InputData(const std::string& fileName);
+      InputData();
+      ~InputData();
+      InputData(const std::string& fileName);
 
-        void setFileName(const std::string& fileName);
-        const std::string& getFileName() const;
+      void setFileName(const std::string& fileName);
+      const std::string& getFileName() const;
+      void getInputSolidsList();
 
     private:
-        class Impl;
-        std::unique_ptr<Impl> pImpl;
-
+      class Impl;
+      std::unique_ptr<Impl> pImpl;
+      
     };
   }
 

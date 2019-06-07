@@ -1,22 +1,20 @@
 #ifndef DECOMPOSITION_HPP
 #define DECOMPOSITION_HPP
 
-// C++ includes
-#include <iostream>
+// C++
+// McCAD
 
-// McCAD includes
-#include "general.hpp"
-
-namespace McCAD { namespace Decomposition {
-
-    class Decomposition {
+namespace McCAD::Decomposition {
+    class Decompose {
     public:
-      Decomposition() = default;
-
+      Decompose();
+      ~Decompose();
+      void perform();
+      
     private:
-	
+      int solidNumber = 0;
+      class Impl;
+      std::unique_ptr<Impl> pImpl;
     };
-
-}}
-
+}
 #endif //DECOMPOSITION_HPP
