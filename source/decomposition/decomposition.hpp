@@ -10,9 +10,9 @@ namespace McCAD::Decomposition {
       Decompose();
       ~Decompose();
       void perform();
+      int solidNumber = 0;
       
     private:
-      int solidNumber = 0;
       class Impl;
       std::unique_ptr<Impl> pImpl;
     };

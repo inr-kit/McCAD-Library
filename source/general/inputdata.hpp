@@ -15,11 +15,14 @@ namespace McCAD::General {
 
       void setFileName(const std::string& fileName);
       const std::string& getFileName() const;
-      void getInputSolidsList();
+      void getInputSolidsList() const;
 
     private:
       class Impl;
       std::unique_ptr<Impl> pImpl;
+
+    public:
+      McCAD::General::InputData::Impl* accessImpl();
       
     };
   }

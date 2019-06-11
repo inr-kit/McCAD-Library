@@ -19,9 +19,10 @@ namespace McCAD::General{
       const std::string& getFileName() const;
       void getInputSolidsList() const;
       
-    private:
       std::string fileName;
-      Handle_TopTools_HSequenceOfShape inputSolidsList;
+      const Handle_TopTools_HSequenceOfShape inputSolidsList;
+
+    private:
     };
   }
 

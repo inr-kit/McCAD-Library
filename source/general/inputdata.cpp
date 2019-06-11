@@ -21,6 +21,10 @@ const std::string& McCAD::General::InputData::getFileName() const{
   return pImpl->getFileName();
 }
 
-void McCAD::General::InputData::getInputSolidsList(){
+void McCAD::General::InputData::getInputSolidsList() const{
   pImpl->getInputSolidsList();
+}
+
+McCAD::General::InputData::Impl* McCAD::General::InputData::accessImpl() {
+  return pImpl.get();
 }

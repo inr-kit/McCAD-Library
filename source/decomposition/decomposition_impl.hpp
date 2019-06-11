@@ -14,6 +14,7 @@ namespace McCAD::Decomposition{
   public:
     Impl() = default;
     void getInputSolidsList();
+    Handle_TopTools_HSequenceOfShape inputSolidsList;
 
   private:
 
