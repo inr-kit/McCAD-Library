@@ -22,7 +22,8 @@ namespace McCAD::General {
       std::unique_ptr<Impl> pImpl;
 
     public:
-      McCAD::General::InputData::Impl* accessImpl();
+      // Allow access to Impl class from other classes.
+      const McCAD::General::InputData::Impl* accessImpl() const;
       
     };
   }

@@ -17,5 +17,5 @@ const std::string& McCAD::General::InputData::Impl::getFileName() const{
 
 void McCAD::General::InputData::Impl::getInputSolidsList() const{
   // Populate the inpuSolidsList
-  // this->inputSolidsList = list obtained from the input solid
+  // this->inputSolidsList = list of solids from the STEP file
 }

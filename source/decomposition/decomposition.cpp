@@ -1,5 +1,4 @@
 // McCAD
-#include "inputdata.hpp"
 #include "decomposition.hpp"
 #include "decomposition_impl.hpp"
 
@@ -10,7 +9,14 @@ McCAD::Decomposition::Decompose::Decompose()
 McCAD::Decomposition::Decompose::~Decompose(){
 }
 
+const McCAD::Decomposition::Decompose::Impl*
+McCAD::Decomposition::Decompose::accessImpl() const{
+  return pImpl.get();
+}
+
 void McCAD::Decomposition::Decompose::perform(){
-  // Populate the input solids list.
+  // Get the input solids list from the loaded STEP file.
   pImpl->getInputSolidsList();
+  // Split the solids in the list if it is a compound solid.
+  pImpl->splitInputSolids();
 }

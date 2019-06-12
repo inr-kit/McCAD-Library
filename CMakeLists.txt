@@ -25,6 +25,7 @@ add_executable(${PROJECT_NAME} "main.cpp")
 # so that we will find McCADConfig.h
 target_include_directories(McCAD PUBLIC "${PROJECT_BINARY_DIR}")
 include_directories ("/usr/local/include/oce")
+
 # General library
 include_directories ("${PROJECT_SOURCE_DIR}/source/general")
 add_subdirectory (source/general)
@@ -35,6 +36,12 @@ target_link_libraries(McCAD ${EXTRA_LIBS})
 include_directories ("${PROJECT_SOURCE_DIR}/source/decomposition")
 add_subdirectory (source/decomposition)
 set (EXTRA_LIBS ${EXTRA_LIBS} Decomposition)
+target_link_libraries(McCAD ${EXTRA_LIBS})
+
+# Tools library
+include_directories ("${PROJECT_SOURCE_DIR}/tools")
+add_subdirectory (tools)
+set (EXTRA_LIBS ${EXTRA_LIBS} Tools Tools_impl)
 target_link_libraries(McCAD ${EXTRA_LIBS})
 
 install (TARGETS McCAD DESTINATION ${PROJECT_BINARY_DIR}/bin)

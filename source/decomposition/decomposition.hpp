@@ -2,6 +2,7 @@
 #define DECOMPOSITION_HPP
 
 // C++
+#include "inputdata.hpp"
 // McCAD
 
 namespace McCAD::Decomposition {
@@ -10,11 +11,15 @@ namespace McCAD::Decomposition {
       Decompose();
       ~Decompose();
       void perform();
-      int solidNumber = 0;
-      
+
     private:
       class Impl;
       std::unique_ptr<Impl> pImpl;
+
+    public:
+      // Allow access to Impl class from other classes.
+      const McCAD::Decomposition::Decompose::Impl* accessImpl() const;
+      
     };
 }
 #endif //DECOMPOSITION_HPP
