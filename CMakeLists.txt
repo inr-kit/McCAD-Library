@@ -32,17 +32,17 @@ add_subdirectory (source/general)
 set (EXTRA_LIBS ${EXTRA_LIBS} InputData InputData_impl)
 target_link_libraries(McCAD ${EXTRA_LIBS})
 
-# Decomposition library
-include_directories ("${PROJECT_SOURCE_DIR}/source/decomposition")
-add_subdirectory (source/decomposition)
-set (EXTRA_LIBS ${EXTRA_LIBS} Decomposition)
-target_link_libraries(McCAD ${EXTRA_LIBS})
-
 # Tools library
 include_directories ("${PROJECT_SOURCE_DIR}/tools")
 add_subdirectory (tools)
 set (EXTRA_LIBS ${EXTRA_LIBS} Tools Tools_impl)
 target_link_libraries(McCAD ${EXTRA_LIBS})
 
+# Decomposition library
+include_directories ("${PROJECT_SOURCE_DIR}/source/decomposition")
+add_subdirectory (source/decomposition)
+set (EXTRA_LIBS ${EXTRA_LIBS} Decomposition Decomposition_impl)
+target_link_libraries(McCAD ${EXTRA_LIBS})
+  
 install (TARGETS McCAD DESTINATION ${PROJECT_BINARY_DIR}/bin)
 install (FILES "${PROJECT_BINARY_DIR}/McCADConfig.hpp" DESTINATION ${PROJECT_BINARY_DIR}/include)

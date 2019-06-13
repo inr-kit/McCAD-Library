@@ -1,7 +1,7 @@
 // McCAD
 #include "tools_impl.hpp"
 
-const Handle_TopTools_HSequenceOfShape&
+const Handle_TopTools_HSequenceOfShape
 SplitCompSolids(Handle_TopTools_HSequenceOfShape& solidsList)
 {
   // Used to tranform the pointer from one on the heap to a normal pointer

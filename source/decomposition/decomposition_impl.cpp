@@ -7,11 +7,10 @@
 //}
 
 void McCAD::Decomposition::Decompose::Impl::getInputSolidsList(){
-  // Get the inpul solids list from the loaded STEP file.
-  McCAD::General::InputData getInputSolidsList;
-  getInputSolidsList.getInputSolidsList();
-  // Retrieve the list from the InputData class.
+  // Get the input solids list from the loaded STEP file.
   McCAD::General::InputData inputData;
+  inputData.getInputSolidsList();
+  // Retrieve the list from the InputData class.
   inputSolidsList = inputData.accessImpl()->inputSolidsList;
 }
 

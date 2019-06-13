@@ -2,7 +2,7 @@
 #define DECOMPOSITION_HPP
 
 // C++
-#include "inputdata.hpp"
+#include <memory>
 // McCAD
 
 namespace McCAD::Decomposition {
