@@ -26,3 +26,25 @@ SplitCompSolids(Handle_TopTools_HSequenceOfShape& solidsList)
     }
   return splitCompSolidsList;
 }
+
+const TopoDS_Shape& removeSmallFaces(TopoDS_Shape& solidShape) const
+{
+  Handle(ShapeFix_FixSmallFace) smallFaceFix = new ShapeFix_FixSmallFace();
+  smallFaceFix->Init(solidShape);
+  smallFaceFix->SetPrecision(0.001);
+  smallFaceFix->SetMaxTolerance(0.001);
+  smallFaceFix->Perform();
+  TopoDS_Shape fixedSolidShape = smallFaceFix->FixShape();
+  //theShape.Free();
+  return fixedSolidShape;
+}
+
+const TopoDS_Solid& repairSolid(TopoDS_Solid& solid) const
+{
+  Handle(ShapeFix_Solid) solidFix = new ShapeFix_Solid;
+  solidFix->Init(solid);
+  solidFix->Perform();
+  //theSolid.Free();
+  TopoDS_Solid fixedSolid = TopoDS::Solid(solidFix->Solid());
+  return fixedSolid;
+}

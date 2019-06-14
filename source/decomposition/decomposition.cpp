@@ -14,9 +14,13 @@ McCAD::Decomposition::Decompose::accessImpl() const{
   return pImpl.get();
 }
 
-void McCAD::Decomposition::Decompose::perform(){
+void McCAD::Decomposition::Decompose::predecompose(){
   // Get the input solids list from the loaded STEP file.
   pImpl->getInputSolidsList();
   // Split the solids in the list if it is a compound solid.
   pImpl->splitInputSolids();
+}
+
+void McCAD::Decomposition::Decompose::perform(){
+  pImpl->decompose();
 }

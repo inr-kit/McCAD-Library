@@ -12,13 +12,17 @@
 #include "TopoDS_Solid.hxx"
 #include "TCollection_AsciiString.hxx"
 #include "TopoDS_Compound.hxx"
+#include "ShapeFix_FixSmallFace.hxx"
+#include "ShapeFix_Solid.hxx"
 
 namespace McCAD::Tools{
   class Preprocessor::Impl {
   public:
     Impl() = default;
 
-    const Handle_TopTools_HSequenceOfShape SplitCompSolids(Handle_TopTools_HSequenceOfShape& solidsList) const; 
+    const Handle_TopTools_HSequenceOfShape SplitCompSolids(Handle_TopTools_HSequenceOfShape& solidsList) const;
+    const TopoDS_Shape& removeSmallFaces(TopoDS_Shape& solidShape) const;
+    const TopoDS_Solid& repairSolid(TopoDS_Solid& solid) const;
 
   private:
 

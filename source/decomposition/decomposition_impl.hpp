@@ -17,6 +17,7 @@ namespace McCAD::Decomposition{
 
     void getInputSolidsList();
     void splitInputSolids();
+    void decompose();
 
   private:
 

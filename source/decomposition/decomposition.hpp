@@ -10,6 +10,7 @@ namespace McCAD::Decomposition {
     public:
       Decompose();
       ~Decompose();
+      void predecompose();
       void perform();
 
     private:
