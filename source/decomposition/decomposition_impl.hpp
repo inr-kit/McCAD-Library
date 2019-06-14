@@ -5,7 +5,7 @@
 // McCAD
 #include "decomposition.hpp"
 // OCC
-#include "TopTools_HSequenceOfShape.hxx"
+#include "Handle_TopTools_HSequenceOfShape.hxx"
 
 namespace McCAD::Decomposition{
   class Decompose::Impl {

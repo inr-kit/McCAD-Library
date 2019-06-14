@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Set project name
 project(McCAD LANGUAGES CXX)
+#option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 # Set version number
 set (McCAD_VERSION_MAJOR 1)

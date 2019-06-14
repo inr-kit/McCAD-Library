@@ -1,7 +1,7 @@
 // McCAD
 #include "inputdata_impl.hpp"
-#include "decomposition_impl.hpp"
 #include "tools_impl.hpp"
+#include "decomposition_impl.hpp"
 
 //McCAD::Decomposition::Decompose::Impl::Impl(){
 //}
@@ -17,7 +17,5 @@ void McCAD::Decomposition::Decompose::Impl::getInputSolidsList(){
 void McCAD::Decomposition::Decompose::Impl::splitInputSolids(){  
   // Split the compound solids in the list.
   McCAD::Tools::Preprocessor preproc;
-  splitInputSolidsList = preproc.accessImpl()->SplitCompSolids(inputSolidsList)
+  splitInputSolidsList = preproc.accessImpl()->SplitCompSolids(inputSolidsList);
 }
-
-

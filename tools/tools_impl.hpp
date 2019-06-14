@@ -5,6 +5,7 @@
 // McCAD
 #include "tools.hpp"
 // OCC
+#include "Handle_TopTools_HSequenceOfShape.hxx"
 #include "TopTools_HSequenceOfShape.hxx"
 #include "TopExp_Explorer.hxx"
 #include "TopoDS.hxx"
@@ -17,8 +18,7 @@ namespace McCAD::Tools{
   public:
     Impl() = default;
 
-    Handle_TopTools_HSequenceOfShape splitCompSolidsList;
-    const Handle_TopTools_HSequenceOfShape SplitCompSolids(Handle_TopTools_HSequenceOfShape& solidsList); 
+    const Handle_TopTools_HSequenceOfShape SplitCompSolids(Handle_TopTools_HSequenceOfShape& solidsList) const; 
 
   private:
 

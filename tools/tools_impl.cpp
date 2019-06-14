@@ -5,6 +5,7 @@ const Handle_TopTools_HSequenceOfShape
 SplitCompSolids(Handle_TopTools_HSequenceOfShape& solidsList)
 {
   // Used to tranform the pointer from one on the heap to a normal pointer
+  Handle_TopTools_HSequenceOfShape splitCompSolidsList;
   splitCompSolidsList = new TopTools_HSequenceOfShape;
   for (int i=1; i <= solidsList->Length(); i++)
     {

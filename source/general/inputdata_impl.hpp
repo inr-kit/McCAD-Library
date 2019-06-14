@@ -2,10 +2,10 @@
 #define INPUTDATAIMPL_HPP
 
 // C++
-#include <string>
 // McCAD
 #include "inputdata.hpp"
 // OCC
+#include "Handle_TopTools_HSequenceOfShape.hxx"
 #include "TCollection_AsciiString.hxx"
 #include "TopTools_HSequenceOfShape.hxx"
 
@@ -20,7 +20,7 @@ namespace McCAD::General{
       void getInputSolidsList() const;
       
       std::string fileName;
-      const Handle_TopTools_HSequenceOfShape inputSolidsList;
+      static Handle_TopTools_HSequenceOfShape inputSolidsList;
 
     private:
     };
