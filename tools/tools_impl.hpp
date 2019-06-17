@@ -19,8 +19,10 @@ namespace McCAD::Tools{
   class Preprocessor::Impl {
   public:
     Impl() = default;
-
-    const Handle_TopTools_HSequenceOfShape SplitCompSolids(Handle_TopTools_HSequenceOfShape& solidsList) const;
+    static Handle_TopTools_HSequenceOfShape splitCompSolidsList;
+    static TopoDS_Shape fixedSolidShape;
+    static TopoDS_Solid fixedSolid;
+    void splitCompSolids(Handle_TopTools_HSequenceOfShape& solidsList) const;
     const TopoDS_Shape& removeSmallFaces(TopoDS_Shape& solidShape) const;
     const TopoDS_Solid& repairSolid(TopoDS_Solid& solid) const;
 

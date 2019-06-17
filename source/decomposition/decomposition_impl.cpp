@@ -19,23 +19,24 @@ void McCAD::Decomposition::Decompose::Impl::splitInputSolids()
 {  
   // Split the compound solids in the list.
   McCAD::Tools::Preprocessor preproc;
-  splitInputSolidsList = preproc.accessImpl()->SplitCompSolids(inputSolidsList);
+  preproc.accessImpl()->splitCompSolids(inputSolidsList);
+  splitInputSolidsList = preproc.accessImpl()->splitCompSolidsList;
 }
 
 void McCAD::Decomposition::Decompose::Impl::decompose()
 {
-  // Loop ver the solids in the list and perform the decomposition
+  // Loop over the solids in the list and perform the decomposition
   int solidNumber = 0;
-  for(int i = 1; i <= inputSolidsList->Length(); i++)
+  for(int i = 1; i <= splitInputSolidsList->Length(); i++)
     {
       solidNumber++;
       std::cout <<"> Decomposing the "<< solidNumber <<" solid"<< std::endl;
       int level = 0;
       McCAD::Tools::Preprocessor preproc;
-      TopoDS_Shape currentSolidShape = inputSolidsList->Value(i);
+      TopoDS_Shape currentSolidShape = splitInputSolidsList->Value(i);
       /* Repair the geometry of solid */
       TopoDS_Shape newSolidShape = preproc.accessImpl()->removeSmallFaces(currentSolidShape); // Remove the small faces in solid
       TopoDS_Solid tempSolid = TopoDS::Solid(newSolidShape);
-      TopoDS_Solid newSolid = preproc.accessImpl()->repairSolid(tmpSolid);      // Repair the solid
+      TopoDS_Solid newSolid = preproc.accessImpl()->repairSolid(tempSolid);      // Repair the solid
     }
 }
