@@ -12,7 +12,7 @@ void McCAD::Decomposition::Decompose::Impl::getInputSolidsList()
   McCAD::General::InputData inputData;
   inputData.getInputSolidsList();
   // Retrieve the list from the InputData class.
-  inputSolidsList = inputData.accessImpl()->inputSolidsList;
+  this->inputSolidsList = inputData.accessImpl()->inputSolidsList;
 }
 
 void McCAD::Decomposition::Decompose::Impl::splitInputSolids()
@@ -20,20 +20,20 @@ void McCAD::Decomposition::Decompose::Impl::splitInputSolids()
   // Split the compound solids in the list.
   McCAD::Tools::Preprocessor preproc;
   preproc.accessImpl()->splitCompSolids(inputSolidsList);
-  splitInputSolidsList = preproc.accessImpl()->splitCompSolidsList;
+  this->splitInputSolidsList = preproc.accessImpl()->splitCompSolidsList;
 }
 
 void McCAD::Decomposition::Decompose::Impl::decompose()
 {
   // Loop over the solids in the list and perform the decomposition
   int solidNumber = 0;
-  for(int i = 1; i <= splitInputSolidsList->Length(); i++)
+  for(int i = 1; i <= this->splitInputSolidsList->Length(); i++)
     {
       solidNumber++;
       std::cout <<"> Decomposing the "<< solidNumber <<" solid"<< std::endl;
       int level = 0;
       McCAD::Tools::Preprocessor preproc;
-      TopoDS_Shape currentSolidShape = splitInputSolidsList->Value(i);
+      TopoDS_Shape currentSolidShape = this->splitInputSolidsList->Value(i);
       /* Repair the geometry of solid */
       TopoDS_Shape newSolidShape = preproc.accessImpl()->removeSmallFaces(currentSolidShape); // Remove the small faces in solid
       TopoDS_Solid tempSolid = TopoDS::Solid(newSolidShape);
