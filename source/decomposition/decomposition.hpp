@@ -10,8 +10,7 @@ namespace McCAD::Decomposition {
     public:
       Decompose();
       ~Decompose();
-      void predecompose();
-      void perform();
+      void perform(McCAD::General::InputData& inputData);
 
     private:
       class Impl;
@@ -19,7 +18,7 @@ namespace McCAD::Decomposition {
 
     public:
       // Allow access to Impl class from other classes.
-      const McCAD::Decomposition::Decompose::Impl* accessImpl() const;
+      McCAD::Decomposition::Decompose::Impl* accessImpl();
       
     };
 }

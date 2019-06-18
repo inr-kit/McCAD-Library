@@ -9,8 +9,8 @@ McCAD::Tools::Preprocessor::Preprocessor()
 McCAD::Tools::Preprocessor::~Preprocessor(){
 }
 
-const McCAD::Tools::Preprocessor::Impl*
-McCAD::Tools::Preprocessor::accessImpl() const{
+McCAD::Tools::Preprocessor::Impl*
+McCAD::Tools::Preprocessor::accessImpl(){
   return pImpl.get();
 }
 

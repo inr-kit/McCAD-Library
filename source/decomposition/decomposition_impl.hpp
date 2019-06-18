@@ -12,11 +12,8 @@ namespace McCAD::Decomposition{
   public:
     Impl() = default;
 
-    Handle_TopTools_HSequenceOfShape inputSolidsList;
     Handle_TopTools_HSequenceOfShape splitInputSolidsList;
 
-    void getInputSolidsList();
-    void splitInputSolids();
     void decompose();
 
   private:

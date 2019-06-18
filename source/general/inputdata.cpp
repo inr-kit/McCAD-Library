@@ -13,8 +13,8 @@ McCAD::General::InputData::InputData(const std::string& fileName)
 McCAD::General::InputData::~InputData(){
 }
 
-const McCAD::General::InputData::Impl*
-McCAD::General::InputData::accessImpl() const{
+McCAD::General::InputData::Impl*
+McCAD::General::InputData::accessImpl(){
   return pImpl.get();
 }
 

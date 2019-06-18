@@ -9,18 +9,11 @@ McCAD::Decomposition::Decompose::Decompose()
 McCAD::Decomposition::Decompose::~Decompose(){
 }
 
-const McCAD::Decomposition::Decompose::Impl*
-McCAD::Decomposition::Decompose::accessImpl() const{
+McCAD::Decomposition::Decompose::Impl*
+McCAD::Decomposition::Decompose::accessImpl(){
   return pImpl.get();
 }
 
-void McCAD::Decomposition::Decompose::predecompose(){
-  // Get the input solids list from the loaded STEP file.
-  pImpl->getInputSolidsList();
-  // Split the solids in the list if it is a compound solid.
-  pImpl->splitInputSolids();
-}
-
-void McCAD::Decomposition::Decompose::perform(){
-  pImpl->decompose();
+void McCAD::Decomposition::Decompose::perform(McCAD::General::InputData& inputData){
+  pImpl->decompose(inputData.accessImpl()->inputSolidsList);
 }

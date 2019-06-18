@@ -16,11 +16,11 @@ namespace McCAD::General{
       Impl(const std::string& fileName);
 
       std::string fileName;
-      static Handle_TopTools_HSequenceOfShape inputSolidsList;
+      Handle_TopTools_HSequenceOfShape inputSolidsList;
       
       void setFileName(const std::string& fileName);
-      const std::string& getFileName() const;
-      void getInputSolidsList() const;
+      const std::string& getFileName();
+      void getInputSolidsList();
       
     private:
     };

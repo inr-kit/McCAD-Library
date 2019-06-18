@@ -2,7 +2,7 @@
 #include "tools_impl.hpp"
 
 //const Handle_TopTools_HSequenceOfShape&
-void McCAD::Tools::Preprocessor::Impl::splitCompSolids(Handle_TopTools_HSequenceOfShape& solidsList) const
+void McCAD::Tools::Preprocessor::Impl::splitCompSolids(Handle_TopTools_HSequenceOfShape& solidsList)
 {
   // Used to tranform the pointer from one on the heap to a normal pointer
   //Handle_TopTools_HSequenceOfShape splitCompSolidsList;
@@ -28,7 +28,7 @@ void McCAD::Tools::Preprocessor::Impl::splitCompSolids(Handle_TopTools_HSequence
 }
 
 const TopoDS_Shape&
-McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape) const
+McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape)
 {
   Handle(ShapeFix_FixSmallFace) smallFaceFix = new ShapeFix_FixSmallFace();
   smallFaceFix->Init(solidShape);
@@ -41,7 +41,7 @@ McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape) con
 }
 
 const TopoDS_Solid&
-McCAD::Tools::Preprocessor::Impl::repairSolid(TopoDS_Solid& solid) const
+McCAD::Tools::Preprocessor::Impl::repairSolid(TopoDS_Solid& solid)
 {
   Handle(ShapeFix_Solid) solidFix = new ShapeFix_Solid;
   solidFix->Init(solid);

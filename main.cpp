@@ -5,7 +5,7 @@
 #include "McCADConfig.hpp"
 #include "inputdata.hpp"
 //#include "decomposition.hpp"
-
+#include <STEPControl_Reader.hxx>
 int main () {
     std::string fileName;
     std::cout << "Type a file name: " << std::endl;
@@ -13,5 +13,8 @@ int main () {
     //McCAD::General::InputData inputData;
     //inputData.setFileName(fileName);
     //std::cout << "Loading file: " << inputData.getFileName() << std::endl;
+
+    // read the file
+    // McCAD::Decomposition::Decompose::perform(McCAD::Decomposition& inputdata)
     return 0;
 }

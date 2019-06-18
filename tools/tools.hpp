@@ -17,7 +17,7 @@ namespace McCAD::Tools {
 
     public:
       // Allow access to Impl class from other classes.
-      const McCAD::Tools::Preprocessor::Impl* accessImpl() const;
+      McCAD::Tools::Preprocessor::Impl* accessImpl();
       
     };
 }

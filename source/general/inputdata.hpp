@@ -23,7 +23,7 @@ namespace McCAD::General {
 
     public:
       // Allow access to Impl class from other classes.
-      const McCAD::General::InputData::Impl* accessImpl() const;
+      McCAD::General::InputData::Impl* accessImpl();
       
     };
   }

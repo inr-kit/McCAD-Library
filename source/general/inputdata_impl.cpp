@@ -11,11 +11,11 @@ void McCAD::General::InputData::Impl::setFileName(
   this->fileName = fileName;
 }
 
-const std::string& McCAD::General::InputData::Impl::getFileName() const{
+const std::string& McCAD::General::InputData::Impl::getFileName(){
   return fileName;
 }
 
-void McCAD::General::InputData::Impl::getInputSolidsList() const{
+void McCAD::General::InputData::Impl::getInputSolidsList(){
   // Populate the inpuSolidsList
   // this->inputSolidsList = list of solids from the STEP file
 }
