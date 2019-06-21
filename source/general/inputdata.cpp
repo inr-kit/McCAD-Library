@@ -3,29 +3,37 @@
 #include "inputdata_impl.hpp"
 
 McCAD::General::InputData::InputData()
-  : pImpl{std::make_unique<Impl>()}{
+    : pImpl{std::make_unique<Impl>()}{
 }
 
-McCAD::General::InputData::InputData(const std::string& fileName)
-  : pImpl{std::make_unique<Impl>(fileName)}{
+McCAD::General::InputData::InputData(
+        const InputData& that)
+    : pImpl{new Impl{*that.pImpl}}{
+}
+
+McCAD::General::InputData::InputData(
+        InputData&& that)
+    : pImpl{std::move(that.pImpl)}{
 }
 
 McCAD::General::InputData::~InputData(){
 }
 
+McCAD::General::InputData&
+McCAD::General::InputData::operator=(
+        const InputData& that){
+    this->pImpl.reset(new Impl{*that.pImpl});
+    return *this;
+}
+
+McCAD::General::InputData&
+McCAD::General::InputData::operator=(
+        InputData&& that){
+    this->pImpl = std::move(that.pImpl);
+    return *this;
+}
+
 McCAD::General::InputData::Impl*
-McCAD::General::InputData::accessImpl(){
-  return pImpl.get();
-}
-
-void McCAD::General::InputData::setFileName(const std::string& fileName){
-  pImpl->setFileName(fileName);
-}
-
-const std::string& McCAD::General::InputData::getFileName() const{
-  return pImpl->getFileName();
-}
-
-void McCAD::General::InputData::getInputSolidsList() const{
-  pImpl->getInputSolidsList();
+McCAD::General::InputData::accessImpl() const{
+    return pImpl.get();
 }

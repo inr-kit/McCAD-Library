@@ -2,28 +2,21 @@
 #define INPUTDATAIMPL_HPP
 
 // C++
+#include <string>
+// OCC
+#include <TopTools_HSequenceOfShape.hxx>
+#include <Handle_Standard_Transient.hxx>
 // McCAD
 #include "inputdata.hpp"
-// OCC
-#include "Handle_TopTools_HSequenceOfShape.hxx"
-#include "TCollection_AsciiString.hxx"
-#include "TopTools_HSequenceOfShape.hxx"
 
 namespace McCAD::General{
-    class InputData::Impl {
-    public:
-      Impl() = default;
-      Impl(const std::string& fileName);
+  class InputData::Impl{
+  public:
+    Impl() = default;
 
-      std::string fileName;
-      Handle_TopTools_HSequenceOfShape inputSolidsList;
-      
-      void setFileName(const std::string& fileName);
-      const std::string& getFileName();
-      void getInputSolidsList();
-      
-    private:
-    };
-  }
+    Handle_TopTools_HSequenceOfShape inputSolidsList;
+    Handle_TopTools_HSequenceOfShape splitSolidsList;
+  };
+}
 
 #endif //INPUTDATAIMPL_HPP

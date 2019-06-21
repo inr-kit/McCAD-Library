@@ -2,19 +2,26 @@
 #include <iostream>
 #include <string>
 // McCAD
-#include "McCADConfig.hpp"
 #include "inputdata.hpp"
-//#include "decomposition.hpp"
-#include <STEPControl_Reader.hxx>
-int main () {
-    std::string fileName;
-    std::cout << "Type a file name: " << std::endl;
-    getline(std::cin, fileName);
-    //McCAD::General::InputData inputData;
-    //inputData.setFileName(fileName);
-    //std::cout << "Loading file: " << inputData.getFileName() << std::endl;
+#include "stepreader.hpp"
 
-    // read the file
-    // McCAD::Decomposition::Decompose::perform(McCAD::Decomposition& inputdata)
+int main (){
+    std::string fileName;
+    std::cout << "Specify the path to the step file: " << std::endl;
+    getline(std::cin, fileName);
+
+    // Load the input file.
+    std::cout << "**************************************" << std::endl;
+    std::cout << "** Loading the specified STEP file. **" << std::endl;
+    std::cout << "**************************************" << std::endl;
+    McCAD::IO::STEPReader reader{fileName};
+    auto inputData = reader.getInputData();
+
+    // Start decomposition.
+    std::cout << "**************************************" << std::endl;
+    std::cout << "** Starting decomposition. **" << std::endl;
+    std::cout << "**************************************" << std::endl;
+    
+    
     return 0;
 }

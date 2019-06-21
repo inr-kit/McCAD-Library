@@ -4,28 +4,26 @@
 // C++
 #include <string>
 #include <memory>
-// McCAD
 
-namespace McCAD::General {
-    class InputData {
-    public:
-      InputData();
-      ~InputData();
-      InputData(const std::string& fileName);
+namespace McCAD::General{
+  class InputData{
+  private:
+    class Impl;
 
-      void setFileName(const std::string& fileName);
-      const std::string& getFileName() const;
-      void getInputSolidsList() const;
+  public:
+    InputData();
+    InputData(const InputData& that);
+    InputData(InputData&& that);
+    ~InputData();
+    
+    InputData& operator=(const InputData& that);
+    InputData& operator=(InputData&& that);
 
-    private:
-      class Impl;
-      std::unique_ptr<Impl> pImpl;
-
-    public:
-      // Allow access to Impl class from other classes.
-      McCAD::General::InputData::Impl* accessImpl();
-      
-    };
-  }
+    Impl* accessImpl() const;
+    
+  private:
+    std::unique_ptr<Impl> pImpl;
+  };
+}
 
 #endif //INPUTDATA_HPP

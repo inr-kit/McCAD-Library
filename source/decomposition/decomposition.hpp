@@ -7,19 +7,17 @@
 
 namespace McCAD::Decomposition {
     class Decompose {
-    public:
-      Decompose();
-      ~Decompose();
-      void perform(McCAD::General::InputData& inputData);
-
     private:
       class Impl;
-      std::unique_ptr<Impl> pImpl;
-
-    public:
-      // Allow access to Impl class from other classes.
-      McCAD::Decomposition::Decompose::Impl* accessImpl();
       
+    public:
+      Decompose(const auto& inputDataObj);
+      ~Decompose();
+      void perform(McCAD::General::InputData& inputData);
+      Impl* accessImpl() const;
+
+    private:
+      std::unique_ptr<Impl> pImpl;
     };
 }
 #endif //DECOMPOSITION_HPP
