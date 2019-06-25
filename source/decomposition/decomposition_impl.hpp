@@ -2,19 +2,26 @@
 #define DECOMPOSITIONIMPL_HPP
 
 // C++
+#include <list>
 // McCAD
 #include "decomposition.hpp"
 // OCC
 #include "Handle_TopTools_HSequenceOfShape.hxx"
+#include <TopExp_Explorer.hxx>
+#include <TopoDS.hxx>
+#include <TopoDS_Solid.hxx>
+#include <TopoDS_CompSolid.hxx>
+#include <TopoDS_Compound.hxx>
 
 namespace McCAD::Decomposition{
   class Decompose::Impl {
   public:
-    Impl() = default;
+    Impl(const McCAD::General::InputData& inputData);
 
     Handle_TopTools_HSequenceOfShape splitInputSolidsList;
 
-    void decompose();
+    void splitInputSolids(const Handle_TopTools_HSequenceOfShape& inputSolidsList);
+    void perform();
 
   private:
 

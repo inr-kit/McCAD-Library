@@ -15,7 +15,6 @@ namespace McCAD::General{
     Impl() = default;
 
     Handle_TopTools_HSequenceOfShape inputSolidsList;
-    Handle_TopTools_HSequenceOfShape splitSolidsList;
   };
 }
 

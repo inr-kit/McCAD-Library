@@ -4,6 +4,7 @@
 // C++
 #include <memory>
 // McCAD
+#include "inputdata.hpp"
 
 namespace McCAD::Decomposition {
     class Decompose {
@@ -11,9 +12,9 @@ namespace McCAD::Decomposition {
       class Impl;
       
     public:
-      Decompose(const auto& inputDataObj);
+      Decompose(const McCAD::General::InputData& inputData);
       ~Decompose();
-      void perform(McCAD::General::InputData& inputData);
+      
       Impl* accessImpl() const;
 
     private:

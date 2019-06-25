@@ -6,19 +6,18 @@
 // McCAD
 
 namespace McCAD::Tools {
-    class Preprocessor {
-    public:
-      Preprocessor();
-      ~Preprocessor();
+  class Preprocessor {
+  private:
+    class Impl;
+    
+  public:
+    Preprocessor() = default;
 
-    private:
-      class Impl;
-      std::unique_ptr<Impl> pImpl;
-
-    public:
-      // Allow access to Impl class from other classes.
-      McCAD::Tools::Preprocessor::Impl* accessImpl();
-      
-    };
+    Impl* accessImpl() const;
+    
+  private:
+    std::unique_ptr<Impl> pImpl;
+  };
 }
+
 #endif //TOOLS_HPP
