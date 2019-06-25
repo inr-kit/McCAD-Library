@@ -11,7 +11,8 @@ namespace McCAD::Tools {
     class Impl;
     
   public:
-    Preprocessor() = default;
+    Preprocessor();
+    ~Preprocessor();
 
     Impl* accessImpl() const;
     

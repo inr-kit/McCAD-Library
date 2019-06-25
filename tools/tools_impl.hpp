@@ -5,26 +5,24 @@
 // McCAD
 #include "tools.hpp"
 // OCC
-#include "Handle_TopTools_HSequenceOfShape.hxx"
-#include "TopTools_HSequenceOfShape.hxx"
-#include "TopExp_Explorer.hxx"
-#include "TopoDS.hxx"
+#include "Handle_ShapeFix_FixSmallFace.hxx"
+#include "Handle_ShapeFix_Solid.hxx"
+#include <ShapeFix_FixSmallFace.hxx>
+#include <ShapeFix_Solid.hxx>
+#include <TopoDS.hxx>
 #include "TopoDS_Solid.hxx"
-#include "TCollection_AsciiString.hxx"
-#include "TopoDS_Compound.hxx"
-#include "ShapeFix_FixSmallFace.hxx"
-#include "ShapeFix_Solid.hxx"
+#include <TopoDS_Shape.hxx>
 
 namespace McCAD::Tools{
   class Preprocessor::Impl {
   public:
     Impl() = default;
-    Handle_TopTools_HSequenceOfShape splitCompSolidsList;
     TopoDS_Shape fixedSolidShape;
     TopoDS_Solid fixedSolid;
-    void splitCompSolids(Handle_TopTools_HSequenceOfShape& solidsList);
+    TopoDS_Solid finalSolid;
     const TopoDS_Shape& removeSmallFaces(TopoDS_Shape& solidShape);
     const TopoDS_Solid& repairSolid(TopoDS_Solid& solid);
+    const TopoDS_Solid& genericFix(TopoDS_Solid& solid);
 
   private:
 
