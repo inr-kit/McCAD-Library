@@ -5,7 +5,7 @@
 McCAD::IO::STEPReader::STEPReader(
         const std::string& fileName)
     : pImpl{std::make_unique<Impl>(fileName)}{
-  (*pImpl)();
+  pImpl->readSTEP();
 }
 
 McCAD::IO::STEPReader::STEPReader(

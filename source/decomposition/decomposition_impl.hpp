@@ -1,5 +1,5 @@
-#ifndef DECOMPOSITIONIMPL_HPP
-#define DECOMPOSITIONIMPL_HPP
+#ifndef DECOMPOSITION_IMPL_HPP
+#define DECOMPOSITION_IMPL_HPP
 
 // C++
 #include <list>
@@ -28,4 +28,4 @@ namespace McCAD::Decomposition{
   };
 }
 
-#endif //DECOMPOSITIONIMPL_HPP
+#endif //DECOMPOSITION_IMPL_HPP

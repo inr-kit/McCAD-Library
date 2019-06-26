@@ -25,7 +25,7 @@ namespace McCAD::IO{
   public:
     Impl(const std::string& fileName);
 
-    void operator()();
+    void readSTEP();
 
     std::string fileName;
     Handle_TopTools_HSequenceOfShape sequenceOfShape;

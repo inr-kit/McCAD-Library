@@ -94,6 +94,8 @@ include_directories ("${PROJECT_SOURCE_DIR}/tools")
 add_subdirectory (tools)
 set (EXTRA_LIBS ${EXTRA_LIBS} Tools Tools_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+target_link_libraries(Tools TKShHealing)
+target_link_libraries(Tools_impl TKShHealing)
 
 # Decomposition library
 include_directories ("${PROJECT_SOURCE_DIR}/source/decomposition")

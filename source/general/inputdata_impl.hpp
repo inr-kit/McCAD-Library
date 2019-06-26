@@ -1,5 +1,5 @@
-#ifndef INPUTDATAIMPL_HPP
-#define INPUTDATAIMPL_HPP
+#ifndef INPUTDATA_IMPL_HPP
+#define INPUTDATA_IMPL_HPP
 
 // C++
 #include <string>
@@ -18,4 +18,4 @@ namespace McCAD::General{
   };
 }
 
-#endif //INPUTDATAIMPL_HPP
+#endif //INPUTDATA_IMPL_HPP

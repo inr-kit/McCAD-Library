@@ -5,13 +5,14 @@ McCAD::IO::STEPReader::Impl::Impl(const std::string& fileName)
     : fileName{fileName}
     , sequenceOfShape{new TopTools_HSequenceOfShape}{
       
-    if(!std::filesystem::exists(fileName)){
+    if(!std::filesystem::exists(fileName))
+      {
       throw std::runtime_error("The specified STEP file couldn't be found!");
-    }
+      }
 }
 
 void
-McCAD::IO::STEPReader::Impl::operator()(){
+McCAD::IO::STEPReader::Impl::readSTEP(){
     std::cout << " > Populating the input solids list: " << std::endl;
     ofstream runLog;
     runLog.open("runLog.txt");

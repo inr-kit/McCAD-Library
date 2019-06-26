@@ -9,9 +9,8 @@
 int main (){
     std::string fileName;
     std::cout << "Specify the path to the step file: " << std::endl;
-    // getline(std::cin, fileName);
-    fileName = "/home/mharb/Documents/MCCADsalome_examples_Jin/BRACKET_M4#UGVQZ5.stp";
-
+    getline(std::cin, fileName);
+    
     // Load the input file.
     std::cout << "****************************" << std::endl;
     std::cout << "** Loading the STEP file. **" << std::endl;
