@@ -1,8 +1,9 @@
 // McCAD
 #include "tools_impl.hpp"
 
-const TopoDS_Shape&
+const TopoDS_Shape
 McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape){
+  TopoDS_Shape fixedSolidShape;
   Standard_Real precision = 0.001;
   Standard_Real maxTolerance = 0.001;
   Handle_ShapeFix_FixSmallFace smallFaceFix = new ShapeFix_FixSmallFace;
@@ -14,8 +15,9 @@ McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape){
   return fixedSolidShape;
 }
 
-const TopoDS_Solid&
+const TopoDS_Solid
 McCAD::Tools::Preprocessor::Impl::repairSolid(TopoDS_Solid& solid){
+  TopoDS_Solid fixedSolid;
   Handle_ShapeFix_Solid solidFix = new ShapeFix_Solid;
   solidFix->Init(solid);
   solidFix->Perform();
@@ -23,8 +25,9 @@ McCAD::Tools::Preprocessor::Impl::repairSolid(TopoDS_Solid& solid){
   return fixedSolid;
 }
 
-const TopoDS_Solid&
+const TopoDS_Solid
 McCAD::Tools::Preprocessor::Impl::genericFix(TopoDS_Solid& solid){
+  TopoDS_Solid finalSolid;
   Handle_ShapeFix_Solid genericFix = new ShapeFix_Solid;
   genericFix->Init(solid);
   genericFix->Perform();
@@ -32,8 +35,9 @@ McCAD::Tools::Preprocessor::Impl::genericFix(TopoDS_Solid& solid){
   return finalSolid;
 }
 
-const Standard_Real&
+const Standard_Real
 McCAD::Tools::Preprocessor::Impl::calMeshDeflection(TopoDS_Solid& solid){
+  Standard_Real deflection;
   /** Calculate the bounding box of face **/
   Standard_Real bndBoxGap = 0.0;
   Standard_Real converting = 100;
@@ -47,34 +51,30 @@ McCAD::Tools::Preprocessor::Impl::calMeshDeflection(TopoDS_Solid& solid){
   return deflection;
 }
 
-const Standard_Boolean&
+const Standard_Boolean
 McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(TopoDS_Solid& solid){
-  TopExp_Explorer exF;
-
+  TopExp_Explorer explorer;
+  Standard_Boolean spline_torus_found = Standard_False;
   // Find the faces with small areas, they will not be added into face list.
-  for (exF.Init(solid, TopAbs_FACE); exF.More(); exF.Next())
+  for (explorer.Init(solid, TopAbs_FACE); explorer.More(); explorer.Next())
     {
-      TopoDS_Face face = TopoDS::Face(exF.Current());
+      TopoDS_Face face = TopoDS::Face(explorer.Current());
       TopLoc_Location loc;
       Handle_Geom_Surface geomSurface = BRep_Tool::Surface(face, loc);
       GeomAdaptor_Surface surfAdoptor(geomSurface);
 
       if(surfAdoptor.GetType() == GeomAbs_Torus)
 	{
-	  std::cout << "torus" << std::endl;
-	  std::cout << "    - Solid containes a torus. Ignoring solid!." << std::endl;
-	  goto terminatefor;
+	  std::cout << "    -- The current verion doesn't support processing of Tori. Ignoring solid!" << std::endl;
+	  spline_torus_found = Standard_True;
+	  break;
 	}
       else if (surfAdoptor.GetType() == GeomAbs_BSplineSurface)
 	{
-	  std::cout << "spline" << std::endl;
-	  std::cout << "    - Solid containes a spline. Ignoring solid!." << std::endl;
-	  goto terminatefor;
+	  std::cout << "    -- The current verion doesn't support processing of splines. Ignoring solid!" << std::endl;
+	  spline_torus_found = Standard_True;
+	  break;
 	}
     }
-  return Standard_False;
- terminatefor:
-  return Standard_True;
+  return spline_torus_found;
 }
-
-

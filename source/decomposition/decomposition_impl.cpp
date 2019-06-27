@@ -4,7 +4,7 @@
 #include "inputdata_impl.hpp"
 #include "tools_impl.hpp"
 
-McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData) : splitInputSolidsList{new TopTools_HSequenceOfShape}{
+McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData) : splitInputSolidsList{new TopTools_HSequenceOfShape}, rejectedInputSolidsList{new TopTools_HSequenceOfShape}{
   auto inputSolidsList = inputData.accessImpl()->inputSolidsList;
   if (inputSolidsList->Length() >= 1)
     {
@@ -67,12 +67,15 @@ McCAD::Decomposition::Decompose::Impl::perform(){
       std::cout << "Decomposing solid # "<< solidNumber << std::endl;
       // Check the boudary surfaces of the solid.
       // If the solid has spline surfaces, torus it cannot be processed by the current version.
-      auto decomposeCondition = preproc.accessImpl()->checkBndSurfaces(repairedSolid);
-      //if (!decomposeCondition)
-      //	{
-      //  std::cout << "The current verion doesn't support processing of splines or Tori. Ignoring solid!" << std::endl;
-      //}
-      // Perform decomposition on the repaired solid.
-      //auto decomposedSolid = decompSolid.accessImpl()->;
+      Standard_Boolean rejectCondition = preproc.accessImpl()->checkBndSurfaces(repairedSolid);
+      if (rejectCondition)
+	{
+	  rejectedInputSolidsList->Append(repairedSolid);
+	}
+      else
+	{
+	  // Perform decomposition on the repaired solid.
+	  //auto decomposedSolid = decompSolid.accessImpl()->;
+	}
     }
 }

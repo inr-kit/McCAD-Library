@@ -12,6 +12,7 @@
 #include <TopoDS_Solid.hxx>
 #include <TopoDS_CompSolid.hxx>
 #include <TopoDS_Compound.hxx>
+#include <Standard.hxx>
 
 namespace McCAD::Decomposition{
   class Decompose::Impl {
@@ -19,6 +20,7 @@ namespace McCAD::Decomposition{
     Impl(const McCAD::General::InputData& inputData);
 
     Handle_TopTools_HSequenceOfShape splitInputSolidsList;
+    Handle_TopTools_HSequenceOfShape rejectedInputSolidsList;
 
     void splitInputSolids(const Handle_TopTools_HSequenceOfShape& inputSolidsList);
     void perform();

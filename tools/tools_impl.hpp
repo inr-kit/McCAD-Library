@@ -20,20 +20,18 @@
 #include <Handle_Geom_Surface.hxx>
 #include <GeomAdaptor_Surface.hxx>
 #include <BRep_Tool.hxx>
+#include <Standard.hxx>
 
 namespace McCAD::Tools{
   class Preprocessor::Impl {
   public:
     Impl() = default;
-    TopoDS_Shape fixedSolidShape;
-    TopoDS_Solid fixedSolid;
-    TopoDS_Solid finalSolid;
-    Standard_Real deflection;
-    const TopoDS_Shape& removeSmallFaces(TopoDS_Shape& solidShape);
-    const TopoDS_Solid& repairSolid(TopoDS_Solid& solid);
-    const TopoDS_Solid& genericFix(TopoDS_Solid& solid);
-    const Standard_Real& calMeshDeflection(TopoDS_Solid& solid);
-    const Standard_Boolean& checkBndSurfaces(TopoDS_Solid& solid);
+
+    const TopoDS_Shape removeSmallFaces(TopoDS_Shape& solidShape);
+    const TopoDS_Solid repairSolid(TopoDS_Solid& solid);
+    const TopoDS_Solid genericFix(TopoDS_Solid& solid);
+    const Standard_Real calMeshDeflection(TopoDS_Solid& solid);
+    const Standard_Boolean checkBndSurfaces(TopoDS_Solid& solid);
 
   private:
 
