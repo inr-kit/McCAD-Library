@@ -1,6 +1,6 @@
 // McCAD
 #include "decomposition_impl.hpp"
-#include "decomposeSolid_impl.hpp"
+//#include "decomposeSolid_impl.hpp"
 #include "inputdata_impl.hpp"
 #include "tools_impl.hpp"
 
@@ -50,30 +50,32 @@ void
 McCAD::Decomposition::Decompose::Impl::perform(){
   // Loop over the solids in the list and perform the decomposition
   McCAD::Tools::Preprocessor preproc;
-  McCAD::Decomposition::DecomposeSolid decomposedSolid;
+  //McCAD::Decomposition::DecomposeSolid decomposedSolid;
   for(Standard_Integer solidNumber = 1; solidNumber <= splitInputSolidsList->Length(); solidNumber++)
     {
       Standard_Integer level = 0;
       TopoDS_Shape currentSolidShape = splitInputSolidsList->Value(solidNumber);
-      
-      // Repair the geometry of solid
-      TopoDS_Shape newSolidShape = preproc.accessImpl()->removeSmallFaces(currentSolidShape);
-      TopoDS_Solid tempSolid = TopoDS::Solid(newSolidShape);
-      TopoDS_Solid newSolid = preproc.accessImpl()->repairSolid(tempSolid);
-      TopoDS_Solid repairedSolid = preproc.accessImpl()->genericFix(newSolid);
+      TopoDS_Solid tempSolid = TopoDS::Solid(currentSolidShape);
       // Check the boudary surfaces of the solid.
       // If the solid has spline surfaces, torus it cannot be processed by the current version.
-      Standard_Boolean rejectCondition = preproc.accessImpl()->checkBndSurfaces(repairedSolid);
+      Standard_Boolean rejectCondition = preproc.accessImpl()->checkBndSurfaces(tempSolid);
       if (rejectCondition)
 	{
 	  rejectedInputSolidsList->Append(splitInputSolidsList->Value(solidNumber));
+	  continue;
 	}
       else
 	{
+	  // Repair the geometry of solid
+	  TopoDS_Shape newSolidShape = preproc.accessImpl()->removeSmallFaces(currentSolidShape);
+	  TopoDS_Solid tempSolid = TopoDS::Solid(newSolidShape);
+	  TopoDS_Solid newSolid = preproc.accessImpl()->repairSolid(tempSolid);
+	  TopoDS_Solid repairedSolid = preproc.accessImpl()->genericFix(newSolid);
+	  
 	  auto deflection = preproc.accessImpl()->calcMeshDeflection(repairedSolid);
 	  // Perform decomposition on the repaired solid.
 	  std::cout << "   - Decomposing solid # "<< solidNumber << std::endl;
-	  decomposeSolid.accessImpl()->;
+	  //decomposeSolid.accessImpl()->;
 	}
     }
   std::cout << "   - Rejected: " << rejectedInputSolidsList->Length() << " solids."<< std::endl;
