@@ -36,7 +36,7 @@ McCAD::Tools::Preprocessor::Impl::genericFix(TopoDS_Solid& solid){
 }
 
 const Standard_Real
-McCAD::Tools::Preprocessor::Impl::calMeshDeflection(TopoDS_Solid& solid){
+McCAD::Tools::Preprocessor::Impl::calcMeshDeflection(TopoDS_Solid& solid){
   Standard_Real deflection;
   /** Calculate the bounding box of face **/
   Standard_Real bndBoxGap = 0.0;
@@ -53,23 +53,23 @@ McCAD::Tools::Preprocessor::Impl::calMeshDeflection(TopoDS_Solid& solid){
 
 const Standard_Boolean
 McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(TopoDS_Solid& solid){
-  TopExp_Explorer explorer;
   Standard_Boolean spline_torus_found = Standard_False;
   // Find the faces with small areas, they will not be added into face list.
-  for (explorer.Init(solid, TopAbs_FACE); explorer.More(); explorer.Next())
+  TopExp_Explorer explorer(solid, TopAbs_FACE);
+  for (; explorer.More(); explorer.Next())
     {
-      TopoDS_Face face = TopoDS::Face(explorer.Current());
-      TopLoc_Location loc;
-      Handle_Geom_Surface geomSurface = BRep_Tool::Surface(face, loc);
-      GeomAdaptor_Surface surfAdoptor(geomSurface);
+      const TopoDS_Face& face = TopoDS::Face(explorer.Current());
+      TopLoc_Location location;
+      Handle_Geom_Surface geomSurface = BRep_Tool::Surface(face, location);
+      GeomAdaptor_Surface surfAdaptor(geomSurface);
 
-      if(surfAdoptor.GetType() == GeomAbs_Torus)
+      if(surfAdaptor.GetType() == GeomAbs_Torus)
 	{
 	  std::cout << "    -- The current verion doesn't support processing of Tori. Ignoring solid!" << std::endl;
 	  spline_torus_found = Standard_True;
 	  break;
 	}
-      else if (surfAdoptor.GetType() == GeomAbs_BSplineSurface)
+      else if (surfAdaptor.GetType() == GeomAbs_BSplineSurface)
 	{
 	  std::cout << "    -- The current verion doesn't support processing of splines. Ignoring solid!" << std::endl;
 	  spline_torus_found = Standard_True;
