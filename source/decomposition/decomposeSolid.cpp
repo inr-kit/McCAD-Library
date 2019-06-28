@@ -2,8 +2,8 @@
 #include "decomposeSolid.hpp"
 #include "decomposeSolid_impl.hpp"
 
-McCAD::Decomposition::DecomposeSolid::DecomposeSolid(const TopoDS_Solid& solid)
-  : pImpl{std::make_unique<Impl>(solid)}{
+McCAD::Decomposition::DecomposeSolid::DecomposeSolid()
+  : pImpl{std::make_unique<Impl>()}{
 }
 
 McCAD::Decomposition::DecomposeSolid::~DecomposeSolid(){

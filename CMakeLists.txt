@@ -102,8 +102,14 @@ include_directories ("${PROJECT_SOURCE_DIR}/source/decomposition")
 add_subdirectory (source/decomposition)
 set (EXTRA_LIBS ${EXTRA_LIBS} Decomposition Decomposition_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
-target_link_libraries(Decomposition Tools)
-target_link_libraries(Decomposition_impl Tools_impl)
+#target_link_libraries(Decomposition Tools)
+#target_link_libraries(Decomposition_impl Tools_impl)
+
+# DecomposeSolid library
+set (EXTRA_LIBS ${EXTRA_LIBS} DecomposeSolid DecomposeSolid_impl)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+#target_link_libraries(Decomposition DecomposeSolid)
+#target_link_libraries(Decomposition_impl DecomposeSolid_impl)
 
 install (TARGETS ${PROJECT_NAME} DESTINATION ${PROJECT_BINARY_DIR}/bin)
 install (FILES "${PROJECT_BINARY_DIR}/McCADConfig.hpp" DESTINATION ${PROJECT_BINARY_DIR}/include)

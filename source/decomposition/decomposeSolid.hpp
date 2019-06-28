@@ -5,7 +5,6 @@
 #include <memory>
 // McCAD
 // OCC
-#include <TopoDS_Solid.hxx>
 
 namespace McCAD::Decomposition {
   class DecomposeSolid {
@@ -13,7 +12,7 @@ namespace McCAD::Decomposition {
     class Impl;
 
   public:
-    DecomposeSolid(const TopoDS_Solid& solid);
+    DecomposeSolid();
     ~DecomposeSolid();
 
     Impl* accessImpl() const;
