@@ -18,9 +18,10 @@ namespace McCAD::Decomposition{
   public:
     Impl() = default;
 
-    Standard_Integer recursivityLevel = 0;
-    void perform(const TopoDS_Solid& solid, const Standard_Integer& meshDeflection);
+    //Standard_Integer recursivityLevel = 0;
+    void perform(const TopoDS_Solid& solid, const Standard_Real& meshDeflection, Standard_Integer recursivityLevel = 0);
     void genSurfaceList(const TopoDS_Solid& solid);
+    void judgeDecomposeSurfaces();
 
   private:
 

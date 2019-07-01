@@ -78,3 +78,16 @@ McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(TopoDS_Solid& solid){
     }
   return spline_torus_found;
 }
+
+const Standard_Boolean
+McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face){
+  ShapeAnalysis_CheckSmallFace shapeAnalysis;
+  Standard_Real tolerance = 0.0001;
+  Standard_Boolean isSmallFace = Standard_False;
+  TopoDS_Edge edge1, edge2;
+  if( shapeAnalysis.CheckSpotFace(face, tolerance) || shapeAnalysis.CheckStripFace(face,edge1,edge2,tolerance))
+    {
+      Standard_Boolean isSmallFace = Standard_True;
+    }
+  return isSmallFace;
+}

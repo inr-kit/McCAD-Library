@@ -8,12 +8,12 @@ McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inp
   auto inputSolidsList = inputData.accessImpl()->inputSolidsList;
   if (inputSolidsList->Length() >= 1)
     {
-      std::cout << "   - Length of input solids list: " << inputSolidsList->Length() << std::endl;
+      std::cout << "   - Found " << inputSolidsList->Length() << " solid(s) in the input file." << std::endl;
       std::cout << " > Spliting compound input solids" << std::endl;
-      // Split input compound input solids.
+      // Split compound input solids.
       splitInputSolids(inputSolidsList);
-      std::cout << "   - Length of split input solids list: " << splitInputSolidsList->Length() << std::endl;
-      std::cout << " > Decomposing solids" << std::endl;
+      std::cout << "   - There are " << splitInputSolidsList->Length() << " solid(s) in the split solids list." <<std::endl;
+      std::cout << " > Decomposing solid(s)" << std::endl;
       // perform the decomposition.
       perform();
     }
@@ -25,7 +25,7 @@ McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inp
 
 void
 McCAD::Decomposition::Decompose::Impl::splitInputSolids(const Handle_TopTools_HSequenceOfShape& inputSolidsList){
-  // Split the compound solids in the list.
+  // Split compound solids in the input solids list.
   for (Standard_Integer i = 1; i <= inputSolidsList->Length(); i++)
     {
       if ((inputSolidsList->Value(i)).ShapeType() == TopAbs_COMPSOLID ||
@@ -48,9 +48,9 @@ McCAD::Decomposition::Decompose::Impl::splitInputSolids(const Handle_TopTools_HS
 
 void
 McCAD::Decomposition::Decompose::Impl::perform(){
-  // Loop over the solids in the list and perform the decomposition
   McCAD::Tools::Preprocessor preproc;
   McCAD::Decomposition::DecomposeSolid decomposedSolid;
+  // Loop over the solids in the list and perform the decomposition
   for(Standard_Integer solidNumber = 1; solidNumber <= splitInputSolidsList->Length(); solidNumber++)
     {
       TopoDS_Shape currentSolidShape = splitInputSolidsList->Value(solidNumber);
@@ -65,20 +65,17 @@ McCAD::Decomposition::Decompose::Impl::perform(){
 	}
       else
 	{
-	  McCAD::Tools::Preprocessor preproc;
-	  McCAD::Decomposition::DecomposeSolid decomposeSolid;
-	  
 	  // Repair the geometry of solid
 	  TopoDS_Shape newSolidShape = preproc.accessImpl()->removeSmallFaces(currentSolidShape);
 	  TopoDS_Solid tempSolid = TopoDS::Solid(newSolidShape);
 	  TopoDS_Solid newSolid = preproc.accessImpl()->repairSolid(tempSolid);
 	  TopoDS_Solid repairedSolid = preproc.accessImpl()->genericFix(newSolid);
 	  
-	  auto meshDeflection = preproc.accessImpl()->calcMeshDeflection(repairedSolid);
+	  Standard_Real meshDeflection = preproc.accessImpl()->calcMeshDeflection(repairedSolid);
 	  // Perform decomposition on the repaired solid.
 	  std::cout << "   - Decomposing solid # "<< solidNumber << std::endl;
-	  decomposeSolid.accessImpl()->perform(repairedSolid, meshDeflection);
+	  decomposedSolid.accessImpl()->perform(repairedSolid, meshDeflection);
 	}
     }
-  std::cout << "   - Rejected: " << rejectedInputSolidsList->Length() << " solids."<< std::endl;
+  std::cout << "   - There are " << rejectedInputSolidsList->Length() << " rejected solid(s)."<< std::endl;
 }
