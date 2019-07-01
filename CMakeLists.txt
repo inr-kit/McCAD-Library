@@ -78,28 +78,28 @@ add_executable(${PROJECT_NAME} "main.cpp")
 target_link_libraries(${PROJECT_NAME} ${OCE_TOOLKITS})
 
 # General library
-include_directories ("${PROJECT_SOURCE_DIR}/source/general")
-add_subdirectory (source/general)
+include_directories ("${PROJECT_SOURCE_DIR}/includes/general")
+add_subdirectory (sources/general)
 set (EXTRA_LIBS ${EXTRA_LIBS} InputData InputData_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # IO library
-include_directories ("${PROJECT_SOURCE_DIR}/source/io")
-add_subdirectory (source/io)
+include_directories ("${PROJECT_SOURCE_DIR}/includes/io")
+add_subdirectory (sources/io)
 set (EXTRA_LIBS ${EXTRA_LIBS} STEPReader STEPReader_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # Tools library
-include_directories ("${PROJECT_SOURCE_DIR}/tools")
-add_subdirectory (tools)
+include_directories ("${PROJECT_SOURCE_DIR}/includes/tools")
+add_subdirectory (sources/tools)
 set (EXTRA_LIBS ${EXTRA_LIBS} Tools Tools_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 target_link_libraries(Tools TKShHealing)
 target_link_libraries(Tools_impl TKShHealing)
 
 # Decomposition library
-include_directories ("${PROJECT_SOURCE_DIR}/source/decomposition")
-add_subdirectory (source/decomposition)
+include_directories ("${PROJECT_SOURCE_DIR}/includes/decomposition")
+add_subdirectory (sources/decomposition)
 set (EXTRA_LIBS ${EXTRA_LIBS} Decomposition Decomposition_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 #target_link_libraries(Decomposition Tools)
