@@ -1,7 +1,7 @@
 // McCAD
 #include "tools_impl.hpp"
 
-const TopoDS_Shape
+void
 McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape){
   TopoDS_Shape fixedSolidShape;
   Standard_Real precision = 0.001;
@@ -11,28 +11,25 @@ McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape){
   smallFaceFix->SetPrecision(precision);
   smallFaceFix->SetMaxTolerance(maxTolerance);
   smallFaceFix->Perform();
-  fixedSolidShape = smallFaceFix->FixShape();
-  return fixedSolidShape;
+  solidShape = smallFaceFix->FixShape();
 }
 
-const TopoDS_Solid
+void
 McCAD::Tools::Preprocessor::Impl::repairSolid(TopoDS_Solid& solid){
   TopoDS_Solid fixedSolid;
   Handle_ShapeFix_Solid solidFix = new ShapeFix_Solid;
   solidFix->Init(solid);
   solidFix->Perform();
-  fixedSolid = TopoDS::Solid(solidFix->Solid());
-  return fixedSolid;
+  solid = TopoDS::Solid(solidFix->Solid());
 }
 
-const TopoDS_Solid
+void
 McCAD::Tools::Preprocessor::Impl::genericFix(TopoDS_Solid& solid){
   TopoDS_Solid finalSolid;
   Handle_ShapeFix_Solid genericFix = new ShapeFix_Solid;
   genericFix->Init(solid);
   genericFix->Perform();
-  finalSolid = TopoDS::Solid(genericFix->Solid());
-  return finalSolid;
+  solid = TopoDS::Solid(genericFix->Solid());
 }
 
 const Standard_Real
@@ -85,7 +82,7 @@ McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face){
   Standard_Real tolerance = 0.0001;
   Standard_Boolean isSmallFace = Standard_False;
   TopoDS_Edge edge1, edge2;
-  if( shapeAnalysis.CheckSpotFace(face, tolerance) || shapeAnalysis.CheckStripFace(face,edge1,edge2,tolerance))
+  if( shapeAnalysis.CheckSpotFace(face, tolerance) || shapeAnalysis.CheckStripFace(face, edge1, edge2, tolerance))
     {
       Standard_Boolean isSmallFace = Standard_True;
     }

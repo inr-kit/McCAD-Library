@@ -30,9 +30,9 @@ namespace McCAD::Tools{
   public:
     Impl() = default;
 
-    const TopoDS_Shape removeSmallFaces(TopoDS_Shape& solidShape);
-    const TopoDS_Solid repairSolid(TopoDS_Solid& solid);
-    const TopoDS_Solid genericFix(TopoDS_Solid& solid);
+    void removeSmallFaces(TopoDS_Shape& solidShape);
+    void repairSolid(TopoDS_Solid& solid);
+    void genericFix(TopoDS_Solid& solid);
     const Standard_Real calcMeshDeflection(TopoDS_Solid& solid);
     const Standard_Boolean checkBndSurfaces(TopoDS_Solid& solid);
     const Standard_Boolean checkFace(const TopoDS_Face& face);

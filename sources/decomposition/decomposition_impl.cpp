@@ -50,31 +50,33 @@ void
 McCAD::Decomposition::Decompose::Impl::perform(){
   McCAD::Tools::Preprocessor preproc;
   McCAD::Decomposition::DecomposeSolid decomposedSolid;
+  TopoDS_Shape solidShape;
+  TopoDS_Solid solid;
   // Loop over the solids in the list and perform the decomposition
   for(Standard_Integer solidNumber = 1; solidNumber <= splitInputSolidsList->Length(); solidNumber++)
     {
-      TopoDS_Shape currentSolidShape = splitInputSolidsList->Value(solidNumber);
-      TopoDS_Solid tempSolid = TopoDS::Solid(currentSolidShape);
+      solidShape = splitInputSolidsList->Value(solidNumber);
+      solid = TopoDS::Solid(solidShape);
       // Check the boudary surfaces of the solid.
       // If the solid has spline surfaces, torus it cannot be processed by the current version.
-      Standard_Boolean rejectCondition = preproc.accessImpl()->checkBndSurfaces(tempSolid);
+      Standard_Boolean rejectCondition = preproc.accessImpl()->checkBndSurfaces(solid);
       if (rejectCondition)
 	{
-	  rejectedInputSolidsList->Append(splitInputSolidsList->Value(solidNumber));
+	  rejectedInputSolidsList->Append(solidShape);
 	  continue;
 	}
       else
 	{
 	  // Repair the geometry of solid
-	  TopoDS_Shape newSolidShape = preproc.accessImpl()->removeSmallFaces(currentSolidShape);
-	  TopoDS_Solid tempSolid = TopoDS::Solid(newSolidShape);
-	  TopoDS_Solid newSolid = preproc.accessImpl()->repairSolid(tempSolid);
-	  TopoDS_Solid repairedSolid = preproc.accessImpl()->genericFix(newSolid);
+	  preproc.accessImpl()->removeSmallFaces(solidShape);
+	  solid = TopoDS::Solid(solidShape);
+	  preproc.accessImpl()->repairSolid(solid);
+	  preproc.accessImpl()->genericFix(solid);
 	  
-	  Standard_Real meshDeflection = preproc.accessImpl()->calcMeshDeflection(repairedSolid);
+	  Standard_Real meshDeflection = preproc.accessImpl()->calcMeshDeflection(solid);
 	  // Perform decomposition on the repaired solid.
 	  std::cout << "   - Decomposing solid # "<< solidNumber << std::endl;
-	  decomposedSolid.accessImpl()->perform(repairedSolid, meshDeflection);
+	  decomposedSolid.accessImpl()->perform(solid, meshDeflection);
 	}
     }
   std::cout << "   - There are " << rejectedInputSolidsList->Length() << " rejected solid(s)."<< std::endl;

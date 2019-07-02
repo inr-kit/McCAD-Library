@@ -20,10 +20,10 @@ McCAD::Decomposition::DecomposeSolid::Impl::genSurfaceList(const TopoDS_Solid& s
   // Generate a list of faces of the solid.
   McCAD::Tools::Preprocessor preproc;
   TopoDS_Face face;
+  std::vector<TopoDS_Face> facesList;
   std::vector<TopoDS_Face> planesList;
   std::vector<TopoDS_Face> cylindersList;
   std::vector<TopoDS_Face> conesList;
-  std::vector<TopoDS_Face> facesList;
   TopExp_Explorer explorer(solid, TopAbs_FACE);
   for (; explorer.More(); explorer.Next())
     {
@@ -36,8 +36,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::genSurfaceList(const TopoDS_Solid& s
 	}
       else continue;
     }
-
-  
 }
 
 void

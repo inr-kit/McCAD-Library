@@ -6,7 +6,7 @@
 // McCAD
 #include "decomposition.hpp"
 // OCC
-#include "Handle_TopTools_HSequenceOfShape.hxx"
+#include <Handle_TopTools_HSequenceOfShape.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
