@@ -52,6 +52,7 @@ McCAD::Decomposition::Decompose::Impl::perform(){
   McCAD::Decomposition::DecomposeSolid decomposedSolid;
   TopoDS_Shape solidShape;
   TopoDS_Solid solid;
+  
   // Loop over the solids in the list and perform the decomposition
   for(Standard_Integer solidNumber = 1; solidNumber <= splitInputSolidsList->Length(); solidNumber++)
     {
@@ -73,10 +74,9 @@ McCAD::Decomposition::Decompose::Impl::perform(){
 	  preproc.accessImpl()->repairSolid(solid);
 	  preproc.accessImpl()->genericFix(solid);
 	  
-	  Standard_Real meshDeflection = preproc.accessImpl()->calcMeshDeflection(solid);
 	  // Perform decomposition on the repaired solid.
 	  std::cout << "   - Decomposing solid # "<< solidNumber << std::endl;
-	  decomposedSolid.accessImpl()->perform(solid, meshDeflection);
+	  decomposedSolid.accessImpl()->initiate(solid);
 	}
     }
   std::cout << "   - There are " << rejectedInputSolidsList->Length() << " rejected solid(s)."<< std::endl;

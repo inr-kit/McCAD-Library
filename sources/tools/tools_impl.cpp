@@ -2,10 +2,8 @@
 #include "tools_impl.hpp"
 
 void
-McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape){
+McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape, const Standard_Real precision, const Standard_Real maxTolerance){
   TopoDS_Shape fixedSolidShape;
-  Standard_Real precision = 0.001;
-  Standard_Real maxTolerance = 0.001;
   Handle_ShapeFix_FixSmallFace smallFaceFix = new ShapeFix_FixSmallFace;
   smallFaceFix->Init(solidShape);
   smallFaceFix->SetPrecision(precision);
@@ -33,11 +31,9 @@ McCAD::Tools::Preprocessor::Impl::genericFix(TopoDS_Solid& solid){
 }
 
 const Standard_Real
-McCAD::Tools::Preprocessor::Impl::calcMeshDeflection(TopoDS_Solid& solid){
+McCAD::Tools::Preprocessor::Impl::calcMeshDeflection(TopoDS_Solid& solid, const Standard_Real bndBoxGap, const Standard_Real converting){
   Standard_Real deflection;
   /** Calculate the bounding box of face **/
-  Standard_Real bndBoxGap = 0.0;
-  Standard_Real converting = 100;
   Bnd_Box boundingBox;
   BRepBndLib::Add(solid,boundingBox);
   boundingBox.SetGap(bndBoxGap);
@@ -77,9 +73,8 @@ McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(TopoDS_Solid& solid){
 }
 
 const Standard_Boolean
-McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face){
+McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face, const Standard_Real tolerance){
   ShapeAnalysis_CheckSmallFace shapeAnalysis;
-  Standard_Real tolerance = 0.0001;
   Standard_Boolean isSmallFace = Standard_False;
   TopoDS_Edge edge1, edge2;
   if( shapeAnalysis.CheckSpotFace(face, tolerance) || shapeAnalysis.CheckStripFace(face, edge1, edge2, tolerance))
@@ -87,4 +82,15 @@ McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face){
       Standard_Boolean isSmallFace = Standard_True;
     }
   return isSmallFace;
+}
+
+void
+McCAD::Tools::Preprocessor::Impl::fixFace(TopoDS_Face& face, const Standard_Real precision, const Standard_Real maxTolerance){
+  Handle_ShapeFix_Shape shapeFixer = new ShapeFix_Shape(face);
+  shapeFixer->SetPrecision(precision);
+  shapeFixer->SetMaxTolerance(maxTolerance);
+  shapeFixer->FixWireTool()->FixRemovePCurveMode() = 1;
+  shapeFixer->FixWireTool()->FixConnected();
+  shapeFixer->Perform();
+  face = TopoDS::Face(shapeFixer->Shape());
 }

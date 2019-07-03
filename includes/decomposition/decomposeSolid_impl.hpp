@@ -2,6 +2,7 @@
 #define DECOMPOSESOLID_IMPL_HPP
 
 // C++
+#include <vector>
 // McCAD
 #include "decomposeSolid.hpp"
 // OCC
@@ -12,15 +13,24 @@
 #include <TopExp_Explorer.hxx>
 #include <BRep_Tool.hxx>
 #include <BRepTools.hxx>
+#include <Bnd_Box.hxx>
+#include <BRepBndLib.hxx>
 
 namespace McCAD::Decomposition{
   class DecomposeSolid::Impl {
   public:
     Impl() = default;
 
-    //Standard_Integer recursivityLevel = 0;
-    void perform(const TopoDS_Solid& solid, const Standard_Real& meshDeflection, Standard_Integer recursivityLevel = 0);
-    void genSurfaceList(const TopoDS_Solid& solid);
+    TopoDS_Solid solid;
+    Standard_Real meshDeflection;
+    Standard_Real boxSquareLength;
+    Standard_Integer recurrenceLevel = 0;
+    Standard_Boolean splitSurface = Standard_False;
+    std::vector<McCAD::Decomposition::boundSurface*> facesList;
+
+    void initiate(const TopoDS_Solid& aSolid);
+    void perform(Standard_Integer recurrenceLevel);
+    void generateSurfacesList(const TopoDS_Face& face, Standard_Integer mode = 0);
     void judgeDecomposeSurfaces();
 
   private:
