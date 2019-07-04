@@ -115,5 +115,17 @@ target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 #target_link_libraries(Decomposition DecomposeSolid)
 #target_link_libraries(Decomposition_impl DecomposeSolid_impl)
 
+# Surface library
+set (EXTRA_LIBS ${EXTRA_LIBS} Surface Surface_impl)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+
+# BoundSurface library
+set (EXTRA_LIBS ${EXTRA_LIBS} BoundSurface BoundSurface_impl)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+
+# BoundSurfacePlane library
+set (EXTRA_LIBS ${EXTRA_LIBS} BoundSurfacePlane BoundSurfacePlane_impl)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+
 install (TARGETS ${PROJECT_NAME} DESTINATION ${PROJECT_BINARY_DIR}/bin)
 install (FILES "${PROJECT_BINARY_DIR}/McCADConfig.hpp" DESTINATION ${PROJECT_BINARY_DIR}/include)

@@ -12,16 +12,16 @@ int main (){
     getline(std::cin, fileName);
     
     // Load the input file.
-    std::cout << "****************************" << std::endl;
-    std::cout << "** Loading the STEP file. **" << std::endl;
-    std::cout << "****************************" << std::endl;
+    std::cout << "***************************" << std::endl;
+    std::cout << "** Loading the STEP file **" << std::endl;
+    std::cout << "***************************" << std::endl;
     McCAD::IO::STEPReader reader{fileName};
     auto inputData = reader.getInputData();
 
     // Start decomposition.
-    std::cout << "*****************************" << std::endl;
-    std::cout << "** Starting decomposition. **" << std::endl;
-    std::cout << "*****************************" << std::endl;
+    std::cout << "****************************" << std::endl;
+    std::cout << "** Starting decomposition **" << std::endl;
+    std::cout << "****************************" << std::endl;
     McCAD::Decomposition::Decompose decompose{inputData};
     
     return 0;

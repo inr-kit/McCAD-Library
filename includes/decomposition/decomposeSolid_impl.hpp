@@ -3,8 +3,11 @@
 
 // C++
 #include <vector>
+#include <assert.h>
 // McCAD
 #include "decomposeSolid.hpp"
+//#include "boundSurface.hpp"
+#include "boundSurfacePlane.hpp"
 // OCC
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
@@ -15,6 +18,8 @@
 #include <BRepTools.hxx>
 #include <Bnd_Box.hxx>
 #include <BRepBndLib.hxx>
+#include <BRepAdaptor_Surface.hxx>
+#include <GeomAdaptor_Surface.hxx>
 
 namespace McCAD::Decomposition{
   class DecomposeSolid::Impl {
@@ -24,13 +29,16 @@ namespace McCAD::Decomposition{
     TopoDS_Solid solid;
     Standard_Real meshDeflection;
     Standard_Real boxSquareLength;
-    Standard_Integer recurrenceLevel = 0;
+    Standard_Integer recurrenceDepth = 0;
     Standard_Boolean splitSurface = Standard_False;
-    std::vector<McCAD::Decomposition::boundSurface*> facesList;
-
+    std::vector<McCAD::Decomposition::BoundSurface*> facesList;
+    
     void initiate(const TopoDS_Solid& aSolid);
-    void perform(Standard_Integer recurrenceLevel);
-    void generateSurfacesList(const TopoDS_Face& face, Standard_Integer mode = 0);
+    void perform(Standard_Integer recurrenceDepth);
+    void generateSurfacesList();
+    McCAD::Decomposition::BoundSurface* generateSurface(const TopoDS_Face& face, Standard_Integer mode = 0);
+    void generateEdges(McCAD::Decomposition::BoundSurface* boundSurface);
+    void mergeSurfaces(std::vector<McCAD::Decomposition::BoundSurface*> planesList);
     void judgeDecomposeSurfaces();
 
   private:
