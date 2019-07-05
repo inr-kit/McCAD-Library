@@ -5,15 +5,12 @@
 #include <string>
 // McCAD
 // OCC
-#include <Standard.hxx>
 
 namespace McCAD::Decomposition{
   class Surface::Impl {
   public:
     Impl() = default;
 
-    std::string surfaceType;
-    Standard_Integer surfaceNumber;
     void initiate();
 
   private:

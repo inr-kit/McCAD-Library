@@ -3,7 +3,7 @@
 #include "decomposeSolid_impl.hpp"
 
 McCAD::Decomposition::DecomposeSolid::DecomposeSolid()
-  : pImpl{std::make_unique<Impl>()}{
+  : pImpl{std::make_unique<Impl>(this)}{
 }
 
 McCAD::Decomposition::DecomposeSolid::~DecomposeSolid(){

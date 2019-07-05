@@ -5,6 +5,7 @@
 #include <memory>
 // McCAD
 #include "inputdata.hpp"
+#include <Standard.hxx>
 
 namespace McCAD::Decomposition {
     class Decompose {

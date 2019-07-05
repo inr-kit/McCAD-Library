@@ -1,8 +1,6 @@
 // McCAD
 #include "decomposition_impl.hpp"
 #include "decomposeSolid_impl.hpp"
-#include "inputdata_impl.hpp"
-#include "tools_impl.hpp"
 
 McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData) : splitInputSolidsList{new TopTools_HSequenceOfShape}, rejectedInputSolidsList{new TopTools_HSequenceOfShape}{
   auto inputSolidsList = inputData.accessImpl()->inputSolidsList;

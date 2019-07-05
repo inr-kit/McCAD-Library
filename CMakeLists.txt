@@ -100,32 +100,39 @@ target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 target_link_libraries(Tools TKShHealing)
 target_link_libraries(Tools_impl TKShHealing)
 
-# Decomposition library
+# Surface library
 include_directories ("${PROJECT_SOURCE_DIR}/includes/decomposition")
 add_subdirectory (includes/decomposition)
 add_subdirectory (sources/decomposition)
-set (EXTRA_LIBS ${EXTRA_LIBS} Decomposition Decomposition_impl)
-target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
-#target_link_libraries(Decomposition Tools)
-#target_link_libraries(Decomposition_impl Tools_impl)
-
-# DecomposeSolid library
-set (EXTRA_LIBS ${EXTRA_LIBS} DecomposeSolid DecomposeSolid_impl)
-target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
-#target_link_libraries(Decomposition DecomposeSolid)
-#target_link_libraries(Decomposition_impl DecomposeSolid_impl)
-
-# Surface library
 set (EXTRA_LIBS ${EXTRA_LIBS} Surface Surface_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # BoundSurface library
 set (EXTRA_LIBS ${EXTRA_LIBS} BoundSurface BoundSurface_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+target_link_libraries(BoundSurface Surface)
+target_link_libraries(BoundSurface_impl Surface_impl)
 
 # BoundSurfacePlane library
 set (EXTRA_LIBS ${EXTRA_LIBS} BoundSurfacePlane BoundSurfacePlane_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+target_link_libraries(BoundSurfacePlane BoundSurface)
+target_link_libraries(BoundSurfacePlane_impl BoundSurface_impl)
+
+# DecomposeSolid library
+set (EXTRA_LIBS ${EXTRA_LIBS} DecomposeSolid DecomposeSolid_impl)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+target_link_libraries(DecomposeSolid BoundSurfacePlane)
+target_link_libraries(DecomposeSolid_impl BoundSurfacePlane_impl)
+
+# Decomposition library
+set (EXTRA_LIBS ${EXTRA_LIBS} Decomposition Decomposition_impl)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+target_link_libraries(Decomposition Tools)
+target_link_libraries(Decomposition_impl Tools_impl)
+target_link_libraries(Decomposition DecomposeSolid)
+target_link_libraries(Decomposition_impl DecomposeSolid_impl)
+
 
 install (TARGETS ${PROJECT_NAME} DESTINATION ${PROJECT_BINARY_DIR}/bin)
 install (FILES "${PROJECT_BINARY_DIR}/McCADConfig.hpp" DESTINATION ${PROJECT_BINARY_DIR}/include)

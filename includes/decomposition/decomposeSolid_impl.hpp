@@ -6,8 +6,10 @@
 #include <assert.h>
 // McCAD
 #include "decomposeSolid.hpp"
-//#include "boundSurface.hpp"
-#include "boundSurfacePlane.hpp"
+#include "tools_impl.hpp"
+#include "boundSurfacePlane_impl.hpp"
+#include "boundSurface_impl.hpp"
+#include "surface_impl.hpp"
 // OCC
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
@@ -24,17 +26,15 @@
 namespace McCAD::Decomposition{
   class DecomposeSolid::Impl {
   public:
-    Impl() = default;
+    Impl(McCAD::Decomposition::DecomposeSolid* dcompSolid);
+    ~Impl();
 
+    McCAD::Decomposition::DecomposeSolid* decompSolid;
     TopoDS_Solid solid;
-    Standard_Real meshDeflection;
-    Standard_Real boxSquareLength;
-    Standard_Integer recurrenceDepth = 0;
-    Standard_Boolean splitSurface = Standard_False;
     std::vector<McCAD::Decomposition::BoundSurface*> facesList;
     
     void initiate(const TopoDS_Solid& aSolid);
-    void perform(Standard_Integer recurrenceDepth);
+    void perform();
     void generateSurfacesList();
     McCAD::Decomposition::BoundSurface* generateSurface(const TopoDS_Face& face, Standard_Integer mode = 0);
     void generateEdges(McCAD::Decomposition::BoundSurface* boundSurface);

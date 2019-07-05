@@ -21,7 +21,6 @@
 #include <Handle_Geom_Surface.hxx>
 #include <GeomAdaptor_Surface.hxx>
 #include <BRep_Tool.hxx>
-#include <Standard.hxx>
 #include <BRepGProp.hxx>
 #include <ShapeAnalysis_CheckSmallFace.hxx>
 #include <TopoDS_Edge.hxx>
@@ -35,9 +34,9 @@ namespace McCAD::Tools{
     void repairSolid(TopoDS_Solid& solid);
     void genericFix(TopoDS_Solid& solid);
     void fixFace(TopoDS_Face& face, const Standard_Real precision = 1.0e-7, const Standard_Real maxTolerance = 1.0e-3);
-    const Standard_Real calcMeshDeflection(TopoDS_Solid& solid, const Standard_Real bndBoxGap = 0.0, const Standard_Real converting = 100);
-    const Standard_Boolean checkBndSurfaces(TopoDS_Solid& solid);
-    const Standard_Boolean checkFace(const TopoDS_Face& face, const Standard_Real tolerance = 1.0e-3);
+    Standard_Real calcMeshDeflection(TopoDS_Solid& solid, const Standard_Real bndBoxGap = 0.0, const Standard_Real converting = 100);
+    Standard_Boolean checkBndSurfaces(TopoDS_Solid& solid);
+    Standard_Boolean checkFace(const TopoDS_Face& face, const Standard_Real tolerance = 1.0e-3);
 
   private:
 

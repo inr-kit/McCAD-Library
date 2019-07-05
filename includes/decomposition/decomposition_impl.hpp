@@ -5,6 +5,8 @@
 #include <list>
 // McCAD
 #include "decomposition.hpp"
+#include "inputdata_impl.hpp"
+#include "tools_impl.hpp"
 // OCC
 #include <Handle_TopTools_HSequenceOfShape.hxx>
 #include <TopExp_Explorer.hxx>
@@ -12,7 +14,6 @@
 #include <TopoDS_Solid.hxx>
 #include <TopoDS_CompSolid.hxx>
 #include <TopoDS_Compound.hxx>
-#include <Standard.hxx>
 
 namespace McCAD::Decomposition{
   class Decompose::Impl {

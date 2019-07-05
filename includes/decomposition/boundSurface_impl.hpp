@@ -11,7 +11,6 @@
 #include <TopoDS_Solid.hxx>
 #include <TopoDS_CompSolid.hxx>
 #include <TopoDS_Compound.hxx>
-#include <Standard.hxx>
 
 namespace McCAD::Decomposition{
   class BoundSurface::Impl {

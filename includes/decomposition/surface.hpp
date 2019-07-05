@@ -18,10 +18,8 @@ namespace McCAD::Decomposition {
       
       Impl* accessImpl() const;
 
-      void setSurfaceType(const std::string& surfacetype);
-      std::string getSurfaceType();
-      void setSurfaceNumber(const Standard_Integer& surfaceNumber);
-      Standard_Integer getSurfaceNUmber();
+      std::string surfaceType;
+      Standard_Integer surfaceNumber;
 
     private:
       std::unique_ptr<Impl> pImpl;

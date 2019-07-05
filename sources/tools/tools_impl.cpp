@@ -30,7 +30,7 @@ McCAD::Tools::Preprocessor::Impl::genericFix(TopoDS_Solid& solid){
   solid = TopoDS::Solid(genericFix->Solid());
 }
 
-const Standard_Real
+Standard_Real
 McCAD::Tools::Preprocessor::Impl::calcMeshDeflection(TopoDS_Solid& solid, const Standard_Real bndBoxGap, const Standard_Real converting){
   Standard_Real deflection;
   /** Calculate the bounding box of face **/
@@ -44,7 +44,7 @@ McCAD::Tools::Preprocessor::Impl::calcMeshDeflection(TopoDS_Solid& solid, const 
   return deflection;
 }
 
-const Standard_Boolean
+Standard_Boolean
 McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(TopoDS_Solid& solid){
   Standard_Boolean spline_torus_found = Standard_False;
   // Find the faces with small areas, they will not be added into face list.
@@ -72,7 +72,7 @@ McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(TopoDS_Solid& solid){
   return spline_torus_found;
 }
 
-const Standard_Boolean
+Standard_Boolean
 McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face, const Standard_Real tolerance){
   ShapeAnalysis_CheckSmallFace shapeAnalysis;
   Standard_Boolean isSmallFace = Standard_False;

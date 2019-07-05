@@ -4,6 +4,7 @@
 // C++
 #include <memory>
 // McCAD
+#include <Standard.hxx>
 
 namespace McCAD::Tools {
   class Preprocessor {

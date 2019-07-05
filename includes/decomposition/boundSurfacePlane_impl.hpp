@@ -11,14 +11,12 @@
 #include <TopoDS_Solid.hxx>
 #include <TopoDS_CompSolid.hxx>
 #include <TopoDS_Compound.hxx>
-#include <Standard.hxx>
 
 namespace McCAD::Decomposition{
   class BoundSurfacePlane::Impl {
   public:
     Impl() = default;
 
-    std::string surfaceType = "Plane";
     void initiate(const TopoDS_Face& face);      
     void generateExtPlane(const Standard_Real& boxSquareLength);
     
