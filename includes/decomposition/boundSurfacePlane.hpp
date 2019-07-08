@@ -15,7 +15,7 @@ namespace McCAD::Decomposition {
   public:
     BoundSurfacePlane();
     ~BoundSurfacePlane();
-      
+    
     Impl* accessImpl() const;
 
   private:

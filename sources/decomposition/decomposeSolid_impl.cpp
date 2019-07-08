@@ -80,12 +80,12 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& f
       GeomAdaptor_Surface AdaptorSurface = surface.Surface();
       if (AdaptorSurface.GetType() == GeomAbs_Plane)
 	{
-	  McCAD::Decomposition::BoundSurfacePlane* boundSurfacePlane;
-	  //boundSurfacePlane->accessImpl()->initiate(face);
-	  boundSurfacePlane->surfaceType = "Plane";
-	  //boundSurfacePlane->accessImpl()->generateExtPlane(decomposeSolid->boxSquareLength);
+	  McCAD::Decomposition::BoundSurfacePlane boundSurfacePlane;
+	  boundSurfacePlane.accessImpl()->initiate(face);
+	  boundSurfacePlane.surfaceType = "Plane";
+	  boundSurfacePlane.accessImpl()->generateExtPlane(decomposeSolid->boxSquareLength);
 	  assert(boundSurfacePlane);
-	  return boundSurfacePlane;
+	  return &boundSurfacePlane;
 	}
       if (AdaptorSurface.GetType() == GeomAbs_Cylinder)
 	{
