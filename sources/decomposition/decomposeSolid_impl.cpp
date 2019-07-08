@@ -30,8 +30,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
   // Generate the boundary surface list of the solid.
   generateSurfacesList();
   // Judge which surfaces are decompose surfaces from the generated list.
-  judgeDecomposeSurfaces();
-  
+  judgeDecomposeSurfaces();  
 }
 
 void
@@ -82,9 +81,9 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& f
       if (AdaptorSurface.GetType() == GeomAbs_Plane)
 	{
 	  McCAD::Decomposition::BoundSurfacePlane* boundSurfacePlane;
-	  boundSurfacePlane->accessImpl()->initiate(face);
+	  //boundSurfacePlane->accessImpl()->initiate(face);
 	  boundSurfacePlane->surfaceType = "Plane";
-	  boundSurfacePlane->accessImpl()->generateExtPlane(decomposeSolid->boxSquareLength);
+	  //boundSurfacePlane->accessImpl()->generateExtPlane(decomposeSolid->boxSquareLength);
 	  assert(boundSurfacePlane);
 	  return boundSurfacePlane;
 	}
