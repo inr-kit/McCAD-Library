@@ -8,17 +8,17 @@
 
 namespace McCAD::Decomposition {
   class BoundSurface : public Surface {
-    private:
-      class Impl;
-      
-    public:
-      BoundSurface();
-      ~BoundSurface();
+  private:
+    class Impl;
+
+  public:
+    BoundSurface();
+    ~BoundSurface();
       
     Impl* accessImpl() const;
 
-    private:
-      std::unique_ptr<Impl> pImpl;
-    };
+  private:
+    std::unique_ptr<Impl> pImpl;
+  };
 }
 #endif //BOUNDSURFACE_HPP
