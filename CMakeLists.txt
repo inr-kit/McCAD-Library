@@ -133,6 +133,5 @@ target_link_libraries(Decomposition_impl Tools_impl)
 target_link_libraries(Decomposition DecomposeSolid)
 target_link_libraries(Decomposition_impl DecomposeSolid_impl)
 
-
 install (TARGETS ${PROJECT_NAME} DESTINATION ${PROJECT_BINARY_DIR}/bin)
 install (FILES "${PROJECT_BINARY_DIR}/McCADConfig.hpp" DESTINATION ${PROJECT_BINARY_DIR}/include)

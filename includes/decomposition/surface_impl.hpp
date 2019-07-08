@@ -4,12 +4,14 @@
 // C++
 #include <string>
 // McCAD
+#include "surface.hpp"
 // OCC
 
 namespace McCAD::Decomposition{
   class Surface::Impl {
   public:
-    Impl() = default;
+    Impl(McCAD::Decomposition::Surface* surface);
+    ~Impl();
 
     void initiate();
 

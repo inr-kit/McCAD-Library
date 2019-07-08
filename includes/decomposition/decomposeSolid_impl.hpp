@@ -7,9 +7,9 @@
 // McCAD
 #include "decomposeSolid.hpp"
 #include "tools_impl.hpp"
-#include "boundSurfacePlane_impl.hpp"
-#include "boundSurface_impl.hpp"
 #include "surface_impl.hpp"
+#include "boundSurface_impl.hpp"
+#include "boundSurfacePlane_impl.hpp"
 // OCC
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
@@ -26,10 +26,10 @@
 namespace McCAD::Decomposition{
   class DecomposeSolid::Impl {
   public:
-    Impl(McCAD::Decomposition::DecomposeSolid* dcompSolid);
+    Impl(McCAD::Decomposition::DecomposeSolid* decomposeSolid);
     ~Impl();
 
-    McCAD::Decomposition::DecomposeSolid* decompSolid;
+    McCAD::Decomposition::DecomposeSolid* decomposeSolid;
     TopoDS_Solid solid;
     std::vector<McCAD::Decomposition::BoundSurface*> facesList;
     

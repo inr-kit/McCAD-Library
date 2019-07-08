@@ -6,6 +6,7 @@
 // McCAD
 #include "decomposition.hpp"
 #include "inputdata_impl.hpp"
+#include "decomposeSolid_impl.hpp"
 #include "tools_impl.hpp"
 // OCC
 #include <Handle_TopTools_HSequenceOfShape.hxx>

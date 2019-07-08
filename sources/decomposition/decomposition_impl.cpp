@@ -1,6 +1,5 @@
 // McCAD
 #include "decomposition_impl.hpp"
-#include "decomposeSolid_impl.hpp"
 
 McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData) : splitInputSolidsList{new TopTools_HSequenceOfShape}, rejectedInputSolidsList{new TopTools_HSequenceOfShape}{
   auto inputSolidsList = inputData.accessImpl()->inputSolidsList;
@@ -33,7 +32,7 @@ McCAD::Decomposition::Decompose::Impl::splitInputSolids(const Handle_TopTools_HS
 	  TopExp_Explorer explorer(inputSolidsList->Value(i), TopAbs_SOLID);
 	  for (; explorer.More(); explorer.Next())
 	    {
-	      const TopoDS_Solid& tempSolid = TopoDS::Solid(explorer.Current());
+	      TopoDS_Solid tempSolid = TopoDS::Solid(explorer.Current());
 	      splitInputSolidsList->Append(tempSolid);
 	    }
 	}
