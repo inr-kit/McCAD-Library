@@ -16,13 +16,10 @@ namespace McCAD::Decomposition {
       Surface();
       ~Surface();
       
-      Impl* accessImpl() const;
-
-      std::string surfaceType;
-      Standard_Integer surfaceNumber;
+      Impl* accessSImpl() const;
 
     private:
-      std::unique_ptr<Impl> pImpl;
+      std::unique_ptr<Impl> pSImpl;
     };
 }
 #endif //SURFACE_HPP

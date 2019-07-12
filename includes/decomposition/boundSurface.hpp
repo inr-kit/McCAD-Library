@@ -15,10 +15,10 @@ namespace McCAD::Decomposition {
     BoundSurface();
     ~BoundSurface();
       
-    Impl* accessImpl() const;
+    Impl* accessBSImpl() const;
 
   private:
-    std::unique_ptr<Impl> pImpl;
+    std::unique_ptr<Impl> pBSImpl;
   };
 }
 #endif //BOUNDSURFACE_HPP

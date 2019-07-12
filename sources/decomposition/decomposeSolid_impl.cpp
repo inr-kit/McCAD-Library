@@ -1,22 +1,15 @@
 // McCAD
 #include "decomposeSolid_impl.hpp"
 
-McCAD::Decomposition::DecomposeSolid::Impl::Impl(McCAD::Decomposition::DecomposeSolid* decomposeSolid) : decomposeSolid{decomposeSolid}{
-}
-
-McCAD::Decomposition::DecomposeSolid::Impl::~Impl(){
-}
-
 void
 McCAD::Decomposition::DecomposeSolid::Impl::initiate(const TopoDS_Solid& aSolid){
-  McCAD::Tools::Preprocessor preproc;
   solid = aSolid;
-  decomposeSolid->meshDeflection = preproc.accessImpl()->calcMeshDeflection(solid);
+  meshDeflection = preproc->accessImpl()->calcMeshDeflection(solid);
   // Calculate Length of bounding box.
   Bnd_Box boundingBox;
   BRepBndLib::Add(solid, boundingBox);
   boundingBox.SetGap(0.0);
-  decomposeSolid->boxSquareLength = sqrt(boundingBox.SquareExtent());
+  boxSquareLength = sqrt(boundingBox.SquareExtent());
   
   perform();
 }
@@ -25,18 +18,17 @@ void
 McCAD::Decomposition::DecomposeSolid::Impl::perform(){
   // The function will be called recursively on a solid and a condition has to be set for termination.
   // Increment the level by 1.
-  ++(decomposeSolid->recurrenceDepth);
-  std::cout << "     - Recurrence Depth: " << decomposeSolid->recurrenceDepth << std::endl;
+  ++recurrenceDepth;
+  std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
   // Generate the boundary surface list of the solid.
   generateSurfacesList();
   // Judge which surfaces are decompose surfaces from the generated list.
-  judgeDecomposeSurfaces();  
+  judgeDecomposeSurfaces();
 }
 
 void
 McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
   // Generate a list of faces of the solid.
-  McCAD::Tools::Preprocessor preproc;
   TopoDS_Face face;
   Standard_Integer faceNumber = 0;
   std::vector<McCAD::Decomposition::BoundSurface*> planesList;
@@ -47,22 +39,22 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
     {
       face = TopoDS::Face(explorer.Current());
       BRepTools::Update(face);
-      Standard_Boolean rejectCondition = preproc.accessImpl()->checkFace(face);
+      Standard_Boolean rejectCondition = preproc->accessImpl()->checkFace(face);
       if (!rejectCondition)
 	{
 	  ++faceNumber;
-	  preproc.accessImpl()->fixFace(face);
+	  preproc->accessImpl()->fixFace(face);
 	  McCAD::Decomposition::BoundSurface* boundSurface = generateSurface(face);
-	  boundSurface->surfaceNumber = faceNumber;
-	  if (boundSurface->accessImpl()->generateMesh(decomposeSolid->meshDeflection))
+	  boundSurface->accessSImpl()->surfaceNumber = faceNumber;
+	  if (boundSurface->accessSImpl()->generateMesh(meshDeflection))
 	    {
 	      generateEdges(boundSurface);
-	      if(boundSurface->surfaceType == "Plane")
+	      if(boundSurface->accessSImpl()->getSurfaceType() == "Plane")
 		{
 		  planesList.push_back(boundSurface);
 		}
 	      // The other two types in McCADDecompSolid are to be added later.
-	    }
+	      }*/
 	}
       else continue;
     }
@@ -81,9 +73,8 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& f
       if (AdaptorSurface.GetType() == GeomAbs_Plane)
 	{
 	  McCAD::Decomposition::BoundSurfacePlane* boundSurfacePlane;
-	  boundSurfacePlane->accessImpl()->initiate(face);
-	  boundSurfacePlane->surfaceType = "Plane";
-	  boundSurfacePlane->accessImpl()->generateExtPlane(decomposeSolid->boxSquareLength);
+	  boundSurfacePlane->accessBSPImpl()->initiate(face);
+	  boundSurfacePlane->accessBSPImpl()->generateExtPlane(boxSquareLength);
 	  //assert(boundSurfacePlane);
 	  return boundSurfacePlane;
 	}
@@ -94,6 +85,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& f
 	{
 	}
     }
+  return nullptr;
 }
 
 void

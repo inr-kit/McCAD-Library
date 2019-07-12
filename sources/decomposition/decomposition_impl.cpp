@@ -45,8 +45,6 @@ McCAD::Decomposition::Decompose::Impl::splitInputSolids(const Handle_TopTools_HS
 
 void
 McCAD::Decomposition::Decompose::Impl::perform(){
-  McCAD::Tools::Preprocessor preproc;
-  McCAD::Decomposition::DecomposeSolid decomposedSolid;
   TopoDS_Shape solidShape;
   TopoDS_Solid solid;
   
@@ -57,7 +55,7 @@ McCAD::Decomposition::Decompose::Impl::perform(){
       solid = TopoDS::Solid(solidShape);
       // Check the boudary surfaces of the solid.
       // If the solid has spline surfaces, torus it cannot be processed by the current version.
-      Standard_Boolean rejectCondition = preproc.accessImpl()->checkBndSurfaces(solid);
+      Standard_Boolean rejectCondition = preproc->accessImpl()->checkBndSurfaces(solid);
       if (rejectCondition)
 	{
 	  rejectedInputSolidsList->Append(solidShape);
@@ -66,14 +64,15 @@ McCAD::Decomposition::Decompose::Impl::perform(){
       else
 	{
 	  // Repair the geometry of solid
-	  preproc.accessImpl()->removeSmallFaces(solidShape);
+	  preproc->accessImpl()->removeSmallFaces(solidShape);
 	  solid = TopoDS::Solid(solidShape);
-	  preproc.accessImpl()->repairSolid(solid);
-	  preproc.accessImpl()->genericFix(solid);
+	  preproc->accessImpl()->repairSolid(solid);
+	  preproc->accessImpl()->genericFix(solid);
 	  
 	  // Perform decomposition on the repaired solid.
 	  std::cout << "   - Decomposing solid # "<< solidNumber << std::endl;
-	  decomposedSolid.accessImpl()->initiate(solid);
+	  McCAD::Decomposition::DecomposeSolid* decomposedSolid;
+	  decomposedSolid->accessImpl()->initiate(solid);
 	}
     }
   std::cout << "   - There are " << rejectedInputSolidsList->Length() << " rejected solid(s)."<< std::endl;

@@ -19,7 +19,7 @@ namespace McCAD::Decomposition {
       Impl* accessImpl() const;
 
     private:
-      std::unique_ptr<Impl> pImpl;
+      std::unique_ptr<Impl> pDecomposeImpl;
     };
 }
 #endif //DECOMPOSITION_HPP

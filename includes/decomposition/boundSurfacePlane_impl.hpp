@@ -2,6 +2,7 @@
 #define BOUNDSURFACEPLANE_IMPL_HPP
 
 // C++
+#include <string>
 // McCAD
 #include "boundSurfacePlane.hpp"
 // OCC
@@ -17,7 +18,9 @@ namespace McCAD::Decomposition{
   public:
     Impl() = default;
 
-    void initiate(const TopoDS_Face& face);      
+    std::string surfaceType = "Plane";
+    void initiate(const TopoDS_Face& face);
+    std::string getSurfaceType();
     void generateExtPlane(const Standard_Real& boxSquareLength);
     
   private:

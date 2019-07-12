@@ -15,10 +15,8 @@
 namespace McCAD::Decomposition{
   class BoundSurface::Impl {
   public:
-    Impl(McCAD::Decomposition::BoundSurface* bndSurface);
-    ~Impl();
+    Impl() = default;
 
-    McCAD::Decomposition::BoundSurface* bndSurface;
     void initiate();
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
 

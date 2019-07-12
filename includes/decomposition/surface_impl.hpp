@@ -10,9 +10,11 @@
 namespace McCAD::Decomposition{
   class Surface::Impl {
   public:
-    Impl(McCAD::Decomposition::Surface* surface);
-    ~Impl();
+    Impl() = default;
 
+    Standard_Integer surfaceNumber;
+
+    virtual std::string getsurfaceType();
     void initiate();
 
   private:

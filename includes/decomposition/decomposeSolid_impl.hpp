@@ -26,13 +26,16 @@
 namespace McCAD::Decomposition{
   class DecomposeSolid::Impl {
   public:
-    Impl(McCAD::Decomposition::DecomposeSolid* decomposeSolid);
-    ~Impl();
+    Impl() = default;
 
-    McCAD::Decomposition::DecomposeSolid* decomposeSolid;
+    McCAD::Tools::Preprocessor* preproc;
     TopoDS_Solid solid;
     std::vector<McCAD::Decomposition::BoundSurface*> facesList;
-    
+    Standard_Real meshDeflection;
+    Standard_Real boxSquareLength;
+    Standard_Integer recurrenceDepth = 0;
+    Standard_Boolean splitSurface = Standard_False;
+
     void initiate(const TopoDS_Solid& aSolid);
     void perform();
     void generateSurfacesList();

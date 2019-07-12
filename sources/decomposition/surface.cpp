@@ -3,14 +3,13 @@
 #include "surface_impl.hpp"
 
 McCAD::Decomposition::Surface::Surface()
-  : pImpl{std::make_unique<Impl>(this)}{
+  : pSImpl{std::make_unique<Impl>()}{
 }
 
 McCAD::Decomposition::Surface::~Surface(){
 }
 
 McCAD::Decomposition::Surface::Impl*
-McCAD::Decomposition::Surface::accessImpl() const{
-  return pImpl.get();
+McCAD::Decomposition::Surface::accessSImpl() const{
+  return pSImpl.get();
 }
-

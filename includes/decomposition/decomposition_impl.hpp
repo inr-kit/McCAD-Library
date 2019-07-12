@@ -21,6 +21,7 @@ namespace McCAD::Decomposition{
   public:
     Impl(const McCAD::General::InputData& inputData);
 
+    McCAD::Tools::Preprocessor* preproc;
     Handle_TopTools_HSequenceOfShape splitInputSolidsList;
     Handle_TopTools_HSequenceOfShape rejectedInputSolidsList;
 

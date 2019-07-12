@@ -96,9 +96,10 @@ include_directories ("${PROJECT_SOURCE_DIR}/includes/tools")
 add_subdirectory (includes/tools)
 add_subdirectory (sources/tools)
 set (EXTRA_LIBS ${EXTRA_LIBS} Tools Tools_impl)
-target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 target_link_libraries(Tools TKShHealing)
 target_link_libraries(Tools_impl TKShHealing)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+
 
 # Surface library
 include_directories ("${PROJECT_SOURCE_DIR}/includes/decomposition")
@@ -109,29 +110,32 @@ target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # BoundSurface library
 set (EXTRA_LIBS ${EXTRA_LIBS} BoundSurface BoundSurface_impl)
-target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 target_link_libraries(BoundSurface Surface)
 target_link_libraries(BoundSurface_impl Surface_impl)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # BoundSurfacePlane library
 set (EXTRA_LIBS ${EXTRA_LIBS} BoundSurfacePlane BoundSurfacePlane_impl)
-target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 target_link_libraries(BoundSurfacePlane BoundSurface)
 target_link_libraries(BoundSurfacePlane_impl BoundSurface_impl)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+
 
 # DecomposeSolid library
 set (EXTRA_LIBS ${EXTRA_LIBS} DecomposeSolid DecomposeSolid_impl)
-target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
-target_link_libraries(DecomposeSolid BoundSurfacePlane)
+target_link_libraries(DecomposeSolid_impl BoundSurfacePlane)
 target_link_libraries(DecomposeSolid_impl BoundSurfacePlane_impl)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+
 
 # Decomposition library
 set (EXTRA_LIBS ${EXTRA_LIBS} Decomposition Decomposition_impl)
-target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 target_link_libraries(Decomposition Tools)
 target_link_libraries(Decomposition_impl Tools_impl)
 target_link_libraries(Decomposition DecomposeSolid)
 target_link_libraries(Decomposition_impl DecomposeSolid_impl)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+
 
 install (TARGETS ${PROJECT_NAME} DESTINATION ${PROJECT_BINARY_DIR}/bin)
-install (FILES "${PROJECT_BINARY_DIR}/McCADConfig.hpp" DESTINATION ${PROJECT_BINARY_DIR}/include)
+install (FILES "${PROJECT_BINARY_DIR}/McCADConfig.hpp" DESTINATION ${PROJECT_BINARY_DIR}/includes)

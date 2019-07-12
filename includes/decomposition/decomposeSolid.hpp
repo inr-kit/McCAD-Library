@@ -17,14 +17,9 @@ namespace McCAD::Decomposition {
     ~DecomposeSolid();
 
     Impl* accessImpl() const;
-
-    Standard_Real meshDeflection;
-    Standard_Real boxSquareLength;
-    Standard_Integer recurrenceDepth = 0;
-    Standard_Boolean splitSurface = Standard_False;
     
   private:
-    std::unique_ptr<Impl> pImpl;
+    std::unique_ptr<Impl> pDecomposeSolidImpl;
   };
 }
 #endif //DECOMPOSESOLID_HPP

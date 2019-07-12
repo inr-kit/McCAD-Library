@@ -16,10 +16,10 @@ namespace McCAD::Decomposition {
     BoundSurfacePlane();
     ~BoundSurfacePlane();
     
-    Impl* accessImpl() const;
+    Impl* accessBSPImpl() const;
 
   private:
-    std::unique_ptr<Impl> pImpl;
+    std::unique_ptr<Impl> pBSPImpl;
   };
 }
 #endif //BOUNDSURFACEPLANE_HPP
