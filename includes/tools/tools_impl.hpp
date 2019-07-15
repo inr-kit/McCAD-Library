@@ -30,13 +30,13 @@ namespace McCAD::Tools{
   public:
     Impl() = default;
 
-    void removeSmallFaces(TopoDS_Shape& solidShape, const Standard_Real precision = 1.0e-3, const Standard_Real maxTolerance = 1.0e-3);
+    void removeSmallFaces(TopoDS_Shape& solidShape, Standard_Real precision = 1.0e-3, Standard_Real maxTolerance = 1.0e-3);
     void repairSolid(TopoDS_Solid& solid);
     void genericFix(TopoDS_Solid& solid);
-    void fixFace(TopoDS_Face& face, const Standard_Real precision = 1.0e-7, const Standard_Real maxTolerance = 1.0e-3);
-    Standard_Real calcMeshDeflection(TopoDS_Solid& solid, const Standard_Real bndBoxGap = 0.0, const Standard_Real converting = 100);
-    Standard_Boolean checkBndSurfaces(TopoDS_Solid& solid);
-    Standard_Boolean checkFace(const TopoDS_Face& face, const Standard_Real tolerance = 1.0e-3);
+    void fixFace(TopoDS_Face& face, Standard_Real precision = 1.0e-7, Standard_Real maxTolerance = 1.0e-3);
+    Standard_Real calcMeshDeflection(const TopoDS_Solid& solid, Standard_Real bndBoxGap = 0.0, Standard_Real converting = 100);
+    Standard_Boolean checkBndSurfaces(const TopoDS_Solid& solid);
+    Standard_Boolean checkFace(const TopoDS_Face& face, Standard_Real tolerance = 1.0e-3);
 
   private:
 

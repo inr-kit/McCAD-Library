@@ -45,14 +45,11 @@ McCAD::Decomposition::Decompose::Impl::splitInputSolids(const Handle_TopTools_HS
 
 void
 McCAD::Decomposition::Decompose::Impl::perform(){
-  TopoDS_Shape solidShape;
-  TopoDS_Solid solid;
-  
   // Loop over the solids in the list and perform the decomposition
   for(Standard_Integer solidNumber = 1; solidNumber <= splitInputSolidsList->Length(); solidNumber++)
     {
-      solidShape = splitInputSolidsList->Value(solidNumber);
-      solid = TopoDS::Solid(solidShape);
+      TopoDS_Shape solidShape = splitInputSolidsList->Value(solidNumber);
+      TopoDS_Solid solid = TopoDS::Solid(solidShape);
       // Check the boudary surfaces of the solid.
       // If the solid has spline surfaces, torus it cannot be processed by the current version.
       Standard_Boolean rejectCondition = preproc->accessImpl()->checkBndSurfaces(solid);

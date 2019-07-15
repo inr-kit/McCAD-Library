@@ -10,7 +10,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::initiate(const TopoDS_Solid& aSolid)
   BRepBndLib::Add(solid, boundingBox);
   boundingBox.SetGap(0.0);
   boxSquareLength = sqrt(boundingBox.SquareExtent());
-  
   perform();
 }
 

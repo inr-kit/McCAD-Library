@@ -2,7 +2,7 @@
 #include "tools_impl.hpp"
 
 void
-McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape, const Standard_Real precision, const Standard_Real maxTolerance){
+McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape, Standard_Real precision, Standard_Real maxTolerance){
   TopoDS_Shape fixedSolidShape;
   Handle_ShapeFix_FixSmallFace smallFaceFix = new ShapeFix_FixSmallFace;
   smallFaceFix->Init(solidShape);
@@ -31,8 +31,9 @@ McCAD::Tools::Preprocessor::Impl::genericFix(TopoDS_Solid& solid){
 }
 
 Standard_Real
-McCAD::Tools::Preprocessor::Impl::calcMeshDeflection(TopoDS_Solid& solid, const Standard_Real bndBoxGap, const Standard_Real converting){
+McCAD::Tools::Preprocessor::Impl::calcMeshDeflection(const TopoDS_Solid& solid, Standard_Real bndBoxGap, Standard_Real converting){
   Standard_Real deflection;
+  std::cout << "calc mesh: << std::endl";
   /** Calculate the bounding box of face **/
   Bnd_Box boundingBox;
   BRepBndLib::Add(solid,boundingBox);
@@ -45,7 +46,7 @@ McCAD::Tools::Preprocessor::Impl::calcMeshDeflection(TopoDS_Solid& solid, const 
 }
 
 Standard_Boolean
-McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(TopoDS_Solid& solid){
+McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid){
   Standard_Boolean spline_torus_found = Standard_False;
   // Find the faces with small areas, they will not be added into face list.
   TopExp_Explorer explorer(solid, TopAbs_FACE);
@@ -73,7 +74,7 @@ McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(TopoDS_Solid& solid){
 }
 
 Standard_Boolean
-McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face, const Standard_Real tolerance){
+McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face, Standard_Real tolerance){
   ShapeAnalysis_CheckSmallFace shapeAnalysis;
   Standard_Boolean isSmallFace = Standard_False;
   TopoDS_Edge edge1, edge2;
@@ -85,7 +86,7 @@ McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face, const Stand
 }
 
 void
-McCAD::Tools::Preprocessor::Impl::fixFace(TopoDS_Face& face, const Standard_Real precision, const Standard_Real maxTolerance){
+McCAD::Tools::Preprocessor::Impl::fixFace(TopoDS_Face& face, Standard_Real precision, Standard_Real maxTolerance){
   Handle_ShapeFix_Shape shapeFixer = new ShapeFix_Shape(face);
   shapeFixer->SetPrecision(precision);
   shapeFixer->SetMaxTolerance(maxTolerance);
