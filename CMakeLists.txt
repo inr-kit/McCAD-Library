@@ -90,13 +90,13 @@ add_subdirectory (includes/io)
 add_subdirectory (sources/io)
 set (EXTRA_LIBS ${EXTRA_LIBS} STEPReader STEPReader_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+target_link_libraries(STEPReader_impl TKSTEP)
 
 # Tools library
 include_directories ("${PROJECT_SOURCE_DIR}/includes/tools")
 add_subdirectory (includes/tools)
 add_subdirectory (sources/tools)
 set (EXTRA_LIBS ${EXTRA_LIBS} Tools Tools_impl)
-target_link_libraries(Tools TKShHealing)
 target_link_libraries(Tools_impl TKShHealing)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 

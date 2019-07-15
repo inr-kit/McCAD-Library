@@ -16,10 +16,10 @@ namespace McCAD::Decomposition {
       Decompose(const McCAD::General::InputData& inputData);
       ~Decompose();
       
-      Impl* accessImpl() const;
+      Impl* accessDImpl() const;
 
     private:
-      std::unique_ptr<Impl> pDecomposeImpl;
+      std::unique_ptr<Impl> pDImpl;
     };
 }
 #endif //DECOMPOSITION_HPP

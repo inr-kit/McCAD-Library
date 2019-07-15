@@ -16,10 +16,10 @@ namespace McCAD::Decomposition {
     DecomposeSolid();
     ~DecomposeSolid();
 
-    Impl* accessImpl() const;
+    Impl* accessDSImpl() const;
     
   private:
-    std::unique_ptr<Impl> pDecomposeSolidImpl;
+    std::unique_ptr<Impl> pDSImpl;
   };
 }
 #endif //DECOMPOSESOLID_HPP

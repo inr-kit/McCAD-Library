@@ -72,7 +72,7 @@ McCAD::Decomposition::Decompose::Impl::perform(){
 	  // Perform decomposition on the repaired solid.
 	  std::cout << "   - Decomposing solid # "<< solidNumber << std::endl;
 	  McCAD::Decomposition::DecomposeSolid* decomposedSolid;
-	  decomposedSolid->accessImpl()->initiate(solid);
+	  decomposedSolid->accessDSImpl()->initiate(solid);
 	}
     }
   std::cout << "   - There are " << rejectedInputSolidsList->Length() << " rejected solid(s)."<< std::endl;

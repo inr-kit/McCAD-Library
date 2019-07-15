@@ -13,3 +13,13 @@ McCAD::Decomposition::Surface::Impl*
 McCAD::Decomposition::Surface::accessSImpl() const{
   return pSImpl.get();
 }
+
+void
+McCAD::Decomposition::Surface::setSurfaceType(const std::string& surfaceType){
+  pSImpl->surfaceType = surfaceType;
+}
+
+std::string
+McCAD::Decomposition::Surface::getSurfaceType(){
+  return pSImpl->surfaceType;
+}

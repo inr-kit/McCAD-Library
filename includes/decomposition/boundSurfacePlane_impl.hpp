@@ -20,7 +20,6 @@ namespace McCAD::Decomposition{
 
     std::string surfaceType = "Plane";
     void initiate(const TopoDS_Face& face);
-    std::string getSurfaceType();
     void generateExtPlane(const Standard_Real& boxSquareLength);
     
   private:

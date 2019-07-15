@@ -17,6 +17,8 @@ namespace McCAD::Decomposition {
       ~Surface();
       
       Impl* accessSImpl() const;
+      void setSurfaceType(const std::string& surfaceType);
+      std::string getSurfaceType();
 
     private:
       std::unique_ptr<Impl> pSImpl;

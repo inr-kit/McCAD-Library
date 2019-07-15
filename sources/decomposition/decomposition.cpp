@@ -3,13 +3,13 @@
 #include "decomposition_impl.hpp"
 
 McCAD::Decomposition::Decompose::Decompose(const McCAD::General::InputData& inputData)
-  : pDecomposeImpl{std::make_unique<Impl>(inputData)}{
+  : pDImpl{std::make_unique<Impl>(inputData)}{
 }
 
 McCAD::Decomposition::Decompose::~Decompose(){
 }
 
 McCAD::Decomposition::Decompose::Impl*
-McCAD::Decomposition::Decompose::accessImpl() const{
-  return pDecomposeImpl.get();
+McCAD::Decomposition::Decompose::accessDImpl() const{
+  return pDImpl.get();
 }
