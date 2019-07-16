@@ -7,9 +7,9 @@
 #include "decomposition.hpp"
 
 int main (){
-    std::string fileName = "/home/mharb/Downloads/McCAD/BRACKET_M5#XC3PJA.stp";
+    std::string fileName;
     std::cout << "Specify the path to the step file: " << std::endl;
-    //getline(std::cin, fileName);
+    getline(std::cin, fileName);
     
     // Load the input file.
     std::cout << "***************************" << std::endl;

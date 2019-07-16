@@ -1,7 +1,7 @@
 // McCAD
 #include "decomposition_impl.hpp"
 
-McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData) : splitInputSolidsList{new TopTools_HSequenceOfShape}, rejectedInputSolidsList{new TopTools_HSequenceOfShape}{
+McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData) : splitInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}, rejectedInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
   auto inputSolidsList = inputData.accessImpl()->inputSolidsList;
   if (inputSolidsList->Length() >= 1)
     {
@@ -45,8 +45,6 @@ McCAD::Decomposition::Decompose::Impl::splitInputSolids(const Handle_TopTools_HS
 
 void
 McCAD::Decomposition::Decompose::Impl::perform(){
-  //TopoDS_Shape solidShape;
-  //TopoDS_Solid solid;
   // Loop over the solids in the list and perform the decomposition
   for(Standard_Integer solidNumber = 1; solidNumber <= splitInputSolidsList->Length(); solidNumber++)
     {

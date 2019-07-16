@@ -4,7 +4,7 @@
 void
 McCAD::Decomposition::DecomposeSolid::Impl::initiate(const TopoDS_Solid& aSolid){
   solid = aSolid;
-  meshDeflection = preproc.accessImpl()->calcMeshDeflection(aSolid);
+  meshDeflection = preproc.accessImpl()->calcMeshDeflection(solid);
   // Calculate Length of bounding box.
   Bnd_Box boundingBox;
   BRepBndLib::Add(solid, boundingBox);
@@ -95,9 +95,9 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
 }
 
 void
-McCAD::Decomposition::DecomposeSolid::Impl::generateEdges(std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurface){
+McCAD::Decomposition::DecomposeSolid::Impl::generateEdges(){
 }
 
 void
-McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> planesList){
+McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(){
 }

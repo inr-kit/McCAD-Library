@@ -9,7 +9,7 @@
 #include "tools_impl.hpp"
 #include "decomposeSolid_impl.hpp"
 // OCC
-#include <Handle_TopTools_HSequenceOfShape.hxx>
+#include <TopTools_HSequenceOfShape.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
@@ -24,8 +24,8 @@ namespace McCAD::Decomposition{
     McCAD::Tools::Preprocessor preproc;
     TopoDS_Solid solid;
     TopoDS_Shape solidShape;
-    Handle_TopTools_HSequenceOfShape splitInputSolidsList;
-    Handle_TopTools_HSequenceOfShape rejectedInputSolidsList;
+    std::unique_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;
+    std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;
 
     void splitInputSolids(const Handle_TopTools_HSequenceOfShape& inputSolidsList);
     void perform();
