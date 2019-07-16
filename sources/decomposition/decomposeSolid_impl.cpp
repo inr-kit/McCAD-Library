@@ -47,17 +47,17 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
 	  boundSurface->accessSImpl()->surfaceNumber = faceNumber;
 	  if (boundSurface->accessBSImpl()->generateMesh(meshDeflection))
 	    {
-	      //generateEdges(boundSurface);
+	      generateEdges(boundSurface);
 	      if(boundSurface->getSurfaceType() == "Plane")
 		{
-		  std::cout << "      Plane" << std::endl;
-		  //planesList.push_back(boundSurface);
+		  planesList.push_back(std::move(boundSurface));
 		}
 	      // The other two types in McCADDecompSolid are to be added later.
 	    }
 	}
       else continue;
     }
+  std::cout << "     - There are " << planesList.size() << " planes in the solid" << std::endl;
   //mergeSurfaces(planesList);
   // The other two types in McCADDecompSolid are to be added later.
   //facesList.insert(facesList.end(), planesList.begin(), planesList.end());
@@ -95,7 +95,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
 }
 
 void
-McCAD::Decomposition::DecomposeSolid::Impl::generateEdges(){
+McCAD::Decomposition::DecomposeSolid::Impl::generateEdges(const std::unique_ptr<McCAD::Decomposition::BoundSurface>& surface){
 }
 
 void
