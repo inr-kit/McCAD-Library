@@ -33,7 +33,6 @@ McCAD::Tools::Preprocessor::Impl::genericFix(TopoDS_Solid& solid){
 Standard_Real
 McCAD::Tools::Preprocessor::Impl::calcMeshDeflection(const TopoDS_Solid& solid, Standard_Real bndBoxGap, Standard_Real converting){
   Standard_Real deflection;
-  std::cout << "calc mesh: << std::endl";
   /** Calculate the bounding box of face **/
   Bnd_Box boundingBox;
   BRepBndLib::Add(solid,boundingBox);
@@ -52,7 +51,7 @@ McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid){
   TopExp_Explorer explorer(solid, TopAbs_FACE);
   for (; explorer.More(); explorer.Next())
     {
-      const TopoDS_Face& face = TopoDS::Face(explorer.Current());
+      TopoDS_Face face = TopoDS::Face(explorer.Current());
       TopLoc_Location location;
       Handle_Geom_Surface geomSurface = BRep_Tool::Surface(face, location);
       GeomAdaptor_Surface surfAdaptor(geomSurface);

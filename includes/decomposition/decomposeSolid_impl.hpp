@@ -28,20 +28,20 @@ namespace McCAD::Decomposition{
   public:
     Impl() = default;
 
-    McCAD::Tools::Preprocessor* preproc;
+    McCAD::Tools::Preprocessor preproc;
     TopoDS_Solid solid;
-    std::vector<McCAD::Decomposition::BoundSurface*> facesList;
+    std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> facesList;
     Standard_Real meshDeflection;
     Standard_Real boxSquareLength;
     Standard_Integer recurrenceDepth = 0;
     Standard_Boolean splitSurface = Standard_False;
 
-    void initiate(const TopoDS_Solid& aSolid);
+    void initiate(const TopoDS_Solid& solid);
     void perform();
     void generateSurfacesList();
-    McCAD::Decomposition::BoundSurface* generateSurface(const TopoDS_Face& face, Standard_Integer mode = 0);
-    void generateEdges(McCAD::Decomposition::BoundSurface* boundSurface);
-    void mergeSurfaces(std::vector<McCAD::Decomposition::BoundSurface*> planesList);
+    std::unique_ptr<McCAD::Decomposition::BoundSurface> generateSurface(const TopoDS_Face& face, Standard_Integer mode = 0);
+    void generateEdges(std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurface);
+    void mergeSurfaces(std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> planesList);
     void judgeDecomposeSurfaces();
 
   private:
