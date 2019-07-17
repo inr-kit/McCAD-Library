@@ -12,10 +12,11 @@ namespace McCAD::Decomposition{
   public:
     Impl() = default;
 
+    TopoDS_Face face;
     std::string surfaceType;
     Standard_Integer surfaceNumber;
-
-    void initiate();
+    
+    void initiate(const TopoDS_Face& aFace);
 
   private:
 

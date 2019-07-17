@@ -48,8 +48,9 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
 	  preproc.accessImpl()->fixFace(face);
 	  //std::cout << "face fixed: " << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurface = std::move(generateSurface(face));
+	  boundSurface->accessSImpl()->initiate(face);
 	  boundSurface->accessSImpl()->surfaceNumber = faceNumber;
-	  if (boundSurface->accessBSImpl()->generateMesh(meshDeflection))
+	  if (boundSurface->accessBSImpl()->generateMesh(face, meshDeflection))
 	    {
 	      generateEdges(boundSurface);
 	      if(boundSurface->getSurfaceType() == "Plane")
@@ -62,9 +63,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
       else continue;
     }
   std::cout << "     - There are " << planesList.size() << " planes in the solid" << std::endl;
-  //mergeSurfaces(planesList);
-  // The other two types in McCADDecompSolid are to be added later.
-  //facesList.insert(facesList.end(), planesList.begin(), planesList.end());
+  mergeSurfaces(planesList);
 }
 
 std::unique_ptr<McCAD::Decomposition::BoundSurface>
@@ -119,11 +118,21 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateEdges(const std::unique_ptr<
 }
 
 void
-McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(){
+McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(const std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>>& surfacesList){
+  std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> mergedSurfacesList;
+  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurface1 = std::make_unique<McCAD::Decomposition::BoundSurface>();
+  mergedSurfacesList.push_back(std::move(boundSurface1));
+  std::cout << facesList.size() << std::endl;
+  for (Standard_Integer i = 1; i <= mergedSurfacesList.size(); ++i)
+    {
+      facesList.push_back(std::move( mergedSurfacesList[i-1]));
+    }
+  std::cout << facesList.size() << std::endl;
 }
 
 std::string
 McCAD::Decomposition::DecomposeSolid::Impl::getSurfTypeName(const Standard_Integer& index){
+  // This function is to be deleted and has to write a tool to get the type from the enumerated type from OCE rather than copy the types into a vector as is done here!.
   std::vector<std::string> typeNames = {
 	"Plane",
 	"Cylinder",

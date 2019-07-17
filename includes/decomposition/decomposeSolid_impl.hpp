@@ -41,7 +41,7 @@ namespace McCAD::Decomposition{
     void generateSurfacesList();
     std::unique_ptr<McCAD::Decomposition::BoundSurface> generateSurface(const TopoDS_Face& face, Standard_Integer mode = 0);
     void generateEdges(const std::unique_ptr<McCAD::Decomposition::BoundSurface>& surface);
-    void mergeSurfaces();
+    void mergeSurfaces(const std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>>& planesList);
     void judgeDecomposeSurfaces();
     std::string getSurfTypeName(const Standard_Integer& index);
 

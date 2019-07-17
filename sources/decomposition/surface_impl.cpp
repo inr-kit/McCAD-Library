@@ -2,6 +2,7 @@
 #include "surface_impl.hpp"
 
 void
-McCAD::Decomposition::Surface::Impl::initiate(){
+McCAD::Decomposition::BoundSurfacePlane::Impl::initiate(const TopoDS_Face& aFace){
+  face = aFace;
 }
 
