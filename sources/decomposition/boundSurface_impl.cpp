@@ -17,12 +17,14 @@ McCAD::Decomposition::BoundSurface::Impl::generateMesh(const TopoDS_Face& face, 
       TopLoc_Location location;
       BRepMesh::Mesh(face, meshDeflection);
       mesh = BRep_Tool::Triangulation(face, location);
-
-      if (mesh.IsNull())
+      if (!mesh.IsNull())
+	{
+	  Standard_Integer numberNodes = mesh->NbNodes();
+	  return Standard_True;  
+	}
     }
-  catch()
+  catch(...)
     {
       return Standard_False;
     }
-  return Standard_True;
 }

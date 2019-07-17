@@ -6,6 +6,7 @@
 // McCAD
 #include "surface.hpp"
 // OCC
+#include <TopoDS_Face.hxx>
 
 namespace McCAD::Decomposition{
   class Surface::Impl {
