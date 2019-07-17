@@ -43,6 +43,7 @@ namespace McCAD::Decomposition{
     void generateEdges(const std::unique_ptr<McCAD::Decomposition::BoundSurface>& surface);
     void mergeSurfaces();
     void judgeDecomposeSurfaces();
+    std::string getSurfTypeName(const Standard_Integer& index);
 
   private:
 

@@ -5,11 +5,13 @@ void
 McCAD::Decomposition::DecomposeSolid::Impl::initiate(const TopoDS_Solid& aSolid){
   solid = aSolid;
   meshDeflection = preproc.accessImpl()->calcMeshDeflection(solid);
+  //std::cout << "deflection: " << meshDeflection << std::endl;
   // Calculate Length of bounding box.
   Bnd_Box boundingBox;
   BRepBndLib::Add(solid, boundingBox);
   boundingBox.SetGap(0.0);
   boxSquareLength = sqrt(boundingBox.SquareExtent());
+  //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
   perform();
 }
 
@@ -42,7 +44,9 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
       if (!rejectCondition)
 	{
 	  ++faceNumber;
+	  //std::cout << "faceNumber: " << faceNumber << std::endl;
 	  preproc.accessImpl()->fixFace(face);
+	  //std::cout << "face fixed: " << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurface = std::move(generateSurface(face));
 	  boundSurface->accessSImpl()->surfaceNumber = faceNumber;
 	  if (boundSurface->accessBSImpl()->generateMesh(meshDeflection))
@@ -67,26 +71,42 @@ std::unique_ptr<McCAD::Decomposition::BoundSurface>
 McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& face, Standard_Integer mode){
   if (mode == Standard_Integer(0))
     {
+      //std::cout << "mode 0 " << std::endl;
       BRepAdaptor_Surface surface(face, Standard_True);
+      //std::cout << "BRepAdaptor_Surface" << std::endl;
       GeomAdaptor_Surface AdaptorSurface = surface.Surface();
+      //std::cout << "GeomAdaptor_Surface" << std::endl;
       if (AdaptorSurface.GetType() == GeomAbs_Plane)
 	{
+	  std::cout << getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurfacePlane> boundSurfacePlane = std::make_unique<McCAD::Decomposition::BoundSurfacePlane>();
 	  boundSurfacePlane->setSurfaceType(boundSurfacePlane->accessBSPImpl()->surfaceType);
 	  boundSurfacePlane->accessBSPImpl()->initiate(face);
 	  boundSurfacePlane->accessBSPImpl()->generateExtPlane(boxSquareLength);
 	  //assert(boundSurfacePlane);
+	  //std::cout << "return poly" << std::endl;
 	  return boundSurfacePlane;
 	}
       else if (AdaptorSurface.GetType() == GeomAbs_Cylinder)
 	{
-	  return nullptr;
+	  std::cout << getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
+	  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurfaceCylinder = std::make_unique<McCAD::Decomposition::BoundSurface>();
+	  return boundSurfaceCylinder;
 	}
       else if (AdaptorSurface.GetType() == GeomAbs_Cone)
 	{
-	  return nullptr;
+	  std::cout << getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
+	  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurfaceCone = std::make_unique<McCAD::Decomposition::BoundSurface>();
+	  return boundSurfaceCone;
+	}
+      else
+	{
+	  std::cout << getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
+	  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurface = std::make_unique<McCAD::Decomposition::BoundSurface>();
+          return boundSurface;
 	}
     }
+  //std::cout << "<<<<<<<<<<<<<< mode 1" << std::endl;
   return nullptr;
 }
 
@@ -100,4 +120,22 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateEdges(const std::unique_ptr<
 
 void
 McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(){
+}
+
+std::string
+McCAD::Decomposition::DecomposeSolid::Impl::getSurfTypeName(const Standard_Integer& index){
+  std::vector<std::string> typeNames = {
+	"Plane",
+	"Cylinder",
+	"Cone",
+	"Sphere",
+	"Torus",
+	"BezierSurface",
+	"BSplineSurface",
+	"SurfaceOfRevolution",
+	"SurfaceOfExtrusion",
+	"OffsetSurface",
+	"OtherSurface"
+	};
+  return typeNames[index];
 }
