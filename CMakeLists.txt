@@ -111,6 +111,7 @@ target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 set (EXTRA_LIBS ${EXTRA_LIBS} BoundSurface BoundSurface_impl)
 target_link_libraries(BoundSurface Surface)
 target_link_libraries(BoundSurface_impl Surface_impl)
+target_link_libraries(BoundSurface_impl TKMesh)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # BoundSurfacePlane library

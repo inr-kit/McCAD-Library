@@ -121,12 +121,12 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(const std::vector<std:
   std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> mergedSurfacesList;
   std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurface1 = std::make_unique<McCAD::Decomposition::BoundSurface>();
   mergedSurfacesList.push_back(std::move(boundSurface1));
-  std::cout << facesList.size() << std::endl;
+  //std::cout << facesList.size() << std::endl;
   for (Standard_Integer i = 1; i <= mergedSurfacesList.size(); ++i)
     {
       facesList.push_back(std::move( mergedSurfacesList[i-1]));
     }
-  std::cout << facesList.size() << std::endl;
+  //std::cout << facesList.size() << std::endl;
 }
 
 std::string
