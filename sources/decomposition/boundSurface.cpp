@@ -3,7 +3,7 @@
 #include "boundSurface_impl.hpp"
 
 McCAD::Decomposition::BoundSurface::BoundSurface()
-  : pBSImpl{std::make_unique<Impl>()}, Surface::Surface() {
+  : pBSImpl{std::make_unique<Impl>(this)}, Surface::Surface() {
 }
 
 McCAD::Decomposition::BoundSurface::~BoundSurface(){

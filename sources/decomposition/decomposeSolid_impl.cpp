@@ -50,7 +50,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
 	  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurface = std::move(generateSurface(face));
 	  boundSurface->accessSImpl()->initiate(face);
 	  boundSurface->accessSImpl()->surfaceNumber = faceNumber;
-	  if (boundSurface->accessBSImpl()->generateMesh(face, meshDeflection))
+	  if (boundSurface->accessBSImpl()->generateMesh(meshDeflection))
 	    {
 	      generateEdges(boundSurface);
 	      if(boundSurface->getSurfaceType() == "Plane")
@@ -80,7 +80,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& f
 	  std::cout << getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurfacePlane> boundSurfacePlane = std::make_unique<McCAD::Decomposition::BoundSurfacePlane>();
 	  boundSurfacePlane->setSurfaceType(boundSurfacePlane->accessBSPImpl()->surfaceType);
-	  boundSurfacePlane->accessBSPImpl()->initiate(face);
 	  boundSurfacePlane->accessBSPImpl()->generateExtPlane(boxSquareLength);
 	  //assert(boundSurfacePlane);
 	  //std::cout << "return poly" << std::endl;

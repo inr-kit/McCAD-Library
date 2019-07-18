@@ -4,7 +4,8 @@
 // C++
 // McCAD
 #include "boundSurface.hpp"
-#include "mesh.hpp"
+#include "surface_impl.hpp"
+//#include "mesh.hpp"
 // OCC
 #include <Handle_Poly_Triangulation.hxx>
 #include <BRepAdaptor_Surface.hxx>
@@ -32,11 +33,12 @@
 namespace McCAD::Decomposition{
   class BoundSurface::Impl {
   public:
-    Impl() = default;
+    Impl(McCAD::Decomposition::BoundSurface* backReference);
+    ~Impl();
 
-    std::vector<std::unique_ptr<McCAD::Decomposition::Mesh>> meshList;
-    
-    void initiate();
+    McCAD::Decomposition::BoundSurface* boundSurface;
+    //std::vector<std::unique_ptr<McCAD::Decomposition::Mesh>> meshList;
+
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
 
   private:
