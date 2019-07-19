@@ -15,19 +15,19 @@
 #include <BRep_Tool.hxx>
 #include <TopoDS_Face.hxx>
 #include <TColgp_Array1OfPnt.hxx>
+#include <TopoDS_Wire.hxx>
+#include <BRepBuilderAPI_MakePolygon.hxx>                                           
+#include <BRepBuilderAPI_MakeFace.hxx>
 //#include <gp_Pln.hxx>
 //#include <gp_Ax3.hxx>
 //#include <TopExp_Explorer.hxx>
 //#include <TopAbs_ShapeEnum.hxx>
-//#include <TopoDS_Wire.hxx>
 //#include <TopoDS.hxx>
 //#include <TopTools_HSequenceOfShape.hxx>
 //#include <TCollection_AsciiString.hxx>
 //#include <BRepTools.hxx>
 //#include <BRepBndLib.hxx>
 //#include <Bnd_Box.hxx>
-//#include <BRepBuilderAPI_MakePolygon.hxx>
-//#include <BRepBuilderAPI_MakeFace.hxx>
 //#include <BRepAlgoAPI_Section.hxx>
 //#include <Handle_TColgp_HSequenceOfPnt.hxx>
 //#include <GeomAdaptor_Curve.hxx>
@@ -39,7 +39,7 @@ namespace McCAD::Decomposition{
     ~Impl();
 
     McCAD::Decomposition::BoundSurface* boundSurface;
-    //std::vector<std::unique_ptr<McCAD::Decomposition::Mesh>> meshList;
+    std::vector<std::unique_ptr<McCAD::Decomposition::Triangle>> meshTrianglesList;
 
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
 

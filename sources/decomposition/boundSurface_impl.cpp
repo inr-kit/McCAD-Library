@@ -10,25 +10,53 @@ McCAD::Decomposition::BoundSurface::Impl::~Impl(){
 Standard_Boolean
 McCAD::Decomposition::BoundSurface::Impl::generateMesh(const Standard_Real& meshDeflection){
   // Get surface from base class; Surface.
-  TopLoc_Location location;
-  Handle_Poly_Triangulation mesh;
   TopoDS_Face face = boundSurface->accessSImpl()->face;
 
   // Generate mesh of the surface.
   try
     {
-      //BRepMesh::Mesh(face, meshDeflection);
+      TopLoc_Location location;
+      Handle_Poly_Triangulation mesh;
       BRepMesh_IncrementalMesh incMesh(face, meshDeflection, Standard_True);
       incMesh.Perform();
       mesh = BRep_Tool::Triangulation(face, location);
       if (!mesh.IsNull())
 	{
 	  BRepAdaptor_Surface surface(face, Standard_True);
-          gp_Trsf Trnsformation = surface.Trsf();
+          gp_Trsf Transformation = surface.Trsf();
+	  // Get mesh nodes.
 	  Standard_Integer numberNodes = mesh->NbNodes();
-	  TColgp_Array1OfPnt meshPoints(1, numberNodes);
-	  meshPoints = mesh->Nodes();
+	  TColgp_Array1OfPnt meshNodes(1, numberNodes);
+	  meshNodes = mesh->Nodes();
+	  std::cout << "number of nodes: " << numberNodes << std::endl;
+	  // Get mesh triangles.
 	  Standard_Integer numberTriangles = mesh->NbTriangles();
+	  const Poly_Array1OfTriangle& Triangles = mesh->Triangles();
+	  std::cout << "number of triangles: " << numberTriangles << std::endl;
+
+	  std::vector<Standard_Integer> triangleNodes(3);
+	  for (Standard_Integer i = 1; i <= numberTriangles; ++i)
+	    {
+	      Poly_Triangle Triangle = Triangles(i);
+	      Triangle.Get(triangleNodes[0], triangleNodes[1], triangleNodes[2]);
+	      std::cout << triangleNodes[0] << std::endl;
+	      std::cout	<< triangleNodes[1] << std::endl;
+	      std::cout	<< triangleNodes[2] << std::endl;
+	      std::cout << "=====" << std::endl;
+	      std::vector<gp_Pnt> points = {
+		meshNodes(triangleNodes[0]).Transformed(Transformation),
+		meshNodes(triangleNodes[1]).Transformed(Transformation),
+		meshNodes(triangleNodes[2]).Transformed(Transformation)};
+	      
+	      // Generate new face with the retrieved triangle points.
+	      TopoDS_Wire wire = BRepBuilderAPI_MakePolygon(points[0], points[1], points[2], Standard_True);
+	      TopoDS_Face triangleFace = BRepBuilderAPI_MakeFace(wire, Standard_True);
+	      std::unique_ptr<McCAD::Decomposition::Triangle> meshTriangle = std::make_unique<McCAD::Decomposition::Triangle>;
+	      meshTriangle->accessMTImpl->points = points;
+	      meshTriangle->accessMTImpl->surfaceNumber();
+	      meshTrianglesList.pushback(std::move(meshTriangle));
+	    }
+	      
 	  return Standard_True;  
 	}
       else
