@@ -51,12 +51,11 @@ McCAD::Decomposition::BoundSurface::Impl::generateMesh(const Standard_Real& mesh
 	      // Generate new face with the retrieved triangle points.
 	      TopoDS_Wire wire = BRepBuilderAPI_MakePolygon(points[0], points[1], points[2], Standard_True);
 	      TopoDS_Face triangleFace = BRepBuilderAPI_MakeFace(wire, Standard_True);
-	      std::unique_ptr<McCAD::Decomposition::Triangle> meshTriangle = std::make_unique<McCAD::Decomposition::Triangle>;
-	      meshTriangle->accessMTImpl->points = points;
-	      meshTriangle->accessMTImpl->surfaceNumber();
-	      meshTrianglesList.pushback(std::move(meshTriangle));
-	    }
-	      
+	      std::unique_ptr<McCAD::Decomposition::MeshTriangle> meshTriangle = std::make_unique<McCAD::Decomposition::MeshTriangle>();
+	      meshTriangle->accessMTImpl()->initiate(triangleFace);
+	      meshTriangle->accessMTImpl()->points = points; 
+	      meshTrianglesList.push_back(std::move(meshTriangle));
+	    }      
 	  return Standard_True;  
 	}
       else
@@ -69,5 +68,4 @@ McCAD::Decomposition::BoundSurface::Impl::generateMesh(const Standard_Real& mesh
       std::cout << "cannot mesh surface" << std::endl;
       return Standard_False;
     }
-
 }

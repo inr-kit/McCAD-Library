@@ -1,3 +1,6 @@
+install (FILES meshtriangle.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+install (FILES meshtriangle_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+
 install (FILES surface.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
 install (FILES surface_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
 

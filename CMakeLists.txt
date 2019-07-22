@@ -107,11 +107,17 @@ add_subdirectory (sources/decomposition)
 set (EXTRA_LIBS ${EXTRA_LIBS} Surface Surface_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
+# MeshTriangle library
+set (EXTRA_LIBS ${EXTRA_LIBS} Meshtriangle Meshtriangle_impl)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+
 # BoundSurface library
 set (EXTRA_LIBS ${EXTRA_LIBS} BoundSurface BoundSurface_impl)
 target_link_libraries(BoundSurface Surface)
 target_link_libraries(BoundSurface_impl Surface_impl)
 target_link_libraries(BoundSurface_impl TKMesh)
+target_link_libraries(BoundSurface_impl Meshtriangle)
+target_link_libraries(BoundSurface_impl Meshtriangle_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # BoundSurfacePlane library

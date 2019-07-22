@@ -1,3 +1,8 @@
+add_library(Meshtriangle meshtriangle.cpp)
+install (TARGETS Meshtriangle DESTINATION ${PROJECT_BINARY_DIR}/bin)
+add_library(Meshtriangle_impl meshtriangle_impl.cpp)
+install (TARGETS Meshtriangle_impl DESTINATION ${PROJECT_BINARY_DIR}/bin)
+
 add_library(Surface surface.cpp)
 install (TARGETS Surface DESTINATION ${PROJECT_BINARY_DIR}/bin)
 add_library(Surface_impl surface_impl.cpp)
