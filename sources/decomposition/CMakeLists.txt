@@ -1,3 +1,8 @@
+add_library(Edge edge.cpp)
+install (TARGETS Edge DESTINATION ${PROJECT_BINARY_DIR}/bin)
+add_library(Edge_impl edge_impl.cpp)
+install (TARGETS Edge_impl DESTINATION ${PROJECT_BINARY_DIR}/bin)
+
 add_library(Meshtriangle meshtriangle.cpp)
 install (TARGETS Meshtriangle DESTINATION ${PROJECT_BINARY_DIR}/bin)
 add_library(Meshtriangle_impl meshtriangle_impl.cpp)

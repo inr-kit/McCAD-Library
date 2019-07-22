@@ -107,6 +107,10 @@ add_subdirectory (sources/decomposition)
 set (EXTRA_LIBS ${EXTRA_LIBS} Surface Surface_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
+# Edge library
+set (EXTRA_LIBS ${EXTRA_LIBS} Edge Edge_impl)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+
 # MeshTriangle library
 set (EXTRA_LIBS ${EXTRA_LIBS} Meshtriangle Meshtriangle_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
@@ -131,6 +135,8 @@ target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 set (EXTRA_LIBS ${EXTRA_LIBS} DecomposeSolid DecomposeSolid_impl)
 target_link_libraries(DecomposeSolid_impl BoundSurfacePlane)
 target_link_libraries(DecomposeSolid_impl BoundSurfacePlane_impl)
+target_link_libraries(DecomposeSolid_impl Edge)
+target_link_libraries(DecomposeSolid_impl Edge_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 

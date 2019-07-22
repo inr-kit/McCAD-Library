@@ -1,3 +1,6 @@
+install (FILES edge.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+install (FILES edge_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+
 install (FILES meshtriangle.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
 install (FILES meshtriangle_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
 

@@ -94,3 +94,38 @@ McCAD::Tools::Preprocessor::Impl::fixFace(TopoDS_Face& face, Standard_Real preci
   shapeFixer->Perform();
   face = TopoDS::Face(shapeFixer->Shape());
 }
+
+std::string
+McCAD::Tools::Preprocessor::Impl::getSurfTypeName(const Standard_Integer& index){
+  // This function is to be deleted and has to write a tool to get the type from the enumerated type from OCE rather than copy the types into a vector as is done here!.
+  std::vector<std::string> typeNames = {
+    "Plane",
+    "Cylinder",
+    "Cone",
+    "Sphere",
+    "Torus",
+    "BezierSurface",
+    "BSplineSurface",
+    "SurfaceOfRevolution",
+    "SurfaceOfExtrusion",
+    "OffsetSurface",
+    "OtherSurface"
+  };
+  return typeNames[index];
+}
+
+std::string
+McCAD::Tools::Preprocessor::Impl::getCurveTypeName(const Standard_Integer& index){
+  // This function is to be deleted. A tool is to be written to get the type from the enumerated type from OCE rather than copy the types into a vector as is done here!.
+  std::vector<std::string> typeNames = {
+    "Line",
+    "Circle",
+    "Ellipse",
+    "Hyperbola",
+    "Parabola",
+    "BezierCurve",
+    "BSplineCurve",
+    "OtherCurve"
+  };
+  return typeNames[index];
+}

@@ -37,6 +37,8 @@ namespace McCAD::Tools{
     Standard_Real calcMeshDeflection(const TopoDS_Solid& solid, Standard_Real bndBoxGap = 0.0, Standard_Real converting = 100);
     Standard_Boolean checkBndSurfaces(const TopoDS_Solid& solid);
     Standard_Boolean checkFace(const TopoDS_Face& face, Standard_Real tolerance = 1.0e-3);
+    std::string getSurfTypeName(const Standard_Integer& index);
+    std::string getCurveTypeName(const Standard_Integer& index);
 
   private:
 

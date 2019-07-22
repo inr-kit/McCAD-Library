@@ -41,8 +41,8 @@ namespace McCAD::Decomposition{
 
     McCAD::Decomposition::BoundSurface* boundSurface;
     std::vector<std::unique_ptr<McCAD::Decomposition::MeshTriangle>> meshTrianglesList;
-
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
+    
 
   private:
 

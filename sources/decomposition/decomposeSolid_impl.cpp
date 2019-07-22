@@ -21,10 +21,66 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
   // Increment the level by 1.
   ++recurrenceDepth;
   std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
+  // Update edges convexity.
+  updateEdgesConvexity();
   // Generate the boundary surface list of the solid.
   generateSurfacesList();
   // Judge which surfaces are decompose surfaces from the generated list.
   judgeDecomposeSurfaces();
+}
+
+void
+McCAD::Decomposition::DecomposeSolid::Impl::updateEdgesConvexity(const Standard_real& angleTolerance){
+  TopTools_IndexedDataMapOfShapeListOfShape mapEdgeFace;
+  TopExp::MapShapesAndAncestors(solid, TopAbs_EDGE, TopAbs_FACE, mapEdgeFace);
+
+  Standard_Integer numberEdges = mapEdgeFace.Extent();
+  TopTools_ListOfShape facesList;
+
+  for (Standard_Integer edgeNumber = 1; edgeNumber <= numberEdges; ++edgeNumber)
+    {
+      TopoDS_Edge edge = TopoDS::Edge(mapEdgeFace.FindKey(edgeNumber));
+      BRepAdaptor_Curve curveAdaptor;
+      curveAdaptor.Initialize(edge);
+      facesList = mapEdgeFace.FindFromKey(edge);
+      if(facesList.Extent() != 2)
+	{
+	  continue;
+        }
+      TopTools_ListIteratorOfListOfShape iterFace(facesList);
+      TopoDS_Face firstFace = TopoDS::Face(iterFace.Value());
+      iterFace.Next();
+      TopoDS_Face secondFace = TopoDS::Face(iterFace.Value());
+
+      Standard_Real start, end;
+      Handle_Geom_Curve curve = BRep_Tool::Curve(edge, start, end);
+      gp_Pnt startPoint;
+      gp_Vec vector;
+      curve->D0(start, startPoint);
+      curve->D1(start, startPoint, vector);
+      gp_Dir direction(vec);
+
+      // Get the normals of each surface
+      gp_Dir firstNormal = preproc.accessImpl()->normalOnFace(firstFace, startpoint);
+      gp_Dir secondNormal = preproc.accessImpl()->normalOnFace(secondFace, startpoint);
+      BRepAdaptor_Curve curve;
+      curve.Initialize(edge);
+      Standard_Real angle = firstNormal.AngleWithRef(secondNormal, direction);
+
+      if(std::abs(angle) < angleTolerance)
+	{
+	  angle = 0;
+        }
+      // The edge is concave.
+      if( angle < 0 && edge.Orientation() == TopAbs_REVERSED)
+	{
+	  edge.Convex(1);
+        }
+      else if(angle > 0 && edge.Orientation() == TopAbs_FORWARD)
+        {
+	  edge.Convex(1);
+        }
+    }
 }
 
 void
@@ -77,7 +133,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& f
       //std::cout << "GeomAdaptor_Surface" << std::endl;
       if (AdaptorSurface.GetType() == GeomAbs_Plane)
 	{
-	  std::cout << getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
+	  std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurfacePlane> boundSurfacePlane = std::make_unique<McCAD::Decomposition::BoundSurfacePlane>();
 	  boundSurfacePlane->setSurfaceType(boundSurfacePlane->accessBSPImpl()->surfaceType);
 	  boundSurfacePlane->accessBSPImpl()->generateExtPlane(boxSquareLength);
@@ -87,19 +143,19 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& f
 	}
       else if (AdaptorSurface.GetType() == GeomAbs_Cylinder)
 	{
-	  std::cout << getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
+	  std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurfaceCylinder = std::make_unique<McCAD::Decomposition::BoundSurface>();
 	  return boundSurfaceCylinder;
 	}
       else if (AdaptorSurface.GetType() == GeomAbs_Cone)
 	{
-	  std::cout << getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
+	  std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurfaceCone = std::make_unique<McCAD::Decomposition::BoundSurface>();
 	  return boundSurfaceCone;
 	}
       else
 	{
-	  std::cout << getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
+	  std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurface = std::make_unique<McCAD::Decomposition::BoundSurface>();
           return boundSurface;
 	}
@@ -109,11 +165,20 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& f
 }
 
 void
-McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
-}
-
-void
-McCAD::Decomposition::DecomposeSolid::Impl::generateEdges(const std::unique_ptr<McCAD::Decomposition::BoundSurface>& surface){
+McCAD::Decomposition::DecomposeSolid::Impl::generateEdges(std::unique_ptr<McCAD::Decomposition::BoundSurface>& boundSurface){
+  TopoDS_Face face = boundSurface->accessSImpl()->face;
+  TopExp_Explorer explorer(face, TopAbs_EDGE);
+  for(; explorer.More(); explorer.Next())
+    {
+      TopoDS_Edge tempEdge = TopoDS::Edge(explorer.Current());
+      std::unique_ptr<McCAD::Decomposition::Edge> edge = std::make_unique<McCAD::Decomposition::Edge>();
+      edge->accessEImpl()->initiate(tempEdge);
+      // Get type of Edge.
+      BRepAdaptor_Curve curveAdaptor;
+      curveAdaptor.Initialize(tempEdge);
+      edge->accessEImpl()->curveType = preproc.accessImpl()->getCurveTypeName(curveAdaptor.GetType());
+      
+    } 
 }
 
 void
@@ -129,21 +194,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(const std::vector<std:
   //std::cout << facesList.size() << std::endl;
 }
 
-std::string
-McCAD::Decomposition::DecomposeSolid::Impl::getSurfTypeName(const Standard_Integer& index){
-  // This function is to be deleted and has to write a tool to get the type from the enumerated type from OCE rather than copy the types into a vector as is done here!.
-  std::vector<std::string> typeNames = {
-	"Plane",
-	"Cylinder",
-	"Cone",
-	"Sphere",
-	"Torus",
-	"BezierSurface",
-	"BSplineSurface",
-	"SurfaceOfRevolution",
-	"SurfaceOfExtrusion",
-	"OffsetSurface",
-	"OtherSurface"
-	};
-  return typeNames[index];
+void
+McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
 }
