@@ -64,7 +64,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::updateEdgesConvexity(const Standard_
       gp_Dir firstNormal = preproc.accessImpl()->normalOnFace(firstFace, startPoint);
       gp_Dir secondNormal = preproc.accessImpl()->normalOnFace(secondFace, startPoint);
       Standard_Real angle = firstNormal.AngleWithRef(secondNormal, direction);
-      std::cout << "angle: " << angle << std::endl;
 
       if(std::abs(angle) < angleTolerance)
 	{
@@ -79,6 +78,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::updateEdgesConvexity(const Standard_
         {
 	  edge.Convex(1);
         }
+      std::cout << "angle: " << angle << ", convexity " << edge.Convex() << std::endl;
     }
 }
 
@@ -164,7 +164,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& f
 }
 
 void
-McCAD::Decomposition::DecomposeSolid::Impl::generateEdges(std::unique_ptr<McCAD::Decomposition::BoundSurface>& boundSurface){
+McCAD::Decomposition::DecomposeSolid::Impl::generateEdges(std::unique_ptr<McCAD::Decomposition::BoundSurface>& boundSurface, Standard_Real uvTolerance){
   TopoDS_Face face = boundSurface->accessSImpl()->face;
   TopExp_Explorer explorer(face, TopAbs_EDGE);
   for(; explorer.More(); explorer.Next())
@@ -175,9 +175,22 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateEdges(std::unique_ptr<McCAD:
       // Get type of Edge.
       BRepAdaptor_Curve curveAdaptor;
       curveAdaptor.Initialize(tempEdge);
-      edge->accessEImpl()->curveType = preproc.accessImpl()->getCurveTypeName(curveAdaptor.GetType());
-      
-    } 
+      edge->setEdgeType(preproc.accessImpl()->getCurveTypeName(curveAdaptor.GetType()));
+      edge->accessEImpl()->convexity = tempEdge.Convex();
+
+      // Add flag if the edge can be used for assisting splitting surface.
+      if (boundSurface->getSurfaceType() == "Cylinder" && edge->getEdgeType() == "Line")
+	{
+	  std::vector<Standard_Real> edgeUV(4), surfaceUV(4);
+          BRepTools::UVBounds(face, tempEdge, edgeUV[0], edgeUV[1], edgeUV[2], edgeUV[3]);
+          BRepTools::UVBounds(face, surfaceUV[0], surfaceUV[1], surfaceUV[2], surfaceUV[3]);
+          if (std::abs(edgeUV[0] - surfaceUV[0]) < uvTolerance || std::abs(edgeUV[1] - surfaceUV[1]) < uvTolerance)
+	    {
+	      edge->accessEImpl()->useForSplitSurface = true;
+	    }
+	}
+      boundSurface->accessBSImpl()->edgesList.push_back(std::move(edge));
+    }
 }
 
 void

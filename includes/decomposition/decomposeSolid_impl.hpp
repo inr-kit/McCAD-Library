@@ -11,6 +11,7 @@
 #include "surface_impl.hpp"
 #include "boundSurface_impl.hpp"
 #include "boundSurfacePlane_impl.hpp"
+#include <Standard.hxx>
 // OCC
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
@@ -50,7 +51,7 @@ namespace McCAD::Decomposition{
     void updateEdgesConvexity(const Standard_Real& angleTolerance = 1.0e-4);
     void generateSurfacesList();
     std::unique_ptr<McCAD::Decomposition::BoundSurface> generateSurface(const TopoDS_Face& face, Standard_Integer mode = 0);
-    void generateEdges(std::unique_ptr<McCAD::Decomposition::BoundSurface>& surface);
+    void generateEdges(std::unique_ptr<McCAD::Decomposition::BoundSurface>& surface, Standard_Real uvTolerance = 1.0e-3);
     void mergeSurfaces(const std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>>& planesList);
     void judgeDecomposeSurfaces();
 

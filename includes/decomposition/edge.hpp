@@ -16,6 +16,8 @@ namespace McCAD::Decomposition {
       ~Edge();
       
       Impl* accessEImpl() const;
+      void setEdgeType(const std::string& edgeType);
+      std::string getEdgeType();
 
     private:
       std::unique_ptr<Impl> pEImpl;

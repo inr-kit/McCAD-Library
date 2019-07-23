@@ -14,7 +14,9 @@ namespace McCAD::Decomposition{
     Impl() = default;
 
     TopoDS_Edge edge;
-    std::string curveType;
+    std::string edgeType;
+    Standard_Integer convexity;
+    Standard_Boolean useForSplitSurface;
     void initiate(const TopoDS_Edge& edge);
 
   private:
