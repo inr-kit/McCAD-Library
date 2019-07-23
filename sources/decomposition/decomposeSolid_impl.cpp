@@ -88,6 +88,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
   TopoDS_Face face;
   Standard_Integer faceNumber = 0;
   std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> planesList;
+  std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> mergedPlanesList;
   //std::vector<TopoDS_Face> cylindersList;
   //std::vector<TopoDS_Face> conesList;
   TopExp_Explorer explorer(solid, TopAbs_FACE);
@@ -108,6 +109,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
 	  if (boundSurface->accessBSImpl()->generateMesh(meshDeflection))
 	    {
 	      generateEdges(boundSurface);
+	      std::cout << "length of egdes list: " << boundSurface->accessBSImpl()->edgesList.size() << std::endl;
 	      if(boundSurface->getSurfaceType() == "Plane")
 		{
 		  planesList.push_back(std::move(boundSurface));
@@ -194,7 +196,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateEdges(std::unique_ptr<McCAD:
 }
 
 void
-McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(const std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>>& surfacesList){
+McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>>& surfacesList){
   std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> mergedSurfacesList;
   std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurface1 = std::make_unique<McCAD::Decomposition::BoundSurface>();
   mergedSurfacesList.push_back(std::move(boundSurface1));
