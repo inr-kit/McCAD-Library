@@ -24,6 +24,13 @@
 #include <BRepGProp.hxx>
 #include <ShapeAnalysis_CheckSmallFace.hxx>
 #include <TopoDS_Edge.hxx>
+#include <gp_Dir.hxx>
+#include <gp_Pnt.hxx>
+#include <ElSLib.hxx>
+#include <CSLib_DerivativeStatus.hxx>
+#include <CSLib.hxx>
+#include <Precision.hxx>
+#include <BRepAdaptor_Surface.hxx>
 
 namespace McCAD::Tools{
   class Preprocessor::Impl {
@@ -39,6 +46,7 @@ namespace McCAD::Tools{
     Standard_Boolean checkFace(const TopoDS_Face& face, Standard_Real tolerance = 1.0e-3);
     std::string getSurfTypeName(const Standard_Integer& index);
     std::string getCurveTypeName(const Standard_Integer& index);
+    gp_Dir normalOnFace(const TopoDS_Face& aFace, const gp_Pnt& aPoint);
 
   private:
 

@@ -129,3 +129,43 @@ McCAD::Tools::Preprocessor::Impl::getCurveTypeName(const Standard_Integer& index
   };
   return typeNames[index];
 }
+
+gp_Dir
+McCAD::Tools::Preprocessor::Impl::normalOnFace(const TopoDS_Face& aFace, const gp_Pnt& aPoint){
+  Standard_Real uParameter, vParameter;
+  BRepAdaptor_Surface surfaceAdaptor(aFace, Standard_True);
+
+  switch (surfaceAdaptor.GetType())
+    {
+    case GeomAbs_Plane:
+      ElSLib::Parameters(surfaceAdaptor.Plane(), aPoint, uParameter, vParameter);
+      break;
+
+    case GeomAbs_Cylinder:
+      ElSLib::Parameters(surfaceAdaptor.Cylinder(), aPoint, uParameter, vParameter);
+      break;
+
+    case GeomAbs_Cone:
+      ElSLib::Parameters(surfaceAdaptor.Cone(), aPoint, uParameter, vParameter);
+      break;
+
+    case GeomAbs_Torus:
+      ElSLib::Parameters(surfaceAdaptor.Torus(), aPoint, uParameter, vParameter);
+      break;
+
+    default:
+      {
+	return gp_Dir(1., 0., 0.);
+      }
+    }
+
+  gp_Pnt point;
+  gp_Vec D1U, D1V;
+  surfaceAdaptor.D1(uParameter, vParameter, point, D1U, D1V);
+  gp_Dir direction;
+  CSLib_DerivativeStatus derivativeStatus;
+  CSLib::Normal(D1U, D1V, Precision::Confusion(), derivativeStatus, direction);
+  if (aFace.Orientation() == TopAbs_FORWARD)
+    direction.Reverse();
+  return direction;
+}

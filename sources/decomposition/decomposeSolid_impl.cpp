@@ -30,7 +30,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
 }
 
 void
-McCAD::Decomposition::DecomposeSolid::Impl::updateEdgesConvexity(const Standard_real& angleTolerance){
+McCAD::Decomposition::DecomposeSolid::Impl::updateEdgesConvexity(const Standard_Real& angleTolerance){
   TopTools_IndexedDataMapOfShapeListOfShape mapEdgeFace;
   TopExp::MapShapesAndAncestors(solid, TopAbs_EDGE, TopAbs_FACE, mapEdgeFace);
 
@@ -58,25 +58,24 @@ McCAD::Decomposition::DecomposeSolid::Impl::updateEdgesConvexity(const Standard_
       gp_Vec vector;
       curve->D0(start, startPoint);
       curve->D1(start, startPoint, vector);
-      gp_Dir direction(vec);
+      gp_Dir direction(vector);
 
       // Get the normals of each surface
-      gp_Dir firstNormal = preproc.accessImpl()->normalOnFace(firstFace, startpoint);
-      gp_Dir secondNormal = preproc.accessImpl()->normalOnFace(secondFace, startpoint);
-      BRepAdaptor_Curve curve;
-      curve.Initialize(edge);
+      gp_Dir firstNormal = preproc.accessImpl()->normalOnFace(firstFace, startPoint);
+      gp_Dir secondNormal = preproc.accessImpl()->normalOnFace(secondFace, startPoint);
       Standard_Real angle = firstNormal.AngleWithRef(secondNormal, direction);
+      std::cout << "angle: " << angle << std::endl;
 
       if(std::abs(angle) < angleTolerance)
 	{
-	  angle = 0;
+	  angle = Standard_Real(0);
         }
       // The edge is concave.
-      if( angle < 0 && edge.Orientation() == TopAbs_REVERSED)
+      if( angle < Standard_Real(0) && edge.Orientation() == TopAbs_REVERSED)
 	{
 	  edge.Convex(1);
         }
-      else if(angle > 0 && edge.Orientation() == TopAbs_FORWARD)
+      else if(angle > Standard_Real(0) && edge.Orientation() == TopAbs_FORWARD)
         {
 	  edge.Convex(1);
         }
