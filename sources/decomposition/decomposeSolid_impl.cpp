@@ -88,7 +88,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
   TopoDS_Face face;
   Standard_Integer faceNumber = 0;
   std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> planesList;
-  std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> mergedPlanesList;
   //std::vector<TopoDS_Face> cylindersList;
   //std::vector<TopoDS_Face> conesList;
   TopExp_Explorer explorer(solid, TopAbs_FACE);
