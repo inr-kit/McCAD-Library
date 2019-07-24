@@ -13,3 +13,9 @@ McCAD::Decomposition::BoundSurface::Impl*
 McCAD::Decomposition::BoundSurface::accessBSImpl() const{
   return pBSImpl.get();
 }
+
+Standard_Boolean
+McCAD::Decomposition::BoundSurface::operator == (const McCAD::Decomposition::BoundSurface& that){
+  return pBSImpl->isEqual(that);
+}
+

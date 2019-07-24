@@ -14,11 +14,6 @@ McCAD::Decomposition::Surface::accessSImpl() const{
   return pSImpl.get();
 }
 
-Standard_Boolean
-McCAD::Decomposition::Surface::operator == (const McCAD::Decomposition::Surface& that){
-  return pSImpl->isEqual(that.accessSImpl());
-}
-
 void
 McCAD::Decomposition::Surface::setSurfaceType(const std::string& surfaceType){
   pSImpl->surfaceType = surfaceType;

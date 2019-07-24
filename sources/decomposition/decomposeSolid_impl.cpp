@@ -88,8 +88,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
   TopoDS_Face face;
   Standard_Integer faceNumber = 0;
   std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> planesList;
-  //std::vector<TopoDS_Face> cylindersList;
-  //std::vector<TopoDS_Face> conesList;
   TopExp_Explorer explorer(solid, TopAbs_FACE);
   for (; explorer.More(); explorer.Next())
     {
@@ -196,15 +194,20 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateEdges(std::unique_ptr<McCAD:
 
 void
 McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>>& surfacesList){
-  std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> mergedSurfacesList;
-  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurface1 = std::make_unique<McCAD::Decomposition::BoundSurface>();
-  mergedSurfacesList.push_back(std::move(boundSurface1));
-  //std::cout << facesList.size() << std::endl;
-  for (Standard_Integer i = 1; i <= mergedSurfacesList.size(); ++i)
+  if (surfacesList.size() < 2)
     {
-      facesList.push_back(std::move( mergedSurfacesList[i-1]));
+      return;
     }
-  //std::cout << facesList.size() << std::endl;
+  for (Standard_Integer i = 0; i <= surfacesList.size() - 2; ++i)
+    {
+      for (Standard_Integer j = i+1; j <= surfacesList.size() - 1; ++j)
+	{
+	  if (*(surfacesList[i]) == *(surfacesList[j]))
+	    {
+	      surfacesList[j]->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
+	    }
+	}
+    }
 }
 
 void

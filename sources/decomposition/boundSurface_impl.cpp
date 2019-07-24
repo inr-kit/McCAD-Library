@@ -8,6 +8,12 @@ McCAD::Decomposition::BoundSurface::Impl::~Impl(){
 }
 
 Standard_Boolean
+McCAD::Decomposition::BoundSurface::Impl::isEqual(const McCAD::Decomposition::BoundSurface& that){
+  Standard_Boolean equalityCondition = preproc.accessImpl()->isSamePlane(boundSurface->accessSImpl()->face, that.accessSImpl()->face);
+  return equalityCondition;
+}
+
+Standard_Boolean
 McCAD::Decomposition::BoundSurface::Impl::generateMesh(const Standard_Real& meshDeflection){
   // Get surface from base class; Surface.
   TopoDS_Face face = boundSurface->accessSImpl()->face;

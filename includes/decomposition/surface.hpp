@@ -15,7 +15,6 @@ namespace McCAD::Decomposition {
     public:
       Surface();
       ~Surface();
-      Standard_Boolean operator == (const Surface& that);
       
       Impl* accessSImpl() const;
       void setSurfaceType(const std::string& surfaceType);

@@ -171,7 +171,13 @@ McCAD::Tools::Preprocessor::Impl::normalOnFace(const TopoDS_Face& aFace, const g
 }
 
 Standard_Boolean
-McCAD::Tools::Preprocessor::Impl::isSameSurface(const TopoDS_Face& firstFace, const TopoDS_Face& secondFace){
+McCAD::Tools::Preprocessor::Impl::isSamePlane(const TopoDS_Face& firstFace, const TopoDS_Face& secondFace, Standard_Real distanceTolerance, Standard_Real angleTolerance, Standard_Real parameterTolerance){
+  // Check orientation.
+  if (firstFace.Orientation() != secondFace.Orientation())
+    {
+      return Standard_False;
+    }
+
   // Check surface type.
   TopLoc_Location location;
   Handle_Geom_Surface firstSurface = BRep_Tool::Surface(firstFace, location);
@@ -182,51 +188,54 @@ McCAD::Tools::Preprocessor::Impl::isSameSurface(const TopoDS_Face& firstFace, co
     {
       return Standard_False;
     }
-  // Check orientation.
-  TopAbs_Orientation firstOrientation = firstFace.Orientation();
-  TopAbs_Orientation secondOrientation = secondFace.Orientation();
-  if (firstOrientation != secondOrientation)
-    {
-      return Standard_False;
-    }
-  // Check direction and parameters.
-  std::vector<Standard_Real> firstPlaneParameters(4);
-  gp_Pln firstPlane = firstSurfaceAdaptor.Plane();
-  firstPlane.Scale(gp_Pnt(0.0, 0.0, 0.0), GetUnit());
-  firstPlaneAxis = firstPlane.Position();
-  firstPlane.Coefficients(firstPlaneParameters[0], firstPlaneParameters[1], firstPlaneParameters[2], firstPlaneParameters[3]);
-  for (Standard_Integer i = 0, i <= firstPlaneParameters.size(), ++i)
-    {
-      if (firstPlaneParameters[i] <= parameterTolerance)
-	{
-	  *firstPlaneParameters[i] = 0.0;
-	}
-    }
-  firstPlaneDirection.SetCoord(firstPlaneParameters[0], firstPlaneParameters[1], firstPlaneParameters[2]);
-  firstPlanePoint = firstPlaneAxis.Location();
 
-  std::vector<Standard_Real> secondPlaneParameters(4);
-  gp_Pln secondPlane = secondSurfaceAdaptor.Plane();
-  secondPlane.Scale(gp_Pnt(0.0, 0.0, 0.0), GetUnit());
-  secondPlaneAxis = secondPlane.Position();
-  secondPlane.Coefficients(secondPlaneParameters[0], secondPlaneParameters[1], secondPlaneParameters[2], secondPlaneParameters[3]);
-  for (Standard_Integer i = 0, i <= secondPlaneParameters.size(), ++i)
+  try
     {
-      if (secondPlaneParameters[i] <= parameterTolerance)
+      // Check direction and parameters.
+      std::vector<Standard_Real> firstPlaneParameters(4);
+      gp_Pln firstPlane = firstSurfaceAdaptor.Plane();
+      firstPlane.Scale(gp_Pnt(0.0, 0.0, 0.0), 0.1);
+      gp_Ax3 firstPlaneAxes = firstPlane.Position();
+      firstPlane.Coefficients(firstPlaneParameters[0], firstPlaneParameters[1], firstPlaneParameters[2], firstPlaneParameters[3]);
+      for (Standard_Integer i = 0; i <= firstPlaneParameters.size(); ++i)
+	{
+          if (firstPlaneParameters[i] <= parameterTolerance)
+	    {
+	      firstPlaneParameters[i] = 0.0;
+	    }
+        }
+      gp_Dir firstPlaneDirection;
+      firstPlaneDirection.SetCoord(firstPlaneParameters[0], firstPlaneParameters[1], firstPlaneParameters[2]);
+      gp_Pnt firstPlanePoint = firstPlaneAxes.Location();
+
+      std::vector<Standard_Real> secondPlaneParameters(4);
+      gp_Pln secondPlane = secondSurfaceAdaptor.Plane();
+      secondPlane.Scale(gp_Pnt(0.0, 0.0, 0.0), 0.1);
+      gp_Ax3 secondPlaneAxes = secondPlane.Position();
+      secondPlane.Coefficients(secondPlaneParameters[0], secondPlaneParameters[1], secondPlaneParameters[2], secondPlaneParameters[3]);
+      for (Standard_Integer i = 0; i <= secondPlaneParameters.size(); ++i)
         {
-          *secondPlaneParameters[i] = 0.0;
+          if (secondPlaneParameters[i] <= parameterTolerance)
+            {
+              secondPlaneParameters[i] = 0.0;
+            }
+        }
+      gp_Dir secondPlaneDirection;
+      secondPlaneDirection.SetCoord(secondPlaneParameters[0], secondPlaneParameters[1], secondPlaneParameters[2]);
+      gp_Pnt secondPlanePoint = secondPlaneAxes.Location();
+
+      if (firstPlaneDirection.IsEqual(secondPlaneDirection, angleTolerance) && std::abs(firstPlaneParameters[3] - secondPlaneParameters[3]) <= distanceTolerance)
+        {
+        }
+      else if (firstPlaneDirection.IsOpposite(secondPlaneDirection, angleTolerance) && !std::abs(firstPlaneParameters[3] + secondPlaneParameters[3]) <= distanceTolerance)
+        {
+        }
+      else
+        {
+          return Standard_False;
         }
     }
-  secondPlaneDirection.SetCoord(secondPlaneParameters[0], secondPlaneParameters[1], secondPlaneParameters[2]);
-  secondPlanePoint = secondPlaneAxis.Location();
-
-  if (firstPlaneDirection.IsEqual(secondPlaneDirection, angleTolerance) && std::Abs(firstPlaneParameters[3] - secondPlaneParameters[3]) <= distanceTolerance)
-    {
-    }
-  else if (firstPlaneDirection.IsOpposite(secondPlaneDirection, angleTolerance) && !std::Abs(firstPlaneParameters[3] - secondPlaneParameters[3]) <= distanceTolerance)
-    {
-    }
-  else
+  catch(...)
     {
       return Standard_False;
     }

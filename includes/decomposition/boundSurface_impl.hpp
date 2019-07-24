@@ -8,6 +8,7 @@
 #include "surface_impl.hpp"
 #include "meshtriangle_impl.hpp"
 #include "edge_impl.hpp"
+#include "tools_impl.hpp"
 // OCC
 #include <Handle_Poly_Triangulation.hxx>
 #include <Poly_Triangulation.hxx>
@@ -41,8 +42,10 @@ namespace McCAD::Decomposition{
     ~Impl();
 
     McCAD::Decomposition::BoundSurface* boundSurface;
+    McCAD::Tools::Preprocessor preproc;
     std::vector<std::unique_ptr<McCAD::Decomposition::Edge>> edgesList;
     std::vector<std::unique_ptr<McCAD::Decomposition::MeshTriangle>> meshTrianglesList;
+    Standard_Boolean isEqual(const McCAD::Decomposition::BoundSurface& that);
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
     
 
