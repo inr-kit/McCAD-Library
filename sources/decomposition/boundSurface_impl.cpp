@@ -14,6 +14,27 @@ McCAD::Decomposition::BoundSurface::Impl::isEqual(const McCAD::Decomposition::Bo
 }
 
 Standard_Boolean
+McCAD::Decomposition::BoundSurface::Impl::canFuse(const McCAD::Decomposition::BoundSurface& that){
+  Standard_Boolean equalityCondition = preproc.accessImpl()->isSamePlane(boundSurface->accessSImpl()->face, that.accessSImpl()->face);
+  if (!equalityCondition)
+    {
+      return Standard_False;
+    }
+  // Check common edges of the two faces.
+  for (Standard_Integer i = 0; i <= edgesList.size() - 2; ++i)
+    {
+      for (Standard_Integer j = i+1; j <= that.accessBSImpl()->edgesList.size() - 1; ++j)
+	{
+	  if (*(edgesList[i]) == *(that.accessBSImpl()->edgesList[j]))
+	    {
+	      return Standard_True;
+	    }
+	}
+    }
+  return Standard_False;
+}
+
+Standard_Boolean
 McCAD::Decomposition::BoundSurface::Impl::generateMesh(const Standard_Real& meshDeflection){
   // Get surface from base class; Surface.
   TopoDS_Face face = boundSurface->accessSImpl()->face;

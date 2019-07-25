@@ -35,6 +35,8 @@
 #include <TopLoc_Location.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Ax3.hxx>
+#include <Handle_Geom_Curve.hxx>
+#include <GeomAdaptor_Curve.hxx>
 
 namespace McCAD::Tools{
   class Preprocessor::Impl {
@@ -52,6 +54,7 @@ namespace McCAD::Tools{
     std::string getCurveTypeName(const Standard_Integer& index);
     gp_Dir normalOnFace(const TopoDS_Face& aFace, const gp_Pnt& aPoint);
     Standard_Boolean isSamePlane(const TopoDS_Face& firstFace, const TopoDS_Face& secondFace, Standard_Real distanceTolerance = 1.0e-5, Standard_Real angleTolerance = 1.0e-3, Standard_Real parameterTolerance = 1.0e-7);
+    Standard_Boolean isSameEdge(const TopoDS_Edge& firstEdge, const TopoDS_Edge& secondEdge, Standard_Real distanceTolerance = 1.0e-5);
 
   private:
 

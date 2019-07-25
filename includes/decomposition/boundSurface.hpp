@@ -15,6 +15,7 @@ namespace McCAD::Decomposition {
     BoundSurface();
     ~BoundSurface();
     Standard_Boolean operator == (const BoundSurface& that);
+    Standard_Boolean operator << (const BoundSurface& that);
       
     Impl* accessBSImpl() const;
 

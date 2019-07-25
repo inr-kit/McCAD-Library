@@ -241,3 +241,25 @@ McCAD::Tools::Preprocessor::Impl::isSamePlane(const TopoDS_Face& firstFace, cons
     }
   return Standard_True;
 }
+
+Standard_Boolean
+McCAD::Tools::Preprocessor::Impl::isSameEdge(const TopoDS_Edge& firstEdge, const TopoDS_Edge& secondEdge, Standard_Real distanceTolerance){
+  // Compare first the start and end points of the curves.
+  Standard_Real firstEdgeStart, firstEdgeEnd;
+  Handle_Geom_Curve firstCurve = BRep_Tool::Curve(firstEdge, firstEdgeStart, firstEdgeEnd);
+  GeomAdaptor_Curve firstCurveAdaptor(firstCurve);
+
+  Standard_Real secondEdgeStart, secondEdgeEnd;
+  Handle_Geom_Curve secondCurve = BRep_Tool::Curve(secondEdge, secondEdgeStart, secondEdgeEnd);
+  GeomAdaptor_Curve secondCurveAdaptor(secondCurve);
+
+  if (firstCurveAdaptor.GetType() != secondCurveAdaptor.GetType())
+    {
+      return Standard_False;
+    }
+  if ((firstEdgeStart != secondEdgeStart) || (firstEdgeEnd != secondEdgeEnd))
+    {
+      return Standard_False;
+    }
+  return Standard_True;
+}

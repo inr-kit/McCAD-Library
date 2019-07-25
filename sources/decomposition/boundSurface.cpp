@@ -19,3 +19,8 @@ McCAD::Decomposition::BoundSurface::operator == (const McCAD::Decomposition::Bou
   return pBSImpl->isEqual(that);
 }
 
+Standard_Boolean
+McCAD::Decomposition::BoundSurface::operator << (const McCAD::Decomposition::BoundSurface& that){
+  return pBSImpl->canFuse(that);
+}
+

@@ -205,6 +205,18 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::uniqu
 	  if (*(surfacesList[i]) == *(surfacesList[j]))
 	    {
 	      surfacesList[j]->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
+	      if (*(surfacesList[i]) << *(surfacesList[j]))
+		{
+		  //surfacesList[i]->accessBSImpl()->fuseSurfaces();
+
+		  // Erase pointer surfacesList[j] from surfacesList.
+		  surfacesList.erase(surfacesList.begin() + j);
+		  --j;
+		  if (surfacesList.size() < 2)
+		    {
+		      return;
+		    }
+		}
 	    }
 	}
     }
