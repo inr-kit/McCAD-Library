@@ -35,6 +35,50 @@ McCAD::Decomposition::BoundSurface::Impl::canFuse(const McCAD::Decomposition::Bo
 }
 
 Standard_Boolean
+McCAD::Decomposition::BoundSurface::Impl::faceCollision(const TopoDS_Face& aFace, Standard_Integer& aSide)
+{
+  Standard_Boolean collision = Standard_False;
+  Standard_Integer positiveTriangles = 0;
+  Standard_Integer negativeTriangles = 0;
+
+  for (Standard_Integer i = 0; i <= aFace.accessBSImpl()->meshTrianglesList.size() - 1; ++i)
+    {
+      Standard_Integer side = 0;
+      if (triangleCollision(*(aFace.accessBSImpl()->meshTrianglesList[i]), side))
+	{
+	  collision = Standard_True;
+	  break;
+	}
+      else
+	{
+	  if (side == 1)
+	    {
+	      ++positiveTriangles;
+	    }
+	  else if (side == -1)
+	    {
+	      ++negativeTriangles;
+	    }
+	}
+      if (positiveTriangles > 0 && negativeTriangles > 0)
+	{
+	  collision = Standard_True;
+	  break;
+	}
+    }
+  // Update side.
+  if (positiveTriangles > 0 && negativeTriangles == 0)
+    {
+      aSide = 1;
+    }
+  else if (positiveTriangles == 0 && negativeTriangles > 0)
+    {
+      aSide = -1;
+    }
+  return collision;
+}
+
+Standard_Boolean
 McCAD::Decomposition::BoundSurface::Impl::generateMesh(const Standard_Real& meshDeflection){
   // Get surface from base class; Surface.
   TopoDS_Face face = boundSurface->accessSImpl()->face;
@@ -96,3 +140,53 @@ McCAD::Decomposition::BoundSurface::Impl::generateMesh(const Standard_Real& mesh
       return Standard_False;
     }
 }
+
+// This function is used as virtual one in BndSurfPlane. Should be modified later.
+Standard_Boolean
+McCAD::Decomposition::BoundSurface::Impl::triangleCollision(const McCAD::Decomposition::MeshTriangle& aTriangle, Standard_Integer& aSide, Standard_Real tolerance, Standard_Real tolerance2){
+  Standard_Boolean collision = Standard_False;
+  Standard_Integer positivePoints = 0;
+  Standard_Integer negativePoints = 0;
+
+  for (Standard_Integer i = 0; i <= aTriangle.accessMTImpl()->points.size() - 1; ++i)
+    {
+      if (pointOnSurface(aTriangle.accessMTImpl()->points[i], tolerance))
+	{
+	  continue;
+	}
+
+      // Evaluate. Should be s perate function.
+      Standard_Real evaluate;
+      BRepAdaptor_Surface surfaceAdaptor(boundSurface->accessSImpl()->face, Standard_True);
+      GeomAdaptor_Surface surfaceGeomAdaptor= surfaceAdaptor.Surface();
+      gp_Pln Plane = surfaceGeomAdaptor.Plane();
+      std::vector<Standard_Real> parameters(4);
+      Plane.Coefficients(parameters[0], parameters[1], parameters[2], parameters[3]);
+      evaluate = aTriangle.accessMTImpl()->points[i][0]*parameters[0] + \
+	aTriangle.accessMTImpl()->points[i][1]*parameters[1] + \
+	aTriangle.accessMTImpl()->points[i][2]*parameters[2] + parameters[3];
+      if (evaluate > tolerance2)
+	{
+	  ++positivePoints;
+	}
+      else if (evaluate < tolerance2)
+	{
+	  ++negativePoints;
+	}
+      if (positivePoints > 0 && negativePoints > 0)
+	{
+	  collision = Standard_True;
+	  break;
+	} 
+    }
+  if (positivePoints > 0 && negativePoints == 0)
+    {
+      aSide = 1;
+    }
+  else if (positivePoints == 0 && negativePoints > 0)
+    {
+      aSide = -1;
+    }
+  return collision;
+}
+

@@ -47,6 +47,8 @@ namespace McCAD::Decomposition{
     std::vector<std::unique_ptr<McCAD::Decomposition::MeshTriangle>> meshTrianglesList;
     Standard_Boolean isEqual(const McCAD::Decomposition::BoundSurface& that);
     Standard_Boolean canFuse(const McCAD::Decomposition::BoundSurface& that);
+    Standard_Boolean faceCollision(const TopoDS_Face& aFace, Standard_Integer& aSide);
+    Standard_Boolean triangleCollision(const McCAD::Decomposition::MeshTriangle& aTriangle, Standard_Integer& aSide, Standard_Real tolerance = 1e-2, Standard_Real tolerance = 1e-3);
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
 
   private:

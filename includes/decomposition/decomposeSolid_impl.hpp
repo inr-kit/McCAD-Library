@@ -41,6 +41,7 @@ namespace McCAD::Decomposition{
     McCAD::Tools::Preprocessor preproc;
     TopoDS_Solid solid;
     std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> facesList;
+    std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> splitFacesList;
     Standard_Real meshDeflection;
     Standard_Real boxSquareLength;
     Standard_Integer recurrenceDepth = 0;

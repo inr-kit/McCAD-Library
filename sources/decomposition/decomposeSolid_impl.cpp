@@ -258,6 +258,51 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::uniqu
 
 void
 McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
-  
+  // Judge whether boundary surfaces of the solid can be used for decomposition.
+  for (Standard_Integer i = 0; i <= facesList.size() - 2; ++i)
+    {
+      Standard_Integer positiveFaces = 0;
+      Standard_Integer negativeFaces = 0;
+      Standard_Integer numberCollidingSurfaces = 0;
+      Standard_Integer numberCollidingCurvedSurfaces = 0;
+      for (Standard_Integer j = i+1; j <= facesList.size() - 1; ++j)
+	{
+	  if (facesList[i]->accessSImpl()->surfaceNumber != facesList[j]->accessSImpl()->surfaceNumber)
+	    {
+	      Standard_Integer side = 0;
+	      if (facesList[i]->accessBSImpl()->faceCollision(facesList[j]->accessSImpl()->face, side))
+		{
+		  ++numberCollidingSurfaces;
+		  facesList[i]->accessSImpl()->splitSurface = Standard_True;
+		  if (facesList[j]->getSurfaceType() != "Plane")
+		    {
+		      ++numberCollidingCurvedSurfaces;
+		    }
+		}
+	      else
+		{
+		  if (side == 1)
+		    {
+		      ++positiveFaces;
+		    }
+		  else if (side == -1)
+		    {
+		      ++negativeFaces;
+		    }
+		}
+	    }
+	}
+      if (positiveFaces > 0 && negativeFaces > 0)
+	{
+	  facesList[i]->accessSImpl()->splitSurface = Standard_True;
+	}
 
+      if (facesList[i]->accessSImpl()->splitSurface)
+	{
+	  facesList[i]->accessSImpl()->numberCollidingSurfaces = numberCollidingSurfaces;
+	  facesList[i]->accessSImpl()->numberCollidingCurvedSurfaces = numberCollidingCurvedSurfaces;
+	  splitFacesList.push_back(std::move(facesList[i]));
+	  splitSurface = Standard_True;
+	}
+    }
 }

@@ -17,6 +17,9 @@ namespace McCAD::Decomposition{
     TopoDS_Face face;
     std::string surfaceType;
     Standard_Integer surfaceNumber;
+    Standard_Boolean splitSurface = Standard_False;
+    Standard_Integer numberCollidingSurfaces = 0;
+    Standard_Integer numberCollidingCurvedSurfaces = 0;
     void initiate(const TopoDS_Face& aFace);
 
   private:
