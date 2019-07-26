@@ -48,7 +48,6 @@ namespace McCAD::Decomposition{
     Standard_Boolean isEqual(const McCAD::Decomposition::BoundSurface& that);
     Standard_Boolean canFuse(const McCAD::Decomposition::BoundSurface& that);
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
-    
 
   private:
 

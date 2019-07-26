@@ -118,6 +118,12 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
     }
   std::cout << "     - There are " << planesList.size() << " planes in the solid" << std::endl;
   mergeSurfaces(planesList);
+  std::cout << "merged planes list: " << planesList.size() << std::endl;
+  for (Standard_Integer i = 0; i <= planesList.size() - 1; ++i)
+    {
+      facesList.push_back(std::move(planesList[i]));
+    }
+  std::cout << "merged faces list: " << facesList.size() << std::endl;
 }
 
 std::unique_ptr<McCAD::Decomposition::BoundSurface>
@@ -202,20 +208,48 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::uniqu
     {
       for (Standard_Integer j = i+1; j <= surfacesList.size() - 1; ++j)
 	{
+	  std::cout << i << " , " << j << " , " << surfacesList.size() << std::endl;
 	  if (*(surfacesList[i]) == *(surfacesList[j]))
 	    {
+	      std::cout << "equal" << std::endl;
 	      surfacesList[j]->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
+	      // Test if the two surfaces can be fused.
 	      if (*(surfacesList[i]) << *(surfacesList[j]))
 		{
-		  //surfacesList[i]->accessBSImpl()->fuseSurfaces();
+		  if (surfacesList[i]->getSurfaceType() == "Plane")
+		    {
+		      std::cout << "equal, fuse plane" << std::endl;
+		      TopoDS_Face newFace = preproc.accessImpl()->fusePlanes(surfacesList[i]->accessSImpl()->face, surfacesList[j]->accessSImpl()->face);
+		      std::unique_ptr<McCAD::Decomposition::BoundSurface> newboundSurface = std::move(generateSurface(newFace));
+		      newboundSurface->accessSImpl()->initiate(newFace);
+		      newboundSurface->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
+		      if (newboundSurface->accessBSImpl()->generateMesh(meshDeflection))
+			{
+			  std::cout << "fuse planes, generate edges" << std::endl;
+			  generateEdges(newboundSurface);
+			}
 
+		      // Erase pointer surfacesList[j] & [i] from surfacesList.
+		      std::cout << "equal, erase two: " << i << " , " << j << " , " << surfacesList.size() << std::endl;
+		      surfacesList.erase(surfacesList.begin() + j);
+                      --j;
+                      surfacesList.erase(surfacesList.begin() + i);
+                      --i;
+
+		      surfacesList.push_back(std::move(newboundSurface));
+		      break;
+		    }
+		}
+	      else
+		{
+		  std::cout << "equal, erase one" << std::endl;
 		  // Erase pointer surfacesList[j] from surfacesList.
 		  surfacesList.erase(surfacesList.begin() + j);
 		  --j;
-		  if (surfacesList.size() < 2)
-		    {
-		      return;
-		    }
+		}
+	      if (surfacesList.size() < 2)
+		{
+		  return;
 		}
 	    }
 	}
@@ -224,4 +258,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::uniqu
 
 void
 McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
+  
+
 }

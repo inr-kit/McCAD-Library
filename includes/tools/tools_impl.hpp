@@ -37,6 +37,8 @@
 #include <gp_Ax3.hxx>
 #include <Handle_Geom_Curve.hxx>
 #include <GeomAdaptor_Curve.hxx>
+#include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepTools.hxx>
 
 namespace McCAD::Tools{
   class Preprocessor::Impl {
@@ -55,6 +57,7 @@ namespace McCAD::Tools{
     gp_Dir normalOnFace(const TopoDS_Face& aFace, const gp_Pnt& aPoint);
     Standard_Boolean isSamePlane(const TopoDS_Face& firstFace, const TopoDS_Face& secondFace, Standard_Real distanceTolerance = 1.0e-5, Standard_Real angleTolerance = 1.0e-3, Standard_Real parameterTolerance = 1.0e-7);
     Standard_Boolean isSameEdge(const TopoDS_Edge& firstEdge, const TopoDS_Edge& secondEdge, Standard_Real distanceTolerance = 1.0e-5);
+    TopoDS_Face fusePlanes(const TopoDS_Face& firstFace, const TopoDS_Face& secondFace, Standard_Real zeroTolerance = 1.0e-7, Standard_Real tolerance = 1.0e-7);
 
   private:
 
