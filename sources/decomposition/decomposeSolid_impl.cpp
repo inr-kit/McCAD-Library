@@ -270,7 +270,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
 	  if (facesList[i]->accessSImpl()->surfaceNumber != facesList[j]->accessSImpl()->surfaceNumber)
 	    {
 	      Standard_Integer side = 0;
-	      if (facesList[i]->accessBSImpl()->faceCollision(facesList[j]->accessSImpl()->face, side))
+	      if (facesList[i]->accessBSImpl()->faceCollision(*(facesList[j]), side))
 		{
 		  ++numberCollidingSurfaces;
 		  facesList[i]->accessSImpl()->splitSurface = Standard_True;

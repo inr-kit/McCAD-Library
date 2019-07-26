@@ -35,7 +35,7 @@ McCAD::Decomposition::BoundSurface::Impl::canFuse(const McCAD::Decomposition::Bo
 }
 
 Standard_Boolean
-McCAD::Decomposition::BoundSurface::Impl::faceCollision(const TopoDS_Face& aFace, Standard_Integer& aSide)
+McCAD::Decomposition::BoundSurface::Impl::faceCollision(const McCAD::Decomposition::BoundSurface& aFace, Standard_Integer& aSide)
 {
   Standard_Boolean collision = Standard_False;
   Standard_Integer positiveTriangles = 0;
@@ -162,9 +162,9 @@ McCAD::Decomposition::BoundSurface::Impl::triangleCollision(const McCAD::Decompo
       gp_Pln Plane = surfaceGeomAdaptor.Plane();
       std::vector<Standard_Real> parameters(4);
       Plane.Coefficients(parameters[0], parameters[1], parameters[2], parameters[3]);
-      evaluate = aTriangle.accessMTImpl()->points[i][0]*parameters[0] + \
-	aTriangle.accessMTImpl()->points[i][1]*parameters[1] + \
-	aTriangle.accessMTImpl()->points[i][2]*parameters[2] + parameters[3];
+      evaluate = aTriangle.accessMTImpl()->points[i].X()*parameters[0] + \
+	aTriangle.accessMTImpl()->points[i].Y()*parameters[1] +		\
+	aTriangle.accessMTImpl()->points[i].Z()*parameters[2] + parameters[3];
       if (evaluate > tolerance2)
 	{
 	  ++positivePoints;
@@ -190,3 +190,7 @@ McCAD::Decomposition::BoundSurface::Impl::triangleCollision(const McCAD::Decompo
   return collision;
 }
 
+Standard_Boolean
+McCAD::Decomposition::BoundSurface::Impl::pointOnSurface(const gp_Pnt& aPoint, const Standard_Real& tolerance){
+  return Standard_True;
+}
