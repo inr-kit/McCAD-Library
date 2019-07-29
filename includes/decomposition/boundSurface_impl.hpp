@@ -13,7 +13,7 @@
 // OCC
 #include <Handle_Poly_Triangulation.hxx>
 #include <Poly_Triangulation.hxx>
-#include <Handle_Geom_Surface.hxx>
+#include <GeomAdaptor_Surface.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <BRepMesh_IncrementalMesh.hxx>
 #include <BRep_Tool.hxx>

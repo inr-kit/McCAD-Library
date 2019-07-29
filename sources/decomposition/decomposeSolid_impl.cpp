@@ -1,7 +1,7 @@
 // McCAD
 #include "decomposeSolid_impl.hpp"
 
-void
+Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::initiate(const TopoDS_Solid& aSolid){
   solid = aSolid;
   meshDeflection = preproc.accessImpl()->calcMeshDeflection(solid);
@@ -12,10 +12,10 @@ McCAD::Decomposition::DecomposeSolid::Impl::initiate(const TopoDS_Solid& aSolid)
   boundingBox.SetGap(0.0);
   boxSquareLength = sqrt(boundingBox.SquareExtent());
   //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
-  perform();
+  return perform();
 }
 
-void
+Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::perform(){
   // The function will be called recursively on a solid and a condition has to be set for termination.
   // Increment the level by 1.
@@ -27,6 +27,25 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
   generateSurfacesList();
   // Judge which surfaces are decompose surfaces from the generated list.
   judgeDecomposeSurfaces();
+  /*
+  if (!selectSplitSurface->throughBoundarySurface(splitFacesList))
+    {
+      judgeThroughConcaveEdges(facesList);
+
+      if (selectSplitSurface->planeSplitOnPlane(splitFacesList))
+	{
+	  generateAssistingSurfaces();
+	  judgeAssistingDecomposeSurfaces();
+	  judgeThroughConcaveEdges(assistingFacesList);
+	}
+    }
+  Standard_Integer selectedSurface = 0;
+  */
+  if (recurrenceDepth >= 25)
+    {
+      return Standard_False;
+    }
+  return Standard_True;
 }
 
 void
@@ -101,7 +120,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
 	  preproc.accessImpl()->fixFace(face);
 	  //std::cout << "face fixed: " << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurface = std::move(generateSurface(face));
-	  boundSurface->accessSImpl()->initiate(face);
+	  //boundSurface->accessSImpl()->initiate(face);
 	  boundSurface->accessSImpl()->surfaceNumber = faceNumber;
 	  if (boundSurface->accessBSImpl()->generateMesh(meshDeflection))
 	    {
@@ -140,7 +159,8 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& f
 	  std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurfacePlane> boundSurfacePlane = std::make_unique<McCAD::Decomposition::BoundSurfacePlane>();
 	  boundSurfacePlane->setSurfaceType(boundSurfacePlane->accessBSPImpl()->surfaceType);
-	  boundSurfacePlane->accessBSPImpl()->generateExtPlane(boxSquareLength);
+	  boundSurfacePlane->accessSImpl()->initiate(face);
+	  boundSurfacePlane->accessBSPImpl()->generateExtendedPlane(boxSquareLength);
 	  //assert(boundSurfacePlane);
 	  //std::cout << "return poly" << std::endl;
 	  return boundSurfacePlane;
@@ -149,18 +169,21 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& f
 	{
 	  std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurfaceCylinder = std::make_unique<McCAD::Decomposition::BoundSurface>();
+	  boundSurfaceCylinder->accessSImpl()->initiate(face);
 	  return boundSurfaceCylinder;
 	}
       else if (AdaptorSurface.GetType() == GeomAbs_Cone)
 	{
 	  std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurfaceCone = std::make_unique<McCAD::Decomposition::BoundSurface>();
+	  boundSurfaceCone->accessSImpl()->initiate(face);
 	  return boundSurfaceCone;
 	}
       else
 	{
 	  std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurface = std::make_unique<McCAD::Decomposition::BoundSurface>();
+	  boundSurface->accessSImpl()->initiate(face);
           return boundSurface;
 	}
     }
@@ -259,6 +282,11 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::uniqu
 void
 McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
   // Judge whether boundary surfaces of the solid can be used for decomposition.
+  std::cout << "judge decompose surfaces" << std::endl;
+  if (facesList.size() < 2)
+    {
+      return;
+    }
   for (Standard_Integer i = 0; i <= facesList.size() - 2; ++i)
     {
       Standard_Integer positiveFaces = 0;

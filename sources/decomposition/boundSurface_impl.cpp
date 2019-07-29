@@ -37,6 +37,7 @@ McCAD::Decomposition::BoundSurface::Impl::canFuse(const McCAD::Decomposition::Bo
 Standard_Boolean
 McCAD::Decomposition::BoundSurface::Impl::faceCollision(const McCAD::Decomposition::BoundSurface& aFace, Standard_Integer& aSide)
 {
+  std::cout << "face collision" << std::endl;
   Standard_Boolean collision = Standard_False;
   Standard_Integer positiveTriangles = 0;
   Standard_Integer negativeTriangles = 0;
@@ -144,6 +145,7 @@ McCAD::Decomposition::BoundSurface::Impl::generateMesh(const Standard_Real& mesh
 // This function is used as virtual one in BndSurfPlane. Should be modified later.
 Standard_Boolean
 McCAD::Decomposition::BoundSurface::Impl::triangleCollision(const McCAD::Decomposition::MeshTriangle& aTriangle, Standard_Integer& aSide, Standard_Real tolerance, Standard_Real tolerance2){
+  std::cout << "triangle collision" << std::endl;
   Standard_Boolean collision = Standard_False;
   Standard_Integer positivePoints = 0;
   Standard_Integer negativePoints = 0;
@@ -192,9 +194,10 @@ McCAD::Decomposition::BoundSurface::Impl::triangleCollision(const McCAD::Decompo
 
 Standard_Boolean
 McCAD::Decomposition::BoundSurface::Impl::pointOnSurface(const gp_Pnt& aPoint, const Standard_Real& distanceTolerance){
-  BRepAdaptor_Surface surfaceAdaptor(externalSurface, Standard_True);
+  std::cout << "point on surface" << std::endl;
+  BRepAdaptor_Surface surfaceAdaptor(boundSurface->accessSImpl()->extendedFace, Standard_True);
   Standard_Real uvTolerance = surfaceAdaptor.Tolerance();
-  std::vector<Standard_Real> uvParameters;
+  std::vector<Standard_Real> uvParameters(4);
   uvParameters[0] = surfaceAdaptor.FirstUParameter();
   uvParameters[1] = surfaceAdaptor.LastUParameter();
   uvParameters[2] = surfaceAdaptor.FirstVParameter();
@@ -203,13 +206,12 @@ McCAD::Decomposition::BoundSurface::Impl::pointOnSurface(const gp_Pnt& aPoint, c
   Extrema_ExtPS extremumDistances(aPoint, surfaceAdaptor, uvParameters[0], uvParameters[1], uvParameters[2], uvParameters[3], uvTolerance, uvTolerance);
   if (extremumDistances.IsDone() && extremumDistances.NbExt() != 0)
     {
-      gp_Pnt point = extremumDistances.Ppoint(1).Value();
-      Standard_real distance = std::Sqrt(std::pow(aPoint.X() - point.X(), 2) + std::pow(aPoint.Y() - point.Y(), 2) + std::pow(aPoint.Z() - point.Z(), 2));
+      gp_Pnt point = extremumDistances.Point(1).Value();
+      Standard_Real distance = std::sqrt(std::pow(aPoint.X() - point.X(), 2) + std::pow(aPoint.Y() - point.Y(), 2) + std::pow(aPoint.Z() - point.Z(), 2));
       if (distance < distanceTolerance)
 	{
 	  return Standard_True;
 	}
-
     }
   return Standard_False;
 }

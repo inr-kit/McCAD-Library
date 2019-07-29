@@ -39,6 +39,7 @@ namespace McCAD::Decomposition{
     Impl() = default;
 
     McCAD::Tools::Preprocessor preproc;
+    //McCAD::Decomposition::SelectSplitSurface selectSplitSurface;
     TopoDS_Solid solid;
     std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> facesList;
     std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> splitFacesList;
@@ -47,8 +48,8 @@ namespace McCAD::Decomposition{
     Standard_Integer recurrenceDepth = 0;
     Standard_Boolean splitSurface = Standard_False;
 
-    void initiate(const TopoDS_Solid& solid);
-    void perform();
+    Standard_Boolean initiate(const TopoDS_Solid& solid);
+    Standard_Boolean perform();
     void updateEdgesConvexity(const Standard_Real& angleTolerance = 1.0e-4);
     void generateSurfacesList();
     std::unique_ptr<McCAD::Decomposition::BoundSurface> generateSurface(const TopoDS_Face& face, Standard_Integer mode = 0);

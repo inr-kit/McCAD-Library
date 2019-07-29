@@ -15,6 +15,7 @@ namespace McCAD::Decomposition{
     Impl() = default;
 
     TopoDS_Face face;
+    TopoDS_Face extendedFace;
     std::string surfaceType;
     Standard_Integer surfaceNumber;
     Standard_Boolean splitSurface = Standard_False;
