@@ -23,6 +23,11 @@ install (TARGETS BoundSurfacePlane DESTINATION ${PROJECT_BINARY_DIR}/bin)
 add_library(BoundSurfacePlane_impl boundSurfacePlane_impl.cpp)
 install (TARGETS BoundSurfacePlane_impl DESTINATION ${PROJECT_BINARY_DIR}/bin)
 
+add_library(SplitSurfaces splitsurfaces.cpp)
+install (TARGETS SplitSurfaces DESTINATION ${PROJECT_BINARY_DIR}/bin)
+add_library(SplitSurfaces_impl splitsurfaces_impl.cpp)
+install (TARGETS SplitSurfaces_impl DESTINATION ${PROJECT_BINARY_DIR}/bin)
+
 add_library(DecomposeSolid decomposeSolid.cpp)
 install (TARGETS DecomposeSolid DESTINATION ${PROJECT_BINARY_DIR}/bin)
 add_library(DecomposeSolid_impl decomposeSolid_impl.cpp)

@@ -3,6 +3,7 @@
 
 // C++
 #include <vector>
+#include <memory>
 #include <assert.h>
 // McCAD
 #include "decomposeSolid.hpp"
@@ -11,6 +12,7 @@
 #include "surface_impl.hpp"
 #include "boundSurface_impl.hpp"
 #include "boundSurfacePlane_impl.hpp"
+#include "splitsurfaces_impl.hpp"
 #include <Standard.hxx>
 // OCC
 #include <TopoDS.hxx>
@@ -41,8 +43,8 @@ namespace McCAD::Decomposition{
     McCAD::Tools::Preprocessor preproc;
     //McCAD::Decomposition::SelectSplitSurface selectSplitSurface;
     TopoDS_Solid solid;
-    std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> facesList;
-    std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> splitFacesList;
+    std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> facesList;
+    std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> splitFacesList;
     Standard_Real meshDeflection;
     Standard_Real boxSquareLength;
     Standard_Integer recurrenceDepth = 0;

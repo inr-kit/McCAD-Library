@@ -37,7 +37,7 @@ McCAD::Decomposition::BoundSurface::Impl::canFuse(const McCAD::Decomposition::Bo
 Standard_Boolean
 McCAD::Decomposition::BoundSurface::Impl::faceCollision(const McCAD::Decomposition::BoundSurface& aFace, Standard_Integer& aSide)
 {
-  std::cout << "face collision" << std::endl;
+  std::cout << "faceCollision" << std::endl;
   Standard_Boolean collision = Standard_False;
   Standard_Integer positiveTriangles = 0;
   Standard_Integer negativeTriangles = 0;
@@ -81,6 +81,7 @@ McCAD::Decomposition::BoundSurface::Impl::faceCollision(const McCAD::Decompositi
 
 Standard_Boolean
 McCAD::Decomposition::BoundSurface::Impl::generateMesh(const Standard_Real& meshDeflection){
+  std::cout << "generateMesh" << std::endl;
   // Get surface from base class; Surface.
   TopoDS_Face face = boundSurface->accessSImpl()->face;
 
@@ -145,7 +146,7 @@ McCAD::Decomposition::BoundSurface::Impl::generateMesh(const Standard_Real& mesh
 // This function is used as virtual one in BndSurfPlane. Should be modified later.
 Standard_Boolean
 McCAD::Decomposition::BoundSurface::Impl::triangleCollision(const McCAD::Decomposition::MeshTriangle& aTriangle, Standard_Integer& aSide, Standard_Real tolerance, Standard_Real tolerance2){
-  std::cout << "triangle collision" << std::endl;
+  std::cout << "triangleCollision" << std::endl;
   Standard_Boolean collision = Standard_False;
   Standard_Integer positivePoints = 0;
   Standard_Integer negativePoints = 0;
@@ -194,7 +195,7 @@ McCAD::Decomposition::BoundSurface::Impl::triangleCollision(const McCAD::Decompo
 
 Standard_Boolean
 McCAD::Decomposition::BoundSurface::Impl::pointOnSurface(const gp_Pnt& aPoint, const Standard_Real& distanceTolerance){
-  std::cout << "point on surface" << std::endl;
+  std::cout << "pointOnSurface" << std::endl;
   BRepAdaptor_Surface surfaceAdaptor(boundSurface->accessSImpl()->extendedFace, Standard_True);
   Standard_Real uvTolerance = surfaceAdaptor.Tolerance();
   std::vector<Standard_Real> uvParameters(4);

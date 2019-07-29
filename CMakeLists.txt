@@ -130,11 +130,17 @@ target_link_libraries(BoundSurfacePlane BoundSurface)
 target_link_libraries(BoundSurfacePlane_impl BoundSurface_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
+# SplitSurfaces library
+set (EXTRA_LIBS ${EXTRA_LIBS} SplitSurfaces SplitSurfaces_impl)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+
 
 # DecomposeSolid library
 set (EXTRA_LIBS ${EXTRA_LIBS} DecomposeSolid DecomposeSolid_impl)
 target_link_libraries(DecomposeSolid_impl BoundSurfacePlane)
 target_link_libraries(DecomposeSolid_impl BoundSurfacePlane_impl)
+target_link_libraries(DecomposeSolid_impl SplitSurfaces)
+target_link_libraries(DecomposeSolid_impl SplitSurfaces_impl)
 target_link_libraries(DecomposeSolid_impl Edge)
 target_link_libraries(DecomposeSolid_impl Edge_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})

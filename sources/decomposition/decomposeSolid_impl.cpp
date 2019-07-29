@@ -5,13 +5,13 @@ Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::initiate(const TopoDS_Solid& aSolid){
   solid = aSolid;
   meshDeflection = preproc.accessImpl()->calcMeshDeflection(solid);
-  //std::cout << "deflection: " << meshDeflection << std::endl;
+  std::cout << "deflection: " << meshDeflection << std::endl;
   // Calculate Length of bounding box.
   Bnd_Box boundingBox;
   BRepBndLib::Add(solid, boundingBox);
   boundingBox.SetGap(0.0);
   boxSquareLength = sqrt(boundingBox.SquareExtent());
-  //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
+  std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
   return perform();
 }
 
@@ -27,23 +27,28 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
   generateSurfacesList();
   // Judge which surfaces are decompose surfaces from the generated list.
   judgeDecomposeSurfaces();
-  /*
-  if (!selectSplitSurface->throughBoundarySurface(splitFacesList))
-    {
-      judgeThroughConcaveEdges(facesList);
 
-      if (selectSplitSurface->planeSplitOnPlane(splitFacesList))
+  McCAD::Decomposition::SplitSurfaces splitSurfaces;
+  Standard_Boolean assistingSurfaceCondiion = splitSurfaces.accessSSImpl()->throughBoundarySurfaces(splitFacesList);
+  if (splitFacesList.empty() || assistingSurfaceCondiion)
+    {
+      //judgeThroughConcaveEdges(facesList);
+      if (splitSurfaces.accessSSImpl()->planeSplitOnPlane(splitFacesList))
 	{
-	  generateAssistingSurfaces();
-	  judgeAssistingDecomposeSurfaces();
-	  judgeThroughConcaveEdges(assistingFacesList);
+	  //generateAssistingSurfaces();
+	  //judgeAssistingDecomposeSurfaces();
+	  //judgeThroughConcaveEdges(assistingFacesList);
 	}
     }
   Standard_Integer selectedSurface = 0;
-  */
+  
   if (recurrenceDepth >= 25)
     {
       return Standard_False;
+    }
+
+  if (splitSurface)
+    {
     }
   return Standard_True;
 }
@@ -162,7 +167,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& f
 	  boundSurfacePlane->accessSImpl()->initiate(face);
 	  boundSurfacePlane->accessBSPImpl()->generateExtendedPlane(boxSquareLength);
 	  //assert(boundSurfacePlane);
-	  //std::cout << "return poly" << std::endl;
 	  return boundSurfacePlane;
 	}
       else if (AdaptorSurface.GetType() == GeomAbs_Cylinder)
@@ -187,7 +191,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& f
           return boundSurface;
 	}
     }
-  //std::cout << "<<<<<<<<<<<<<< mode 1" << std::endl;
   return nullptr;
 }
 
@@ -282,7 +285,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::uniqu
 void
 McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
   // Judge whether boundary surfaces of the solid can be used for decomposition.
-  std::cout << "judge decompose surfaces" << std::endl;
+  std::cout << "judgeDecomposeSurfaces" << std::endl;
   if (facesList.size() < 2)
     {
       return;
@@ -329,7 +332,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
 	{
 	  facesList[i]->accessSImpl()->numberCollidingSurfaces = numberCollidingSurfaces;
 	  facesList[i]->accessSImpl()->numberCollidingCurvedSurfaces = numberCollidingCurvedSurfaces;
-	  splitFacesList.push_back(std::move(facesList[i]));
+	  splitFacesList.push_back(facesList[i]);
 	  splitSurface = Standard_True;
 	}
     }

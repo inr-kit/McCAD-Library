@@ -67,7 +67,7 @@ McCAD::Decomposition::Decompose::Impl::perform(){
 	  preproc.accessImpl()->genericFix(solid);
 	  
 	  // Perform decomposition on the repaired solid.
-	  std::cout << "   - Decomposing solid # "<< solidNumber << std::endl;
+	  std::cout << "   - Decomposing solid # " << solidNumber << std::endl;
 	  McCAD::Decomposition::DecomposeSolid decomposedSolid;
 	  if (!decomposedSolid.accessDSImpl()->initiate(solid))
 	    {

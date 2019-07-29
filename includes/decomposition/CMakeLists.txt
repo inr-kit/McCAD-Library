@@ -13,6 +13,9 @@ install (FILES boundSurface_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
 install (FILES boundSurfacePlane.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
 install (FILES boundSurfacePlane_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
 
+install (FILES splitsurfaces.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+install (FILES splitsurfaces_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+
 install (FILES decomposeSolid.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
 install (FILES decomposeSolid_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
 
