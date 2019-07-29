@@ -3,7 +3,7 @@
 #include "boundSurfacePlane_impl.hpp"
 
 McCAD::Decomposition::BoundSurfacePlane::BoundSurfacePlane()
-  : pBSPImpl{std::make_unique<Impl>()}, BoundSurface::BoundSurface() {
+  : pBSPImpl{std::make_unique<Impl>(this)}, BoundSurface::BoundSurface() {
 }
 
 McCAD::Decomposition::BoundSurfacePlane::~BoundSurfacePlane(){

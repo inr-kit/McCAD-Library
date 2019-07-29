@@ -3,6 +3,7 @@
 
 // C++
 #include <vector>
+#include <cmath>
 // McCAD
 #include "boundSurface.hpp"
 #include "surface_impl.hpp"
@@ -21,6 +22,7 @@
 #include <TopoDS_Wire.hxx>
 #include <BRepBuilderAPI_MakePolygon.hxx>                                           
 #include <BRepBuilderAPI_MakeFace.hxx>
+#include <Extrema_ExtPS.hxx>
 //#include <gp_Pln.hxx>
 //#include <gp_Ax3.hxx>
 //#include <TopExp_Explorer.hxx>
@@ -49,7 +51,7 @@ namespace McCAD::Decomposition{
     Standard_Boolean canFuse(const McCAD::Decomposition::BoundSurface& that);
     Standard_Boolean faceCollision(const McCAD::Decomposition::BoundSurface& aFace, Standard_Integer& aSide);
     Standard_Boolean triangleCollision(const McCAD::Decomposition::MeshTriangle& aTriangle, Standard_Integer& aSide, Standard_Real tolerance = 1e-2, Standard_Real tolerance2 = 1e-3);
-    Standard_Boolean pointOnSurface(const gp_Pnt& aPoint, const Standard_Real& tolerance);
+    Standard_Boolean pointOnSurface(const gp_Pnt& aPoint, const Standard_Real& distanceTolerance);
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
 
   private:
