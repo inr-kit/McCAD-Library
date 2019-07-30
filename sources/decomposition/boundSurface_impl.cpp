@@ -220,4 +220,28 @@ McCAD::Decomposition::BoundSurface::Impl::pointOnSurface(const gp_Pnt& aPoint, c
     }
   std::cout << "pointOnSurface return"	<< std::endl;
   return Standard_False;
+  }
+
+Standard_Boolean
+McCAD::Decomposition::BoundSurface::Impl::edgeOnSurface(const McCAD::Decomposition::Edge& aEdge, Standard_Real tolerance){
+  gp_Pnt startPoint = aEdge.accessEImpl()->startPoint;
+  gp_Pnt endPoint   = aEdge.accessEImpl()->endPoint;
+  if (pointOnSurface(startPoint, tolerance) && pointOnSurface(endPoint, tolerance\
+))
+    {
+      if (aEdge.accessEImpl()->edgeType == "Line")
+	{
+	  return Standard_True;
+	}
+      else
+	{
+	  gp_Pnt middlePoint = aEdge.accessEImpl()->middlePoint;
+          gp_Pnt extraPoint = aEdge.accessEImpl()->extraPoint;
+          if (pointOnSurface(middlePoint, tolerance) && pointOnSurface(extraPoint, tolerance))
+	{
+	  return Standard_True;
+	}
+	}
+    }
+  return Standard_False;
 }

@@ -53,6 +53,7 @@ namespace McCAD::Decomposition{
     Standard_Boolean triangleCollision(const McCAD::Decomposition::MeshTriangle& aTriangle, Standard_Integer& aSide, Standard_Real tolerance = 1e-2, Standard_Real tolerance2 = 1e-3);
     Standard_Boolean pointOnSurface(const gp_Pnt& aPoint, const Standard_Real& distanceTolerance);
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
+    Standard_Boolean edgeOnSurface(const McCAD::Decomposition::Edge& aEdge, Standard_Real tolerance = 1.0e-4);
 
   private:
 

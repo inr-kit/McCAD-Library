@@ -16,7 +16,7 @@ namespace McCAD::Decomposition{
     Impl() = default;
 
     Standard_Boolean throughBoundarySurfaces(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& facesList);
-    Standard_Boolean planeSplitOnPlane(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& facesList);
+    Standard_Boolean planeSplitOnlyPlane(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& facesList);
 
 
   private:

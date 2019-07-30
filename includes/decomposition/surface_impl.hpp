@@ -21,6 +21,7 @@ namespace McCAD::Decomposition{
     Standard_Boolean splitSurface = Standard_False;
     Standard_Integer numberCollidingSurfaces = 0;
     Standard_Integer numberCollidingCurvedSurfaces = 0;
+    Standard_Integer throughConcaveEdges;
     void initiate(const TopoDS_Face& aFace);
 
   private:

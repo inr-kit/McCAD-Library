@@ -58,6 +58,8 @@ namespace McCAD::Decomposition{
     void generateEdges(std::unique_ptr<McCAD::Decomposition::BoundSurface>& surface, Standard_Real uvTolerance = 1.0e-3);
     void mergeSurfaces(std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>>& planesList);
     void judgeDecomposeSurfaces();
+    void judgeThroughConcaveEdges(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& facesList);
+    void generateAssistingSurfaces();
 
   private:
 

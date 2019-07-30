@@ -27,12 +27,14 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
   generateSurfacesList();
   // Judge which surfaces are decompose surfaces from the generated list.
   judgeDecomposeSurfaces();
+  std::cout << "length of faceslist: " << facesList.size() << std::endl;
+  std::cout << "length of splitfaceslist: " << splitFacesList.size() << std::endl;
+  std::cout << "splitSurface: " << splitSurface  << std::endl;
 
-  Standard_Boolean assistingSurfaceCondiion = splitSurfaces.accessSSImpl()->throughBoundarySurfaces(splitFacesList);
-  if (splitFacesList.empty() || assistingSurfaceCondiion)
+  if (splitSurfaces.accessSSImpl()->throughBoundarySurfaces(splitFacesList))
     {
-      //judgeThroughConcaveEdges(facesList);
-      if (splitSurfaces.accessSSImpl()->planeSplitOnPlane(splitFacesList))
+      judgeThroughConcaveEdges(facesList);
+      if (splitSurfaces.accessSSImpl()->planeSplitOnlyPlane(splitFacesList))
 	{
 	  //generateAssistingSurfaces();
 	  //judgeAssistingDecomposeSurfaces();
@@ -48,6 +50,11 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
 
   if (splitSurface)
     {
+      std::cout << "Solid has a split surface" << std::endl;
+    }
+  else
+    {
+      std::cout	<< "Solid has no split surfaces" << std::endl;
     }
   return Standard_True;
 }
@@ -332,7 +339,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
 	  std::cout << "splitsutface True, pos & neg" << std::endl;
 	  facesList[i]->accessSImpl()->splitSurface = Standard_True;
 	}
-
       if (facesList[i]->accessSImpl()->splitSurface)
 	{
 	  std::cout << "set collidingsurfaces" << std::endl;
@@ -343,4 +349,31 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
 	  splitSurface = Standard_True;
 	}
     }
+}
+
+void
+McCAD::Decomposition::DecomposeSolid::Impl::judgeThroughConcaveEdges(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& facesList){
+  // Judge how many concave edges each boundary face of solid goes through.
+  for (Standard_Integer i = 0; i <= facesList.size() - 2; ++i)
+    {
+      Standard_Integer throughConcaveEdges = 0;
+      for (Standard_Integer j = i+1; j <= facesList.size() - 1; ++j)
+	{
+	  if (facesList[i]->accessSImpl()->surfaceNumber != facesList[j]->accessSImpl()->surfaceNumber)
+	    {
+	      for (Standard_Integer k = 0; k <= facesList[j]->accessBSImpl()->edgesList.size() - 1; ++k)
+		{
+		  if (facesList[j]->accessBSImpl()->edgesList[k]->accessEImpl()->convexity == 0 && facesList[i]->accessBSImpl()->edgeOnSurface(*(facesList[j]->accessBSImpl()->edgesList[k])))
+		    {
+		      ++throughConcaveEdges;
+		    }
+		}
+	    }
+	}
+      facesList[i]->accessSImpl()->throughConcaveEdges = throughConcaveEdges;
+    }    
+}
+
+void
+McCAD::Decomposition::DecomposeSolid::Impl::generateAssistingSurfaces(){
 }
