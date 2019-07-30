@@ -42,8 +42,10 @@ McCAD::Decomposition::BoundSurface::Impl::faceCollision(const McCAD::Decompositi
   Standard_Integer positiveTriangles = 0;
   Standard_Integer negativeTriangles = 0;
 
+  std::cout << "length of list: " << aFace.accessBSImpl()->meshTrianglesList.size() << std::endl; 
   for (Standard_Integer i = 0; i <= aFace.accessBSImpl()->meshTrianglesList.size() - 1; ++i)
     {
+      std::cout << i << std::endl;
       Standard_Integer side = 0;
       if (triangleCollision(*(aFace.accessBSImpl()->meshTrianglesList[i]), side))
 	{
@@ -76,6 +78,7 @@ McCAD::Decomposition::BoundSurface::Impl::faceCollision(const McCAD::Decompositi
     {
       aSide = -1;
     }
+  std::cout << "faceCollision return"	<< std::endl;
   return collision;
 }
 
@@ -190,6 +193,7 @@ McCAD::Decomposition::BoundSurface::Impl::triangleCollision(const McCAD::Decompo
     {
       aSide = -1;
     }
+  std::cout << "triangleCollision return" << std::endl;
   return collision;
 }
 
@@ -214,5 +218,6 @@ McCAD::Decomposition::BoundSurface::Impl::pointOnSurface(const gp_Pnt& aPoint, c
 	  return Standard_True;
 	}
     }
+  std::cout << "pointOnSurface return"	<< std::endl;
   return Standard_False;
 }

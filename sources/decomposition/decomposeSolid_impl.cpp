@@ -28,7 +28,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
   // Judge which surfaces are decompose surfaces from the generated list.
   judgeDecomposeSurfaces();
 
-  McCAD::Decomposition::SplitSurfaces splitSurfaces;
   Standard_Boolean assistingSurfaceCondiion = splitSurfaces.accessSSImpl()->throughBoundarySurfaces(splitFacesList);
   if (splitFacesList.empty() || assistingSurfaceCondiion)
     {
@@ -292,18 +291,21 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
     }
   for (Standard_Integer i = 0; i <= facesList.size() - 2; ++i)
     {
+      std::cout << "judge: " << i << " , " << std::endl;
       Standard_Integer positiveFaces = 0;
       Standard_Integer negativeFaces = 0;
       Standard_Integer numberCollidingSurfaces = 0;
       Standard_Integer numberCollidingCurvedSurfaces = 0;
       for (Standard_Integer j = i+1; j <= facesList.size() - 1; ++j)
 	{
+	  std::cout << "judge: " << j<< " , " << std::endl;
 	  if (facesList[i]->accessSImpl()->surfaceNumber != facesList[j]->accessSImpl()->surfaceNumber)
 	    {
 	      Standard_Integer side = 0;
 	      if (facesList[i]->accessBSImpl()->faceCollision(*(facesList[j]), side))
 		{
 		  ++numberCollidingSurfaces;
+		  std::cout << "facecollision True" << std::endl;
 		  facesList[i]->accessSImpl()->splitSurface = Standard_True;
 		  if (facesList[j]->getSurfaceType() != "Plane")
 		    {
@@ -312,6 +314,8 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
 		}
 	      else
 		{
+		  std::cout << "facecollision False" << std::endl;
+		  std::cout << side << std::endl;
 		  if (side == 1)
 		    {
 		      ++positiveFaces;
@@ -325,13 +329,16 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
 	}
       if (positiveFaces > 0 && negativeFaces > 0)
 	{
+	  std::cout << "splitsutface True, pos & neg" << std::endl;
 	  facesList[i]->accessSImpl()->splitSurface = Standard_True;
 	}
 
       if (facesList[i]->accessSImpl()->splitSurface)
 	{
+	  std::cout << "set collidingsurfaces" << std::endl;
 	  facesList[i]->accessSImpl()->numberCollidingSurfaces = numberCollidingSurfaces;
 	  facesList[i]->accessSImpl()->numberCollidingCurvedSurfaces = numberCollidingCurvedSurfaces;
+	  std::cout << "adding to split surfaces list" << std::endl;
 	  splitFacesList.push_back(facesList[i]);
 	  splitSurface = Standard_True;
 	}

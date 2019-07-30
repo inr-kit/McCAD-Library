@@ -41,7 +41,7 @@ namespace McCAD::Decomposition{
     Impl() = default;
 
     McCAD::Tools::Preprocessor preproc;
-    //McCAD::Decomposition::SelectSplitSurface selectSplitSurface;
+    McCAD::Decomposition::SplitSurfaces splitSurfaces;
     TopoDS_Solid solid;
     std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> facesList;
     std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> splitFacesList;
