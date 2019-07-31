@@ -51,17 +51,18 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
   if (splitSurface)
     {
       std::cout << "Solid has a split surface" << std::endl;
-      if (!selectSplitSurface(selectedSurface))
+      if (!selectSplitSurface())
 	{
 	  return Standard_False;
 	}
       // Split the solid with the selected surface.
-      splitSolidList = new TopTools_HSequenceOfShape;
-      if (!splitSolid(selectedSplitFacesList[0], splitSolidList))
+      //splitSolidList = new TopTools_HSequenceOfShape;
+      if (!splitSolid(selectedSplitFacesList[0]))
 	{
 	  return Standard_False;
 	}
 
+      /*
       // Loop over the resulting subsolids and split each one of them recursively.
       for (Standard_Integer i = 0; i <= splitSolidList.size() - 1; ++i)
 	{
@@ -81,6 +82,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
 	    {
 	      return Standard_False;
 	    }
+	  */
     }
   else
     {
@@ -409,7 +411,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateAssistingSurfaces(){
 }
 
 Standard_Boolean
-McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(Standard_Integer& selectedSurface){
+McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(){
   // mergeSplitSurfaces(splitFacesList) // see no need for it as the formed lists; planesList, etc. are already merged. splitFacesList is a subset of facesList.
   splitSurfaces.accessSSImpl()->generateSplitFacesList(splitFacesList, selectedSplitFacesList);
   if (!selectedSplitFacesList.empty())
@@ -417,4 +419,9 @@ McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(Standard_Integer&
       return Standard_True;
     }
   return Standard_False;
+}
+
+Standard_Boolean
+McCAD::Decomposition::DecomposeSolid::Impl::splitSolid(std::shared_ptr<McCAD::Decomposition::BoundSurface>& splitSurface){
+  return Standard_True;
 }

@@ -68,7 +68,7 @@ McCAD::Decomposition::Decompose::Impl::perform(){
 	  
 	  // Perform decomposition on the repaired solid.
 	  std::cout << "   - Decomposing solid # " << solidNumber << std::endl;
-	  std::unique_ptr<McCAD::Decomposition::DecomposeSolid> decomposedSolid = std::make_unique<McCAD::Decomposition::DecomposeSolid>;
+	  std::unique_ptr<McCAD::Decomposition::DecomposeSolid> decomposedSolid = std::make_unique<McCAD::Decomposition::DecomposeSolid>();
 	  if (!decomposedSolid->accessDSImpl()->initiate(solid))
 	    {
 	      rejectedInputSolidsList->Append(solidShape);
