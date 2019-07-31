@@ -57,7 +57,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
 	}
       // Split the solid with the selected surface.
       //splitSolidList = new TopTools_HSequenceOfShape;
-      if (!splitSolid(selectedSplitFacesList[0]))
+      if (!splitSolid(selectedSplitFacesList[0], splitSolidList))
 	{
 	  return Standard_False;
 	}
@@ -423,5 +423,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(){
 
 Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::splitSolid(std::shared_ptr<McCAD::Decomposition::BoundSurface>& splitSurface){
+  // Split the solid using the first surface in the sorted splitting surfaces list.
+  
   return Standard_True;
 }

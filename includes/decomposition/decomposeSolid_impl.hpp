@@ -13,6 +13,7 @@
 #include "boundSurface_impl.hpp"
 #include "boundSurfacePlane_impl.hpp"
 #include "splitsurfaces_impl.hpp"
+#include "splitsolid_impl.hpp"
 #include <Standard.hxx>
 // OCC
 #include <TopoDS.hxx>
@@ -43,8 +44,10 @@ namespace McCAD::Decomposition{
 
     McCAD::Tools::Preprocessor preproc;
     McCAD::Decomposition::SplitSurfaces splitSurfaces;
+    McCAD::Decomposition::SplitSolid splitSolid;
+    McCAD::Decomposition::splitSolid;
     TopoDS_Solid solid;
-    Handle_TopTools_HSequenceOfShape splitSolidList;
+    Handle_TopTools_HSequenceOfShape splitSolidList = new TopTools_HSequenceOfShape;
     std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> facesList;
     std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> splitFacesList;
     std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> selectedSplitFacesList;

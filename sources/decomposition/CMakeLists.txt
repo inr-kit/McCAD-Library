@@ -28,6 +28,11 @@ install (TARGETS SplitSurfaces DESTINATION ${PROJECT_BINARY_DIR}/bin)
 add_library(SplitSurfaces_impl splitsurfaces_impl.cpp)
 install (TARGETS SplitSurfaces_impl DESTINATION ${PROJECT_BINARY_DIR}/bin)
 
+add_library(SplitSolid splitsolid.cpp)
+install (TARGETS SplitSolid DESTINATION ${PROJECT_BINARY_DIR}/bin)
+add_library(SplitSolid_impl splitsolid_impl.cpp)
+install (TARGETS SplitSolid_impl DESTINATION ${PROJECT_BINARY_DIR}/bin)
+
 add_library(DecomposeSolid decomposeSolid.cpp)
 install (TARGETS DecomposeSolid DESTINATION ${PROJECT_BINARY_DIR}/bin)
 add_library(DecomposeSolid_impl decomposeSolid_impl.cpp)
