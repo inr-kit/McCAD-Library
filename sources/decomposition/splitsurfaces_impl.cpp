@@ -33,3 +33,8 @@ McCAD::Decomposition::SplitSurfaces::Impl::planeSplitOnlyPlane(std::vector<std::
 
   return Standard_False;
 }
+
+void
+McCAD::Decomposition::SplitSurfaces::Impl::generateSplitFacesList(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& splitFacesList, std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& selectedSplitFacesList){
+  
+}

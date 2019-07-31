@@ -2,7 +2,7 @@
 #define DECOMPOSITION_IMPL_HPP
 
 // C++
-#include <list>
+#include <memory>
 // McCAD
 #include "decomposition.hpp"
 #include "inputdata_impl.hpp"

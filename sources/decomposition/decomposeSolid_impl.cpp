@@ -51,6 +51,36 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
   if (splitSurface)
     {
       std::cout << "Solid has a split surface" << std::endl;
+      if (!selectSplitSurface(selectedSurface))
+	{
+	  return Standard_False;
+	}
+      // Split the solid with the selected surface.
+      splitSolidList = new TopTools_HSequenceOfShape;
+      if (!splitSolid(selectedSplitFacesList[0], splitSolidList))
+	{
+	  return Standard_False;
+	}
+
+      // Loop over the resulting subsolids and split each one of them recursively.
+      for (Standard_Integer i = 0; i <= splitSolidList.size() - 1; ++i)
+	{
+	  TopoDS_Solid subSolid = splitSolidList[i];
+	  std::unique_ptr<McCAD::Decomposition::DecomposeSolid> decomposedSolid = std::make_unique<McCAD::Decomposition::DecomposeSolid>;
+	  decomposedSolid->accessDSImpl()->recurrenceDepth = recurrenceDepth;
+	  // mesh deflection is calculated inside initiate for every solid!.
+          if (decomposedSolid->accessDSImpl()->initiate(subSolid))
+            {
+	      for (Standard_Integer j = 0; j <= decomposedSolid->accessDSImpl()->splitSolidList.size() - 1; ++j)
+		{
+		  splitSolidList.push_back(decomposedSolid->accessDSImpl()->splitSolidList[j]);
+		}
+	      return Standard_True;
+	    }
+	  else
+	    {
+	      return Standard_False;
+	    }
     }
   else
     {
@@ -376,4 +406,15 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeThroughConcaveEdges(std::vector
 
 void
 McCAD::Decomposition::DecomposeSolid::Impl::generateAssistingSurfaces(){
+}
+
+Standard_Boolean
+McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(Standard_Integer& selectedSurface){
+  // mergeSplitSurfaces(splitFacesList) // see no need for it as the formed lists; planesList, etc. are already merged. splitFacesList is a subset of facesList.
+  splitSurfaces.accessSSImpl()->generateSplitFacesList(splitFacesList, selectedSplitFacesList);
+  if (!selectedSplitFacesList.empty())
+    {
+      return Standard_True;
+    }
+  return Standard_False;
 }

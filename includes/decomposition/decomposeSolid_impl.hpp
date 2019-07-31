@@ -34,6 +34,7 @@
 #include <gp_Pnt.hxx>
 #include <gp_Dir.hxx>
 #include <Handle_Geom_Curve.hxx>
+#include <Handle_TopTools_HSequenceOfShape.hxx>
 
 namespace McCAD::Decomposition{
   class DecomposeSolid::Impl {
@@ -43,8 +44,10 @@ namespace McCAD::Decomposition{
     McCAD::Tools::Preprocessor preproc;
     McCAD::Decomposition::SplitSurfaces splitSurfaces;
     TopoDS_Solid solid;
+    Handle_TopTools_HSequenceOfShape splitSolidList;
     std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> facesList;
     std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> splitFacesList;
+    std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> selectedSplitFacesList;
     Standard_Real meshDeflection;
     Standard_Real boxSquareLength;
     Standard_Integer recurrenceDepth = 0;
@@ -60,6 +63,7 @@ namespace McCAD::Decomposition{
     void judgeDecomposeSurfaces();
     void judgeThroughConcaveEdges(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& facesList);
     void generateAssistingSurfaces();
+    Standard_Boolean selectSplitSurface(Standard_Integer& selectedSurface);
 
   private:
 
