@@ -8,6 +8,8 @@
 #include "tools_impl.hpp"
 // OCC
 #include <TopoDS_Face.hxx>
+#include <BRepAdaptor_Surface.hxx>
+#include <GeomAdaptor_Surface.hxx>
 
 namespace McCAD::Decomposition{
   class Surface::Impl {

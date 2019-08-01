@@ -45,9 +45,9 @@ namespace McCAD::Decomposition{
     McCAD::Tools::Preprocessor preproc;
     McCAD::Decomposition::SplitSurfaces splitSurfaces;
     McCAD::Decomposition::SplitSolid splitSolid;
-    McCAD::Decomposition::splitSolid;
+    
     TopoDS_Solid solid;
-    Handle_TopTools_HSequenceOfShape splitSolidList = new TopTools_HSequenceOfShape;
+    Handle_TopTools_HSequenceOfShape splitSolidList;
     std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> facesList;
     std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> splitFacesList;
     std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> selectedSplitFacesList;
@@ -67,7 +67,6 @@ namespace McCAD::Decomposition{
     void judgeThroughConcaveEdges(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& facesList);
     void generateAssistingSurfaces();
     Standard_Boolean selectSplitSurface();
-    Standard_Boolean splitSolid(std::shared_ptr<McCAD::Decomposition::BoundSurface>& splitSurface);
 
   private:
 

@@ -134,6 +134,12 @@ target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 set (EXTRA_LIBS ${EXTRA_LIBS} SplitSurfaces SplitSurfaces_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
+# SplitSolid library
+set (EXTRA_LIBS ${EXTRA_LIBS} SplitSolid SplitSolid_impl)
+target_link_libraries(SplitSolid_impl TKBRep)
+target_link_libraries(SplitSolid_impl TKPrim)
+target_link_libraries(SplitSolid_impl TKBool)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # DecomposeSolid library
 set (EXTRA_LIBS ${EXTRA_LIBS} DecomposeSolid DecomposeSolid_impl)
@@ -141,6 +147,8 @@ target_link_libraries(DecomposeSolid_impl BoundSurfacePlane)
 target_link_libraries(DecomposeSolid_impl BoundSurfacePlane_impl)
 target_link_libraries(DecomposeSolid_impl SplitSurfaces)
 target_link_libraries(DecomposeSolid_impl SplitSurfaces_impl)
+target_link_libraries(DecomposeSolid_impl SplitSolid)
+target_link_libraries(DecomposeSolid_impl SplitSolid_impl)
 target_link_libraries(DecomposeSolid_impl Edge)
 target_link_libraries(DecomposeSolid_impl Edge_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
