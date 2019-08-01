@@ -12,7 +12,8 @@
 namespace McCAD::General{
   class InputData::Impl{
   public:
-    Impl() = default;
+    Impl();
+    ~Impl();
 
     Handle_TopTools_HSequenceOfShape inputSolidsList;
   };

@@ -26,6 +26,7 @@ namespace McCAD::Decomposition{
     TopoDS_Shape solidShape;
     std::unique_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;
+    std::shared_ptr<TopTools_HSequenceOfShape> resultSolidsList;
 
     void splitInputSolids(const Handle_TopTools_HSequenceOfShape& inputSolidsList);
     void perform();

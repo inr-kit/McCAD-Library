@@ -61,7 +61,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
 	{
 	  return Standard_False;
 	}
-      std::cout << "length of split solids: " << splitSolidList->Length() << std::endl;
 
       /*
       // Loop over the resulting subsolids and split each one of them recursively.

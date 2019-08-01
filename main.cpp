@@ -4,6 +4,7 @@
 // McCAD
 #include "inputdata.hpp"
 #include "stepreader.hpp"
+#include "stepwriter.hpp"
 #include "decomposition.hpp"
 
 int main (){
@@ -23,6 +24,13 @@ int main (){
     std::cout << "** Starting decomposition **" << std::endl;
     std::cout << "****************************" << std::endl;
     McCAD::Decomposition::Decompose decompose{inputData};
+    auto outputData = decompose.getResultSolids();
+
+    // Erite output STEP file.
+    std::cout << "****************************" << std::endl;
+    std::cout << "** Saving to STEP file **" << std::endl;
+    std::cout << "****************************" << std::endl;
+    McCAD::IO::STEPWriter writer{fileName, outputData};
     
     return 0;
 }

@@ -90,6 +90,8 @@ add_subdirectory (includes/io)
 add_subdirectory (sources/io)
 set (EXTRA_LIBS ${EXTRA_LIBS} STEPReader STEPReader_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+set (EXTRA_LIBS ${EXTRA_LIBS} STEPWriter STEPWriter_impl)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # Tools library
 include_directories ("${PROJECT_SOURCE_DIR}/includes/tools")

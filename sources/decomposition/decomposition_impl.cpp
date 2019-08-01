@@ -69,11 +69,16 @@ McCAD::Decomposition::Decompose::Impl::perform(){
 	  // Perform decomposition on the repaired solid.
 	  std::cout << "   - Decomposing solid # " << solidNumber << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::DecomposeSolid> decomposedSolid = std::make_unique<McCAD::Decomposition::DecomposeSolid>();
-	  if (!decomposedSolid->accessDSImpl()->initiate(solid))
+	  if (decomposedSolid->accessDSImpl()->initiate(solid))
+	    {
+	      resultSolidsList = std::move(decomposedSolid->accessDSImpl()->splitSolidList);
+	    }
+	  else
 	    {
 	      rejectedInputSolidsList->Append(solidShape);
 	    }
 	}
     }
   std::cout << "   - There are " << rejectedInputSolidsList->Length() << " rejected solid(s)."<< std::endl;
+  std::cout << "length of split solids list: " << resultSolidsList->Length() << std::endl;
 }
