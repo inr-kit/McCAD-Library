@@ -56,11 +56,12 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
 	  return Standard_False;
 	}
       // Split the solid with the selected surface.
-      //splitSolidList = new TopTools_HSequenceOfShape;
+      splitSolidList = std::make_unique<TopTools_HSequenceOfShape>();
       if (!splitSolid.accessSSImpl()->initiate(solid, selectedSplitFacesList[0], splitSolidList))
 	{
 	  return Standard_False;
 	}
+      std::cout << "length of split solids: " << splitSolidList->Length() << std::endl;
 
       /*
       // Loop over the resulting subsolids and split each one of them recursively.

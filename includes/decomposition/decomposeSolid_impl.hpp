@@ -47,7 +47,7 @@ namespace McCAD::Decomposition{
     McCAD::Decomposition::SplitSolid splitSolid;
     
     TopoDS_Solid solid;
-    Handle_TopTools_HSequenceOfShape splitSolidList;
+    std::unique_ptr<TopTools_HSequenceOfShape> splitSolidList;
     std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> facesList;
     std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> splitFacesList;
     std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> selectedSplitFacesList;
