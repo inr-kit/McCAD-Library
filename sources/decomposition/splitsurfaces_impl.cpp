@@ -87,7 +87,7 @@ McCAD::Decomposition::SplitSurfaces::Impl::sortSplitFaces(std::vector<std::share
       return;
     }
   // Implement more modern sorting. maybe utilizing sorting of zipped vectors.
-  // A Splitting surface that goes through more concave edges has more priority.
+  // A Splitting surface that goes through more concave edges has priority.
   for (Standard_Integer i = 0; i <= splitFacesList.size() - 2; ++i)
     {
       for (Standard_Integer j = i + 1; j <= splitFacesList.size() - 1; ++j)
@@ -96,7 +96,14 @@ McCAD::Decomposition::SplitSurfaces::Impl::sortSplitFaces(std::vector<std::share
 	    {
 	      std::swap(splitFacesList[i], splitFacesList[j]);
 	    }
-	  else if (splitFacesList[i]->accessSImpl()->throughConcaveEdges == splitFacesList[j]->accessSImpl()->throughConcaveEdges)
+	}
+    }
+  // A Splitting surface that intesects with less boundary surfaces has priority.
+  for (Standard_Integer i = 0; i <= splitFacesList.size() - 2; ++i)
+    {
+      for (Standard_Integer j = i + 1; j <= splitFacesList.size() - 1; ++j)
+        {
+	  if (splitFacesList[i]->accessSImpl()->throughConcaveEdges <= splitFacesList[j]->accessSImpl()->throughConcaveEdges)
 	    {
 	      if (splitFacesList[i]->accessSImpl()->numberCollidingSurfaces > splitFacesList[j]->accessSImpl()->numberCollidingSurfaces)
 		{

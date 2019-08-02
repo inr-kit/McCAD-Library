@@ -71,7 +71,15 @@ McCAD::Decomposition::Decompose::Impl::perform(){
 	  std::unique_ptr<McCAD::Decomposition::DecomposeSolid> decomposedSolid = std::make_unique<McCAD::Decomposition::DecomposeSolid>();
 	  if (decomposedSolid->accessDSImpl()->initiate(solid))
 	    {
+	      std::cout << "length: " << decomposedSolid->accessDSImpl()->splitSolidList->Length() << std::endl;
 	      resultSolidsList = std::move(decomposedSolid->accessDSImpl()->splitSolidList);
+	      /*
+	      for (Standard_Integer i = 1; i <= decomposedSolid->accessDSImpl()->splitSolidList->Length(); ++i)
+		{
+		  std::cout << i << std::endl;
+		  resultSolidsList->Append(decomposedSolid->accessDSImpl()->splitSolidList->Value(i));
+		}
+	      */
 	    }
 	  else
 	    {

@@ -118,8 +118,39 @@ McCAD::Decomposition::SplitSolid::Impl::splitWithBoxes(const TopoDS_Solid& solid
     {
       return Standard_False;
     }
+  return Standard_False;
 }
 
 void
-McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){  
+McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
+  std::unique_ptr<TopTools_HSequenceOfShape> newsubSolidsList = std::make_unique<TopTools_HSequenceOfShape>();
+  for (Standard_Integer i = 1; i <= subSolidsList->Length(); ++i)
+    {
+      try
+	{
+	  TopoDS_Solid tmpsolid = TopoDS::Solid(subSolidsList->Value(i));
+	  newsubSolidsList->Append(tmpsolid);
+	}
+      catch(...)
+	{
+	  TopExp_Explorer explorer;
+	  explorer.Init(subSolidsList->Value(i), TopAbs_SOLID);
+	  for (; explorer.More(); explorer.Next())
+	    {
+	      TopoDS_Solid tmpsolid = TopoDS::Solid(explorer.Current());
+	      if (tmpsolid.IsNull())
+		{
+		  continue;
+		}
+	      else
+		{
+		  newsubSolidsList->Append(tmpsolid);
+		}
+	    }
+	}
+    }
+  if (newsubSolidsList->Length() != 0)
+    {
+      subSolidsList = std::move(newsubSolidsList);
+    }
 }
