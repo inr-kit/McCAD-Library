@@ -29,8 +29,20 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
   std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
   // Update edges convexity.
   updateEdgesConvexity();
+  //throw std::runtime_error("saved concave edges");
   // Generate the boundary surface list of the solid.
   generateSurfacesList();
+  STEPControl_Writer wrt;
+  for (Standard_Integer DD = 0; DD <= facesList.size() - 1; ++DD)
+    {
+      wrt.Transfer(facesList[DD]->accessSImpl()->face, STEPControl_AsIs);
+    }
+  std::ostringstream oss;
+  oss << "./faceslist" << ".stp";
+  std::string listname = oss.str();
+  wrt.Write(listname.c_str());
+  //throw std::runtime_error("saved facesList");
+
   // Judge which surfaces are decompose surfaces from the generated list.
   judgeDecomposeSurfaces();
   //std::cout << "length of faceslist: " << facesList.size() << std::endl;
@@ -40,7 +52,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
   if (!splitSurfaces.accessSSImpl()->throughNoBoundarySurfaces(splitFacesList))
     {
       std::cout << "throughNoBoundarySurfaces false" << std::endl;
-      judgeThroughConcaveEdges(splitFacesList);
+      judgeThroughConcaveEdges(facesList);
       if (!splitSurfaces.accessSSImpl()->planeSplitOnlyPlane(splitFacesList))
 	{
 	  //generateAssistingSurfaces();
@@ -50,7 +62,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
     }
   //Standard_Integer selectedSurface = 0;
   
-  if (recurrenceDepth >= 25)
+  if (recurrenceDepth >= 5)
     {
       return Standard_False;
     }
@@ -75,7 +87,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
 	  return Standard_False;
 	}
 
-      
       // Loop over the resulting subsolids and split each one of them recursively.
       std::cout << "splitting subsolids" << std::endl;
       for (Standard_Integer i = 1; i <= splitSolidList->Length(); ++i)
@@ -148,7 +159,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::updateEdgesConvexity(const Standard_
 	{
 	  angle = Standard_Real(0);
         }
-      // The edge is concave.
+      // The edge is convex.
       if( angle < Standard_Real(0) && edge.Orientation() == TopAbs_REVERSED)
 	{
 	  edge.Convex(1);
@@ -157,7 +168,23 @@ McCAD::Decomposition::DecomposeSolid::Impl::updateEdgesConvexity(const Standard_
         {
 	  edge.Convex(1);
         }
-      //std::cout << "angle: " << angle << ", convexity " << edge.Convex() << std::endl;
+      else
+	{
+	  // edge is concave
+	  edge.Convex(0);
+	}
+      std::cout << "angle: " << angle << ", convexity " << edge.Convex() << std::endl;
+      if (edge.Convex() == 0)
+	{
+	  STEPControl_Writer wrt;
+          wrt.Transfer(firstFace, STEPControl_AsIs);
+	  wrt.Transfer(secondFace, STEPControl_AsIs);
+          std::ostringstream oss;
+          oss << "./concave_edge_" << edgeNumber << "_" << recurrenceDepth << ".stp";
+          std::string surfname = oss.str();
+          wrt.Write(surfname.c_str());
+	  //throw std::runtime_error("saved concave edge");
+	}
     }
 }
 
@@ -195,14 +222,14 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
 	}
       else continue;
     }
-  //std::cout << "     - There are " << planesList.size() << " planes in the solid" << std::endl;
-  mergeSurfaces(planesList);
+  std::cout << "     - There are " << planesList.size() << " planes in the solid" << std::endl;
+  //mergeSurfaces(planesList);
   //std::cout << "merged planes list: " << planesList.size() << std::endl;
   for (Standard_Integer i = 0; i <= planesList.size() - 1; ++i)
     {
       facesList.push_back(std::move(planesList[i]));
     }
-  //std::cout << "merged faces list: " << facesList.size() << std::endl;
+  std::cout << "merged faces list: " << facesList.size() << std::endl;
 }
 
 std::unique_ptr<McCAD::Decomposition::BoundSurface>
@@ -299,7 +326,8 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::uniqu
 		{
 		  if (surfacesList[i]->getSurfaceType() == "Plane")
 		    {
-		      //std::cout << "equal, fuse plane" << std::endl;
+		      std::cout << "equal, fuse plane" << std::endl;
+		      
 		      TopoDS_Face newFace = preproc.accessImpl()->fusePlanes(surfacesList[i]->accessSImpl()->face, surfacesList[j]->accessSImpl()->face);
 		      std::unique_ptr<McCAD::Decomposition::BoundSurface> newboundSurface = std::move(generateSurface(newFace));
 		      newboundSurface->accessSImpl()->initiate(newFace);
@@ -323,7 +351,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::uniqu
 		}
 	      else
 		{
-		  //std::cout << "equal, erase one" << std::endl;
+		  std::cout << "equal, erase one" << std::endl;
 		  // Erase pointer surfacesList[j] from surfacesList.
 		  surfacesList.erase(surfacesList.begin() + j);
 		  --j;
@@ -403,16 +431,16 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
 void
 McCAD::Decomposition::DecomposeSolid::Impl::judgeThroughConcaveEdges(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& facesList){
   // Judge how many concave edges each boundary face of solid goes through.
-  for (Standard_Integer i = 0; i <= facesList.size() - 2; ++i)
+  for (Standard_Integer i = 0; i <= facesList.size() - 1; ++i)
     {
       Standard_Integer throughConcaveEdges = 0;
-      for (Standard_Integer j = i+1; j <= facesList.size() - 1; ++j)
+      for (Standard_Integer j = 0; j <= facesList.size() - 1; ++j)
 	{
-	  if (facesList[i]->accessSImpl()->surfaceNumber != facesList[j]->accessSImpl()->surfaceNumber)
+	  if (i != j && facesList[i]->accessSImpl()->surfaceNumber != facesList[j]->accessSImpl()->surfaceNumber)
 	    {
 	      for (Standard_Integer k = 0; k <= facesList[j]->accessBSImpl()->edgesList.size() - 1; ++k)
 		{
-		  if (facesList[j]->accessBSImpl()->edgesList[k]->accessEImpl()->convexity == 1 && facesList[i]->accessBSImpl()->edgeOnSurface(*(facesList[j]->accessBSImpl()->edgesList[k])))
+		  if (facesList[j]->accessBSImpl()->edgesList[k]->accessEImpl()->convexity == 0 && facesList[i]->accessBSImpl()->edgeOnSurface(*(facesList[j]->accessBSImpl()->edgesList[k])))
 		    {
 		      ++throughConcaveEdges;
 		    }
