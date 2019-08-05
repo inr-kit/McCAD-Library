@@ -2,19 +2,19 @@
 #include "splitsurfaces_impl.hpp"
 
 Standard_Boolean
-McCAD::Decomposition::SplitSurfaces::Impl::throughBoundarySurfaces(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& facesList){
+McCAD::Decomposition::SplitSurfaces::Impl::throughNoBoundarySurfaces(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& facesList){
   if (facesList.empty())
     {
-      return Standard_True;
+      return Standard_False;
     }
   for (Standard_Integer i = 0; i <= facesList.size() - 1; ++i)
     {
       if (facesList[i]->accessSImpl()->numberCollidingSurfaces == 0)
 	{
-	  return Standard_False;
+	  return Standard_True;
 	}
     }
-  return Standard_True;
+  return Standard_False;
 }
 
 Standard_Boolean
@@ -114,7 +114,7 @@ McCAD::Decomposition::SplitSurfaces::Impl::sortSplitFaces(std::vector<std::share
     }
   for (Standard_Integer i = 0; i <= splitFacesList.size() - 1; ++i)
     {
-      std::cout << "throughConcaveEdges: " << splitFacesList[i]->accessSImpl()->throughConcaveEdges << " , numberCollidingSurfaces: " << splitFacesList[i]->accessSImpl()->numberCollidingSurfaces << std::endl;
+      //std::cout << "throughConcaveEdges: " << splitFacesList[i]->accessSImpl()->throughConcaveEdges << " , numberCollidingSurfaces: " << splitFacesList[i]->accessSImpl()->numberCollidingSurfaces << std::endl;
     }
 
   // A Splitting surface that goes through less boundary surfaces has priority.

@@ -1,18 +1,23 @@
 // McCAD
 #include "decomposeSolid_impl.hpp"
 
+McCAD::Decomposition::DecomposeSolid::Impl::Impl() : splitSolidList{std::make_unique<TopTools_HSequenceOfShape>()}{
+}
+
+McCAD::Decomposition::DecomposeSolid::Impl::~Impl(){
+}
+
 Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::initiate(const TopoDS_Solid& aSolid){
   solid = aSolid;
-  splitSolidList = std::make_unique<TopTools_HSequenceOfShape>();
   meshDeflection = preproc.accessImpl()->calcMeshDeflection(solid);
-  std::cout << "deflection: " << meshDeflection << std::endl;
+  //std::cout << "deflection: " << meshDeflection << std::endl;
   // Calculate Length of bounding box.
   Bnd_Box boundingBox;
   BRepBndLib::Add(solid, boundingBox);
   boundingBox.SetGap(0.0);
   boxSquareLength = sqrt(boundingBox.SquareExtent());
-  std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
+  //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
   return perform();
 }
 
@@ -28,23 +33,24 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
   generateSurfacesList();
   // Judge which surfaces are decompose surfaces from the generated list.
   judgeDecomposeSurfaces();
-  std::cout << "length of faceslist: " << facesList.size() << std::endl;
-  std::cout << "length of splitfaceslist: " << splitFacesList.size() << std::endl;
-  std::cout << "splitSurface: " << splitSurface  << std::endl;
+  //std::cout << "length of faceslist: " << facesList.size() << std::endl;
+  //std::cout << "length of splitfaceslist: " << splitFacesList.size() << std::endl;
+  //std::cout << "splitSurface: " << splitSurface  << std::endl;
 
-  if (splitSurfaces.accessSSImpl()->throughBoundarySurfaces(splitFacesList))
+  if (!splitSurfaces.accessSSImpl()->throughNoBoundarySurfaces(splitFacesList))
     {
-      judgeThroughConcaveEdges(facesList);
-      if (splitSurfaces.accessSSImpl()->planeSplitOnlyPlane(splitFacesList))
+      std::cout << "throughNoBoundarySurfaces false" << std::endl;
+      judgeThroughConcaveEdges(splitFacesList);
+      if (!splitSurfaces.accessSSImpl()->planeSplitOnlyPlane(splitFacesList))
 	{
 	  //generateAssistingSurfaces();
 	  //judgeAssistingDecomposeSurfaces();
 	  //judgeThroughConcaveEdges(assistingFacesList);
 	}
     }
-  Standard_Integer selectedSurface = 0;
+  //Standard_Integer selectedSurface = 0;
   
-  if (recurrenceDepth >= 5)
+  if (recurrenceDepth >= 25)
     {
       return Standard_False;
     }
@@ -57,18 +63,24 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
 	  return Standard_False;
 	}
       // Split the solid with the selected surface.
+      std::cout << "selected surface concave edges: " << selectedSplitFacesList[0]->accessSImpl()->throughConcaveEdges << std::endl;
+      STEPControl_Writer wrt;
+      wrt.Transfer(selectedSplitFacesList[0]->accessSImpl()->face, STEPControl_AsIs);
+      std::ostringstream oss;
+      oss << "./list_" << recurrenceDepth << ".stp";
+      std::string surfname = oss.str();
+      wrt.Write(surfname.c_str());
       if (!splitSolid.accessSSImpl()->initiate(solid, selectedSplitFacesList[0], splitSolidList))
 	{
 	  return Standard_False;
 	}
 
-      /*
+      
       // Loop over the resulting subsolids and split each one of them recursively.
       std::cout << "splitting subsolids" << std::endl;
       for (Standard_Integer i = 1; i <= splitSolidList->Length(); ++i)
 	{
 	  TopoDS_Solid subSolid = TopoDS::Solid(splitSolidList->Value(i));   
-	  std::cout	<< "creating subsolid object" << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::DecomposeSolid> decomposedSolid = std::make_unique<McCAD::Decomposition::DecomposeSolid>();
 	  decomposedSolid->accessDSImpl()->recurrenceDepth = recurrenceDepth;
 	  // mesh deflection is calculated inside initiate for every solid!.
@@ -87,11 +99,11 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
 	    }
 	}
       return Standard_True;
-      */
     }
   else
     {
       std::cout	<< "Solid has no split surfaces" << std::endl;
+      splitSolidList->Append(solid);
     }
   return Standard_True;
 }
@@ -145,7 +157,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::updateEdgesConvexity(const Standard_
         {
 	  edge.Convex(1);
         }
-      std::cout << "angle: " << angle << ", convexity " << edge.Convex() << std::endl;
+      //std::cout << "angle: " << angle << ", convexity " << edge.Convex() << std::endl;
     }
 }
 
@@ -173,7 +185,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
 	  if (boundSurface->accessBSImpl()->generateMesh(meshDeflection))
 	    {
 	      generateEdges(boundSurface);
-	      std::cout << "length of egdes list: " << boundSurface->accessBSImpl()->edgesList.size() << std::endl;
+	      //std::cout << "length of egdes list: " << boundSurface->accessBSImpl()->edgesList.size() << std::endl;
 	      if(boundSurface->getSurfaceType() == "Plane")
 		{
 		  planesList.push_back(std::move(boundSurface));
@@ -183,14 +195,14 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
 	}
       else continue;
     }
-  std::cout << "     - There are " << planesList.size() << " planes in the solid" << std::endl;
+  //std::cout << "     - There are " << planesList.size() << " planes in the solid" << std::endl;
   mergeSurfaces(planesList);
-  std::cout << "merged planes list: " << planesList.size() << std::endl;
+  //std::cout << "merged planes list: " << planesList.size() << std::endl;
   for (Standard_Integer i = 0; i <= planesList.size() - 1; ++i)
     {
       facesList.push_back(std::move(planesList[i]));
     }
-  std::cout << "merged faces list: " << facesList.size() << std::endl;
+  //std::cout << "merged faces list: " << facesList.size() << std::endl;
 }
 
 std::unique_ptr<McCAD::Decomposition::BoundSurface>
@@ -204,7 +216,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& f
       //std::cout << "GeomAdaptor_Surface" << std::endl;
       if (AdaptorSurface.GetType() == GeomAbs_Plane)
 	{
-	  std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
+	  //std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurfacePlane> boundSurfacePlane = std::make_unique<McCAD::Decomposition::BoundSurfacePlane>();
 	  boundSurfacePlane->setSurfaceType(boundSurfacePlane->accessBSPImpl()->surfaceType);
 	  boundSurfacePlane->accessSImpl()->initiate(face);
@@ -214,21 +226,21 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& f
 	}
       else if (AdaptorSurface.GetType() == GeomAbs_Cylinder)
 	{
-	  std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
+	  //std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurfaceCylinder = std::make_unique<McCAD::Decomposition::BoundSurface>();
 	  boundSurfaceCylinder->accessSImpl()->initiate(face);
 	  return boundSurfaceCylinder;
 	}
       else if (AdaptorSurface.GetType() == GeomAbs_Cone)
 	{
-	  std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
+	  //std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurfaceCone = std::make_unique<McCAD::Decomposition::BoundSurface>();
 	  boundSurfaceCone->accessSImpl()->initiate(face);
 	  return boundSurfaceCone;
 	}
       else
 	{
-	  std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
+	  //std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
 	  std::unique_ptr<McCAD::Decomposition::BoundSurface> boundSurface = std::make_unique<McCAD::Decomposition::BoundSurface>();
 	  boundSurface->accessSImpl()->initiate(face);
           return boundSurface;
@@ -277,29 +289,29 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::uniqu
     {
       for (Standard_Integer j = i+1; j <= surfacesList.size() - 1; ++j)
 	{
-	  std::cout << i << " , " << j << " , " << surfacesList.size() << std::endl;
+	  //std::cout << i << " , " << j << " , " << surfacesList.size() << std::endl;
 	  if (*(surfacesList[i]) == *(surfacesList[j]))
 	    {
-	      std::cout << "equal" << std::endl;
+	      //std::cout << "equal" << std::endl;
 	      surfacesList[j]->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
 	      // Test if the two surfaces can be fused.
 	      if (*(surfacesList[i]) << *(surfacesList[j]))
 		{
 		  if (surfacesList[i]->getSurfaceType() == "Plane")
 		    {
-		      std::cout << "equal, fuse plane" << std::endl;
+		      //std::cout << "equal, fuse plane" << std::endl;
 		      TopoDS_Face newFace = preproc.accessImpl()->fusePlanes(surfacesList[i]->accessSImpl()->face, surfacesList[j]->accessSImpl()->face);
 		      std::unique_ptr<McCAD::Decomposition::BoundSurface> newboundSurface = std::move(generateSurface(newFace));
 		      newboundSurface->accessSImpl()->initiate(newFace);
 		      newboundSurface->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
 		      if (newboundSurface->accessBSImpl()->generateMesh(meshDeflection))
 			{
-			  std::cout << "fuse planes, generate edges" << std::endl;
+			  //std::cout << "fuse planes, generate edges" << std::endl;
 			  generateEdges(newboundSurface);
 			}
 
 		      // Erase pointer surfacesList[j] & [i] from surfacesList.
-		      std::cout << "equal, erase two: " << i << " , " << j << " , " << surfacesList.size() << std::endl;
+		      //std::cout << "equal, erase two: " << i << " , " << j << " , " << surfacesList.size() << std::endl;
 		      surfacesList.erase(surfacesList.begin() + j);
                       --j;
                       surfacesList.erase(surfacesList.begin() + i);
@@ -311,7 +323,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::uniqu
 		}
 	      else
 		{
-		  std::cout << "equal, erase one" << std::endl;
+		  //std::cout << "equal, erase one" << std::endl;
 		  // Erase pointer surfacesList[j] from surfacesList.
 		  surfacesList.erase(surfacesList.begin() + j);
 		  --j;
@@ -328,28 +340,28 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::uniqu
 void
 McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
   // Judge whether boundary surfaces of the solid can be used for decomposition.
-  std::cout << "judgeDecomposeSurfaces" << std::endl;
+  //std::cout << "judgeDecomposeSurfaces" << std::endl;
   if (facesList.size() < 2)
     {
       return;
     }
   for (Standard_Integer i = 0; i <= facesList.size() - 2; ++i)
     {
-      std::cout << "judge: " << i << " , " << std::endl;
+      //std::cout << "judge: " << i << " , " << std::endl;
       Standard_Integer positiveFaces = 0;
       Standard_Integer negativeFaces = 0;
       Standard_Integer numberCollidingSurfaces = 0;
       Standard_Integer numberCollidingCurvedSurfaces = 0;
       for (Standard_Integer j = i+1; j <= facesList.size() - 1; ++j)
 	{
-	  std::cout << "judge: " << j << " , " << std::endl;
+	  //std::cout << "judge: " << j << " , " << std::endl;
 	  if (facesList[i]->accessSImpl()->surfaceNumber != facesList[j]->accessSImpl()->surfaceNumber)
 	    {
 	      Standard_Integer side = 0;
 	      if (facesList[i]->accessBSImpl()->faceCollision(*(facesList[j]), side))
 		{
 		  ++numberCollidingSurfaces;
-		  std::cout << "facecollision True" << std::endl;
+		  //std::cout << "facecollision True" << std::endl;
 		  facesList[i]->accessSImpl()->splitSurface = Standard_True;
 		  if (facesList[j]->getSurfaceType() != "Plane")
 		    {
@@ -358,8 +370,8 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
 		}
 	      else
 		{
-		  std::cout << "facecollision False" << std::endl;
-		  std::cout << side << std::endl;
+		  //std::cout << "facecollision False" << std::endl;
+		  //std::cout << side << std::endl;
 		  if (side == 1)
 		    {
 		      ++positiveFaces;
@@ -373,15 +385,15 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
 	}
       if (positiveFaces > 0 && negativeFaces > 0)
 	{
-	  std::cout << "splitsutface True, pos & neg" << std::endl;
+	  //std::cout << "splitsutface True, pos & neg" << std::endl;
 	  facesList[i]->accessSImpl()->splitSurface = Standard_True;
 	}
       if (facesList[i]->accessSImpl()->splitSurface)
 	{
-	  std::cout << "set collidingsurfaces" << std::endl;
+	  //std::cout << "set collidingsurfaces" << std::endl;
 	  facesList[i]->accessSImpl()->numberCollidingSurfaces = numberCollidingSurfaces;
 	  facesList[i]->accessSImpl()->numberCollidingCurvedSurfaces = numberCollidingCurvedSurfaces;
-	  std::cout << "adding to split surfaces list" << std::endl;
+	  //std::cout << "adding to split surfaces list" << std::endl;
 	  splitFacesList.push_back(facesList[i]);
 	  splitSurface = Standard_True;
 	}
@@ -400,7 +412,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeThroughConcaveEdges(std::vector
 	    {
 	      for (Standard_Integer k = 0; k <= facesList[j]->accessBSImpl()->edgesList.size() - 1; ++k)
 		{
-		  if (facesList[j]->accessBSImpl()->edgesList[k]->accessEImpl()->convexity == 0 && facesList[i]->accessBSImpl()->edgeOnSurface(*(facesList[j]->accessBSImpl()->edgesList[k])))
+		  if (facesList[j]->accessBSImpl()->edgesList[k]->accessEImpl()->convexity == 1 && facesList[i]->accessBSImpl()->edgeOnSurface(*(facesList[j]->accessBSImpl()->edgesList[k])))
 		    {
 		      ++throughConcaveEdges;
 		    }
@@ -408,6 +420,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeThroughConcaveEdges(std::vector
 	    }
 	}
       facesList[i]->accessSImpl()->throughConcaveEdges = throughConcaveEdges;
+      std::cout << "throughConcaveEdges: " << throughConcaveEdges << std::endl;
     }    
 }
 

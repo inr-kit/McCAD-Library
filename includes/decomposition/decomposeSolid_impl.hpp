@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <assert.h>
+#include <sstream>
 // McCAD
 #include "decomposeSolid.hpp"
 #include "tools_impl.hpp"
@@ -36,11 +37,13 @@
 #include <gp_Dir.hxx>
 #include <Handle_Geom_Curve.hxx>
 #include <Handle_TopTools_HSequenceOfShape.hxx>
+#include <STEPControl_Writer.hxx>
 
 namespace McCAD::Decomposition{
   class DecomposeSolid::Impl {
   public:
-    Impl() = default;
+    Impl();
+    ~Impl();
 
     McCAD::Tools::Preprocessor preproc;
     McCAD::Decomposition::SplitSurfaces splitSurfaces;
