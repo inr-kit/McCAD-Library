@@ -26,6 +26,8 @@ McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid, const T
   std::cout << "split" << std::endl;
   gp_Pnt positivePoint, negativePoint;
   calculatePoints(splitFace, positivePoint, negativePoint);
+  //std::cout << positivePoint.X() << "," << positivePoint.Y() << "," << positivePoint.Z() << "," << std::endl;
+  //std::cout << negativePoint.X() << "," << negativePoint.Y() << "," << negativePoint.Z() << "," << std::endl;
   
   TopoDS_Solid positiveHalfSolid = BRepPrimAPI_MakeHalfSpace(splitFace, positivePoint).Solid();
   TopoDS_Shape positiveBox;

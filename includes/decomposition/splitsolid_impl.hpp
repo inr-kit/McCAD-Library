@@ -19,6 +19,7 @@
 #include <gp_Dir.hxx>
 #include <gp_Pnt.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
+#include <STEPControl_Writer.hxx>
 
 namespace McCAD::Decomposition{
   class SplitSolid::Impl {

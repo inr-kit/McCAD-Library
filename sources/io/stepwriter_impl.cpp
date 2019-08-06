@@ -4,7 +4,7 @@
 McCAD::IO::STEPWriter::Impl::Impl(const std::string& fileName){
   if(std::filesystem::exists(fileName))
     {
-      outputfileName = "./test_output.step";
+      outputfileName = "./run/test_output.step";
     }
 }
 

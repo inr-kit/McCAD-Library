@@ -38,15 +38,15 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
       wrt.Transfer(facesList[DD]->accessSImpl()->face, STEPControl_AsIs);
     }
   std::ostringstream oss;
-  oss << "./faceslist" << ".stp";
+  oss << "./run/" << recurrenceDepth << "_faceslist" << ".stp";
   std::string listname = oss.str();
   wrt.Write(listname.c_str());
   //throw std::runtime_error("saved facesList");
 
   // Judge which surfaces are decompose surfaces from the generated list.
   judgeDecomposeSurfaces();
-  //std::cout << "length of faceslist: " << facesList.size() << std::endl;
-  //std::cout << "length of splitfaceslist: " << splitFacesList.size() << std::endl;
+  std::cout << "length of faceslist: " << facesList.size() << std::endl;
+  std::cout << "length of splitfaceslist: " << splitFacesList.size() << std::endl;
   //std::cout << "splitSurface: " << splitSurface  << std::endl;
 
   if (!splitSurfaces.accessSSImpl()->throughNoBoundarySurfaces(splitFacesList))
@@ -77,32 +77,47 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
       // Split the solid with the selected surface.
       std::cout << "selected surface concave edges: " << selectedSplitFacesList[0]->accessSImpl()->throughConcaveEdges << std::endl;
       STEPControl_Writer wrt;
-      wrt.Transfer(selectedSplitFacesList[0]->accessSImpl()->face, STEPControl_AsIs);
+      wrt.Transfer(selectedSplitFacesList[0]->accessSImpl()->extendedFace, STEPControl_AsIs);
       std::ostringstream oss;
-      oss << "./list_" << recurrenceDepth << ".stp";
+      oss << "./run/" << recurrenceDepth << "_splitFace.stp";
       std::string surfname = oss.str();
       wrt.Write(surfname.c_str());
       if (!splitSolid.accessSSImpl()->initiate(solid, selectedSplitFacesList[0], splitSolidList))
 	{
 	  return Standard_False;
 	}
+      STEPControl_Writer wrt2;
+      for (Standard_Integer DD = 1; DD <= splitSolidList->Length(); ++DD)
+	{
+	  wrt2.Transfer(splitSolidList->Value(DD), STEPControl_AsIs);
+	}
+      std::ostringstream oss2;
+      oss2 << "./run/" << recurrenceDepth << "_splitsolidslist.stp";
+      std::string solidname = oss2.str();
+      wrt2.Write(solidname.c_str());
 
       // Loop over the resulting subsolids and split each one of them recursively.
       std::cout << "splitting subsolids" << std::endl;
       for (Standard_Integer i = 1; i <= splitSolidList->Length(); ++i)
 	{
+	  std::cout << "   - Decomposing subsolid # " << i << "/" << splitSolidList->Length() << std::endl;
+	  std::cout << splitSolidList->Length() << std::endl;
 	  TopoDS_Solid subSolid = TopoDS::Solid(splitSolidList->Value(i));   
 	  std::unique_ptr<McCAD::Decomposition::DecomposeSolid> decomposedSolid = std::make_unique<McCAD::Decomposition::DecomposeSolid>();
 	  decomposedSolid->accessDSImpl()->recurrenceDepth = recurrenceDepth;
 	  // mesh deflection is calculated inside initiate for every solid!.
           if (decomposedSolid->accessDSImpl()->initiate(subSolid))
             {
-	      splitSolidList->Remove(i);
-	      for (Standard_Integer j = 1; j <= decomposedSolid->accessDSImpl()->splitSolidList->Length(); ++j)
+	      if (decomposedSolid->accessDSImpl()->splitSolidList->Length() >= 2)
 		{
-		  splitSolidList->Append(decomposedSolid->accessDSImpl()->splitSolidList->Value(j));
+		  splitSolidList->Remove(i);
+		  for (Standard_Integer j = 1; j <= decomposedSolid->accessDSImpl()->splitSolidList->Length(); ++j)
+		    {
+		      splitSolidList->InsertBefore(i, decomposedSolid->accessDSImpl()->splitSolidList->Value(j));
+		    }
+		  i =+ decomposedSolid->accessDSImpl()->splitSolidList->Length() - 1;
+		  //return Standard_True;
 		}
-	      //return Standard_True;
 	    }
 	  else
 	    {
@@ -168,6 +183,11 @@ McCAD::Decomposition::DecomposeSolid::Impl::updateEdgesConvexity(const Standard_
         {
 	  edge.Convex(1);
         }
+      else if (angle == Standard_Real(0))
+	{
+	  // edge if flat
+	  edge.Convex(100);
+	}
       else
 	{
 	  // edge is concave
@@ -176,13 +196,18 @@ McCAD::Decomposition::DecomposeSolid::Impl::updateEdgesConvexity(const Standard_
       std::cout << "angle: " << angle << ", convexity " << edge.Convex() << std::endl;
       if (edge.Convex() == 0)
 	{
-	  STEPControl_Writer wrt;
-          wrt.Transfer(firstFace, STEPControl_AsIs);
-	  wrt.Transfer(secondFace, STEPControl_AsIs);
-          std::ostringstream oss;
-          oss << "./concave_edge_" << edgeNumber << "_" << recurrenceDepth << ".stp";
-          std::string surfname = oss.str();
-          wrt.Write(surfname.c_str());
+	  STEPControl_Writer wrt1;
+	  std::ostringstream oss1;
+          wrt1.Transfer(firstFace, STEPControl_AsIs);
+	  oss1 << "./run/" << recurrenceDepth << "_concave_face1_" << edgeNumber << ".stp";
+	  std::string surfname1 = oss1.str();
+          wrt1.Write(surfname1.c_str());
+	  STEPControl_Writer wrt2;
+          std::ostringstream oss2;
+	  wrt2.Transfer(secondFace, STEPControl_AsIs);
+          oss2 << "./run/" << recurrenceDepth << "_concave_face2_" << edgeNumber << ".stp";
+          std::string surfname2 = oss2.str();
+          wrt2.Write(surfname2.c_str());
 	  //throw std::runtime_error("saved concave edge");
 	}
     }
