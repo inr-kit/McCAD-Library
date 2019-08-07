@@ -226,11 +226,15 @@ Standard_Boolean
 McCAD::Decomposition::BoundSurface::Impl::edgeOnSurface(const McCAD::Decomposition::Edge& aEdge, Standard_Real tolerance){
   gp_Pnt startPoint = aEdge.accessEImpl()->startPoint;
   gp_Pnt endPoint   = aEdge.accessEImpl()->endPoint;
+  //std::cout << startPoint.X() << "," << startPoint.Y() << "," << startPoint.Z() << "," << std::endl;
+  //std::cout << endPoint.X() << "," << endPoint.Y() << "," << endPoint.Z() << "," << std::endl;
   if (pointOnSurface(startPoint, tolerance) && pointOnSurface(endPoint, tolerance\
 ))
     {
+      //std::cout << "points on surface" << std::endl;
       if (aEdge.accessEImpl()->edgeType == "Line")
 	{
+	  //std::cout	<< "line" << std::endl;
 	  return Standard_True;
 	}
       else
@@ -239,6 +243,7 @@ McCAD::Decomposition::BoundSurface::Impl::edgeOnSurface(const McCAD::Decompositi
           gp_Pnt extraPoint = aEdge.accessEImpl()->extraPoint;
           if (pointOnSurface(middlePoint, tolerance) && pointOnSurface(extraPoint, tolerance))
 	{
+	  //std::cout << "no line" << std::endl;
 	  return Standard_True;
 	}
 	}
