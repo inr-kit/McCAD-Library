@@ -55,8 +55,10 @@ McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid, const T
 
   if (splitWithBoxes(solid, positiveBox, negativeBox, subSolidsList) && splitWithBoxes(solid, negativeBox, positiveBox, subSolidsList))
     {
-      checkRepair(subSolidsList);
-      return Standard_True;
+      if (checkRepair(subSolidsList))
+	{
+	  return Standard_True;
+	}
     }
   else
     {
@@ -123,36 +125,50 @@ McCAD::Decomposition::SplitSolid::Impl::splitWithBoxes(const TopoDS_Solid& solid
   return Standard_False;
 }
 
-void
-McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
+Standard_Boolean
+McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList, Standard_Real tolerance){
   std::unique_ptr<TopTools_HSequenceOfShape> newsubSolidsList = std::make_unique<TopTools_HSequenceOfShape>();
   for (Standard_Integer i = 1; i <= subSolidsList->Length(); ++i)
     {
-      try
+      TopExp_Explorer explorer;
+      explorer.Init(subSolidsList->Value(i), TopAbs_SOLID);
+      for (; explorer.More(); explorer.Next())
 	{
-	  TopoDS_Solid tmpsolid = TopoDS::Solid(subSolidsList->Value(i));
+	  TopoDS_Solid tmpsolid = TopoDS::Solid(explorer.Current());
+	  if (tmpsolid.IsNull())
+	    {
+	      continue;
+	    }
+
+	  GProp_GProps geometryProperties;
+	  BRepGProp::VolumeProperties(subSolidsList->Value(i), geometryProperties);
+
+	  if (geometryProperties.Mass() <= tolerance)
+	    {
+	      continue;
+	    }
 	  newsubSolidsList->Append(tmpsolid);
 	}
-      catch(...)
-	{
-	  TopExp_Explorer explorer;
-	  explorer.Init(subSolidsList->Value(i), TopAbs_SOLID);
-	  for (; explorer.More(); explorer.Next())
-	    {
-	      TopoDS_Solid tmpsolid = TopoDS::Solid(explorer.Current());
-	      if (tmpsolid.IsNull())
-		{
-		  continue;
-		}
-	      else
-		{
-		  newsubSolidsList->Append(tmpsolid);
-		}
-	    }
-	}
     }
+  
   if (newsubSolidsList->Length() != 0)
     {
+      for (Standard_Integer i = 1; i <= newsubSolidsList->Length(); ++i)
+	{
+	  BRepCheck_Analyzer BRepAnalyzer(newsubSolidsList->Value(i), Standard_True);
+	  if (!BRepAnalyzer.IsValid())
+	    {
+	      if (!rebuildSolidFromShell(newsubSolidsList->Value(i)))
+		{
+		  return Standard_False;
+		}
+	    }
+	  else
+	    {
+	      continue;
+	    }
+	}
       subSolidsList = std::move(newsubSolidsList);
     }
+  return Standard_True;
 }

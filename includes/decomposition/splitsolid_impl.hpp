@@ -20,6 +20,8 @@
 #include <gp_Pnt.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
 #include <STEPControl_Writer.hxx>
+#include <GProp_GProps.hxx>
+#include <BRepCheck_Analyzer.hxx>
 
 namespace McCAD::Decomposition{
   class SplitSolid::Impl {
@@ -35,7 +37,7 @@ namespace McCAD::Decomposition{
     Standard_Boolean split(const TopoDS_Solid& solid, const TopoDS_Face& splitFace, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList);
     void calculatePoints(const TopoDS_Face& splitFace, gp_Pnt& positivePoint, gp_Pnt& negativePoint);
     Standard_Boolean splitWithBoxes(const TopoDS_Solid& solid, TopoDS_Shape& firstBox, TopoDS_Shape& secondBox, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList);
-    void checkRepair(std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList);
+    Standard_Boolean checkRepair(std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList, Standard_Real tolerance = 1.0e-4);
 
   private:
 

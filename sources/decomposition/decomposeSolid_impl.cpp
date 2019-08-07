@@ -116,7 +116,15 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
 	  std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/" << i << std::endl;
 
 	  std::cout << splitSolidList->Length() << std::endl;
-	  TopoDS_Solid subSolid = TopoDS::Solid(splitSolidList->Value(i));
+	  TopoDS_Solid subSolid;
+	  try
+	    {
+	      subSolid = TopoDS::Solid(splitSolidList->Value(i));
+	    }
+	  catch(...)
+	    {
+	      return Standard_False;
+	    }
 	  std::unique_ptr<McCAD::Decomposition::DecomposeSolid> decomposedSolid = std::make_unique<McCAD::Decomposition::DecomposeSolid>();
 	  decomposedSolid->accessDSImpl()->recurrenceDepth = recurrenceDepth;
 	  // mesh deflection is calculated inside initiate for every solid!.
