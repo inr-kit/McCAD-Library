@@ -155,12 +155,20 @@ McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSe
     {
       for (Standard_Integer i = 1; i <= newsubSolidsList->Length(); ++i)
 	{
-	  BRepCheck_Analyzer BRepAnalyzer(newsubSolidsList->Value(i), Standard_True);
+	  TopoDS_Solid tempSolid = TopoDS::Solid(newsubSolidsList->Value(i));
+	  BRepCheck_Analyzer BRepAnalyzer(tempSolid, Standard_True);
 	  if (!BRepAnalyzer.IsValid())
 	    {
-	      if (!rebuildSolidFromShell(newsubSolidsList->Value(i)))
+	      TopoDS_Solid newSolid;
+	      Standard_Boolean rebuildCondition = rebuildSolidFromShell(tempSolid, newSolid);
+	      if (!rebuildCondition)
 		{
 		  return Standard_False;
+		}
+	      else
+		{
+		  newsubSolidsList->InsertAfter(i, newSolid);
+		  newsubSolidsList->Remove(i);
 		}
 	    }
 	  else
@@ -171,4 +179,58 @@ McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSe
       subSolidsList = std::move(newsubSolidsList);
     }
   return Standard_True;
+}
+
+Standard_Boolean
+McCAD::Decomposition::SplitSolid::Impl::rebuildSolidFromShell(const TopoDS_Shape& solid, TopoDS_Solid& resultSolid, Standard_Real tolerance){
+  BRepBuilderAPI_Sewing builder(tolerance, Standard_True, Standard_True, Standard_True, Standard_True);
+  TopExp_Explorer explorerFace;
+  explorerFace.Init(solid, TopAbs_FACE);
+  for (; explorerFace.More(); explorerFace.Next())
+    {
+      TopoDS_Face tempFace = TopoDS::Face(explorerFace.Current());
+      if (tempFace.IsNull())
+	{
+	  continue;
+	}
+      GProp_GProps geometryProperties;
+      BRepGProp::SurfaceProperties(tempFace, geometryProperties);
+      if (geometryProperties.Mass() <= 1.0e-4)
+	{
+	  continue;
+	}
+      builder.Add(tempFace);
+    }
+
+  builder.Perform();
+  TopoDS_Shape tempShape = builder.SewedShape();
+
+  TopoDS_Shape newshape;
+  TopExp_Explorer explorer;
+  explorer.Init(tempShape, TopAbs_SHELL);
+  for (; explorer.More(); explorer.Next())
+    {
+      try
+	{
+	  TopoDS_Shell tempShell = TopoDS::Shell(explorer.Current());
+          ShapeFix_Solid tempSolid;
+          tempSolid.LimitTolerance(tolerance);
+          newshape = tempSolid.SolidFromShell(tempShell);
+	}
+      catch(...)
+	{
+	  return Standard_False;
+	}
+    }
+
+  BRepCheck_Analyzer BRepAnalyzer(newshape, Standard_True);
+  if (!BRepAnalyzer.IsValid())
+    {
+      return Standard_False;
+    }
+  else
+    {
+      resultSolid = TopoDS::Solid(newshape);
+      return Standard_True;
+    }
 }
