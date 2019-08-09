@@ -11,7 +11,7 @@
 #include "edge_impl.hpp"
 #include "tools_impl.hpp"
 // OCC
-#include <Handle_Poly_Triangulation.hxx>
+#include <Poly_Triangulation.hxx>
 #include <Poly_Triangulation.hxx>
 #include <GeomAdaptor_Surface.hxx>
 #include <BRepAdaptor_Surface.hxx>

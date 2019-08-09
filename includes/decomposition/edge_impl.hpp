@@ -8,7 +8,7 @@
 #include "tools_impl.hpp"
 // OCC
 #include <TopoDS_Edge.hxx>
-#include <Handle_Geom_Curve.hxx>
+#include <Geom_Curve.hxx>
 #include <BRep_Tool.hxx>
 #include <gp_Pnt.hxx>
 

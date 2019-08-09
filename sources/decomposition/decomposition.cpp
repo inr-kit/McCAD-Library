@@ -22,3 +22,14 @@ McCAD::Decomposition::Decompose::getResultSolids(){
     }
   return outputData;
 }
+
+McCAD::General::InputData
+McCAD::Decomposition::Decompose::getRejectedsubSolids(){
+  General::InputData outputData;
+  for (Standard_Integer i = 1; i <= pDImpl->rejectedsubSolidsList->Length(); ++i)
+    {
+      outputData.accessImpl()->inputSolidsList->Append(pDImpl->rejectedsubSolidsList->Value(i));
+    }
+  return outputData;
+}
+

@@ -1,7 +1,7 @@
 // McCAD
 #include "decomposeSolid_impl.hpp"
 
-McCAD::Decomposition::DecomposeSolid::Impl::Impl() : splitSolidList{std::make_unique<TopTools_HSequenceOfShape>()}{
+McCAD::Decomposition::DecomposeSolid::Impl::Impl() : splitSolidList{std::make_unique<TopTools_HSequenceOfShape>()}, rejectedsubSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
 }
 
 McCAD::Decomposition::DecomposeSolid::Impl::~Impl(){
@@ -139,15 +139,25 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
 		    }
 		  splitSolidList->Remove(i);
 		  i += decomposedSolid->accessDSImpl()->splitSolidList->Length() - 1;
-		  //return Standard_True;
+		  // Add rejected subSolids
 		}
+	      if (decomposedSolid->accessDSImpl()->rejectedsubSolidsList->Length() >= 1)
+		{
+		  for (Standard_Integer j = 1; j <= decomposedSolid->accessDSImpl()->rejectedsubSolidsList->Length(); ++j)
+		    {
+		      rejectedsubSolidsList->Append(decomposedSolid->accessDSImpl()->rejectedsubSolidsList->Value(j));
+		    }
+		}
+	      //return Standard_True;
 	    }
 	  else
 	    {
-	      return Standard_False;
+	      //return Standard_False;
+	      rejectedsubSolidsList->Append(subSolid);
+	      continue;
 	    }
 	}
-      return Standard_True;
+      //return Standard_True;
     }
   else
     {

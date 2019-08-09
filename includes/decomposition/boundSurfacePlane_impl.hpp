@@ -9,7 +9,7 @@
 #include "surface_impl.hpp"
 // OCC
 #include <TopLoc_Location.hxx>
-#include <Handle_Geom_Surface.hxx>
+#include <Geom_Surface.hxx>
 #include <BRepTools.hxx>
 #include <BRep_Tool.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>

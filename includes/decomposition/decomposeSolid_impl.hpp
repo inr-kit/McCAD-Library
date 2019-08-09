@@ -35,8 +35,8 @@
 #include <TopTools_ListOfShape.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Dir.hxx>
-#include <Handle_Geom_Curve.hxx>
-#include <Handle_TopTools_HSequenceOfShape.hxx>
+#include <Geom_Curve.hxx>
+#include <TopTools_HSequenceOfShape.hxx>
 #include <STEPControl_Writer.hxx>
 
 namespace McCAD::Decomposition{
@@ -51,6 +51,7 @@ namespace McCAD::Decomposition{
     
     TopoDS_Solid solid;
     std::unique_ptr<TopTools_HSequenceOfShape> splitSolidList;
+    std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
     std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> facesList;
     std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> splitFacesList;
     std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> selectedSplitFacesList;

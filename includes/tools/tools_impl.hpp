@@ -6,8 +6,8 @@
 // McCAD
 #include "tools.hpp"
 // OCC
-#include <Handle_ShapeFix_FixSmallFace.hxx>
-#include <Handle_ShapeFix_Solid.hxx>
+#include <ShapeFix_FixSmallFace.hxx>
+#include <ShapeFix_Solid.hxx>
 #include <ShapeFix_FixSmallFace.hxx>
 #include <ShapeFix_Solid.hxx>
 #include <ShapeFix_Shape.hxx>
@@ -18,7 +18,7 @@
 #include <BRepBndLib.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopoDS_Face.hxx>
-#include <Handle_Geom_Surface.hxx>
+#include <Geom_Surface.hxx>
 #include <GeomAdaptor_Surface.hxx>
 #include <BRep_Tool.hxx>
 #include <BRepGProp.hxx>
@@ -35,7 +35,7 @@
 #include <TopLoc_Location.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Ax3.hxx>
-#include <Handle_Geom_Curve.hxx>
+#include <Geom_Curve.hxx>
 #include <GeomAdaptor_Curve.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepTools.hxx>

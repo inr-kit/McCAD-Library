@@ -1,7 +1,7 @@
 // McCAD
 #include "decomposition_impl.hpp"
 
-McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData) : splitInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}, rejectedInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}, resultSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
+McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData) : splitInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}, rejectedInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}, resultSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}, rejectedsubSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
   auto inputSolidsList = inputData.accessImpl()->inputSolidsList;
   if (inputSolidsList->Length() >= 1)
     {
@@ -75,7 +75,14 @@ McCAD::Decomposition::Decompose::Impl::perform(){
 	      for (Standard_Integer i = 1; i <= lengthList; ++i)
 		{
 		  resultSolidsList->Append(decomposedSolid->accessDSImpl()->splitSolidList->Value(i));
-		}	      
+		}
+	      if (decomposedSolid->accessDSImpl()->rejectedsubSolidsList->Length() >= 1)
+                {
+                  for (Standard_Integer j = 1; j <= decomposedSolid->accessDSImpl()->rejectedsubSolidsList->Length(); ++j)
+                    {
+                      rejectedsubSolidsList->Append(decomposedSolid->accessDSImpl()->rejectedsubSolidsList->Value(j));
+                    }
+		}
 	    }
 	  else
 	    {
@@ -85,4 +92,5 @@ McCAD::Decomposition::Decompose::Impl::perform(){
     }
   std::cout << "   - There are " << rejectedInputSolidsList->Length() << " rejected solid(s)."<< std::endl;
   std::cout << "length of split solids list: " << resultSolidsList->Length() << std::endl;
+  std::cout << "length of rejected subsolids list: " << rejectedsubSolidsList->Length() << std::endl;
 }

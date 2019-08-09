@@ -5,7 +5,7 @@
 #include <string>
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>
-#include <Handle_Standard_Transient.hxx>
+#include <Standard_Transient.hxx>
 // McCAD
 #include "inputdata.hpp"
 

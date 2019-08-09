@@ -24,13 +24,15 @@ int main (){
     std::cout << "** Starting decomposition **" << std::endl;
     std::cout << "****************************" << std::endl;
     McCAD::Decomposition::Decompose decompose{inputData};
-    auto outputData = decompose.getResultSolids();
+    auto outputData_success = decompose.getResultSolids();
+    auto outputData_fail = decompose.getRejectedsubSolids();
 
-    // Erite output STEP file.
+    // Write output STEP files.
     std::cout << "****************************" << std::endl;
     std::cout << "** Saving to STEP file **" << std::endl;
     std::cout << "****************************" << std::endl;
-    McCAD::IO::STEPWriter writer{fileName, outputData};
+    McCAD::IO::STEPWriter successWriter{"./run/resultSolids.stp", outputData_success};
+    McCAD::IO::STEPWriter failWriter{"./run/rejectedsubSolids.stp", outputData_fail};
     
     return 0;
 }

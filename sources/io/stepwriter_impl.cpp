@@ -2,9 +2,10 @@
 #include "stepwriter_impl.hpp"
 
 McCAD::IO::STEPWriter::Impl::Impl(const std::string& fileName){
+  outputfileName = fileName;
   if(std::filesystem::exists(fileName))
     {
-      outputfileName = "./run/test_output.step";
+      //
     }
 }
 
