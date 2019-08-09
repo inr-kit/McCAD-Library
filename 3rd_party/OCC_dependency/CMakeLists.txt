@@ -1,0 +1,61 @@
+add_library(OCC INTERFACE)
+
+set(OCC_LIB_DIR
+    "C:/OpenCASCADE/OpenCASCADE-7.3.0-vc14-64/opencascade-7.3.0/win64/vc14/lib")
+set(OCC_INC_DIR
+    "C:/OpenCASCADE/OpenCASCADE-7.3.0-vc14-64/opencascade-7.3.0/inc")
+
+target_link_libraries(OCC
+    INTERFACE
+    "${OCC_LIB_DIR}/TKBin.lib"
+    "${OCC_LIB_DIR}/TKBinL.lib"
+    "${OCC_LIB_DIR}/TKBinTObj.lib"
+    "${OCC_LIB_DIR}/TKBinXCAF.lib"
+    "${OCC_LIB_DIR}/TKBO.lib"
+    "${OCC_LIB_DIR}/TKBool.lib"
+    "${OCC_LIB_DIR}/TKBRep.lib"
+    "${OCC_LIB_DIR}/TKCAF.lib"
+    "${OCC_LIB_DIR}/TKCDF.lib"
+    "${OCC_LIB_DIR}/TKLCAF.lib"
+    "${OCC_LIB_DIR}/TKSTL.lib"
+    "${OCC_LIB_DIR}/TKXMesh.lib"
+    "${OCC_LIB_DIR}/TKernel.lib"
+    "${OCC_LIB_DIR}/TKMath.lib"
+    "${OCC_LIB_DIR}/TKService.lib"
+    "${OCC_LIB_DIR}/TKTObj.lib"
+    "${OCC_LIB_DIR}/TKXml.lib"
+    "${OCC_LIB_DIR}/TKFeat.lib"
+    "${OCC_LIB_DIR}/TKMesh.lib"
+    "${OCC_LIB_DIR}/TKTopAlgo.lib"
+    "${OCC_LIB_DIR}/TKXmlL.lib"
+    "${OCC_LIB_DIR}/TKFillet.lib"
+    "${OCC_LIB_DIR}/TKMeshVS.lib"
+    "${OCC_LIB_DIR}/TKShHealing.lib"
+    "${OCC_LIB_DIR}/TKV3d.lib"
+    "${OCC_LIB_DIR}/TKXmlTObj.lib"
+    "${OCC_LIB_DIR}/TKG2d.lib"
+    "${OCC_LIB_DIR}/TKXmlXCAF.lib"
+    "${OCC_LIB_DIR}/TKG3d.lib"
+    "${OCC_LIB_DIR}/TKOffset.lib"
+    "${OCC_LIB_DIR}/TKVRML.lib"
+    "${OCC_LIB_DIR}/TKXSBase.lib"
+    "${OCC_LIB_DIR}/TKGeomAlgo.lib"
+    "${OCC_LIB_DIR}/TKOpenGl.lib"
+    "${OCC_LIB_DIR}/TKSTEP.lib"
+    "${OCC_LIB_DIR}/TKXCAF.lib"
+    "${OCC_LIB_DIR}/TKGeomBase.lib"
+    "${OCC_LIB_DIR}/TKSTEP209.lib"
+    "${OCC_LIB_DIR}/TKHLR.lib"
+    "${OCC_LIB_DIR}/TKSTEPAttr.lib"
+    "${OCC_LIB_DIR}/TKXDEIGES.lib"
+    "${OCC_LIB_DIR}/TKIGES.lib"
+    "${OCC_LIB_DIR}/TKPrim.lib"
+    "${OCC_LIB_DIR}/TKSTEPBase.lib"
+    "${OCC_LIB_DIR}/TKXDESTEP.lib")
+
+target_include_directories(
+    OCC
+    INTERFACE
+    ${OCC_INC_DIR}
+    )
+

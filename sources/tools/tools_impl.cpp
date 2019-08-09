@@ -1,5 +1,6 @@
 // McCAD
 #include "tools_impl.hpp"
+#include <vector>
 
 void
 McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid, Standard_Boolean& isTorus, Standard_Boolean& isSpline){
