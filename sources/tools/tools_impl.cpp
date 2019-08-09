@@ -1,7 +1,6 @@
 // McCAD
 #include "tools_impl.hpp"
 #include <vector>
-#include "ShapeView.hpp"
 
 void
 McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid,
