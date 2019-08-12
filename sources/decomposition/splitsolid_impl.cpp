@@ -1,5 +1,6 @@
 // McCAD
 #include "splitsolid_impl.hpp"
+#include "ShapeView.hpp"
 
 Standard_Boolean
 McCAD::Decomposition::SplitSolid::Impl::perform(const TopoDS_Solid& solid, const std::shared_ptr<BoundSurface>& surface, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
@@ -133,11 +134,9 @@ McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSe
   std::unique_ptr<TopTools_HSequenceOfShape> newsubSolidsList = std::make_unique<TopTools_HSequenceOfShape>();
   for (Standard_Integer i = 1; i <= subSolidsList->Length(); ++i)
     {
-      TopExp_Explorer explorer;
-      explorer.Init(subSolidsList->Value(i), TopAbs_SOLID);
-      for (; explorer.More(); explorer.Next())
+      for (const auto& solid : ShapeView<TopAbs_SOLID>(subSolidsList->Value(i)))
 	{
-	  TopoDS_Solid tmpsolid = TopoDS::Solid(explorer.Current());
+      TopoDS_Solid tmpsolid = solid;
 	  if (tmpsolid.IsNull())
 	    {
 	      continue;
@@ -187,11 +186,9 @@ McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSe
 Standard_Boolean
 McCAD::Decomposition::SplitSolid::Impl::rebuildSolidFromShell(const TopoDS_Shape& solid, TopoDS_Solid& resultSolid, Standard_Real tolerance, Standard_Real tolerance2){
   BRepBuilderAPI_Sewing builder(tolerance, Standard_True, Standard_True, Standard_True, Standard_True);
-  TopExp_Explorer explorerFace;
-  explorerFace.Init(solid, TopAbs_FACE);
-  for (; explorerFace.More(); explorerFace.Next())
+  for (const auto& element : ShapeView<TopAbs_FACE>{solid})
     {
-      TopoDS_Face tempFace = TopoDS::Face(explorerFace.Current());
+      TopoDS_Face tempFace = element;
       if (tempFace.IsNull())
 	{
 	  continue;
@@ -209,13 +206,11 @@ McCAD::Decomposition::SplitSolid::Impl::rebuildSolidFromShell(const TopoDS_Shape
   TopoDS_Shape tempShape = builder.SewedShape();
 
   TopoDS_Shape newshape;
-  TopExp_Explorer explorer;
-  explorer.Init(tempShape, TopAbs_SHELL);
-  for (; explorer.More(); explorer.Next())
+  for (const auto& element : ShapeView<TopAbs_SHELL>{tempShape})
     {
       try
 	{
-	  TopoDS_Shell tempShell = TopoDS::Shell(explorer.Current());
+      TopoDS_Shell tempShell = element;
           ShapeFix_Solid tempSolid;
           tempSolid.LimitTolerance(tolerance);
           newshape = tempSolid.SolidFromShell(tempShell);

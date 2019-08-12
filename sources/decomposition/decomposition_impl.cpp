@@ -1,5 +1,6 @@
 // McCAD
 #include "decomposition_impl.hpp"
+#include "ShapeView.hpp"
 
 McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData) : splitInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}, rejectedInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}, resultSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}, rejectedsubSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
   // Get input solids list from the Input Data object.
@@ -34,10 +35,9 @@ McCAD::Decomposition::Decompose::Impl::splitInputSolids(const Handle_TopTools_HS
 	  (inputSolidsList->Value(i)).ShapeType() == TopAbs_COMPOUND)
 	{
 	  std::cout << "   - Solid # " << i << " is a compound solid" << std::endl; 
-	  TopExp_Explorer explorer(inputSolidsList->Value(i), TopAbs_SOLID);
-	  for (; explorer.More(); explorer.Next())
+      for (const auto& element : ShapeView<TopAbs_SOLID>{inputSolidsList->Value(i)})
 	    {
-	      TopoDS_Solid tempSolid = TopoDS::Solid(explorer.Current());
+          TopoDS_Solid tempSolid = element;
 	      splitInputSolidsList->Append(tempSolid);
 	    }
 	}

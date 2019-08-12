@@ -1,5 +1,6 @@
 // McCAD
 #include "stepreader_impl.hpp"
+#include <TopExp_Explorer.hxx>
 
 McCAD::IO::STEPReader::Impl::Impl(const std::string& fileName)
     : fileName{fileName}
@@ -36,7 +37,7 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
 		    TopExp_Explorer explorer;
 		    TopoDS_CompSolid compSolid;
                     TopoDS_Builder builder;
-		    for(explorer.Init(solidShape, TopAbs_SOLID);
+            for(explorer.Init(solidShape, TopAbs_SOLID);
 			explorer.More(); explorer.Next())
 		      {
 			TopoDS_Solid tempSolid = TopoDS::Solid(explorer.Current());

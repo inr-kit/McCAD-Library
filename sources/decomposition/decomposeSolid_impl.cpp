@@ -4,6 +4,7 @@
 #include "CurveUtilities.hpp"
 #include "PlaneFuser.hpp"
 #include "FaceParameters.hpp"
+#include "ShapeView.hpp"
 
 McCAD::Decomposition::DecomposeSolid::Impl::Impl(){
 }
