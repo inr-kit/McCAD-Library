@@ -6,7 +6,7 @@
 #include <GeomAbs_SurfaceType.hxx>
 #include <GeomAbs_CurveType.hxx>
 
-namespace McCAD::detail{
+namespace McCAD::Tools{
 
     std::string toTypeName(
             GeomAbs_SurfaceType surfaceType);

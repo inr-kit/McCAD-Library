@@ -6,4 +6,3 @@ add_library(TOOLS
   PlaneComparator.cpp
   PlaneFuser.cpp
   FaceParameters.cpp)
-
