@@ -27,7 +27,6 @@
 #include <Extrema_ExtPS.hxx>
 //#include <gp_Pln.hxx>
 //#include <gp_Ax3.hxx>
-//#include <TopExp_Explorer.hxx>
 //#include <TopAbs_ShapeEnum.hxx>
 //#include <TopoDS.hxx>
 //#include <TopTools_HSequenceOfShape.hxx>

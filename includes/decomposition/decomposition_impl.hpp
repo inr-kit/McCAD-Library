@@ -11,7 +11,6 @@
 #include <Standard.hxx>
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>
-#include <TopExp_Explorer.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
 #include <TopoDS_CompSolid.hxx>
