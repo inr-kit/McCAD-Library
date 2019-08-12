@@ -1,5 +1,6 @@
 // McCAD
 #include "decomposeSolid_impl.hpp"
+#include "TypeName.hpp"
 
 McCAD::Decomposition::DecomposeSolid::Impl::Impl(){
 }
