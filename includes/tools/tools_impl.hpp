@@ -51,10 +51,7 @@ namespace McCAD::Tools{
     void repairSolid(TopoDS_Solid& solid);
     void fixFace(TopoDS_Face& face, Standard_Real precision = 1.0e-7, Standard_Real maxTolerance = 1.0e-3);
     Standard_Boolean checkFace(const TopoDS_Face& face, Standard_Real tolerance = 1.0e-3);
-    std::string getSurfTypeName(const Standard_Integer& index);
-    std::string getCurveTypeName(const Standard_Integer& index);
     gp_Dir normalOnFace(const TopoDS_Face& aFace, const gp_Pnt& aPoint);
-    Standard_Boolean isSamePlane(const TopoDS_Face& firstFace, const TopoDS_Face& secondFace, Standard_Real distanceTolerance = 1.0e-5, Standard_Real angleTolerance = 1.0e-3*M_PI, Standard_Real parameterTolerance = 1.0e-7);
     Standard_Boolean isSameEdge(const TopoDS_Edge& firstEdge, const TopoDS_Edge& secondEdge, Standard_Real distanceTolerance = 1.0e-5);
     TopoDS_Face fusePlanes(const TopoDS_Face& firstFace, const TopoDS_Face& secondFace, Standard_Real zeroTolerance = 1.0e-7, Standard_Real tolerance = 1.0e-7);
 

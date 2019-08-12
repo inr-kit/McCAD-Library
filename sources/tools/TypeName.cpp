@@ -1,7 +1,7 @@
 #include "TypeName.hpp"
 
 std::string
-McCAD::detail::toTypeName(
+McCAD::Tools::toTypeName(
         GeomAbs_SurfaceType surfaceType){
     switch(surfaceType){
     case GeomAbs_Plane:
@@ -30,7 +30,7 @@ McCAD::detail::toTypeName(
 }
 
 std::string
-McCAD::detail::toTypeName(
+McCAD::Tools::toTypeName(
         GeomAbs_CurveType curveType){
     switch(curveType){
     case GeomAbs_Line:

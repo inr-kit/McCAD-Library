@@ -1,6 +1,7 @@
 // McCAD
 #include "tools_impl.hpp"
 #include <vector>
+#include <array>
 
 void
 McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid, Standard_Boolean& isTorus, Standard_Boolean& isSpline){
@@ -105,6 +106,7 @@ McCAD::Tools::Preprocessor::Impl::normalOnFace(const TopoDS_Face& aFace, const g
   return normal;
 }
 
+<<<<<<< HEAD
 Standard_Boolean
 McCAD::Tools::Preprocessor::Impl::isSamePlane(const TopoDS_Face& firstFace, const TopoDS_Face& secondFace, Standard_Real distanceTolerance, Standard_Real angleTolerance, Standard_Real parameterTolerance){
   // Check orientation.
@@ -175,9 +177,15 @@ McCAD::Tools::Preprocessor::Impl::isSamePlane(const TopoDS_Face& firstFace, cons
     }
   return Standard_True;
 }
+=======
+
+>>>>>>> refactoring of plane comparison
 
 Standard_Boolean
-McCAD::Tools::Preprocessor::Impl::isSameEdge(const TopoDS_Edge& firstEdge, const TopoDS_Edge& secondEdge, Standard_Real distanceTolerance){
+McCAD::Tools::Preprocessor::Impl::isSameEdge(
+        const TopoDS_Edge& firstEdge,
+        const TopoDS_Edge& secondEdge,
+        Standard_Real distanceTolerance){
   // Compare first the start and end points of the curves.
   Standard_Real firstEdgeStart, firstEdgeEnd;
   Handle_Geom_Curve firstCurve = BRep_Tool::Curve(firstEdge, firstEdgeStart, firstEdgeEnd);
@@ -218,8 +226,18 @@ McCAD::Tools::Preprocessor::Impl::isSameEdge(const TopoDS_Edge& firstEdge, const
 }
 
 TopoDS_Face
+<<<<<<< HEAD
 McCAD::Tools::Preprocessor::Impl::fusePlanes(const TopoDS_Face& firstFace, const TopoDS_Face& secondFace, Standard_Real zeroTolerance, Standard_Real tolerance){
   std::array<Standard_Real, 4> firstUV;
+=======
+McCAD::Tools::Preprocessor::Impl::fusePlanes(
+        const TopoDS_Face& firstFace,
+        const TopoDS_Face& secondFace,
+        Standard_Real zeroTolerance,
+        Standard_Real tolerance){
+
+  std::vector<Standard_Real> firstUV(4);
+>>>>>>> refactoring of plane comparison
   BRepTools::UVBounds(firstFace, firstUV[0], firstUV[1], firstUV[2], firstUV[3]);
   std::array<Standard_Real, 4> secondUV;
   BRepTools::UVBounds(secondFace, secondUV[0], secondUV[1], secondUV[2], secondUV[3]);
@@ -238,6 +256,7 @@ McCAD::Tools::Preprocessor::Impl::fusePlanes(const TopoDS_Face& firstFace, const
 	}
     }
 
+<<<<<<< HEAD
   std::array<Standard_Real, 4> newUV;
   newUV[0] = (firstUV[0] <= secondUV[0]) ? firstUV[0] : secondUV[0];
   newUV[1] = (firstUV[1] >= secondUV[1]) ? firstUV[1] :	secondUV[1];
@@ -246,6 +265,21 @@ McCAD::Tools::Preprocessor::Impl::fusePlanes(const TopoDS_Face& firstFace, const
 
   Handle_Geom_Surface newSurface = BRep_Tool::Surface(firstFace);
   TopoDS_Face newFace = BRepBuilderAPI_MakeFace(newSurface, newUV[0], newUV[1], newUV[2], newUV[3], tolerance).Face();
+=======
+  std::vector<Standard_Real> newUV(4);
+  newUV[0] = (firstUV[0] <= secondUV[0]) ? firstUV[0] : secondUV[0];
+  newUV[1] = (firstUV[1] >= secondUV[1]) ? firstUV[1] : secondUV[1];
+  newUV[2] = (firstUV[2] <= secondUV[2]) ? firstUV[2] : secondUV[2];
+  newUV[3] = (firstUV[3] >= secondUV[3]) ? firstUV[3] :	secondUV[3];
+
+  TopLoc_Location location;
+  Handle_Geom_Surface newSurface = BRep_Tool::Surface(firstFace, location);
+  TopoDS_Face newFace
+          = BRepBuilderAPI_MakeFace(
+              newSurface,
+              newUV[0], newUV[1], newUV[2], newUV[3],
+                tolerance).Face();
+>>>>>>> refactoring of plane comparison
 
   if (newFace.Orientation() != firstFace.Orientation())
     {

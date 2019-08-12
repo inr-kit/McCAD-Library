@@ -1,5 +1,6 @@
 // McCAD
 #include "boundSurface_impl.hpp"
+#include "PlaneComparator.hpp"
 
 McCAD::Decomposition::BoundSurface::Impl::Impl(BoundSurface* backReference) : boundSurface{backReference}{
 }
@@ -8,13 +9,22 @@ McCAD::Decomposition::BoundSurface::Impl::~Impl(){
 }
 
 Standard_Boolean
-McCAD::Decomposition::BoundSurface::Impl::isEqual(const BoundSurface& that){
-  Standard_Boolean equalityCondition = preproc.accessImpl()->isSamePlane(boundSurface->accessSImpl()->face, that.accessSImpl()->face);
+McCAD::Decomposition::BoundSurface::Impl::isEqual(const McCAD::Decomposition::BoundSurface& that){
+  Standard_Boolean equalityCondition
+          = Tools::PlaneComparator{}(boundSurface->accessSImpl()->face,
+                                      that.accessSImpl()->face);
   return equalityCondition;
 }
 
 Standard_Boolean
-McCAD::Decomposition::BoundSurface::Impl::canFuse(const BoundSurface& that){
+McCAD::Decomposition::BoundSurface::Impl::canFuse(const McCAD::Decomposition::BoundSurface& that){
+  Standard_Boolean equalityCondition
+          = Tools::PlaneComparator{}(boundSurface->accessSImpl()->face,
+                                      that.accessSImpl()->face);
+  if (!equalityCondition)
+    {
+      return Standard_False;
+    }
   // Check common edges of the two faces.
   for (Standard_Integer i = 0; i <= edgesList.size() - 2; ++i)
     {
