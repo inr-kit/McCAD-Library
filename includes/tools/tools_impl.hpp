@@ -63,6 +63,7 @@ namespace McCAD::Tools{
 				const TopoDS_Edge& secondEdge,
 				Standard_Real distanceTolerance = 1.0e-5);
   };
+
 }
 
 #endif //TOOLSIMPL_HPP

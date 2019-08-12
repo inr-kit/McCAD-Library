@@ -35,8 +35,8 @@ namespace McCAD::Tools{
 
     namespace detail{
         template<GeomAbs_SurfaceType surfaceType>
-        PositionUV toPositionUV(const BRepAdaptor_Surface& surface,
-                                const gp_Pnt& point);
+        PositionUV toParameters(const BRepAdaptor_Surface& surface,
+                                 const gp_Pnt& point);
 
         using SurfaceFunctionPointer = PositionUV(*)(
             const BRepAdaptor_Surface&,
@@ -49,7 +49,7 @@ namespace McCAD::Tools{
 
 template<GeomAbs_SurfaceType surfaceType>
 McCAD::Tools::PositionUV
-McCAD::Tools::detail::toPositionUV(
+McCAD::Tools::detail::toParameters(
         const BRepAdaptor_Surface& surface,
         const gp_Pnt& point){
     PositionUV uv;
