@@ -43,11 +43,10 @@ McCAD::Tools::normalOnFace(
 McCAD::Tools::DerivativeUV
 McCAD::Tools::calcDerivative(
         const BRepAdaptor_Surface& surface,
-        const PositionUV& uv){
+        const PositionUV& position){
     gp_Pnt dummyPoint;
     DerivativeUV deriv;
-    gp_Vec D1U, D1V;
-    surface.D1(uv.u, uv.v,
+    surface.D1(position.u, position.v,
                dummyPoint,
                deriv.u, deriv.v);
     return deriv;
@@ -58,15 +57,15 @@ McCAD::Tools::detail::getSurfFPtr(
         GeomAbs_SurfaceType surfaceType){
     switch(surfaceType){
     case GeomAbs_Plane:
-        return &toParameters<GeomAbs_Plane>;
+        return &toPositionUV<GeomAbs_Plane>;
     case GeomAbs_Cylinder:
-        return &toParameters<GeomAbs_Cylinder>;
+        return &toPositionUV<GeomAbs_Cylinder>;
     case GeomAbs_Cone:
-        return &toParameters<GeomAbs_Cone>;
+        return &toPositionUV<GeomAbs_Cone>;
     case GeomAbs_Sphere:
-        return &toParameters<GeomAbs_Sphere>;
+        return &toPositionUV<GeomAbs_Sphere>;
     case GeomAbs_Torus:
-        return &toParameters<GeomAbs_Sphere>;
+        return &toPositionUV<GeomAbs_Sphere>;
     default:
         return nullptr;
     }

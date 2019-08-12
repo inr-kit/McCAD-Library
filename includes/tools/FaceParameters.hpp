@@ -30,13 +30,13 @@ namespace McCAD::Tools{
 
     DerivativeUV calcDerivative(
             const BRepAdaptor_Surface& surface,
-            const PositionUV& uv);
+            const PositionUV& position);
 
 
     namespace detail{
         template<GeomAbs_SurfaceType surfaceType>
-        PositionUV toParameters(const BRepAdaptor_Surface& surface,
-                                 const gp_Pnt& point);
+        PositionUV toPositionUV(const BRepAdaptor_Surface& surface,
+                                const gp_Pnt& point);
 
         using SurfaceFunctionPointer = PositionUV(*)(
             const BRepAdaptor_Surface&,
@@ -49,7 +49,7 @@ namespace McCAD::Tools{
 
 template<GeomAbs_SurfaceType surfaceType>
 McCAD::Tools::PositionUV
-McCAD::Tools::detail::toParameters(
+McCAD::Tools::detail::toPositionUV(
         const BRepAdaptor_Surface& surface,
         const gp_Pnt& point){
     PositionUV uv;
