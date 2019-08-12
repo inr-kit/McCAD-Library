@@ -1,7 +1,6 @@
 // McCAD
 #include "tools_impl.hpp"
 #include <vector>
-#include <array>
 
 void
 McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid,
@@ -93,34 +92,9 @@ McCAD::Tools::Preprocessor::Impl::isSameEdge(
     {
       return Standard_False;
     }
-
-  gp_Pnt firstStartPoint, firstEndPoint;
-  firstCurve->D0(firstEdgeStart, firstStartPoint);
-  firstCurve->D0(firstEdgeEnd, firstEndPoint);
-
-  gp_Pnt secondStartPoint, secondEndPoint;
-  secondCurve->D0(secondEdgeStart, secondStartPoint);
-  secondCurve->D0(secondEdgeEnd, secondEndPoint);
-
-  if ((firstStartPoint.IsEqual(secondStartPoint, distanceTolerance) &&
-       firstEndPoint.IsEqual(secondEndPoint, distanceTolerance)) ||
-      (firstStartPoint.IsEqual(secondEndPoint, distanceTolerance) &&
-       firstEndPoint.IsEqual(secondStartPoint, distanceTolerance)))
+  if ((firstEdgeStart != secondEdgeStart) || (firstEdgeEnd != secondEdgeEnd))
     {
-      return Standard_True;
+      return Standard_False;
     }
-  else
-    {
-      if ((firstStartPoint.Distance(secondStartPoint) <= distanceTolerance &&
-	   firstEndPoint.Distance(secondEndPoint) <= distanceTolerance) ||
-	  ((firstStartPoint.Distance(secondEndPoint) <= distanceTolerance &&
-	    firstEndPoint.Distance(secondStartPoint) <= distanceTolerance)))
-	{
-	  return Standard_True;
-	}
-      else
-	{
-	  return Standard_False;
-	}
-    }
+  return Standard_True;
 }
