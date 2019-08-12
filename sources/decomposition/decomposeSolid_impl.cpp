@@ -32,6 +32,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
   //throw std::runtime_error("saved concave edges");
   // Generate the boundary surface list of the solid.
   generateSurfacesList();
+  /*
   STEPControl_Writer wrt;
   for (Standard_Integer DD = 0; DD <= facesList.size() - 1; ++DD)
     {
@@ -41,6 +42,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
   oss << "./run/" << recurrenceDepth << "_faceslist" << ".stp";
   std::string listname = oss.str();
   wrt.Write(listname.c_str());
+  */
   //throw std::runtime_error("saved facesList");
 
   // Judge which surfaces are decompose surfaces from the generated list.
@@ -89,17 +91,20 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
 	}
       // Split the solid with the selected surface.
       std::cout << "selected surface concave edges: " << selectedSplitFacesList[0]->accessSImpl()->throughConcaveEdges << std::endl;
+      /*
       STEPControl_Writer wrt;
       wrt.Transfer(selectedSplitFacesList[0]->accessSImpl()->extendedFace, STEPControl_AsIs);
       std::ostringstream oss;
       oss << "./run/" << recurrenceDepth << "_splitFace.stp";
       std::string surfname = oss.str();
       wrt.Write(surfname.c_str());
+      */
       if (!splitSolid.accessSSImpl()->initiate(solid, selectedSplitFacesList[0], splitSolidList))
 	{
 	  return Standard_False;
 	}
 
+      /*
       STEPControl_Writer wrt2;
       for (Standard_Integer DD = 1; DD <= splitSolidList->Length(); ++DD)
 	{
@@ -109,6 +114,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
       oss2 << "./run/" << recurrenceDepth << "_splitsolidslist.stp";
       std::string solidname = oss2.str();
       wrt2.Write(solidname.c_str());
+      */
       // Loop over the resulting subsolids and split each one of them recursively.
       std::cout << "splitting subsolids" << std::endl;
       for (Standard_Integer i = 1; i <= splitSolidList->Length(); ++i)
@@ -226,9 +232,10 @@ McCAD::Decomposition::DecomposeSolid::Impl::updateEdgesConvexity(const Standard_
 	  // edge is concave
 	  edge.Convex(0);
 	}
-      std::cout << "angle: " << angle << ", convexity " << edge.Convex() << std::endl;
+      //std::cout << "angle: " << angle << ", convexity " << edge.Convex() << std::endl;
       if (edge.Convex() == 0)
 	{
+	  /*
 	  STEPControl_Writer wrt1;
 	  std::ostringstream oss1;
           wrt1.Transfer(firstFace, STEPControl_AsIs);
@@ -242,6 +249,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::updateEdgesConvexity(const Standard_
           std::string surfname2 = oss2.str();
           wrt2.Write(surfname2.c_str());
 	  //throw std::runtime_error("saved concave edge");
+	  */
 	}
     }
 }
@@ -281,7 +289,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
       else continue;
     }
   std::cout << "     - There are " << planesList.size() << " planes in the solid" << std::endl;
-  //mergeSurfaces(planesList);
+  mergeSurfaces(planesList);
   //std::cout << "merged planes list: " << planesList.size() << std::endl;
   for (Standard_Integer i = 0; i <= planesList.size() - 1; ++i)
     {
@@ -390,11 +398,26 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::uniqu
 		      std::unique_ptr<McCAD::Decomposition::BoundSurface> newboundSurface = std::move(generateSurface(newFace));
 		      newboundSurface->accessSImpl()->initiate(newFace);
 		      newboundSurface->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
+		      /*
 		      if (newboundSurface->accessBSImpl()->generateMesh(meshDeflection))
 			{
 			  //std::cout << "fuse planes, generate edges" << std::endl;
 			  generateEdges(newboundSurface);
 			}
+		      */
+		      // Add triangles of surface i.
+		      for (Standard_Integer k = 0; k <= surfacesList[i]->accessBSImpl()->meshTrianglesList.size() - 1; ++k)
+			{
+			  newboundSurface->accessBSImpl()->meshTrianglesList.push_back(std::move(surfacesList[i]->accessBSImpl()->meshTrianglesList[k]));
+			}
+		      // Add triangles of surface j.
+		      for (Standard_Integer k = 0; k <=	surfacesList[j]->accessBSImpl()->meshTrianglesList.size() - 1; ++k)
+                        {
+                          newboundSurface->accessBSImpl()->meshTrianglesList.push_back(std::move(surfacesList[j]->accessBSImpl()->meshTrianglesList[k]));
+			}
+		      
+		      // Combine edges.
+		      newboundSurface->accessBSImpl()->combineEdges(surfacesList[i]->accessBSImpl()->edgesList);
 
 		      // Erase pointer surfacesList[j] & [i] from surfacesList.
 		      //std::cout << "equal, erase two: " << i << " , " << j << " , " << surfacesList.size() << std::endl;

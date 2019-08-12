@@ -250,3 +250,35 @@ McCAD::Decomposition::BoundSurface::Impl::edgeOnSurface(const McCAD::Decompositi
     }
   return Standard_False;
 }
+
+void
+McCAD::Decomposition::BoundSurface::Impl::combineEdges(std::vector<std::unique_ptr<McCAD::Decomposition::Edge>>& aEdgesList){
+  if (edgesList.size() == 0)
+    {
+      // If the current list is empty, append to it the new one.
+      for (Standard_Integer i = 0; i <= aEdgesList.size() - 1; ++i)
+	{
+	  edgesList.push_back(std::move(aEdgesList[i]));
+	}
+    }
+  else
+    {
+      // Compare and add only if different.
+      for (Standard_Integer i = 0; i <= aEdgesList.size() - 1; ++i)
+	{
+	  for (Standard_Integer j = 0; j <= edgesList.size() - 1; ++j)
+	    {
+	      if (*(edgesList[i]) == *(aEdgesList[j]))
+		{
+		  edgesList.erase(edgesList.begin() + j);
+		  --j;
+		}
+	      else
+		{
+		  edgesList.insert(edgesList.begin() + j, std::move(aEdgesList[i]));
+		  ++j;
+		}
+	    }
+	}
+    }
+}

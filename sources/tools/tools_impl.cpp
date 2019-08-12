@@ -197,7 +197,7 @@ McCAD::Tools::Preprocessor::Impl::isSamePlane(const TopoDS_Face& firstFace, cons
       firstPlane.Scale(gp_Pnt(0.0, 0.0, 0.0), 0.1);
       gp_Ax3 firstPlaneAxes = firstPlane.Position();
       firstPlane.Coefficients(firstPlaneParameters[0], firstPlaneParameters[1], firstPlaneParameters[2], firstPlaneParameters[3]);
-      for (Standard_Integer i = 0; i <= firstPlaneParameters.size(); ++i)
+      for (Standard_Integer i = 0; i <= firstPlaneParameters.size() - 1; ++i)
 	{
           if (firstPlaneParameters[i] <= parameterTolerance)
 	    {
@@ -213,7 +213,7 @@ McCAD::Tools::Preprocessor::Impl::isSamePlane(const TopoDS_Face& firstFace, cons
       secondPlane.Scale(gp_Pnt(0.0, 0.0, 0.0), 0.1);
       gp_Ax3 secondPlaneAxes = secondPlane.Position();
       secondPlane.Coefficients(secondPlaneParameters[0], secondPlaneParameters[1], secondPlaneParameters[2], secondPlaneParameters[3]);
-      for (Standard_Integer i = 0; i <= secondPlaneParameters.size(); ++i)
+      for (Standard_Integer i = 0; i <= secondPlaneParameters.size() - 1; ++i)
         {
           if (secondPlaneParameters[i] <= parameterTolerance)
             {
@@ -227,7 +227,7 @@ McCAD::Tools::Preprocessor::Impl::isSamePlane(const TopoDS_Face& firstFace, cons
       if (firstPlaneDirection.IsEqual(secondPlaneDirection, angleTolerance) && std::abs(firstPlaneParameters[3] - secondPlaneParameters[3]) <= distanceTolerance)
         {
         }
-      else if (firstPlaneDirection.IsOpposite(secondPlaneDirection, angleTolerance) && !std::abs(firstPlaneParameters[3] + secondPlaneParameters[3]) <= distanceTolerance)
+      else if (firstPlaneDirection.IsOpposite(secondPlaneDirection, angleTolerance) && std::abs(firstPlaneParameters[3] + secondPlaneParameters[3]) <= distanceTolerance)
         {
         }
       else
@@ -257,11 +257,37 @@ McCAD::Tools::Preprocessor::Impl::isSameEdge(const TopoDS_Edge& firstEdge, const
     {
       return Standard_False;
     }
+  // Comparison for line edges. to be separated in different functions for other curve types.
+  /*
   if ((firstEdgeStart != secondEdgeStart) || (firstEdgeEnd != secondEdgeEnd))
     {
       return Standard_False;
     }
-  return Standard_True;
+  */
+
+  gp_Pnt firstStartPoint, firstEndPoint;
+  firstCurve->D0(firstEdgeStart, firstStartPoint);
+  firstCurve->D0(firstEdgeEnd, firstEndPoint);
+
+  gp_Pnt secondStartPoint, secondEndPoint;
+  firstCurve->D0(secondEdgeStart, secondStartPoint);
+  firstCurve->D0(secondEdgeEnd, secondEndPoint);
+
+  if ((firstStartPoint.IsEqual(secondStartPoint, distanceTolerance) && firstEndPoint.IsEqual(secondEndPoint, distanceTolerance)) || (firstStartPoint.IsEqual(secondEndPoint, distanceTolerance) && firstEndPoint.IsEqual(secondStartPoint, distanceTolerance)))
+    {
+      return Standard_True;
+    }
+  else
+    {
+      if ((firstStartPoint.Distance(secondStartPoint) <= distanceTolerance && firstEndPoint.Distance(secondEndPoint) <= distanceTolerance) || ((firstStartPoint.Distance(secondEndPoint) <= distanceTolerance && firstEndPoint.Distance(secondStartPoint) <= distanceTolerance)))
+	{
+	  return Standard_True;
+	}
+      else
+	{
+	  return Standard_False;
+	}
+    }
 }
 
 TopoDS_Face
@@ -271,18 +297,18 @@ McCAD::Tools::Preprocessor::Impl::fusePlanes(const TopoDS_Face& firstFace, const
   BRepTools::UVBounds(firstFace, firstUV[0], firstUV[1], firstUV[2], firstUV[3]);
   std::vector<Standard_Real> secondUV(4);;
   BRepTools::UVBounds(secondFace, secondUV[0], secondUV[1], secondUV[2], secondUV[3]);
-  for (Standard_Integer i = 0; i <= firstUV.size(); ++i)
+  for (Standard_Integer i = 0; i <= firstUV.size() - 1; ++i)
     {
       if (firstUV[i] <= zeroTolerance)
 	{
 	  firstUV[i] = 0.0;
 	}
     }
-  for (Standard_Integer j = 0; j <= firstUV.size(); ++j)
+  for (Standard_Integer j = 0; j <= secondUV.size() - 1; ++j)
     {
-      if (firstUV[j] <= zeroTolerance)
+      if (secondUV[j] <= zeroTolerance)
         {
-          firstUV[j] = 0.0;
+          secondUV[j] = 0.0;
 	}
     }
 
