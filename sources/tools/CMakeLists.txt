@@ -1,7 +1,8 @@
 add_library(Tools
     tools.cpp
     TypeName.cpp
-    PlaneComparator.cpp)
+    PlaneComparator.cpp
+    PlaneFuser.cpp)
 install (TARGETS Tools DESTINATION ${PROJECT_BINARY_DIR}/bin)
 target_link_libraries(Tools OCC)
 

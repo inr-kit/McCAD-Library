@@ -1,6 +1,7 @@
 // McCAD
 #include "decomposeSolid_impl.hpp"
 #include "TypeName.hpp"
+#include "PlaneFuser.hpp"
 
 McCAD::Decomposition::DecomposeSolid::Impl::Impl(){
 }

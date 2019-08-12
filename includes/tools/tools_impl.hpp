@@ -53,7 +53,11 @@ namespace McCAD::Tools{
     Standard_Boolean checkFace(const TopoDS_Face& face, Standard_Real tolerance = 1.0e-3);
     gp_Dir normalOnFace(const TopoDS_Face& aFace, const gp_Pnt& aPoint);
     Standard_Boolean isSameEdge(const TopoDS_Edge& firstEdge, const TopoDS_Edge& secondEdge, Standard_Real distanceTolerance = 1.0e-5);
-    TopoDS_Face fusePlanes(const TopoDS_Face& firstFace, const TopoDS_Face& secondFace, Standard_Real zeroTolerance = 1.0e-7, Standard_Real tolerance = 1.0e-7);
+    TopoDS_Face fusePlanes(
+            const TopoDS_Face& firstFace,
+            const TopoDS_Face& secondFace,
+            Standard_Real zeroTolerance = 1.0e-7,
+            Standard_Real tolerance = 1.0e-7);
 
   private:
 

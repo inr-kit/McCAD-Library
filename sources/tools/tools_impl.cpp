@@ -1,7 +1,6 @@
 // McCAD
 #include "tools_impl.hpp"
 #include <vector>
-#include <array>
 
 void
 McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid, Standard_Boolean& isTorus, Standard_Boolean& isSpline){
@@ -106,80 +105,6 @@ McCAD::Tools::Preprocessor::Impl::normalOnFace(const TopoDS_Face& aFace, const g
   return normal;
 }
 
-<<<<<<< HEAD
-Standard_Boolean
-McCAD::Tools::Preprocessor::Impl::isSamePlane(const TopoDS_Face& firstFace, const TopoDS_Face& secondFace, Standard_Real distanceTolerance, Standard_Real angleTolerance, Standard_Real parameterTolerance){
-  // Check orientation.
-  if (firstFace.Orientation() != secondFace.Orientation())
-    {
-      return Standard_False;
-    }
-
-  // Check surface type.
-  Handle_Geom_Surface firstSurface = BRep_Tool::Surface(firstFace);
-  GeomAdaptor_Surface firstSurfaceAdaptor(firstSurface);
-  Handle_Geom_Surface secondSurface = BRep_Tool::Surface(secondFace);
-  GeomAdaptor_Surface secondSurfaceAdaptor(secondSurface);
-  if (firstSurfaceAdaptor.GetType() != secondSurfaceAdaptor.GetType())
-    {
-      return Standard_False;
-    }
-
-  try
-    {
-      // Check direction and parameters.
-      std::array<Standard_Real, 4> firstPlaneParameters;
-      gp_Pln firstPlane = firstSurfaceAdaptor.Plane();
-      firstPlane.Scale(gp_Pnt(0.0, 0.0, 0.0), 0.1);
-      gp_Ax3 firstPlaneAxes = firstPlane.Position();
-      firstPlane.Coefficients(firstPlaneParameters[0], firstPlaneParameters[1], firstPlaneParameters[2], firstPlaneParameters[3]);
-      for (Standard_Integer i = 0; i <= firstPlaneParameters.size() - 1; ++i)
-	{
-          if (firstPlaneParameters[i] <= parameterTolerance)
-	    {
-	      firstPlaneParameters[i] = 0.0;
-	    }
-        }
-      gp_Dir firstPlaneDirection;
-      firstPlaneDirection.SetCoord(firstPlaneParameters[0], firstPlaneParameters[1], firstPlaneParameters[2]);
-      gp_Pnt firstPlanePoint = firstPlaneAxes.Location();
-
-      std::array<Standard_Real, 4> secondPlaneParameters;
-      gp_Pln secondPlane = secondSurfaceAdaptor.Plane();
-      secondPlane.Scale(gp_Pnt(0.0, 0.0, 0.0), 0.1);
-      gp_Ax3 secondPlaneAxes = secondPlane.Position();
-      secondPlane.Coefficients(secondPlaneParameters[0], secondPlaneParameters[1], secondPlaneParameters[2], secondPlaneParameters[3]);
-      for (Standard_Integer i = 0; i <= secondPlaneParameters.size() - 1; ++i)
-        {
-          if (secondPlaneParameters[i] <= parameterTolerance)
-            {
-              secondPlaneParameters[i] = 0.0;
-            }
-        }
-      gp_Dir secondPlaneDirection;
-      secondPlaneDirection.SetCoord(secondPlaneParameters[0], secondPlaneParameters[1], secondPlaneParameters[2]);
-      gp_Pnt secondPlanePoint = secondPlaneAxes.Location();
-
-      if (firstPlaneDirection.IsEqual(secondPlaneDirection, angleTolerance) && std::abs(firstPlaneParameters[3] - secondPlaneParameters[3]) <= distanceTolerance)
-        {
-        }
-      else if (firstPlaneDirection.IsOpposite(secondPlaneDirection, angleTolerance) && std::abs(firstPlaneParameters[3] + secondPlaneParameters[3]) <= distanceTolerance)
-        {
-        }
-      else
-        {
-          return Standard_False;
-        }
-    }
-  catch(...)
-    {
-      return Standard_False;
-    }
-  return Standard_True;
-}
-=======
-
->>>>>>> refactoring of plane comparison
 
 Standard_Boolean
 McCAD::Tools::Preprocessor::Impl::isSameEdge(
@@ -224,6 +149,7 @@ McCAD::Tools::Preprocessor::Impl::isSameEdge(
 	}
     }
 }
+<<<<<<< HEAD
 
 TopoDS_Face
 <<<<<<< HEAD
@@ -287,3 +213,5 @@ McCAD::Tools::Preprocessor::Impl::fusePlanes(
     }
   return newFace;
 }
+=======
+>>>>>>> refactoring fusion of planes
