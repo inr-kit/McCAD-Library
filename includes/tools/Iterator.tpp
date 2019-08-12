@@ -1,12 +1,9 @@
 #include "Iterator.hpp"
-#include <iostream>
 
 template<TopAbs_ShapeEnum shapeTag>
 McCAD::Iterator<shapeTag>::Iterator(
         const TopoDS_Shape& shape)
     : explorer{std::make_shared<TopExp_Explorer>(shape, shapeTag)}{
-    if(!explorer->More())
-        explorer = nullptr;
 }
 
 template<TopAbs_ShapeEnum shapeTag>
