@@ -3,30 +3,11 @@
 #include <vector>
 
 void
-McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid, Standard_Boolean& isTorus, Standard_Boolean& isSpline){
-  TopoDS_Face face;
-  TopExp_Explorer explorer(solid, TopAbs_FACE);
-  for (; explorer.More(); explorer.Next())
-    {
-      face = TopoDS::Face(explorer.Current());
-      GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
-
-      if(surfAdaptor.GetType() == GeomAbs_Torus)
-        {
-          std::cout << "    -- The current verion doesn't support processing of Tori. Ignoring solid!" << std::endl;
-          isTorus = Standard_True;
-        }
-      else if (surfAdaptor.GetType() == GeomAbs_BSplineSurface)
-        {
-          std::cout << "    -- The current verion doesn't support processing of splines. Ignoring solid!" << std::endl;
-          isSpline = Standard_True;
-        }
-    }
-}
-
-void
-McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape, Standard_Real precision, Standard_Real maxTolerance){
-  // If the size of face is less than the precision (spot or strip face), it will be removed.
+McCAD::Tools::Preprocessor::Impl::removeSmallFaces(
+        TopoDS_Shape& solidShape,
+        Standard_Real precision,
+        Standard_Real maxTolerance){
+  TopoDS_Shape fixedSolidShape;
   Handle_ShapeFix_FixSmallFace smallFaceFix = new ShapeFix_FixSmallFace;
   smallFaceFix->Init(solidShape);
   smallFaceFix->SetPrecision(precision);
@@ -65,6 +46,7 @@ McCAD::Tools::Preprocessor::Impl::fixFace(TopoDS_Face& face, Standard_Real preci
   face = TopoDS::Face(shapeFixer->Shape());
 }
 
+<<<<<<< HEAD
 gp_Dir
 McCAD::Tools::Preprocessor::Impl::normalOnFace(const TopoDS_Face& aFace, const gp_Pnt& aPoint){
   Standard_Real uParameter, vParameter;
@@ -106,6 +88,8 @@ McCAD::Tools::Preprocessor::Impl::normalOnFace(const TopoDS_Face& aFace, const g
 }
 
 
+=======
+>>>>>>> refactoring parametrized faces with uv-coordinates
 Standard_Boolean
 McCAD::Tools::Preprocessor::Impl::isSameEdge(
         const TopoDS_Edge& firstEdge,
