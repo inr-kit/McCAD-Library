@@ -6,6 +6,7 @@
 #include <memory>
 #include <assert.h>
 #include <sstream>
+#include <tuple>
 // McCAD
 #include "decomposeSolid.hpp"
 #include "tools_impl.hpp"
@@ -45,20 +46,20 @@ namespace McCAD::Decomposition{
     Impl();
     ~Impl();
 
-    McCAD::Tools::Preprocessor preproc;
-    McCAD::Decomposition::SplitSurfaces splitSurfaces;
-    McCAD::Decomposition::SplitSolid splitSolid;
+    Tools::Preprocessor preproc;
+    SplitSurfaces splitSurfaces;
+    SplitSolid splitSolid;
     
     TopoDS_Solid solid;
-    std::unique_ptr<TopTools_HSequenceOfShape> splitSolidList;
-    std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
-    std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> facesList;
-    std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> splitFacesList;
-    std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>> selectedSplitFacesList;
     Standard_Real meshDeflection;
     Standard_Real boxSquareLength;
     Standard_Integer recurrenceDepth = 0;
     Standard_Boolean splitSurface = Standard_False;
+    std::vector<std::shared_ptr<BoundSurface>> facesList;
+    std::unique_ptr<TopTools_HSequenceOfShape> splitSolidList;
+    std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
+    std::vector<std::shared_ptr<BoundSurface>> splitFacesList;
+    std::vector<std::shared_ptr<BoundSurface>> selectedSplitFacesList;
 
     Standard_Boolean initiate(const TopoDS_Solid& solid);
     Standard_Boolean perform();

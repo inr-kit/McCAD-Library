@@ -4,6 +4,7 @@
 // C++
 #include <algorithm>
 #include <cmath>
+#include <tuple>
 // McCAD
 #include "tools.hpp"
 // OCC
@@ -46,12 +47,11 @@ namespace McCAD::Tools{
   public:
     Impl() = default;
 
+    Standard_Boolean checkBndSurfaces(const TopoDS_Solid& solid);
     void removeSmallFaces(TopoDS_Shape& solidShape, Standard_Real precision = 1.0e-3, Standard_Real maxTolerance = 1.0e-3);
     void repairSolid(TopoDS_Solid& solid);
-    void genericFix(TopoDS_Solid& solid);
     void fixFace(TopoDS_Face& face, Standard_Real precision = 1.0e-7, Standard_Real maxTolerance = 1.0e-3);
-    Standard_Real calcMeshDeflection(const TopoDS_Solid& solid, Standard_Real bndBoxGap = 0.0, Standard_Real converting = 100);
-    Standard_Boolean checkBndSurfaces(const TopoDS_Solid& solid);
+    std::tuple<Standard_Real, Standard_Real> calcMeshDeflection(const TopoDS_Solid& solid, Standard_Real bndBoxGap = 0.0, Standard_Real converting = 100);
     Standard_Boolean checkFace(const TopoDS_Face& face, Standard_Real tolerance = 1.0e-3);
     std::string getSurfTypeName(const Standard_Integer& index);
     std::string getCurveTypeName(const Standard_Integer& index);

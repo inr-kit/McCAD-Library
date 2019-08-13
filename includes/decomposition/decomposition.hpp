@@ -13,7 +13,7 @@ namespace McCAD::Decomposition {
       class Impl;
       
     public:
-      Decompose(const McCAD::General::InputData& inputData);
+      Decompose(const General::InputData& inputData);
       ~Decompose();
       
       Impl* accessDImpl() const;

@@ -19,9 +19,10 @@
 namespace McCAD::Decomposition{
   class Decompose::Impl {
   public:
-    Impl(const McCAD::General::InputData& inputData);
+    Impl(const General::InputData& inputData);
+    ~Impl();
 
-    McCAD::Tools::Preprocessor preproc;
+    Tools::Preprocessor preproc;
     TopoDS_Solid solid;
     TopoDS_Shape solidShape;
     std::unique_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;

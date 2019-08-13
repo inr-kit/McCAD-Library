@@ -17,10 +17,10 @@
 namespace McCAD::Decomposition{
   class BoundSurfacePlane::Impl {
   public:
-    Impl(McCAD::Decomposition::BoundSurfacePlane* backReference);
+    Impl(BoundSurfacePlane* backReference);
     ~Impl();
 
-    McCAD::Decomposition::BoundSurfacePlane* boundSurfacePlane;
+    BoundSurfacePlane* boundSurfacePlane;
 
     std::string surfaceType = "Plane";
     void generateExtendedPlane(const Standard_Real& boxSquareLength, Standard_Real tolerance = 1.0e-7);

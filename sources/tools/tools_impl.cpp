@@ -1,9 +1,32 @@
 // McCAD
 #include "tools_impl.hpp"
 
+Standard_Boolean
+McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid){
+  TopoDS_Face face;
+  TopExp_Explorer explorer(solid, TopAbs_FACE);
+  for (; explorer.More(); explorer.Next())
+    {
+      face = TopoDS::Face(explorer.Current());
+      GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
+
+      if(surfAdaptor.GetType() == GeomAbs_Torus)
+        {
+          std::cout << "    -- The current verion doesn't support processing of Tori. Ignoring solid!" << std::endl;
+          return Standard_True;
+        }
+      else if (surfAdaptor.GetType() == GeomAbs_BSplineSurface)
+        {
+          std::cout << "    -- The current verion doesn't support processing of splines. Ignoring solid!" << std::endl;
+          return Standard_True;
+        }
+    }
+  return Standard_False;
+}
+
 void
 McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape, Standard_Real precision, Standard_Real maxTolerance){
-  TopoDS_Shape fixedSolidShape;
+  // If the size of face is less than the precision (spot or strip face), it will be removed.
   Handle_ShapeFix_FixSmallFace smallFaceFix = new ShapeFix_FixSmallFace;
   smallFaceFix->Init(solidShape);
   smallFaceFix->SetPrecision(precision);
@@ -14,74 +37,35 @@ McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape, Sta
 
 void
 McCAD::Tools::Preprocessor::Impl::repairSolid(TopoDS_Solid& solid){
-  TopoDS_Solid fixedSolid;
   Handle_ShapeFix_Solid solidFix = new ShapeFix_Solid;
   solidFix->Init(solid);
   solidFix->Perform();
   solid = TopoDS::Solid(solidFix->Solid());
 }
 
-void
-McCAD::Tools::Preprocessor::Impl::genericFix(TopoDS_Solid& solid){
-  TopoDS_Solid finalSolid;
-  Handle_ShapeFix_Solid genericFix = new ShapeFix_Solid;
-  genericFix->Init(solid);
-  genericFix->Perform();
-  solid = TopoDS::Solid(genericFix->Solid());
-}
-
-Standard_Real
+std::tuple<Standard_Real, Standard_Real>
 McCAD::Tools::Preprocessor::Impl::calcMeshDeflection(const TopoDS_Solid& solid, Standard_Real bndBoxGap, Standard_Real converting){
-  Standard_Real deflection;
-  /** Calculate the bounding box of face **/
+  // Calculate the bounding box of the solid.
   Bnd_Box boundingBox;
-  BRepBndLib::Add(solid,boundingBox);
+  BRepBndLib::Add(solid, boundingBox);
   boundingBox.SetGap(bndBoxGap);
   Standard_Real Xmin, Ymin, Zmin, Xmax, Ymax, Zmax;
   boundingBox.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
   Standard_Real tempdeflection = std::max((Xmax-Xmin), (Ymax-Ymin));
-  deflection = std::max(tempdeflection, (Zmax-Zmin)) / converting;
-  return deflection;
-}
-
-Standard_Boolean
-McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid){
-  Standard_Boolean spline_torus_found = Standard_False;
-  // Find the faces with small areas, they will not be added into face list.
-  TopExp_Explorer explorer(solid, TopAbs_FACE);
-  for (; explorer.More(); explorer.Next())
-    {
-      TopoDS_Face face = TopoDS::Face(explorer.Current());
-      TopLoc_Location location;
-      Handle_Geom_Surface geomSurface = BRep_Tool::Surface(face, location);
-      GeomAdaptor_Surface surfAdaptor(geomSurface);
-
-      if(surfAdaptor.GetType() == GeomAbs_Torus)
-	{
-	  std::cout << "    -- The current verion doesn't support processing of Tori. Ignoring solid!" << std::endl;
-	  spline_torus_found = Standard_True;
-	  break;
-	}
-      else if (surfAdaptor.GetType() == GeomAbs_BSplineSurface)
-	{
-	  std::cout << "    -- The current verion doesn't support processing of splines. Ignoring solid!" << std::endl;
-	  spline_torus_found = Standard_True;
-	  break;
-	}
-    }
-  return spline_torus_found;
+  Standard_Real deflection = std::max(tempdeflection, (Zmax-Zmin)) / converting;
+  Standard_Real boxSquareLength = sqrt(boundingBox.SquareExtent());
+  return std::make_tuple(deflection, boxSquareLength);
 }
 
 Standard_Boolean
 McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face, Standard_Real tolerance){
   ShapeAnalysis_CheckSmallFace shapeAnalysis;
-  Standard_Boolean isSmallFace = Standard_False;
   TopoDS_Edge edge1, edge2;
   if( shapeAnalysis.CheckSpotFace(face, tolerance) || shapeAnalysis.CheckStripFace(face, edge1, edge2, tolerance))
     {
-      Standard_Boolean isSmallFace = Standard_True;
+      return Standard_True;
     }
-  return isSmallFace;
+  return Standard_False;
 }
 
 void
@@ -162,12 +146,12 @@ McCAD::Tools::Preprocessor::Impl::normalOnFace(const TopoDS_Face& aFace, const g
   gp_Pnt point;
   gp_Vec D1U, D1V;
   surfaceAdaptor.D1(uParameter, vParameter, point, D1U, D1V);
-  gp_Dir direction;
+  gp_Dir normal;
   CSLib_DerivativeStatus derivativeStatus;
-  CSLib::Normal(D1U, D1V, Precision::Confusion(), derivativeStatus, direction);
+  CSLib::Normal(D1U, D1V, Precision::Confusion(), derivativeStatus, normal);
   if (aFace.Orientation() == TopAbs_FORWARD)
-    direction.Reverse();
-  return direction;
+    normal.Reverse();
+  return normal;
 }
 
 Standard_Boolean
