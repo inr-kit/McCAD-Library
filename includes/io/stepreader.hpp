@@ -21,7 +21,7 @@ namespace McCAD::IO{
     STEPReader& operator=(const STEPReader& that);
     STEPReader& operator=(STEPReader&& that);
 
-    McCAD::General::InputData getInputData() const;
+    General::InputData getInputData() const;
     const std::string& getFileName() const;
 
   private:

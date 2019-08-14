@@ -61,23 +61,25 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
     {
       //std::cout << "throughNoBoundarySurfaces false" << std::endl;
       judgeThroughConcaveEdges(splitFacesList);
+      /*
       if (!splitSurfaces.accessSSImpl()->planeSplitOnlyPlane(splitFacesList))
 	{
 	  //generateAssistingSurfaces();
 	  //judgeAssistingDecomposeSurfaces();
 	  //judgeThroughConcaveEdges(assistingFacesList);
 	}
+      */
     }
   //Standard_Integer selectedSurface = 0;
   
-  if (recurrenceDepth >= 10)
+  if (recurrenceDepth >= 20)
     {
       return Standard_False;
     }
   
   if (splitSurface)
     {
-      std::cout << "Solid has a split surface" << std::endl;
+      //std::cout << "Solid has a split surface" << std::endl;
       if (!selectSplitSurface())
 	{
 	  return Standard_False;
@@ -455,7 +457,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(){
 }
 
 void
-McCAD::Decomposition::DecomposeSolid::Impl::judgeThroughConcaveEdges(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& facesList){
+McCAD::Decomposition::DecomposeSolid::Impl::judgeThroughConcaveEdges(std::vector<std::shared_ptr<BoundSurface>>& facesList){
   // Judge how many concave edges each boundary face of solid goes through.
   if (facesList.size() == 0)
     {

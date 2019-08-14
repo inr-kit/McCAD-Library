@@ -2,7 +2,7 @@
 #include "splitsurfaces_impl.hpp"
 
 Standard_Boolean
-McCAD::Decomposition::SplitSurfaces::Impl::throughNoBoundarySurfaces(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& facesList){
+McCAD::Decomposition::SplitSurfaces::Impl::throughNoBoundarySurfaces(std::vector<std::shared_ptr<BoundSurface>>& facesList){
   if (facesList.empty())
     {
       return Standard_False;
@@ -18,7 +18,7 @@ McCAD::Decomposition::SplitSurfaces::Impl::throughNoBoundarySurfaces(std::vector
 }
 
 Standard_Boolean
-McCAD::Decomposition::SplitSurfaces::Impl::planeSplitOnlyPlane(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& facesList){
+McCAD::Decomposition::SplitSurfaces::Impl::planeSplitOnlyPlane(std::vector<std::shared_ptr<BoundSurface>>& facesList){
   if (facesList.empty())
     {
       return Standard_False;
@@ -30,12 +30,11 @@ McCAD::Decomposition::SplitSurfaces::Impl::planeSplitOnlyPlane(std::vector<std::
 	  return Standard_True;
 	}
     }
-
   return Standard_False;
 }
 
 void
-McCAD::Decomposition::SplitSurfaces::Impl::generateSplitFacesList(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& splitFacesList, std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& selectedSplitFacesList){
+McCAD::Decomposition::SplitSurfaces::Impl::generateSplitFacesList(std::vector<std::shared_ptr<BoundSurface>>& splitFacesList, std::vector<std::shared_ptr<BoundSurface>>& selectedSplitFacesList){
   // 1st step: Select surfaces that go through 0 boundary surfaces.
   for (Standard_Integer i = 0; i <= splitFacesList.size() - 1; ++i)
     {
@@ -81,7 +80,7 @@ McCAD::Decomposition::SplitSurfaces::Impl::generateSplitFacesList(std::vector<st
 }
 
 void
-McCAD::Decomposition::SplitSurfaces::Impl::sortSplitFaces(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& splitFacesList){
+McCAD::Decomposition::SplitSurfaces::Impl::sortSplitFaces(std::vector<std::shared_ptr<BoundSurface>>& splitFacesList){
   if (splitFacesList.size() <= 1)
     {
       return;
