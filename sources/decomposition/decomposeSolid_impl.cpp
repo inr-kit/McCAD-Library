@@ -288,7 +288,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
     {
       facesList.push_back(std::move(planesList[i]));
     }
-  std::cout << "merged faces list: " << facesList.size() << std::endl;
+  //std::cout << "merged faces list: " << facesList.size() << std::endl;
 }
 
 std::unique_ptr<McCAD::Decomposition::BoundSurface>
@@ -348,15 +348,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::uniqu
 		    {
 		      TopoDS_Face newFace = preproc.accessImpl()->fusePlanes(surfacesList[i]->accessSImpl()->face, surfacesList[j]->accessSImpl()->face);
 		      std::unique_ptr<BoundSurface> newboundSurface = std::move(generateSurface(newFace));
-		      newboundSurface->accessSImpl()->initiate(newFace);
 		      newboundSurface->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
-		      /*
-		      if (newboundSurface->accessBSImpl()->generateMesh(meshDeflection))
-			{
-			  //std::cout << "fuse planes, generate edges" << std::endl;
-			  generateEdges(newboundSurface);
-			}
-		      */
 		      // Add triangles of surface i.
 		      for (Standard_Integer k = 0; k <= surfacesList[i]->accessBSImpl()->meshTrianglesList.size() - 1; ++k)
 			{
@@ -370,6 +362,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::uniqu
 		      
 		      // Combine edges.
 		      newboundSurface->accessBSImpl()->combineEdges(surfacesList[i]->accessBSImpl()->edgesList);
+		      newboundSurface->accessBSImpl()->combineEdges(surfacesList[j]->accessBSImpl()->edgesList);
 
 		      // Erase pointer surfacesList[j] & [i] from surfacesList.
 		      //std::cout << "equal, erase two: " << i << " , " << j << " , " << surfacesList.size() << std::endl;

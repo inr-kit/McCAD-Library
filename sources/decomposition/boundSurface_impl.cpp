@@ -272,7 +272,7 @@ McCAD::Decomposition::BoundSurface::Impl::edgeOnSurface(const McCAD::Decompositi
 }
 
 void
-McCAD::Decomposition::BoundSurface::Impl::combineEdges(std::vector<std::unique_ptr<McCAD::Decomposition::Edge>>& aEdgesList){
+McCAD::Decomposition::BoundSurface::Impl::combineEdges(std::vector<std::unique_ptr<Edge>>& aEdgesList){
   if (edgesList.size() == 0)
     {
       // If the current list is empty, append to it the new one.
@@ -286,18 +286,19 @@ McCAD::Decomposition::BoundSurface::Impl::combineEdges(std::vector<std::unique_p
       // Compare and add only if different.
       for (Standard_Integer i = 0; i <= aEdgesList.size() - 1; ++i)
 	{
+	  Standard_Integer sameEdge = 0;
 	  for (Standard_Integer j = 0; j <= edgesList.size() - 1; ++j)
 	    {
-	      if (*(edgesList[i]) == *(aEdgesList[j]))
+	      if (*(edgesList[j]) == *(aEdgesList[i]))
 		{
 		  edgesList.erase(edgesList.begin() + j);
+		  ++sameEdge;
 		  --j;
 		}
-	      else
-		{
-		  edgesList.insert(edgesList.begin() + j, std::move(aEdgesList[i]));
-		  ++j;
-		}
+	    }
+	  if (sameEdge == 0)
+	    {
+	      edgesList.push_back(std::move(aEdgesList[i]));
 	    }
 	}
     }
