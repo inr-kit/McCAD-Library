@@ -17,15 +17,17 @@ namespace McCAD::Decomposition{
   public:
     Impl() = default;
 
+    Tools::Preprocessor preproc;
+    
     TopoDS_Edge edge;
     gp_Pnt startPoint, endPoint, middlePoint, extraPoint;
     std::string edgeType;
     Standard_Integer convexity;
     Standard_Boolean useForSplitSurface;
-    McCAD::Tools::Preprocessor preproc;
+
     void initiate(const TopoDS_Edge& edge);
     void calculatePoints();
-    Standard_Boolean isEqual(const McCAD::Decomposition::Edge& that);
+    Standard_Boolean isEqual(const Edge& that);
 
   private:
 

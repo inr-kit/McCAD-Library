@@ -29,7 +29,6 @@
 #include <BRepBndLib.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <GeomAdaptor_Surface.hxx>
-#include <BRepAdaptor_Curve.hxx>
 #include <TopExp.hxx>
 #include <TopTools_IndexedDataMapOfShapeListOfShape.hxx>
 #include <TopTools_ListIteratorOfListOfShape.hxx>
@@ -65,11 +64,10 @@ namespace McCAD::Decomposition{
     Standard_Boolean perform();
     void updateEdgesConvexity(const Standard_Real& angleTolerance = 1.0e-4);
     void generateSurfacesList();
-    std::unique_ptr<McCAD::Decomposition::BoundSurface> generateSurface(const TopoDS_Face& face, Standard_Integer mode = 0);
-    void generateEdges(std::unique_ptr<McCAD::Decomposition::BoundSurface>& surface, Standard_Real uvTolerance = 1.0e-3);
-    void mergeSurfaces(std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>>& planesList);
+    std::unique_ptr<BoundSurface> generateSurface(const TopoDS_Face& face, Standard_Integer mode = 0);
+    void mergeSurfaces(std::vector<std::unique_ptr<BoundSurface>>& planesList);
     void judgeDecomposeSurfaces();
-    void judgeThroughConcaveEdges(std::vector<std::shared_ptr<McCAD::Decomposition::BoundSurface>>& facesList);
+    void judgeThroughConcaveEdges(std::vector<std::shared_ptr<BoundSurface>>& facesList);
     void generateAssistingSurfaces();
     Standard_Boolean selectSplitSurface();
 

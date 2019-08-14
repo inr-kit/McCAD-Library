@@ -3,7 +3,7 @@
 
 // C++
 #include <string>
-#include <vector>
+#include <array>
 // McCAD
 #include "meshtriangle.hpp"
 // OCC
@@ -18,7 +18,7 @@ namespace McCAD::Decomposition{
     Impl() = default;
 
     Bnd_Box boundingBox;
-    std::vector<gp_Pnt> points;
+    std::array<gp_Pnt, 3> points;
 
     void initiate(const TopoDS_Face& face);
 

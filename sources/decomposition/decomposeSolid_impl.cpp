@@ -124,7 +124,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
 	    {
 	      return Standard_False;
 	    }
-	  std::unique_ptr<McCAD::Decomposition::DecomposeSolid> decomposedSolid = std::make_unique<McCAD::Decomposition::DecomposeSolid>();
+	  std::unique_ptr<DecomposeSolid> decomposedSolid = std::make_unique<DecomposeSolid>();
 	  decomposedSolid->accessDSImpl()->recurrenceDepth = recurrenceDepth;
 	  // mesh deflection is calculated inside initiate for every solid!.
           if (decomposedSolid->accessDSImpl()->initiate(subSolid))
@@ -248,7 +248,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
   // Generate a list of faces of the solid.
   TopoDS_Face face;
   Standard_Integer faceNumber = 0;
-  std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>> planesList;
+  std::vector<std::unique_ptr<BoundSurface>> planesList;
   TopExp_Explorer explorer(solid, TopAbs_FACE);
   for (; explorer.More(); explorer.Next())
     {
@@ -267,7 +267,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
 	  boundSurface->accessSImpl()->surfaceNumber = faceNumber;
 	  if (boundSurface->accessBSImpl()->generateMesh(meshDeflection))
 	    {
-	      generateEdges(boundSurface);
+	      boundSurface->accessBSImpl()->generateEdges();
 	      //std::cout << "length of egdes list: " << boundSurface->accessBSImpl()->edgesList.size() << std::endl;
 	      if(boundSurface->getSurfaceType() == "Plane")
 		{
@@ -276,7 +276,10 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurfacesList(){
 	      // The other two types in McCADDecompSolid are to be added later.
 	    }
 	}
-      else continue;
+      else
+	{
+	  continue;
+	}
     }
   std::cout << "     - There are " << planesList.size() << " planes in the solid" << std::endl;
   mergeSurfaces(planesList);
@@ -324,37 +327,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateSurface(const TopoDS_Face& f
 }
 
 void
-McCAD::Decomposition::DecomposeSolid::Impl::generateEdges(std::unique_ptr<McCAD::Decomposition::BoundSurface>& boundSurface, Standard_Real uvTolerance){
-  TopoDS_Face face = boundSurface->accessSImpl()->face;
-  TopExp_Explorer explorer(face, TopAbs_EDGE);
-  for(; explorer.More(); explorer.Next())
-    {
-      TopoDS_Edge tempEdge = TopoDS::Edge(explorer.Current());
-      std::unique_ptr<McCAD::Decomposition::Edge> edge = std::make_unique<McCAD::Decomposition::Edge>();
-      edge->accessEImpl()->initiate(tempEdge);
-      // Get type of Edge.
-      BRepAdaptor_Curve curveAdaptor;
-      curveAdaptor.Initialize(tempEdge);
-      edge->setEdgeType(preproc.accessImpl()->getCurveTypeName(curveAdaptor.GetType()));
-      edge->accessEImpl()->convexity = tempEdge.Convex();
-
-      // Add flag if the edge can be used for assisting splitting surface.
-      if (boundSurface->getSurfaceType() == "Cylinder" && edge->getEdgeType() == "Line")
-	{
-	  std::vector<Standard_Real> edgeUV(4), surfaceUV(4);
-          BRepTools::UVBounds(face, tempEdge, edgeUV[0], edgeUV[1], edgeUV[2], edgeUV[3]);
-          BRepTools::UVBounds(face, surfaceUV[0], surfaceUV[1], surfaceUV[2], surfaceUV[3]);
-          if (std::abs(edgeUV[0] - surfaceUV[0]) < uvTolerance || std::abs(edgeUV[1] - surfaceUV[1]) < uvTolerance)
-	    {
-	      edge->accessEImpl()->useForSplitSurface = true;
-	    }
-	}
-      boundSurface->accessBSImpl()->edgesList.push_back(std::move(edge));
-    }
-}
-
-void
-McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::unique_ptr<McCAD::Decomposition::BoundSurface>>& surfacesList){
+McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSurface>>& surfacesList){
   if (surfacesList.size() < 2)
     {
       return;
@@ -373,10 +346,8 @@ McCAD::Decomposition::DecomposeSolid::Impl::mergeSurfaces(std::vector<std::uniqu
 		{
 		  if (surfacesList[i]->getSurfaceType() == "Plane")
 		    {
-		      //std::cout << "equal, fuse plane" << std::endl;
-		      
 		      TopoDS_Face newFace = preproc.accessImpl()->fusePlanes(surfacesList[i]->accessSImpl()->face, surfacesList[j]->accessSImpl()->face);
-		      std::unique_ptr<McCAD::Decomposition::BoundSurface> newboundSurface = std::move(generateSurface(newFace));
+		      std::unique_ptr<BoundSurface> newboundSurface = std::move(generateSurface(newFace));
 		      newboundSurface->accessSImpl()->initiate(newFace);
 		      newboundSurface->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
 		      /*

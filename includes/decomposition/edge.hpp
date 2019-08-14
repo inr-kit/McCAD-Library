@@ -14,7 +14,7 @@ namespace McCAD::Decomposition {
     public:
       Edge();
       ~Edge();
-      Standard_Boolean operator == (const McCAD::Decomposition::Edge& that);
+      Standard_Boolean operator == (const Edge& that);
       
       Impl* accessEImpl() const;
       void setEdgeType(const std::string& edgeType);

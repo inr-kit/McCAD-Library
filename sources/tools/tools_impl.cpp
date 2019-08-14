@@ -163,10 +163,9 @@ McCAD::Tools::Preprocessor::Impl::isSamePlane(const TopoDS_Face& firstFace, cons
     }
 
   // Check surface type.
-  TopLoc_Location location;
-  Handle_Geom_Surface firstSurface = BRep_Tool::Surface(firstFace, location);
+  Handle_Geom_Surface firstSurface = BRep_Tool::Surface(firstFace);
   GeomAdaptor_Surface firstSurfaceAdaptor(firstSurface);
-  Handle_Geom_Surface secondSurface = BRep_Tool::Surface(secondFace, location);
+  Handle_Geom_Surface secondSurface = BRep_Tool::Surface(secondFace);
   GeomAdaptor_Surface secondSurfaceAdaptor(secondSurface);
   if (firstSurfaceAdaptor.GetType() != secondSurfaceAdaptor.GetType())
     {
@@ -176,7 +175,7 @@ McCAD::Tools::Preprocessor::Impl::isSamePlane(const TopoDS_Face& firstFace, cons
   try
     {
       // Check direction and parameters.
-      std::vector<Standard_Real> firstPlaneParameters(4);
+      std::array<Standard_Real, 4> firstPlaneParameters;
       gp_Pln firstPlane = firstSurfaceAdaptor.Plane();
       firstPlane.Scale(gp_Pnt(0.0, 0.0, 0.0), 0.1);
       gp_Ax3 firstPlaneAxes = firstPlane.Position();
@@ -192,7 +191,7 @@ McCAD::Tools::Preprocessor::Impl::isSamePlane(const TopoDS_Face& firstFace, cons
       firstPlaneDirection.SetCoord(firstPlaneParameters[0], firstPlaneParameters[1], firstPlaneParameters[2]);
       gp_Pnt firstPlanePoint = firstPlaneAxes.Location();
 
-      std::vector<Standard_Real> secondPlaneParameters(4);
+      std::array<Standard_Real, 4> secondPlaneParameters;
       gp_Pln secondPlane = secondSurfaceAdaptor.Plane();
       secondPlane.Scale(gp_Pnt(0.0, 0.0, 0.0), 0.1);
       gp_Ax3 secondPlaneAxes = secondPlane.Position();
@@ -241,21 +240,14 @@ McCAD::Tools::Preprocessor::Impl::isSameEdge(const TopoDS_Edge& firstEdge, const
     {
       return Standard_False;
     }
-  // Comparison for line edges. to be separated in different functions for other curve types.
-  /*
-  if ((firstEdgeStart != secondEdgeStart) || (firstEdgeEnd != secondEdgeEnd))
-    {
-      return Standard_False;
-    }
-  */
 
   gp_Pnt firstStartPoint, firstEndPoint;
   firstCurve->D0(firstEdgeStart, firstStartPoint);
   firstCurve->D0(firstEdgeEnd, firstEndPoint);
 
   gp_Pnt secondStartPoint, secondEndPoint;
-  firstCurve->D0(secondEdgeStart, secondStartPoint);
-  firstCurve->D0(secondEdgeEnd, secondEndPoint);
+  secondCurve->D0(secondEdgeStart, secondStartPoint);
+  secondCurve->D0(secondEdgeEnd, secondEndPoint);
 
   if ((firstStartPoint.IsEqual(secondStartPoint, distanceTolerance) && firstEndPoint.IsEqual(secondEndPoint, distanceTolerance)) || (firstStartPoint.IsEqual(secondEndPoint, distanceTolerance) && firstEndPoint.IsEqual(secondStartPoint, distanceTolerance)))
     {

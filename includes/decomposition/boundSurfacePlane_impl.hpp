@@ -4,6 +4,7 @@
 // C++
 #include <string>
 #include <memory>
+#include <array>
 // McCAD
 #include "boundSurfacePlane.hpp"
 #include "surface_impl.hpp"
@@ -23,7 +24,7 @@ namespace McCAD::Decomposition{
     BoundSurfacePlane* boundSurfacePlane;
 
     std::string surfaceType = "Plane";
-    void generateExtendedPlane(const Standard_Real& boxSquareLength, Standard_Real tolerance = 1.0e-7);
+    void generateExtendedPlane(const Standard_Real& boxSquareLength, Standard_Real degenerateEdgesTolerance = 1.0e-7);
     
   private:
 

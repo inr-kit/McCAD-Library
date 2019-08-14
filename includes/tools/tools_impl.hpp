@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cmath>
 #include <tuple>
+#include <array>
 // McCAD
 #include "tools.hpp"
 // OCC
