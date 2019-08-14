@@ -2,7 +2,7 @@
 #include "splitsolid_impl.hpp"
 
 Standard_Boolean
-McCAD::Decomposition::SplitSolid::Impl::initiate(const TopoDS_Solid& solid, const std::shared_ptr<McCAD::Decomposition::BoundSurface>& surface, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
+McCAD::Decomposition::SplitSolid::Impl::initiate(const TopoDS_Solid& solid, const std::shared_ptr<BoundSurface>& surface, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
   calculateBoundingBox(solid);
   if (surface->getSurfaceType() == "Plane")
     {
@@ -15,7 +15,7 @@ void
 McCAD::Decomposition::SplitSolid::Impl::calculateBoundingBox(const TopoDS_Solid& solid){
   BRepBndLib::Add(solid, bndBox);
   bndBox.SetGap(10.0);
-  std::vector<Standard_Real> coordinates(6);
+  std::array<Standard_Real, 6> coordinates;
   bndBox.Get(coordinates[0], coordinates[1], coordinates[2], coordinates[3], coordinates[4], coordinates[5]);
   boxSquareLength = sqrt(bndBox.SquareExtent());
   boundingBox = BRepPrimAPI_MakeBox(gp_Pnt(coordinates[0], coordinates[1], coordinates[2]) , gp_Pnt(coordinates[3], coordinates[4], coordinates[5])).Shape();
@@ -23,7 +23,7 @@ McCAD::Decomposition::SplitSolid::Impl::calculateBoundingBox(const TopoDS_Solid&
 
 Standard_Boolean
 McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid, const TopoDS_Face& splitFace, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
-  std::cout << "split" << std::endl;
+  //std::cout << "split" << std::endl;
   gp_Pnt positivePoint, negativePoint;
   calculatePoints(splitFace, positivePoint, negativePoint);
   //std::cout << positivePoint.X() << "," << positivePoint.Y() << "," << positivePoint.Z() << "," << std::endl;
@@ -59,12 +59,15 @@ McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid, const T
 	{
 	  return Standard_True;
 	}
+      else
+	{
+	  return Standard_False;
+	}
     }
   else
     {
       return Standard_False;
     }
-  return Standard_False;
 }
 
 void
@@ -157,7 +160,7 @@ McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSe
 	{
 	  TopoDS_Solid tempSolid = TopoDS::Solid(newsubSolidsList->Value(i));
 	  BRepCheck_Analyzer BRepAnalyzer(tempSolid, Standard_True);
-	  if (!BRepAnalyzer.IsValid())
+	  if (!(BRepAnalyzer.IsValid()))
 	    {
 	      TopoDS_Solid newSolid;
 	      Standard_Boolean rebuildCondition = rebuildSolidFromShell(tempSolid, newSolid);
@@ -182,7 +185,7 @@ McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSe
 }
 
 Standard_Boolean
-McCAD::Decomposition::SplitSolid::Impl::rebuildSolidFromShell(const TopoDS_Shape& solid, TopoDS_Solid& resultSolid, Standard_Real tolerance){
+McCAD::Decomposition::SplitSolid::Impl::rebuildSolidFromShell(const TopoDS_Shape& solid, TopoDS_Solid& resultSolid, Standard_Real tolerance, Standard_Real tolerance2){
   BRepBuilderAPI_Sewing builder(tolerance, Standard_True, Standard_True, Standard_True, Standard_True);
   TopExp_Explorer explorerFace;
   explorerFace.Init(solid, TopAbs_FACE);
@@ -195,7 +198,7 @@ McCAD::Decomposition::SplitSolid::Impl::rebuildSolidFromShell(const TopoDS_Shape
 	}
       GProp_GProps geometryProperties;
       BRepGProp::SurfaceProperties(tempFace, geometryProperties);
-      if (geometryProperties.Mass() <= 1.0e-4)
+      if (geometryProperties.Mass() <= tolerance2)
 	{
 	  continue;
 	}
@@ -224,7 +227,7 @@ McCAD::Decomposition::SplitSolid::Impl::rebuildSolidFromShell(const TopoDS_Shape
     }
 
   BRepCheck_Analyzer BRepAnalyzer(newshape, Standard_True);
-  if (!BRepAnalyzer.IsValid())
+  if (!(BRepAnalyzer.IsValid()))
     {
       return Standard_False;
     }

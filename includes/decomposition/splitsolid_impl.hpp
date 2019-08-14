@@ -2,7 +2,7 @@
 #define SPLITSOLID_IMPL_HPP
 
 // C++
-#include <vector>
+#include <array>
 // McCAD
 #include "splitsolid.hpp"
 #include "boundSurface_impl.hpp"
@@ -35,13 +35,13 @@ namespace McCAD::Decomposition{
     Standard_Real boxSquareLength;
     TopoDS_Shape boundingBox;
 
-    Standard_Boolean initiate(const TopoDS_Solid& solid, const std::shared_ptr<McCAD::Decomposition::BoundSurface>& surface, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList);
+    Standard_Boolean initiate(const TopoDS_Solid& solid, const std::shared_ptr<BoundSurface>& surface, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList);
     void calculateBoundingBox(const TopoDS_Solid& solid);
     Standard_Boolean split(const TopoDS_Solid& solid, const TopoDS_Face& splitFace, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList);
     void calculatePoints(const TopoDS_Face& splitFace, gp_Pnt& positivePoint, gp_Pnt& negativePoint);
     Standard_Boolean splitWithBoxes(const TopoDS_Solid& solid, TopoDS_Shape& firstBox, TopoDS_Shape& secondBox, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList);
     Standard_Boolean checkRepair(std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList, Standard_Real tolerance = 1.0e-4);
-    Standard_Boolean rebuildSolidFromShell(const TopoDS_Shape& solid, TopoDS_Solid& resultSolid, Standard_Real tolerance = 1.0e-2);
+    Standard_Boolean rebuildSolidFromShell(const TopoDS_Shape& solid, TopoDS_Solid& resultSolid, Standard_Real tolerance = 1.0e-2, Standard_Real tolerance2 = 1.0e-4);
 
   private:
 

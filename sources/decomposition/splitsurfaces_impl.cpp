@@ -111,10 +111,10 @@ McCAD::Decomposition::SplitSurfaces::Impl::sortSplitFaces(std::vector<std::share
 	    }
 	}
     }
+  /*
   for (Standard_Integer i = 0; i <= splitFacesList.size() - 1; ++i)
     {
       //std::cout << "throughConcaveEdges: " << splitFacesList[i]->accessSImpl()->throughConcaveEdges << " , numberCollidingSurfaces: " << splitFacesList[i]->accessSImpl()->numberCollidingSurfaces << std::endl;
     }
-
-  // A Splitting surface that goes through less boundary surfaces has priority.
+  */
 }

@@ -111,11 +111,10 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
       wrt2.Write(solidname.c_str());
       */
       // Loop over the resulting subsolids and split each one of them recursively.
-      std::cout << "splitting subsolids" << std::endl;
+      //std::cout << "splitting subsolids" << std::endl;
       for (Standard_Integer i = 1; i <= splitSolidList->Length(); ++i)
 	{
-	  std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/" << i << std::endl;
-
+	  std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/" << splitSolidList->Length() << "/" << i << std::endl;
 	  //std::cout << splitSolidList->Length() << std::endl;
 	  TopoDS_Solid subSolid;
 	  try
@@ -155,7 +154,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(){
 	    {
 	      //return Standard_False;
 	      rejectedsubSolidsList->Append(subSolid);
-	      continue;
 	    }
 	}
       //return Standard_True;
