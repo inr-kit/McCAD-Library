@@ -32,7 +32,6 @@ McCAD::Decomposition::BoundSurface::Impl::canFuse(const BoundSurface& that){
 Standard_Boolean
 McCAD::Decomposition::BoundSurface::Impl::faceCollision(const BoundSurface& aFace, Standard_Integer& aSide)
 {
-  //std::cout << "faceCollision" << std::endl;
   Standard_Boolean collision = Standard_False;
   Standard_Integer positiveTriangles = 0;
   Standard_Integer negativeTriangles = 0;
@@ -248,6 +247,7 @@ McCAD::Decomposition::BoundSurface::Impl::edgeOnSurface(const Edge& aEdge, Stand
   gp_Pnt endPoint   = aEdge.accessEImpl()->endPoint;
   //std::cout << startPoint.X() << "," << startPoint.Y() << "," << startPoint.Z() << "," << std::endl;
   //std::cout << endPoint.X() << "," << endPoint.Y() << "," << endPoint.Z() << "," << std::endl;
+  tolerance = BRep_Tool::Tolerance(boundSurface->accessSImpl()->extendedFace);
   if (pointOnSurface(startPoint, tolerance) && pointOnSurface(endPoint, tolerance\
 ))
     {

@@ -53,43 +53,38 @@ McCAD::Decomposition::Decompose::Impl::perform(){
   // Loop over the solids in the split solids list and perform the decomposition
   for(Standard_Integer solidNumber = 1; solidNumber <= splitInputSolidsList->Length(); ++solidNumber)
     {
-      solidShape = splitInputSolidsList->Value(solidNumber);
-      solid = TopoDS::Solid(solidShape);
-      // Check the boudary surfaces of the solid.
+      std::unique_ptr<Solid> solid = std::make_unique<Solid>();
+      solid->accessSImpl()->initiate(splitInputSolidsList->Value(solidNumber));
       // If the solid has spline or tori surfaces it cannot be processed by the current version of the code.
-      Standard_Boolean rejectCondition = preproc.accessImpl()->checkBndSurfaces(solid);
-      if (rejectCondition)
+      if (solid->accessSImpl()->isTorus || solid->accessSImpl()->isSpline)
 	{
-	  rejectedInputSolidsList->Append(solidShape);
+	  rejectedInputSolidsList->Append(solid->accessSImpl()->solidShape);
 	}
       else
 	{
 	  // Repair the geometry of solid
-	  preproc.accessImpl()->removeSmallFaces(solidShape);
-	  solid = TopoDS::Solid(solidShape);
-	  preproc.accessImpl()->repairSolid(solid);
-
+	  solid->accessSImpl()->repairSolid;
 	  // Perform decomposition on the repaired solid.
 	  std::cout << "   - Decomposing solid # " << solidNumber << std::endl;
-	  std::unique_ptr<McCAD::Decomposition::DecomposeSolid> decomposedSolid = std::make_unique<McCAD::Decomposition::DecomposeSolid>();
-	  if (decomposedSolid->accessDSImpl()->initiate(solid))
+	  std::unique_ptr<DecomposeSolid> decomposeSolid = std::make_unique<DecomposeSolid>();
+	  if (decomposeSolid->accessDSImpl()->perform(solid))
 	    {
-	      Standard_Integer lengthList = decomposedSolid->accessDSImpl()->splitSolidList->Length();
+	      Standard_Integer lengthList = solid->accessSImpl()->splitSolidList->Length();
 	      for (Standard_Integer i = 1; i <= lengthList; ++i)
 		{
-		  resultSolidsList->Append(decomposedSolid->accessDSImpl()->splitSolidList->Value(i));
+		  resultSolidsList->Append(solid->accessSImpl()->splitSolidList->Value(i));
 		}
-	      if (decomposedSolid->accessDSImpl()->rejectedsubSolidsList->Length() >= 1)
+	      if (solid->accessSImpl()->rejectedsubSolidsList->Length() >= 1)
                 {
-                  for (Standard_Integer j = 1; j <= decomposedSolid->accessDSImpl()->rejectedsubSolidsList->Length(); ++j)
+                  for (Standard_Integer j = 1; j <= solid->SImpl()->rejectedsubSolidsList->Length(); ++j)
                     {
-                      rejectedsubSolidsList->Append(decomposedSolid->accessDSImpl()->rejectedsubSolidsList->Value(j));
+                      rejectedsubSolidsList->Append(solid->accessSImpl()->rejectedsubSolidsList->Value(j));
                     }
 		}
 	    }
 	  else
 	    {
-	      rejectedInputSolidsList->Append(solidShape);
+	      rejectedInputSolidsList->Append(solid->accessSImpl()->solidShape);
 	    }
 	}
     }

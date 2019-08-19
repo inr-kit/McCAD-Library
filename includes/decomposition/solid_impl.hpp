@@ -1,5 +1,5 @@
-#ifndef DECOMPOSESOLID_IMPL_HPP
-#define DECOMPOSESOLID_IMPL_HPP
+#ifndef SOLID_IMPL_HPP
+#define SOLID_IMPL_HPP
 
 // C++
 #include <vector>
@@ -40,24 +40,35 @@
 #include <STEPControl_Writer.hxx>
 
 namespace McCAD::Decomposition{
-  class DecomposeSolid::Impl {
+  class Solid::Impl {
   public:
     Impl();
     ~Impl();
 
     Tools::Preprocessor preproc;
-    SplitSurfaces splitSurfaces;
-    SplitSolid splitSolid;
     
-    Standard_Boolean perform(Solid& solid);
-    void judgeDecomposeSurfaces(Solid& solid);
-    void judgeThroughConcaveEdges(std::vector<std::shared_ptr<BoundSurface>>& facesList);
-    void generateAssistingSurfaces();
-    Standard_Boolean selectSplitSurface(Solid& solid);
+    TopoDS_Solid solid;
+    TopoDS_Shape solidShape;
+    Standard_Boolean isTorus = Standard_False;
+    Standard_Boolean isSpline = Standard_False;
+    Standard_Real meshDeflection;
+    Standard_Real boxSquareLength;
+    Standard_Boolean splitSurface = Standard_False;
+    std::vector<std::shared_ptr<BoundSurface>> facesList;
+    std::vector<std::shared_ptr<BoundSurface>> splitFacesList;
+    std::unique_ptr<TopTools_HSequenceOfShape> splitSolidList;
+    std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
+
+    void initiate(const TopoDS_Shape& aSolidShape);
+    void updateEdgesConvexity(const Standard_Real& angleTolerance = 1.0e-4);
+    void repairSolid();
+    void generateSurfacesList();
+    std::unique_ptr<BoundSurface> generateSurface(const TopoDS_Face& face, Standard_Integer mode = 0);
+    void mergeSurfaces(std::vector<std::unique_ptr<BoundSurface>>& planesList);
 
   private:
 
   };
 }
 
-#endif //DECOMPOSESOLID_IMPL_HPP
+#endif //SOLID_IMPL_HPP
