@@ -131,7 +131,7 @@ McCAD::Decomposition::Solid::Impl::generateSurfacesList(){
   //std::cout << "merged faces list: " << facesList.size() << std::endl;
 }
 
-std::unique_ptr<BoundSurface>
+std::unique_ptr<McCAD::Decomposition::BoundSurface>
 McCAD::Decomposition::Solid::Impl::generateSurface(const TopoDS_Face& face, Standard_Integer mode){
   if (mode == Standard_Integer(0))
     {

@@ -1,8 +1,8 @@
 // McCAD
 #include "tools_impl.hpp"
 
-Standard_Boolean
-McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid){
+void
+McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid, Standard_Boolean& isTorus, Standard_Boolean& isSpline){
   TopoDS_Face face;
   TopExp_Explorer explorer(solid, TopAbs_FACE);
   for (; explorer.More(); explorer.Next())
@@ -13,15 +13,14 @@ McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid){
       if(surfAdaptor.GetType() == GeomAbs_Torus)
         {
           std::cout << "    -- The current verion doesn't support processing of Tori. Ignoring solid!" << std::endl;
-          return Standard_True;
+          isTorus = Standard_True;
         }
       else if (surfAdaptor.GetType() == GeomAbs_BSplineSurface)
         {
           std::cout << "    -- The current verion doesn't support processing of splines. Ignoring solid!" << std::endl;
-          return Standard_True;
+          isSpline = Standard_True;
         }
     }
-  return Standard_False;
 }
 
 void

@@ -35,7 +35,7 @@ namespace McCAD::Decomposition{
     Standard_Real boxSquareLength;
     TopoDS_Shape boundingBox;
 
-    Standard_Boolean initiate(const TopoDS_Solid& solid, const std::shared_ptr<BoundSurface>& surface, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList);
+    Standard_Boolean perform(const TopoDS_Solid& solid, const std::shared_ptr<BoundSurface>& surface, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList);
     void calculateBoundingBox(const TopoDS_Solid& solid);
     Standard_Boolean split(const TopoDS_Solid& solid, const TopoDS_Face& splitFace, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList);
     void calculatePoints(const TopoDS_Face& splitFace, gp_Pnt& positivePoint, gp_Pnt& negativePoint);

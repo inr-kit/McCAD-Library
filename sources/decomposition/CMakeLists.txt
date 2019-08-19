@@ -33,6 +33,11 @@ install (TARGETS SplitSolid DESTINATION ${PROJECT_BINARY_DIR}/bin)
 add_library(SplitSolid_impl splitsolid_impl.cpp)
 install (TARGETS SplitSolid_impl DESTINATION ${PROJECT_BINARY_DIR}/bin)
 
+add_library(Solid solid.cpp)
+install (TARGETS Solid DESTINATION ${PROJECT_BINARY_DIR}/bin)
+add_library(Solid_impl solid_impl.cpp)
+install (TARGETS Solid_impl DESTINATION ${PROJECT_BINARY_DIR}/bin)
+
 add_library(DecomposeSolid decomposeSolid.cpp)
 install (TARGETS DecomposeSolid DESTINATION ${PROJECT_BINARY_DIR}/bin)
 add_library(DecomposeSolid_impl decomposeSolid_impl.cpp)

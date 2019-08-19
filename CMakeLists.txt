@@ -101,16 +101,19 @@ set (EXTRA_LIBS ${EXTRA_LIBS} Tools Tools_impl)
 target_link_libraries(Tools_impl TKShHealing)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
-
 # Surface library
 include_directories ("${PROJECT_SOURCE_DIR}/includes/decomposition")
 add_subdirectory (includes/decomposition)
 add_subdirectory (sources/decomposition)
+target_link_libraries(Surface Tools)
+target_link_libraries(Surface_impl Tools_impl)
 set (EXTRA_LIBS ${EXTRA_LIBS} Surface Surface_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # Edge library
 set (EXTRA_LIBS ${EXTRA_LIBS} Edge Edge_impl)
+target_link_libraries(Edge Tools)
+target_link_libraries(Edge_impl Tools_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # MeshTriangle library
@@ -130,6 +133,8 @@ target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 set (EXTRA_LIBS ${EXTRA_LIBS} BoundSurfacePlane BoundSurfacePlane_impl)
 target_link_libraries(BoundSurfacePlane BoundSurface)
 target_link_libraries(BoundSurfacePlane_impl BoundSurface_impl)
+#target_link_libraries(BoundSurfacePlane Tools)
+#target_link_libraries(BoundSurfacePlane_impl Tools_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # SplitSurfaces library
@@ -143,10 +148,18 @@ target_link_libraries(SplitSolid_impl TKPrim)
 target_link_libraries(SplitSolid_impl TKBool)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
+# Solid library
+set (EXTRA_LIBS ${EXTRA_LIBS} Solid Solid_impl)
+target_link_libraries(Solid BoundSurfacePlane)
+target_link_libraries(Solid_impl BoundSurfacePlane_impl)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+
 # DecomposeSolid library
 set (EXTRA_LIBS ${EXTRA_LIBS} DecomposeSolid DecomposeSolid_impl)
-target_link_libraries(DecomposeSolid_impl BoundSurfacePlane)
-target_link_libraries(DecomposeSolid_impl BoundSurfacePlane_impl)
+#target_link_libraries(DecomposeSolid_impl BoundSurfacePlane)
+#target_link_libraries(DecomposeSolid_impl BoundSurfacePlane_impl)
+target_link_libraries(DecomposeSolid_impl Solid)
+target_link_libraries(DecomposeSolid_impl Solid_impl)
 target_link_libraries(DecomposeSolid_impl SplitSurfaces)
 target_link_libraries(DecomposeSolid_impl SplitSurfaces_impl)
 target_link_libraries(DecomposeSolid_impl SplitSolid)
@@ -155,7 +168,6 @@ target_link_libraries(DecomposeSolid_impl Edge)
 target_link_libraries(DecomposeSolid_impl Edge_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
-
 # Decomposition library
 set (EXTRA_LIBS ${EXTRA_LIBS} Decomposition Decomposition_impl)
 target_link_libraries(Decomposition Tools)
@@ -163,7 +175,6 @@ target_link_libraries(Decomposition_impl Tools_impl)
 target_link_libraries(Decomposition DecomposeSolid)
 target_link_libraries(Decomposition_impl DecomposeSolid_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
-
 
 install (TARGETS ${PROJECT_NAME} DESTINATION ${PROJECT_BINARY_DIR}/bin)
 install (FILES "${PROJECT_BINARY_DIR}/McCADConfig.hpp" DESTINATION ${PROJECT_BINARY_DIR}/includes)

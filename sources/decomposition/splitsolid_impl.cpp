@@ -2,7 +2,7 @@
 #include "splitsolid_impl.hpp"
 
 Standard_Boolean
-McCAD::Decomposition::SplitSolid::Impl::initiate(const TopoDS_Solid& solid, const std::shared_ptr<BoundSurface>& surface, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
+McCAD::Decomposition::SplitSolid::Impl::perform(const TopoDS_Solid& solid, const std::shared_ptr<BoundSurface>& surface, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
   calculateBoundingBox(solid);
   if (surface->getSurfaceType() == "Plane")
     {

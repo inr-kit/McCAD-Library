@@ -58,12 +58,12 @@ McCAD::Decomposition::Decompose::Impl::perform(){
       // If the solid has spline or tori surfaces it cannot be processed by the current version of the code.
       if (solid->accessSImpl()->isTorus || solid->accessSImpl()->isSpline)
 	{
-	  rejectedInputSolidsList->Append(solid->accessSImpl()->solidShape);
+	  rejectedInputSolidsList->Append(solid->accessSImpl()->solid);
 	}
       else
 	{
 	  // Repair the geometry of solid
-	  solid->accessSImpl()->repairSolid;
+	  solid->accessSImpl()->repairSolid();
 	  // Perform decomposition on the repaired solid.
 	  std::cout << "   - Decomposing solid # " << solidNumber << std::endl;
 	  std::unique_ptr<DecomposeSolid> decomposeSolid = std::make_unique<DecomposeSolid>();
@@ -76,7 +76,7 @@ McCAD::Decomposition::Decompose::Impl::perform(){
 		}
 	      if (solid->accessSImpl()->rejectedsubSolidsList->Length() >= 1)
                 {
-                  for (Standard_Integer j = 1; j <= solid->SImpl()->rejectedsubSolidsList->Length(); ++j)
+                  for (Standard_Integer j = 1; j <= solid->accessSImpl()->rejectedsubSolidsList->Length(); ++j)
                     {
                       rejectedsubSolidsList->Append(solid->accessSImpl()->rejectedsubSolidsList->Value(j));
                     }
@@ -84,7 +84,7 @@ McCAD::Decomposition::Decompose::Impl::perform(){
 	    }
 	  else
 	    {
-	      rejectedInputSolidsList->Append(solid->accessSImpl()->solidShape);
+	      rejectedInputSolidsList->Append(solid->accessSImpl()->solid);
 	    }
 	}
     }

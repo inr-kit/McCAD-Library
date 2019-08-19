@@ -48,7 +48,7 @@ namespace McCAD::Tools{
   public:
     Impl() = default;
 
-    Standard_Boolean checkBndSurfaces(const TopoDS_Solid& solid);
+    void checkBndSurfaces(const TopoDS_Solid& solid, Standard_Boolean& isTorus, Standard_Boolean& isSpline);
     void removeSmallFaces(TopoDS_Shape& solidShape, Standard_Real precision = 1.0e-3, Standard_Real maxTolerance = 1.0e-3);
     void repairSolid(TopoDS_Solid& solid);
     void fixFace(TopoDS_Face& face, Standard_Real precision = 1.0e-7, Standard_Real maxTolerance = 1.0e-3);

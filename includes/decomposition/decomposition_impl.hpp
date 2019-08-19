@@ -7,6 +7,7 @@
 #include "decomposition.hpp"
 #include "inputdata_impl.hpp"
 #include "tools_impl.hpp"
+#include "solid_impl.hpp"
 #include "decomposeSolid_impl.hpp"
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>

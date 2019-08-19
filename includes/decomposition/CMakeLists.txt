@@ -19,6 +19,9 @@ install (FILES splitsurfaces_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes
 install (FILES splitsolid.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
 install (FILES splitsolid_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
 
+install (FILES solid.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+install (FILES solid_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+
 install (FILES decomposeSolid.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
 install (FILES decomposeSolid_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
 

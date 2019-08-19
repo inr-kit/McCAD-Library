@@ -10,10 +10,8 @@
 // McCAD
 #include "decomposeSolid.hpp"
 #include "tools_impl.hpp"
-#include "edge_impl.hpp"
-#include "surface_impl.hpp"
+#include "solid_impl.hpp"
 #include "boundSurface_impl.hpp"
-#include "boundSurfacePlane_impl.hpp"
 #include "splitsurfaces_impl.hpp"
 #include "splitsolid_impl.hpp"
 #include <Standard.hxx>
@@ -48,12 +46,14 @@ namespace McCAD::Decomposition{
     Tools::Preprocessor preproc;
     SplitSurfaces splitSurfaces;
     SplitSolid splitSolid;
+
+    Standard_Integer recurrenceDepth = 0;
     
-    Standard_Boolean perform(Solid& solid);
-    void judgeDecomposeSurfaces(Solid& solid);
+    Standard_Boolean perform(std::unique_ptr<Solid>& solid);
+    void judgeDecomposeSurfaces(std::unique_ptr<Solid>& solid);
     void judgeThroughConcaveEdges(std::vector<std::shared_ptr<BoundSurface>>& facesList);
     void generateAssistingSurfaces();
-    Standard_Boolean selectSplitSurface(Solid& solid);
+    Standard_Boolean selectSplitSurface(std::unique_ptr<Solid>& solid);
 
   private:
 
