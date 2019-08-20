@@ -17,8 +17,6 @@
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
 #include <TopoDS_Shape.hxx>
-#include <Bnd_Box.hxx>
-#include <BRepBndLib.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopoDS_Face.hxx>
 #include <Geom_Surface.hxx>
@@ -52,7 +50,6 @@ namespace McCAD::Tools{
     void removeSmallFaces(TopoDS_Shape& solidShape, Standard_Real precision = 1.0e-3, Standard_Real maxTolerance = 1.0e-3);
     void repairSolid(TopoDS_Solid& solid);
     void fixFace(TopoDS_Face& face, Standard_Real precision = 1.0e-7, Standard_Real maxTolerance = 1.0e-3);
-    std::tuple<Standard_Real, Standard_Real> calcMeshDeflection(const TopoDS_Solid& solid, Standard_Real bndBoxGap = 0.0, Standard_Real converting = 100);
     Standard_Boolean checkFace(const TopoDS_Face& face, Standard_Real tolerance = 1.0e-3);
     std::string getSurfTypeName(const Standard_Integer& index);
     std::string getCurveTypeName(const Standard_Integer& index);

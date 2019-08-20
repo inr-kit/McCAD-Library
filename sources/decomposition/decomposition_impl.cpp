@@ -3,7 +3,7 @@
 
 McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData) : splitInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}, rejectedInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}, resultSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}, rejectedsubSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
   // Get input solids list from the Input Data object.
-  auto inputSolidsList = inputData.accessImpl()->inputSolidsList;
+  auto& inputSolidsList = inputData.accessImpl()->inputSolidsList;
   if (inputSolidsList->Length() > 0)
     {
       std::cout << "   - Found " << inputSolidsList->Length() << " solid(s) in the input file." << std::endl;

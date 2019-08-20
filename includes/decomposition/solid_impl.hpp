@@ -14,6 +14,8 @@
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
 #include <TopoDS_Shape.hxx>
+#include <Bnd_Box.hxx>
+#include <BRepBndLib.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopExp_Explorer.hxx>
@@ -38,7 +40,7 @@ namespace McCAD::Decomposition{
     Impl();
     ~Impl();
 
-    Tools::Preprocessor preproc;
+    std::unique_ptr<Tools::Preprocessor> preproc;
     
     TopoDS_Solid solid;
     TopoDS_Shape solidShape;
@@ -54,6 +56,7 @@ namespace McCAD::Decomposition{
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
 
     void initiate(const TopoDS_Shape& aSolidShape);
+    void calcMeshDeflection(Standard_Real bndBoxGap = 0.0, Standard_Real converting = 100);
     void updateEdgesConvexity(const Standard_Real& angleTolerance = 1.0e-4);
     void repairSolid();
     void generateSurfacesList();

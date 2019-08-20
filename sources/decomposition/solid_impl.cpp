@@ -1,7 +1,7 @@
 // McCAD
 #include "solid_impl.hpp"
 
-McCAD::Decomposition::Solid::Impl::Impl() : splitSolidList{std::make_unique<TopTools_HSequenceOfShape>()}, rejectedsubSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
+McCAD::Decomposition::Solid::Impl::Impl() : preproc{std::make_unique<McCAD::Tools::Preprocessor>()}, splitSolidList{std::make_unique<TopTools_HSequenceOfShape>()}, rejectedsubSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
 }
 
 McCAD::Decomposition::Solid::Impl::~Impl(){
@@ -11,17 +11,28 @@ void
 McCAD::Decomposition::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
   solidShape = aSolidShape;
   solid = TopoDS::Solid(solidShape);
-  // Calculate bounding box diagonal and maximum extent.
-  std::tie(meshDeflection, boxSquareLength) = preproc.accessImpl()->calcMeshDeflection(solid);
   // Check boundary surfaces.
-  preproc.accessImpl()->checkBndSurfaces(solid, isTorus, isSpline);
+  preproc->accessImpl()->checkBndSurfaces(solid, isTorus, isSpline);
+}
+
+void
+McCAD::Decomposition::Solid::Impl::calcMeshDeflection(Standard_Real bndBoxGap, Standard_Real converting){
+  // Calculate the bounding box of the solid.
+  Bnd_Box boundingBox;
+  BRepBndLib::Add(solid, boundingBox);
+  boundingBox.SetGap(bndBoxGap);
+  std::array<Standard_Real, 6> coordinates;
+  boundingBox.Get(coordinates[0], coordinates[1], coordinates[2], coordinates[3], coordinates[4], coordinates[5]);
+  Standard_Real tempdeflection = std::max((coordinates[3] - coordinates[0]), (coordinates[4] - coordinates[1]));
+  meshDeflection = std::max(tempdeflection, (coordinates[5] - coordinates[2])) / converting;
+  boxSquareLength = sqrt(boundingBox.SquareExtent());
 }
 
 void
 McCAD::Decomposition::Solid::Impl::repairSolid(){
-  preproc.accessImpl()->removeSmallFaces(solidShape);
+  preproc->accessImpl()->removeSmallFaces(solidShape);
   solid = TopoDS::Solid(solidShape);
-  preproc.accessImpl()->repairSolid(solid);
+  preproc->accessImpl()->repairSolid(solid);
 }
 
 void
@@ -53,8 +64,8 @@ McCAD::Decomposition::Solid::Impl::updateEdgesConvexity(const Standard_Real& ang
       gp_Dir direction(vector);
 
       // Get the normals of each surface
-      gp_Dir firstNormal = preproc.accessImpl()->normalOnFace(firstFace, startPoint);
-      gp_Dir secondNormal = preproc.accessImpl()->normalOnFace(secondFace, startPoint);
+      gp_Dir firstNormal = preproc->accessImpl()->normalOnFace(firstFace, startPoint);
+      gp_Dir secondNormal = preproc->accessImpl()->normalOnFace(secondFace, startPoint);
       Standard_Real angle = firstNormal.AngleWithRef(secondNormal, direction);
 
       if(std::abs(angle) < angleTolerance)
@@ -95,12 +106,12 @@ McCAD::Decomposition::Solid::Impl::generateSurfacesList(){
       face = TopoDS::Face(explorer.Current());
       // Update UV points of the face.
       BRepTools::Update(face);
-      Standard_Boolean rejectCondition = preproc.accessImpl()->checkFace(face);
+      Standard_Boolean rejectCondition = preproc->accessImpl()->checkFace(face);
       if (!rejectCondition)
 	{
 	  ++faceNumber;
 	  //std::cout << "faceNumber: " << faceNumber << std::endl;
-	  preproc.accessImpl()->fixFace(face);
+	  preproc->accessImpl()->fixFace(face);
 	  //std::cout << "face fixed: " << std::endl;
 	  std::unique_ptr<BoundSurface> boundSurface = std::move(generateSurface(face));
 	  //boundSurface->accessSImpl()->initiate(face);
@@ -142,7 +153,7 @@ McCAD::Decomposition::Solid::Impl::generateSurface(const TopoDS_Face& face, Stan
       //std::cout << "GeomAdaptor_Surface" << std::endl;
       if (AdaptorSurface.GetType() == GeomAbs_Plane)
 	{
-	  //std::cout << preproc.accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
+	  //std::cout << preproc->accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
 	  std::unique_ptr<BoundSurfacePlane> boundSurfacePlane = std::make_unique<BoundSurfacePlane>();
 	  boundSurfacePlane->setSurfaceType(boundSurfacePlane->accessBSPImpl()->surfaceType);
 	  boundSurfacePlane->accessSImpl()->initiate(face);
@@ -186,7 +197,7 @@ McCAD::Decomposition::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<Bou
 		{
 		  if (surfacesList[i]->getSurfaceType() == "Plane")
 		    {
-		      TopoDS_Face newFace = preproc.accessImpl()->fusePlanes(surfacesList[i]->accessSImpl()->face, surfacesList[j]->accessSImpl()->face);
+		      TopoDS_Face newFace = preproc->accessImpl()->fusePlanes(surfacesList[i]->accessSImpl()->face, surfacesList[j]->accessSImpl()->face);
 		      std::unique_ptr<BoundSurface> newboundSurface = std::move(generateSurface(newFace));
 		      newboundSurface->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
 		      // Add triangles of surface i.

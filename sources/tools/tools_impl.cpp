@@ -42,20 +42,6 @@ McCAD::Tools::Preprocessor::Impl::repairSolid(TopoDS_Solid& solid){
   solid = TopoDS::Solid(solidFix->Solid());
 }
 
-std::tuple<Standard_Real, Standard_Real>
-McCAD::Tools::Preprocessor::Impl::calcMeshDeflection(const TopoDS_Solid& solid, Standard_Real bndBoxGap, Standard_Real converting){
-  // Calculate the bounding box of the solid.
-  Bnd_Box boundingBox;
-  BRepBndLib::Add(solid, boundingBox);
-  boundingBox.SetGap(bndBoxGap);
-  Standard_Real Xmin, Ymin, Zmin, Xmax, Ymax, Zmax;
-  boundingBox.Get(Xmin, Ymin, Zmin, Xmax, Ymax, Zmax);
-  Standard_Real tempdeflection = std::max((Xmax-Xmin), (Ymax-Ymin));
-  Standard_Real deflection = std::max(tempdeflection, (Zmax-Zmin)) / converting;
-  Standard_Real boxSquareLength = sqrt(boundingBox.SquareExtent());
-  return std::make_tuple(deflection, boxSquareLength);
-}
-
 Standard_Boolean
 McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face, Standard_Real tolerance){
   ShapeAnalysis_CheckSmallFace shapeAnalysis;

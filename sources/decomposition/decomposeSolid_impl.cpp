@@ -13,17 +13,21 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(std::unique_ptr<Solid>& soli
   // Increment the recurrence depth by 1.
   ++recurrenceDepth;
   std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
+  // Alias the access to the implementation of solid object.
+  auto solid_impl = solid->accessSImpl();
+  // Calculate mesh deflection of the solid.
+  solid_impl->calcMeshDeflection();
   // Update edges convexity of the solid.
-  solid->accessSImpl()->updateEdgesConvexity();
+  solid_impl->updateEdgesConvexity();
   // Generate the boundary surfaces list of the solid.
-  solid->accessSImpl()->generateSurfacesList();
+  solid_impl->generateSurfacesList();
   // Judge which surfaces are decompose surfaces from the generated list.
   judgeDecomposeSurfaces(solid);
   //judgeThroughConcaveEdges(splitFacesList);
-  if (!splitSurfaces.accessSSImpl()->throughNoBoundarySurfaces(solid->accessSImpl()->splitFacesList))
+  if (!splitSurfaces.accessSSImpl()->throughNoBoundarySurfaces(solid_impl->splitFacesList))
     {
       //std::cout << "throughNoBoundarySurfaces false" << std::endl;
-      judgeThroughConcaveEdges(solid->accessSImpl()->splitFacesList);
+      judgeThroughConcaveEdges(solid_impl->splitFacesList);
       /*
       if (!splitSurfaces.accessSSImpl()->planeSplitOnlyPlane(splitFacesList))
 	{
@@ -39,7 +43,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(std::unique_ptr<Solid>& soli
       return Standard_False;
     }
   
-  if (solid->accessSImpl()->splitSurface)
+  if (solid_impl->splitSurface)
     {
       //std::cout << "Solid has a split surface" << std::endl;
       if (!selectSplitSurface(solid))
@@ -48,20 +52,21 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(std::unique_ptr<Solid>& soli
 	}
       // Split the solid with the selected surface.
       //std::cout << "selected surface concave edges: " << selectedSplitFacesList[0]->accessSImpl()->throughConcaveEdges << std::endl;
-      if (!splitSolid.accessSSImpl()->perform(solid->accessSImpl()->solid, solid->accessSImpl()->selectedSplitFacesList[0], solid->accessSImpl()->splitSolidList))
+      if (!splitSolid.accessSSImpl()->perform(solid_impl->solid, solid_impl->selectedSplitFacesList[0], solid_impl->splitSolidList))
 	{
 	  return Standard_False;
 	}
       // Loop over the resulting subsolids and split each one of them recursively.
       //std::cout << "splitting subsolids" << std::endl;
-      for (Standard_Integer i = 1; i <= solid->accessSImpl()->splitSolidList->Length(); ++i)
+      for (Standard_Integer i = 1; i <= solid_impl->splitSolidList->Length(); ++i)
 	{
-	  std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/" << solid->accessSImpl()->splitSolidList->Length() << "/" << i << std::endl;
+	  std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/" << solid_impl->splitSolidList->Length() << "/" << i << std::endl;
 	  //std::cout << splitSolidList->Length() << std::endl;
 	  std::unique_ptr<Solid> subSolid = std::make_unique<Solid>();
+	  auto subSolid_impl = subSolid->accessSImpl();
 	  try
 	    {
-	      subSolid->accessSImpl()->initiate(solid->accessSImpl()->splitSolidList->Value(i));
+	      subSolid_impl->initiate(solid_impl->splitSolidList->Value(i));
 	    }
 	  catch(...)
 	    {
@@ -72,22 +77,22 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(std::unique_ptr<Solid>& soli
 	  // mesh deflection is calculated inside initiate for every solid!.
           if (decomposeSolid->accessDSImpl()->perform(subSolid))
             {
-	      if (subSolid->accessSImpl()->splitSolidList->Length() >= 2)
+	      if (subSolid_impl->splitSolidList->Length() >= 2)
 		{
 		  //splitSolidList->Remove(i);
-		  for (Standard_Integer j = 1; j <= subSolid->accessSImpl()->splitSolidList->Length(); ++j)
+		  for (Standard_Integer j = 1; j <= subSolid_impl->splitSolidList->Length(); ++j)
 		    {
-		      solid->accessSImpl()->splitSolidList->InsertAfter(i, subSolid->accessSImpl()->splitSolidList->Value(j));
+		      solid_impl->splitSolidList->InsertAfter(i, subSolid_impl->splitSolidList->Value(j));
 		    }
-		  solid->accessSImpl()->splitSolidList->Remove(i);
-		  i += subSolid->accessSImpl()->splitSolidList->Length() - 1;
+		  solid_impl->splitSolidList->Remove(i);
+		  i += subSolid_impl->splitSolidList->Length() - 1;
 		}
 	      // Add rejected subSolids
-	      if (subSolid->accessSImpl()->rejectedsubSolidsList->Length() >= 1)
+	      if (subSolid_impl->rejectedsubSolidsList->Length() >= 1)
 		{
-		  for (Standard_Integer j = 1; j <= subSolid->accessSImpl()->rejectedsubSolidsList->Length(); ++j)
+		  for (Standard_Integer j = 1; j <= subSolid_impl->rejectedsubSolidsList->Length(); ++j)
 		    {
-		      solid->accessSImpl()->rejectedsubSolidsList->Append(subSolid->accessSImpl()->rejectedsubSolidsList->Value(j));
+		      solid_impl->rejectedsubSolidsList->Append(subSolid_impl->rejectedsubSolidsList->Value(j));
 		    }
 		}
 	      //return Standard_True;
@@ -95,7 +100,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(std::unique_ptr<Solid>& soli
 	  else
 	    {
 	      //return Standard_False;
-	      solid->accessSImpl()->rejectedsubSolidsList->Append(subSolid->accessSImpl()->solid);
+	      solid_impl->rejectedsubSolidsList->Append(subSolid_impl->solid);
 	    }
 	}
       //return Standard_True;
@@ -103,7 +108,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(std::unique_ptr<Solid>& soli
   else
     {
       //std::cout	<< "Solid has no split surfaces" << std::endl;
-      solid->accessSImpl()->splitSolidList->Append(solid->accessSImpl()->solid);
+      solid_impl->splitSolidList->Append(solid_impl->solid);
     }
   return Standard_True;
 }
