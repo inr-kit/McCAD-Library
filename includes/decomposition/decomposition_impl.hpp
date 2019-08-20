@@ -6,9 +6,9 @@
 // McCAD
 #include "decomposition.hpp"
 #include "inputdata_impl.hpp"
-#include "tools_impl.hpp"
 #include "solid_impl.hpp"
 #include "decomposeSolid_impl.hpp"
+#include <Standard.hxx>
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>
 #include <TopExp_Explorer.hxx>
@@ -23,7 +23,6 @@ namespace McCAD::Decomposition{
     Impl(const General::InputData& inputData);
     ~Impl();
 
-    Tools::Preprocessor preproc;
     std::unique_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;
     std::unique_ptr<TopTools_HSequenceOfShape> resultSolidsList;

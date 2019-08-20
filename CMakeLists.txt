@@ -118,6 +118,8 @@ target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # MeshTriangle library
 set (EXTRA_LIBS ${EXTRA_LIBS} Meshtriangle Meshtriangle_impl)
+#target_link_libraries(Meshtriangle Edge)
+#target_link_libraries(Meshtriangle_impl Edge_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # BoundSurface library
@@ -148,12 +150,6 @@ target_link_libraries(SplitSolid_impl TKPrim)
 target_link_libraries(SplitSolid_impl TKBool)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
-# Solid library
-set (EXTRA_LIBS ${EXTRA_LIBS} Solid Solid_impl)
-target_link_libraries(Solid BoundSurfacePlane)
-target_link_libraries(Solid_impl BoundSurfacePlane_impl)
-target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
-
 # DecomposeSolid library
 set (EXTRA_LIBS ${EXTRA_LIBS} DecomposeSolid DecomposeSolid_impl)
 #target_link_libraries(DecomposeSolid_impl BoundSurfacePlane)
@@ -174,6 +170,12 @@ target_link_libraries(Decomposition Tools)
 target_link_libraries(Decomposition_impl Tools_impl)
 target_link_libraries(Decomposition DecomposeSolid)
 target_link_libraries(Decomposition_impl DecomposeSolid_impl)
+target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
+
+# Solid library
+set (EXTRA_LIBS ${EXTRA_LIBS} Solid Solid_impl)
+target_link_libraries(Solid BoundSurfacePlane)
+target_link_libraries(Solid_impl BoundSurfacePlane_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 install (TARGETS ${PROJECT_NAME} DESTINATION ${PROJECT_BINARY_DIR}/bin)

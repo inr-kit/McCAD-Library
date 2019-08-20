@@ -15,11 +15,17 @@
 #include <TopoDS_Solid.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Face.hxx>
+#include <TopoDS_Edge.hxx>
 #include <TopExp_Explorer.hxx>
 #include <BRep_Tool.hxx>
 #include <BRepTools.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <GeomAdaptor_Surface.hxx>
+#include <BRepAdaptor_Curve.hxx>
+#include <gp_Pnt.hxx>
+#include <gp_Vec.hxx>
+#include <gp_Dir.hxx>
+#include <Geom_Curve.hxx>
 #include <TopExp.hxx>
 #include <TopTools_IndexedDataMapOfShapeListOfShape.hxx>
 #include <TopTools_ListIteratorOfListOfShape.hxx>

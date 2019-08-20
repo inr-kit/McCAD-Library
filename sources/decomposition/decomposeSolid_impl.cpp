@@ -199,7 +199,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeThroughConcaveEdges(std::vector
 	}
       facesList[i]->accessSImpl()->throughConcaveEdges = throughConcaveEdges;
       //std::cout << "throughConcaveEdges: " << throughConcaveEdges << std::endl;
-    }    
+    }
 }
 
 void
@@ -210,7 +210,7 @@ Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(std::unique_ptr<Solid>& solid){
   // mergeSplitSurfaces(splitFacesList) // see no need for it as the formed lists; planesList, etc. are already merged. splitFacesList is a subset of facesList.
   splitSurfaces.accessSSImpl()->generateSplitFacesList(solid->accessSImpl()->splitFacesList, solid->accessSImpl()->selectedSplitFacesList);
-  if (!solid->accessSImpl()->selectedSplitFacesList.empty())
+  if (!(solid->accessSImpl()->selectedSplitFacesList.empty()))
     {
       return Standard_True;
     }
