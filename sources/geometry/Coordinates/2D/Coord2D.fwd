@@ -1,0 +1,8 @@
+#ifndef COORD2D_FWD_HPP
+#define COORD2D_FWD_HPP
+
+namespace McCAD::Geometry{
+    class Coord2D;
+}
+
+#endif
