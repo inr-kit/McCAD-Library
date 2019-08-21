@@ -1,70 +1,77 @@
+if(Linux_OS)
+  # This part is imported from https://github.com/tpaviot/oce/blob/master/examples/find_package_components/CMakeLists.txt
+  # find_package(OCE) by specifying a list of toolkits.
+  # If a toolkit is missing or if OCE is not found, try to find an OpenCascade installation.
+  add_library(OCC_TOOLKITS INTERFACE)
+  set(OCE_TOOLKITS FWOSPlugin TKCDF TKLCAF TKPShape TKSTL TKXMesh PTKernel TKernel TKMath
+    TKService TKTObj TKXml TKBin TKFeat TKMesh TKShapeSchema TKTopAlgo TKXmlL TKBinL
+    TKFillet TKMeshVS TKShHealing TKV3d TKXmlTObj TKBinTObj TKG2d TKNIS TKStdLSchema
+    TKVoxel TKXmlXCAF TKBinXCAF TKG3d TKOffset TKStdSchema TKVRML TKXSBase TKBO TKGeomAlgo
+    TKOpenGl TKSTEP TKXCAF TKBool TKGeomBase TKPCAF TKSTEP209 TKXCAFSchema TKBRep TKHLR
+    TKPLCAF TKSTEPAttr TKXDEIGES TKCAF TKIGES TKPrim TKSTEPBase TKXDESTEP)
+  
+  find_package(OCE COMPONENTS ${OCE_TOOLKITS})
+  if(OCE_FOUND)
+    message(STATUS "Found OCE version ${OCE_VERSION}")
+    if(NOT OCE_ALL_FOUND)
+      set(OCE_FOUND false)
+      message(WARNING "Ignoring OCE installation due to missing toolkit(s): ${OCE_MISSING_TOOLKITS}")
+    endif(NOT OCE_ALL_FOUND)
+  endif(OCE_FOUND)
 
-## This part is imported from https://github.com/tpaviot/oce/blob/master/examples/find_package_components/CMakeLists.txt
-## find_package(OCE) by specifying a list of toolkits.
-## If a toolkit is missing or if OCE is not found, try to find
-## an OpenCascade installation.
-set(OCE_TOOLKITS FWOSPlugin TKCDF TKLCAF TKPShape TKSTL TKXMesh PTKernel TKernel TKMath TKService TKTObj TKXml TKBin TKFeat TKMesh TKShapeSchema TKTopAlgo TKXmlL TKBinL TKFillet TKMeshVS TKShHealing TKV3d TKXmlTObj TKBinTObj TKG2d TKNIS TKStdLSchema TKVoxel TKXmlXCAF TKBinXCAF TKG3d TKOffset TKStdSchema TKVRML TKXSBase TKBO TKGeomAlgo TKOpenGl TKSTEP TKXCAF TKBool TKGeomBase TKPCAF TKSTEP209 TKXCAFSchema TKBRep TKHLR TKPLCAF TKSTEPAttr TKXDEIGES TKCAF TKIGES TKPrim TKSTEPBase TKXDESTEP)
-#find_package(OCE COMPONENTS ${OCE_TOOLKITS})
-if(OCE_FOUND)
-  message(STATUS "Found OCE version ${OCE_VERSION}")
-  if(NOT OCE_ALL_FOUND)
-    set(OCE_FOUND false)
-    message(WARNING "Ignoring OCE installation due to missing toolkit(s): ${OCE_MISSING_TOOLKITS}")
-  endif(NOT OCE_ALL_FOUND)
-endif(OCE_FOUND)
-
-
-if(OCE_FOUND)
-  # Include files reside in ${OCE_INCLUDE_DIRS};
-  include_directories(${OCE_INCLUDE_DIRS})
-  message(STATUS "  > OCE include_dir ${OCE_INCLUDE_DIRS}")
-  # We do not need library path, they will be automatically imported.
-else(OCE_FOUND)
-  # OCE not found; either it is not found and user
-  # has to set OCE_DIR to the directory containing
-  # OCEConfig.cmake, or OCE is not installed and we
-  # try to find OpenCascade files.
-  if(DEFINED ENV{CASROOT})
-    if(NOT DEFINED OCC_INCLUDE_PATH)
-      set(OCC_INCLUDE_PATH "$ENV{CASROOT}/inc")
-    endif(NOT DEFINED OCC_INCLUDE_PATH)
-    if(NOT DEFINED OCC_LIB_PATH)
-      if(WIN32)
-	set(OCC_LIB_PATH "$ENV{CASROOT}/win32/lib")
-      else(WIN32)
-	if(APPLE)
-	  set(OCC_LIB_PATH "/Library/OpenCASCADE/6.3.0/lib")
-	else(APPLE)
-	  set(OCC_LIB_PATH "$ENV{CASROOT}/lin/lib")
-	endif(APPLE)
-      endif(WIN32)
-    endif(NOT DEFINED OCC_LIB_PATH)
-  else(DEFINED ENV{CASROOT})
-    if(NOT DEFINED OCC_INCLUDE_PATH OR NOT DEFINED OCC_LIB_PATH)
-      message(WARNING "To specify paths of OpenCascade files, you may either define the CASROOT environment variable, or set both OCC_INCLUDE_PATH and OCC_LIB_PATH variables.")
-    endif(NOT DEFINED OCC_INCLUDE_PATH OR NOT DEFINED OCC_LIB_PATH)
-  endif(DEFINED ENV{CASROOT})
-  if(DEFINED OCC_INCLUDE_PATH)
-    message(STATUS "OCC search path for include files: OCC_INCLUDE_PATH=${OCC_INCLUDE_PATH}")
-    include_directories(${OCC_INCLUDE_PATH})
-  endif(DEFINED OCC_INCLUDE_PATH)
-  if(DEFINED OCC_LIB_PATH)
-    message(STATUS "OCC search path for libraries: OCC_LIB_PATH=${OCC_LIB_PATH}")
-    link_directories(${OCC_LIB_PATH})
-  endif(DEFINED OCC_LIB_PATH)
-endif(OCE_FOUND)
+  if(OCE_FOUND)
+    # Include files reside in ${OCE_INCLUDE_DIRS};
+    target_link_libraries(OCC_TOOLKITS INTERFACE ${OCE_TOOLKITS})
+    target_include_directories(OCC_TOOLKITS INTERFACE ${OCE_INCLUDE_DIRS})
+    #include_directories(${OCE_INCLUDE_DIRS})
+    message(STATUS "  > OCE include_dir ${OCE_INCLUDE_DIRS}")
+    # We do not need library path, they will be automatically imported.
+  else(OCE_FOUND)
+    # OCE not found; either it is not found and user
+    # has to set OCE_DIR to the directory containing
+    # OCEConfig.cmake, or OCE is not installed and we
+    # try to find OpenCascade files.
+    if(DEFINED ENV{CASROOT})
+      if(NOT DEFINED OCC_INCLUDE_PATH)
+        set(OCC_INCLUDE_PATH "$ENV{CASROOT}/inc")
+      endif(NOT DEFINED OCC_INCLUDE_PATH)
+      if(NOT DEFINED OCC_LIB_PATH)
+        if(WIN32)
+	  set(OCC_LIB_PATH "$ENV{CASROOT}/win32/lib")
+        else(WIN32)
+	  if(APPLE)
+	    set(OCC_LIB_PATH "/Library/OpenCASCADE/6.3.0/lib")
+	  else(APPLE)
+	    set(OCC_LIB_PATH "$ENV{CASROOT}/lin/lib")
+	  endif(APPLE)
+        endif(WIN32)
+      endif(NOT DEFINED OCC_LIB_PATH)
+    else(DEFINED ENV{CASROOT})
+      if(NOT DEFINED OCC_INCLUDE_PATH OR NOT DEFINED OCC_LIB_PATH)
+        message(WARNING "To specify paths of OpenCascade files, you may either define the CASROOT environment variable, or set both OCC_INCLUDE_PATH and OCC_LIB_PATH variables.")
+      endif(NOT DEFINED OCC_INCLUDE_PATH OR NOT DEFINED OCC_LIB_PATH)
+    endif(DEFINED ENV{CASROOT})
+    if(DEFINED OCC_INCLUDE_PATH)
+      message(STATUS "OCC search path for include files: OCC_INCLUDE_PATH=${OCC_INCLUDE_PATH}")
+      include_directories(${OCC_INCLUDE_PATH})
+    endif(DEFINED OCC_INCLUDE_PATH)
+    if(DEFINED OCC_LIB_PATH)
+      message(STATUS "OCC search path for libraries: OCC_LIB_PATH=${OCC_LIB_PATH}")
+      link_directories(${OCC_LIB_PATH})
+    endif(DEFINED OCC_LIB_PATH)
+  endif(OCE_FOUND)
 
 ## =========================================================
 
-if(WIN64)
-  add_library(OCC INTERFACE)
+else(Linux_OS)
+  add_library(OCC_TOOLKITS INTERFACE)
 
   set(OCC_LIB_DIR
     "C:/OpenCASCADE/OpenCASCADE-7.3.0-vc14-64/opencascade-7.3.0/win64/vc14/lib")
   set(OCC_INC_DIR
     "C:/OpenCASCADE/OpenCASCADE-7.3.0-vc14-64/opencascade-7.3.0/inc")
 
-  target_link_libraries(OCC
+  target_link_libraries(OCC_TOOLKITS
     INTERFACE
     "${OCC_LIB_DIR}/TKBin.lib"
     "${OCC_LIB_DIR}/TKBinL.lib"
@@ -113,8 +120,8 @@ if(WIN64)
     "${OCC_LIB_DIR}/TKXDESTEP.lib")
 
   target_include_directories(
-    OCC
+    OCC_TOOLKITS
     INTERFACE
     ${OCC_INC_DIR}
     )
-endif(WIN64)
+endif(Linux_OS)
