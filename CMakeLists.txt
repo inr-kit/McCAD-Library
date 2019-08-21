@@ -125,9 +125,7 @@ target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 # BoundSurface library
 set (EXTRA_LIBS ${EXTRA_LIBS} BoundSurface BoundSurface_impl)
 target_link_libraries(BoundSurface Surface OCC)
-target_link_libraries(BoundSurface_impl Surface_impl OCC)
-target_link_libraries(BoundSurface_impl Meshtriangle OCC)
-target_link_libraries(BoundSurface_impl Meshtriangle_impl OCC)
+target_link_libraries(BoundSurface_impl Surface_impl Meshtriangle Meshtriangle_impl OCC)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # BoundSurfacePlane library
@@ -146,22 +144,14 @@ target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # DecomposeSolid library
 set (EXTRA_LIBS ${EXTRA_LIBS} DecomposeSolid DecomposeSolid_impl)
-target_link_libraries(DecomposeSolid_impl Solid)
-target_link_libraries(DecomposeSolid_impl Solid_impl)
-target_link_libraries(DecomposeSolid_impl SplitSurfaces)
-target_link_libraries(DecomposeSolid_impl SplitSurfaces_impl)
-target_link_libraries(DecomposeSolid_impl SplitSolid)
-target_link_libraries(DecomposeSolid_impl SplitSolid_impl)
-target_link_libraries(DecomposeSolid_impl Edge)
-target_link_libraries(DecomposeSolid_impl Edge_impl)
+target_link_libraries(DecomposeSolid_impl Solid Solid_impl SplitSurfaces
+  SplitSurfaces_impl SplitSolid SplitSolid_impl Edge Edge_impl)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # Decomposition library
 set (EXTRA_LIBS ${EXTRA_LIBS} Decomposition Decomposition_impl)
-target_link_libraries(Decomposition Tools OCC)
-target_link_libraries(Decomposition_impl Tools_impl OCC)
-target_link_libraries(Decomposition DecomposeSolid OCC)
-target_link_libraries(Decomposition_impl DecomposeSolid_impl OCC)
+target_link_libraries(Decomposition Tools DecomposeSolid OCC)
+target_link_libraries(Decomposition_impl DecomposeSolid_impl Tools_impl OCC)
 target_link_libraries(${PROJECT_NAME} ${EXTRA_LIBS})
 
 # Solid library

@@ -29,9 +29,6 @@ namespace McCAD::Decomposition{
 
     void splitInputSolids(const Handle_TopTools_HSequenceOfShape& inputSolidsList);
     void perform();
-
-  private:
-
   };
 }
 

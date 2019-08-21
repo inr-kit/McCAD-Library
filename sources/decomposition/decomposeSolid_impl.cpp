@@ -137,7 +137,8 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(std::unique_p
       for (Standard_Integer j = 0; j <= facesList.size() - 1; ++j)
 	{
 	  //std::cout << "judge: " << j << " , " << std::endl;
-	  if (i != j && facesList[i]->accessSImpl()->surfaceNumber != facesList[j]->accessSImpl()->surfaceNumber)
+	  if (i != j && facesList[i]->accessSImpl()->surfaceNumber !=
+	      facesList[j]->accessSImpl()->surfaceNumber)
 	    {
 	      Standard_Integer side = 0;
 	      if (facesList[i]->accessBSImpl()->faceCollision(*(facesList[j]), side))

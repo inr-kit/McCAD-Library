@@ -3,7 +3,9 @@
 #include "ShapeView.hpp"
 
 Standard_Boolean
-McCAD::Decomposition::SplitSolid::Impl::perform(const TopoDS_Solid& solid, const std::shared_ptr<BoundSurface>& surface, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
+McCAD::Decomposition::SplitSolid::Impl::perform(const TopoDS_Solid& solid,
+						const std::shared_ptr<BoundSurface>& surface,
+						std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
   calculateBoundingBox(solid);
   if (surface->getSurfaceType() == "Plane")
     {
@@ -17,23 +19,31 @@ McCAD::Decomposition::SplitSolid::Impl::calculateBoundingBox(const TopoDS_Solid&
   BRepBndLib::Add(solid, bndBox);
   bndBox.SetGap(10.0);
   std::array<Standard_Real, 6> coordinates;
-  bndBox.Get(coordinates[0], coordinates[1], coordinates[2], coordinates[3], coordinates[4], coordinates[5]);
+  bndBox.Get(coordinates[0], coordinates[1], coordinates[2], coordinates[3],
+	     coordinates[4], coordinates[5]);
   boxSquareLength = sqrt(bndBox.SquareExtent());
-  boundingBox = BRepPrimAPI_MakeBox(gp_Pnt(coordinates[0], coordinates[1], coordinates[2]) , gp_Pnt(coordinates[3], coordinates[4], coordinates[5])).Shape();
+  boundingBox = BRepPrimAPI_MakeBox(gp_Pnt(coordinates[0], coordinates[1],
+					   coordinates[2]),
+				    gp_Pnt(coordinates[3], coordinates[4],
+					   coordinates[5])).Shape();
 }
 
 Standard_Boolean
-McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid, const TopoDS_Face& splitFace, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
+McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid,
+					      const TopoDS_Face& splitFace,
+					      std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
   //std::cout << "split" << std::endl;
   gp_Pnt positivePoint, negativePoint;
   calculatePoints(splitFace, positivePoint, negativePoint);
   //std::cout << positivePoint.X() << "," << positivePoint.Y() << "," << positivePoint.Z() << "," << std::endl;
   //std::cout << negativePoint.X() << "," << negativePoint.Y() << "," << negativePoint.Z() << "," << std::endl;
   
-  TopoDS_Solid positiveHalfSolid = BRepPrimAPI_MakeHalfSpace(splitFace, positivePoint).Solid();
+  TopoDS_Solid positiveHalfSolid = BRepPrimAPI_MakeHalfSpace(splitFace,
+							     positivePoint).Solid();
   TopoDS_Shape positiveBox;
   
-  TopoDS_Solid negativeHalfSolid = BRepPrimAPI_MakeHalfSpace(splitFace, negativePoint).Solid();
+  TopoDS_Solid negativeHalfSolid = BRepPrimAPI_MakeHalfSpace(splitFace,
+							     negativePoint).Solid();
   TopoDS_Shape negativeBox;
 
   try
@@ -54,7 +64,8 @@ McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid, const T
       return Standard_False;
     }
 
-  if (splitWithBoxes(solid, positiveBox, negativeBox, subSolidsList) && splitWithBoxes(solid, negativeBox, positiveBox, subSolidsList))
+  if (splitWithBoxes(solid, positiveBox, negativeBox, subSolidsList) &&
+      splitWithBoxes(solid, negativeBox, positiveBox, subSolidsList))
     {
       if (checkRepair(subSolidsList))
 	{
@@ -72,7 +83,9 @@ McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid, const T
 }
 
 void
-McCAD::Decomposition::SplitSolid::Impl::calculatePoints(const TopoDS_Face& splitFace, gp_Pnt& positivePoint, gp_Pnt& negativePoint){
+McCAD::Decomposition::SplitSolid::Impl::calculatePoints(const TopoDS_Face& splitFace,
+							gp_Pnt& positivePoint,
+							gp_Pnt& negativePoint){
   BRepAdaptor_Surface splitSurface(splitFace, Standard_True);
   GeomAdaptor_Surface surfaceAdaptor = splitSurface.Surface();
   if (surfaceAdaptor.GetType() == GeomAbs_Plane)
@@ -93,7 +106,10 @@ McCAD::Decomposition::SplitSolid::Impl::calculatePoints(const TopoDS_Face& split
 }
 
 Standard_Boolean
-McCAD::Decomposition::SplitSolid::Impl::splitWithBoxes(const TopoDS_Solid& solid, TopoDS_Shape& firstBox, TopoDS_Shape& secondBox, std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
+McCAD::Decomposition::SplitSolid::Impl::splitWithBoxes(const TopoDS_Solid& solid,
+						       TopoDS_Shape& firstBox,
+						       TopoDS_Shape& secondBox,
+						       std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
   // Try first with common boolean operations and if failed use subtract
   try
     {
@@ -130,8 +146,10 @@ McCAD::Decomposition::SplitSolid::Impl::splitWithBoxes(const TopoDS_Solid& solid
 }
 
 Standard_Boolean
-McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList, Standard_Real tolerance){
-  std::unique_ptr<TopTools_HSequenceOfShape> newsubSolidsList = std::make_unique<TopTools_HSequenceOfShape>();
+McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList,
+						    Standard_Real tolerance){
+  std::unique_ptr<TopTools_HSequenceOfShape> newsubSolidsList =
+    std::make_unique<TopTools_HSequenceOfShape>();
   for (Standard_Integer i = 1; i <= subSolidsList->Length(); ++i)
     {
       for (const auto& solid : ShapeView<TopAbs_SOLID>(subSolidsList->Value(i)))
@@ -184,8 +202,12 @@ McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSe
 }
 
 Standard_Boolean
-McCAD::Decomposition::SplitSolid::Impl::rebuildSolidFromShell(const TopoDS_Shape& solid, TopoDS_Solid& resultSolid, Standard_Real tolerance, Standard_Real tolerance2){
-  BRepBuilderAPI_Sewing builder(tolerance, Standard_True, Standard_True, Standard_True, Standard_True);
+McCAD::Decomposition::SplitSolid::Impl::rebuildSolidFromShell(const TopoDS_Shape& solid,
+							      TopoDS_Solid& resultSolid,
+							      Standard_Real tolerance,
+							      Standard_Real tolerance2){
+  BRepBuilderAPI_Sewing builder(tolerance, Standard_True, Standard_True, Standard_True,
+				Standard_True);
   for (const auto& element : ShapeView<TopAbs_FACE>{solid})
     {
       TopoDS_Face tempFace = element;

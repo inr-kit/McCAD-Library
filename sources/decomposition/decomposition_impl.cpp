@@ -2,7 +2,11 @@
 #include "decomposition_impl.hpp"
 #include "ShapeView.hpp"
 
-McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData) : splitInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}, rejectedInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}, resultSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}, rejectedsubSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
+McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData)
+  : splitInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()},
+    rejectedInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()},
+    resultSolidsList{std::make_unique<TopTools_HSequenceOfShape>()},
+    rejectedsubSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
   // Get input solids list from the Input Data object.
   auto& inputSolidsList = inputData.accessImpl()->inputSolidsList;
   if (inputSolidsList->Length() > 0)
@@ -51,7 +55,8 @@ McCAD::Decomposition::Decompose::Impl::splitInputSolids(const Handle_TopTools_HS
 void
 McCAD::Decomposition::Decompose::Impl::perform(){
   // Loop over the solids in the split solids list and perform the decomposition
-  for(Standard_Integer solidNumber = 1; solidNumber <= splitInputSolidsList->Length(); ++solidNumber)
+  for(Standard_Integer solidNumber = 1; solidNumber <= splitInputSolidsList->Length();
+      ++solidNumber)
     {
       std::unique_ptr<Solid> solid = std::make_unique<Solid>();
       solid->accessSImpl()->initiate(splitInputSolidsList->Value(solidNumber));

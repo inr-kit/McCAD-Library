@@ -1,7 +1,10 @@
 // McCAD
 #include "solid_impl.hpp"
 
-McCAD::Decomposition::Solid::Impl::Impl() : preproc{std::make_unique<McCAD::Tools::Preprocessor>()}, splitSolidList{std::make_unique<TopTools_HSequenceOfShape>()}, rejectedsubSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
+McCAD::Decomposition::Solid::Impl::Impl()
+  : preproc{std::make_unique<McCAD::Tools::Preprocessor>()},
+    splitSolidList{std::make_unique<TopTools_HSequenceOfShape>()},
+    rejectedsubSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
 }
 
 McCAD::Decomposition::Solid::Impl::~Impl(){
@@ -16,14 +19,17 @@ McCAD::Decomposition::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
 }
 
 void
-McCAD::Decomposition::Solid::Impl::calcMeshDeflection(Standard_Real bndBoxGap, Standard_Real converting){
+McCAD::Decomposition::Solid::Impl::calcMeshDeflection(Standard_Real bndBoxGap,
+						      Standard_Real converting){
   // Calculate the bounding box of the solid.
   Bnd_Box boundingBox;
   BRepBndLib::Add(solid, boundingBox);
   boundingBox.SetGap(bndBoxGap);
   std::array<Standard_Real, 6> coordinates;
-  boundingBox.Get(coordinates[0], coordinates[1], coordinates[2], coordinates[3], coordinates[4], coordinates[5]);
-  Standard_Real tempdeflection = std::max((coordinates[3] - coordinates[0]), (coordinates[4] - coordinates[1]));
+  boundingBox.Get(coordinates[0], coordinates[1], coordinates[2], coordinates[3],
+		  coordinates[4], coordinates[5]);
+  Standard_Real tempdeflection = std::max((coordinates[3] - coordinates[0]),
+					  (coordinates[4] - coordinates[1]));
   meshDeflection = std::max(tempdeflection, (coordinates[5] - coordinates[2])) / converting;
   boxSquareLength = sqrt(boundingBox.SquareExtent());
 }
@@ -154,7 +160,8 @@ McCAD::Decomposition::Solid::Impl::generateSurface(const TopoDS_Face& face, Stan
       if (AdaptorSurface.GetType() == GeomAbs_Plane)
 	{
 	  //std::cout << preproc->accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
-	  std::unique_ptr<BoundSurfacePlane> boundSurfacePlane = std::make_unique<BoundSurfacePlane>();
+	  std::unique_ptr<BoundSurfacePlane> boundSurfacePlane =
+	    std::make_unique<BoundSurfacePlane>();
 	  boundSurfacePlane->setSurfaceType(boundSurfacePlane->accessBSPImpl()->surfaceType);
 	  boundSurfacePlane->accessSImpl()->initiate(face);
 	  boundSurfacePlane->accessBSPImpl()->generateExtendedPlane(boxSquareLength);
@@ -198,7 +205,8 @@ McCAD::Decomposition::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<Bou
 		  if (surfacesList[i]->getSurfaceType() == "Plane")
 		    {
 		      TopoDS_Face newFace = preproc->accessImpl()->fusePlanes(surfacesList[i]->accessSImpl()->face, surfacesList[j]->accessSImpl()->face);
-		      std::unique_ptr<BoundSurface> newboundSurface = std::move(generateSurface(newFace));
+		      std::unique_ptr<BoundSurface> newboundSurface =
+			std::move(generateSurface(newFace));
 		      newboundSurface->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
 		      // Add triangles of surface i.
 		      for (Standard_Integer k = 0; k <= surfacesList[i]->accessBSImpl()->meshTrianglesList.size() - 1; ++k)

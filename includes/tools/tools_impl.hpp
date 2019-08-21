@@ -17,8 +17,6 @@
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
 #include <TopoDS_Shape.hxx>
-#include <Bnd_Box.hxx>
-#include <BRepBndLib.hxx>
 #include <TopoDS_Face.hxx>
 #include <Geom_Surface.hxx>
 #include <GeomAdaptor_Surface.hxx>
@@ -47,32 +45,24 @@ namespace McCAD::Tools{
   public:
     Impl() = default;
 
-    void removeSmallFaces(
-            TopoDS_Shape& solidShape,
-            Standard_Real precision = 1.0e-3,
-            Standard_Real maxTolerance = 1.0e-3);
+    void checkBndSurfaces(const TopoDS_Solid& solid,
+			  Standard_Boolean& isTorus,
+			  Standard_Boolean& isSpline);
+    void removeSmallFaces(TopoDS_Shape& solidShape,
+			  Standard_Real precision = 1.0e-3,
+			  Standard_Real maxTolerance = 1.0e-3);
     void repairSolid(TopoDS_Solid& solid);
-    void genericFix(TopoDS_Solid& solid);
     void fixFace(
-            TopoDS_Face& face,
-            Standard_Real precision = 1.0e-7,
-            Standard_Real maxTolerance = 1.0e-3);
-
-    Standard_Real calcMeshDeflection(
-            const TopoDS_Solid& solid,
-            Standard_Real bndBoxGap = 0.0,
-            Standard_Real converting = 100);
-    Standard_Boolean checkBndSurfaces(const TopoDS_Solid& solid);
+		 TopoDS_Face& face,
+		 Standard_Real precision = 1.0e-7,
+		 Standard_Real maxTolerance = 1.0e-3);
     Standard_Boolean checkFace(
-            const TopoDS_Face& face,
-            Standard_Real tolerance = 1.0e-3);
-
->>>>>>> refactoring parametrized faces with uv-coordinates
-    Standard_Boolean isSameEdge(const TopoDS_Edge& firstEdge, const TopoDS_Edge& secondEdge, Standard_Real distanceTolerance = 1.0e-5);
-
-
+			       const TopoDS_Face& face,
+			       Standard_Real tolerance = 1.0e-3);
+    Standard_Boolean isSameEdge(const TopoDS_Edge& firstEdge,
+				const TopoDS_Edge& secondEdge,
+				Standard_Real distanceTolerance = 1.0e-5);
   };
-
 }
 
 #endif //TOOLSIMPL_HPP

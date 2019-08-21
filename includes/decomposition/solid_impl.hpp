@@ -56,15 +56,14 @@ namespace McCAD::Decomposition{
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
 
     void initiate(const TopoDS_Shape& aSolidShape);
-    void calcMeshDeflection(Standard_Real bndBoxGap = 0.0, Standard_Real converting = 100);
+    void calcMeshDeflection(Standard_Real bndBoxGap = 0.0,
+			    Standard_Real converting = 100);
     void updateEdgesConvexity(const Standard_Real& angleTolerance = 1.0e-4);
     void repairSolid();
     void generateSurfacesList();
-    std::unique_ptr<BoundSurface> generateSurface(const TopoDS_Face& face, Standard_Integer mode = 0);
+    std::unique_ptr<BoundSurface> generateSurface(const TopoDS_Face& face,
+						  Standard_Integer mode = 0);
     void mergeSurfaces(std::vector<std::unique_ptr<BoundSurface>>& planesList);
-
-  private:
-
   };
 }
 

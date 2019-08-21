@@ -52,7 +52,8 @@ McCAD::Decomposition::SplitSurfaces::Impl::generateSplitFacesList(std::vector<st
   // 2nd step: select surfaces that go through 0 curved surfaces.
   for (Standard_Integer i = 0; i <= splitFacesList.size() - 1; ++i)
     {
-      if (splitFacesList[i]->accessSImpl()->numberCollidingCurvedSurfaces == 0 && splitFacesList[i]->accessSImpl()->surfaceType == "Plane")
+      if (splitFacesList[i]->accessSImpl()->numberCollidingCurvedSurfaces == 0 &&
+	  splitFacesList[i]->accessSImpl()->surfaceType == "Plane")
         {
           selectedSplitFacesList.push_back(splitFacesList[i]);
         }
