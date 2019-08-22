@@ -202,6 +202,7 @@ McCAD::Decomposition::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<Bou
 	      // Test if the two surfaces can be fused.
 	      if (*(surfacesList[i]) << *(surfacesList[j]))
 		{
+		  //std::cout << "fuse" << std::endl;
 		  if (surfacesList[i]->getSurfaceType() == "Plane")
 		    {
 		      TopoDS_Face newFace = Tools::PlaneFuser{}(surfacesList[i]->accessSImpl()->face, surfacesList[j]->accessSImpl()->face);
