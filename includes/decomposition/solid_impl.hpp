@@ -10,6 +10,12 @@
 #include "boundSurface_impl.hpp"
 #include "boundSurfacePlane_impl.hpp"
 #include <Standard.hxx>
+#include "decomposeSolid_impl.hpp"
+#include "SurfaceUtilities.hpp"
+#include "CurveUtilities.hpp"
+#include "PlaneFuser.hpp"
+#include "FaceParameters.hpp"
+#include "ShapeView.hpp"
 // OCC
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>

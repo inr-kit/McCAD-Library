@@ -1,0 +1,7 @@
+if(NOT Linux_OS)
+  set(Boost_USE_STATIC_LIBS ON)
+  find_package(Boost 1.70 REQUIRED COMPONENTS program_options)
+  add_library(Boost INTERFACE)
+  target_link_libraries(Boost INTERFACE Boost::program_options)
+  target_include_directories(Boost INTERFACE ${Boost_INCLUDE_DIR})
+endif(NOT Linux_OS)

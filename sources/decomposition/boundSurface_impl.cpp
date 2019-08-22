@@ -148,16 +148,18 @@ McCAD::Decomposition::BoundSurface::Impl::generateMesh(const Standard_Real& mesh
 void
 McCAD::Decomposition::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
   TopoDS_Face face = boundSurface->accessSImpl()->face;
-  TopExp_Explorer explorer(face, TopAbs_EDGE);
-  for(; explorer.More(); explorer.Next())
+  //TopExp_Explorer explorer(face, TopAbs_EDGE);
+  //for(; explorer.More(); explorer.Next())
+  for (const auto& element : ShapeView<TopAbs_EDGE>{face})  
     {
-      TopoDS_Edge tempEdge = TopoDS::Edge(explorer.Current());
+      //TopoDS_Edge tempEdge = TopoDS::Edge(explorer.Current());
+      TopoDS_Edge tempEdge = element;
       std::unique_ptr<Edge> edge = std::make_unique<Edge>();
       edge->accessEImpl()->initiate(tempEdge);
       // Get type of Edge.
       BRepAdaptor_Curve curveAdaptor;
       curveAdaptor.Initialize(tempEdge);
-      edge->setEdgeType(preproc.accessImpl()->getCurveTypeName(curveAdaptor.GetType()));
+      edge->setEdgeType(Tools::toTypeName(curveAdaptor.GetType()));
       edge->accessEImpl()->convexity = tempEdge.Convex();
 
       // Add flag if the edge can be used for assisting splitting surface.

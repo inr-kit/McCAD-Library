@@ -21,9 +21,9 @@ if(Linux_OS)
 
   if(OCE_FOUND)
     # Include files reside in ${OCE_INCLUDE_DIRS};
+    include_directories(${OCE_INCLUDE_DIRS})
     target_link_libraries(OCC_TOOLKITS INTERFACE ${OCE_TOOLKITS})
-    target_include_directories(OCC_TOOLKITS INTERFACE ${OCE_INCLUDE_DIRS})
-    #include_directories(${OCE_INCLUDE_DIRS})
+    #target_include_directories(OCC_TOOLKITS INTERFACE ${OCE_INCLUDE_DIRS})
     message(STATUS "  > OCE include_dir ${OCE_INCLUDE_DIRS}")
     # We do not need library path, they will be automatically imported.
   else(OCE_FOUND)

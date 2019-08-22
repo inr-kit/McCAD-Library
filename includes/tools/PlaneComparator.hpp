@@ -4,6 +4,9 @@
 // OCC
 #include <TopoDS_Face.hxx>
 #include <gp_Pln.hxx>
+#include <Standard_ConstructionError.hxx>
+#include <Standard_NoSuchObject.hxx>
+#include <Standard.hxx>
 // C++
 #include <cmath>
 
@@ -35,7 +38,6 @@ namespace McCAD::Tools{
                 const gp_Pln& second) const;
 
     };
-
 }
 
 #endif

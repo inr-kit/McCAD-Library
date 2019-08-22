@@ -11,6 +11,8 @@
 #include "meshtriangle_impl.hpp"
 #include "edge_impl.hpp"
 #include "tools_impl.hpp"
+#include "ShapeView.hpp"
+#include "CurveUtilities.hpp"
 // OCC
 #include <Poly_Triangulation.hxx>
 #include <Poly_Triangulation.hxx>

@@ -3,6 +3,7 @@
 #include <vector>
 #include "ShapeView.hpp"
 
+void
 McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid,
 						   Standard_Boolean& isTorus,
 						   Standard_Boolean& isSpline){
@@ -122,44 +123,4 @@ McCAD::Tools::Preprocessor::Impl::isSameEdge(
 	  return Standard_False;
 	}
     }
-}
-
-TopoDS_Face
-McCAD::Tools::Preprocessor::Impl::fusePlanes(const TopoDS_Face& firstFace,
-					     const TopoDS_Face& secondFace,
-					     Standard_Real zeroTolerance,
-					     Standard_Real tolerance){
-  std::array<Standard_Real, 4> firstUV;
-  BRepTools::UVBounds(firstFace, firstUV[0], firstUV[1], firstUV[2], firstUV[3]);
-  std::array<Standard_Real, 4> secondUV;
-  BRepTools::UVBounds(secondFace, secondUV[0], secondUV[1], secondUV[2], secondUV[3]);
-  for (Standard_Integer i = 0; i <= firstUV.size() - 1; ++i)
-    {
-      if (firstUV[i] <= zeroTolerance)
-	{
-	  firstUV[i] = 0.0;
-	}
-    }
-  for (Standard_Integer j = 0; j <= secondUV.size() - 1; ++j)
-    {
-      if (secondUV[j] <= zeroTolerance)
-        {
-          secondUV[j] = 0.0;
-	}
-    }
-
-  std::array<Standard_Real, 4> newUV;
-  newUV[0] = (firstUV[0] <= secondUV[0]) ? firstUV[0] : secondUV[0];
-  newUV[1] = (firstUV[1] >= secondUV[1]) ? firstUV[1] :	secondUV[1];
-  newUV[2] = (firstUV[2] <= secondUV[2]) ? firstUV[2] :	secondUV[2];
-  newUV[3] = (firstUV[3] >= secondUV[3]) ? firstUV[3] : secondUV[3];
-
-  Handle_Geom_Surface newSurface = BRep_Tool::Surface(firstFace);
-  TopoDS_Face newFace = BRepBuilderAPI_MakeFace(newSurface, newUV[0], newUV[1],
-						newUV[2], newUV[3], tolerance).Face();
-  if (newFace.Orientation() != firstFace.Orientation())
-    {
-      newFace.Orientation(firstFace.Orientation());
-    }
-  return newFace;
 }

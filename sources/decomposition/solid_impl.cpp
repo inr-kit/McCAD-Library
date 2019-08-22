@@ -70,8 +70,8 @@ McCAD::Decomposition::Solid::Impl::updateEdgesConvexity(const Standard_Real& ang
       gp_Dir direction(vector);
 
       // Get the normals of each surface
-      gp_Dir firstNormal = preproc->accessImpl()->normalOnFace(firstFace, startPoint);
-      gp_Dir secondNormal = preproc->accessImpl()->normalOnFace(secondFace, startPoint);
+      gp_Dir firstNormal = Tools::normalOnFace(firstFace, startPoint);
+      gp_Dir secondNormal = Tools::normalOnFace(secondFace, startPoint);
       Standard_Real angle = firstNormal.AngleWithRef(secondNormal, direction);
 
       if(std::abs(angle) < angleTolerance)
@@ -204,7 +204,7 @@ McCAD::Decomposition::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<Bou
 		{
 		  if (surfacesList[i]->getSurfaceType() == "Plane")
 		    {
-		      TopoDS_Face newFace = preproc->accessImpl()->fusePlanes(surfacesList[i]->accessSImpl()->face, surfacesList[j]->accessSImpl()->face);
+		      TopoDS_Face newFace = Tools::PlaneFuser{}(surfacesList[i]->accessSImpl()->face, surfacesList[j]->accessSImpl()->face);
 		      std::unique_ptr<BoundSurface> newboundSurface =
 			std::move(generateSurface(newFace));
 		      newboundSurface->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
