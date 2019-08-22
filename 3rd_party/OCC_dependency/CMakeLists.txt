@@ -2,13 +2,12 @@ if(Linux_OS)
   # This part is imported from https://github.com/tpaviot/oce/blob/master/examples/find_package_components/CMakeLists.txt
   # find_package(OCE) by specifying a list of toolkits.
   # If a toolkit is missing or if OCE is not found, try to find an OpenCascade installation.
-  add_library(OCC_TOOLKITS INTERFACE)
   set(OCE_TOOLKITS FWOSPlugin TKCDF TKLCAF TKPShape TKSTL TKXMesh PTKernel TKernel TKMath
     TKService TKTObj TKXml TKBin TKFeat TKMesh TKShapeSchema TKTopAlgo TKXmlL TKBinL
     TKFillet TKMeshVS TKShHealing TKV3d TKXmlTObj TKBinTObj TKG2d TKNIS TKStdLSchema
-    TKVoxel TKXmlXCAF TKBinXCAF TKG3d TKOffset TKStdSchema TKVRML TKXSBase TKBO TKGeomAlgo
-    TKOpenGl TKSTEP TKXCAF TKBool TKGeomBase TKPCAF TKSTEP209 TKXCAFSchema TKBRep TKHLR
-    TKPLCAF TKSTEPAttr TKXDEIGES TKCAF TKIGES TKPrim TKSTEPBase TKXDESTEP)
+    TKVoxel TKXmlXCAF TKBinXCAF TKG3d TKOffset TKStdSchema TKVRML TKXSBase TKBO
+    TKGeomAlgo TKOpenGl TKSTEP TKXCAF TKBool TKGeomBase TKPCAF TKSTEP209 TKXCAFSchema
+    TKBRep TKHLR TKPLCAF TKSTEPAttr TKXDEIGES TKCAF TKIGES TKPrim TKSTEPBase TKXDESTEP)
   
   find_package(OCE COMPONENTS ${OCE_TOOLKITS})
   if(OCE_FOUND)
@@ -21,9 +20,10 @@ if(Linux_OS)
 
   if(OCE_FOUND)
     # Include files reside in ${OCE_INCLUDE_DIRS};
-    include_directories(${OCE_INCLUDE_DIRS})
+    add_library(OCC_TOOLKITS INTERFACE)
+    install (TARGETS OCC_TOOLKITS DESTINATION ${PROJECT_BINARY_DIR}/bin)
     target_link_libraries(OCC_TOOLKITS INTERFACE ${OCE_TOOLKITS})
-    #target_include_directories(OCC_TOOLKITS INTERFACE ${OCE_INCLUDE_DIRS})
+    target_include_directories(OCC_TOOLKITS INTERFACE ${OCE_INCLUDE_DIRS})
     message(STATUS "  > OCE include_dir ${OCE_INCLUDE_DIRS}")
     # We do not need library path, they will be automatically imported.
   else(OCE_FOUND)

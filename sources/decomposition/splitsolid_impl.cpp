@@ -155,20 +155,13 @@ McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSe
 						    Standard_Real tolerance){
   std::unique_ptr<TopTools_HSequenceOfShape> newsubSolidsList =
     std::make_unique<TopTools_HSequenceOfShape>();
-  std::cout << subSolidsList->Length() << std::endl;
+  //std::cout << subSolidsList->Length() << std::endl;
   for (Standard_Integer i = 1; i <= subSolidsList->Length(); ++i)
     {
-      std::cout << "i = " << i << std::endl;
-      if (subSolidsList->Value(i).IsNull())
+      //std::cout << "i = " << i << std::endl;
+      for (const auto& element : ShapeView<TopAbs_SOLID>{subSolidsList->Value(i)})
 	{
-	  std::cout << "continue" << std::endl;
-	  continue;
-	}
-      for (const auto& solid : ShapeView<TopAbs_SOLID>{subSolidsList->Value(i)})
-	{
-	  std::cout << "for loop" << std::endl;
-	  TopoDS_Solid tmpsolid = solid;
-	  std::cout << "tmpSolid" << std::endl;
+	  TopoDS_Solid tmpsolid = element;
 	  if (tmpsolid.IsNull())
 	    {
 	      continue;
@@ -182,23 +175,23 @@ McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSe
 	      continue;
 	    }
 	  newsubSolidsList->Append(tmpsolid);
-	  std::cout << "appended tmpSolid" << std::endl;
+	  //std::cout << "appended tmpSolid" << std::endl;
 	}
     }
-  std::cout << "new list" << std::endl;
+  //std::cout << "new list" << std::endl;
 
   if (newsubSolidsList->Length() != 0)
     {
       for (Standard_Integer i = 1; i <= newsubSolidsList->Length(); ++i)
 	{
-	  std::cout << newsubSolidsList->Value(i).IsNull() << std::endl;
+	  //std::cout << newsubSolidsList->Value(i).IsNull() << std::endl;
 	  TopoDS_Solid tempSolid = TopoDS::Solid(newsubSolidsList->Value(i));
-	  std::cout << "tempSolid" << std::endl; 
+	  //std::cout << "tempSolid" << std::endl; 
 	  BRepCheck_Analyzer BRepAnalyzer(tempSolid, Standard_True);
-	  std::cout << "check solid" << std::endl;
+	  //std::cout << "check solid" << std::endl;
 	  if (!(BRepAnalyzer.IsValid()))
 	    {
-	      std::cout << "build solid" << std::endl;
+	      //std::cout << "build solid" << std::endl;
 	      TopoDS_Solid newSolid;
 	      Standard_Boolean rebuildCondition = rebuildSolidFromShell(tempSolid, newSolid);
 	      if (!rebuildCondition)
