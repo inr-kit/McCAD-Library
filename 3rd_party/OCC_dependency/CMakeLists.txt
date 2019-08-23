@@ -1,4 +1,4 @@
-if(Linux_OS)
+if(Use_Linux_OS)
   message("Linux")
   # This part is imported from https://github.com/tpaviot/oce/blob/master/examples/find_package_components/CMakeLists.txt
   # find_package(OCE) by specifying a list of toolkits.
@@ -64,7 +64,7 @@ if(Linux_OS)
 
 ## =========================================================
 
-else(Linux_OS)
+else(Use_Linux_OS)
   message("Non-Linux")
   add_library(OCC_TOOLKITS INTERFACE)
 
@@ -126,4 +126,4 @@ else(Linux_OS)
     INTERFACE
     ${OCC_INC_DIR}
     )
-endif(Linux_OS)
+endif(Use_Linux_OS)
