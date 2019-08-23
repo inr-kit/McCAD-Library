@@ -11,8 +11,8 @@ McCAD::Geometry::BoundingBox::BoundingBox(
         const Coord3D& maxima)
     : minima_{minima}
     , maxima_{maxima}
-    /*, gap_{CT_0()}*/{
-    if(maxima.x < minima.y
+    , gap_{CT_0()}{
+    if(maxima.x < minima.x
             || maxima.y < minima.y
             || maxima.z < minima.z)
         throw std::runtime_error{
@@ -30,29 +30,29 @@ McCAD::Geometry::BoundingBox::maxima() const{
     return maxima_;
 }
 
-//const McCAD::Geometry::coord_type&
-//McCAD::Geometry::BoundingBox::getGap() const{
-//    return gap_;
-//}
+const McCAD::Geometry::coord_type&
+McCAD::Geometry::BoundingBox::getGap() const{
+    return gap_;
+}
 
-//bool
-//McCAD::Geometry::BoundingBox::setGap(
-//        coord_type gap){
-//    if(gap >= CT_0()){
-//        auto diff = gap - gap_;
-//        auto diffVec = Coord3D{diff, diff, diff};
-//        maxima_ += diffVec;
-//        minima_ -= diffVec;
-//        gap_ = gap;
-//        return true;
-//    }
-//    return false;
-//}
+bool
+McCAD::Geometry::BoundingBox::setGap(
+        coord_type gap){
+    if(gap >= CT_0()){
+        auto diff = gap - gap_;
+        auto diffVec = Coord3D{diff, diff, diff};
+        maxima_ += diffVec;
+        minima_ -= diffVec;
+        gap_ = gap;
+        return true;
+    }
+    return false;
+}
 
-//void
-//McCAD::Geometry::BoundingBox::resetGap(){
-//    setGap(CT_0());
-//}
+void
+McCAD::Geometry::BoundingBox::resetGap(){
+    setGap(CT_0());
+}
 
 McCAD::Geometry::coord_type
 McCAD::Geometry::BoundingBox::minSize() const{
@@ -83,7 +83,6 @@ McCAD::Geometry::detail::makeBoundingBox(
         const TopoDS_Solid& solid){
     Bnd_Box boundingBox;
     BRepBndLib::Add(solid, boundingBox);
-    boundingBox.SetGap(0);
     Coord3D min, max;
     boundingBox.Get(min.x.value, min.y.value, min.z.value,
                     max.x.value, max.y.value, max.z.value);

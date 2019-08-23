@@ -16,9 +16,9 @@ namespace McCAD::Geometry{
         const Coord3D& minima() const;
         const Coord3D& maxima() const;
 
-//        const coord_type& getGap() const;
-//        bool setGap(coord_type gap);
-//        void resetGap();
+        const coord_type& getGap() const;
+        bool setGap(coord_type gap);
+        void resetGap();
 
         coord_type minSize() const;
         coord_type maxSize() const;
@@ -28,7 +28,7 @@ namespace McCAD::Geometry{
     private:
         Coord3D minima_;
         Coord3D maxima_;
-       // coord_type gap_;
+        coord_type gap_;
 
     };
 
