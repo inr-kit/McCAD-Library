@@ -31,8 +31,8 @@ int main (){
     std::cout << "****************************" << std::endl;
     std::cout << "** Saving to STEP file **" << std::endl;
     std::cout << "****************************" << std::endl;
-    McCAD::IO::STEPWriter successWriter{"/media/sf_test_McCAD/resultSolids.stp", outputData_success};
-    McCAD::IO::STEPWriter failWriter{"/media/sf_test_McCAD/rejectedsubSolids.stp", outputData_fail};
+    McCAD::IO::STEPWriter successWriter{"resultSolids.stp", outputData_success};
+    McCAD::IO::STEPWriter failWriter{"rejectedsubSolids.stp", outputData_fail};
     
     return 0;
 }

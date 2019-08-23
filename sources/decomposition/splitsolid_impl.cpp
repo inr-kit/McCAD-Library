@@ -151,67 +151,54 @@ McCAD::Decomposition::SplitSolid::Impl::splitWithBoxes(const TopoDS_Solid& solid
 }
 
 Standard_Boolean
-McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList,
-						    Standard_Real tolerance){
-  std::unique_ptr<TopTools_HSequenceOfShape> newsubSolidsList =
-    std::make_unique<TopTools_HSequenceOfShape>();
-  //std::cout << subSolidsList->Length() << std::endl;
-  for (Standard_Integer i = 1; i <= subSolidsList->Length(); ++i)
-    {
-      //std::cout << "i = " << i << std::endl;
-      for (const auto& element : ShapeView<TopAbs_SOLID>{subSolidsList->Value(i)})
-	{
-	  TopoDS_Solid tmpsolid = element;
-	  if (tmpsolid.IsNull())
-	    {
-	      continue;
-	    }
+McCAD::Decomposition::SplitSolid::Impl::checkRepair(
+        std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList,
+        Standard_Real tolerance){
+    std::unique_ptr<TopTools_HSequenceOfShape> newsubSolidsList =
+            std::make_unique<TopTools_HSequenceOfShape>();
 
-	  GProp_GProps geometryProperties;
-	  BRepGProp::VolumeProperties(subSolidsList->Value(i), geometryProperties);
+    for(Standard_Integer i = 1; i <= subSolidsList->Length(); ++i){
+        for(const auto& element : ShapeView<TopAbs_SOLID>{subSolidsList->Value(i)}){
+            TopoDS_Solid tmpsolid = element;
+            if (tmpsolid.IsNull()){
+                continue;
+            }
 
-	  if (geometryProperties.Mass() <= tolerance)
-	    {
-	      continue;
-	    }
-	  newsubSolidsList->Append(tmpsolid);
-	  //std::cout << "appended tmpSolid" << std::endl;
-	}
+            GProp_GProps geometryProperties;
+            BRepGProp::VolumeProperties(subSolidsList->Value(i), geometryProperties);
+
+            if(geometryProperties.Mass() <= tolerance){
+                continue;
+            }
+            newsubSolidsList->Append(tmpsolid);
+        }
     }
-  //std::cout << "new list" << std::endl;
+    //std::cout << "new list" << std::endl;
 
-  if (newsubSolidsList->Length() != 0)
-    {
-      for (Standard_Integer i = 1; i <= newsubSolidsList->Length(); ++i)
-	{
-	  //std::cout << newsubSolidsList->Value(i).IsNull() << std::endl;
-	  TopoDS_Solid tempSolid = TopoDS::Solid(newsubSolidsList->Value(i));
-	  //std::cout << "tempSolid" << std::endl; 
-	  BRepCheck_Analyzer BRepAnalyzer(tempSolid, Standard_True);
-	  //std::cout << "check solid" << std::endl;
-	  if (!(BRepAnalyzer.IsValid()))
-	    {
-	      //std::cout << "build solid" << std::endl;
-	      TopoDS_Solid newSolid;
-	      Standard_Boolean rebuildCondition = rebuildSolidFromShell(tempSolid, newSolid);
-	      if (!rebuildCondition)
-		{
-		  return Standard_False;
-		}
-	      else
-		{
-		  newsubSolidsList->InsertAfter(i, newSolid);
-		  newsubSolidsList->Remove(i);
-		}
-	    }
-	  else
-	    {
-	      continue;
-	    }
-	}
-      subSolidsList = std::move(newsubSolidsList);
+    if(newsubSolidsList->Length() != 0){
+        for (Standard_Integer i = 1; i <= newsubSolidsList->Length(); ++i){
+            //std::cout << newsubSolidsList->Value(i).IsNull() << std::endl;
+            TopoDS_Solid tempSolid = TopoDS::Solid(newsubSolidsList->Value(i));
+            //std::cout << "tempSolid" << std::endl;
+            BRepCheck_Analyzer BRepAnalyzer(tempSolid, Standard_True);
+            //std::cout << "check solid" << std::endl;
+            if(!(BRepAnalyzer.IsValid())){
+                //std::cout << "build solid" << std::endl;
+                TopoDS_Solid newSolid;
+                Standard_Boolean rebuildCondition = rebuildSolidFromShell(tempSolid, newSolid);
+                if (!rebuildCondition){
+                    return Standard_False;
+                }else{
+                    newsubSolidsList->InsertAfter(i, newSolid);
+                    newsubSolidsList->Remove(i);
+                }
+            }else{
+                continue;
+            }
+        }
+        subSolidsList = std::move(newsubSolidsList);
     }
-  return Standard_True;
+    return Standard_True;
 }
 
 Standard_Boolean

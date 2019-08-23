@@ -1,4 +1,5 @@
 if(Linux_OS)
+  message("Linux")
   # This part is imported from https://github.com/tpaviot/oce/blob/master/examples/find_package_components/CMakeLists.txt
   # find_package(OCE) by specifying a list of toolkits.
   # If a toolkit is missing or if OCE is not found, try to find an OpenCascade installation.
@@ -64,6 +65,7 @@ if(Linux_OS)
 ## =========================================================
 
 else(Linux_OS)
+  message("Non-Linux")
   add_library(OCC_TOOLKITS INTERFACE)
 
   set(OCC_LIB_DIR
