@@ -1,32 +1,13 @@
-install (FILES edge.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-install (FILES edge_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-
-install (FILES meshtriangle.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-install (FILES meshtriangle_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-
-install (FILES surface.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-install (FILES surface_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-
-install (FILES boundSurface.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-install (FILES boundSurface_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-
-install (FILES boundSurfacePlane.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-install (FILES boundSurfacePlane_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-
-install (FILES splitsurfaces.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-install (FILES splitsurfaces_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-
-install (FILES splitsolid.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-install (FILES splitsolid_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-
-install (FILES solid.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-install (FILES solid_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-
-install (FILES decomposeSolid.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-install (FILES decomposeSolid_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-
-install (FILES decomposition.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
-install (FILES decomposition_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+install (FILES edge.hpp edge_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+install (FILES meshtriangle.hpp meshtriangle_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+install (FILES surface.hpp surface_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+install (FILES boundSurface.hpp boundSurface_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+install (FILES boundSurfacePlane.hpp boundSurfacePlane_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+install (FILES splitsurfaces.hpp splitsurfaces_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+install (FILES splitsolid.hpp splitsolid_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+install (FILES solid.hpp solid_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+install (FILES decomposeSolid.hpp decomposeSolid_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
+install (FILES decomposition.hpp decomposition_impl.hpp DESTINATION ${PROJECT_BINARY_DIR}/includes)
 
 
 

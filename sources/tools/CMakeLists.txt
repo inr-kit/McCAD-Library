@@ -7,5 +7,3 @@ add_library(TOOLS
   PlaneFuser.cpp
   FaceParameters.cpp)
 
-install (TARGETS TOOLS DESTINATION ${PROJECT_BINARY_DIR}/bin)
-

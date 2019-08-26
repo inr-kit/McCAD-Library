@@ -19,5 +19,3 @@ add_library(DECOMPOSITION
   decomposeSolid_impl.cpp
   decomposition.cpp
   decomposition_impl.cpp)
-
-install (TARGETS DECOMPOSITION DESTINATION ${PROJECT_BINARY_DIR}/bin)
