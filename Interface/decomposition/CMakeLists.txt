@@ -1,4 +1,4 @@
-add_library(DECOMPOSITION
+add_library(DECOMPOSITION_IFACE
   edge.cpp
   meshtriangle.cpp
   surface.cpp

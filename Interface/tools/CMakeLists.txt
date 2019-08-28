@@ -1,4 +1,4 @@
-add_library(DECOMPOSITION
+add_library(TOOLS_IFACE
   tools.cpp)
 
 install(FILES

@@ -1,11 +1,10 @@
-add_library(Tools
+add_library(TOOLS
     tools_impl.cpp
     CurveUtilities.cpp
     SurfaceUtilities.cpp
     PlaneComparator.cpp
     PlaneFuser.cpp
-    FaceParameters.cpp
-    )
+    FaceParameters.cpp)
 
 install(FILES
   tools_impl.hpp
@@ -16,6 +15,5 @@ install(FILES
   FaceParameters.hpp
   ShapeView.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes)
-  
-add_library(Tools_impl tools_impl.cpp)
+
 add_subdirectory(FloatingPoint)

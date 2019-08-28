@@ -1,4 +1,4 @@
-add_library(INPUTDATA
+add_library(INPUTDATA_IFACE
   inputdata.cpp)
 
 install(FILES

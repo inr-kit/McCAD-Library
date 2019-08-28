@@ -1,21 +1,21 @@
 add_subdirectory(Coordinates)
 
-add_library(Geometry
+add_library(GEOMETRY
     BoundingBox.cpp)
 
-target_sources(Geometry
+target_sources(GEOMETRY
     PUBLIC
         BoundingBox.hpp
     )
 
-target_link_libraries(Geometry
+target_link_libraries(GEOMETRY
     PRIVATE
-        OCC
+        OCC_TOOLKITS
     PUBLIC
         Coordinates
     )
 
-target_include_directories(Geometry
+target_include_directories(GEOMETRY
     INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}
     )

@@ -1,4 +1,4 @@
-add_library(IO
+add_library(IO_IFACE
   stepreader.cpp
   stepwriter.cpp)
 
