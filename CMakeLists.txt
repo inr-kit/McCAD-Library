@@ -56,7 +56,9 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/Implementation/tools")
 add_subdirectory (Interface/tools)
 add_subdirectory (Implementation/tools)
+###### To be deleted once we create McCAD Standard header file
 target_link_libraries(TOOLS_IFACE OCC_TOOLKITS)
+###### 
 target_link_libraries(TOOLS TOOLS_IFACE OCC_TOOLKITS)
 
 # Decomposition library
@@ -65,8 +67,12 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/Implementation/decomposition")
 add_subdirectory (Interface/decomposition)
 add_subdirectory (Implementation/decomposition)
+###### To be deleted once we create McCAD Standard header file
 target_link_libraries (DECOMPOSITION_IFACE OCC_TOOLKITS)
-target_link_libraries (DECOMPOSITION DECOMPOSITION_IFACE TOOLS OCC_TOOLKITS)
+######
+target_link_libraries(DECOMPOSITION DECOMPOSITION_IFACE TOOLS OCC_TOOLKITS)
 
-install (TARGETS ${PROJECT_NAME} DESTINATION ${PROJECT_BINARY_DIR}/bin)
-install (FILES "${PROJECT_BINARY_DIR}/McCADConfig.hpp" DESTINATION ${PROJECT_BINARY_DIR}/includes)
+install(TARGETS ${PROJECT_NAME}
+  DESTINATION ${PROJECT_BINARY_DIR}/bin)
+install(FILES "${PROJECT_BINARY_DIR}/McCADConfig.hpp"
+  DESTINATION ${PROJECT_BINARY_DIR}/includes)

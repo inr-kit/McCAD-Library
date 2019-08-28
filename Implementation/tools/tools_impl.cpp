@@ -1,7 +1,5 @@
 // McCAD
 #include "tools_impl.hpp"
-#include <vector>
-#include "ShapeView.hpp"
 
 void
 McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid,
@@ -74,10 +72,9 @@ McCAD::Tools::Preprocessor::Impl::fixFace(TopoDS_Face& face,
 }
 
 Standard_Boolean
-McCAD::Tools::Preprocessor::Impl::isSameEdge(
-        const TopoDS_Edge& firstEdge,
-        const TopoDS_Edge& secondEdge,
-        Standard_Real distanceTolerance){
+McCAD::Tools::Preprocessor::Impl::isSameEdge(const TopoDS_Edge& firstEdge,
+					     const TopoDS_Edge& secondEdge,
+					     Standard_Real distanceTolerance){
   // Compare first the start and end points of the curves.
   Standard_Real firstEdgeStart, firstEdgeEnd;
   Handle_Geom_Curve firstCurve = BRep_Tool::Curve(firstEdge, firstEdgeStart,

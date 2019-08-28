@@ -3,11 +3,11 @@
 
 // C++
 #include <string>
+// McCAD
+#include "inputdata.hpp"
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>
 #include <Standard_Transient.hxx>
-// McCAD
-#include "inputdata.hpp"
 
 namespace McCAD::General{
   class InputData::Impl{

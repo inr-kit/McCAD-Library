@@ -15,6 +15,13 @@
 #include "splitsurfaces_impl.hpp"
 #include "splitsolid_impl.hpp"
 #include <Standard.hxx>
+#include "SurfaceUtilities.hpp"
+#include "CurveUtilities.hpp"
+#include "PlaneFuser.hpp"
+#include "FaceParameters.hpp"
+#include "ShapeView.hpp"
+#include "PlaneFuser.hpp"
+#include "FaceParameters.hpp"
 // OCC
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>

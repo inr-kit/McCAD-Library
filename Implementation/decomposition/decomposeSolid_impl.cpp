@@ -1,13 +1,5 @@
 // McCAD
 #include "decomposeSolid_impl.hpp"
-#include "SurfaceUtilities.hpp"
-#include "CurveUtilities.hpp"
-#include "PlaneFuser.hpp"
-#include "FaceParameters.hpp"
-#include "ShapeView.hpp"
-#include "TypeName.hpp"
-#include "PlaneFuser.hpp"
-#include "FaceParameters.hpp"
 
 McCAD::Decomposition::DecomposeSolid::Impl::Impl(){
 }
