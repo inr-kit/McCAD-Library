@@ -18,6 +18,7 @@
 #include <TopoDS_Builder.hxx>
 #include <TopoDS.hxx>
 #include <TopTools_HSequenceOfShape.hxx>
+#include <TopExp_Explorer.hxx>
 
 namespace McCAD::IO{
   class STEPReader::Impl{

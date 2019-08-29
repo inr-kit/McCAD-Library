@@ -1,8 +1,14 @@
 #ifndef BOUNDINGBOX_HPP
 #define BOUNDINGBOX_HPP
 
+// McCAD
 #include "Coord3D.hpp"
+#include "Coordinates.ipp"
+// OCC
 #include <TopoDS_Solid.hxx>
+#include <algorithm>
+#include <Bnd_Box.hxx>
+#include <BRepBndLib.hxx>
 
 namespace McCAD::Geometry{
 

@@ -1,13 +1,12 @@
 #ifndef CURVEUTILITIES_HPP
 #define CURVEUTILITIES_HPP
 
+// C++
+#include <string>
 // OCC
 #include <GeomAbs_CurveType.hxx>
 #include <gp.hxx>
 #include <BRepAdaptor_Curve.hxx>
-
-// C++
-#include <string>
 
 namespace McCAD::Tools{
 

@@ -8,6 +8,7 @@
 #include "inputdata_impl.hpp"
 #include "solid_impl.hpp"
 #include "decomposeSolid_impl.hpp"
+#include "ShapeView.hpp"
 #include <Standard.hxx>
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>

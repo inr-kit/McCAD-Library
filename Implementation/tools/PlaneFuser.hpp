@@ -1,11 +1,14 @@
 #ifndef PLANEFUSER_HPP
 #define PLANEFUSER_HPP
 
-// OCC
-#include <TopoDS_Face.hxx>
-
 // C++
 #include <array>
+// OCC
+#include <TopoDS_Face.hxx>
+#include <BRepTools.hxx>
+#include <BRep_Tool.hxx>
+#include <BRepBuilderAPI_MakeFace.hxx>
+#include <Geom_Surface.hxx>
 
 namespace McCAD::Tools{
 

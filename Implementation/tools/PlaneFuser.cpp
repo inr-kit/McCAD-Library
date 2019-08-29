@@ -1,10 +1,5 @@
+// McCAD
 #include "PlaneFuser.hpp"
-
-// OCC
-#include <BRepTools.hxx>
-#include <BRep_Tool.hxx>
-#include <BRepBuilderAPI_MakeFace.hxx>
-#include <Geom_Surface.hxx>
 
 McCAD::Tools::PlaneFuser::PlaneFuser(
         Standard_Real zeroTolerance,

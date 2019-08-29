@@ -6,6 +6,7 @@
 // McCAD
 #include "splitsolid.hpp"
 #include "boundSurface_impl.hpp"
+#include "ShapeView.hpp"
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>
 #include <BRepBndLib.hxx>

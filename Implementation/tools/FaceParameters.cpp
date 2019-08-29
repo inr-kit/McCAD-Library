@@ -1,7 +1,5 @@
+// McCAD
 #include "FaceParameters.hpp"
-
-// OCC
-#include <CSLib.hxx>
 
 gp_Dir
 McCAD::Tools::normalOnFace(

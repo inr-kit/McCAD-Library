@@ -1,6 +1,5 @@
 // McCAD
 #include "splitsolid_impl.hpp"
-#include "ShapeView.hpp"
 
 Standard_Boolean
 McCAD::Decomposition::SplitSolid::Impl::perform(const TopoDS_Solid& solid,

@@ -13,6 +13,7 @@
 #include "tools_impl.hpp"
 #include "ShapeView.hpp"
 #include "CurveUtilities.hpp"
+#include "PlaneComparator.hpp"
 // OCC
 #include <Poly_Triangulation.hxx>
 #include <Poly_Triangulation.hxx>

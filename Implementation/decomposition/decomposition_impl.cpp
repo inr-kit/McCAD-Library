@@ -1,6 +1,5 @@
 // McCAD
 #include "decomposition_impl.hpp"
-#include "ShapeView.hpp"
 
 McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData)
   : splitInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()},

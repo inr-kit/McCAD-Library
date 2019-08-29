@@ -1,10 +1,5 @@
+// McCAD
 #include "BoundingBox.hpp"
-
-#include "Coordinates.ipp"
-#include <algorithm>
-
-#include <Bnd_Box.hxx>
-#include <BRepBndLib.hxx>
 
 McCAD::Geometry::BoundingBox::BoundingBox(
         const Coord3D& minima,

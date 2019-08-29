@@ -1,6 +1,5 @@
 // McCAD
 #include "boundSurfacePlane_impl.hpp"
-#include <vector>
 
 McCAD::Decomposition::BoundSurfacePlane::Impl::Impl(McCAD::Decomposition::BoundSurfacePlane* backReference) : boundSurfacePlane{backReference}{
 }

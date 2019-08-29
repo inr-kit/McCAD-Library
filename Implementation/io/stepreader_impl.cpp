@@ -1,6 +1,5 @@
 // McCAD
 #include "stepreader_impl.hpp"
-#include <TopExp_Explorer.hxx>
 
 McCAD::IO::STEPReader::Impl::Impl(const std::string& fileName)
     : fileName{fileName}

@@ -1,9 +1,10 @@
 #ifndef FACEPARAMETERS_HPP
 #define FACEPARAMETERS_HPP
 
+// McCAD
 #include "SurfaceUtilities.hpp"
-
 // OCC
+#include <CSLib.hxx>
 #include <gp_Dir.hxx>
 #include <TopoDS_Face.hxx>
 #include <BRepAdaptor_Surface.hxx>

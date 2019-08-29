@@ -1,6 +1,5 @@
 // McCAD
 #include "boundSurface_impl.hpp"
-#include "PlaneComparator.hpp"
 
 McCAD::Decomposition::BoundSurface::Impl::Impl(BoundSurface* backReference) : boundSurface{backReference}{
 }

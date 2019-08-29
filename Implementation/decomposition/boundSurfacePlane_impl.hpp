@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include <array>
+#include <vector>
 // McCAD
 #include "boundSurfacePlane.hpp"
 #include "surface_impl.hpp"
