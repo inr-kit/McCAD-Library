@@ -17,3 +17,7 @@ install(FILES
   DESTINATION ${PROJECT_BINARY_DIR}/includes)
 
 add_subdirectory(FloatingPoint)
+
+target_link_libraries(TOOLS
+  TOOLS_IFACE
+  OCC_TOOLKITS)

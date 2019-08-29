@@ -25,14 +25,14 @@ add_subdirectory(3rd_party)
 add_executable(${PROJECT_NAME} "main.cpp")
 target_link_libraries(${PROJECT_NAME} PRIVATE
   OCC_TOOLKITS
-  INPUTDATA
   INPUTDATA_IFACE
-  IO
+  INPUTDATA
   IO_IFACE
-  TOOLS
+  IO
   TOOLS_IFACE
-  DECOMPOSITION
-  DECOMPOSITION_IFACE)
+  TOOLS
+  DECOMPOSITION_IFACE
+  DECOMPOSITION)
 
 # General library
 include_directories(
@@ -40,7 +40,6 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/Implementation/general")
 add_subdirectory (Interface/general)
 add_subdirectory (Implementation/general)
-target_link_libraries(INPUTDATA INPUTDATA_IFACE OCC_TOOLKITS)
 
 # IO library
 include_directories(
@@ -48,7 +47,6 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/Implementation/io")
 add_subdirectory (Interface/io)
 add_subdirectory (Implementation/io)
-target_link_libraries(IO IO_IFACE OCC_TOOLKITS)
 
 # Tools library
 include_directories(
@@ -59,7 +57,6 @@ add_subdirectory (Implementation/tools)
 ###### To be deleted once we create McCAD Standard header file
 target_link_libraries(TOOLS_IFACE OCC_TOOLKITS)
 ###### 
-target_link_libraries(TOOLS TOOLS_IFACE OCC_TOOLKITS)
 
 # Decomposition library
 include_directories(
@@ -70,7 +67,6 @@ add_subdirectory (Implementation/decomposition)
 ###### To be deleted once we create McCAD Standard header file
 target_link_libraries (DECOMPOSITION_IFACE OCC_TOOLKITS)
 ######
-target_link_libraries(DECOMPOSITION DECOMPOSITION_IFACE TOOLS OCC_TOOLKITS)
 
 install(TARGETS ${PROJECT_NAME}
   DESTINATION ${PROJECT_BINARY_DIR}/bin)

@@ -22,3 +22,8 @@ install(FILES
   decomposeSolid_impl.hpp
   decomposition_impl.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes)
+
+target_link_libraries(DECOMPOSITION
+  DECOMPOSITION_IFACE
+  TOOLS
+  OCC_TOOLKITS)
