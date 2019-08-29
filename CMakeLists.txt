@@ -25,34 +25,50 @@ add_subdirectory(3rd_party)
 add_executable(${PROJECT_NAME} "main.cpp")
 target_link_libraries(${PROJECT_NAME} PRIVATE
   OCC_TOOLKITS
+  INPUTDATA_IFACE
   INPUTDATA
+  IO_IFACE
   IO
+  TOOLS_IFACE
   TOOLS
+  DECOMPOSITION_IFACE
   DECOMPOSITION)
 
 # General library
-include_directories ("${PROJECT_SOURCE_DIR}/includes/general")
-add_subdirectory (includes/general)
-add_subdirectory (sources/general)
-target_link_libraries(INPUTDATA OCC_TOOLKITS)
+include_directories(
+  "${PROJECT_SOURCE_DIR}/Interface/general"
+  "${PROJECT_SOURCE_DIR}/Implementation/general")
+add_subdirectory (Interface/general)
+add_subdirectory (Implementation/general)
 
 # IO library
-include_directories ("${PROJECT_SOURCE_DIR}/includes/io")
-add_subdirectory (includes/io)
-add_subdirectory (sources/io)
-target_link_libraries(IO OCC_TOOLKITS)
+include_directories(
+  "${PROJECT_SOURCE_DIR}/Interface/io"
+  "${PROJECT_SOURCE_DIR}/Implementation/io")
+add_subdirectory (Interface/io)
+add_subdirectory (Implementation/io)
 
 # Tools library
-include_directories ("${PROJECT_SOURCE_DIR}/includes/tools")
-add_subdirectory (includes/tools)
-add_subdirectory (sources/tools)
-target_link_libraries(TOOLS OCC_TOOLKITS)
+include_directories(
+  "${PROJECT_SOURCE_DIR}/Interface/tools"
+  "${PROJECT_SOURCE_DIR}/Implementation/tools")
+add_subdirectory (Interface/tools)
+add_subdirectory (Implementation/tools)
+###### To be deleted once we create McCAD Standard header file
+target_link_libraries(TOOLS_IFACE OCC_TOOLKITS)
+###### 
 
 # Decomposition library
-include_directories ("${PROJECT_SOURCE_DIR}/includes/decomposition")
-add_subdirectory (includes/decomposition)
-add_subdirectory (sources/decomposition)
-target_link_libraries (DECOMPOSITION TOOLS OCC_TOOLKITS)
+include_directories(
+  "${PROJECT_SOURCE_DIR}/Interface/decomposition"
+  "${PROJECT_SOURCE_DIR}/Implementation/decomposition")
+add_subdirectory (Interface/decomposition)
+add_subdirectory (Implementation/decomposition)
+###### To be deleted once we create McCAD Standard header file
+target_link_libraries (DECOMPOSITION_IFACE OCC_TOOLKITS)
+######
 
-install (TARGETS ${PROJECT_NAME} DESTINATION ${PROJECT_BINARY_DIR}/bin)
-install (FILES "${PROJECT_BINARY_DIR}/McCADConfig.hpp" DESTINATION ${PROJECT_BINARY_DIR}/includes)
+install(TARGETS ${PROJECT_NAME}
+  DESTINATION ${PROJECT_BINARY_DIR}/bin)
+install(FILES "${PROJECT_BINARY_DIR}/McCADConfig.hpp"
+  DESTINATION ${PROJECT_BINARY_DIR}/includes)
