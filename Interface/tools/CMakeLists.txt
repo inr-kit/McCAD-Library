@@ -1,4 +1,4 @@
-add_library(TOOLS_IFACE
+add_library(TOOLS_IFACE OBJECT
   tools.cpp)
 
 install(FILES
@@ -6,4 +6,4 @@ install(FILES
   DESTINATION ${PROJECT_BINARY_DIR}/includes)
 
 target_link_libraries(TOOLS_IFACE
-  TOOLS)
+  TOOLS_IMPL)

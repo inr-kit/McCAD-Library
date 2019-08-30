@@ -1,4 +1,4 @@
-add_library(DECOMPOSITION_IFACE
+add_library(DECOMPOSITION_IFACE OBJECT
   edge.cpp
   meshtriangle.cpp
   surface.cpp
@@ -24,4 +24,4 @@ install(FILES
   DESTINATION ${PROJECT_BINARY_DIR}/includes)
 
 target_link_libraries(DECOMPOSITION_IFACE
-  DECOMPOSITION)
+  DECOMPOSITION_IMPL)
