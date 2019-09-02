@@ -71,7 +71,7 @@ target_link_libraries(DECOMPOSITION INTERFACE TOOLS)
 # add the executable
 add_executable(${PROJECT_NAME} "main.cpp")
 target_link_libraries(${PROJECT_NAME} PRIVATE
-  OCC_TOOLKITS
+  OCC
   INPUTDATA
   IO
   TOOLS

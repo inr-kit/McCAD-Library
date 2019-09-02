@@ -10,7 +10,7 @@ target_sources(GEOMETRY
 
 target_link_libraries(GEOMETRY
     PRIVATE
-        OCC_TOOLKITS
+        OCC
     PUBLIC
         Coordinates
     )
