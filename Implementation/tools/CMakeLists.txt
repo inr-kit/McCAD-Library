@@ -1,4 +1,4 @@
-add_library(TOOLS
+add_library(TOOLS_IMPL OBJECT
     tools_impl.cpp
     CurveUtilities.cpp
     SurfaceUtilities.cpp
@@ -18,6 +18,5 @@ install(FILES
 
 add_subdirectory(FloatingPoint)
 
-target_link_libraries(TOOLS
-  TOOLS_IFACE
+target_link_libraries(TOOLS_IMPL
   OCC_TOOLKITS)

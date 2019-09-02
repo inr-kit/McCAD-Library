@@ -1,4 +1,4 @@
-add_library(IO_IFACE
+add_library(IO_IFACE OBJECT
   stepreader.cpp
   stepwriter.cpp)
 
@@ -8,4 +8,4 @@ install(FILES
   DESTINATION ${PROJECT_BINARY_DIR}/includes)
 
 target_link_libraries(IO_IFACE
-  IO)
+  IO_IMPL)

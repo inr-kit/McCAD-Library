@@ -1,4 +1,4 @@
-add_library(INPUTDATA_IFACE
+add_library(INPUTDATA_IFACE OBJECT
   inputdata.cpp)
 
 install(FILES
@@ -6,4 +6,4 @@ install(FILES
   DESTINATION ${PROJECT_BINARY_DIR}/includes)
 
 target_link_libraries(INPUTDATA_IFACE
-  INPUTDATA)
+  INPUTDATA_IMPL)

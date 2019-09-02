@@ -1,4 +1,4 @@
-add_library(DECOMPOSITION
+add_library(DECOMPOSITION_IMPL OBJECT
   edge_impl.cpp
   meshtriangle_impl.cpp
   surface_impl.cpp
@@ -23,7 +23,5 @@ install(FILES
   decomposition_impl.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes)
 
-target_link_libraries(DECOMPOSITION
-  DECOMPOSITION_IFACE
-  TOOLS
+target_link_libraries(DECOMPOSITION_IMPL
   OCC_TOOLKITS)

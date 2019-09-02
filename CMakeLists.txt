@@ -20,19 +20,8 @@ configure_file (
   "${PROJECT_BINARY_DIR}/McCADConfig.hpp"
   )
 
-# add the executable
+# OCC library
 add_subdirectory(3rd_party)
-add_executable(${PROJECT_NAME} "main.cpp")
-target_link_libraries(${PROJECT_NAME} PRIVATE
-  OCC_TOOLKITS
-  INPUTDATA_IFACE
-  INPUTDATA
-  IO_IFACE
-  IO
-  TOOLS_IFACE
-  TOOLS
-  DECOMPOSITION_IFACE
-  DECOMPOSITION)
 
 # General library
 include_directories(
@@ -40,6 +29,10 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/Implementation/general")
 add_subdirectory (Interface/general)
 add_subdirectory (Implementation/general)
+add_library(INPUTDATA INTERFACE)
+target_sources(INPUTDATA INTERFACE
+  $<TARGET_OBJECTS:INPUTDATA_IFACE>
+  $<TARGET_OBJECTS:INPUTDATA_IMPL>)
 
 # IO library
 include_directories(
@@ -47,6 +40,10 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/Implementation/io")
 add_subdirectory (Interface/io)
 add_subdirectory (Implementation/io)
+add_library(IO INTERFACE)
+target_sources(IO INTERFACE
+  $<TARGET_OBJECTS:IO_IFACE>
+  $<TARGET_OBJECTS:IO_IMPL>)
 
 # Tools library
 include_directories(
@@ -54,9 +51,10 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/Implementation/tools")
 add_subdirectory (Interface/tools)
 add_subdirectory (Implementation/tools)
-###### To be deleted once we create McCAD Standard header file
-target_link_libraries(TOOLS_IFACE OCC_TOOLKITS)
-###### 
+add_library(TOOLS INTERFACE)
+target_sources(TOOLS INTERFACE
+  $<TARGET_OBJECTS:TOOLS_IFACE>
+  $<TARGET_OBJECTS:TOOLS_IMPL>)
 
 # Decomposition library
 include_directories(
@@ -64,9 +62,20 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/Implementation/decomposition")
 add_subdirectory (Interface/decomposition)
 add_subdirectory (Implementation/decomposition)
-###### To be deleted once we create McCAD Standard header file
-target_link_libraries (DECOMPOSITION_IFACE OCC_TOOLKITS)
-######
+add_library(DECOMPOSITION INTERFACE)
+target_sources(DECOMPOSITION INTERFACE
+  $<TARGET_OBJECTS:DECOMPOSITION_IFACE>
+  $<TARGET_OBJECTS:DECOMPOSITION_IMPL>)
+target_link_libraries(DECOMPOSITION INTERFACE TOOLS)
+
+# add the executable
+add_executable(${PROJECT_NAME} "main.cpp")
+target_link_libraries(${PROJECT_NAME} PRIVATE
+  OCC_TOOLKITS
+  INPUTDATA
+  IO
+  TOOLS
+  DECOMPOSITION)
 
 install(TARGETS ${PROJECT_NAME}
   DESTINATION ${PROJECT_BINARY_DIR}/bin)
