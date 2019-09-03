@@ -2,24 +2,24 @@
 #include "surface.hpp"
 #include "surface_impl.hpp"
 
-McCAD::Decomposition::Surface::Surface()
+McCAD::Geometry::Surface::Surface()
   : pSImpl{std::make_unique<Impl>()}{
 }
 
-McCAD::Decomposition::Surface::~Surface(){
+McCAD::Geometry::Surface::~Surface(){
 }
 
-McCAD::Decomposition::Surface::Impl*
-McCAD::Decomposition::Surface::accessSImpl() const{
+McCAD::Geometry::Surface::Impl*
+McCAD::Geometry::Surface::accessSImpl() const{
   return pSImpl.get();
 }
 
 void
-McCAD::Decomposition::Surface::setSurfaceType(const std::string& surfaceType){
+McCAD::Geometry::Surface::setSurfaceType(const std::string& surfaceType){
   pSImpl->surfaceType = surfaceType;
 }
 
 std::string
-McCAD::Decomposition::Surface::getSurfaceType(){
+McCAD::Geometry::Surface::getSurfaceType(){
   return pSImpl->surfaceType;
 }

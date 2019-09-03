@@ -7,8 +7,8 @@
 // McCAD
 #include <Standard.hxx>
 
-namespace McCAD::Decomposition {
-    class Surface {
+namespace McCAD::Geometry{
+    class Surface{
     private:
       class Impl;
       
@@ -17,6 +17,7 @@ namespace McCAD::Decomposition {
       ~Surface();
       
       Impl* accessSImpl() const;
+      
       void setSurfaceType(const std::string& surfaceType);
       std::string getSurfaceType();
 

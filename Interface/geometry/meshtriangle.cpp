@@ -2,14 +2,14 @@
 #include "meshtriangle.hpp"
 #include "meshtriangle_impl.hpp"
 
-McCAD::Decomposition::MeshTriangle::MeshTriangle()
+McCAD::Geometry::MeshTriangle::MeshTriangle()
   : pMTImpl{std::make_unique<Impl>()}{
 }
 
-McCAD::Decomposition::MeshTriangle::~MeshTriangle(){
+McCAD::Geometry::MeshTriangle::~MeshTriangle(){
 }
 
-McCAD::Decomposition::MeshTriangle::Impl*
-McCAD::Decomposition::MeshTriangle::accessMTImpl() const{
+McCAD::Geometry::MeshTriangle::Impl*
+McCAD::Geometry::MeshTriangle::accessMTImpl() const{
   return pMTImpl.get();
 }

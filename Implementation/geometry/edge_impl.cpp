@@ -3,6 +3,7 @@
 
 void
 McCAD::Geometry::Edge::Impl::initiate(const TopoDS_Edge& aEdge){
+  preproc = std::make_unique<McCAD::Tools::Preprocessor>();
   edge = aEdge;
   calculatePoints();
 }
@@ -24,7 +25,7 @@ McCAD::Geometry::Edge::Impl::calculatePoints(){
 
 Standard_Boolean
 McCAD::Geometry::Edge::Impl::isEqual(const Edge& that){
-  Standard_Boolean equalityCondition = preproc->isSameEdge(edge,
+  Standard_Boolean equalityCondition = preproc->accessImpl()->isSameEdge(edge,
 							   that.accessEImpl()->edge);
   return equalityCondition;
 }

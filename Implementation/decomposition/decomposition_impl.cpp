@@ -59,7 +59,7 @@ McCAD::Decomposition::Decompose::Impl::perform(){
   for(Standard_Integer solidNumber = 1; solidNumber <= splitInputSolidsList->Length();
       ++solidNumber)
     {
-      std::unique_ptr<Solid> solid = std::make_unique<Solid>();
+      std::unique_ptr<Geometry::Solid> solid = std::make_unique<Geometry::Solid>();
       solid->accessSImpl()->initiate(splitInputSolidsList->Value(solidNumber));
       // If the solid has spline or tori surfaces it cannot be processed by the current version of the code.
       if (solid->accessSImpl()->isTorus || solid->accessSImpl()->isSpline)

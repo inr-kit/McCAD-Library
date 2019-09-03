@@ -8,7 +8,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::~Impl(){
 }
 
 Standard_Boolean
-McCAD::Decomposition::DecomposeSolid::Impl::perform(std::unique_ptr<Solid>& solid){
+McCAD::Decomposition::DecomposeSolid::Impl::perform(std::unique_ptr<Geometry::Solid>& solid){
   // The function will be called recursively on a solid and a condition has to be set for termination.
   // Increment the recurrence depth by 1.
   ++recurrenceDepth;
@@ -63,7 +63,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(std::unique_ptr<Solid>& soli
 	{
 	  std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/" << solid_impl->splitSolidList->Length() << "/" << i << std::endl;
 	  //std::cout << splitSolidList->Length() << std::endl;
-	  std::unique_ptr<Solid> subSolid = std::make_unique<Solid>();
+	  std::unique_ptr<Geometry::Solid> subSolid = std::make_unique<Geometry::Solid>();
 	  auto subSolid_impl = subSolid->accessSImpl();
 	  try
 	    {
@@ -115,7 +115,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(std::unique_ptr<Solid>& soli
 }
 
 void
-McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(std::unique_ptr<Solid>& solid){
+McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(std::unique_ptr<Geometry::Solid>& solid){
   // Judge whether boundary surfaces of the solid can be used for decomposition.
   //std::cout << "judgeDecomposeSurfaces" << std::endl;
   auto& facesList = solid->accessSImpl()->facesList;
@@ -180,7 +180,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(std::unique_p
 }
 
 void
-McCAD::Decomposition::DecomposeSolid::Impl::judgeThroughConcaveEdges(std::vector<std::shared_ptr<BoundSurface>>& facesList){
+McCAD::Decomposition::DecomposeSolid::Impl::judgeThroughConcaveEdges(std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList){
   // Judge how many concave edges each boundary face of solid goes through.
   if (facesList.size() == 0)
     {
@@ -214,7 +214,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateAssistingSurfaces(){
 }
 
 Standard_Boolean
-McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(std::unique_ptr<Solid>& solid){
+McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(std::unique_ptr<Geometry::Solid>& solid){
   // mergeSplitSurfaces(splitFacesList) // see no need for it as the formed lists; planesList, etc. are already merged. splitFacesList is a subset of facesList.
   splitSurfaces.accessSSImpl()->generateSplitFacesList(solid->accessSImpl()->splitFacesList, solid->accessSImpl()->selectedSplitFacesList);
   if (!(solid->accessSImpl()->selectedSplitFacesList.empty()))

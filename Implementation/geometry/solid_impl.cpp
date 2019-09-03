@@ -1,17 +1,17 @@
 // McCAD
 #include "solid_impl.hpp"
 
-McCAD::Decomposition::Solid::Impl::Impl()
+McCAD::Geometry::Solid::Impl::Impl()
   : preproc{std::make_unique<McCAD::Tools::Preprocessor>()},
     splitSolidList{std::make_unique<TopTools_HSequenceOfShape>()},
     rejectedsubSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
 }
 
-McCAD::Decomposition::Solid::Impl::~Impl(){
+McCAD::Geometry::Solid::Impl::~Impl(){
 }
 
 void
-McCAD::Decomposition::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
+McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
   solidShape = aSolidShape;
   solid = TopoDS::Solid(solidShape);
   // Check boundary surfaces.
@@ -19,8 +19,8 @@ McCAD::Decomposition::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
 }
 
 void
-McCAD::Decomposition::Solid::Impl::calcMeshDeflection(Standard_Real bndBoxGap,
-						      Standard_Real converting){
+McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real bndBoxGap,
+						 Standard_Real converting){
   // Calculate the bounding box of the solid.
   Bnd_Box boundingBox;
   BRepBndLib::Add(solid, boundingBox);
@@ -35,14 +35,14 @@ McCAD::Decomposition::Solid::Impl::calcMeshDeflection(Standard_Real bndBoxGap,
 }
 
 void
-McCAD::Decomposition::Solid::Impl::repairSolid(){
+McCAD::Geometry::Solid::Impl::repairSolid(){
   preproc->accessImpl()->removeSmallFaces(solidShape);
   solid = TopoDS::Solid(solidShape);
   preproc->accessImpl()->repairSolid(solid);
 }
 
 void
-McCAD::Decomposition::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTolerance){
+McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTolerance){
   TopTools_IndexedDataMapOfShapeListOfShape mapEdgeFace;
   TopExp::MapShapesAndAncestors(solid, TopAbs_EDGE, TopAbs_FACE, mapEdgeFace);
   
@@ -101,7 +101,7 @@ McCAD::Decomposition::Solid::Impl::updateEdgesConvexity(const Standard_Real& ang
 }
 
 void
-McCAD::Decomposition::Solid::Impl::generateSurfacesList(){
+McCAD::Geometry::Solid::Impl::generateSurfacesList(){
   // Generate a list of faces of the solid.
   TopoDS_Face face;
   Standard_Integer faceNumber = 0;
@@ -148,8 +148,8 @@ McCAD::Decomposition::Solid::Impl::generateSurfacesList(){
   //std::cout << "merged faces list: " << facesList.size() << std::endl;
 }
 
-std::unique_ptr<McCAD::Decomposition::BoundSurface>
-McCAD::Decomposition::Solid::Impl::generateSurface(const TopoDS_Face& face, Standard_Integer mode){
+std::unique_ptr<McCAD::Geometry::BoundSurface>
+McCAD::Geometry::Solid::Impl::generateSurface(const TopoDS_Face& face, Standard_Integer mode){
   if (mode == Standard_Integer(0))
     {
       //std::cout << "mode 0 " << std::endl;
@@ -185,7 +185,7 @@ McCAD::Decomposition::Solid::Impl::generateSurface(const TopoDS_Face& face, Stan
 }
 
 void
-McCAD::Decomposition::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSurface>>& surfacesList){
+McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSurface>>& surfacesList){
   if (surfacesList.size() < 2)
     {
       return;

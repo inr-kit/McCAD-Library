@@ -2,25 +2,25 @@
 #include "boundSurface.hpp"
 #include "boundSurface_impl.hpp"
 
-McCAD::Decomposition::BoundSurface::BoundSurface()
+McCAD::Geometry::BoundSurface::BoundSurface()
   : pBSImpl{std::make_unique<Impl>(this)}, Surface::Surface() {
 }
 
-McCAD::Decomposition::BoundSurface::~BoundSurface(){
+McCAD::Geometry::BoundSurface::~BoundSurface(){
 }
 
-McCAD::Decomposition::BoundSurface::Impl*
-McCAD::Decomposition::BoundSurface::accessBSImpl() const{
+McCAD::Geometry::BoundSurface::Impl*
+McCAD::Geometry::BoundSurface::accessBSImpl() const{
   return pBSImpl.get();
 }
 
 Standard_Boolean
-McCAD::Decomposition::BoundSurface::operator == (const McCAD::Decomposition::BoundSurface& that){
+McCAD::Geometry::BoundSurface::operator == (const McCAD::Geometry::BoundSurface& that){
   return pBSImpl->isEqual(that);
 }
 
 Standard_Boolean
-McCAD::Decomposition::BoundSurface::operator << (const McCAD::Decomposition::BoundSurface& that){
+McCAD::Geometry::BoundSurface::operator << (const McCAD::Geometry::BoundSurface& that){
   return pBSImpl->canFuse(that);
 }
 

@@ -12,7 +12,7 @@
 #include <Bnd_Box.hxx>
 #include <TopoDS_Face.hxx>
 
-namespace McCAD::Decomposition{
+namespace McCAD::Geometry{
   class MeshTriangle::Impl {
   public:
     Impl() = default;
@@ -21,9 +21,6 @@ namespace McCAD::Decomposition{
     std::array<gp_Pnt, 3> points;
 
     void initiate(const TopoDS_Face& face);
-
-  private:
-
   };
 }
 

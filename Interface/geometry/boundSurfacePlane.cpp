@@ -2,14 +2,14 @@
 #include "boundSurfacePlane.hpp"
 #include "boundSurfacePlane_impl.hpp"
 
-McCAD::Decomposition::BoundSurfacePlane::BoundSurfacePlane()
+McCAD::Geometry::BoundSurfacePlane::BoundSurfacePlane()
   : pBSPImpl{std::make_unique<Impl>(this)}, BoundSurface::BoundSurface() {
 }
 
-McCAD::Decomposition::BoundSurfacePlane::~BoundSurfacePlane(){
+McCAD::Geometry::BoundSurfacePlane::~BoundSurfacePlane(){
 }
 
-McCAD::Decomposition::BoundSurfacePlane::Impl*
-McCAD::Decomposition::BoundSurfacePlane::accessBSPImpl() const{
+McCAD::Geometry::BoundSurfacePlane::Impl*
+McCAD::Geometry::BoundSurfacePlane::accessBSPImpl() const{
   return pBSPImpl.get();
 }

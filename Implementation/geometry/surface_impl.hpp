@@ -11,7 +11,7 @@
 #include <BRepAdaptor_Surface.hxx>
 #include <GeomAdaptor_Surface.hxx>
 
-namespace McCAD::Decomposition{
+namespace McCAD::Geometry{
   class Surface::Impl {
   public:
     Impl() = default;
@@ -24,10 +24,8 @@ namespace McCAD::Decomposition{
     Standard_Integer numberCollidingSurfaces = 0;
     Standard_Integer numberCollidingCurvedSurfaces = 0;
     Standard_Integer throughConcaveEdges;
+    
     void initiate(const TopoDS_Face& aFace);
-
-  private:
-
   };
 }
 

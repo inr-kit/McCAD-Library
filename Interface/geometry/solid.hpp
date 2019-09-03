@@ -7,7 +7,7 @@
 #include <Standard.hxx>
 // OCC
 
-namespace McCAD::Decomposition {
+namespace McCAD::Geometry{
   class Solid {
   private:
     class Impl;
