@@ -28,21 +28,9 @@
 #include <BRepBuilderAPI_MakePolygon.hxx>                                           
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <Extrema_ExtPS.hxx>
-//#include <gp_Pln.hxx>
-//#include <gp_Ax3.hxx>
-//#include <TopAbs_ShapeEnum.hxx>
-//#include <TopoDS.hxx>
-//#include <TopTools_HSequenceOfShape.hxx>
-//#include <TCollection_AsciiString.hxx>
-//#include <BRepTools.hxx>
-//#include <BRepBndLib.hxx>
-//#include <Bnd_Box.hxx>
-//#include <BRepAlgoAPI_Section.hxx>
-//#include <Handle_TColgp_HSequenceOfPnt.hxx>
-//#include <GeomAdaptor_Curve.hxx>
 
-namespace McCAD::Decomposition{
-  class BoundSurface::Impl {
+namespace McCAD::Geometry{
+  class BoundSurface::Impl{
   public:
     Impl(BoundSurface* backReference);
     ~Impl();
@@ -51,19 +39,21 @@ namespace McCAD::Decomposition{
     Tools::Preprocessor preproc;
     std::vector<std::unique_ptr<Edge>> edgesList;
     std::vector<std::unique_ptr<MeshTriangle>> meshTrianglesList;
+
     Standard_Boolean isEqual(const BoundSurface& that);
     Standard_Boolean canFuse(const BoundSurface& that);
-    Standard_Boolean faceCollision(const BoundSurface& aFace, Standard_Integer& aSide);
-    Standard_Boolean triangleCollision(const MeshTriangle& aTriangle, Standard_Integer& aSide, Standard_Real tolerance = 1e-2, Standard_Real tolerance2 = 1e-3);
-    Standard_Boolean pointOnSurface(const gp_Pnt& aPoint, const Standard_Real& distanceTolerance);
+    Standard_Boolean faceCollision(const BoundSurface& aFace,
+				     Standard_Integer& aSide);
+    Standard_Boolean triangleCollision(const MeshTriangle& aTriangle,
+					 Standard_Integer& aSide,
+					 Standard_Real tolerance = 1e-2,
+					 Standard_Real tolerance2 = 1e-3);
+    Standard_Boolean pointOnSurface(const gp_Pnt& aPoint,
+				      const Standard_Real& distanceTolerance);
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
     void generateEdges(Standard_Real uvTolerance = 1.0e-3);
     Standard_Boolean edgeOnSurface(const Edge& aEdge, Standard_Real tolerance = 1.0e-4);
     void combineEdges(std::vector<std::unique_ptr<Edge>>& aEdgesList);
-
-  private:
-
   };
 }
-
 #endif //BOUNDSURFACE_IMPL_HPP

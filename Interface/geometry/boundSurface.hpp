@@ -6,7 +6,7 @@
 // McCAD
 #include "surface.hpp"
 
-namespace McCAD::Decomposition {
+namespace McCAD::Geometry{
   class BoundSurface : public Surface {
   private:
     class Impl;

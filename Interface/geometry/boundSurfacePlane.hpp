@@ -7,7 +7,7 @@
 #include "boundSurface.hpp"
 #include <Standard.hxx>
 
-namespace McCAD::Decomposition {
+namespace McCAD::Geometry{
   class BoundSurfacePlane : public BoundSurface {
   private:
     class Impl;

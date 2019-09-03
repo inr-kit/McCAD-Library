@@ -17,7 +17,7 @@ namespace McCAD::Geometry{
   public:
     Impl() = default;
 
-    auto preproc = Tools::Preprocessor::accessImpl();
+    std::unique_ptr<Tools::Preprocessor> preproc;
     
     TopoDS_Edge edge;
     gp_Pnt startPoint, endPoint, middlePoint, extraPoint;

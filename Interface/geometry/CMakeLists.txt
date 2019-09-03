@@ -1,4 +1,4 @@
-add_library(DECOMPOSITION_IFACE OBJECT
+add_library(GEOMETRY_IFACE OBJECT
   edge.cpp
   meshtriangle.cpp
   surface.cpp
@@ -15,5 +15,5 @@ install(FILES
   solid.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes)
 
-target_link_libraries(DECOMPOSITION_IFACE
-  DECOMPOSITION_IMPL)
+target_link_libraries(GEOMETRY_IFACE
+  GEOMETRY_IMPL)

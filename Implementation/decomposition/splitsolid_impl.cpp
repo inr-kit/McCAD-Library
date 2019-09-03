@@ -3,7 +3,7 @@
 
 Standard_Boolean
 McCAD::Decomposition::SplitSolid::Impl::perform(const TopoDS_Solid& solid,
-						const std::shared_ptr<BoundSurface>& surface,
+						const std::shared_ptr<Geometry::BoundSurface>& surface,
 						std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
   calculateBoundingBox(solid);
   if (surface->getSurfaceType() == "Plane")

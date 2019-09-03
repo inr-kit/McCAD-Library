@@ -15,7 +15,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::~Impl(){
 
 Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::perform(
-        Solid::Impl& solidImpl){
+        Geometry::Solid::Impl& solidImpl){
     // The function will be called recursively on a solid and a condition has to be set for termination.
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
@@ -72,7 +72,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(
                       << "/" << i << std::endl;
             //std::cout << splitSolidList->Length() << std::endl;
 
-            Solid::Impl subSolidImpl;
+            Geometry::Solid::Impl subSolidImpl;
             try{
                 subSolidImpl.initiate(solidImpl.splitSolidList->Value(i));
             }catch(...){
@@ -115,7 +115,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
 
 void
 McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(
-        Solid::Impl& solidImpl){
+        Geometry::Solid::Impl& solidImpl){
     // Judge whether boundary surfaces of the solid can be used for decomposition.
     //std::cout << "judgeDecomposeSurfaces" << std::endl;
     auto& facesList = solidImpl.facesList;
@@ -173,7 +173,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(
 
 void
 McCAD::Decomposition::DecomposeSolid::Impl::judgeThroughConcaveEdges(
-        std::vector<std::shared_ptr<BoundSurface>>& facesList){
+        std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList){
     // Judge how many concave edges each boundary face of solid goes through.
     for (Standard_Integer i = 0; i < facesList.size(); ++i){
         Standard_Integer throughConcaveEdges = 0;
@@ -193,6 +193,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeThroughConcaveEdges(
         }
         facesList[i]->accessSImpl()->throughConcaveEdges = throughConcaveEdges;
         //std::cout << "throughConcaveEdges: " << throughConcaveEdges << std::endl;
+
     }
 }
 
@@ -202,7 +203,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateAssistingSurfaces(){
 
 Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(
-        Solid::Impl& solidImpl){
+        Geometry::Solid::Impl& solidImpl){
     // mergeSplitSurfaces(splitFacesList) // see no need for it as the formed lists; planesList, etc. are already merged. splitFacesList is a subset of facesList.
     SplitSurfaces::Impl::generateSplitFacesList(
                 solidImpl.splitFacesList,

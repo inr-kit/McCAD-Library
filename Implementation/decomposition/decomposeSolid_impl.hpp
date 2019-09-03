@@ -58,10 +58,10 @@ namespace McCAD::Decomposition{
 
     SplitSurfaces splitSurfaces;
 
-    void judgeDecomposeSurfaces(Solid::Impl& solidImpl);
-    void judgeThroughConcaveEdges(std::vector<std::shared_ptr<BoundSurface>>& facesList);
+    void judgeDecomposeSurfaces(Geometry::Solid::Impl& solidImpl);
+    void judgeThroughConcaveEdges(std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList);
     void generateAssistingSurfaces();
-    Standard_Boolean selectSplitSurface(Solid::Impl& solidImpl);
+    Standard_Boolean selectSplitSurface(Geometry::Solid::Impl& solidImpl);
 
   };
 }

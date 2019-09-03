@@ -1,3 +1,10 @@
+include_directories(
+  "${PROJECT_SOURCE_DIR}/Implementation/geometry/Coordinates"
+  "${PROJECT_SOURCE_DIR}/Implementation/geometry/Coordinates/common"
+  "${PROJECT_SOURCE_DIR}/Implementation/geometry/Coordinates/1D"
+  "${PROJECT_SOURCE_DIR}/Implementation/geometry/Coordinates/2D"
+  "${PROJECT_SOURCE_DIR}/Implementation/geometry/Coordinates/3D")
+
 add_subdirectory(Coordinates)
 
 add_library(GEOMETRY_IMPL OBJECT
@@ -7,7 +14,7 @@ add_library(GEOMETRY_IMPL OBJECT
   boundSurface_impl.cpp
   boundSurfacePlane_impl.cpp
   solid_impl.cpp
-  BboundingBox.cpp)
+  BoundingBox.cpp)
 
 install(FILES
   edge_impl.hpp
@@ -19,6 +26,6 @@ install(FILES
   BoundingBox.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes)
 
-target_link_libraries(GEOMETRY_IMPL
-  Coordinates
+target_link_libraries(GEOMETRY_IMPL 
+  Coordinates_IMPL
   OCC)

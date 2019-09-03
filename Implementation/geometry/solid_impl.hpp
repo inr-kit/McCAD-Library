@@ -10,7 +10,6 @@
 #include "boundSurface_impl.hpp"
 #include "boundSurfacePlane_impl.hpp"
 #include <Standard.hxx>
-#include "decomposeSolid_impl.hpp"
 #include "SurfaceUtilities.hpp"
 #include "CurveUtilities.hpp"
 #include "PlaneFuser.hpp"
@@ -40,7 +39,7 @@
 #include <TopTools_ListOfShape.hxx>
 #include <TopTools_HSequenceOfShape.hxx>
 
-namespace McCAD::Decomposition{
+namespace McCAD::Geometry{
   class Solid::Impl {
   public:
     Impl();
@@ -55,6 +54,7 @@ namespace McCAD::Decomposition{
     Standard_Real meshDeflection;
     Standard_Real boxSquareLength;
     Standard_Boolean splitSurface = Standard_False;
+    
     std::vector<std::shared_ptr<BoundSurface>> facesList;
     std::vector<std::shared_ptr<BoundSurface>> splitFacesList;
     std::vector<std::shared_ptr<BoundSurface>> selectedSplitFacesList;

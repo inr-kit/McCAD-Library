@@ -57,7 +57,7 @@ void
 McCAD::Decomposition::Decompose::Impl::perform(){
     // Loop over the solids in the split solids list and perform the decomposition
     for(const auto& shape : *splitInputSolidsList){
-        Solid::Impl solidImpl;
+        Geometry::Solid::Impl solidImpl;
         solidImpl.initiate(shape);
         // If the solid has spline or tori surfaces it cannot be processed by the current version of the code.
         if(solidImpl.isTorus
