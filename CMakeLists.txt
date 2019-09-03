@@ -56,6 +56,18 @@ target_sources(TOOLS INTERFACE
   $<TARGET_OBJECTS:TOOLS_IFACE>
   $<TARGET_OBJECTS:TOOLS_IMPL>)
 
+# Geometry library
+include_directories(
+  "${PROJECT_SOURCE_DIR}/Interface/geometry"
+  "${PROJECT_SOURCE_DIR}/Implementation/geometry")
+add_subdirectory (Interface/geometry)
+add_subdirectory (Implementation/geometry)
+add_library(GEOMETRY INTERFACE)
+target_sources(GEOMETRY INTERFACE
+  $<TARGET_OBJECTS:GEOMETRY_IFACE>
+  $<TARGET_OBJECTS:GEOMETRY_IMPL>)
+target_link_libraries(GEOMETRY INTERFACE TOOLS)
+
 # Decomposition library
 include_directories(
   "${PROJECT_SOURCE_DIR}/Interface/decomposition"
@@ -66,7 +78,7 @@ add_library(DECOMPOSITION INTERFACE)
 target_sources(DECOMPOSITION INTERFACE
   $<TARGET_OBJECTS:DECOMPOSITION_IFACE>
   $<TARGET_OBJECTS:DECOMPOSITION_IMPL>)
-target_link_libraries(DECOMPOSITION INTERFACE TOOLS)
+target_link_libraries(DECOMPOSITION INTERFACE TOOLS GEOMETRY)
 
 # add the executable
 add_executable(${PROJECT_NAME} "main.cpp")
@@ -75,6 +87,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   INPUTDATA
   IO
   TOOLS
+  GEOMETRY
   DECOMPOSITION)
 
 install(TARGETS ${PROJECT_NAME}

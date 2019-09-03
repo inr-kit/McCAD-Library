@@ -12,12 +12,12 @@
 #include <BRep_Tool.hxx>
 #include <gp_Pnt.hxx>
 
-namespace McCAD::Decomposition{
+namespace McCAD::Geometry{
   class Edge::Impl {
   public:
     Impl() = default;
 
-    Tools::Preprocessor preproc;
+    auto preproc = Tools::Preprocessor::accessImpl();
     
     TopoDS_Edge edge;
     gp_Pnt startPoint, endPoint, middlePoint, extraPoint;
@@ -28,9 +28,6 @@ namespace McCAD::Decomposition{
     void initiate(const TopoDS_Edge& edge);
     void calculatePoints();
     Standard_Boolean isEqual(const Edge& that);
-
-  private:
-
   };
 }
 
