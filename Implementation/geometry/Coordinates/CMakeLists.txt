@@ -9,9 +9,9 @@ add_subdirectory(1D)
 add_subdirectory(2D)
 add_subdirectory(3D)
 
-add_library(Coordinates_IMPL INTERFACE)
+add_library(Coordinates_IMPL OBJECT)
 
-target_sources(Coordinates_IMPL INTERFACE
+target_sources(Coordinates_IMPL PUBLIC
   $<TARGET_OBJECTS:CoordCommon_IMPL>
   $<TARGET_OBJECTS:Coord1D_IMPL>
   $<TARGET_OBJECTS:Coord2D_IMPL>

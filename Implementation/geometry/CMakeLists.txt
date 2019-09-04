@@ -14,7 +14,7 @@ add_library(GEOMETRY_IMPL OBJECT
   boundSurface_impl.cpp
   boundSurfacePlane_impl.cpp
   solid_impl.cpp
-  BoundingBox.cpp)
+  boundingBox_impl.cpp)
 
 install(FILES
   edge_impl.hpp
@@ -23,9 +23,8 @@ install(FILES
   boundSurface_impl.hpp
   boundSurfacePlane_impl.hpp
   solid_impl.hpp
-  BoundingBox.hpp
+  boundingBox_impl.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes)
 
-target_link_libraries(GEOMETRY_IMPL 
-  Coordinates_IMPL
+target_link_libraries(GEOMETRY_IMPL PUBLIC
   OCC)
