@@ -25,12 +25,12 @@ McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real bndBoxGap,
   Bnd_Box boundingBox;
   BRepBndLib::Add(solid, boundingBox);
   boundingBox.SetGap(bndBoxGap);
-  std::array<Standard_Real, 6> coordinates;
-  boundingBox.Get(coordinates[0], coordinates[1], coordinates[2], coordinates[3],
-		  coordinates[4], coordinates[5]);
-  Standard_Real tempdeflection = std::max((coordinates[3] - coordinates[0]),
-					  (coordinates[4] - coordinates[1]));
-  meshDeflection = std::max(tempdeflection, (coordinates[5] - coordinates[2])) / converting;
+  std::array<Standard_Real, 3> XYZmin;
+  std::array<Standard_Real, 3> XYZmax;
+  boundingBox.Get(XYZmin[0], XYZmin[1], XYZmin[2], XYZmax[0], XYZmax[1], XYZmax[2]);
+  Standard_Real tempdeflection = std::max((XYZmax[0] - XYZmin[0]),
+					  (XYZmax[1] - XYZmin[1]));
+  meshDeflection = std::max(tempdeflection, (XYZmax[2] - XYZmax[2])) / converting;
   boxSquareLength = sqrt(boundingBox.SquareExtent());
 }
 
@@ -135,12 +135,13 @@ McCAD::Geometry::Solid::Impl::generateSurfacesList(){
 	}
       else
 	{
+	  //std::cout << "face rejected" << std::endl;
 	  continue;
 	}
     }
   std::cout << "     - There are " << planesList.size() << " planes in the solid" << std::endl;
   mergeSurfaces(planesList);
-  //std::cout << "merged planes list: " << planesList.size() << std::endl;
+  std::cout << "merged planes list: " << planesList.size() << std::endl;
   for (Standard_Integer i = 0; i <= planesList.size() - 1; ++i)
     {
       facesList.push_back(std::move(planesList[i]));
@@ -149,7 +150,8 @@ McCAD::Geometry::Solid::Impl::generateSurfacesList(){
 }
 
 std::unique_ptr<McCAD::Geometry::BoundSurface>
-McCAD::Geometry::Solid::Impl::generateSurface(const TopoDS_Face& face, Standard_Integer mode){
+McCAD::Geometry::Solid::Impl::generateSurface(const TopoDS_Face& face,
+					      Standard_Integer mode){
   if (mode == Standard_Integer(0))
     {
       //std::cout << "mode 0 " << std::endl;

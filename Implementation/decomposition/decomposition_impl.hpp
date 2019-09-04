@@ -3,6 +3,7 @@
 
 // C++
 #include <memory>
+#include <deque>
 // McCAD
 #include "decomposition.hpp"
 #include "inputdata_impl.hpp"
@@ -24,7 +25,6 @@ namespace McCAD::Decomposition{
     ~Impl();
 
     std::unique_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;
-
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;
     std::unique_ptr<TopTools_HSequenceOfShape> resultSolidsList;
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;

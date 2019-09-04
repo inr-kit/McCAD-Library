@@ -37,6 +37,7 @@ namespace McCAD::Geometry{
 
     BoundSurface* boundSurface;
     Tools::Preprocessor preproc;
+    
     std::vector<std::unique_ptr<Edge>> edgesList;
     std::vector<std::unique_ptr<MeshTriangle>> meshTrianglesList;
 

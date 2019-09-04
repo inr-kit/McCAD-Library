@@ -8,7 +8,8 @@ McCAD::Geometry::BoundSurfacePlane::Impl::~Impl(){
 }
 
 void
-McCAD::Geometry::BoundSurfacePlane::Impl::generateExtendedPlane(const Standard_Real& boxSquareLength, Standard_Real degenerateEdgesTolerance){
+McCAD::Geometry::BoundSurfacePlane::Impl::generateExtendedPlane(const Standard_Real& boxSquareLength,
+								Standard_Real degenerateEdgesTolerance){
   //std::cout << "boxSquareLength, " << boxSquareLength << std::endl;
   Handle_Geom_Surface surface = BRep_Tool::Surface(boundSurfacePlane->accessSImpl()->face);
   //std::cout << "calculating parameters" << std::endl;

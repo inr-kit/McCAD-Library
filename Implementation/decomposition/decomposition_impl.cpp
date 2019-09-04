@@ -1,7 +1,5 @@
 // McCAD
 #include "decomposition_impl.hpp"
-// C++
-#include <deque>
 
 McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData)
   : splitInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()},
@@ -12,7 +10,7 @@ McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inp
   auto& inputSolidsList = inputData.accessImpl()->inputSolidsList;
   if (inputSolidsList->Length() > 0)
     {
-      std::cout << "   - Found " << inputSolidsList->Length() << " solid(s) in the input file." << std::endl;
+      std::cout << "> Found " << inputSolidsList->Length() << " solid(s) in the input file." << std::endl;
       std::cout << " > Spliting compound input solids" << std::endl;
       // Split compound input solids.
       flattenSolidHierarchy(inputSolidsList);
