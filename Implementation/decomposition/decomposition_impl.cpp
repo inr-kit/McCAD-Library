@@ -1,7 +1,5 @@
 // McCAD
 #include "decomposition_impl.hpp"
-// C++
-#include <deque>
 
 McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData)
   : splitInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()},
@@ -12,7 +10,7 @@ McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inp
   auto& inputSolidsList = inputData.accessImpl()->inputSolidsList;
   if (inputSolidsList->Length() > 0)
     {
-      std::cout << "   - Found " << inputSolidsList->Length() << " solid(s) in the input file." << std::endl;
+      std::cout << "> Found " << inputSolidsList->Length() << " solid(s) in the input file." << std::endl;
       std::cout << " > Spliting compound input solids" << std::endl;
       // Split compound input solids.
       flattenSolidHierarchy(inputSolidsList);
@@ -32,24 +30,27 @@ McCAD::Decomposition::Decompose::Impl::~Impl(){
 }
 
 void
-McCAD::Decomposition::Decompose::Impl::flattenSolidHierarchy(
-        const Handle_TopTools_HSequenceOfShape& inputSolidsList){
-     for(const auto& shape : *inputSolidsList){
-        switch(shape.ShapeType()){
-        case TopAbs_COMPOUND:
-            [[fallthrough]];
-        case TopAbs_COMPSOLID:
-            for(const auto& solid : ShapeView<TopAbs_SOLID>{shape})
-                splitInputSolidsList->Append(solid);
-            break;
-        case TopAbs_SOLID:
-            splitInputSolidsList->Append(shape);
-            break;
-        default:
-            throw std::runtime_error{
-                "Shape can only be COMPOUND, COMPSOLID or SOLID"
-            };
-        }
+McCAD::Decomposition::Decompose::Impl::flattenSolidHierarchy(const Handle_TopTools_HSequenceOfShape& inputSolidsList){
+  for(const auto& shape : *inputSolidsList)
+    {
+      switch(shape.ShapeType())
+	{
+	case TopAbs_COMPOUND:
+	  [[fallthrough]];
+	case TopAbs_COMPSOLID:
+	  std::cout << "   - Found a compound solid" << std::endl; 
+	  for(const auto& solid : ShapeView<TopAbs_SOLID>{shape})
+	    {
+	      splitInputSolidsList->Append(solid);
+	    };
+	  break;
+	case TopAbs_SOLID:
+	  std::cout << "   - Found a compound solid" << std::endl;
+	  splitInputSolidsList->Append(shape);
+	  break;
+	default:
+	  throw std::runtime_error{"Shape can only be COMPOUND, COMPSOLID or SOLID"};
+	}
     }
 }
 

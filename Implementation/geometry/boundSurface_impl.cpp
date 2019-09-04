@@ -151,10 +151,9 @@ McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
   TopoDS_Face face = boundSurface->accessSImpl()->face;
   //TopExp_Explorer explorer(face, TopAbs_EDGE);
   //for(; explorer.More(); explorer.Next())
-  for (const auto& element : ShapeView<TopAbs_EDGE>{face})  
+  for (const auto& tempEdge : ShapeView<TopAbs_EDGE>{face})  
     {
-      //TopoDS_Edge tempEdge = TopoDS::Edge(explorer.Current());
-      TopoDS_Edge tempEdge = element;
+      //TopoDS_Edge tempEdge = element;
       std::unique_ptr<Edge> edge = std::make_unique<Edge>();
       edge->accessEImpl()->initiate(tempEdge);
       // Get type of Edge.

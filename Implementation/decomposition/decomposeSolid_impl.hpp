@@ -52,7 +52,7 @@ namespace McCAD::Decomposition{
     Tools::Preprocessor preproc;
     SplitSurfaces splitSurfaces;
     SplitSolid splitSolid;
-
+    
     Standard_Integer recurrenceDepth = 0;
     
     Standard_Boolean perform(std::unique_ptr<Geometry::Solid>& solid);
