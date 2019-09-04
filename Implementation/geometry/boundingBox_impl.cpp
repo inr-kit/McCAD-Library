@@ -1,5 +1,5 @@
 // McCAD
-#include "BoundingBox.hpp"
+#include "boundingBox_impl.hpp"
 
 McCAD::Geometry::BoundingBox::BoundingBox(const Coord3D& minima, const Coord3D& maxima)
   : minima_{minima}, maxima_{maxima}, gap_{CT_0()}{
