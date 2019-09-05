@@ -12,10 +12,14 @@ McCAD::Geometry::Solid::Impl::~Impl(){
 
 void
 McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
+  //std::cout << "solid initiate" << std::endl;
   solidShape = aSolidShape;
+  //std::cout << "solidShape" << std::endl;
   solid = TopoDS::Solid(solidShape);
+  //std::cout << "solid" << std::endl;
   // Check boundary surfaces.
   preproc->accessImpl()->checkBndSurfaces(solid, isTorus, isSpline);
+  //std::cout << "checkBndSurfaces" << std::endl;
 }
 
 void
@@ -141,7 +145,7 @@ McCAD::Geometry::Solid::Impl::generateSurfacesList(){
     }
   std::cout << "     - There are " << planesList.size() << " planes in the solid" << std::endl;
   mergeSurfaces(planesList);
-  std::cout << "merged planes list: " << planesList.size() << std::endl;
+  //std::cout << "merged planes list: " << planesList.size() << std::endl;
   for (Standard_Integer i = 0; i <= planesList.size() - 1; ++i)
     {
       facesList.push_back(std::move(planesList[i]));
