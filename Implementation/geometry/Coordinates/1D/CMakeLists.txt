@@ -11,7 +11,7 @@ install(FILES
   Coord_hash.hpp
   Coord_util.hpp
   Coord.ipp
-  DESTINATION ${PROJECT_BINARY_DIR}/includes)
+  DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/coordinates/1d)
 
 target_link_libraries(Coord1D_IMPL
   CoordCommon_IMPL)

@@ -8,7 +8,7 @@ install(FILES
   coord_type_util.hpp
   Dimension.hpp
   common.ipp
-  DESTINATION ${PROJECT_BINARY_DIR}/includes)
+  DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/coordinates/common)
 
 target_link_libraries(CoordCommon_IMPL
   FloatingPoint)

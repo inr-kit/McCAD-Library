@@ -24,7 +24,7 @@ install(FILES
   boundSurfacePlane_impl.hpp
   solid_impl.hpp
   boundingBox_impl.hpp
-  DESTINATION ${PROJECT_BINARY_DIR}/includes)
+  DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/geometry)
 
 target_link_libraries(GEOMETRY_IMPL PUBLIC
   OCC)
