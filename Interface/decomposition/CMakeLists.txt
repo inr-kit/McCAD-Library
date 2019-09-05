@@ -9,7 +9,7 @@ install(FILES
   splitsolid.hpp
   decomposeSolid.hpp
   decomposition.hpp
-  DESTINATION ${PROJECT_BINARY_DIR}/includes)
+  DESTINATION ${PROJECT_BINARY_DIR}/includes/interface/decomposition)
 
 target_link_libraries(DECOMPOSITION_IFACE
   DECOMPOSITION_IMPL)

@@ -14,7 +14,7 @@ install(FILES
   PlaneFuser.hpp
   FaceParameters.hpp
   ShapeView.hpp
-  DESTINATION ${PROJECT_BINARY_DIR}/includes)
+  DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/tools)
 
 add_subdirectory(FloatingPoint)
 

@@ -11,7 +11,7 @@ install(FILES
   Coord3D_hash.hpp
   Coord3D_util.hpp
   Coord3D.ipp
-  DESTINATION ${PROJECT_BINARY_DIR}/includes)
+  DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/coordinates/3d)
 
 target_link_libraries(Coord3D_IMPL
   CoordCommon_IMPL

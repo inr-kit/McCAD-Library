@@ -11,7 +11,7 @@ install(FILES
   Coord2D_hash.hpp
   Coord2D_util.hpp
   Coord2D.ipp
-  DESTINATION ${PROJECT_BINARY_DIR}/includes)
+  DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/coordinates/2d)
 
 target_link_libraries(Coord2D_IMPL
   CoordCommon_IMPL

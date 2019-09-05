@@ -13,7 +13,7 @@ install(FILES
   boundSurface.hpp
   boundSurfacePlane.hpp
   solid.hpp
-  DESTINATION ${PROJECT_BINARY_DIR}/includes)
+  DESTINATION ${PROJECT_BINARY_DIR}/includes/interface/geometry)
 
 target_link_libraries(GEOMETRY_IFACE
   GEOMETRY_IMPL)

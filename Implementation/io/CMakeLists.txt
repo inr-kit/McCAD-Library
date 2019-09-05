@@ -5,7 +5,7 @@ add_library(IO_IMPL OBJECT
 install(FILES
   stepreader_impl.hpp
   stepwriter_impl.hpp
-  DESTINATION ${PROJECT_BINARY_DIR}/includes)
+  DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/io)
 
 target_link_libraries(IO_IMPL
   OCC)
