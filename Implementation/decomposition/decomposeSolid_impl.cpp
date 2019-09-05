@@ -48,17 +48,19 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(std::unique_ptr<Geometry::So
       //std::cout << "Solid has a split surface" << std::endl;
       if (!selectSplitSurface(solid))
 	{
+	  //std::cout << "** selectSplitSurface fail" << std::endl;
 	  return Standard_False;
 	}
       // Split the solid with the selected surface.
       //std::cout << "selected surface concave edges: " << selectedSplitFacesList[0]->accessSImpl()->throughConcaveEdges << std::endl;
       if (!(splitSolid.accessSSImpl()->perform(solid_impl->solid, solid_impl->selectedSplitFacesList[0], solid_impl->splitSolidList)))
 	{
-	  //std::cout << "return of splitsolid" << std::endl;
+	  //std::cout << "** splitsolid fail" << std::endl;
 	  return Standard_False;
 	}
       // Loop over the resulting subsolids and split each one of them recursively.
       //std::cout << "splitting subsolids" << std::endl;
+      //throw std::runtime_error {"end"};
       for (Standard_Integer i = 1; i <= solid_impl->splitSolidList->Length(); ++i)
 	{
 	  std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/" << solid_impl->splitSolidList->Length() << "/" << i << std::endl;
@@ -71,6 +73,14 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(std::unique_ptr<Geometry::So
 	    }
 	  catch(...)
 	    {
+	      //std::cout << "** subSolid_impl->initiate fail" << std::endl;
+	      //STEPControl_Writer writer3;
+	      //writer3.Transfer(solid_impl->splitSolidList->Value(i), STEPControl_StepModelType::STEPControl_AsIs);
+	      //writer3.Write("../examples/solid.stp");
+	      //STEPControl_Writer writer4;
+	      //writer4.Transfer(solid_impl->selectedSplitFacesList[0]->accessSImpl()->extendedFace, STEPControl_StepModelType::STEPControl_AsIs);
+	      //writer4.Write("../examples/surface.stp");
+	      //throw std::runtime_error{"Shape problem"};
 	      return Standard_False;
 	    }
 	  std::unique_ptr<DecomposeSolid> decomposeSolid = std::make_unique<DecomposeSolid>();
@@ -100,8 +110,9 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(std::unique_ptr<Geometry::So
 	    }
 	  else
 	    {
+	      //std::cout << "** decompose subsolid fail" << std::endl;
 	      //return Standard_False;
-	      solid_impl->rejectedsubSolidsList->Append(subSolid_impl->solid);
+	      solid_impl->rejectedsubSolidsList->Append(solid_impl->splitSolidList->Value(i));
 	    }
 	}
       //return Standard_True;
