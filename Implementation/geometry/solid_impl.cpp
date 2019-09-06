@@ -26,6 +26,9 @@ void
 McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real bndBoxGap,
 						 Standard_Real converting){
   // Calculate the bounding box of the solid.
+  //Bnd_OBB boundingBox;
+  //BRepBndLib::AddOBB(solid, boundingBox);
+  //boundingBox.Enlarge(bndBoxGap);
   Bnd_Box boundingBox;
   BRepBndLib::Add(solid, boundingBox);
   boundingBox.SetGap(bndBoxGap);
@@ -33,9 +36,11 @@ McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real bndBoxGap,
   std::array<Standard_Real, 3> XYZmax;
   boundingBox.Get(XYZmin[0], XYZmin[1], XYZmin[2], XYZmax[0], XYZmax[1], XYZmax[2]);
   Standard_Real tempdeflection = std::max((XYZmax[0] - XYZmin[0]),
-					  (XYZmax[1] - XYZmin[1]));
-  meshDeflection = std::max(tempdeflection, (XYZmax[2] - XYZmax[2])) / converting;
+  					  (XYZmax[1] - XYZmin[1]));
+  meshDeflection = std::max(std::max((XYZmax[0] - XYZmin[0]), (XYZmax[1] - XYZmin[1])),
+			    (XYZmax[2] - XYZmax[2])) / converting;
   boxSquareLength = sqrt(boundingBox.SquareExtent());
+  //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
 }
 
 void
@@ -150,7 +155,7 @@ McCAD::Geometry::Solid::Impl::generateSurfacesList(){
     {
       facesList.push_back(std::move(planesList[i]));
     }
-  //std::cout << "merged faces list: " << facesList.size() << std::endl;
+  std::cout << "merged faces list: " << facesList.size() << std::endl;
 }
 
 std::unique_ptr<McCAD::Geometry::BoundSurface>
@@ -200,15 +205,21 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
     {
       for (Standard_Integer j = i+1; j <= surfacesList.size() - 1; ++j)
 	{
-	  //std::cout << i << " , " << j << " , " << surfacesList.size() << std::endl;
+	  std::cout << i << " , " << j << " , " << surfacesList.size() << std::endl;
 	  if (*(surfacesList[i]) == *(surfacesList[j]))
 	    {
-	      //std::cout << "equal" << std::endl;
+	      std::cout << "equal" << std::endl;
 	      surfacesList[j]->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
+	      STEPControl_Writer writer6;
+	      writer6.Transfer(surfacesList[j]->accessSImpl()->face,
+			       STEPControl_StepModelType::STEPControl_AsIs);
+	      writer6.Transfer(surfacesList[i]->accessSImpl()->face,
+			       STEPControl_StepModelType::STEPControl_AsIs);
+	      writer6.Write("../examples/equalsurface.stp");
 	      // Test if the two surfaces can be fused.
 	      if (*(surfacesList[i]) << *(surfacesList[j]))
 		{
-		  //std::cout << "fuse" << std::endl;
+		  std::cout << "fuse" << std::endl;
 		  if (surfacesList[i]->getSurfaceType() == "Plane")
 		    {
 		      TopoDS_Face newFace = Tools::PlaneFuser{}(surfacesList[i]->accessSImpl()->face, surfacesList[j]->accessSImpl()->face);
@@ -245,6 +256,10 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
 		{
 		  //std::cout << "equal, erase one" << std::endl;
 		  // Erase pointer surfacesList[j] from surfacesList.
+		  STEPControl_Writer writer7;
+		  writer7.Transfer(surfacesList[j]->accessSImpl()->face,
+                                   STEPControl_StepModelType::STEPControl_AsIs);
+                  writer7.Write("../examples/equalsurfacedelete.stp");
 		  surfacesList.erase(surfacesList.begin() + j);
 		  --j;
 		}

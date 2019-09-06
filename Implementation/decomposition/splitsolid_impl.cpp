@@ -20,7 +20,7 @@ void
 McCAD::Decomposition::SplitSolid::Impl::calculateBoundingBox(const TopoDS_Solid& solid){
   //std::cout << "calculateBoundingBox" << std::endl;
   BRepBndLib::Add(solid, bndBox);
-  bndBox.SetGap(1.0);
+  bndBox.SetGap(0.5);
   std::array<Standard_Real, 3> XYZmin;
   std::array<Standard_Real, 3> XYZmax;
   bndBox.Get(XYZmin[0], XYZmin[1], XYZmin[2], XYZmax[0], XYZmax[1], XYZmax[2]);
@@ -28,9 +28,9 @@ McCAD::Decomposition::SplitSolid::Impl::calculateBoundingBox(const TopoDS_Solid&
   boundingBox = BRepPrimAPI_MakeBox(gp_Pnt(XYZmin[0], XYZmin[1], XYZmin[2]),
 				    gp_Pnt(XYZmax[0], XYZmax[1], XYZmax[2])).Shape();
   //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
-  //STEPControl_Writer writer0;
-  //writer0.Transfer(boundingBox, STEPControl_StepModelType::STEPControl_AsIs);
-  //writer0.Write("../examples/bbox.stp");
+  STEPControl_Writer writer0;
+  writer0.Transfer(boundingBox, STEPControl_StepModelType::STEPControl_AsIs);
+  writer0.Write("../examples/bbox.stp");
 }
 
 Standard_Boolean
@@ -56,10 +56,10 @@ McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid,
 	  //std::cout << "positiveCommon" << std::endl;
 	  positiveBox = positiveCommon.Shape();
 
-	  //STEPControl_Writer writer1;
-	  //writer1.Transfer(positiveBox, STEPControl_StepModelType::STEPControl_AsIs);
-	  //writer1.Transfer(positiveHalfSolid, STEPControl_StepModelType::STEPControl_AsIs);
-	  //writer1.Write("../examples/positive.stp");
+	  STEPControl_Writer writer1;
+	  writer1.Transfer(positiveBox, STEPControl_StepModelType::STEPControl_AsIs);
+	  writer1.Transfer(positiveHalfSolid, STEPControl_StepModelType::STEPControl_AsIs);
+	  writer1.Write("../examples/positive.stp");
 	}
       BRepAlgoAPI_Common negativeCommon(negativeHalfSolid, boundingBox);
       if (negativeCommon.IsDone())
@@ -67,10 +67,10 @@ McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid,
 	  //std::cout << "negativeCommon" << std::endl;
 	  negativeBox = negativeCommon.Shape();
 
-	  //STEPControl_Writer writer2;
-	  //writer2.Transfer(negativeBox, STEPControl_StepModelType::STEPControl_AsIs);
-          //writer2.Transfer(negativeHalfSolid, STEPControl_StepModelType::STEPControl_AsIs);
-	  //writer2.Write("../examples/negative.stp");
+	  STEPControl_Writer writer2;
+	  writer2.Transfer(negativeBox, STEPControl_StepModelType::STEPControl_AsIs);
+          writer2.Transfer(negativeHalfSolid, STEPControl_StepModelType::STEPControl_AsIs);
+	  writer2.Write("../examples/negative.stp");
 	}
     }
   catch(...)
