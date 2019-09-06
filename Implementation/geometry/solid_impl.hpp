@@ -38,6 +38,8 @@
 #include <TopTools_ListIteratorOfListOfShape.hxx>
 #include <TopTools_ListOfShape.hxx>
 #include <TopTools_HSequenceOfShape.hxx>
+#include <Bnd_OBB.hxx>
+#include <STEPControl_Writer.hxx>
 
 namespace McCAD::Geometry{
   class Solid::Impl {
