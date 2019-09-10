@@ -26,21 +26,28 @@ void
 McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real bndBoxGap,
 						 Standard_Real converting){
   // Calculate the bounding box of the solid.
-  //Bnd_OBB boundingBox;
-  //BRepBndLib::AddOBB(solid, boundingBox);
-  //boundingBox.Enlarge(bndBoxGap);
-  Bnd_Box boundingBox;
-  BRepBndLib::Add(solid, boundingBox);
-  boundingBox.SetGap(bndBoxGap);
-  std::array<Standard_Real, 3> XYZmin;
-  std::array<Standard_Real, 3> XYZmax;
-  boundingBox.Get(XYZmin[0], XYZmin[1], XYZmin[2], XYZmax[0], XYZmax[1], XYZmax[2]);
-  Standard_Real tempdeflection = std::max((XYZmax[0] - XYZmin[0]),
-  					  (XYZmax[1] - XYZmin[1]));
-  meshDeflection = std::max(std::max((XYZmax[0] - XYZmin[0]), (XYZmax[1] - XYZmin[1])),
-			    (XYZmax[2] - XYZmax[2])) / converting;
+  Bnd_OBB boundingBox;
+  BRepBndLib::AddOBB(solid, boundingBox);
+  boundingBox.Enlarge(bndBoxGap);
+  //Bnd_Box boundingBox;
+  //BRepBndLib::Add(solid, boundingBox);
+  //boundingBox.SetGap(bndBoxGap);
+  //std::array<Standard_Real, 3> XYZmin;
+  //std::array<Standard_Real, 3> XYZmax;
+  //boundingBox.Get(XYZmin[0], XYZmin[1], XYZmin[2], XYZmax[0], XYZmax[1], XYZmax[2]);
+  //gp_Pnt corners [8];
+  //boundingBox.GetVertex(corners);
+  //XYZmin = {corners[0].X(), corners[0].Y(), corners[0].Z()};
+  //XYZmax = {corners[7].X(), corners[7].Y(), corners[7].Z()};
+
+  //Standard_Real tempdeflection = std::max((XYZmax[0] - XYZmin[0]),
+  //		  (XYZmax[1] - XYZmin[1]));
+  //meshDeflection = std::max(std::max((XYZmax[0] - XYZmin[0]), (XYZmax[1] - XYZmin[1])),
+  //			    (XYZmax[2] - XYZmax[2])) / converting;
+  meshDeflection = std::max((2*boundingBox.XHSize(), 2*boundingBox.YHSize()),
+			    2*boundingBox.ZHSize()) / converting;
   boxSquareLength = sqrt(boundingBox.SquareExtent());
-  //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
+  std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
 }
 
 void
@@ -254,14 +261,14 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
 		}
 	      else
 		{
-		  //std::cout << "equal, erase one" << std::endl;
+		  std::cout << "equal, erase one" << std::endl;
 		  // Erase pointer surfacesList[j] from surfacesList.
-		  STEPControl_Writer writer7;
-		  writer7.Transfer(surfacesList[j]->accessSImpl()->face,
-                                   STEPControl_StepModelType::STEPControl_AsIs);
-                  writer7.Write("../examples/equalsurfacedelete.stp");
-		  surfacesList.erase(surfacesList.begin() + j);
-		  --j;
+		  //STEPControl_Writer writer7;
+		  //writer7.Transfer(surfacesList[j]->accessSImpl()->face,
+                  //                 STEPControl_StepModelType::STEPControl_AsIs);
+                  //writer7.Write("../examples/equalsurfacedelete.stp");
+		  //surfacesList.erase(surfacesList.begin() + j);
+		  //--j;
 		}
 	      if (surfacesList.size() < 2)
 		{
