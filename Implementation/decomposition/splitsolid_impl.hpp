@@ -26,13 +26,17 @@
 #include <BRepBuilderAPI_Sewing.hxx>
 #include <ShapeFix_Solid.hxx>
 #include <TopoDS_Shell.hxx>
+#include <Bnd_OBB.hxx>
+#include <gp_Trsf.hxx>
+#include <BRepBuilderAPI_Transform.hxx>
 
 namespace McCAD::Decomposition{
   class SplitSolid::Impl {
   public:
     Impl() = default;
 
-    Bnd_Box bndBox;
+    //Bnd_Box bndBox;
+    Bnd_OBB bndBox;
     Standard_Real boxSquareLength;
     TopoDS_Shape boundingBox;
 
