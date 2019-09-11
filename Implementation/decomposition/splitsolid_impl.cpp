@@ -6,8 +6,8 @@ McCAD::Decomposition::SplitSolid::Impl::perform(std::unique_ptr<Geometry::Solid>
 						Standard_Integer indexSplitSurface){
   auto solid_impl = solid->accessSImpl();
   auto surface = solid_impl->selectedSplitFacesList[indexSplitSurface];
-  
-  createOBBSolid(solid_impl->OBB);
+
+  createOBBSolid(solid_impl->OBB, solid_impl->solid);
   if (surface->getSurfaceType() == "Plane")
     {
       return split(solid_impl->solid, surface->accessSImpl()->extendedFace,
@@ -20,7 +20,8 @@ McCAD::Decomposition::SplitSolid::Impl::perform(std::unique_ptr<Geometry::Solid>
 }
 
 void
-McCAD::Decomposition::SplitSolid::Impl::createOBBSolid(const Bnd_OBB& OBB){
+McCAD::Decomposition::SplitSolid::Impl::createOBBSolid(const Bnd_OBB& OBB,
+						       TopoDS_Solid& solid){
   std::cout << "createOBBSolid" << std::endl;
   bndBox = OBB;
   bndBox.Enlarge(0.4);
@@ -45,31 +46,26 @@ McCAD::Decomposition::SplitSolid::Impl::createOBBSolid(const Bnd_OBB& OBB){
   std::cout << "dimentsions: " << bndBox.XHSize() << ", " << bndBox.YHSize()  << ", " << bndBox.ZHSize() << std::endl;
   gp_Pnt pnt1 = corners[0];
   gp_Pnt pnt2 = corners[7];
-  try
-    {
-      gp_Ax3 axis;
-      axis.SetDirection(gp_Dir(bndBox.ZDirection()));
-      axis.SetXDirection(gp_Dir(bndBox.XDirection()));
-      axis.SetYDirection(gp_Dir(bndBox.YDirection()));
-      std::cout << "try Transformation" << std::endl;
-      gp_Trsf transformation;
-      transformation.SetTransformation(axis);
-      std::cout << "try Pnt1" << std::endl;
-      pnt1 = pnt1.Transformed(transformation);
-      std::cout << "try Pnt2" << std::endl;
-      pnt2 = pnt2.Transformed(transformation);
-      std::cout << "try BRepPrimAPI_MakeBox" << std::endl;
-      boundingBox = BRepPrimAPI_MakeBox(pnt1, pnt2).Shape();
-      BRepBuilderAPI_Transform boxTransform(transformation);
-      boxTransform.Perform(boundingBox);
-      boundingBox = boxTransform.ModifiedShape(boundingBox);
-    }
-  catch(...)
-    {
-      //throw std::runtime_error {"Error creating OBB solid!."};
-      std::cout << "** not transformation BRepPrimAPI_MakeBox" << std::endl;
-      boundingBox = BRepPrimAPI_MakeBox(pnt1, pnt2).Shape();
-    }
+
+  ///gp_Ax3 axis(gp_Pnt(0, 0, 0), bndBox.ZDirection(), bndBox.XDirection());
+  //axis.SetDirection(gp_Dir(bndBox.ZDirection()));
+  //axis.SetXDirection(gp_Dir(bndBox.XDirection()));
+  //axis.SetYDirection(gp_Dir(bndBox.YDirection()));
+  std::cout << "try Transformation" << std::endl;
+  TopLoc_Location location;
+  solid.Location(location);
+  gp_Trsf transformation = location.Transformation();
+  ///transformation.SetTransformation(axis);
+  std::cout << "try Pnt1" << std::endl;
+  pnt1 = pnt1.Transformed(transformation);
+  std::cout << "try Pnt2" << std::endl;
+  pnt2 = pnt2.Transformed(transformation);
+  std::cout << "try BRepPrimAPI_MakeBox" << std::endl;
+  boundingBox = BRepPrimAPI_MakeBox(pnt1, pnt2).Shape();
+  BRepBuilderAPI_Transform boxTransform(transformation);
+  boxTransform.Perform(boundingBox);
+  boundingBox = boxTransform.ModifiedShape(boundingBox);
+  
   STEPControl_Writer writer0;
   writer0.Transfer(boundingBox, STEPControl_StepModelType::STEPControl_AsIs);
   Standard_Integer kk = 0;

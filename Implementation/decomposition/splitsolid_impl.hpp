@@ -32,6 +32,7 @@
 #include <Bnd_OBB.hxx>
 #include <gp_Trsf.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
+#include <TopLoc_Location.hxx>
 
 namespace McCAD::Decomposition{
   class SplitSolid::Impl {
@@ -44,7 +45,7 @@ namespace McCAD::Decomposition{
 
     Standard_Boolean perform(std::unique_ptr<Geometry::Solid>& solid,
 			     Standard_Integer indexSplitSurface = 0);
-    void createOBBSolid(const Bnd_OBB& OBB);
+    void createOBBSolid(const Bnd_OBB& OBB, TopoDS_Solid& solid);
     Standard_Boolean split(const TopoDS_Solid& solid,
 			   const TopoDS_Face& splitFace,
 			   std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList);
