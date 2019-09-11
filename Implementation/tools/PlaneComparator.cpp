@@ -33,10 +33,10 @@ McCAD::Tools::PlaneComparator::operator()(const TopoDS_Face& firstFace,
         auto firstPlane = firstAdaptor.Plane();             // also checks if surface type is GeomAbs_Plane
         auto secondPlane = secondAdaptor.Plane();           // also checks if surface type is GeomAbs_Plane
 
-	std::cout << "distance: " << firstPlane.Distance(secondPlane) << std::endl;
+	//std::cout << "distance: " << firstPlane.Distance(secondPlane) << std::endl;
         secondPlane.Scale(gp_Pnt{0.0, 0.0, 0.0}, 0.1);
         firstPlane.Scale(gp_Pnt{0.0, 0.0, 0.0}, 0.1);
-	std::cout << "distance: " << firstPlane.Distance(secondPlane) << std::endl;
+	//std::cout << "distance: " << firstPlane.Distance(secondPlane) << std::endl;
 
         // Compare plane parameters
         return equivalentPlaneParameters(firstPlane, secondPlane);
@@ -86,10 +86,10 @@ McCAD::Tools::PlaneComparator::equivalentPlaneParameters(const gp_Pln& first,
             secondPlaneParameters[2]
         };
 
-	std::cout << "firstPlane: " << firstPlaneParameters[3] << std::endl;
-	std::cout << (firstPlaneDirection.IsEqual(secondPlaneDirection, angularTolerance) && std::abs(firstPlaneParameters[3] - secondPlaneParameters[3]) <= distanceTolerance) << std::endl;
-	std::cout << "secondPlane: " << secondPlaneParameters[3] << std::endl;
-	std::cout << (firstPlaneDirection.IsOpposite(secondPlaneDirection, angularTolerance) && std::abs(firstPlaneParameters[3] + secondPlaneParameters[3]) <= distanceTolerance) << std::endl;
+	//std::cout << "firstPlane: " << firstPlaneParameters[3] << std::endl;
+	//std::cout << (firstPlaneDirection.IsEqual(secondPlaneDirection, angularTolerance) && std::abs(firstPlaneParameters[3] - secondPlaneParameters[3]) <= distanceTolerance) << std::endl;
+	//std::cout << "secondPlane: " << secondPlaneParameters[3] << std::endl;
+	//std::cout << (firstPlaneDirection.IsOpposite(secondPlaneDirection, angularTolerance) && std::abs(firstPlaneParameters[3] + secondPlaneParameters[3]) <= distanceTolerance) << std::endl;
 
         return (firstPlaneDirection.IsEqual(secondPlaneDirection, angularTolerance)
                 && std::abs(firstPlaneParameters[3] - secondPlaneParameters[3])

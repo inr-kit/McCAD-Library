@@ -83,7 +83,7 @@ McCAD::Decomposition::SplitSurfaces::Impl::generateSplitFacesList(std::vector<st
 
 void
 McCAD::Decomposition::SplitSurfaces::Impl::sortSplitFaces(std::vector<std::shared_ptr<Geometry::BoundSurface>>& splitFacesList){
-  if (splitFacesList.size() <= 1)
+  if (splitFacesList.size() < 2)
     {
       return;
     }
