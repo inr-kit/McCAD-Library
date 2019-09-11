@@ -23,18 +23,18 @@ McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
 }
 
 void
-McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real bndBoxGap,
-						 Standard_Real converting){
+McCAD::Geometry::Solid::Impl::createOBB(Standard_Real bndBoxGap){
   // Calculate the bounding box of the solid.
-  Bnd_Box boundingBox;
-  BRepBndLib::Add(solid, boundingBox);
-  boundingBox.SetGap(bndBoxGap);
-  std::array<Standard_Real, 3> XYZmin;
-  std::array<Standard_Real, 3> XYZmax;
-  boundingBox.Get(XYZmin[0], XYZmin[1], XYZmin[2], XYZmax[0], XYZmax[1], XYZmax[2]);
-  meshDeflection = std::max(std::max((XYZmax[0] - XYZmin[0]), (XYZmax[1] - XYZmin[1])),
-			    (XYZmax[2] - XYZmax[2])) / converting;
-  boxSquareLength = sqrt(boundingBox.SquareExtent());
+  BRepBndLib::AddOBB(solid, OBB);
+  OBB.Enlarge(bndBoxGap);
+}
+
+void
+McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real scalingFactor){
+  // Calculate the oriented bounding box of the solid.
+  meshDeflection = 2 * std::max(std::max(OBB.XHSize(), OBB.YHSize()),
+				OBB.ZHSize()) / scalingFactor;
+  boxSquareLength = sqrt(OBB.SquareExtent());
   //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
 }
 
@@ -207,7 +207,7 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
 	      surfacesList[j]->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
 	      //STEPControl_Writer writer6;
 	      //writer6.Transfer(surfacesList[j]->accessSImpl()->face,
-	      //		       STEPControl_StepModelType::STEPControl_AsIs);
+	      //	       STEPControl_StepModelType::STEPControl_AsIs);
 	      //writer6.Transfer(surfacesList[i]->accessSImpl()->face,
 	      //	       STEPControl_StepModelType::STEPControl_AsIs);
 	      //writer6.Write("../examples/equalsurface.stp");

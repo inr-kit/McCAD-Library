@@ -48,7 +48,8 @@ namespace McCAD::Geometry{
     ~Impl();
 
     std::unique_ptr<Tools::Preprocessor> preproc;
-    
+
+    Bnd_OBB OBB;
     TopoDS_Solid solid;
     TopoDS_Shape solidShape;
     Standard_Boolean isTorus = Standard_False;
@@ -64,8 +65,8 @@ namespace McCAD::Geometry{
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
 
     void initiate(const TopoDS_Shape& aSolidShape);
-    void calcMeshDeflection(Standard_Real bndBoxGap = 0.0,
-			    Standard_Real converting = 100);
+    void createOBB(Standard_Real bndBoxGap = 0);
+    void calcMeshDeflection(Standard_Real scalingFactor = 100);
     void updateEdgesConvexity(const Standard_Real& angleTolerance = 1.0e-4);
     void repairSolid();
     void generateSurfacesList();

@@ -2,13 +2,16 @@
 #include "splitsolid_impl.hpp"
 
 Standard_Boolean
-McCAD::Decomposition::SplitSolid::Impl::perform(const TopoDS_Solid& solid,
-						const std::shared_ptr<Geometry::BoundSurface>& surface,
-						std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
-  calculateBoundingBox(solid);
+McCAD::Decomposition::SplitSolid::Impl::perform(std::unique_ptr<Geometry::Solid>& solid,
+						Standard_Integer indexSplitSurface){
+  auto solid_impl = solid->accessSImpl();
+  auto surface = solid_impl->selectedSplitFacesList[indexSplitSurface];
+  
+  createOBBSolid(solid_impl->OBB);
   if (surface->getSurfaceType() == "Plane")
     {
-      return split(solid, surface->accessSImpl()->extendedFace, subSolidsList);
+      return split(solid_impl->solid, surface->accessSImpl()->extendedFace,
+		   solid_impl->splitSolidList);
     }
   else
     {
@@ -17,21 +20,58 @@ McCAD::Decomposition::SplitSolid::Impl::perform(const TopoDS_Solid& solid,
 }
 
 void
-McCAD::Decomposition::SplitSolid::Impl::calculateBoundingBox(const TopoDS_Solid& solid){
-  std::cout << "calculateBoundingBox" << std::endl;
-  BRepBndLib::Add(solid, bndBox);
-  bndBox.SetGap(0.5);
-  std::array<Standard_Real, 3> XYZmin;
-  std::array<Standard_Real, 3> XYZmax;
-  bndBox.Get(XYZmin[0], XYZmin[1], XYZmin[2], XYZmax[0], XYZmax[1], XYZmax[2]);
+McCAD::Decomposition::SplitSolid::Impl::createOBBSolid(const Bnd_OBB& OBB){
+  std::cout << "createOBBSolid" << std::endl;
+  bndBox = OBB;
+  bndBox.Enlarge(0.4);
+  std::cout << "status: " << bndBox.IsAABox() << std::endl;
   boxSquareLength = sqrt(bndBox.SquareExtent());
-  //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
-  boundingBox = BRepPrimAPI_MakeBox(gp_Pnt(XYZmin[0], XYZmin[1], XYZmin[2]),
-				    gp_Pnt(XYZmax[0], XYZmax[1], XYZmax[2])).Shape();
-
+  std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
+  std::array<Standard_Real, 3> center;
+  std::array<Standard_Real, 3> dimension;
+  gp_Pnt corners[8];
+  bndBox.GetVertex(corners);
+  std::cout << "corners: " << std::endl;
+  for (Standard_Integer k = 0; k < 8; ++k)
+    {
+      std::cout << corners[k].X() << ", " << corners[k].Y() << ", " << corners[k].Z() << std::endl;
+    }
+  center = {bndBox.Center().X(), bndBox.Center().Y(), bndBox.Center().Z()};
+  std::cout << "center: " << bndBox.Center().X() << ", " << bndBox.Center().Y() << ", " << bndBox.Center().Z() << std::endl;
+  dimension = {bndBox.XHSize(), bndBox.YHSize(), bndBox.ZHSize()};
+  std::cout << "xdirection: " << bndBox.XDirection().X() << ", " << bndBox.XDirection().Y()  << ", " << bndBox.XDirection().Z() << std::endl;
+  std::cout << "ydirection: " << bndBox.YDirection().X() << ", " << bndBox.YDirection().Y() << ", " << bndBox.YDirection().Z() << std::endl;
+  std::cout << "zdirection: " << bndBox.ZDirection().X() << ", " << bndBox.ZDirection().Y() << ", " << bndBox.ZDirection().Z() << std::endl;
+  std::cout << "dimentsions: " << bndBox.XHSize() << ", " << bndBox.YHSize()  << ", " << bndBox.ZHSize() << std::endl;
+  gp_Pnt pnt1 = corners[0];
+  gp_Pnt pnt2 = corners[7];
+  try
+    {
+      gp_Ax3 axis;
+      axis.SetDirection(gp_Dir(bndBox.ZDirection()));
+      axis.SetXDirection(gp_Dir(bndBox.XDirection()));
+      axis.SetYDirection(gp_Dir(bndBox.YDirection()));
+      std::cout << "try Transformation" << std::endl;
+      gp_Trsf transformation;
+      transformation.SetTransformation(axis);
+      std::cout << "try Pnt1" << std::endl;
+      pnt1 = pnt1.Transformed(transformation);
+      std::cout << "try Pnt2" << std::endl;
+      pnt2 = pnt2.Transformed(transformation);
+      std::cout << "try BRepPrimAPI_MakeBox" << std::endl;
+      boundingBox = BRepPrimAPI_MakeBox(pnt1, pnt2).Shape();
+      BRepBuilderAPI_Transform boxTransform(transformation);
+      boxTransform.Perform(boundingBox);
+      boundingBox = boxTransform.ModifiedShape(boundingBox);
+    }
+  catch(...)
+    {
+      //throw std::runtime_error {"Error creating OBB solid!."};
+      std::cout << "** not transformation BRepPrimAPI_MakeBox" << std::endl;
+      boundingBox = BRepPrimAPI_MakeBox(pnt1, pnt2).Shape();
+    }
   STEPControl_Writer writer0;
   writer0.Transfer(boundingBox, STEPControl_StepModelType::STEPControl_AsIs);
-  writer0.Transfer(solid, STEPControl_StepModelType::STEPControl_AsIs);
   Standard_Integer kk = 0;
   std::string filename = "../examples/bbox/box";
   std::string suffix = ".stp";
