@@ -19,72 +19,25 @@ McCAD::Decomposition::SplitSolid::Impl::perform(const TopoDS_Solid& solid,
 void
 McCAD::Decomposition::SplitSolid::Impl::calculateBoundingBox(const TopoDS_Solid& solid){
   std::cout << "calculateBoundingBox" << std::endl;
-  BRepBndLib::AddOBB(solid, bndBox);
-  bndBox.Enlarge(0.5);
-  //BRepBndLib::Add(solid, bndBox);
-  //bndBox.SetGap(0.5);
-  std::array<Standard_Real, 3> center;
-  std::array<Standard_Real, 3> dimension;
+  BRepBndLib::Add(solid, bndBox);
+  bndBox.SetGap(0.5);
   std::array<Standard_Real, 3> XYZmin;
   std::array<Standard_Real, 3> XYZmax;
-  gp_Pnt corners [8];
-  gp_Ax3 axis;
-  //bndBox.Get(XYZmin[0], XYZmin[1], XYZmin[2], XYZmax[0], XYZmax[1], XYZmax[2]);
-  bndBox.GetVertex(corners);
-  std::cout << "status: " << bndBox.IsAABox() << std::endl;
-  center = {bndBox.Center().X(), bndBox.Center().Y(), bndBox.Center().Z()};
-  dimension = {bndBox.XHSize(), bndBox.YHSize(), bndBox.ZHSize()};
-  std::cout << "xdirection: " << bndBox.XDirection().X() << ", " << bndBox.XDirection().Y()  << ", " << bndBox.XDirection().Z() << std::endl;
-  std::cout << "ydirection: " << bndBox.YDirection().X() << ", " << bndBox.YDirection().Y() << ", " << bndBox.YDirection().Z() << std::endl;
-  std::cout << "zdirection: " << bndBox.ZDirection().X() << ", " << bndBox.ZDirection().Y() << ", " << bndBox.ZDirection().Z() << std::endl;
-  std::cout << "dimentsions: " << bndBox.XHSize() << ", " << bndBox.YHSize()  << ", " << bndBox.ZHSize() << std::endl;
-  std::cout << "center: " << bndBox.Center().X() << ", " << bndBox.Center().Y() << ", " << bndBox.Center().Z() << std::endl;
-  for (Standard_Integer k = 0; k < 8; ++k)
-    {
-      std::cout << corners[k].X() << ", " << corners[k].Y() << ", " << corners[k].Z() << std::endl;
-    }
-  //XYZmin = {center[0] - dimension[0], center[1] - dimension[1], center[2] - dimension[2]};
-  //XYZmax = {center[0] + dimension[0], center[1] + dimension[1], center[2] + dimension[2]};
-  //std::cout << XYZmin[0] << ", " << XYZmin[1] << ", " << XYZmin[2] << std::endl;
-  //std::cout << XYZmax[0] << ", " << XYZmax[1] << ", " << XYZmax[2] << std::endl;
+  bndBox.Get(XYZmin[0], XYZmin[1], XYZmin[2], XYZmax[0], XYZmax[1], XYZmax[2]);
   boxSquareLength = sqrt(bndBox.SquareExtent());
-  std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
-  //boundingBox = BRepPrimAPI_MakeBox(gp_Pnt(XYZmin[0], XYZmin[1], XYZmin[2]),
-  //gp_Pnt(XYZmax[0], XYZmax[1], XYZmax[2])).Shape();
-  gp_Pnt pnt1 = gp_Pnt(corners[0].X(), corners[0].Y(), corners[0].Z());
-  gp_Pnt pnt2 = gp_Pnt(corners[7].X(), corners[7].Y(), corners[7].Z());
-  try
-    {
-      axis.SetXDirection(gp_Dir(bndBox.XDirection()));
-      axis.SetYDirection(gp_Dir(bndBox.YDirection()));
-      std::cout << "Transformation" << std::endl;
-      gp_Trsf transformation;
-      transformation.SetTransformation(axis);
-      std::cout << "Pnt1" << std::endl;
-      pnt1 = pnt1.Transformed(transformation);
-      std::cout << "Pnt2" << std::endl;
-      pnt2 = pnt2.Transformed(transformation);
-      std::cout << "BRepPrimAPI_MakeBox" << std::endl;
-      boundingBox = BRepPrimAPI_MakeBox(pnt1, pnt2).Shape();
-      BRepBuilderAPI_Transform boxTransform(transformation);
-      boxTransform.Perform(boundingBox);
-      boundingBox = boxTransform.ModifiedShape(boundingBox);
-    }
-  catch(...)
-    {
-      std::cout << "BRepPrimAPI_MakeBox" << std::endl;
-      boundingBox = BRepPrimAPI_MakeBox(pnt1, pnt2).Shape();
-    }
-  STEPControl_Writer writer0;
-  writer0.Transfer(boundingBox, STEPControl_StepModelType::STEPControl_AsIs);
-  writer0.Write("../examples/bbox.stp");
+  //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
+  boundingBox = BRepPrimAPI_MakeBox(gp_Pnt(XYZmin[0], XYZmin[1], XYZmin[2]),
+				    gp_Pnt(XYZmax[0], XYZmax[1], XYZmax[2])).Shape();
+  //STEPControl_Writer writer0;
+  //writer0.Transfer(boundingBox, STEPControl_StepModelType::STEPControl_AsIs);
+  //writer0.Write("../examples/bbox.stp");
 }
 
 Standard_Boolean
 McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid,
 					      const TopoDS_Face& splitFace,
 					      std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
-  std::cout << "split" << std::endl;
+  //std::cout << "split" << std::endl;
   gp_Pnt positivePoint, negativePoint;
   calculatePoints(splitFace, positivePoint, negativePoint);
   //std::cout << "positive point: " << positivePoint.X() << "," << positivePoint.Y() << "," << positivePoint.Z() << "," << std::endl;
@@ -103,10 +56,10 @@ McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid,
 	  //std::cout << "positiveCommon" << std::endl;
 	  positiveBox = positiveCommon.Shape();
 
-	  STEPControl_Writer writer1;
-	  writer1.Transfer(positiveBox, STEPControl_StepModelType::STEPControl_AsIs);
-	  writer1.Transfer(positiveHalfSolid, STEPControl_StepModelType::STEPControl_AsIs);
-	  writer1.Write("../examples/positive.stp");
+	  //STEPControl_Writer writer1;
+	  //writer1.Transfer(positiveBox, STEPControl_StepModelType::STEPControl_AsIs);
+	  //writer1.Transfer(positiveHalfSolid, STEPControl_StepModelType::STEPControl_AsIs);
+	  //writer1.Write("../examples/positive.stp");
 	}
       BRepAlgoAPI_Common negativeCommon(negativeHalfSolid, boundingBox);
       if (negativeCommon.IsDone())
@@ -114,10 +67,10 @@ McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid,
 	  //std::cout << "negativeCommon" << std::endl;
 	  negativeBox = negativeCommon.Shape();
 
-	  STEPControl_Writer writer2;
-	  writer2.Transfer(negativeBox, STEPControl_StepModelType::STEPControl_AsIs);
-          writer2.Transfer(negativeHalfSolid, STEPControl_StepModelType::STEPControl_AsIs);
-	  writer2.Write("../examples/negative.stp");
+	  //STEPControl_Writer writer2;
+	  //writer2.Transfer(negativeBox, STEPControl_StepModelType::STEPControl_AsIs);
+          //writer2.Transfer(negativeHalfSolid, STEPControl_StepModelType::STEPControl_AsIs);
+	  //writer2.Write("../examples/negative.stp");
 	}
     }
   catch(...)
