@@ -47,10 +47,10 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(std::unique_ptr<Geometry::So
   
   if (solid_impl->splitSurface)
     {
-      //std::cout << "Solid has a split surface" << std::endl;
+      std::cout << "Solid has a split surface" << std::endl;
       if (!selectSplitSurface(solid))
 	{
-	  //std::cout << "** selectSplitSurface fail" << std::endl;
+	  std::cout << "** selectSplitSurface fail" << std::endl;
 	  return Standard_False;
 	}
       // Split the solid with the selected surface.
@@ -123,7 +123,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(std::unique_ptr<Geometry::So
     }
   else
     {
-      //std::cout	<< "Solid has no split surfaces" << std::endl;
+      std::cout	<< "Solid has no split surfaces" << std::endl;
       solid_impl->splitSolidList->Append(solid_impl->solid);
     }
   return Standard_True;
