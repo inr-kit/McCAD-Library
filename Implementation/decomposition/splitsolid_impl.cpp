@@ -73,9 +73,9 @@ McCAD::Decomposition::SplitSolid::Impl::createOBBSolid(const Bnd_OBB& OBB,
     }
   
   //std::cout << "try Pnt1" << std::endl;
-  pnt1 = pnt1.Transformed(transformation);
+  pnt1 = pnt1.Transformed(transformation.Inverted());
   //std::cout << "try Pnt2" << std::endl;
-  pnt2 = pnt2.Transformed(transformation);
+  pnt2 = pnt2.Transformed(transformation.Inverted());
   std::cout << "Pnt1: " << pnt1.X() << ", " << pnt1.Y()  << ", " << pnt1.Z() << std::endl;
   std::cout << "Pnt2: " << pnt2.X() << ", " << pnt2.Y()  << ", " << pnt2.Z() << std::endl;
 
@@ -89,7 +89,7 @@ McCAD::Decomposition::SplitSolid::Impl::createOBBSolid(const Bnd_OBB& OBB,
     }
 
   std::cout << "Transform OBB solid" << std::endl;
-  transformation = transformation.Inverted();
+  //transformation = transformation.Inverted();
   BRepBuilderAPI_Transform boxTransform(transformation);
   boxTransform.Perform(boundingBox);
   boundingBox = boxTransform.ModifiedShape(boundingBox);
