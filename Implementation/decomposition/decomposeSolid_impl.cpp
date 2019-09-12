@@ -55,7 +55,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(
       //std::cout << "Solid has a split surface" << std::endl;
       if (!selectSplitSurface(solidImpl))
 	{
-	  //std::cout << "** selectSplitSurface fail" << std::endl;
+	  std::cout << "** selectSplitSurface fail" << std::endl;
 	  return Standard_False;
 	}
       // Split the solid with the selected surface.

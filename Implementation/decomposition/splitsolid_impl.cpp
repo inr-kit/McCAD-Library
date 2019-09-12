@@ -47,27 +47,56 @@ McCAD::Decomposition::SplitSolid::Impl::createOBBSolid(const Bnd_OBB& OBB,
   gp_Pnt pnt1 = corners[0];
   gp_Pnt pnt2 = corners[7];
 
-  ///gp_Ax3 axis(gp_Pnt(0, 0, 0), bndBox.ZDirection(), bndBox.XDirection());
+  TopLoc_Location location = solid.Location();
+  gp_Trsf transformation_solid;
+  transformation_solid = location.Transformation();
+  for (Standard_Integer i = 1; i < 4; ++i)
+    {
+      std::cout << transformation_solid.Value(i,1) << ", " << transformation_solid.Value(i,2) << ", " << transformation_solid.Value(i,3) << ", " << transformation_solid.Value(i,4) << std::endl;
+    }
+
+  std::cout << "Axis" << std::endl;
+  gp_Ax3 axis(gp_Pnt(0, 0, 0), bndBox.ZDirection(), bndBox.XDirection());
   //axis.SetDirection(gp_Dir(bndBox.ZDirection()));
   //axis.SetXDirection(gp_Dir(bndBox.XDirection()));
   //axis.SetYDirection(gp_Dir(bndBox.YDirection()));
-  std::cout << "try Transformation" << std::endl;
-  TopLoc_Location location;
-  solid.Location(location);
-  gp_Trsf transformation = location.Transformation();
-  ///transformation.SetTransformation(axis);
-  std::cout << "try Pnt1" << std::endl;
+  std::cout << "xdirection: " << axis.XDirection().X() << ", " << axis.XDirection().Y()  << ", " << axis.XDirection().Z() << std::endl;
+  std::cout << "ydirection: " << axis.YDirection().X() << ", " << axis.YDirection().Y() << ", " << axis.YDirection().Z() << std::endl;
+  std::cout << "zdirection: " << axis.Direction().X() << ", " << axis.Direction().Y() << ", " << axis.Direction().Z() << std::endl;
+
+  std::cout << "Transformation" << std::endl;
+  gp_Trsf transformation;
+  transformation.SetTransformation(axis);
+  for (Standard_Integer i = 1; i < 4; ++i)
+    {
+      std::cout << transformation.Value(i,1) << ", " << transformation.Value(i,2) << ", " << transformation.Value(i,3) << ", " << transformation.Value(i,4) << std::endl;
+    }
+  
+  //std::cout << "try Pnt1" << std::endl;
   pnt1 = pnt1.Transformed(transformation);
-  std::cout << "try Pnt2" << std::endl;
+  //std::cout << "try Pnt2" << std::endl;
   pnt2 = pnt2.Transformed(transformation);
-  std::cout << "try BRepPrimAPI_MakeBox" << std::endl;
-  boundingBox = BRepPrimAPI_MakeBox(pnt1, pnt2).Shape();
+  std::cout << "Pnt1: " << pnt1.X() << ", " << pnt1.Y()  << ", " << pnt1.Z() << std::endl;
+  std::cout << "Pnt2: " << pnt2.X() << ", " << pnt2.Y()  << ", " << pnt2.Z() << std::endl;
+
+  std::cout << "BRepPrimAPI_MakeBox" << std::endl;
+  boundingBox = BRepPrimAPI_MakeBox(pnt1, pnt2).Solid();
+  location = boundingBox.Location();
+  transformation_solid = location.Transformation();
+  for (Standard_Integer i = 1; i < 4; ++i)
+    {
+      std::cout << transformation_solid.Value(i,1) << ", " << transformation_solid.Value(i,2) << ", " << transformation_solid.Value(i,3) << ", " << transformation_solid.Value(i,4) << std::endl;
+    }
+
+  std::cout << "Transform OBB solid" << std::endl;
+  transformation = transformation.Inverted();
   BRepBuilderAPI_Transform boxTransform(transformation);
   boxTransform.Perform(boundingBox);
   boundingBox = boxTransform.ModifiedShape(boundingBox);
   
   STEPControl_Writer writer0;
   writer0.Transfer(boundingBox, STEPControl_StepModelType::STEPControl_AsIs);
+  writer0.Transfer(solid, STEPControl_StepModelType::STEPControl_AsIs);
   Standard_Integer kk = 0;
   std::string filename = "../examples/bbox/box";
   std::string suffix = ".stp";
