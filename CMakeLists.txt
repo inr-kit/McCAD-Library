@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 option(Use_Linux_OS "Linux OS is assumed by default. Change to OFF for Windows" ON)
-message("Use_Linux_OS: " ${Use_Linux_OS})
+message("-- Use_Linux_OS: " ${Use_Linux_OS})
 
 # Set project name
 project(McCAD LANGUAGES CXX)
@@ -71,7 +71,7 @@ target_link_libraries(DECOMPOSITION INTERFACE TOOLS)
 # add the executable
 add_executable(${PROJECT_NAME} "main.cpp")
 target_link_libraries(${PROJECT_NAME} PRIVATE
-  OCC_TOOLKITS
+  OCC
   INPUTDATA
   IO
   TOOLS

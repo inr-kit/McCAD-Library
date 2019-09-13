@@ -6,4 +6,4 @@ install(FILES
   DESTINATION ${PROJECT_BINARY_DIR}/includes)
 
 target_link_libraries(INPUTDATA_IMPL
-  OCC_TOOLKITS)
+  OCC)
