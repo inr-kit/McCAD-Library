@@ -109,7 +109,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(
 
 bool
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
-        Solid::Impl& solid){
+        Geometry::Solid::Impl& solid){
     return perform(solid);
 }
 
