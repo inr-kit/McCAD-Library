@@ -69,6 +69,7 @@ McCAD::Decomposition::SplitSurfaces::Impl::generateSplitFacesList(
 }
 
 void
+<<<<<<< HEAD
 McCAD::Decomposition::SplitSurfaces::Impl::sortSplitFaces(
         std::vector<std::shared_ptr<Geometry::BoundSurface>>& splitFacesList){
 
@@ -98,4 +99,43 @@ McCAD::Decomposition::SplitSurfaces::Impl::sortSplitFaces(
 //                  << face->accessSImpl()->numberCollidingSurfaces
 //                  << std::endl;
 
+=======
+McCAD::Decomposition::SplitSurfaces::Impl::sortSplitFaces(std::vector<std::shared_ptr<Geometry::BoundSurface>>& splitFacesList){
+  if (splitFacesList.size() < 2)
+    {
+      return;
+    }
+  // Implement more modern sorting. maybe utilizing sorting of zipped vectors.
+  // A Splitting surface that goes through more concave edges has priority.
+  for (Standard_Integer i = 0; i <= splitFacesList.size() - 2; ++i)
+    {
+      for (Standard_Integer j = i + 1; j <= splitFacesList.size() - 1; ++j)
+	{
+	  if (splitFacesList[i]->accessSImpl()->throughConcaveEdges < splitFacesList[j]->accessSImpl()->throughConcaveEdges)
+	    {
+	      std::swap(splitFacesList[i], splitFacesList[j]);
+	    }
+	}
+    }
+  // A Splitting surface that intesects with less boundary surfaces has priority.
+  for (Standard_Integer i = 0; i <= splitFacesList.size() - 2; ++i)
+    {
+      for (Standard_Integer j = i + 1; j <= splitFacesList.size() - 1; ++j)
+        {
+	  if (splitFacesList[i]->accessSImpl()->throughConcaveEdges <= splitFacesList[j]->accessSImpl()->throughConcaveEdges)
+	    {
+	      if (splitFacesList[i]->accessSImpl()->numberCollidingSurfaces > splitFacesList[j]->accessSImpl()->numberCollidingSurfaces)
+		{
+		  std::swap(splitFacesList[i], splitFacesList[j]);
+		}
+	    }
+	}
+    }
+  /*
+  for (Standard_Integer i = 0; i <= splitFacesList.size() - 1; ++i)
+    {
+      //std::cout << "throughConcaveEdges: " << splitFacesList[i]->accessSImpl()->throughConcaveEdges << " , numberCollidingSurfaces: " << splitFacesList[i]->accessSImpl()->numberCollidingSurfaces << std::endl;
+    }
+  */
+>>>>>>> 8352a6283d76be033b3ce470ada525db92b50bbe
 }

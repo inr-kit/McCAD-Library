@@ -17,7 +17,7 @@ namespace McCAD::Decomposition{
 
     // Should probably not be part of this class.
     // No interaction of this function with other members.
-    static bool throughNoBoundarySurfaces(const std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList);
+    static Standard_Boolean throughNoBoundarySurfaces(const std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList);
 
     // Should probably not be part of this class.
     // No interaction of this function with other members.
