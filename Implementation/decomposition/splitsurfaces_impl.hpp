@@ -15,10 +15,22 @@ namespace McCAD::Decomposition{
   public:
     Impl() = default;
 
-    Standard_Boolean throughNoBoundarySurfaces(std::vector<std::shared_ptr<BoundSurface>>& facesList);
-    Standard_Boolean planeSplitOnlyPlane(std::vector<std::shared_ptr<BoundSurface>>& facesList);
-    void generateSplitFacesList(std::vector<std::shared_ptr<BoundSurface>>& splitFacesList, std::vector<std::shared_ptr<BoundSurface>>& selectedSplitFacesList);
-    void sortSplitFaces(std::vector<std::shared_ptr<BoundSurface>>& splitFacesList);
+    // Should probably not be part of this class.
+    // No interaction of this function with other members.
+    static bool throughNoBoundarySurfaces(
+            const std::vector<std::shared_ptr<BoundSurface>>& facesList);
+
+    // Should probably not be part of this class.
+    // No interaction of this function with other members.
+    static Standard_Boolean planeSplitOnlyPlane(
+            std::vector<std::shared_ptr<BoundSurface>>& facesList);
+
+    // Possibly, these should not be part of this class
+    static void generateSplitFacesList(
+            std::vector<std::shared_ptr<BoundSurface>>& splitFacesList,
+            std::vector<std::shared_ptr<BoundSurface>>& selectedSplitFacesList);
+    static void sortSplitFaces(
+            std::vector<std::shared_ptr<BoundSurface>>& splitFacesList);
 
   private:
 

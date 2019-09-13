@@ -47,19 +47,22 @@ namespace McCAD::Decomposition{
   class DecomposeSolid::Impl {
   public:
     Impl();
+    Impl(Standard_Integer recurrenceDepth);
     ~Impl();
-
-    Tools::Preprocessor preproc;
-    SplitSurfaces splitSurfaces;
-    SplitSolid splitSolid;
-
-    Standard_Integer recurrenceDepth = 0;
     
-    Standard_Boolean perform(std::unique_ptr<Solid>& solid);
-    void judgeDecomposeSurfaces(std::unique_ptr<Solid>& solid);
+    Standard_Boolean perform(Solid::Impl& solidImpl);
+    bool operator()(Solid::Impl& solid);
+
+  private:
+    Standard_Integer recurrenceDepth;
+
+    SplitSurfaces splitSurfaces;
+
+    void judgeDecomposeSurfaces(Solid::Impl& solidImpl);
     void judgeThroughConcaveEdges(std::vector<std::shared_ptr<BoundSurface>>& facesList);
     void generateAssistingSurfaces();
-    Standard_Boolean selectSplitSurface(std::unique_ptr<Solid>& solid);
+    Standard_Boolean selectSplitSurface(Solid::Impl& solidImpl);
+
   };
 }
 

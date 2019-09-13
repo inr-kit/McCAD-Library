@@ -9,7 +9,7 @@
 
 namespace McCAD::Decomposition {
   class Solid {
-  private:
+  public:
     class Impl;
 
   public:

@@ -9,7 +9,7 @@
 
 namespace McCAD::Decomposition {
     class SplitSurfaces {
-    private:
+    public:
       class Impl;
       
     public:
