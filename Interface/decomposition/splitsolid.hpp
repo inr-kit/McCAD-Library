@@ -9,7 +9,7 @@
 
 namespace McCAD::Decomposition {
     class SplitSolid {
-    private:
+    public:
       class Impl;
       
     public:

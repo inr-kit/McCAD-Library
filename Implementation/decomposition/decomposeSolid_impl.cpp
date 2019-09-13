@@ -1,14 +1,21 @@
 // McCAD
 #include "decomposeSolid_impl.hpp"
 
-McCAD::Decomposition::DecomposeSolid::Impl::Impl(){
+McCAD::Decomposition::DecomposeSolid::Impl::Impl()
+    : recurrenceDepth{0}{
+}
+
+McCAD::Decomposition::DecomposeSolid::Impl::Impl(
+        Standard_Integer recurrenceDepth)
+    : recurrenceDepth{recurrenceDepth}{
 }
 
 McCAD::Decomposition::DecomposeSolid::Impl::~Impl(){
 }
 
 Standard_Boolean
-McCAD::Decomposition::DecomposeSolid::Impl::perform(Solid::Impl& solidImpl){
+McCAD::Decomposition::DecomposeSolid::Impl::perform(
+        Solid::Impl& solidImpl){
     // The function will be called recursively on a solid and a condition has to be set for termination.
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
@@ -23,7 +30,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Solid::Impl& solidImpl){
     // Judge which surfaces are decompose surfaces from the generated list.
     judgeDecomposeSurfaces(solidImpl);
     //judgeThroughConcaveEdges(splitFacesList);
-    if(!splitSurfaces.accessSSImpl()->throughNoBoundarySurfaces(solidImpl.splitFacesList)){
+    if(!SplitSurfaces::Impl::throughNoBoundarySurfaces(solidImpl.splitFacesList)){
         //std::cout << "throughNoBoundarySurfaces false" << std::endl;
         judgeThroughConcaveEdges(solidImpl.splitFacesList);
         /*
@@ -47,7 +54,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Solid::Impl& solidImpl){
         }
         // Split the solid with the selected surface.
         //std::cout << "selected surface concave edges: " << selectedSplitFacesList[0]->accessSImpl()->throughConcaveEdges << std::endl;
-        if(!(splitSolid.accessSSImpl()->perform(
+        if(!(SplitSolid::Impl{}.perform(
                  solidImpl.solid,
                  solidImpl.selectedSplitFacesList[0],
                  solidImpl.splitSolidList))){
@@ -56,6 +63,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Solid::Impl& solidImpl){
         }
         // Loop over the resulting subsolids and split each one of them recursively.
         //std::cout << "splitting subsolids" << std::endl;
+
         for (Standard_Integer i = 1; i <= solidImpl.splitSolidList->Length(); ++i){
 
             std::cout << "   - Decomposing subsolid # "
@@ -71,10 +79,8 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Solid::Impl& solidImpl){
                 return Standard_False;
             }
 
-            DecomposeSolid::Impl decomposeSolid;
-            decomposeSolid.recurrenceDepth = recurrenceDepth;
             // mesh deflection is calculated inside initiate for every solid!.
-            if (decomposeSolid.perform(subSolidImpl)){
+            if (DecomposeSolid::Impl{recurrenceDepth}(subSolidImpl)){
                 if (subSolidImpl.splitSolidList->Length() >= 2){
                     //splitSolidList->Remove(i);
                     for(const auto& el : *subSolidImpl.splitSolidList)
@@ -99,6 +105,12 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Solid::Impl& solidImpl){
         solidImpl.splitSolidList->Append(solidImpl.solid);
     }
     return Standard_True;
+}
+
+bool
+McCAD::Decomposition::DecomposeSolid::Impl::operator()(
+        Solid::Impl& solid){
+    return perform(solid);
 }
 
 void
@@ -191,11 +203,10 @@ McCAD::Decomposition::DecomposeSolid::Impl::generateAssistingSurfaces(){
 Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(
         Solid::Impl& solidImpl){
-  // mergeSplitSurfaces(splitFacesList) // see no need for it as the formed lists; planesList, etc. are already merged. splitFacesList is a subset of facesList.
-  splitSurfaces.accessSSImpl()->generateSplitFacesList(
-              solidImpl.splitFacesList,
-              solidImpl.selectedSplitFacesList
-              );
+    // mergeSplitSurfaces(splitFacesList) // see no need for it as the formed lists; planesList, etc. are already merged. splitFacesList is a subset of facesList.
+    SplitSurfaces::Impl::generateSplitFacesList(
+                solidImpl.splitFacesList,
+                solidImpl.selectedSplitFacesList);
 
-  return !solidImpl.selectedSplitFacesList.empty();
+    return !solidImpl.selectedSplitFacesList.empty();
 }
