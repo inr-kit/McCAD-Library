@@ -3,6 +3,7 @@
 
 // C++
 #include <array>
+#include <filesystem>
 // McCAD
 #include "splitsolid.hpp"
 #include "boundSurface_impl.hpp"

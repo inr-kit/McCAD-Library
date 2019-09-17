@@ -28,9 +28,20 @@ McCAD::Decomposition::SplitSolid::Impl::calculateBoundingBox(const TopoDS_Solid&
   //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
   boundingBox = BRepPrimAPI_MakeBox(gp_Pnt(XYZmin[0], XYZmin[1], XYZmin[2]),
 				    gp_Pnt(XYZmax[0], XYZmax[1], XYZmax[2])).Shape();
-  //STEPControl_Writer writer0;
-  //writer0.Transfer(boundingBox, STEPControl_StepModelType::STEPControl_AsIs);
-  //writer0.Write("../examples/bbox.stp");
+
+  STEPControl_Writer writer0;
+  writer0.Transfer(boundingBox, STEPControl_StepModelType::STEPControl_AsIs);
+  writer0.Transfer(solid, STEPControl_StepModelType::STEPControl_AsIs);
+  Standard_Integer kk = 0;
+  std::string filename = "../examples/bbox/box";
+  std::string suffix = ".stp";
+  while (std::filesystem::exists(filename + std::to_string(kk) + suffix))
+    {
+      ++kk;
+    }
+  filename += std::to_string(kk);
+  filename += suffix;
+  writer0.Write(filename.c_str());
 }
 
 Standard_Boolean
