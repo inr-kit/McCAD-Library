@@ -23,7 +23,7 @@ namespace McCAD::Geometry{
     Standard_Boolean splitSurface = Standard_False;
     Standard_Integer numberCollidingSurfaces = 0;
     Standard_Integer numberCollidingCurvedSurfaces = 0;
-    Standard_Integer throughConcaveEdges;
+    Standard_Integer throughConcaveEdges = 0;
     
     void initiate(const TopoDS_Face& aFace);
   };

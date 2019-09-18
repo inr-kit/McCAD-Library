@@ -49,7 +49,9 @@ McCAD::Decomposition::Decompose::Impl::flattenSolidHierarchy(const Handle_TopToo
 	  splitInputSolidsList->Append(shape);
 	  break;
 	default:
-	  throw std::runtime_error{"Shape can only be COMPOUND, COMPSOLID or SOLID"};
+	  //throw std::runtime_error{"Shape can only be COMPOUND, COMPSOLID or SOLID"};
+	  std::cout << "Shape can only be COMPOUND, COMPSOLID or SOLID" << std::endl;
+	  rejectedInputSolidsList->Append(shape);
 	}
     }
 }

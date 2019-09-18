@@ -23,10 +23,10 @@ McCAD::Geometry::BoundSurfacePlane::Impl::generateExtendedPlane(const Standard_R
   //std::cout << "U: " << uMid << ", V: " << vMid << std::endl;
 
   std::array<Standard_Real, 4> newUVParameters;
-  newUVParameters[0] = uMid - boxSquareLength/1.0;
-  newUVParameters[1] = uMid + boxSquareLength/1.0;
-  newUVParameters[2] = vMid - boxSquareLength/1.0;
-  newUVParameters[3] = vMid + boxSquareLength/1.0;
+  newUVParameters[0] = uMid - boxSquareLength/0.5;
+  newUVParameters[1] = uMid + boxSquareLength/0.5;
+  newUVParameters[2] = vMid - boxSquareLength/0.5;
+  newUVParameters[3] = vMid + boxSquareLength/0.5;
 
   boundSurfacePlane->accessSImpl()->extendedFace =
     BRepBuilderAPI_MakeFace(surface, newUVParameters[0], newUVParameters[1],

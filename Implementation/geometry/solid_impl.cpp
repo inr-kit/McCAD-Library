@@ -51,7 +51,8 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTol
   TopExp::MapShapesAndAncestors(solid, TopAbs_EDGE, TopAbs_FACE, mapEdgeFace);
   
   TopTools_ListOfShape facesList;
-  for (Standard_Integer edgeNumber = 1; edgeNumber <= mapEdgeFace.Extent(); ++edgeNumber)
+  for (Standard_Integer edgeNumber = 1; edgeNumber <= mapEdgeFace.Extent();
+       ++edgeNumber)
     {
       TopoDS_Edge edge = TopoDS::Edge(mapEdgeFace.FindKey(edgeNumber));
       BRepAdaptor_Curve curveAdaptor;
@@ -203,18 +204,28 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
 	  //std::cout << i << " , " << j << " , " << surfacesList.size() << std::endl;
 	  if (*(surfacesList[i]) == *(surfacesList[j]))
 	    {
-	      //std::cout << "equal" << std::endl;
+	      //std::cout << "*** equal" << std::endl;
 	      surfacesList[j]->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
-	      //STEPControl_Writer writer6;
-	      //writer6.Transfer(surfacesList[j]->accessSImpl()->face,
-	      //	       STEPControl_StepModelType::STEPControl_AsIs);
-	      //writer6.Transfer(surfacesList[i]->accessSImpl()->face,
-	      //	       STEPControl_StepModelType::STEPControl_AsIs);
-	      //writer6.Write("../examples/equalsurface.stp");
+	      // Save surfaces to step file for comparison/debugging.
+	      STEPControl_Writer writer6;
+	      writer6.Transfer(surfacesList[j]->accessSImpl()->face,
+			       STEPControl_StepModelType::STEPControl_AsIs);
+	      writer6.Transfer(surfacesList[i]->accessSImpl()->face,
+			       STEPControl_StepModelType::STEPControl_AsIs);
+	      Standard_Integer kk = 0;
+              std::string filename = "../examples/bbox/equalsurfaces";
+              std::string suffix = ".stp";
+              while (std::filesystem::exists(filename + std::to_string(kk) + suffix))
+		{
+		  ++kk;
+		}
+	      filename += std::to_string(kk);
+              filename += suffix;
+              writer6.Write(filename.c_str());
 	      // Test if the two surfaces can be fused.
 	      if (*(surfacesList[i]) << *(surfacesList[j]))
 		{
-		  //std::cout << "fuse" << std::endl;
+		  std::cout << "*** equal fuse" << std::endl;
 		  if (surfacesList[i]->getSurfaceType() == "Plane")
 		    {
 		      TopoDS_Face newFace = Tools::PlaneFuser{}(surfacesList[i]->accessSImpl()->face, surfacesList[j]->accessSImpl()->face);
@@ -249,14 +260,22 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
 		}
 	      else
 		{
-		  //std::cout << "equal, erase one" << std::endl;
+		  std::cout << "*** equal, erase one" << std::endl;
 		  // Erase pointer surfacesList[j] from surfacesList.
-		  //STEPControl_Writer writer7;
-		  //writer7.Transfer(surfacesList[j]->accessSImpl()->face,
-                  //                 STEPControl_StepModelType::STEPControl_AsIs);
-                  //writer7.Write("../examples/equalsurfacedelete.stp");
-		  //surfacesList.erase(surfacesList.begin() + j);
-		  //--j;
+		  STEPControl_Writer writer7;
+		  writer7.Transfer(surfacesList[j]->accessSImpl()->face,
+                                   STEPControl_StepModelType::STEPControl_AsIs);
+		  std::string filename = "../examples/bbox/equalsurfacedelete";
+                  std::string suffix = ".stp";
+                  while (std::filesystem::exists(filename + std::to_string(kk) + suffix))
+		    {
+		      ++kk;
+		    }
+		  filename += std::to_string(kk);
+		  filename += suffix;
+		  writer7.Write(filename.c_str());
+                  surfacesList.erase(surfacesList.begin() + j);
+		  --j;
 		}
 	      if (surfacesList.size() < 2)
 		{

@@ -161,6 +161,10 @@ McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
       curveAdaptor.Initialize(tempEdge);
       edge->setEdgeType(Tools::toTypeName(curveAdaptor.GetType()));
       edge->accessEImpl()->convexity = tempEdge.Convex();
+      if (tempEdge.Convex() == 0)
+	{
+	  boundSurface->accessSImpl()->throughConcaveEdges += 1;
+	}
 
       // Add flag if the edge can be used for assisting splitting surface.
       if (boundSurface->getSurfaceType() == "Cylinder" && edge->getEdgeType() == "Line")
@@ -179,7 +183,7 @@ McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
       edgesList.push_back(std::move(edge));
     }
 }
-
+   
 // This function is used as virtual one in BndSurfPlane. Should be modified later.
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::triangleCollision(const MeshTriangle& aTriangle,

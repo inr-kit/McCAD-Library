@@ -4,6 +4,7 @@
 // C++
 #include <vector>
 #include <memory>
+#include <filesystem>
 // McCAD
 #include "solid.hpp"
 #include "tools_impl.hpp"
