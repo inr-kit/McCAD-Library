@@ -30,24 +30,29 @@ McCAD::Decomposition::Decompose::Impl::~Impl(){
 }
 
 void
-McCAD::Decomposition::Decompose::Impl::flattenSolidHierarchy(
-        const Handle_TopTools_HSequenceOfShape& inputSolidsList){
-    for(const auto& shape : *inputSolidsList){
-        switch(shape.ShapeType()){
-        case TopAbs_COMPOUND:
-            [[fallthrough]];
-        case TopAbs_COMPSOLID:
-            for(const auto& solid : ShapeView<TopAbs_SOLID>{shape})
-                splitInputSolidsList->Append(solid);
-            break;
-        case TopAbs_SOLID:
-            splitInputSolidsList->Append(shape);
-            break;
-        default:
-            throw std::runtime_error{
-                "Shape can only be COMPOUND, COMPSOLID or SOLID"
-            };
-        }
+McCAD::Decomposition::Decompose::Impl::flattenSolidHierarchy(const Handle_TopTools_HSequenceOfShape& inputSolidsList){
+  for(const auto& shape : *inputSolidsList)
+    {
+      switch(shape.ShapeType())
+	{
+	case TopAbs_COMPOUND:
+	  [[fallthrough]];
+	case TopAbs_COMPSOLID:
+	  std::cout << "   - Found a compound solid" << std::endl; 
+	  for(const auto& solid : ShapeView<TopAbs_SOLID>{shape})
+	    {
+	      splitInputSolidsList->Append(solid);
+	    };
+	  break;
+	case TopAbs_SOLID:
+	  std::cout << "   - Found a compound solid" << std::endl;
+	  splitInputSolidsList->Append(shape);
+	  break;
+	default:
+	  //throw std::runtime_error{"Shape can only be COMPOUND, COMPSOLID or SOLID"};
+	  std::cout << "Shape can only be COMPOUND, COMPSOLID or SOLID" << std::endl;
+	  rejectedInputSolidsList->Append(shape);
+	}
     }
 }
 

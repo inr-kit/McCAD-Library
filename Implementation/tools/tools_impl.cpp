@@ -95,5 +95,12 @@ McCAD::Tools::Preprocessor::Impl::isSameEdge(const TopoDS_Edge& firstEdge,
     {
       return Standard_False;
     }
+  if (firstCurveAdaptor.GetType() == GeomAbs_Line)
+    {
+      if (firstCurveAdaptor.Line().Distance(secondCurveAdaptor.Line()) > distanceTolerance)
+	{
+	  return Standard_False;
+	}
+    }
   return Standard_True;
 }

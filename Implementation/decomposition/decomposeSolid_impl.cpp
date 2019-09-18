@@ -63,9 +63,10 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(
       if (!SplitSolid::Impl{}.perform(solidImpl.solid, solidImpl.selectedSplitFacesList[0],
 				      solidImpl.splitSolidList))
 	{
-	  //STEPControl_Writer writer4;
-	  //writer4.Transfer(solid_impl->selectedSplitFacesList[0]->accessSImpl()->extendedFace, STEPControl_StepModelType::STEPControl_AsIs);
-	  //writer4.Write("../examples/surface.stp");                                    
+	  STEPControl_Writer writer4;
+	  writer4.Transfer(solid_impl->selectedSplitFacesList[0]->accessSImpl()->extendedFace, STEPControl_StepModelType::STEPControl_AsIs);
+	  writer4.Write("../examples/bbox/splitSurface.stp");
+	  std::cout << "** splitSolid fail" << std::endl;
           return Standard_False;
 	}
       // Loop over the resulting subsolids and split each one of them recursively.
@@ -84,14 +85,14 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(
 	    }
 	  catch(...)
 	    {
-	      //std::cout << "** subSolid_impl->initiate fail" << std::endl;
-	      //STEPControl_Writer writer3;
-	      //writer3.Transfer(solid_impl->splitSolidList->Value(i), STEPControl_StepModelType::STEPControl_AsIs);
-	      //writer3.Write("../examples/solid.stp");
-	      //STEPControl_Writer writer4;
-	      //writer4.Transfer(solid_impl->selectedSplitFacesList[0]->accessSImpl()->extendedFace, STEPControl_StepModelType::STEPControl_AsIs);
-	      //writer4.Write("../examples/surface.stp");
-	      //throw std::runtime_error{"Shape problem"};
+	      std::cout << "** subSolid_impl->initiate fail" << std::endl;
+	      STEPControl_Writer writer3;
+	      writer3.Transfer(solid_impl->splitSolidList->Value(i), STEPControl_StepModelType::STEPControl_AsIs);
+	      writer3.Write("../examples/bbox/subsolid.stp");
+	      STEPControl_Writer writer4;
+	      writer4.Transfer(solid_impl->selectedSplitFacesList[0]->accessSImpl()->extendedFace, STEPControl_StepModelType::STEPControl_AsIs);
+	      writer4.Write("../examples/bbox/splitsurface)subsolid.stp");
+	      throw std::runtime_error{"Shape problem"};
 	      return Standard_False;
 	    }
 	  // mesh deflection is calculated inside initiate for every solid!.
@@ -204,29 +205,35 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(Geometry::Sol
     }
 }
 
+
 void
-McCAD::Decomposition::DecomposeSolid::Impl::judgeThroughConcaveEdges(
-        std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList){
-    // Judge how many concave edges each boundary face of solid goes through.
-    for (Standard_Integer i = 0; i < facesList.size(); ++i){
-        Standard_Integer throughConcaveEdges = 0;
-        for (Standard_Integer j = 0; j < facesList.size(); ++j){
-            if (i != j &&
-                    facesList[i]->accessSImpl()->surfaceNumber
-                    != facesList[j]->accessSImpl()->surfaceNumber){
-                //std::cout << "checking edges" << std::endl;
-
-                for(const auto& edge : facesList[j]->accessBSImpl()->edgesList){
-                    if(edge->accessEImpl()->convexity == 0
-                            && facesList[i]->accessBSImpl()->edgeOnSurface(*edge)){
-                        ++throughConcaveEdges;
-                    }
-                }
-            }
-        }
-        facesList[i]->accessSImpl()->throughConcaveEdges = throughConcaveEdges;
-        //std::cout << "throughConcaveEdges: " << throughConcaveEdges << std::endl;
-
+McCAD::Decomposition::DecomposeSolid::Impl::judgeThroughConcaveEdges(std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList){
+  // Judge how many concave edges each boundary face of solid goes through.
+  if (facesList.size() == 0)
+    {
+      //std::cout << "return" << std::endl;
+      return;
+    }
+  for (Standard_Integer i = 0; i <= facesList.size() - 1; ++i)
+    {
+      if (facesList[i]->accessSImpl()->throughConcaveEdges != 0) continue;
+      Standard_Integer throughConcaveEdges = 0;
+      for (Standard_Integer j = 0; j <= facesList.size() - 1; ++j)
+	{
+	  if (i != j && facesList[i]->accessSImpl()->surfaceNumber != facesList[j]->accessSImpl()->surfaceNumber)
+	    {
+	      //std::cout << "checking edges" << std::endl;
+	      for (Standard_Integer k = 0; k <= facesList[j]->accessBSImpl()->edgesList.size() - 1; ++k)
+		{
+		  if (facesList[j]->accessBSImpl()->edgesList[k]->accessEImpl()->convexity == 0 && facesList[i]->accessBSImpl()->edgeOnSurface(*(facesList[j]->accessBSImpl()->edgesList[k])))
+		    {
+		      ++throughConcaveEdges;
+		    }
+		}
+	    }
+	}
+      facesList[i]->accessSImpl()->throughConcaveEdges = throughConcaveEdges;
+      //std::cout << "throughConcaveEdges: " << throughConcaveEdges << std::endl;
     }
 }
 

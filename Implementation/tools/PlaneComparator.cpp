@@ -9,12 +9,15 @@ McCAD::Tools::PlaneComparator::PlaneComparator(Standard_Real parameterTolerance,
     distanceTolerance{distanceTolerance}{
 }
 
-bool
+Standard_Boolean
 McCAD::Tools::PlaneComparator::operator()(const TopoDS_Face& firstFace,
 					  const TopoDS_Face& secondFace) const{
     // Compare orientations
     if(firstFace.Orientation() != secondFace.Orientation())
+      {
+	std::cout << "Orientation different" << std::endl;
         return Standard_False;
+      }
 
     // Compare locations
     TopLoc_Location firstLocation;
@@ -26,18 +29,49 @@ McCAD::Tools::PlaneComparator::operator()(const TopoDS_Face& firstFace,
         BRep_Tool::Surface(secondFace, secondLocation)};
 
     if(firstLocation != secondLocation)
+      {
+	std::cout << "Location different" << std::endl;
         return Standard_False;
+      }
+
+    
+    // Compare transformation.
+    // Translation part
+    if(!(firstLocation.Transformation().TranslationPart().IsEqual(secondLocation.Transformation().TranslationPart(), distanceTolerance)))
+      {
+    	std::cout << "Translation different" << std::endl;
+   	//return Standard_False;
+      }
+    // Compare rotations
+    gp_XYZ firstAxis, secondAxis;
+    Standard_Real firstAngle, secondAngle;
+    firstLocation.Transformation().GetRotation(firstAxis, firstAngle);
+    firstLocation.Transformation().GetRotation(secondAxis, secondAngle);
+    if(!(firstAxis.IsEqual(secondAxis, distanceTolerance)) ||
+       !((firstAngle - secondAngle) <= angularTolerance))
+      {
+	std::cout << "Rotation different" << std::endl;
+	//return Standard_False;
+      }
 
     try
       {
-        auto firstPlane = firstAdaptor.Plane();             // also checks if surface type is GeomAbs_Plane
-        auto secondPlane = secondAdaptor.Plane();           // also checks if surface type is GeomAbs_Plane
+        auto firstPlane = firstAdaptor.Plane();
+	// also checks if surface type is GeomAbs_Plane
+        auto secondPlane = secondAdaptor.Plane();
+	// also checks if surface type is GeomAbs_Plane
 
-	//std::cout << "distance: " << firstPlane.Distance(secondPlane) << std::endl;
-        secondPlane.Scale(gp_Pnt{0.0, 0.0, 0.0}, 0.1);
-        firstPlane.Scale(gp_Pnt{0.0, 0.0, 0.0}, 0.1);
-	//std::cout << "distance: " << firstPlane.Distance(secondPlane) << std::endl;
-
+	std::cout << "distance: " << firstPlane.Distance(secondPlane) << std::endl;
+	secondPlane.Scale(gp_Pnt{0.0, 0.0, 0.0}, 0.1);
+	firstPlane.Scale(gp_Pnt{0.0, 0.0, 0.0}, 0.1);
+	std::cout << "distance: " << firstPlane.Distance(secondPlane) << std::endl;
+   
+	// Compare distance between planes.
+	if (firstPlane.Distance(secondPlane) > distanceTolerance)
+	  {
+	    return Standard_False;
+	  }
+	
         // Compare plane parameters
         return equivalentPlaneParameters(firstPlane, secondPlane);
       }
@@ -86,16 +120,14 @@ McCAD::Tools::PlaneComparator::equivalentPlaneParameters(const gp_Pln& first,
             secondPlaneParameters[2]
         };
 
-	//std::cout << "firstPlane: " << firstPlaneParameters[3] << std::endl;
-	//std::cout << (firstPlaneDirection.IsEqual(secondPlaneDirection, angularTolerance) && std::abs(firstPlaneParameters[3] - secondPlaneParameters[3]) <= distanceTolerance) << std::endl;
-	//std::cout << "secondPlane: " << secondPlaneParameters[3] << std::endl;
-	//std::cout << (firstPlaneDirection.IsOpposite(secondPlaneDirection, angularTolerance) && std::abs(firstPlaneParameters[3] + secondPlaneParameters[3]) <= distanceTolerance) << std::endl;
+	std::cout << "firstPlane: " << firstPlaneParameters[3] << std::endl;
+	std::cout << (firstPlaneDirection.IsEqual(secondPlaneDirection, angularTolerance) && std::abs(firstPlaneParameters[3] - secondPlaneParameters[3]) <= distanceTolerance) << std::endl;
+	std::cout << "secondPlane: " << secondPlaneParameters[3] << std::endl;
+	std::cout << (firstPlaneDirection.IsOpposite(secondPlaneDirection, angularTolerance) && std::abs(firstPlaneParameters[3] + secondPlaneParameters[3]) <= distanceTolerance) << std::endl;
 
         return (firstPlaneDirection.IsEqual(secondPlaneDirection, angularTolerance)
-                && std::abs(firstPlaneParameters[3] - secondPlaneParameters[3])
-                    <= distanceTolerance)
+		&& std::abs(firstPlaneParameters[3] - secondPlaneParameters[3]) <= distanceTolerance)
                 ||
-	  
                (firstPlaneDirection.IsOpposite(secondPlaneDirection, angularTolerance)
                 && std::abs(firstPlaneParameters[3] + secondPlaneParameters[3])
                     <= distanceTolerance);

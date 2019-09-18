@@ -15,6 +15,7 @@ McCAD::Decomposition::SplitSolid::Impl::perform(std::unique_ptr<Geometry::Solid>
     }
   else
     {
+      std::cout << "** not Plane" << std::endl; 
       return Standard_False;
     }
 }
@@ -151,7 +152,7 @@ McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid,
     }
   catch(...)
     {
-      //std::cout << "** Common fail" << std::endl;
+      std::cout << "** Common fail" << std::endl;
       return Standard_False;
     }
 
@@ -164,14 +165,14 @@ McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid,
 	}
       else
 	{
-	  //std::cout << "** checkRepair fail" << std::endl;
+	  std::cout << "** checkRepair fail" << std::endl;
 	  //throw std::runtime_error{"Shape problem"};
 	  return Standard_False;
 	}
     }
   else
     {
-      //std::cout << "** splitWithBoxes fail" << std::endl;
+      std::cout << "** splitWithBoxes fail" << std::endl;
       return Standard_False;
     }
 }
@@ -234,14 +235,14 @@ McCAD::Decomposition::SplitSolid::Impl::splitWithBoxes(const TopoDS_Solid& solid
 	    }
 	  catch(...)
 	    {
-	      //std::cout << "** cutter catch" << std::endl;
+	      std::cout << "** cutter catch" << std::endl;
 	      return Standard_False;
 	    }
 	}
     }
   catch(...)
     {
-      //std::cout << "** common catch" << std::endl;
+      std::cout << "** common catch" << std::endl;
       return Standard_False;
     }
   return Standard_False;
@@ -295,7 +296,7 @@ McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSe
 									  newSolid);
                 if (!rebuildCondition)
 		  {
-		    //std::cout << "** rebuildSolidFromShell fail" << std::endl;
+		    std::cout << "** rebuildSolidFromShell fail" << std::endl;
                     return Standard_False;
 		  }
 		else
@@ -362,6 +363,7 @@ McCAD::Decomposition::SplitSolid::Impl::rebuildSolidFromShell(const TopoDS_Shape
   BRepCheck_Analyzer BRepAnalyzer(newshape, Standard_True);
   if (!(BRepAnalyzer.IsValid()))
     {
+      //std::cout << "analyzer fail" << std::endl;
       return Standard_False;
     }
   else
