@@ -14,7 +14,7 @@ McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inp
       std::cout << " > Spliting compound input solids" << std::endl;
       // Split compound input solids.
       flattenSolidHierarchy(inputSolidsList);
-      std::cout << "   - There are " << splitInputSolidsList->Length() << " solid(s) in the split solids list." <<std::endl;
+      std::cout << "   - There are " << splitInputSolidsList->Length() << " solid(s) in the flattened solids heirarchy." <<std::endl;
       std::cout << " > Decomposing solid(s)" << std::endl;
       // Perform the decomposition.
       perform();
@@ -45,12 +45,12 @@ McCAD::Decomposition::Decompose::Impl::flattenSolidHierarchy(const Handle_TopToo
 	    };
 	  break;
 	case TopAbs_SOLID:
-	  std::cout << "   - Found a compound solid" << std::endl;
+	  std::cout << "   - Found a solid" << std::endl;
 	  splitInputSolidsList->Append(shape);
 	  break;
 	default:
 	  //throw std::runtime_error{"Shape can only be COMPOUND, COMPSOLID or SOLID"};
-	  std::cout << "Shape can only be COMPOUND, COMPSOLID or SOLID" << std::endl;
+	  std::cout << "   - Found invalid shape" << std::endl;
 	  rejectedInputSolidsList->Append(shape);
 	}
     }
@@ -58,46 +58,43 @@ McCAD::Decomposition::Decompose::Impl::flattenSolidHierarchy(const Handle_TopToo
 
 void
 McCAD::Decomposition::Decompose::Impl::perform(){
-  // Loop over the solids in the split solids list and perform the decomposition
-  for(Standard_Integer solidNumber = 1; solidNumber <= splitInputSolidsList->Length();
-      ++solidNumber)
+  for(const auto& shape : *splitInputSolidsList)
     {
       std::unique_ptr<Geometry::Solid> solid = std::make_unique<Geometry::Solid>();
-      solid->accessSImpl()->initiate(splitInputSolidsList->Value(solidNumber));
-      // If the solid has spline or tori surfaces it cannot be processed by the current version of the code.
-      if (solid->accessSImpl()->isTorus || solid->accessSImpl()->isSpline)
+      auto solidImpl = solid->accessSImpl();
+      solidImpl->initiate(shape);
+      if (solidImpl->isTorus || solidImpl->isSpline)
 	{
-	  rejectedInputSolidsList->Append(solid->accessSImpl()->solid);
+	  rejectedInputSolidsList->Append(shape);
 	}
       else
 	{
-	  // Repair the geometry of solid
-	  solid->accessSImpl()->repairSolid();
+	  // Repair the geometry of solid.
+	  solidImpl->repairSolid();
 	  // Perform decomposition on the repaired solid.
-	  std::cout << "   - Decomposing solid # " << solidNumber << std::endl;
+	  std::cout << "   - Decomposing solid" << std::endl;
 	  std::unique_ptr<DecomposeSolid> decomposeSolid = std::make_unique<DecomposeSolid>();
 	  if (decomposeSolid->accessDSImpl()->perform(solid))
 	    {
-	      Standard_Integer lengthList = solid->accessSImpl()->splitSolidList->Length();
-	      for (Standard_Integer i = 1; i <= lengthList; ++i)
+	      for(const auto& resultSolid : *solidImpl->splitSolidList)
 		{
-		  resultSolidsList->Append(solid->accessSImpl()->splitSolidList->Value(i));
+		  resultSolidsList->Append(resultSolid);
 		}
-	      if (solid->accessSImpl()->rejectedsubSolidsList->Length() >= 1)
+	      if (solidImpl->rejectedsubSolidsList->Length() >= 1)
                 {
-                  for (Standard_Integer j = 1; j <= solid->accessSImpl()->rejectedsubSolidsList->Length(); ++j)
-                    {
-                      rejectedsubSolidsList->Append(solid->accessSImpl()->rejectedsubSolidsList->Value(j));
+		  for(const auto& rejectedSubSolid : *solidImpl->rejectedsubSolidsList)
+		    {
+                      rejectedsubSolidsList->Append(rejectedSubSolid);
                     }
 		}
 	    }
 	  else
 	    {
-	      rejectedInputSolidsList->Append(solid->accessSImpl()->solid);
+	      rejectedInputSolidsList->Append(shape);
 	    }
 	}
     }
-  std::cout << "   - There are " << rejectedInputSolidsList->Length() << " rejected solid(s)."<< std::endl;
+  std::cout << "   - There are " << rejectedInputSolidsList->Length() << " rejected input solid(s)."<< std::endl;
   std::cout << "   - There are " << resultSolidsList->Length() << " result solid(s)." << std::endl;
   std::cout << "   - There are " << rejectedsubSolidsList->Length() << " rejected subsolid(s)." << std::endl;
 }

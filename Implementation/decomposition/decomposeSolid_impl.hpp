@@ -44,12 +44,12 @@
 #include <STEPControl_Writer.hxx>
 
 namespace McCAD::Decomposition{
-  class DecomposeSolid::Impl {
+  class DecomposeSolid::Impl{
   public:
     Impl();
     ~Impl();
 
-    Tools::Preprocessor preproc;
+    //Tools::Preprocessor preproc;
     SplitSurfaces splitSurfaces;
     SplitSolid splitSolid;
     
