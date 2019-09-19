@@ -44,7 +44,7 @@
 #include <STEPControl_Writer.hxx>
 
 namespace McCAD::Decomposition{
-  class DecomposeSolid::Impl {
+  class DecomposeSolid::Impl{
   public:
     Impl();
     Impl(Standard_Integer recurrenceDepth);

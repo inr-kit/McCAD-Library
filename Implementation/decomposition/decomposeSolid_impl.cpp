@@ -14,15 +14,14 @@ McCAD::Decomposition::DecomposeSolid::Impl::~Impl(){
 }
 
 Standard_Boolean
-McCAD::Decomposition::DecomposeSolid::Impl::perform(
-        Geometry::Solid::Impl& solidImpl){
+McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solidImpl){
     // The function will be called recursively on a solid and a condition has to be set for termination.
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
     std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
     // Alias the access to the implementation of solid object.
     // Calculate mesh deflection of the solid.
-    solidImpl->createOBB();
+    solidImpl.createOBB();
     solidImpl.calcMeshDeflection();
     // Update edges convexity of the solid.
     solidImpl.updateEdgesConvexity();
@@ -55,7 +54,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(
       //std::cout << "Solid has a split surface" << std::endl;
       if (!selectSplitSurface(solidImpl))
 	{
-	  std::cout << "** selectSplitSurface fail" << std::endl;
+	  //std::cout << "** selectSplitSurface fail" << std::endl;
 	  return Standard_False;
 	}
       // Split the solid with the selected surface.
@@ -63,14 +62,15 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(
       if (!SplitSolid::Impl{}.perform(solidImpl.solid, solidImpl.selectedSplitFacesList[0],
 				      solidImpl.splitSolidList))
 	{
-	  STEPControl_Writer writer4;
-	  writer4.Transfer(solid_impl->selectedSplitFacesList[0]->accessSImpl()->extendedFace, STEPControl_StepModelType::STEPControl_AsIs);
+	  /*
+          STEPControl_Writer writer4;
+	  writer4.Transfer(solidImpl->selectedSplitFacesList[0]->accessSImpl()->extendedFace, STEPControl_StepModelType::STEPControl_AsIs);
 	  writer4.Write("../examples/bbox/splitSurface.stp");
 	  std::cout << "** splitSolid fail" << std::endl;
+          */
           return Standard_False;
 	}
       // Loop over the resulting subsolids and split each one of them recursively.
-      //std::cout << "splitting subsolids" << std::endl;
       //throw std::runtime_error {"end"};
       for (Standard_Integer i = 1; i <= solidImpl.splitSolidList->Length(); ++i)
 	{
@@ -83,16 +83,18 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(
 	    {
 	      subSolidImpl->initiate(solidImpl.splitSolidList->Value(i));
 	    }
-	  catch(...)
+	  catch(const Standard_ConstructionError&)
 	    {
-	      std::cout << "** subSolid_impl->initiate fail" << std::endl;
+	      /*
+	      std::cout << "** subSolidImpl->initiate fail" << std::endl;
 	      STEPControl_Writer writer3;
-	      writer3.Transfer(solid_impl->splitSolidList->Value(i), STEPControl_StepModelType::STEPControl_AsIs);
+	      writer3.Transfer(solidImpl->splitSolidList->Value(i), STEPControl_StepModelType::STEPControl_AsIs);
 	      writer3.Write("../examples/bbox/subsolid.stp");
 	      STEPControl_Writer writer4;
-	      writer4.Transfer(solid_impl->selectedSplitFacesList[0]->accessSImpl()->extendedFace, STEPControl_StepModelType::STEPControl_AsIs);
+	      writer4.Transfer(solidImpl->selectedSplitFacesList[0]->accessSImpl()->extendedFace, STEPControl_StepModelType::STEPControl_AsIs);
 	      writer4.Write("../examples/bbox/splitsurface)subsolid.stp");
 	      throw std::runtime_error{"Shape problem"};
+	      */
 	      return Standard_False;
 	    }
 	  // mesh deflection is calculated inside initiate for every solid!.
