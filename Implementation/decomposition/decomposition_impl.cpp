@@ -21,7 +21,6 @@ McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inp
     }
   else
     {
-      // Throw an exception.
       throw std::runtime_error("Input solids list is empty!.");
     }
 }

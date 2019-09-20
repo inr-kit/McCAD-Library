@@ -122,6 +122,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(std::unique_ptr<Geometry::So
     }
   else
     {
+      // Solid has no split surface means it is already convex.
       //std::cout	<< "Solid has no split surfaces" << std::endl;
       solidImpl->splitSolidList->Append(solidImpl->solid);
     }

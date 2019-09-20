@@ -49,7 +49,6 @@ namespace McCAD::Decomposition{
     Impl();
     ~Impl();
 
-    //Tools::Preprocessor preproc;
     SplitSurfaces splitSurfaces;
     SplitSolid splitSolid;
     
