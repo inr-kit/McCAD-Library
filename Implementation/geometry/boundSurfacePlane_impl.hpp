@@ -10,7 +10,7 @@
 #include "boundSurfacePlane.hpp"
 #include "surface_impl.hpp"
 // OCC
-#include <TopLoc_Location.hxx>
+#include <TopoDS_Face.hxx>
 #include <Geom_Surface.hxx>
 #include <BRepTools.hxx>
 #include <BRep_Tool.hxx>

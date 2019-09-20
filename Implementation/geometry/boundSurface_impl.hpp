@@ -14,6 +14,7 @@
 #include "ShapeView.hpp"
 #include "CurveUtilities.hpp"
 #include "PlaneComparator.hpp"
+#include "SurfaceUtilities.hpp"
 // OCC
 #include <Poly_Triangulation.hxx>
 #include <Poly_Triangulation.hxx>
@@ -50,7 +51,7 @@ namespace McCAD::Geometry{
 					 Standard_Real tolerance = 1e-2,
 					 Standard_Real tolerance2 = 1e-3);
     Standard_Boolean pointOnSurface(const gp_Pnt& aPoint,
-				      const Standard_Real& distanceTolerance);
+				    const Standard_Real& distanceTolerance);
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
     void generateEdges(Standard_Real uvTolerance = 1.0e-3);
     Standard_Boolean edgeOnSurface(const Edge& aEdge, Standard_Real tolerance = 1.0e-4);
