@@ -53,8 +53,7 @@ namespace McCAD::Tools{
 			  Standard_Real precision = 1.0e-3,
 			  Standard_Real maxTolerance = 1.0e-3);
     void repairSolid(TopoDS_Solid& solid);
-    Standard_Boolean checkFace(
-			       const TopoDS_Face& face,
+    Standard_Boolean checkFace(const TopoDS_Face& face,
 			       Standard_Real tolerance = 1.0e-3);
     void fixFace(TopoDS_Face& face,
 		 Standard_Real precision = 1.0e-7,

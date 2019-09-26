@@ -50,19 +50,17 @@ namespace McCAD::Decomposition{
     Impl(Standard_Integer recurrenceDepth);
     ~Impl();
     
-    Standard_Boolean perform(Solid::Impl& solidImpl);
-    bool operator()(Solid::Impl& solid);
+    Standard_Boolean perform(Geometry::Solid::Impl& solidImpl);
+    bool operator()(Geometry::Solid::Impl& solid);
 
   private:
     Standard_Integer recurrenceDepth;
-
     SplitSurfaces splitSurfaces;
 
-    void judgeDecomposeSurfaces(Solid::Impl& solidImpl);
-    void judgeThroughConcaveEdges(std::vector<std::shared_ptr<BoundSurface>>& facesList);
+    void judgeDecomposeSurfaces(Geometry::Solid::Impl& solidImpl);
+    void judgeThroughConcaveEdges(std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList);
     void generateAssistingSurfaces();
-    Standard_Boolean selectSplitSurface(Solid::Impl& solidImpl);
-
+    Standard_Boolean selectSplitSurface(Geometry::Solid::Impl& solidImpl);
   };
 }
 

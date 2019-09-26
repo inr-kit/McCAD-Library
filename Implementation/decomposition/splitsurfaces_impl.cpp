@@ -6,22 +6,22 @@
 
 bool
 McCAD::Decomposition::SplitSurfaces::Impl::throughNoBoundarySurfaces(
-        const std::vector<std::shared_ptr<BoundSurface>>& facesList){
+        const std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList){
     return std::any_of(
                 facesList.cbegin(),
                 facesList.cend(),
-                [](const std::shared_ptr<BoundSurface>& face){
+                [](const std::shared_ptr<Geometry::BoundSurface>& face){
                     return face->accessSImpl()->numberCollidingSurfaces == 0;
                 });
 }
 
 Standard_Boolean
 McCAD::Decomposition::SplitSurfaces::Impl::planeSplitOnlyPlane(
-        std::vector<std::shared_ptr<BoundSurface>>& facesList){
+        std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList){
     return std::any_of(
                 facesList.cbegin(),
                 facesList.cend(),
-                [](const std::shared_ptr<BoundSurface>& face){
+                [](const std::shared_ptr<Geometry::BoundSurface>& face){
                     return face->getSurfaceType() == "Plane"
                             && face->accessSImpl()->numberCollidingCurvedSurfaces == 0;
                 });
@@ -29,8 +29,8 @@ McCAD::Decomposition::SplitSurfaces::Impl::planeSplitOnlyPlane(
 
 void
 McCAD::Decomposition::SplitSurfaces::Impl::generateSplitFacesList(
-        std::vector<std::shared_ptr<BoundSurface>>& splitFacesList,
-        std::vector<std::shared_ptr<BoundSurface>>& selectedSplitFacesList){
+        std::vector<std::shared_ptr<Geometry::BoundSurface>>& splitFacesList,
+        std::vector<std::shared_ptr<Geometry::BoundSurface>>& selectedSplitFacesList){
 
     // 1st step: Select surfaces that go through 0 boundary surfaces.
     for(const auto& face : splitFacesList){
@@ -70,7 +70,7 @@ McCAD::Decomposition::SplitSurfaces::Impl::generateSplitFacesList(
 
 void
 McCAD::Decomposition::SplitSurfaces::Impl::sortSplitFaces(
-        std::vector<std::shared_ptr<BoundSurface>>& splitFacesList){
+        std::vector<std::shared_ptr<Geometry::BoundSurface>>& splitFacesList){
 
     // Use a lambda expression as a comparator:
     // Faces which go through more concave edges have a higher priority.
@@ -78,8 +78,8 @@ McCAD::Decomposition::SplitSurfaces::Impl::sortSplitFaces(
     // the face with less colliding surfaces has a higher priority.
     auto comparator
             = [](
-            const std::shared_ptr<BoundSurface>& first,
-            const std::shared_ptr<BoundSurface>& second){
+            const std::shared_ptr<Geometry::BoundSurface>& first,
+            const std::shared_ptr<Geometry::BoundSurface>& second){
         const auto& fst = *first->accessSImpl();
         const auto& snd = *second->accessSImpl();
         return fst.throughConcaveEdges > snd.throughConcaveEdges

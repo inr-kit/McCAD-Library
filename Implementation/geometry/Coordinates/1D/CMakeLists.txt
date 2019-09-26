@@ -1,27 +1,17 @@
-add_library(Coord1D
-    Coord.cpp
-    Coord_const.cpp
-    Coord_hash.cpp
-    Coord_util.cpp
-    )
+add_library(Coord1D_IMPL OBJECT
+  Coord.cpp
+  Coord_const.cpp
+  Coord_hash.cpp
+  Coord_util.cpp)
 
-target_sources(Coord1D
-    PUBLIC
-        Coord.fwd
-        Coord.hpp
-        Coord_const.hpp
-        Coord_hash.hpp
-        Coord_util.hpp
-        Coord.ipp
-    )
+install(FILES
+  Coord.fwd
+  Coord.hpp
+  Coord_const.hpp
+  Coord_hash.hpp
+  Coord_util.hpp
+  Coord.ipp
+  DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/coordinates/1d)
 
-target_link_libraries(Coord1D
-    PRIVATE
-        CoordCommon
-        FloatingPoint
-    )
-
-target_include_directories(Coord1D
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-    )
+target_link_libraries(Coord1D_IMPL
+  CoordCommon_IMPL)

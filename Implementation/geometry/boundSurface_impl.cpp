@@ -1,14 +1,15 @@
 // McCAD
 #include "boundSurface_impl.hpp"
 
-McCAD::Decomposition::BoundSurface::Impl::Impl(BoundSurface* backReference) : boundSurface{backReference}{
+McCAD::Geometry::BoundSurface::Impl::Impl(BoundSurface* backReference)
+  : boundSurface{backReference}{
 }
 
-McCAD::Decomposition::BoundSurface::Impl::~Impl(){
+McCAD::Geometry::BoundSurface::Impl::~Impl(){
 }
 
 Standard_Boolean
-McCAD::Decomposition::BoundSurface::Impl::isEqual(const McCAD::Decomposition::BoundSurface& that){
+McCAD::Geometry::BoundSurface::Impl::isEqual(const McCAD::Geometry::BoundSurface& that){
   Standard_Boolean equalityCondition
           = Tools::PlaneComparator{}(boundSurface->accessSImpl()->face,
                                       that.accessSImpl()->face);
@@ -16,7 +17,7 @@ McCAD::Decomposition::BoundSurface::Impl::isEqual(const McCAD::Decomposition::Bo
 }
 
 Standard_Boolean
-McCAD::Decomposition::BoundSurface::Impl::canFuse(const McCAD::Decomposition::BoundSurface& that){
+McCAD::Geometry::BoundSurface::Impl::canFuse(const McCAD::Geometry::BoundSurface& that){
   Standard_Boolean equalityCondition
           = Tools::PlaneComparator{}(boundSurface->accessSImpl()->face,
                                       that.accessSImpl()->face);
@@ -39,13 +40,13 @@ McCAD::Decomposition::BoundSurface::Impl::canFuse(const McCAD::Decomposition::Bo
 }
 
 Standard_Boolean
-McCAD::Decomposition::BoundSurface::Impl::faceCollision(const BoundSurface& aFace, Standard_Integer& aSide)
-{
+McCAD::Geometry::BoundSurface::Impl::faceCollision(const BoundSurface& aFace,
+						   Standard_Integer& aSide){
   Standard_Boolean collision = Standard_False;
   Standard_Integer positiveTriangles = 0;
   Standard_Integer negativeTriangles = 0;
 
-  //std::cout << "length of list: " << aFace.accessBSImpl()->meshTrianglesList.size() << std::endl; 
+  //std::cout << "length of list: " << aFace.accessBSImpl()->meshTrianglesList.size() << std::endl;
   for (Standard_Integer i = 0; i <= aFace.accessBSImpl()->meshTrianglesList.size() - 1; ++i)
     {
       //std::cout << i << std::endl;
@@ -86,7 +87,7 @@ McCAD::Decomposition::BoundSurface::Impl::faceCollision(const BoundSurface& aFac
 }
 
 Standard_Boolean
-McCAD::Decomposition::BoundSurface::Impl::generateMesh(const Standard_Real& meshDeflection){
+McCAD::Geometry::BoundSurface::Impl::generateMesh(const Standard_Real& meshDeflection){
   // Get surface from base class; Surface.
   TopoDS_Face face = boundSurface->accessSImpl()->face;
   // Generate mesh of the surface.
@@ -123,7 +124,8 @@ McCAD::Decomposition::BoundSurface::Impl::generateMesh(const Standard_Real& mesh
 		meshNodes(triangleNodes[2]).Transformed(Transformation)};
 	      
 	      // Generate new face with the retrieved triangle points.
-	      TopoDS_Wire wire = BRepBuilderAPI_MakePolygon(points[0], points[1], points[2], Standard_True);
+	      TopoDS_Wire wire = BRepBuilderAPI_MakePolygon(points[0], points[1],
+							    points[2], Standard_True);
 	      TopoDS_Face triangleFace = BRepBuilderAPI_MakeFace(wire, Standard_True);
 	      std::unique_ptr<MeshTriangle> meshTriangle = std::make_unique<MeshTriangle>();
 	      meshTriangle->accessMTImpl()->initiate(triangleFace);
@@ -145,14 +147,13 @@ McCAD::Decomposition::BoundSurface::Impl::generateMesh(const Standard_Real& mesh
 }
 
 void
-McCAD::Decomposition::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
+McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
   TopoDS_Face face = boundSurface->accessSImpl()->face;
   //TopExp_Explorer explorer(face, TopAbs_EDGE);
   //for(; explorer.More(); explorer.Next())
-  for (const auto& element : ShapeView<TopAbs_EDGE>{face})  
+  for (const auto& tempEdge : ShapeView<TopAbs_EDGE>{face})  
     {
-      //TopoDS_Edge tempEdge = TopoDS::Edge(explorer.Current());
-      TopoDS_Edge tempEdge = element;
+      //TopoDS_Edge tempEdge = element;
       std::unique_ptr<Edge> edge = std::make_unique<Edge>();
       edge->accessEImpl()->initiate(tempEdge);
       // Get type of Edge.
@@ -165,9 +166,12 @@ McCAD::Decomposition::BoundSurface::Impl::generateEdges(Standard_Real uvToleranc
       if (boundSurface->getSurfaceType() == "Cylinder" && edge->getEdgeType() == "Line")
         {
           std::array<Standard_Real, 4> edgeUV, surfaceUV;
-          BRepTools::UVBounds(face, tempEdge, edgeUV[0], edgeUV[1], edgeUV[2], edgeUV[3]);
-          BRepTools::UVBounds(face, surfaceUV[0], surfaceUV[1], surfaceUV[2], surfaceUV[3]);
-          if (std::abs(edgeUV[0] - surfaceUV[0]) < uvTolerance || std::abs(edgeUV[1] - surfaceUV[1]) < uvTolerance)
+          BRepTools::UVBounds(face, tempEdge, edgeUV[0], edgeUV[1], edgeUV[2],
+			      edgeUV[3]);
+          BRepTools::UVBounds(face, surfaceUV[0], surfaceUV[1], surfaceUV[2],
+			      surfaceUV[3]);
+          if (std::abs(edgeUV[0] - surfaceUV[0]) < uvTolerance ||
+	      std::abs(edgeUV[1] - surfaceUV[1]) < uvTolerance)
 	    {
               edge->accessEImpl()->useForSplitSurface = Standard_True;
             }
@@ -178,7 +182,10 @@ McCAD::Decomposition::BoundSurface::Impl::generateEdges(Standard_Real uvToleranc
 
 // This function is used as virtual one in BndSurfPlane. Should be modified later.
 Standard_Boolean
-McCAD::Decomposition::BoundSurface::Impl::triangleCollision(const MeshTriangle& aTriangle, Standard_Integer& aSide, Standard_Real tolerance, Standard_Real tolerance2){
+McCAD::Geometry::BoundSurface::Impl::triangleCollision(const MeshTriangle& aTriangle,
+						       Standard_Integer& aSide,
+						       Standard_Real tolerance,
+						       Standard_Real tolerance2){
   //std::cout << "triangleCollision" << std::endl;
   Standard_Boolean collision = Standard_False;
   Standard_Integer positivePoints = 0;
@@ -228,9 +235,10 @@ McCAD::Decomposition::BoundSurface::Impl::triangleCollision(const MeshTriangle& 
 }
 
 Standard_Boolean
-McCAD::Decomposition::BoundSurface::Impl::pointOnSurface(const gp_Pnt& aPoint, const Standard_Real& distanceTolerance){
+McCAD::Geometry::BoundSurface::Impl::pointOnSurface(const gp_Pnt& aPoint, const Standard_Real& distanceTolerance){
   //std::cout << "pointOnSurface" << std::endl;
-  BRepAdaptor_Surface surfaceAdaptor(boundSurface->accessSImpl()->extendedFace, Standard_True);
+  BRepAdaptor_Surface surfaceAdaptor(boundSurface->accessSImpl()->extendedFace,
+				     Standard_True);
   Standard_Real uvTolerance = surfaceAdaptor.Tolerance();
   std::array<Standard_Real, 4> uvParameters;
   uvParameters[0] = surfaceAdaptor.FirstUParameter();
@@ -238,11 +246,15 @@ McCAD::Decomposition::BoundSurface::Impl::pointOnSurface(const gp_Pnt& aPoint, c
   uvParameters[2] = surfaceAdaptor.FirstVParameter();
   uvParameters[3] = surfaceAdaptor.LastVParameter();
 
-  Extrema_ExtPS extremumDistances(aPoint, surfaceAdaptor, uvParameters[0], uvParameters[1], uvParameters[2], uvParameters[3], uvTolerance, uvTolerance);
+  Extrema_ExtPS extremumDistances(aPoint, surfaceAdaptor, uvParameters[0],
+				  uvParameters[1], uvParameters[2], uvParameters[3],
+				  uvTolerance, uvTolerance);
   if (extremumDistances.IsDone() && extremumDistances.NbExt() != 0)
     {
       gp_Pnt point = extremumDistances.Point(1).Value();
-      Standard_Real distance = std::sqrt(std::pow(aPoint.X() - point.X(), 2) + std::pow(aPoint.Y() - point.Y(), 2) + std::pow(aPoint.Z() - point.Z(), 2));
+      Standard_Real distance = std::sqrt(std::pow(aPoint.X() - point.X(), 2) +
+					 std::pow(aPoint.Y() - point.Y(), 2) +
+					 std::pow(aPoint.Z() - point.Z(), 2));
       if (distance < distanceTolerance)
 	{
 	  return Standard_True;
@@ -253,14 +265,14 @@ McCAD::Decomposition::BoundSurface::Impl::pointOnSurface(const gp_Pnt& aPoint, c
 }
 
 Standard_Boolean
-McCAD::Decomposition::BoundSurface::Impl::edgeOnSurface(const Edge& aEdge, Standard_Real tolerance){
+McCAD::Geometry::BoundSurface::Impl::edgeOnSurface(const Edge& aEdge,
+						   Standard_Real tolerance){
   gp_Pnt startPoint = aEdge.accessEImpl()->startPoint;
   gp_Pnt endPoint   = aEdge.accessEImpl()->endPoint;
   //std::cout << startPoint.X() << "," << startPoint.Y() << "," << startPoint.Z() << "," << std::endl;
   //std::cout << endPoint.X() << "," << endPoint.Y() << "," << endPoint.Z() << "," << std::endl;
   tolerance = BRep_Tool::Tolerance(boundSurface->accessSImpl()->extendedFace);
-  if (pointOnSurface(startPoint, tolerance) && pointOnSurface(endPoint, tolerance\
-))
+  if (pointOnSurface(startPoint, tolerance) && pointOnSurface(endPoint, tolerance))
     {
       //std::cout << "points on surface" << std::endl;
       if (aEdge.accessEImpl()->edgeType == "Line")
@@ -272,7 +284,8 @@ McCAD::Decomposition::BoundSurface::Impl::edgeOnSurface(const Edge& aEdge, Stand
 	{
 	  gp_Pnt middlePoint = aEdge.accessEImpl()->middlePoint;
           gp_Pnt extraPoint = aEdge.accessEImpl()->extraPoint;
-          if (pointOnSurface(middlePoint, tolerance) && pointOnSurface(extraPoint, tolerance))
+          if (pointOnSurface(middlePoint, tolerance) && pointOnSurface(extraPoint,
+								       tolerance))
 	    {
 	      //std::cout << "no line" << std::endl;
 	      return Standard_True;
@@ -283,7 +296,7 @@ McCAD::Decomposition::BoundSurface::Impl::edgeOnSurface(const Edge& aEdge, Stand
 }
 
 void
-McCAD::Decomposition::BoundSurface::Impl::combineEdges(std::vector<std::unique_ptr<Edge>>& aEdgesList){
+McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::unique_ptr<Edge>>& aEdgesList){
   if (edgesList.size() == 0)
     {
       // If the current list is empty, append to it the new one.

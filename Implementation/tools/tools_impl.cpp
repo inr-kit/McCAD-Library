@@ -51,7 +51,8 @@ McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face,
 					    Standard_Real tolerance){
   ShapeAnalysis_CheckSmallFace shapeAnalysis;
   TopoDS_Edge edge1, edge2;
-  if( shapeAnalysis.CheckSpotFace(face, tolerance) || shapeAnalysis.CheckStripFace(face, edge1, edge2, tolerance))
+  if( shapeAnalysis.CheckSpotFace(face, tolerance) ||
+      shapeAnalysis.CheckStripFace(face, edge1, edge2, tolerance))
     {
       return Standard_True;
     }

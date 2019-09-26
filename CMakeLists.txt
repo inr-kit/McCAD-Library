@@ -27,8 +27,8 @@ add_subdirectory(3rd_party)
 include_directories(
   "${PROJECT_SOURCE_DIR}/Interface/general"
   "${PROJECT_SOURCE_DIR}/Implementation/general")
-add_subdirectory (Interface/general)
 add_subdirectory (Implementation/general)
+add_subdirectory (Interface/general)
 add_library(INPUTDATA INTERFACE)
 target_sources(INPUTDATA INTERFACE
   $<TARGET_OBJECTS:INPUTDATA_IFACE>
@@ -38,8 +38,8 @@ target_sources(INPUTDATA INTERFACE
 include_directories(
   "${PROJECT_SOURCE_DIR}/Interface/io"
   "${PROJECT_SOURCE_DIR}/Implementation/io")
-add_subdirectory (Interface/io)
 add_subdirectory (Implementation/io)
+add_subdirectory (Interface/io)
 add_library(IO INTERFACE)
 target_sources(IO INTERFACE
   $<TARGET_OBJECTS:IO_IFACE>
@@ -56,17 +56,29 @@ target_sources(TOOLS INTERFACE
   $<TARGET_OBJECTS:TOOLS_IFACE>
   $<TARGET_OBJECTS:TOOLS_IMPL>)
 
+# Geometry library
+include_directories(
+  "${PROJECT_SOURCE_DIR}/Interface/geometry"
+  "${PROJECT_SOURCE_DIR}/Implementation/geometry")
+add_subdirectory (Implementation/geometry)
+add_subdirectory (Interface/geometry)
+add_library(GEOMETRY INTERFACE)
+target_sources(GEOMETRY INTERFACE
+  $<TARGET_OBJECTS:GEOMETRY_IFACE>
+  $<TARGET_OBJECTS:GEOMETRY_IMPL>)
+target_link_libraries(GEOMETRY INTERFACE Coordinates_IMPL TOOLS)
+
 # Decomposition library
 include_directories(
   "${PROJECT_SOURCE_DIR}/Interface/decomposition"
   "${PROJECT_SOURCE_DIR}/Implementation/decomposition")
-add_subdirectory (Interface/decomposition)
 add_subdirectory (Implementation/decomposition)
+add_subdirectory (Interface/decomposition)
 add_library(DECOMPOSITION INTERFACE)
 target_sources(DECOMPOSITION INTERFACE
   $<TARGET_OBJECTS:DECOMPOSITION_IFACE>
   $<TARGET_OBJECTS:DECOMPOSITION_IMPL>)
-target_link_libraries(DECOMPOSITION INTERFACE TOOLS)
+target_link_libraries(DECOMPOSITION INTERFACE GEOMETRY)
 
 # add the executable
 add_executable(${PROJECT_NAME} "main.cpp")
@@ -75,6 +87,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   INPUTDATA
   IO
   TOOLS
+  GEOMETRY
   DECOMPOSITION)
 
 install(TARGETS ${PROJECT_NAME}

@@ -1,48 +1,52 @@
 // McCAD
 #include "solid_impl.hpp"
 
-McCAD::Decomposition::Solid::Impl::Impl()
+McCAD::Geometry::Solid::Impl::Impl()
   : preproc{std::make_unique<McCAD::Tools::Preprocessor>()},
     splitSolidList{std::make_unique<TopTools_HSequenceOfShape>()},
     rejectedsubSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
 }
 
-McCAD::Decomposition::Solid::Impl::~Impl(){
+McCAD::Geometry::Solid::Impl::~Impl(){
 }
 
 void
-McCAD::Decomposition::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
+McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
+  //std::cout << "solid initiate" << std::endl;
   solidShape = aSolidShape;
+  //std::cout << "solidShape" << std::endl;
   solid = TopoDS::Solid(solidShape);
+  //std::cout << "solid" << std::endl;
   // Check boundary surfaces.
   preproc->accessImpl()->checkBndSurfaces(solid, isTorus, isSpline);
+  //std::cout << "checkBndSurfaces" << std::endl;
 }
 
 void
-McCAD::Decomposition::Solid::Impl::calcMeshDeflection(Standard_Real bndBoxGap,
-						      Standard_Real converting){
+McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real bndBoxGap,
+						 Standard_Real converting){
   // Calculate the bounding box of the solid.
   Bnd_Box boundingBox;
   BRepBndLib::Add(solid, boundingBox);
   boundingBox.SetGap(bndBoxGap);
-  std::array<Standard_Real, 6> coordinates;
-  boundingBox.Get(coordinates[0], coordinates[1], coordinates[2], coordinates[3],
-		  coordinates[4], coordinates[5]);
-  Standard_Real tempdeflection = std::max((coordinates[3] - coordinates[0]),
-					  (coordinates[4] - coordinates[1]));
-  meshDeflection = std::max(tempdeflection, (coordinates[5] - coordinates[2])) / converting;
+  std::array<Standard_Real, 3> XYZmin;
+  std::array<Standard_Real, 3> XYZmax;
+  boundingBox.Get(XYZmin[0], XYZmin[1], XYZmin[2], XYZmax[0], XYZmax[1], XYZmax[2]);
+  meshDeflection = std::max(std::max((XYZmax[0] - XYZmin[0]), (XYZmax[1] - XYZmin[1])),
+			    (XYZmax[2] - XYZmax[2])) / converting;
   boxSquareLength = sqrt(boundingBox.SquareExtent());
+  //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
 }
 
 void
-McCAD::Decomposition::Solid::Impl::repairSolid(){
+McCAD::Geometry::Solid::Impl::repairSolid(){
   preproc->accessImpl()->removeSmallFaces(solidShape);
   solid = TopoDS::Solid(solidShape);
   preproc->accessImpl()->repairSolid(solid);
 }
 
 void
-McCAD::Decomposition::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTolerance){
+McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTolerance){
   TopTools_IndexedDataMapOfShapeListOfShape mapEdgeFace;
   TopExp::MapShapesAndAncestors(solid, TopAbs_EDGE, TopAbs_FACE, mapEdgeFace);
   
@@ -101,7 +105,7 @@ McCAD::Decomposition::Solid::Impl::updateEdgesConvexity(const Standard_Real& ang
 }
 
 void
-McCAD::Decomposition::Solid::Impl::generateSurfacesList(){
+McCAD::Geometry::Solid::Impl::generateSurfacesList(){
   // Generate a list of faces of the solid.
   TopoDS_Face face;
   Standard_Integer faceNumber = 0;
@@ -135,6 +139,7 @@ McCAD::Decomposition::Solid::Impl::generateSurfacesList(){
 	}
       else
 	{
+	  //std::cout << "face rejected" << std::endl;
 	  continue;
 	}
     }
@@ -148,8 +153,9 @@ McCAD::Decomposition::Solid::Impl::generateSurfacesList(){
   //std::cout << "merged faces list: " << facesList.size() << std::endl;
 }
 
-std::unique_ptr<McCAD::Decomposition::BoundSurface>
-McCAD::Decomposition::Solid::Impl::generateSurface(const TopoDS_Face& face, Standard_Integer mode){
+std::unique_ptr<McCAD::Geometry::BoundSurface>
+McCAD::Geometry::Solid::Impl::generateSurface(const TopoDS_Face& face,
+					      Standard_Integer mode){
   if (mode == Standard_Integer(0))
     {
       //std::cout << "mode 0 " << std::endl;
@@ -185,7 +191,7 @@ McCAD::Decomposition::Solid::Impl::generateSurface(const TopoDS_Face& face, Stan
 }
 
 void
-McCAD::Decomposition::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSurface>>& surfacesList){
+McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSurface>>& surfacesList){
   if (surfacesList.size() < 2)
     {
       return;
@@ -199,6 +205,12 @@ McCAD::Decomposition::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<Bou
 	    {
 	      //std::cout << "equal" << std::endl;
 	      surfacesList[j]->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
+	      //STEPControl_Writer writer6;
+	      //writer6.Transfer(surfacesList[j]->accessSImpl()->face,
+	      //		       STEPControl_StepModelType::STEPControl_AsIs);
+	      //writer6.Transfer(surfacesList[i]->accessSImpl()->face,
+	      //	       STEPControl_StepModelType::STEPControl_AsIs);
+	      //writer6.Write("../examples/equalsurface.stp");
 	      // Test if the two surfaces can be fused.
 	      if (*(surfacesList[i]) << *(surfacesList[j]))
 		{
@@ -239,8 +251,12 @@ McCAD::Decomposition::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<Bou
 		{
 		  //std::cout << "equal, erase one" << std::endl;
 		  // Erase pointer surfacesList[j] from surfacesList.
-		  surfacesList.erase(surfacesList.begin() + j);
-		  --j;
+		  //STEPControl_Writer writer7;
+		  //writer7.Transfer(surfacesList[j]->accessSImpl()->face,
+                  //                 STEPControl_StepModelType::STEPControl_AsIs);
+                  //writer7.Write("../examples/equalsurfacedelete.stp");
+		  //surfacesList.erase(surfacesList.begin() + j);
+		  //--j;
 		}
 	      if (surfacesList.size() < 2)
 		{

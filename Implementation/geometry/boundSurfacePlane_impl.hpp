@@ -16,7 +16,7 @@
 #include <BRep_Tool.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
 
-namespace McCAD::Decomposition{
+namespace McCAD::Geometry{
   class BoundSurfacePlane::Impl {
   public:
     Impl(BoundSurfacePlane* backReference);
@@ -25,10 +25,8 @@ namespace McCAD::Decomposition{
     BoundSurfacePlane* boundSurfacePlane;
 
     std::string surfaceType = "Plane";
-    void generateExtendedPlane(const Standard_Real& boxSquareLength, Standard_Real degenerateEdgesTolerance = 1.0e-7);
-    
-  private:
-
+    void generateExtendedPlane(const Standard_Real& boxSquareLength,
+			       Standard_Real degenerateEdgesTolerance = 1.0e-7);
   };
 }
 

@@ -2,19 +2,14 @@
 #include "edge_impl.hpp"
 
 void
-McCAD::Decomposition::Edge::Impl::initiate(const TopoDS_Edge& aEdge){
+McCAD::Geometry::Edge::Impl::initiate(const TopoDS_Edge& aEdge){
+  preproc = std::make_unique<McCAD::Tools::Preprocessor>();
   edge = aEdge;
   calculatePoints();
 }
 
-Standard_Boolean
-McCAD::Decomposition::Edge::Impl::isEqual(const Edge& that){
-  Standard_Boolean equalityCondition = preproc.accessImpl()->isSameEdge(edge, that.accessEImpl()->edge);
-  return equalityCondition;
-}
-
 void
-McCAD::Decomposition::Edge::Impl::calculatePoints(){
+McCAD::Geometry::Edge::Impl::calculatePoints(){
   Standard_Real firstPoint, secondPoint, thirdPoint, fourthPoint;
   Handle_Geom_Curve curve = BRep_Tool::Curve(edge, firstPoint, secondPoint);
 
@@ -26,4 +21,11 @@ McCAD::Decomposition::Edge::Impl::calculatePoints(){
 
   fourthPoint = (firstPoint + secondPoint) / 4.0;
   curve->D0(fourthPoint, extraPoint);
+}
+
+Standard_Boolean
+McCAD::Geometry::Edge::Impl::isEqual(const Edge& that){
+  Standard_Boolean equalityCondition = preproc->accessImpl()->isSameEdge(edge,
+							   that.accessEImpl()->edge);
+  return equalityCondition;
 }
