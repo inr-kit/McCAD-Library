@@ -226,9 +226,8 @@ McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSe
 	      {
                 //std::cout << "build solid" << std::endl;
                 TopoDS_Solid newSolid;
-                Standard_Boolean rebuildCondition = rebuildSolidFromShell(tempSolid,
-									  newSolid);
-                if (!rebuildCondition)
+                auto rebuildSolid = rebuildSolidFromShell(tempSolid);
+                if (!rebuildSolid)
 		  {
 		    //std::cout << "** rebuildSolidFromShell fail" << std::endl;
                     return Standard_False;
@@ -250,58 +249,44 @@ McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSe
     return Standard_True;
 }
 
-Standard_Boolean
-McCAD::Decomposition::SplitSolid::Impl::rebuildSolidFromShell(const TopoDS_Shape& solid,
-							      TopoDS_Solid& resultSolid,
-							      Standard_Real tolerance,
-							      Standard_Real tolerance2){
-  //std::cout << "rebuildSolidFromShell" << std::endl;
-  BRepBuilderAPI_Sewing builder(tolerance, Standard_True, Standard_True, Standard_True,
-				Standard_True);
-  for (const auto& element : ShapeView<TopAbs_FACE>{solid})
-    {
-      TopoDS_Face tempFace = element;
-      if (tempFace.IsNull())
-	{
-	  continue;
-	}
-      GProp_GProps geometryProperties;
-      BRepGProp::SurfaceProperties(tempFace, geometryProperties);
-      if (geometryProperties.Mass() <= tolerance2)
-	{
-	  continue;
-	}
-      builder.Add(tempFace);
+std::optional<TopoDS_Solid>
+McCAD::Decomposition::SplitSolid::Impl::rebuildSolidFromShell(
+        const TopoDS_Shape& solid,
+        Standard_Real tolerance,
+        Standard_Real massTolerance){
+    //std::cout << "rebuildSolidFromShell" << std::endl;
+
+    BRepBuilderAPI_Sewing builder{
+        tolerance,
+        Standard_True, Standard_True, Standard_True, Standard_True
+    };
+
+    for (const auto& face : ShapeView<TopAbs_FACE>{solid}){
+        if (face.IsNull()) continue;
+
+        GProp_GProps geometryProperties;
+        BRepGProp::SurfaceProperties(face, geometryProperties);
+        if (geometryProperties.Mass() <= massTolerance) continue;
+
+        builder.Add(face);
     }
 
-  builder.Perform();
-  TopoDS_Shape tempShape = builder.SewedShape();
+    builder.Perform();
 
-  TopoDS_Shape newshape;
-  for (const auto& element : ShapeView<TopAbs_SHELL>{tempShape})
-    {
-      try
-	{
-	  TopoDS_Shell tempShell = element;
-          ShapeFix_Solid tempSolid;
-          tempSolid.LimitTolerance(tolerance);
-          newshape = tempSolid.SolidFromShell(tempShell);
-	}
-      catch(...)
-	{
-	  return Standard_False;
-	}
+    TopoDS_Shape newshape;
+    for (const auto& shell : ShapeView<TopAbs_SHELL>{builder.SewedShape()}){
+        try{
+            ShapeFix_Solid tempSolid;
+            tempSolid.LimitTolerance(tolerance);
+            newshape = tempSolid.SolidFromShell(shell);
+        }catch(...){
+            return std::nullopt;
+        }
     }
 
-  //std::cout << "analyzer" << std::endl;
-  BRepCheck_Analyzer BRepAnalyzer(newshape, Standard_True);
-  if (!(BRepAnalyzer.IsValid()))
-    {
-      return Standard_False;
-    }
-  else
-    {
-      resultSolid = TopoDS::Solid(newshape);
-      return Standard_True;
-    }
+    //std::cout << "analyzer" << std::endl;
+    if(BRepCheck_Analyzer{newshape, Standard_True}.IsValid())
+        return TopoDS::Solid(newshape);
+    else
+        return std::nullopt;
 }
