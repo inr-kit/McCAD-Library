@@ -60,11 +60,7 @@ namespace McCAD::Decomposition{
         Standard_Boolean checkRepair(std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList,
                      Standard_Real tolerance = 1.0e-4);
 
-    private:
-        std::optional<TopoDS_Solid> rebuildSolidFromShell(
-                const TopoDS_Shape& solid,
-                Standard_Real tolerance = 1.0e-2,
-                Standard_Real massTolerance = 1.0e-4);
+
     };
 }
 

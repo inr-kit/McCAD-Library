@@ -13,6 +13,7 @@ namespace McCAD{
 
         Iterator<shapeTag> begin() const;
         Iterator<shapeTag> end() const;
+        std::size_t size() const;
 
     private:
         const TopoDS_Shape& shape;
