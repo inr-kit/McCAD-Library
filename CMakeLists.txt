@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.14.4 FATAL_ERROR)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-option(Use_Linux_OS "Linux OS is assumed by default. Change to OFF for Windows" ON)
+option(Use_Linux_OS "Linux OS is assumed by default. Change to OFF for Windows" OFF)
 message("-- Use_Linux_OS: " ${Use_Linux_OS})
 
 # Set project name
