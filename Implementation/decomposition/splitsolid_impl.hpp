@@ -34,22 +34,19 @@ namespace McCAD::Decomposition{
     public:
         Impl() = default;
 
-        Bnd_Box bndBox;
-        Standard_Real boxSquareLength;
-        TopoDS_Shape boundingBox;
+        bool operator()(
+                const TopoDS_Solid& solid,
+                const Geometry::BoundSurface& surface,
+                TopTools_HSequenceOfShape& subSolidsList) const;
 
-        Standard_Boolean perform(const TopoDS_Solid& solid,
-                     const std::shared_ptr<Geometry::BoundSurface>& surface,
-                     std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList);
-        void calculateBoundingBox(const TopoDS_Solid& solid);
-        Standard_Boolean split(const TopoDS_Solid& solid,
-                   const TopoDS_Face& splitFace,
-                   std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList);
+    private:
+        bool filterAndRepair(
+                TopTools_HSequenceOfShape& subSolidsList,
+                Standard_Real tolerance = 1.0e-4) const;
 
-        Standard_Boolean checkRepair(std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList,
-                     Standard_Real tolerance = 1.0e-4);
-
-        bool repair(TopTools_HSequenceOfShape& listOfSolids) const;
+        TopTools_HSequenceOfShape gatherSubSolids(
+                TopTools_HSequenceOfShape& solids,
+                Standard_Real tolerance = 1.0e-4) const;
 
     };
 }

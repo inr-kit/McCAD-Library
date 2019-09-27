@@ -20,6 +20,6 @@ McCAD::Geometry::Surface::setSurfaceType(const std::string& surfaceType){
 }
 
 std::string
-McCAD::Geometry::Surface::getSurfaceType(){
+McCAD::Geometry::Surface::getSurfaceType() const{
   return pSImpl->surfaceType;
 }

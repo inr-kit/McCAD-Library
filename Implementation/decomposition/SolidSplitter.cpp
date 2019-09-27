@@ -1,15 +1,17 @@
 #include "SolidSplitter.hpp"
 
+// C++
 #include <array>
 
+// OCC
 #include <Bnd_Box.hxx>
-#include <BRepBndLib.hxx>
-#include <BRepPrimAPI_MakeBox.hxx>
 #include <BRepAdaptor_Surface.hxx>
-#include <gp_Pln.hxx>
-#include <BRepPrimAPI_MakeHalfSpace.hxx>
+#include <BRepBndLib.hxx>
 #include <BRepAlgoAPI_Common.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
+#include <BRepPrimAPI_MakeBox.hxx>
+#include <BRepPrimAPI_MakeHalfSpace.hxx>
+#include <gp_Pln.hxx>
 
 std::optional<std::pair<TopoDS_Shape, TopoDS_Shape>>
 McCAD::Decomposition::SolidSplitter::operator()(
@@ -26,20 +28,18 @@ McCAD::Decomposition::SolidSplitter::operator()(
 TopoDS_Shape
 McCAD::Decomposition::SolidSplitter::calculateBoundingBox(
         const TopoDS_Solid& solid) const{
-    Bnd_Box bndBox;
-    Standard_Real boxSquareLength;
+    Bnd_Box boundingBox;
+    BRepBndLib::Add(solid, boundingBox);
+    boundingBox.SetGap(0.5);
 
-    BRepBndLib::Add(solid, bndBox);
-    bndBox.SetGap(0.5);
-    std::array<Standard_Real, 3> XYZmin;
-    std::array<Standard_Real, 3> XYZmax;
-    bndBox.Get(XYZmin[0], XYZmin[1], XYZmin[2], XYZmax[0], XYZmax[1], XYZmax[2]);
-    boxSquareLength = sqrt(bndBox.SquareExtent());
-    TopoDS_Shape boundingBox = BRepPrimAPI_MakeBox(
-                gp_Pnt(XYZmin[0], XYZmin[1], XYZmin[2]),
-                gp_Pnt(XYZmax[0], XYZmax[1], XYZmax[2])
-            ).Shape();
-    return boundingBox;
+    std::array<Standard_Real, 3> minCoords;
+    std::array<Standard_Real, 3> maxCoords;
+    boundingBox.Get(minCoords[0], minCoords[1], minCoords[2],
+                    maxCoords[0], maxCoords[1], maxCoords[2]);
+    return BRepPrimAPI_MakeBox{
+        gp_Pnt{minCoords[0], minCoords[1], minCoords[2]},
+        gp_Pnt{maxCoords[0], maxCoords[1], maxCoords[2]}
+    }.Shape();
 }
 
 std::pair<gp_Pnt, gp_Pnt>
