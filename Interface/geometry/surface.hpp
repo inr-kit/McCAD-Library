@@ -19,7 +19,7 @@ namespace McCAD::Geometry{
       Impl* accessSImpl() const;
       
       void setSurfaceType(const std::string& surfaceType);
-      std::string getSurfaceType();
+      std::string getSurfaceType() const;
 
     private:
       std::unique_ptr<Impl> pSImpl;
