@@ -37,11 +37,11 @@ McCAD::Decomposition::SolidRebuilder::solidToFaces(
         const TopoDS_Solid& solid) const{
     std::vector<const TopoDS_Face*> faces;
 
-    for (const auto& face : ShapeView<TopAbs_FACE>{solid}){
-        if (face.IsNull()) continue;
+    for(const auto& face : ShapeView<TopAbs_FACE>{solid}){
+        if(face.IsNull()) continue;
         GProp_GProps geometryProperties;
         BRepGProp::SurfaceProperties(face, geometryProperties);
-        if (geometryProperties.Mass() <= faceMassTolerance) continue;
+        if(geometryProperties.Mass() <= faceMassTolerance) continue;
         faces.push_back(&face);
     }
 
