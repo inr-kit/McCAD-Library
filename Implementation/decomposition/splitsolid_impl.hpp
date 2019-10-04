@@ -43,7 +43,7 @@ namespace McCAD::Decomposition{
     Standard_Real boxSquareLength;
     TopoDS_Shape boundingBox;
 
-    Standard_Boolean perform(std::unique_ptr<Geometry::Solid>& solid,
+    Standard_Boolean perform(Geometry::Solid::Impl& solidImpl,
 			     Standard_Integer indexSplitSurface = 0);
     void createOBBSolid(const Bnd_OBB& OBB, TopoDS_Solid& solid);
     Standard_Boolean split(const TopoDS_Solid& solid,

@@ -5,12 +5,16 @@ McCAD::Decomposition::DecomposeSolid::Impl::Impl()
     : recurrenceDepth{0}{
 }
 
-McCAD::Decomposition::DecomposeSolid::Impl::Impl(
-        Standard_Integer recurrenceDepth)
+McCAD::Decomposition::DecomposeSolid::Impl::Impl(Standard_Integer recurrenceDepth)
     : recurrenceDepth{recurrenceDepth}{
 }
 
 McCAD::Decomposition::DecomposeSolid::Impl::~Impl(){
+}
+
+Standard_Boolean
+McCAD::Decomposition::DecomposeSolid::Impl::operator()(Geometry::Solid::Impl& solidImpl){
+    return perform(solidImpl);
 }
 
 Standard_Boolean
@@ -58,13 +62,14 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
 	  return Standard_False;
 	}
       // Split the solid with the selected surface.
-      //std::cout << "selected surface concave edges: " << selectedSplitFacesList[0]->accessSImpl()->throughConcaveEdges << std::endl;
-      if (!SplitSolid::Impl{}.perform(solidImpl.solid, solidImpl.selectedSplitFacesList[0],
-				      solidImpl.splitSolidList))
+      //std::cout << "selected surface concave edges: " <<
+      // selectedSplitFacesList[0]->accessSImpl()->throughConcaveEdges << std::endl;
+      if (!SplitSolid::Impl{}.perform(solidImpl))
 	{
 	  /*
           STEPControl_Writer writer4;
-	  writer4.Transfer(solidImpl->selectedSplitFacesList[0]->accessSImpl()->extendedFace, STEPControl_StepModelType::STEPControl_AsIs);
+	  writer4.Transfer(solidImpl.selectedSplitFacesList[0]->accessSImpl()->extendedFace, 
+          //STEPControl_StepModelType::STEPControl_AsIs);
 	  writer4.Write("../examples/bbox/splitSurface.stp");
 	  std::cout << "** splitSolid fail" << std::endl;
           */
@@ -74,46 +79,48 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
       //throw std::runtime_error {"end"};
       for (Standard_Integer i = 1; i <= solidImpl.splitSolidList->Length(); ++i)
 	{
-	  std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/"
-	  << solid_impl->splitSolidList->Length() << "/" << i << std::endl;
+	  std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/" << solidImpl.splitSolidList->Length() << "/" << i << std::endl;
 	  //std::cout << splitSolidList->Length() << std::endl;
 	  std::unique_ptr<Geometry::Solid> subSolid = std::make_unique<Geometry::Solid>();
-	  auto subSolidImpl = subSolid->accessSImpl();
+	  auto& subSolidImpl = *subSolid->accessSImpl();
 	  try
 	    {
-	      subSolidImpl->initiate(solidImpl.splitSolidList->Value(i));
+	      subSolidImpl.initiate(solidImpl.splitSolidList->Value(i));
 	    }
 	  catch(const Standard_ConstructionError&)
 	    {
 	      /*
 	      std::cout << "** subSolidImpl->initiate fail" << std::endl;
 	      STEPControl_Writer writer3;
-	      writer3.Transfer(solidImpl->splitSolidList->Value(i), STEPControl_StepModelType::STEPControl_AsIs);
+	      writer3.Transfer(solidImpl.splitSolidList->Value(i), STEPControl_StepModelType::STEPControl_AsIs);
 	      writer3.Write("../examples/bbox/subsolid.stp");
 	      STEPControl_Writer writer4;
-	      writer4.Transfer(solidImpl->selectedSplitFacesList[0]->accessSImpl()->extendedFace, STEPControl_StepModelType::STEPControl_AsIs);
+	      writer4.Transfer(solidImpl.selectedSplitFacesList[0]->accessSImpl()->extendedFace, STEPControl_StepModelType::STEPControl_AsIs);
 	      writer4.Write("../examples/bbox/splitsurface)subsolid.stp");
 	      throw std::runtime_error{"Shape problem"};
 	      */
 	      return Standard_False;
 	    }
 	  // mesh deflection is calculated inside initiate for every solid!.
-          if (DecomposeSolid::Impl{recurrenceDepth}(subSolidImpl))
+	  if (DecomposeSolid::Impl{recurrenceDepth}(subSolidImpl))
             {
-	      if (subSolidImpl->splitSolidList->Length() >= 2)
+	      if (subSolidImpl.splitSolidList->Length() >= 2)
 		{
 		  //splitSolidList->Remove(i);
-		  for (const auto& element : *subSolidImpl->splitSolidList)
+		  for (const auto& element : *subSolidImpl.splitSolidList)
 		    {
 		      solidImpl.splitSolidList->InsertAfter(i, element);
 		    }
 		  solidImpl.splitSolidList->Remove(i);
-		  i += subSolidImpl->splitSolidList->Length() - 1;
+		  i += subSolidImpl.splitSolidList->Length() - 1;
 		}
 	      // Add rejected subSolids
-	      if (subSolidImpl->rejectedsubSolidsList->Length() >= 1)
+	      if (subSolidImpl.rejectedsubSolidsList->Length() >= 1)
 		{
-		  solidImpl.rejectedsubSolidsList->Append(subSolidImpl->rejectedsubSolidsList);
+		  for(const auto& rejectedElement : *subSolidImpl.rejectedsubSolidsList)
+		    {
+		      solidImpl.rejectedsubSolidsList->Append(rejectedElement);
+		    }
 		}
 	      //return Standard_True;
 	    }
@@ -135,12 +142,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
     return Standard_True;
 }
 
-bool
-McCAD::Decomposition::DecomposeSolid::Impl::operator()(
-        Geometry::Solid::Impl& solid){
-    return perform(solid);
-}
-
 void
 McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(Geometry::Solid::Impl& solidImpl){
   // Judge whether boundary surfaces of the solid can be used for decomposition.
@@ -153,7 +154,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(Geometry::Sol
   //std::cout << "facesList.size(): " << facesList.size() << std::endl;
   for (Standard_Integer i = 0; i <= facesList.size() - 1; ++i)
     {
-      auto& iFace = facesList[i]->accessSImpl();
+      auto iFace = facesList[i]->accessSImpl();
       //std::cout << "judge: " << i << std::endl;;
       Standard_Integer positiveFaces = 0;
       Standard_Integer negativeFaces = 0;
@@ -161,7 +162,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(Geometry::Sol
       Standard_Integer numberCollidingCurvedSurfaces = 0;
       for (Standard_Integer j = 0; j <= facesList.size() - 1; ++j)
 	{
-	  auto& jFace = facesList[j]->accessSImpl();
+	  auto jFace = facesList[j]->accessSImpl();
 	  //std::cout << "judge:    " << j << std::endl;
 	  if (i != j && iFace->surfaceNumber != jFace->surfaceNumber)
 	    {

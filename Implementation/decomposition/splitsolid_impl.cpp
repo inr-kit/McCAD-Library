@@ -2,16 +2,15 @@
 #include "splitsolid_impl.hpp"
 
 Standard_Boolean
-McCAD::Decomposition::SplitSolid::Impl::perform(std::unique_ptr<Geometry::Solid>& solid,
+McCAD::Decomposition::SplitSolid::Impl::perform(Geometry::Solid::Impl& solidImpl,
 						Standard_Integer indexSplitSurface){
-  auto solid_impl = solid->accessSImpl();
-  auto surface = solid_impl->selectedSplitFacesList[indexSplitSurface];
+  auto surface = solidImpl.selectedSplitFacesList[indexSplitSurface];
 
-  createOBBSolid(solid_impl->OBB, solid_impl->solid);
+  createOBBSolid(solidImpl.OBB, solidImpl.solid);
   if (surface->getSurfaceType() == "Plane")
     {
-      return split(solid_impl->solid, surface->accessSImpl()->extendedFace,
-		   solid_impl->splitSolidList);
+      return split(solidImpl.solid, surface->accessSImpl()->extendedFace,
+		   solidImpl.splitSolidList);
     }
   else
     {

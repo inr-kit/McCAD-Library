@@ -60,28 +60,27 @@ McCAD::Decomposition::Decompose::Impl::perform(){
   for(const auto& shape : *splitInputSolidsList)
     {
       std::unique_ptr<Geometry::Solid> solid = std::make_unique<Geometry::Solid>();
-      auto solidImpl = solid->accessSImpl();
-      solidImpl->initiate(shape);
-      if (solidImpl->isTorus || solidImpl->isSpline)
+      auto& solidImpl = *solid->accessSImpl();
+      solidImpl.initiate(shape);
+      if (solidImpl.isTorus || solidImpl.isSpline)
 	{
 	  rejectedInputSolidsList->Append(shape);
 	}
       else
 	{
 	  // Repair the geometry of solid.
-	  solidImpl->repairSolid();
+	  solidImpl.repairSolid();
 	  // Perform decomposition on the repaired solid.
 	  std::cout << "   - Decomposing solid" << std::endl;
-	  std::unique_ptr<DecomposeSolid> decomposeSolid = std::make_unique<DecomposeSolid>();
-	  if (decomposeSolid->accessDSImpl()->perform(solid))
+	  if (DecomposeSolid{}.accessDSImpl()->perform(solidImpl))
 	    {
-	      for(const auto& resultSolid : *solidImpl->splitSolidList)
+	      for(const auto& resultSolid : *solidImpl.splitSolidList)
 		{
 		  resultSolidsList->Append(resultSolid);
 		}
-	      if (solidImpl->rejectedsubSolidsList->Length() >= 1)
+	      if (solidImpl.rejectedsubSolidsList->Length() >= 1)
                 {
-		  for(const auto& rejectedSubSolid : *solidImpl->rejectedsubSolidsList)
+		  for(const auto& rejectedSubSolid : *solidImpl.rejectedsubSolidsList)
 		    {
                       rejectedsubSolidsList->Append(rejectedSubSolid);
                     }
