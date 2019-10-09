@@ -2,7 +2,7 @@
 #include "solid_impl.hpp"
 
 McCAD::Geometry::Solid::Impl::Impl()
-  : preproc{std::make_unique<McCAD::Tools::Preprocessor>()},
+  : preproc{std::make_unique<Tools::Preprocessor>()},
     splitSolidList{std::make_unique<TopTools_HSequenceOfShape>()},
     rejectedsubSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
 }
@@ -23,22 +23,6 @@ McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
 }
 
 void
-McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real bndBoxGap,
-						 Standard_Real converting){
-  // Calculate the bounding box of the solid.
-  Bnd_Box boundingBox;
-  BRepBndLib::Add(solid, boundingBox);
-  boundingBox.SetGap(bndBoxGap);
-  std::array<Standard_Real, 3> XYZmin;
-  std::array<Standard_Real, 3> XYZmax;
-  boundingBox.Get(XYZmin[0], XYZmin[1], XYZmin[2], XYZmax[0], XYZmax[1], XYZmax[2]);
-  meshDeflection = std::max(std::max((XYZmax[0] - XYZmin[0]), (XYZmax[1] - XYZmin[1])),
-			    (XYZmax[2] - XYZmax[2])) / converting;
-  boxSquareLength = sqrt(boundingBox.SquareExtent());
-  //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
-}
-
-void
 McCAD::Geometry::Solid::Impl::repairSolid(){
   preproc->accessImpl()->removeSmallFaces(solidShape);
   solid = TopoDS::Solid(solidShape);
@@ -46,18 +30,35 @@ McCAD::Geometry::Solid::Impl::repairSolid(){
 }
 
 void
-McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTolerance){
+McCAD::Geometry::Solid::Impl::createOBB(Standard_Real bndBoxGap){
+  // Calculate the bounding box of the solid.
+  BRepBndLib::AddOBB(solid, OBB);
+  OBB.Enlarge(bndBoxGap);
+}
+
+void
+McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real scalingFactor){
+  // Calculate the oriented bounding box of the solid.
+  meshDeflection = 2 * std::max(std::max(OBB.XHSize(), OBB.YHSize()),
+				OBB.ZHSize()) / scalingFactor;
+  boxSquareLength = sqrt(OBB.SquareExtent());
+  //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
+}
+
+void
+McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real angleTolerance){
   TopTools_IndexedDataMapOfShapeListOfShape mapEdgeFace;
   TopExp::MapShapesAndAncestors(solid, TopAbs_EDGE, TopAbs_FACE, mapEdgeFace);
   
   TopTools_ListOfShape facesList;
-  for (Standard_Integer edgeNumber = 1; edgeNumber <= mapEdgeFace.Extent(); ++edgeNumber)
+  for (Standard_Integer edgeNumber = 1; edgeNumber <= mapEdgeFace.Extent();
+       ++edgeNumber)
     {
       TopoDS_Edge edge = TopoDS::Edge(mapEdgeFace.FindKey(edgeNumber));
       BRepAdaptor_Curve curveAdaptor;
       curveAdaptor.Initialize(edge);
       facesList = mapEdgeFace.FindFromKey(edge);
-      if(facesList.Extent() != 2)
+      if(facesList.Extent() != Standard_Integer(2))
 	{
 	  continue;
         }
@@ -94,7 +95,7 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTol
       else if (angle == Standard_Real(0))
 	{
 	  // edge if flat
-	  edge.Convex(100);
+	  edge.Convex(2);
 	}
       else
 	{
@@ -110,11 +111,10 @@ McCAD::Geometry::Solid::Impl::generateSurfacesList(){
   TopoDS_Face face;
   Standard_Integer faceNumber = 0;
   std::vector<std::unique_ptr<BoundSurface>> planesList;
-  TopExp_Explorer explorer(solid, TopAbs_FACE);
-  for (; explorer.More(); explorer.Next())
+  for(const auto& aFace : ShapeView<TopAbs_FACE>{solid})
     {
-      face = TopoDS::Face(explorer.Current());
       // Update UV points of the face.
+      face = aFace;
       BRepTools::Update(face);
       Standard_Boolean rejectCondition = preproc->accessImpl()->checkFace(face);
       if (!rejectCondition)
@@ -130,7 +130,7 @@ McCAD::Geometry::Solid::Impl::generateSurfacesList(){
 	    {
 	      boundSurface->accessBSImpl()->generateEdges();
 	      //std::cout << "length of egdes list: " << boundSurface->accessBSImpl()->edgesList.size() << std::endl;
-	      if(boundSurface->getSurfaceType() == "Plane")
+	      if(boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane))
 		{
 		  planesList.push_back(std::move(boundSurface));
 		}
@@ -168,10 +168,9 @@ McCAD::Geometry::Solid::Impl::generateSurface(const TopoDS_Face& face,
 	  //std::cout << preproc->accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
 	  std::unique_ptr<BoundSurfacePlane> boundSurfacePlane =
 	    std::make_unique<BoundSurfacePlane>();
-	  boundSurfacePlane->setSurfaceType(boundSurfacePlane->accessBSPImpl()->surfaceType);
+	  boundSurfacePlane->setSurfaceType(Tools::toTypeName(GeomAbs_Plane));
 	  boundSurfacePlane->accessSImpl()->initiate(face);
 	  boundSurfacePlane->accessBSPImpl()->generateExtendedPlane(boxSquareLength);
-	  //assert(boundSurfacePlane);
 	  return boundSurfacePlane;
 	}
       else if (AdaptorSurface.GetType() == GeomAbs_Cylinder)
@@ -201,26 +200,38 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
       for (Standard_Integer j = i+1; j <= surfacesList.size() - 1; ++j)
 	{
 	  //std::cout << i << " , " << j << " , " << surfacesList.size() << std::endl;
-	  if (*(surfacesList[i]) == *(surfacesList[j]))
+	  if (*surfacesList[i] == *surfacesList[j])
 	    {
-	      //std::cout << "equal" << std::endl;
-	      surfacesList[j]->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
-	      //STEPControl_Writer writer6;
-	      //writer6.Transfer(surfacesList[j]->accessSImpl()->face,
-	      //		       STEPControl_StepModelType::STEPControl_AsIs);
-	      //writer6.Transfer(surfacesList[i]->accessSImpl()->face,
-	      //	       STEPControl_StepModelType::STEPControl_AsIs);
-	      //writer6.Write("../examples/equalsurface.stp");
-	      // Test if the two surfaces can be fused.
-	      if (*(surfacesList[i]) << *(surfacesList[j]))
+	      //std::cout << "*** equal" << std::endl;
+	      surfacesList[j]->accessSImpl()->surfaceNumber =
+		surfacesList[i]->accessSImpl()->surfaceNumber;
+	      // Save surfaces to step file for comparison/debugging.
+	      STEPControl_Writer writer6;
+	      writer6.Transfer(surfacesList[j]->accessSImpl()->face,
+			       STEPControl_StepModelType::STEPControl_AsIs);
+	      writer6.Transfer(surfacesList[i]->accessSImpl()->face,
+			       STEPControl_StepModelType::STEPControl_AsIs);
+	      Standard_Integer kk = 0;
+              std::string filename = "../examples/bbox/equalsurfaces";
+              std::string suffix = ".stp";
+              while (std::filesystem::exists(filename + std::to_string(kk) + suffix))
 		{
-		  //std::cout << "fuse" << std::endl;
-		  if (surfacesList[i]->getSurfaceType() == "Plane")
+		  ++kk;
+		}
+	      filename += std::to_string(kk);
+              filename += suffix;
+              writer6.Write(filename.c_str());
+	      // Test if the two surfaces can be fused.
+	      if (*surfacesList[i] << *surfacesList[j])
+		{
+		  std::cout << "*** equal fuse" << std::endl;
+		  if (surfacesList[i]->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane))
 		    {
 		      TopoDS_Face newFace = Tools::PlaneFuser{}(surfacesList[i]->accessSImpl()->face, surfacesList[j]->accessSImpl()->face);
 		      std::unique_ptr<BoundSurface> newboundSurface =
 			std::move(generateSurface(newFace));
-		      newboundSurface->accessSImpl()->surfaceNumber = surfacesList[i]->accessSImpl()->surfaceNumber;
+		      newboundSurface->accessSImpl()->surfaceNumber =
+			surfacesList[i]->accessSImpl()->surfaceNumber;
 		      // Add triangles of surface i.
 		      for (Standard_Integer k = 0; k <= surfacesList[i]->accessBSImpl()->meshTrianglesList.size() - 1; ++k)
 			{
@@ -249,14 +260,22 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
 		}
 	      else
 		{
-		  //std::cout << "equal, erase one" << std::endl;
+		  std::cout << "*** equal, erase one" << std::endl;
 		  // Erase pointer surfacesList[j] from surfacesList.
-		  //STEPControl_Writer writer7;
-		  //writer7.Transfer(surfacesList[j]->accessSImpl()->face,
-                  //                 STEPControl_StepModelType::STEPControl_AsIs);
-                  //writer7.Write("../examples/equalsurfacedelete.stp");
-		  //surfacesList.erase(surfacesList.begin() + j);
-		  //--j;
+		  STEPControl_Writer writer7;
+		  writer7.Transfer(surfacesList[j]->accessSImpl()->face,
+                                   STEPControl_StepModelType::STEPControl_AsIs);
+		  std::string filename = "../examples/bbox/equalsurfacedelete";
+                  std::string suffix = ".stp";
+                  while (std::filesystem::exists(filename + std::to_string(kk) + suffix))
+		    {
+		      ++kk;
+		    }
+		  filename += std::to_string(kk);
+		  filename += suffix;
+		  writer7.Write(filename.c_str());
+                  surfacesList.erase(surfacesList.begin() + j);
+		  --j;
 		}
 	      if (surfacesList.size() < 2)
 		{

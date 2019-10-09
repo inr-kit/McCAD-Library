@@ -28,9 +28,10 @@ McCAD::Geometry::BoundSurface::Impl::canFuse(const McCAD::Geometry::BoundSurface
   // Check common edges of the two faces.
   for (Standard_Integer i = 0; i <= edgesList.size() - 2; ++i)
     {
-      for (Standard_Integer j = i+1; j <= that.accessBSImpl()->edgesList.size() - 1; ++j)
+      for (Standard_Integer j = i+1; j <= that.accessBSImpl()->edgesList.size() - 1;
+	   ++j)
 	{
-	  if (*(edgesList[i]) == *(that.accessBSImpl()->edgesList[j]))
+	  if (*edgesList[i] == *that.accessBSImpl()->edgesList[j])
 	    {
 	      return Standard_True;
 	    }
@@ -47,7 +48,8 @@ McCAD::Geometry::BoundSurface::Impl::faceCollision(const BoundSurface& aFace,
   Standard_Integer negativeTriangles = 0;
 
   //std::cout << "length of list: " << aFace.accessBSImpl()->meshTrianglesList.size() << std::endl;
-  for (Standard_Integer i = 0; i <= aFace.accessBSImpl()->meshTrianglesList.size() - 1; ++i)
+  for (Standard_Integer i = 0; i <= aFace.accessBSImpl()->meshTrianglesList.size() - 1;
+       ++i)
     {
       //std::cout << i << std::endl;
       Standard_Integer side = 0;
@@ -110,9 +112,8 @@ McCAD::Geometry::BoundSurface::Impl::generateMesh(const Standard_Real& meshDefle
 	  Standard_Integer numberTriangles = mesh->NbTriangles();
 	  const Poly_Array1OfTriangle& Triangles = mesh->Triangles();
 	  std::array<Standard_Integer, 3> triangleNodes;
-	  for (Standard_Integer i = 1; i <= numberTriangles; ++i)
+	  for (const auto& Triangle : Triangles)
 	    {
-	      Poly_Triangle Triangle = Triangles(i);
 	      Triangle.Get(triangleNodes[0], triangleNodes[1], triangleNodes[2]);
 	      //std::cout << triangleNodes[0] << std::endl;
 	      //std::cout	<< triangleNodes[1] << std::endl;
@@ -149,22 +150,24 @@ McCAD::Geometry::BoundSurface::Impl::generateMesh(const Standard_Real& meshDefle
 void
 McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
   TopoDS_Face face = boundSurface->accessSImpl()->face;
-  //TopExp_Explorer explorer(face, TopAbs_EDGE);
-  //for(; explorer.More(); explorer.Next())
   for (const auto& tempEdge : ShapeView<TopAbs_EDGE>{face})  
     {
-      //TopoDS_Edge tempEdge = element;
       std::unique_ptr<Edge> edge = std::make_unique<Edge>();
       edge->accessEImpl()->initiate(tempEdge);
       // Get type of Edge.
-      BRepAdaptor_Curve curveAdaptor;
-      curveAdaptor.Initialize(tempEdge);
+      BRepAdaptor_Curve curveAdaptor(tempEdge);
+      //curveAdaptor.Initialize(tempEdge);
       edge->setEdgeType(Tools::toTypeName(curveAdaptor.GetType()));
       edge->accessEImpl()->convexity = tempEdge.Convex();
+      if (tempEdge.Convex() == Standard_Integer(0))
+	{
+	  boundSurface->accessSImpl()->throughConcaveEdges += 1;
+	}
 
       // Add flag if the edge can be used for assisting splitting surface.
-      if (boundSurface->getSurfaceType() == "Cylinder" && edge->getEdgeType() == "Line")
-        {
+      if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder) &&
+	  edge->getEdgeType() == Tools::toTypeName(GeomAbs_Line))
+	{
           std::array<Standard_Real, 4> edgeUV, surfaceUV;
           BRepTools::UVBounds(face, tempEdge, edgeUV[0], edgeUV[1], edgeUV[2],
 			      edgeUV[3]);
@@ -179,7 +182,7 @@ McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
       edgesList.push_back(std::move(edge));
     }
 }
-
+   
 // This function is used as virtual one in BndSurfPlane. Should be modified later.
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::triangleCollision(const MeshTriangle& aTriangle,

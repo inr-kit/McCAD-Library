@@ -2,33 +2,98 @@
 #include "splitsolid_impl.hpp"
 
 Standard_Boolean
-McCAD::Decomposition::SplitSolid::Impl::perform(const TopoDS_Solid& solid,
-						const std::shared_ptr<Geometry::BoundSurface>& surface,
-						std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList){
-  calculateBoundingBox(solid);
+McCAD::Decomposition::SplitSolid::Impl::perform(Geometry::Solid::Impl& solidImpl,
+						Standard_Integer indexSplitSurface){
+  auto surface = solidImpl.selectedSplitFacesList[indexSplitSurface];
+
+  createOBBSolid(solidImpl.OBB, solidImpl.solid);
   if (surface->getSurfaceType() == "Plane")
     {
-      return split(solid, surface->accessSImpl()->extendedFace, subSolidsList);
+      return split(solidImpl.solid, surface->accessSImpl()->extendedFace,
+		   solidImpl.splitSolidList);
     }
   else
     {
+      std::cout << "** not Plane" << std::endl; 
       return Standard_False;
     }
 }
 
 void
-McCAD::Decomposition::SplitSolid::Impl::calculateBoundingBox(const TopoDS_Solid& solid){
-  std::cout << "calculateBoundingBox" << std::endl;
-  BRepBndLib::Add(solid, bndBox);
-  bndBox.SetGap(0.5);
-  std::array<Standard_Real, 3> XYZmin;
-  std::array<Standard_Real, 3> XYZmax;
-  bndBox.Get(XYZmin[0], XYZmin[1], XYZmin[2], XYZmax[0], XYZmax[1], XYZmax[2]);
+McCAD::Decomposition::SplitSolid::Impl::createOBBSolid(const Bnd_OBB& OBB,
+						       TopoDS_Solid& solid){
+  std::cout << "createOBBSolid" << std::endl;
+  bndBox = OBB;
+  bndBox.Enlarge(0.4);
+  std::cout << "status: " << bndBox.IsAABox() << std::endl;
   boxSquareLength = sqrt(bndBox.SquareExtent());
-  //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
-  boundingBox = BRepPrimAPI_MakeBox(gp_Pnt(XYZmin[0], XYZmin[1], XYZmin[2]),
-				    gp_Pnt(XYZmax[0], XYZmax[1], XYZmax[2])).Shape();
+  std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
+  std::array<Standard_Real, 3> center;
+  std::array<Standard_Real, 3> dimension;
+  gp_Pnt corners[8];
+  bndBox.GetVertex(corners);
+  std::cout << "corners: " << std::endl;
+  for (Standard_Integer k = 0; k < 8; ++k)
+    {
+      std::cout << corners[k].X() << ", " << corners[k].Y() << ", " << corners[k].Z() << std::endl;
+    }
+  center = {bndBox.Center().X(), bndBox.Center().Y(), bndBox.Center().Z()};
+  std::cout << "center: " << bndBox.Center().X() << ", " << bndBox.Center().Y() << ", " << bndBox.Center().Z() << std::endl;
+  dimension = {bndBox.XHSize(), bndBox.YHSize(), bndBox.ZHSize()};
+  std::cout << "xdirection: " << bndBox.XDirection().X() << ", " << bndBox.XDirection().Y()  << ", " << bndBox.XDirection().Z() << std::endl;
+  std::cout << "ydirection: " << bndBox.YDirection().X() << ", " << bndBox.YDirection().Y() << ", " << bndBox.YDirection().Z() << std::endl;
+  std::cout << "zdirection: " << bndBox.ZDirection().X() << ", " << bndBox.ZDirection().Y() << ", " << bndBox.ZDirection().Z() << std::endl;
+  std::cout << "dimentsions: " << bndBox.XHSize() << ", " << bndBox.YHSize()  << ", " << bndBox.ZHSize() << std::endl;
+  gp_Pnt pnt1 = corners[0];
+  gp_Pnt pnt2 = corners[7];
 
+  TopLoc_Location location = solid.Location();
+  gp_Trsf transformation_solid;
+  transformation_solid = location.Transformation();
+  for (Standard_Integer i = 1; i < 4; ++i)
+    {
+      std::cout << transformation_solid.Value(i,1) << ", " << transformation_solid.Value(i,2) << ", " << transformation_solid.Value(i,3) << ", " << transformation_solid.Value(i,4) << std::endl;
+    }
+
+  std::cout << "Axis" << std::endl;
+  gp_Ax3 axis(gp_Pnt(0, 0, 0), bndBox.ZDirection(), bndBox.XDirection());
+  //axis.SetDirection(gp_Dir(bndBox.ZDirection()));
+  //axis.SetXDirection(gp_Dir(bndBox.XDirection()));
+  //axis.SetYDirection(gp_Dir(bndBox.YDirection()));
+  std::cout << "xdirection: " << axis.XDirection().X() << ", " << axis.XDirection().Y()  << ", " << axis.XDirection().Z() << std::endl;
+  std::cout << "ydirection: " << axis.YDirection().X() << ", " << axis.YDirection().Y() << ", " << axis.YDirection().Z() << std::endl;
+  std::cout << "zdirection: " << axis.Direction().X() << ", " << axis.Direction().Y() << ", " << axis.Direction().Z() << std::endl;
+
+  std::cout << "Transformation" << std::endl;
+  gp_Trsf transformation;
+  transformation.SetTransformation(axis);
+  for (Standard_Integer i = 1; i < 4; ++i)
+    {
+      std::cout << transformation.Value(i,1) << ", " << transformation.Value(i,2) << ", " << transformation.Value(i,3) << ", " << transformation.Value(i,4) << std::endl;
+    }
+  
+  //std::cout << "try Pnt1" << std::endl;
+  pnt1 = pnt1.Transformed(transformation.Inverted());
+  //std::cout << "try Pnt2" << std::endl;
+  pnt2 = pnt2.Transformed(transformation.Inverted());
+  std::cout << "Pnt1: " << pnt1.X() << ", " << pnt1.Y()  << ", " << pnt1.Z() << std::endl;
+  std::cout << "Pnt2: " << pnt2.X() << ", " << pnt2.Y()  << ", " << pnt2.Z() << std::endl;
+
+  std::cout << "BRepPrimAPI_MakeBox" << std::endl;
+  boundingBox = BRepPrimAPI_MakeBox(pnt1, pnt2).Solid();
+  location = boundingBox.Location();
+  transformation_solid = location.Transformation();
+  for (Standard_Integer i = 1; i < 4; ++i)
+    {
+      std::cout << transformation_solid.Value(i,1) << ", " << transformation_solid.Value(i,2) << ", " << transformation_solid.Value(i,3) << ", " << transformation_solid.Value(i,4) << std::endl;
+    }
+
+  std::cout << "Transform OBB solid" << std::endl;
+  //transformation = transformation.Inverted();
+  BRepBuilderAPI_Transform boxTransform(transformation);
+  boxTransform.Perform(boundingBox);
+  boundingBox = boxTransform.ModifiedShape(boundingBox);
+  
   STEPControl_Writer writer0;
   writer0.Transfer(boundingBox, STEPControl_StepModelType::STEPControl_AsIs);
   writer0.Transfer(solid, STEPControl_StepModelType::STEPControl_AsIs);
@@ -86,7 +151,7 @@ McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid,
     }
   catch(...)
     {
-      //std::cout << "** Common fail" << std::endl;
+      std::cout << "** Common fail" << std::endl;
       return Standard_False;
     }
 
@@ -99,14 +164,14 @@ McCAD::Decomposition::SplitSolid::Impl::split(const TopoDS_Solid& solid,
 	}
       else
 	{
-	  //std::cout << "** checkRepair fail" << std::endl;
+	  std::cout << "** checkRepair fail" << std::endl;
 	  //throw std::runtime_error{"Shape problem"};
 	  return Standard_False;
 	}
     }
   else
     {
-      //std::cout << "** splitWithBoxes fail" << std::endl;
+      std::cout << "** splitWithBoxes fail" << std::endl;
       return Standard_False;
     }
 }
@@ -169,14 +234,14 @@ McCAD::Decomposition::SplitSolid::Impl::splitWithBoxes(const TopoDS_Solid& solid
 	    }
 	  catch(...)
 	    {
-	      //std::cout << "** cutter catch" << std::endl;
+	      std::cout << "** cutter catch" << std::endl;
 	      return Standard_False;
 	    }
 	}
     }
   catch(...)
     {
-      //std::cout << "** common catch" << std::endl;
+      std::cout << "** common catch" << std::endl;
       return Standard_False;
     }
   return Standard_False;
@@ -230,7 +295,7 @@ McCAD::Decomposition::SplitSolid::Impl::checkRepair(std::unique_ptr<TopTools_HSe
 									  newSolid);
                 if (!rebuildCondition)
 		  {
-		    //std::cout << "** rebuildSolidFromShell fail" << std::endl;
+		    std::cout << "** rebuildSolidFromShell fail" << std::endl;
                     return Standard_False;
 		  }
 		else
@@ -297,6 +362,7 @@ McCAD::Decomposition::SplitSolid::Impl::rebuildSolidFromShell(const TopoDS_Shape
   BRepCheck_Analyzer BRepAnalyzer(newshape, Standard_True);
   if (!(BRepAnalyzer.IsValid()))
     {
+      //std::cout << "analyzer fail" << std::endl;
       return Standard_False;
     }
   else

@@ -5,11 +5,8 @@ void
 McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid,
 						   Standard_Boolean& isTorus,
 						   Standard_Boolean& isSpline){
-  TopoDS_Face face;
-  TopExp_Explorer explorer(solid, TopAbs_FACE);
-  for (; explorer.More(); explorer.Next())
+  for(const auto& face : ShapeView<TopAbs_FACE>{solid})
     {
-      face = TopoDS::Face(explorer.Current());
       GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
 
       if(surfAdaptor.GetType() == GeomAbs_Torus)
@@ -29,7 +26,6 @@ void
 McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape,
 						   Standard_Real precision,
 						   Standard_Real maxTolerance){
-  TopoDS_Shape fixedSolidShape;
   Handle_ShapeFix_FixSmallFace smallFaceFix = new ShapeFix_FixSmallFace;
   smallFaceFix->Init(solidShape);
   smallFaceFix->SetPrecision(precision);
@@ -40,8 +36,7 @@ McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape,
 
 void
 McCAD::Tools::Preprocessor::Impl::repairSolid(TopoDS_Solid& solid){
-  Handle_ShapeFix_Solid solidFix = new ShapeFix_Solid;
-  solidFix->Init(solid);
+  Handle_ShapeFix_Solid solidFix = new ShapeFix_Solid(solid);
   solidFix->Perform();
   solid = TopoDS::Solid(solidFix->Solid());
 }
@@ -94,6 +89,13 @@ McCAD::Tools::Preprocessor::Impl::isSameEdge(const TopoDS_Edge& firstEdge,
   if ((firstEdgeStart != secondEdgeStart) || (firstEdgeEnd != secondEdgeEnd))
     {
       return Standard_False;
+    }
+  if (firstCurveAdaptor.GetType() == GeomAbs_Line)
+    {
+      if (firstCurveAdaptor.Line().Distance(secondCurveAdaptor.Line()) > distanceTolerance)
+	{
+	  return Standard_False;
+	}
     }
   return Standard_True;
 }
