@@ -31,22 +31,13 @@ McCAD::Geometry::Solid::Impl::repairSolid(){
 
 void
 McCAD::Geometry::Solid::Impl::createOBB(Standard_Real bndBoxGap){
-  // Calculate the bounding box of the solid.
-  BRepBndLib::AddOBB(solid, OBB);
-  OBB.Enlarge(bndBoxGap);
+    // Calculate the bounding box of the solid.
+    BRepBndLib::AddOBB(solid, obb);
+    obb.Enlarge(bndBoxGap);
 }
 
 void
-McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real scalingFactor){
-  // Calculate the oriented bounding box of the solid.
-  meshDeflection = 2 * std::max(std::max(OBB.XHSize(), OBB.YHSize()),
-				OBB.ZHSize()) / scalingFactor;
-  boxSquareLength = sqrt(OBB.SquareExtent());
-  //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
-}
-
-void
-McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real angleTolerance){
+McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTolerance){
   TopTools_IndexedDataMapOfShapeListOfShape mapEdgeFace;
   TopExp::MapShapesAndAncestors(solid, TopAbs_EDGE, TopAbs_FACE, mapEdgeFace);
   

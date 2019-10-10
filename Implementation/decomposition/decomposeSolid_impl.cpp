@@ -62,6 +62,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
         //std::cout << "selected surface concave edges: " << selectedSplitFacesList[0]->accessSImpl()->throughConcaveEdges << std::endl;
         if(!(SplitSolid::Impl{}(
                  solidImpl.solid,
+                 solidImpl.obb,
                  *solidImpl.selectedSplitFacesList[0],
                  *solidImpl.splitSolidList))){
         //std::cout << "return of splitsolid" << std::endl;
