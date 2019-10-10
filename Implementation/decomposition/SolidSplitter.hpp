@@ -27,7 +27,7 @@ namespace McCAD::Decomposition{
         using SolidPair = std::pair<TopoDS_Solid, TopoDS_Solid>;
         using ShapePair = std::pair<TopoDS_Shape, TopoDS_Shape>;
 
-        TopoDS_Shape calculateBoundingBox(
+        TopoDS_Shape calculateOBB(
                 Bnd_OBB obb) const;
 
         PointPair calculatePoints(
@@ -36,11 +36,11 @@ namespace McCAD::Decomposition{
         SolidPair calculateHalfSpaces(
                 const TopoDS_Face& splittingFace) const;
 
-        std::optional<TopoDS_Shape> calculateHalfBoundingBox(
+        std::optional<TopoDS_Shape> calculateHalfOBB(
                 const TopoDS_Shape& halfSpace,
                 const TopoDS_Shape& boundingBox) const;
 
-        std::optional<ShapePair> calculateHalfBoundingBoxes(
+        std::optional<ShapePair> calculateHalfBB(
                 const TopoDS_Face& splittingFace,
                 const TopoDS_Shape& boundingBox) const;
 

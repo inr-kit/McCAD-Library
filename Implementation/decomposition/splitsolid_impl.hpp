@@ -50,11 +50,6 @@ namespace McCAD::Decomposition{
                 TopTools_HSequenceOfShape& solids,
                 Standard_Real tolerance = 1.0e-4) const;
 
-        Bnd_OBB bndBox;
-        Standard_Real boxSquareLength;
-        TopoDS_Shape boundingBox;
-        void createOBBSolid(const Bnd_OBB& OBB);
-
     };
 }
 
