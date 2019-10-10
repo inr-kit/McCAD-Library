@@ -21,6 +21,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(
     ++recurrenceDepth;
     std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
     // Alias the access to the implementation of solid object.
+    solidImpl.createOBB();
     // Calculate mesh deflection of the solid.
     solidImpl.calcMeshDeflection();
     // Update edges convexity of the solid.
