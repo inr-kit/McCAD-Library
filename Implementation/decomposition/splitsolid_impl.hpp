@@ -28,6 +28,7 @@
 #include <BRepBuilderAPI_Sewing.hxx>
 #include <ShapeFix_Solid.hxx>
 #include <TopoDS_Shell.hxx>
+#include <Bnd_OBB.hxx>
 
 namespace McCAD::Decomposition{
     class SplitSolid::Impl {
@@ -47,6 +48,11 @@ namespace McCAD::Decomposition{
         TopTools_HSequenceOfShape gatherSubSolids(
                 TopTools_HSequenceOfShape& solids,
                 Standard_Real tolerance = 1.0e-4) const;
+
+        Bnd_OBB bndBox;
+        Standard_Real boxSquareLength;
+        TopoDS_Shape boundingBox;
+        void createOBBSolid(const Bnd_OBB& OBB);
 
     };
 }
