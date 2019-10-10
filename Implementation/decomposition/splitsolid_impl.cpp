@@ -9,11 +9,12 @@
 bool
 McCAD::Decomposition::SplitSolid::Impl::operator()(
         const TopoDS_Solid& solid,
+        const Bnd_OBB& obb,
         const Geometry::BoundSurface& surface,
         TopTools_HSequenceOfShape& subSolidsList) const{
     if(surface.getSurfaceType() != "Plane") return false;
 
-    auto halfSolids = SolidSplitter{}(solid, surface.accessSImpl()->extendedFace);
+    auto halfSolids = SolidSplitter{}(solid, obb, surface.accessSImpl()->extendedFace);
     if(!halfSolids) return false;
 
     subSolidsList.Append(halfSolids->first);
@@ -57,31 +58,4 @@ McCAD::Decomposition::SplitSolid::Impl::gatherSubSolids(
     }
     return subSolids;
 }
-
-#include <BRepBuilderAPI_Transform.hxx>
-
-void
-McCAD::Decomposition::SplitSolid::Impl::createOBBSolid(const Bnd_OBB& OBB){
-    bndBox = OBB;
-    bndBox.Enlarge(0.4);
-    boxSquareLength = sqrt(bndBox.SquareExtent());
-    std::array<gp_Pnt, 8> corners;
-    bndBox.GetVertex(&corners[0]);
-
-    gp_Trsf transformation;
-    transformation.SetTransformation(
-                gp_Ax3{gp_Pnt(0, 0, 0),
-                bndBox.ZDirection(),
-                bndBox.XDirection()});
-
-    boundingBox = BRepPrimAPI_MakeBox{
-            corners[0].Transformed(transformation.Inverted()),
-            corners[7].Transformed(transformation.Inverted())
-        }.Solid();
-
-    BRepBuilderAPI_Transform boxTransform{transformation};
-    boxTransform.Perform(boundingBox);
-    boundingBox = boxTransform.ModifiedShape(boundingBox);
-}
-
 

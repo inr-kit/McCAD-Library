@@ -37,6 +37,7 @@ namespace McCAD::Decomposition{
 
         bool operator()(
                 const TopoDS_Solid& solid,
+                const Bnd_OBB& obb,
                 const Geometry::BoundSurface& surface,
                 TopTools_HSequenceOfShape& subSolidsList) const;
 

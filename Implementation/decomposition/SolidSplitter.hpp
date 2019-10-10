@@ -6,6 +6,7 @@
 #include <utility>
 
 // OCC
+#include <Bnd_OBB.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Solid.hxx>
@@ -18,6 +19,7 @@ namespace McCAD::Decomposition{
     public:
         std::optional<std::pair<TopoDS_Shape, TopoDS_Shape>> operator()(
                 const TopoDS_Solid& solidToSplit,
+                const Bnd_OBB& obb,
                 const TopoDS_Face& splittingFace) const;
 
     private:
@@ -26,7 +28,7 @@ namespace McCAD::Decomposition{
         using ShapePair = std::pair<TopoDS_Shape, TopoDS_Shape>;
 
         TopoDS_Shape calculateBoundingBox(
-                const TopoDS_Solid& solidToSplit) const;
+                Bnd_OBB obb) const;
 
         PointPair calculatePoints(
                 const TopoDS_Face& splittingFace) const;
