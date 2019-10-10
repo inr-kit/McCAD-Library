@@ -19,16 +19,16 @@ McCAD::Decomposition::SolidSplitter::operator()(
         const TopoDS_Solid& solidToSplit,
         const Bnd_OBB& obb,
         const TopoDS_Face& splittingFace) const{
-    auto boundingBox = calculateBoundingBox(obb);
+    auto boundingBox = calculateOBB(obb);
 
-    auto halfBoundingBoxes = calculateHalfBoundingBoxes(splittingFace, boundingBox);
+    auto halfBoundingBoxes = calculateHalfBB(splittingFace, boundingBox);
     if(!halfBoundingBoxes) return std::nullopt;
 
     return calculateHalfSolids(solidToSplit, *halfBoundingBoxes);
 }
 
 TopoDS_Shape
-McCAD::Decomposition::SolidSplitter::calculateBoundingBox(
+McCAD::Decomposition::SolidSplitter::calculateOBB(
         Bnd_OBB obb) const{
     obb.Enlarge(0.4); // where does 0.4 come from? Should it be a parameter/tolerance for this class object?
     //boxSquareLength = sqrt(bndBox.SquareExtent());
@@ -94,22 +94,22 @@ McCAD::Decomposition::SolidSplitter::calculateHalfSpaces(
 }
 
 std::optional<std::pair<TopoDS_Shape, TopoDS_Shape>>
-McCAD::Decomposition::SolidSplitter::calculateHalfBoundingBoxes(
+McCAD::Decomposition::SolidSplitter::calculateHalfBB(
         const TopoDS_Face& splittingFace,
         const TopoDS_Shape& boundingBox) const{
     auto halfSpaces = calculateHalfSpaces(splittingFace);
 
-    auto firstHalfBB = calculateHalfBoundingBox(halfSpaces.first, boundingBox);
+    auto firstHalfBB = calculateHalfOBB(halfSpaces.first, boundingBox);
     if(!firstHalfBB) return std::nullopt;
 
-    auto secondHalfBB = calculateHalfBoundingBox(halfSpaces.second, boundingBox);
+    auto secondHalfBB = calculateHalfOBB(halfSpaces.second, boundingBox);
     if(!secondHalfBB) return std::nullopt;
 
     return std::make_pair(*firstHalfBB, *secondHalfBB);
 }
 
 std::optional<TopoDS_Shape>
-McCAD::Decomposition::SolidSplitter::calculateHalfBoundingBox(
+McCAD::Decomposition::SolidSplitter::calculateHalfOBB(
         const TopoDS_Shape& halfSpace,
         const TopoDS_Shape& boundingBox) const{
     try{
