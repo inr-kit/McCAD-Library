@@ -31,22 +31,22 @@ McCAD::Geometry::Solid::Impl::repairSolid(){
 
 void
 McCAD::Geometry::Solid::Impl::createOBB(Standard_Real bndBoxGap){
-  // Calculate the bounding box of the solid.
-  BRepBndLib::AddOBB(solid, OBB);
-  OBB.Enlarge(bndBoxGap);
+    // Calculate the bounding box of the solid.
+    BRepBndLib::AddOBB(solid, obb);
+    obb.Enlarge(bndBoxGap);
 }
 
 void
 McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real scalingFactor){
   // Calculate the oriented bounding box of the solid.
-  meshDeflection = 2 * std::max(std::max(OBB.XHSize(), OBB.YHSize()),
-				OBB.ZHSize()) / scalingFactor;
-  boxSquareLength = sqrt(OBB.SquareExtent());
+  meshDeflection = 2 * std::max(std::max(obb.XHSize(), obb.YHSize()),
+				obb.ZHSize()) / scalingFactor;
+  boxSquareLength = sqrt(obb.SquareExtent());
   //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
 }
 
 void
-McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real angleTolerance){
+McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTolerance){
   TopTools_IndexedDataMapOfShapeListOfShape mapEdgeFace;
   TopExp::MapShapesAndAncestors(solid, TopAbs_EDGE, TopAbs_FACE, mapEdgeFace);
   
@@ -205,12 +205,13 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
 	      //std::cout << "*** equal" << std::endl;
 	      surfacesList[j]->accessSImpl()->surfaceNumber =
 		surfacesList[i]->accessSImpl()->surfaceNumber;
+	      /*
 	      // Save surfaces to step file for comparison/debugging.
 	      STEPControl_Writer writer6;
 	      writer6.Transfer(surfacesList[j]->accessSImpl()->face,
-			       STEPControl_StepModelType::STEPControl_AsIs);
+	      	       STEPControl_StepModelType::STEPControl_AsIs);
 	      writer6.Transfer(surfacesList[i]->accessSImpl()->face,
-			       STEPControl_StepModelType::STEPControl_AsIs);
+	      		       STEPControl_StepModelType::STEPControl_AsIs);
 	      Standard_Integer kk = 0;
               std::string filename = "../examples/bbox/equalsurfaces";
               std::string suffix = ".stp";
@@ -221,6 +222,7 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
 	      filename += std::to_string(kk);
               filename += suffix;
               writer6.Write(filename.c_str());
+	      */
 	      // Test if the two surfaces can be fused.
 	      if (*surfacesList[i] << *surfacesList[j])
 		{
@@ -262,6 +264,7 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
 		{
 		  std::cout << "*** equal, erase one" << std::endl;
 		  // Erase pointer surfacesList[j] from surfacesList.
+		  /*
 		  STEPControl_Writer writer7;
 		  writer7.Transfer(surfacesList[j]->accessSImpl()->face,
                                    STEPControl_StepModelType::STEPControl_AsIs);
@@ -274,6 +277,7 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
 		  filename += std::to_string(kk);
 		  filename += suffix;
 		  writer7.Write(filename.c_str());
+		  */
                   surfacesList.erase(surfacesList.begin() + j);
 		  --j;
 		}

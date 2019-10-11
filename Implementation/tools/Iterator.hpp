@@ -78,6 +78,10 @@ namespace McCAD{
 
     public:
         using value_type = typename detail::TopClass<shapeTag>::type;
+        using reference = value_type&;
+        using pointer = value_type*;
+        using difference_type = std::size_t;
+        using iterator_category = std::forward_iterator_tag;
 
         Iterator() = default;
         Iterator(const TopoDS_Shape& shape);

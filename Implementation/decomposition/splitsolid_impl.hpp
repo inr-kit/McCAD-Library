@@ -4,7 +4,7 @@
 // C++
 #include <array>
 #include <filesystem>
-#include <string>
+#include <optional>
 // McCAD
 #include "splitsolid.hpp"
 #include "solid_impl.hpp"
@@ -30,39 +30,28 @@
 #include <ShapeFix_Solid.hxx>
 #include <TopoDS_Shell.hxx>
 #include <Bnd_OBB.hxx>
-#include <gp_Trsf.hxx>
-#include <BRepBuilderAPI_Transform.hxx>
-#include <TopLoc_Location.hxx>
 
 namespace McCAD::Decomposition{
-  class SplitSolid::Impl {
-  public:
-    Impl() = default;
+    class SplitSolid::Impl {
+    public:
+        Impl() = default;
 
-    Bnd_OBB bndBox;
-    Standard_Real boxSquareLength;
-    TopoDS_Shape boundingBox;
+        bool operator()(
+                const TopoDS_Solid& solid,
+                const Bnd_OBB& obb,
+                const Geometry::BoundSurface& surface,
+                TopTools_HSequenceOfShape& subSolidsList) const;
 
-    Standard_Boolean perform(Geometry::Solid::Impl& solidImpl,
-			     Standard_Integer indexSplitSurface = 0);
-    void createOBBSolid(const Bnd_OBB& OBB, TopoDS_Solid& solid);
-    Standard_Boolean split(const TopoDS_Solid& solid,
-			   const TopoDS_Face& splitFace,
-			   std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList);
-    void calculatePoints(const TopoDS_Face& splitFace,
-			 gp_Pnt& positivePoint,
-			 gp_Pnt& negativePoint);
-    Standard_Boolean splitWithBoxes(const TopoDS_Solid& solid,
-				    TopoDS_Shape& firstBox,
-				    TopoDS_Shape& secondBox,
-				    std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList);
-    Standard_Boolean checkRepair(std::unique_ptr<TopTools_HSequenceOfShape>& subSolidsList,
-				 Standard_Real tolerance = 1.0e-4);
-    Standard_Boolean rebuildSolidFromShell(const TopoDS_Shape& solid,
-					   TopoDS_Solid& resultSolid,
-					   Standard_Real tolerance = 1.0e-2,
-					   Standard_Real tolerance2 = 1.0e-4);
-  };
+    private:
+        bool filterAndRepair(
+                TopTools_HSequenceOfShape& subSolidsList,
+                Standard_Real tolerance = 1.0e-4) const;
+
+        TopTools_HSequenceOfShape gatherSubSolids(
+                TopTools_HSequenceOfShape& solids,
+                Standard_Real tolerance = 1.0e-4) const;
+
+    };
 }
 
 #endif //SPLITSOLID_IMPL_HPP

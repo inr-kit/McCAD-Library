@@ -1,14 +1,16 @@
 // McCAD
 #include "boundingBox_impl.hpp"
 
-McCAD::Geometry::BoundingBox::BoundingBox(const Coord3D& minima, const Coord3D& maxima)
-  : minima_{minima}, maxima_{maxima}, gap_{CT_0()}{
-    if(maxima.x < minima.x || maxima.y < minima.y || maxima.z < minima.z)
-      {
+McCAD::Geometry::BoundingBox::BoundingBox(
+        const Coord3D& minima,
+        const Coord3D& maxima)
+    : minima_{minima}, maxima_{maxima}, gap_{CT_0()}{
+    if(maxima.x < minima.x || maxima.y < minima.y || maxima.z < minima.z){
+
 	throw std::runtime_error{
-	  "Minimum coordinates must be smaller than maximum coordinates"};
-      };
-				      }
+        "Minimum coordinates must be smaller than maximum coordinates"};
+    };
+}
 
 const McCAD::Geometry::Coord3D&
 McCAD::Geometry::BoundingBox::minima() const{
