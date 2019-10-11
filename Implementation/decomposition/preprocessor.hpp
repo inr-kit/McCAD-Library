@@ -44,25 +44,14 @@
 #include <STEPControl_Writer.hxx>
 
 namespace McCAD::Decomposition{
-  class DecomposeSolid::Impl{
+  class preprocessor{
   public:
-    Impl();
-    Impl(Standard_Integer recurrenceDepth);
-    ~Impl();
-    
-    Standard_Boolean operator()(Geometry::Solid::Impl& solidImpl);
+    preprocessor();
+    ~preprocessor();
 
-    Standard_Integer recurrenceDepth;
-    SplitSurfaces splitSurfaces;
-    SplitSolid splitSolid;
-
+    Standard_Boolean checkBndSurfaces(const TopoDS_Solid& solid);
     template <typename SolidType>
-    Standard_Boolean perform(SolidType& solidImpl);
-    //Standard_Boolean perform(Geometry::Solid::Impl& solidImpl);
-    void judgeDecomposeSurfaces(Geometry::Solid::Impl& solidImpl);
-    void judgeThroughConcaveEdges(std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList);
-    void generateAssistingSurfaces();
-    Standard_Boolean selectSplitSurface(Geometry::Solid::Impl& solidImpl);
+    SolidType createSolidObj(TopoDS_Solid& solid);
   };
 }
 

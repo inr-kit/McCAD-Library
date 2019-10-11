@@ -72,7 +72,7 @@ namespace McCAD::Geometry{
     void repairSolid();
     void generateSurfacesList();
     std::unique_ptr<BoundSurface> generateSurface(const TopoDS_Face& face,
-						  Standard_Integer mode = 0);
+                                                  Standard_Integer mode = 0);
     void mergeSurfaces(std::vector<std::unique_ptr<BoundSurface>>& planesList);
   };
 }

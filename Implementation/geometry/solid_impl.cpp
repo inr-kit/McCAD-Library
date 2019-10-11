@@ -40,7 +40,7 @@ void
 McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real scalingFactor){
   // Calculate the oriented bounding box of the solid.
   meshDeflection = 2 * std::max(std::max(obb.XHSize(), obb.YHSize()),
-				obb.ZHSize()) / scalingFactor;
+                                obb.ZHSize()) / scalingFactor;
   boxSquareLength = sqrt(obb.SquareExtent());
   //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
 }
@@ -49,19 +49,16 @@ void
 McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTolerance){
   TopTools_IndexedDataMapOfShapeListOfShape mapEdgeFace;
   TopExp::MapShapesAndAncestors(solid, TopAbs_EDGE, TopAbs_FACE, mapEdgeFace);
-  
   TopTools_ListOfShape facesList;
   for (Standard_Integer edgeNumber = 1; edgeNumber <= mapEdgeFace.Extent();
-       ++edgeNumber)
-    {
+       ++edgeNumber){
       TopoDS_Edge edge = TopoDS::Edge(mapEdgeFace.FindKey(edgeNumber));
       BRepAdaptor_Curve curveAdaptor;
       curveAdaptor.Initialize(edge);
       facesList = mapEdgeFace.FindFromKey(edge);
-      if(facesList.Extent() != Standard_Integer(2))
-	{
-	  continue;
-        }
+      if(facesList.Extent() != Standard_Integer(2)){
+          continue;
+      }
       TopTools_ListIteratorOfListOfShape iterFace(facesList);
       TopoDS_Face firstFace = TopoDS::Face(iterFace.Value());
       iterFace.Next();
@@ -79,29 +76,21 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTol
       gp_Dir secondNormal = Tools::normalOnFace(secondFace, startPoint);
       Standard_Real angle = firstNormal.AngleWithRef(secondNormal, direction);
 
-      if(std::abs(angle) < angleTolerance)
-	{
-	  angle = Standard_Real(0);
-        }
+      if(std::abs(angle) < angleTolerance){
+          angle = Standard_Real(0);
+      }
       // The edge is convex.
-      if( angle < Standard_Real(0) && edge.Orientation() == TopAbs_REVERSED)
-	{
-	  edge.Convex(1);
-        }
-      else if(angle > Standard_Real(0) && edge.Orientation() == TopAbs_FORWARD)
-        {
-	  edge.Convex(1);
-        }
-      else if (angle == Standard_Real(0))
-	{
-	  // edge if flat
-	  edge.Convex(2);
-	}
-      else
-	{
-	  // edge is concave
-	  edge.Convex(0);
-	}
+      if( angle < Standard_Real(0) && edge.Orientation() == TopAbs_REVERSED){
+          edge.Convex(1);
+      } else if(angle > Standard_Real(0) && edge.Orientation() == TopAbs_FORWARD){
+          edge.Convex(1);
+      } else if (angle == Standard_Real(0)){
+          // edge if flat
+          edge.Convex(2);
+      } else{
+          // edge is concave
+          edge.Convex(0);
+      }
     }
 }
 

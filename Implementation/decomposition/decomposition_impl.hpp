@@ -19,7 +19,7 @@
 #include <TopoDS_Compound.hxx>
 
 namespace McCAD::Decomposition{
-  class Decompose::Impl {
+  class Decompose::Impl{
   public:
     Impl(const General::InputData& inputData);
     ~Impl();
