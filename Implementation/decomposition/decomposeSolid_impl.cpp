@@ -26,13 +26,13 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(SolidType& solidImpl){
     ++recurrenceDepth;
     std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
     // Calculate OBB of the solid.
-    solidImpl.createOBB();
+    //solidImpl.createOBB();
     // Calculate mesh deflection of the solid.
-    solidImpl.calcMeshDeflection();
+    //solidImpl.calcMeshDeflection();
     // Update edges convexity of the solid.
-    solidImpl.updateEdgesConvexity();
+    //solidImpl.updateEdgesConvexity();
     // Generate the boundary surfaces list of the solid.
-    solidImpl.generateSurfacesList();
+    //solidImpl.generateSurfacesList();
     // Judge which surfaces are decompose surfaces from the generated list.
     judgeDecomposeSurfaces(solidImpl);
     //judgeThroughConcaveEdges(splitFacesList);
@@ -71,12 +71,9 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(SolidType& solidImpl){
             std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/"
                       << solidImpl.splitSolidList->Length() << "/" << i << std::endl;
             //std::cout << splitSolidList->Length() << std::endl;
-            Geometry::Solid::Impl subSolidImpl;
-            try{
-                subSolidImpl.initiate(solidImpl.splitSolidList->Value(i));
-            } catch(...){
-                return Standard_False;
-            }
+            auto subSolid = Decomposition::preprocessor{}.perform(solidImpl.splitSolidList->Value(i));
+            if (!subSolid.has_value()) return Standard_False;
+            auto subSolidImpl = subSolid.value().accessImpl();
             // Mesh deflection is calculated for every solid in DecomposeSolid.
             if (DecomposeSolid::Impl{recurrenceDepth}(subSolidImpl)){
                 if (subSolidImpl.splitSolidList->Length() >= 2){

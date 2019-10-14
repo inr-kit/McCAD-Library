@@ -1,4 +1,5 @@
 add_library(DECOMPOSITION_IMPL OBJECT
+  preprocessor.cpp
   splitsurfaces_impl.cpp
   splitsolid_impl.cpp
   decomposeSolid_impl.cpp
@@ -8,6 +9,7 @@ add_library(DECOMPOSITION_IMPL OBJECT
   SolidRepairer.cpp)
 
 install(FILES
+  preprocessor.hpp
   splitsurfaces_impl.hpp
   splitsolid_impl.hpp
   decomposeSolid_impl.hpp

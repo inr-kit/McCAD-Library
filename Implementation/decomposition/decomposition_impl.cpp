@@ -55,8 +55,8 @@ McCAD::Decomposition::Decompose::Impl::flattenSolidHierarchy(
 void
 McCAD::Decomposition::Decompose::Impl::perform(){
   for(const auto& shape : *splitInputSolidsList){
-      auto& solid = preprocessor(shape);
-      if (!solid){
+      auto solid = Decomposition::preprocessor{}.perform(shape);
+      if (!solid.has_value()){
           rejectedInputSolidsList->Append(shape);
       /*
       std::unique_ptr<Geometry::Solid> solid = std::make_unique<Geometry::Solid>();
@@ -66,6 +66,7 @@ McCAD::Decomposition::Decompose::Impl::perform(){
           rejectedInputSolidsList->Append(shape);
       */
       } else{
+          auto solidImpl = solid.value().accessImpl();
           // Repair the geometry of solid.
           solidImpl.repairSolid();
           // Perform decomposition on the repaired solid.

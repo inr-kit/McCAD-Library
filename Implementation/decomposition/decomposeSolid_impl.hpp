@@ -9,6 +9,7 @@
 #include <tuple>
 // McCAD
 #include "decomposeSolid.hpp"
+#include "preprocessor.hpp"
 #include "tools_impl.hpp"
 #include "solid_impl.hpp"
 #include "boundSurface_impl.hpp"

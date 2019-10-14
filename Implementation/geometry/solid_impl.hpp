@@ -52,7 +52,7 @@ namespace McCAD::Geometry{
     
     Bnd_OBB obb;
     TopoDS_Solid solid;
-    TopoDS_Shape solidShape;
+    //TopoDS_Shape solidShape;
     Standard_Boolean isTorus = Standard_False;
     Standard_Boolean isSpline = Standard_False;
     Standard_Real meshDeflection;
@@ -65,7 +65,7 @@ namespace McCAD::Geometry{
     std::unique_ptr<TopTools_HSequenceOfShape> splitSolidList;
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
 
-    void initiate(const TopoDS_Shape& aSolidShape);
+    void initiate(const TopoDS_Solid& aSolid);
     void createOBB(Standard_Real bndBoxGap = 0);
     void calcMeshDeflection(Standard_Real scalingFactor = 100);
     void updateEdgesConvexity(const Standard_Real& angleTolerance = 1.0e-4);
