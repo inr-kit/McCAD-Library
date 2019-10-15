@@ -1,5 +1,5 @@
-#ifndef DECOMPOSESOLID_IMPL_HPP
-#define DECOMPOSESOLID_IMPL_HPP
+#ifndef Preprocessor_HPP
+#define Preprocessor_HPP
 
 // C++
 #include <variant>
@@ -18,17 +18,17 @@
 #include <GeomAdaptor_Surface.hxx>
 
 namespace McCAD::Decomposition{
-  class preprocessor{
+  class Preprocessor{
   public:
-    preprocessor();
-    ~preprocessor();
+    Preprocessor();
+    ~Preprocessor();
 
-    std::variant<std::monostate, McCAD::Geometry::Solid> perform(const TopoDS_Shape& shape);
+    std::unique_ptr<McCAD::Geometry::Solid> perform(const TopoDS_Shape& shape);
     Standard_Boolean checkBndSurfaces(const TopoDS_Solid& solid);
     std::string determineSolidType(const TopoDS_Solid& solid);
-    void constructObj(std::variant<std::monostate, McCAD::Geometry::Solid> solidObj,
-                      const TopoDS_Solid& solid);
+    template<typename objType>
+    std::unique_ptr<objType> constructObj(const TopoDS_Shape& shape);
   };
 }
 
-#endif //DECOMPOSESOLID_IMPL_HPP
+#endif //Preprocessor_HPP

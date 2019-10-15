@@ -8,7 +8,7 @@ McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid,
   for(const auto& face : ShapeView<TopAbs_FACE>{solid}){
       GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
       if(surfAdaptor.GetType() == GeomAbs_Torus){
-          std::cout << "    -- The current verion doesn't support processing of "
+          std::cout << "    -- The current verion doesn't support processing of"
                        "Tori. Ignoring solid!" << std::endl;
           isTorus = Standard_True;
       } else if (surfAdaptor.GetType() == GeomAbs_BSplineSurface){

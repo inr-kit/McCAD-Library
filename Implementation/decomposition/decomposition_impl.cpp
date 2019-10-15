@@ -55,9 +55,6 @@ McCAD::Decomposition::Decompose::Impl::flattenSolidHierarchy(
 void
 McCAD::Decomposition::Decompose::Impl::perform(){
   for(const auto& shape : *splitInputSolidsList){
-      auto solid = Decomposition::preprocessor{}.perform(shape);
-      if (!solid.has_value()){
-          rejectedInputSolidsList->Append(shape);
       /*
       std::unique_ptr<Geometry::Solid> solid = std::make_unique<Geometry::Solid>();
       auto& solidImpl = *solid->accessSImpl();
@@ -65,6 +62,10 @@ McCAD::Decomposition::Decompose::Impl::perform(){
       if (solidImpl.isTorus || solidImpl.isSpline){
           rejectedInputSolidsList->Append(shape);
       */
+      auto solid = Preprocessor{}.perform(shape);
+      /*
+      if (!solid.has_value()){
+          rejectedInputSolidsList->Append(shape);
       } else{
           auto solidImpl = solid.value().accessImpl();
           // Repair the geometry of solid.
@@ -80,10 +81,10 @@ McCAD::Decomposition::Decompose::Impl::perform(){
                       rejectedsubSolidsList->Append(rejectedSubSolid);
                   }
               }
-        } else{
+          } else{
               rejectedInputSolidsList->Append(shape);
           }
-      }
+      }*/
   }
   std::cout << "   - There are " << rejectedInputSolidsList->Length() << " rejected input solid(s)."<< std::endl;
   std::cout << "   - There are " << resultSolidsList->Length() << " result solid(s)." << std::endl;

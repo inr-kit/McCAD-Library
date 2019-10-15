@@ -1,23 +1,20 @@
 // McCAD
 #include "preprocessor.hpp"
 
-McCAD::Decomposition::preprocessor::preprocessor(){
-
+McCAD::Decomposition::Preprocessor::Preprocessor(){
 }
 
-McCAD::Decomposition::preprocessor::~preprocessor(){
-
+McCAD::Decomposition::Preprocessor::~Preprocessor(){
 }
 
-std::variant<std::monostate, McCAD::Geometry::Solid>
-McCAD::Decomposition::preprocessor::perform(const TopoDS_Shape& shape){
-    using my_variant = std::variant<std::monostate, McCAD::Geometry::Solid>;
+std::unique_ptr<McCAD::Geometry::Solid>
+McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
     TopoDS_Solid solid = TopoDS::Solid(shape);
     if (!checkBndSurfaces(solid)){
         if (determineSolidType(solid) == "Pl"){
-            my_variant solidObj{std::in_place_index<1>};
-            constructObj(solidObj, solid);
-            return solidObj;
+            //std::variant<McCAD::Geometry::Solid, std::monostate>
+             //       solidVariant(constructObj<McCAD::Geometry::Solid>(solid));
+            return constructObj<McCAD::Geometry::Solid>(shape);
         } else{
             std::cout << "Processing of solids with non-planar surfaces is not"
                          "yet supported!. Solid will be added to rejected solids"
@@ -27,7 +24,7 @@ McCAD::Decomposition::preprocessor::perform(const TopoDS_Shape& shape){
 }
 
 Standard_Boolean
-McCAD::Decomposition::preprocessor::checkBndSurfaces(const TopoDS_Solid& solid){
+McCAD::Decomposition::Preprocessor::checkBndSurfaces(const TopoDS_Solid& solid){
   for(const auto& face : ShapeView<TopAbs_FACE>{solid})
     {
       GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
@@ -47,7 +44,7 @@ McCAD::Decomposition::preprocessor::checkBndSurfaces(const TopoDS_Solid& solid){
 }
 
 std::string
-McCAD::Decomposition::preprocessor::determineSolidType(const TopoDS_Solid& solid){
+McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid){
     Standard_Boolean cylSolid, sphSolid, plSolid, mxdSolid;
     for(const auto& face : ShapeView<TopAbs_FACE>{solid}){
         GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
@@ -73,12 +70,13 @@ McCAD::Decomposition::preprocessor::determineSolidType(const TopoDS_Solid& solid
     else return "Pl";
 }
 
-void
-McCAD::Decomposition::preprocessor::constructObj(std::variant<std::monostate, McCAD::Geometry::Solid> solidObj,
-                                                 const TopoDS_Solid& solid){
-    auto solidImpl = *solidObj.accessSImpl();
+template<typename objType>
+std::unique_ptr<objType>
+McCAD::Decomposition::Preprocessor::constructObj(const TopoDS_Shape& shape){
+    std::unique_ptr<objType> solidObj = std::make_unique<objType>();
+    auto& solidImpl = *solidObj->accessSImpl();
     // Initiate solid.
-    solidImpl.initiate(solid);
+    solidImpl.initiate(shape);
     // Calculate OBB of the solid.
     solidImpl.createOBB();
     // Calculate mesh deflection of the solid.
@@ -88,5 +86,5 @@ McCAD::Decomposition::preprocessor::constructObj(std::variant<std::monostate, Mc
     // Generate the boundary surfaces list of the solid.
     solidImpl.generateSurfacesList();
     // Judge which surfaces are decompose surfaces from the generated list.
-    //return solidObj;
+    return solidObj;
 }

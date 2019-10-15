@@ -11,17 +11,16 @@ McCAD::Geometry::Solid::Impl::~Impl(){
 }
 
 void
-McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Solid& aSolid){
+McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
   //std::cout << "solid initiate" << std::endl;
-  solid = aSolid;
-  //solidShape = aSolidShape;
+  solidShape = aSolidShape;
   //std::cout << "solidShape" << std::endl;
-  //solid = TopoDS::Solid(solidShape);
+  solid = TopoDS::Solid(solidShape);
   //std::cout << "solid" << std::endl;
   // Check boundary surfaces.
   //preproc->accessImpl()->checkBndSurfaces(solid, isTorus, isSpline);
   //std::cout << "checkBndSurfaces" << std::endl;
-//}
+}
 
 void
 McCAD::Geometry::Solid::Impl::repairSolid(){

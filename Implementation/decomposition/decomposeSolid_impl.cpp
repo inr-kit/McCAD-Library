@@ -71,9 +71,10 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(SolidType& solidImpl){
             std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/"
                       << solidImpl.splitSolidList->Length() << "/" << i << std::endl;
             //std::cout << splitSolidList->Length() << std::endl;
-            auto subSolid = Decomposition::preprocessor{}.perform(solidImpl.splitSolidList->Value(i));
-            if (!subSolid.has_value()) return Standard_False;
-            auto subSolidImpl = subSolid.value().accessImpl();
+            auto subSolid = Preprocessor{}.perform(solidImpl.splitSolidList->Value(i));
+            /*
+            //if (!subSolid.has_value()) return Standard_False;
+            auto subSolidImpl = subSolid.accessSImpl();
             // Mesh deflection is calculated for every solid in DecomposeSolid.
             if (DecomposeSolid::Impl{recurrenceDepth}(subSolidImpl)){
                 if (subSolidImpl.splitSolidList->Length() >= 2){
@@ -91,7 +92,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(SolidType& solidImpl){
             } else{
                 //return Standard_False;
                 solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
-            }
+            }*/
         }
         //return Standard_True;
     } else{
