@@ -72,32 +72,36 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(SolidType& solidImpl){
                       << solidImpl.splitSolidList->Length() << "/" << i << std::endl;
             //std::cout << splitSolidList->Length() << std::endl;
             auto subSolid = Preprocessor{}.perform(solidImpl.splitSolidList->Value(i));
-            /*
-            //if (!subSolid.has_value()) return Standard_False;
-            auto subSolidImpl = subSolid.accessSImpl();
-            // Mesh deflection is calculated for every solid in DecomposeSolid.
-            if (DecomposeSolid::Impl{recurrenceDepth}(subSolidImpl)){
-                if (subSolidImpl.splitSolidList->Length() >= 2){
-                    //splitSolidList->Remove(i);
-                    for(const auto& el : *subSolidImpl.splitSolidList){
-                        solidImpl.splitSolidList->InsertAfter(i, el);
+            if (std::holds_alternative<std::monostate>(subSolid)) return Standard_False;
+            // Using switch for now. Should be separated in a separate class an called
+            // for each specific type of solid object.
+            switch (Standard_Integer(subSolid.index())){
+            default:
+                auto& subSolidImpl = *std::get<1>(subSolid)->accessSImpl();
+                // Mesh deflection is calculated for every solid in DecomposeSolid.
+                if (DecomposeSolid::Impl{recurrenceDepth}(subSolidImpl)){
+                    if (subSolidImpl.splitSolidList->Length() >= 2){
+                        //splitSolidList->Remove(i);
+                        for(const auto& el : *subSolidImpl.splitSolidList){
+                            solidImpl.splitSolidList->InsertAfter(i, el);
+                        }
+                        solidImpl.splitSolidList->Remove(i);
+                        i += subSolidImpl.splitSolidList->Length() - 1;
                     }
-                    solidImpl.splitSolidList->Remove(i);
-                    i += subSolidImpl.splitSolidList->Length() - 1;
+                    // Add rejected subSolids
+                    solidImpl.rejectedsubSolidsList->Append(
+                                *subSolidImpl.rejectedsubSolidsList);
+                    //return Standard_True;
+                } else{
+                    //return Standard_False;
+                    solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
                 }
-                // Add rejected subSolids
-                solidImpl.rejectedsubSolidsList->Append(
-                          *subSolidImpl.rejectedsubSolidsList);
-                //return Standard_True;
-            } else{
-                //return Standard_False;
-                solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
-            }*/
+            }
+            //return Standard_True;
         }
-        //return Standard_True;
     } else{
-        //std::cout	<< "Solid has no split surfaces" << std::endl;
-        solidImpl.splitSolidList->Append(solidImpl.solid);
+            //std::cout	<< "Solid has no split surfaces" << std::endl;
+            solidImpl.splitSolidList->Append(solidImpl.solid);
     }
     return Standard_True;
 }

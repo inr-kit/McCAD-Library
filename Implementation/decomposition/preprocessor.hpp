@@ -23,11 +23,11 @@ namespace McCAD::Decomposition{
     Preprocessor();
     ~Preprocessor();
 
-    std::unique_ptr<McCAD::Geometry::Solid> perform(const TopoDS_Shape& shape);
+    std::variant<std::monostate, std::shared_ptr<McCAD::Geometry::Solid>> perform(const TopoDS_Shape& shape);
     Standard_Boolean checkBndSurfaces(const TopoDS_Solid& solid);
     std::string determineSolidType(const TopoDS_Solid& solid);
     template<typename objType>
-    std::unique_ptr<objType> constructObj(const TopoDS_Shape& shape);
+    std::shared_ptr<objType> constructObj(const TopoDS_Shape& shape);
   };
 }
 

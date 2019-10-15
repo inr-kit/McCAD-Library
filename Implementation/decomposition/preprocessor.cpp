@@ -7,45 +7,47 @@ McCAD::Decomposition::Preprocessor::Preprocessor(){
 McCAD::Decomposition::Preprocessor::~Preprocessor(){
 }
 
-std::unique_ptr<McCAD::Geometry::Solid>
+std::variant<std::monostate, std::shared_ptr<McCAD::Geometry::Solid>>
 McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
-    TopoDS_Solid solid = TopoDS::Solid(shape);
+    //std::cout << "Preprocessor::perform" << std::endl;
+    std::variant<std::monostate, std::shared_ptr<McCAD::Geometry::Solid>> solidVariant;
+    auto& solid = TopoDS::Solid(shape);
     if (!checkBndSurfaces(solid)){
         if (determineSolidType(solid) == "Pl"){
-            //std::variant<McCAD::Geometry::Solid, std::monostate>
-             //       solidVariant(constructObj<McCAD::Geometry::Solid>(solid));
-            return constructObj<McCAD::Geometry::Solid>(shape);
-        } else{
-            std::cout << "Processing of solids with non-planar surfaces is not"
-                         "yet supported!. Solid will be added to rejected solids"
-                         "file" << std::endl;
+            //std::cout << "Pl solid" << std::endl;
+            solidVariant = constructObj<McCAD::Geometry::Solid>(shape);
+            return solidVariant;
         }
     }
+    std::cout << "   - Processing of solids with non-planar surfaces is not yet "
+                 "supported!.\n     Solid will be added to rejected solids file"
+              << std::endl;
+    return solidVariant;
 }
 
 Standard_Boolean
 McCAD::Decomposition::Preprocessor::checkBndSurfaces(const TopoDS_Solid& solid){
-  for(const auto& face : ShapeView<TopAbs_FACE>{solid})
-    {
-      GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
-      if(surfAdaptor.GetType() == GeomAbs_Torus)
-        {
-          std::cout << "    -- The current verion doesn't support processing of "
-                       "Tori. Ignoring solid!" << std::endl;
-          return Standard_True;
-        }
-      else if (surfAdaptor.GetType() == GeomAbs_BSplineSurface)
-        {
-          std::cout << "    -- The current verion doesn't support processing of "
-                       "splines. Ignoring solid!" << std::endl;
-          return Standard_True;
+    //std::cout << "Preprocessor::checkBndSurfaces" << std::endl;
+    for(const auto& face : ShapeView<TopAbs_FACE>{solid}){
+        GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
+        if(surfAdaptor.GetType() == GeomAbs_Torus){
+            std::cout << "    -- The current verion doesn't support processing of "
+                         "Tori. Ignoring solid!" << std::endl;
+            return Standard_True;
+        } else if (surfAdaptor.GetType() == GeomAbs_BSplineSurface){
+            std::cout << "    -- The current verion doesn't support processing of "
+                         "splines. Ignoring solid!" << std::endl;
+            return Standard_True;
         }
     }
+    return Standard_False;
 }
 
 std::string
 McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid){
+    //std::cout << "Preprocessor::determineSolidType" << std::endl;
     Standard_Boolean cylSolid, sphSolid, plSolid, mxdSolid;
+    cylSolid = sphSolid = plSolid = mxdSolid = Standard_False;
     for(const auto& face : ShapeView<TopAbs_FACE>{solid}){
         GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
         switch (surfAdaptor.GetType()){
@@ -71,9 +73,10 @@ McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid
 }
 
 template<typename objType>
-std::unique_ptr<objType>
+std::shared_ptr<objType>
 McCAD::Decomposition::Preprocessor::constructObj(const TopoDS_Shape& shape){
-    std::unique_ptr<objType> solidObj = std::make_unique<objType>();
+    //std::cout << "Preprocessor::constructObj" << std::endl;
+    std::shared_ptr<objType> solidObj = std::make_shared<objType>();
     auto& solidImpl = *solidObj->accessSImpl();
     // Initiate solid.
     solidImpl.initiate(shape);
@@ -85,6 +88,7 @@ McCAD::Decomposition::Preprocessor::constructObj(const TopoDS_Shape& shape){
     solidImpl.updateEdgesConvexity();
     // Generate the boundary surfaces list of the solid.
     solidImpl.generateSurfacesList();
-    // Judge which surfaces are decompose surfaces from the generated list.
+    // Repair solid.
+    solidImpl.repairSolid();
     return solidObj;
 }

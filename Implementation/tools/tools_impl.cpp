@@ -2,24 +2,6 @@
 #include "tools_impl.hpp"
 
 void
-McCAD::Tools::Preprocessor::Impl::checkBndSurfaces(const TopoDS_Solid& solid,
-                                                   Standard_Boolean& isTorus,
-                                                   Standard_Boolean& isSpline){
-  for(const auto& face : ShapeView<TopAbs_FACE>{solid}){
-      GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
-      if(surfAdaptor.GetType() == GeomAbs_Torus){
-          std::cout << "    -- The current verion doesn't support processing of"
-                       "Tori. Ignoring solid!" << std::endl;
-          isTorus = Standard_True;
-      } else if (surfAdaptor.GetType() == GeomAbs_BSplineSurface){
-            std::cout << "    -- The current verion doesn't support processing "
-                         "of splines. Ignoring solid!" << std::endl;
-            isSpline = Standard_True;
-      }
-    }
-}
-
-void
 McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape,
 						   Standard_Real precision,
 						   Standard_Real maxTolerance){

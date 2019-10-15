@@ -15,7 +15,7 @@ McCAD::Tools::PlaneComparator::operator()(const TopoDS_Face& firstFace,
     // Compare orientations
     if(firstFace.Orientation() != secondFace.Orientation())
       {
-	std::cout << "Orientation different" << std::endl;
+    //std::cout << "Orientation different" << std::endl;
         return Standard_False;
       }
 
@@ -30,7 +30,7 @@ McCAD::Tools::PlaneComparator::operator()(const TopoDS_Face& firstFace,
 
     if(firstLocation != secondLocation)
       {
-	std::cout << "Location different" << std::endl;
+    //std::cout << "Location different" << std::endl;
         return Standard_False;
       }
 
@@ -39,7 +39,7 @@ McCAD::Tools::PlaneComparator::operator()(const TopoDS_Face& firstFace,
     // Translation part
     if(!(firstLocation.Transformation().TranslationPart().IsEqual(secondLocation.Transformation().TranslationPart(), distanceTolerance)))
       {
-    	std::cout << "Translation different" << std::endl;
+        //std::cout << "Translation different" << std::endl;
    	//return Standard_False;
       }
     // Compare rotations
@@ -50,7 +50,7 @@ McCAD::Tools::PlaneComparator::operator()(const TopoDS_Face& firstFace,
     if(!(firstAxis.IsEqual(secondAxis, distanceTolerance)) ||
        !((firstAngle - secondAngle) <= angularTolerance))
       {
-	std::cout << "Rotation different" << std::endl;
+    //std::cout << "Rotation different" << std::endl;
 	//return Standard_False;
       }
 
@@ -61,10 +61,10 @@ McCAD::Tools::PlaneComparator::operator()(const TopoDS_Face& firstFace,
         auto secondPlane = secondAdaptor.Plane();
 	// also checks if surface type is GeomAbs_Plane
 
-	std::cout << "distance: " << firstPlane.Distance(secondPlane) << std::endl;
+    //std::cout << "distance: " << firstPlane.Distance(secondPlane) << std::endl;
 	secondPlane.Scale(gp_Pnt{0.0, 0.0, 0.0}, 0.1);
 	firstPlane.Scale(gp_Pnt{0.0, 0.0, 0.0}, 0.1);
-	std::cout << "distance: " << firstPlane.Distance(secondPlane) << std::endl;
+    //std::cout << "distance: " << firstPlane.Distance(secondPlane) << std::endl;
    
 	// Compare distance between planes.
 	if (firstPlane.Distance(secondPlane) > distanceTolerance)
@@ -120,10 +120,10 @@ McCAD::Tools::PlaneComparator::equivalentPlaneParameters(const gp_Pln& first,
             secondPlaneParameters[2]
         };
 
-	std::cout << "firstPlane: " << firstPlaneParameters[3] << std::endl;
-	std::cout << (firstPlaneDirection.IsEqual(secondPlaneDirection, angularTolerance) && std::abs(firstPlaneParameters[3] - secondPlaneParameters[3]) <= distanceTolerance) << std::endl;
-	std::cout << "secondPlane: " << secondPlaneParameters[3] << std::endl;
-	std::cout << (firstPlaneDirection.IsOpposite(secondPlaneDirection, angularTolerance) && std::abs(firstPlaneParameters[3] + secondPlaneParameters[3]) <= distanceTolerance) << std::endl;
+    //std::cout << "firstPlane: " << firstPlaneParameters[3] << std::endl;
+    //std::cout << (firstPlaneDirection.IsEqual(secondPlaneDirection, angularTolerance) && std::abs(firstPlaneParameters[3] - secondPlaneParameters[3]) <= distanceTolerance) << std::endl;
+    //std::cout << "secondPlane: " << secondPlaneParameters[3] << std::endl;
+    //std::cout << (firstPlaneDirection.IsOpposite(secondPlaneDirection, angularTolerance) && std::abs(firstPlaneParameters[3] + secondPlaneParameters[3]) <= distanceTolerance) << std::endl;
 
         return (firstPlaneDirection.IsEqual(secondPlaneDirection, angularTolerance)
 		&& std::abs(firstPlaneParameters[3] - secondPlaneParameters[3]) <= distanceTolerance)

@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <sstream>
 #include <tuple>
+#include <variant>
 // McCAD
 #include "decomposeSolid.hpp"
 #include "preprocessor.hpp"

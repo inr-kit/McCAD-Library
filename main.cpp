@@ -13,7 +13,7 @@ int main (){
   getline(std::cin, inputFileName);
   std::cout << "Specify the path to save the resulting step file: " << std::endl;
   getline(std::cin, successFileName);
-  std::cout << "Specify the path to save the rejected solids' step file: " << std::endl;
+  std::cout << "Specify the path to save the rejected solids step file: " << std::endl;
   getline(std::cin, failFileName);
     
   // Load the input file.
@@ -29,14 +29,14 @@ int main (){
   std::cout << "****************************" << std::endl;
   McCAD::Decomposition::Decompose decompose{inputData};
   auto outputData_success = decompose.getResultSolids();
-  auto outputData_fail = decompose.getRejectedsubSolids();
+  auto outputData_fail = decompose.getRejectedSolids();
 
   // Write output STEP files.
   std::cout << "****************************" << std::endl;
   std::cout << "**  Saving to STEP file   **" << std::endl;
   std::cout << "****************************" << std::endl;
-  McCAD::IO::STEPWriter successWriter{successFileName, outputData_success};
-  McCAD::IO::STEPWriter failWriter{failFileName, outputData_fail};
+  McCAD::IO::STEPWriter{successFileName, outputData_success};
+  McCAD::IO::STEPWriter{failFileName, outputData_fail};
     
   return 0;
 }

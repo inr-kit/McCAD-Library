@@ -4,6 +4,7 @@
 // C++
 #include <memory>
 #include <deque>
+#include <variant>
 // McCAD
 #include "decomposition.hpp"
 #include "inputdata_impl.hpp"

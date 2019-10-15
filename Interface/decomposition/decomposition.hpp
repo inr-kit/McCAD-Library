@@ -18,7 +18,7 @@ namespace McCAD::Decomposition {
       
       Impl* accessDImpl() const;
       General::InputData getResultSolids();
-      General::InputData getRejectedsubSolids();
+      General::InputData getRejectedSolids();
 
     private:
       std::unique_ptr<Impl> pDImpl;
