@@ -53,8 +53,6 @@ namespace McCAD::Geometry{
     Bnd_OBB obb;
     TopoDS_Solid solid;
     TopoDS_Shape solidShape;
-    Standard_Boolean isTorus = Standard_False;
-    Standard_Boolean isSpline = Standard_False;
     Standard_Real meshDeflection;
     Standard_Real boxSquareLength;
     Standard_Boolean splitSurface = Standard_False;
