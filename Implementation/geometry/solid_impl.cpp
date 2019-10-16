@@ -17,9 +17,6 @@ McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
     //std::cout << "solidShape" << std::endl;
     solid = TopoDS::Solid(solidShape);
     //std::cout << "solid" << std::endl;
-    // Check boundary surfaces.
-    //preproc->accessImpl()->checkBndSurfaces(solid, isTorus, isSpline);
-    //std::cout << "checkBndSurfaces" << std::endl;
 }
 
 void

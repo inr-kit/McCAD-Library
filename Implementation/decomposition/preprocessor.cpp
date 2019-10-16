@@ -7,15 +7,16 @@ McCAD::Decomposition::Preprocessor::Preprocessor(){
 McCAD::Decomposition::Preprocessor::~Preprocessor(){
 }
 
-std::variant<std::monostate, std::shared_ptr<McCAD::Geometry::Solid>>
+std::variant<std::monostate, std::shared_ptr<McCAD::Geometry::PLSolid>>
 McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
     //std::cout << "Preprocessor::perform" << std::endl;
-    std::variant<std::monostate, std::shared_ptr<McCAD::Geometry::Solid>> solidVariant;
+    std::variant<std::monostate, std::shared_ptr<McCAD::Geometry::PLSolid>>
+            solidVariant;
     auto& solid = TopoDS::Solid(shape);
     if (!checkBndSurfaces(solid)){
         if (determineSolidType(solid) == "Pl"){
             //std::cout << "Pl solid" << std::endl;
-            solidVariant = constructObj<McCAD::Geometry::Solid>(shape);
+            solidVariant = constructObj<McCAD::Geometry::PLSolid>(shape);
             return solidVariant;
         }
     }

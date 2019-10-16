@@ -4,7 +4,8 @@ add_library(GEOMETRY_IFACE OBJECT
   surface.cpp
   boundSurface.cpp
   boundSurfacePlane.cpp
-  solid.cpp)
+  solid.cpp
+  planarSolid.cpp)
 
 install(FILES
   edge.hpp
@@ -13,6 +14,7 @@ install(FILES
   boundSurface.hpp
   boundSurfacePlane.hpp
   solid.hpp
+  planarSolid.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes/interface/geometry)
 
 target_link_libraries(GEOMETRY_IFACE
