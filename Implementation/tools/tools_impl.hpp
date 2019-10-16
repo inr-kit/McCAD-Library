@@ -42,7 +42,7 @@
 #include <BRepTools.hxx>
 
 namespace McCAD::Tools{
-  class Preprocessor::Impl {
+  class Preprocessor::Impl{
   public:
     Impl() = default;
 

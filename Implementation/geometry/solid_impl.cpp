@@ -115,7 +115,9 @@ McCAD::Geometry::Solid::Impl::generateSurfacesList(){
             boundSurface->accessSImpl()->surfaceNumber = faceNumber;
             if (boundSurface->accessBSImpl()->generateMesh(meshDeflection)){
                 boundSurface->accessBSImpl()->generateEdges();
-                //std::cout << "length of egdes list: " << boundSurface->accessBSImpl()->edgesList.size() << std::endl;
+                //std::cout << "length of egdes list: " <<
+                //             boundSurface->accessBSImpl()->edgesList.size() <<
+                //             std::endl;
                 if(boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
                     planesList.push_back(std::move(boundSurface));
                 }
@@ -126,7 +128,8 @@ McCAD::Geometry::Solid::Impl::generateSurfacesList(){
             continue;
         }
     }
-    std::cout << "     - There are " << planesList.size() << " planes in the solid" << std::endl;
+    std::cout << "     - There are " << planesList.size() <<
+                 " planes in the solid" << std::endl;
     mergeSurfaces(planesList);
     //std::cout << "merged planes list: " << planesList.size() << std::endl;
     for (Standard_Integer i = 0; i <= planesList.size() - 1; ++i){
@@ -145,7 +148,8 @@ McCAD::Geometry::Solid::Impl::generateSurface(const TopoDS_Face& face,
         GeomAdaptor_Surface AdaptorSurface = surface.Surface();
         //std::cout << "GeomAdaptor_Surface" << std::endl;
         if (AdaptorSurface.GetType() == GeomAbs_Plane){
-            //std::cout << preproc->accessImpl()->getSurfTypeName(AdaptorSurface.GetType()) << std::endl;
+            //std::cout << preproc->accessImpl()->getSurfTypeName(
+            //                 AdaptorSurface.GetType()) << std::endl;
             std::unique_ptr<BoundSurfacePlane> boundSurfacePlane =
                     std::make_unique<BoundSurfacePlane>();
             boundSurfacePlane->setSurfaceType(Tools::toTypeName(GeomAbs_Plane));
