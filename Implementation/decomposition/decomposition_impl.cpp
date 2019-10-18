@@ -10,7 +10,7 @@ McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inp
   auto& inputSolidsList = inputData.accessImpl()->inputSolidsList;
   if (inputSolidsList->Length() > 0){
       std::cout << "> Found " << inputSolidsList->Length() <<
-                   " solid(s) in the input file." << std::endl;
+                   " solid(s) in the input step file." << std::endl;
       std::cout << " > Spliting compound input solids" << std::endl;
       // Split compound input solids.
       flattenSolidHierarchy(inputSolidsList);

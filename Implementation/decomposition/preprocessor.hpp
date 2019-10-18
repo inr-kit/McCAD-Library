@@ -5,8 +5,10 @@
 #include <variant>
 // McCAD
 #include "planarSolid_impl.hpp"
+#include "cylSolid_impl.hpp"
 #include <Standard.hxx>
 #include "ShapeView.hpp"
+#include "solidType.hpp"
 // OCC
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
@@ -23,9 +25,11 @@ namespace McCAD::Decomposition{
     Preprocessor();
     ~Preprocessor();
 
-    std::variant<std::monostate, std::shared_ptr<McCAD::Geometry::PLSolid>> perform(const TopoDS_Shape& shape);
+    McCAD::Tools::SolidType solidType;
+    std::variant<std::monostate, std::shared_ptr<McCAD::Geometry::PLSolid>>
+    perform(const TopoDS_Shape& shape);
     Standard_Boolean checkBndSurfaces(const TopoDS_Solid& solid);
-    std::string determineSolidType(const TopoDS_Solid& solid);
+    Standard_Integer determineSolidType(const TopoDS_Solid& solid);
     template<typename objType>
     std::shared_ptr<objType> constructObj(const TopoDS_Shape& shape);
   };

@@ -15,6 +15,7 @@ add_library(GEOMETRY_IMPL OBJECT
   boundSurfacePlane_impl.cpp
   solid_impl.cpp
   planarSolid_impl.cpp
+  cylSolid_impl.cpp
   boundingBox_impl.cpp)
 
 install(FILES
@@ -25,6 +26,7 @@ install(FILES
   boundSurfacePlane_impl.hpp
   solid_impl.hpp
   planarSolid_impl.hpp
+  cylSolid_impl.hpp
   boundingBox_impl.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/geometry)
 
