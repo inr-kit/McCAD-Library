@@ -10,7 +10,7 @@ public:
     SolidType() = default;
 
     enum customSolidType{
-        planarSolid = 0,
+        planarSolid = 1,
         cylindricalSolid,
         sphericalSolid,
         mixedSolid

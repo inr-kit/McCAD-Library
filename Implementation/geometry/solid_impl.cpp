@@ -12,11 +12,8 @@ McCAD::Geometry::Solid::Impl::~Impl(){
 
 void
 McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
-    //std::cout << "solid initiate" << std::endl;
     solidShape = aSolidShape;
-    //std::cout << "solidShape" << std::endl;
     solid = TopoDS::Solid(solidShape);
-    //std::cout << "solid" << std::endl;
 }
 
 void
@@ -39,7 +36,6 @@ McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real scalingFactor){
     meshDeflection = 2 * std::max(std::max(obb.XHSize(), obb.YHSize()),
                                   obb.ZHSize()) / scalingFactor;
     boxSquareLength = sqrt(obb.SquareExtent());
-    //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
 }
 
 void
@@ -154,8 +150,6 @@ McCAD::Geometry::Solid::Impl::generateSurface(const TopoDS_Face& face,
             boundSurfacePlane->accessBSPImpl()->generateExtendedPlane(boxSquareLength);
             return boundSurfacePlane;
         } else if (AdaptorSurface.GetType() == GeomAbs_Cylinder){
-            return nullptr;
-        } else if (AdaptorSurface.GetType() == GeomAbs_Cone){
             return nullptr;
         } else{
             return nullptr;

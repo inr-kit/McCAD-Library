@@ -7,19 +7,24 @@ McCAD::Decomposition::Preprocessor::Preprocessor(){
 McCAD::Decomposition::Preprocessor::~Preprocessor(){
 }
 
-std::variant<std::monostate, std::shared_ptr<McCAD::Geometry::PLSolid>>
+std::variant<std::monostate, std::shared_ptr<McCAD::Geometry::PLSolid>,
+std::shared_ptr<McCAD::Geometry::CYLSolid>>
 McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
-    std::variant<std::monostate, std::shared_ptr<McCAD::Geometry::PLSolid>> solidVariant;
+    std::variant<std::monostate, std::shared_ptr<McCAD::Geometry::PLSolid>,
+            std::shared_ptr<McCAD::Geometry::CYLSolid>> solidVariant;
     auto& solid = TopoDS::Solid(shape);
     if (!checkBndSurfaces(solid)){
         switch (determineSolidType(solid)){
         case solidType.planarSolid:
-            solidVariant = constructObj<McCAD::Geometry::PLSolid>(shape);
+            solidVariant = SolidObjConstructor{}.constructObj<
+                    McCAD::Geometry::PLSolid>(shape);
             return solidVariant;
         case solidType.cylindricalSolid:
-            solidVariant = constructObj<McCAD::Geometry::CYLSolid>(shape);
+            solidVariant = SolidObjConstructor{}.constructObj<
+                    McCAD::Geometry::CYLSolid>(shape);
             return solidVariant;
         default:
+            std::cout << "other" << std::endl;
             goto rejectSolid;
         }
     }
@@ -72,25 +77,4 @@ McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid
     else if (sphSolid) return solidType.sphericalSolid;
     else if (cylSolid) return solidType.cylindricalSolid;
     else return solidType.planarSolid;
-}
-
-template<typename objType>
-std::shared_ptr<objType>
-McCAD::Decomposition::Preprocessor::constructObj(const TopoDS_Shape& shape){
-    //std::cout << "Preprocessor::constructObj" << std::endl;
-    std::shared_ptr<objType> solidObj = std::make_shared<objType>();
-    auto& solidImpl = *solidObj->accessSImpl();
-    // Initiate solid.
-    solidImpl.initiate(shape);
-    // Calculate OBB of the solid.
-    solidImpl.createOBB();
-    // Calculate mesh deflection of the solid.
-    solidImpl.calcMeshDeflection();
-    // Update edges convexity of the solid.
-    solidImpl.updateEdgesConvexity();
-    // Generate the boundary surfaces list of the solid.
-    solidImpl.generateSurfacesList();
-    // Repair solid.
-    solidImpl.repairSolid();
-    return solidObj;
 }

@@ -17,9 +17,8 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(Geometry::Solid::Impl& so
     return perform(solidImpl);
 }
 
-template <typename SolidType>
 Standard_Boolean
-McCAD::Decomposition::DecomposeSolid::Impl::perform(SolidType& solidImpl){
+McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solidImpl){
     // The function will be called recursively on a solid.
     // A condition has to be set for termination (Now only 20 recursion levels).
     // Increment the recurrence depth by 1.
@@ -64,12 +63,15 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(SolidType& solidImpl){
                       << solidImpl.splitSolidList->Length() << "/" << i << std::endl;
             //std::cout << splitSolidList->Length() << std::endl;
             auto subSolid = Preprocessor{}.perform(solidImpl.splitSolidList->Value(i));
-            if (std::holds_alternative<std::monostate>(subSolid)) return Standard_False;
+            if (std::holds_alternative<std::monostate>(subSolid)){
+                solidImpl.rejectedsubSolidsList->Append(solidImpl.splitSolidList->Value(i));
+                continue;
+            }
             // Using switch for now. Should be separated in a separate class an called
             // for each specific type of solid object.
             switch (Standard_Integer(subSolid.index())){
-            default:
-                auto& subSolidImpl = *std::get<1>(subSolid)->accessSImpl();
+            case solidType.planarSolid:{
+                auto& subSolidImpl = *std::get<solidType.planarSolid>(subSolid)->accessSImpl();
                 // Mesh deflection is calculated for every solid in DecomposeSolid.
                 if (DecomposeSolid::Impl{recurrenceDepth}(subSolidImpl)){
                     if (subSolidImpl.splitSolidList->Length() >= 2){
@@ -88,6 +90,15 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(SolidType& solidImpl){
                     //return Standard_False;
                     solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
                 }
+                break;}
+            case solidType.cylindricalSolid:{
+                solidImpl.rejectedsubSolidsList->Append(solidImpl.splitSolidList->Value(i));
+                break;}
+            case solidType.sphericalSolid:{
+                solidImpl.rejectedsubSolidsList->Append(solidImpl.splitSolidList->Value(i));
+                break;}
+            default:
+                solidImpl.rejectedsubSolidsList->Append(solidImpl.splitSolidList->Value(i));
             }
             //return Standard_True;
         }
