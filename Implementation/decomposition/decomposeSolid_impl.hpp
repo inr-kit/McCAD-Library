@@ -19,11 +19,11 @@
 #include <Standard.hxx>
 #include "SurfaceUtilities.hpp"
 #include "CurveUtilities.hpp"
-#include "PlaneFuser.hpp"
 #include "FaceParameters.hpp"
 #include "ShapeView.hpp"
 #include "PlaneFuser.hpp"
 #include "FaceParameters.hpp"
+#include "solidType.hpp"
 // OCC
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
@@ -54,12 +54,12 @@ namespace McCAD::Decomposition{
     
     Standard_Boolean operator()(Geometry::Solid::Impl& solidImpl);
 
+    Tools::SolidType solidType;
     Standard_Integer recurrenceDepth;
     SplitSurfaces splitSurfaces;
     SplitSolid splitSolid;
 
-    template <typename SolidType>
-    Standard_Boolean perform(SolidType& solidImpl);
+    Standard_Boolean perform(Geometry::Solid::Impl& solidImpl);
     //Standard_Boolean perform(Geometry::Solid::Impl& solidImpl);
     void judgeDecomposeSurfaces(Geometry::Solid::Impl& solidImpl);
     void judgeThroughConcaveEdges(std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList);
