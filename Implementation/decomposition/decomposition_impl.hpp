@@ -4,10 +4,12 @@
 // C++
 #include <memory>
 #include <deque>
+#include <variant>
 // McCAD
 #include "decomposition.hpp"
 #include "inputdata_impl.hpp"
 #include "solid_impl.hpp"
+#include "preprocessor.hpp"
 #include "decomposeSolid_impl.hpp"
 #include "ShapeView.hpp"
 #include <Standard.hxx>
@@ -19,7 +21,7 @@
 #include <TopoDS_Compound.hxx>
 
 namespace McCAD::Decomposition{
-  class Decompose::Impl {
+  class Decompose::Impl{
   public:
     Impl(const General::InputData& inputData);
     ~Impl();

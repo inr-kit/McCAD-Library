@@ -42,25 +42,22 @@
 #include <BRepTools.hxx>
 
 namespace McCAD::Tools{
-  class Preprocessor::Impl {
+  class Preprocessor::Impl{
   public:
     Impl() = default;
 
-    void checkBndSurfaces(const TopoDS_Solid& solid,
-			  Standard_Boolean& isTorus,
-			  Standard_Boolean& isSpline);
     void removeSmallFaces(TopoDS_Shape& solidShape,
-			  Standard_Real precision = 1.0e-3,
-			  Standard_Real maxTolerance = 1.0e-3);
+                          Standard_Real precision = 1.0e-3,
+                          Standard_Real maxTolerance = 1.0e-3);
     void repairSolid(TopoDS_Solid& solid);
     Standard_Boolean checkFace(const TopoDS_Face& face,
-			       Standard_Real tolerance = 1.0e-3);
+                               Standard_Real tolerance = 1.0e-3);
     void fixFace(TopoDS_Face& face,
-		 Standard_Real precision = 1.0e-7,
-		 Standard_Real maxTolerance = 1.0e-3);
+                 Standard_Real precision = 1.0e-7,
+                 Standard_Real maxTolerance = 1.0e-3);
     Standard_Boolean isSameEdge(const TopoDS_Edge& firstEdge,
-				const TopoDS_Edge& secondEdge,
-				Standard_Real distanceTolerance = 1.0e-5);
+                                const TopoDS_Edge& secondEdge,
+                                Standard_Real distanceTolerance = 1.0e-5);
   };
 }
 

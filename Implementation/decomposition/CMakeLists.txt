@@ -5,7 +5,8 @@ add_library(DECOMPOSITION_IMPL OBJECT
   decomposition_impl.cpp
   SolidRebuilder.cpp
   SolidSplitter.cpp
-  SolidRepairer.cpp)
+  SolidRepairer.cpp
+  preprocessor.cpp)
 
 install(FILES
   splitsurfaces_impl.hpp
@@ -15,6 +16,7 @@ install(FILES
   SolidRebuilder.hpp
   SolidSplitter.hpp
   SolidRepairer.hpp
+  preprocessor.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/decomposition)
 
 target_link_libraries(DECOMPOSITION_IMPL

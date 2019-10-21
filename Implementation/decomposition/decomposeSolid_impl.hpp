@@ -7,8 +7,10 @@
 #include <assert.h>
 #include <sstream>
 #include <tuple>
+#include <variant>
 // McCAD
 #include "decomposeSolid.hpp"
+#include "preprocessor.hpp"
 #include "tools_impl.hpp"
 #include "solid_impl.hpp"
 #include "boundSurface_impl.hpp"
@@ -56,7 +58,9 @@ namespace McCAD::Decomposition{
     SplitSurfaces splitSurfaces;
     SplitSolid splitSolid;
 
-    Standard_Boolean perform(Geometry::Solid::Impl& solidImpl);
+    template <typename SolidType>
+    Standard_Boolean perform(SolidType& solidImpl);
+    //Standard_Boolean perform(Geometry::Solid::Impl& solidImpl);
     void judgeDecomposeSurfaces(Geometry::Solid::Impl& solidImpl);
     void judgeThroughConcaveEdges(std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList);
     void generateAssistingSurfaces();
