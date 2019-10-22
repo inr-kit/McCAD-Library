@@ -15,7 +15,7 @@ namespace McCAD::Geometry{
     BoundSurfaceCyl();
     ~BoundSurfaceCyl();
     
-    Impl* accessBSPImpl() const;
+    Impl* accessBSCImpl() const;
 
   private:
     std::unique_ptr<Impl> pBSCImpl;

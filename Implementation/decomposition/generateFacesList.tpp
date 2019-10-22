@@ -1,45 +1,14 @@
 //McCAD
 #include "generateFacesList.hpp"
-#include "planarSolid_impl.hpp"
-#include "tools_impl.hpp"
+//OCC
+#include <TopoDS_Solid.hxx>
 
 // Planar solids
-std::vector<std::shared_ptr<Geometry::BoundSurface>>
-McCAD::Decomposition::GenerateFacesList::operator()(
-        const McCAD::Geometry::PLSolid& solidObj){
-    // Generate a list of solid faces.
-    TopoDS_Solid solid = solidObj.accesSImpl()->solid;
-    Standard_Integer faceNumber = 0;
-    std::vector<std::shared_ptr<Geometry::BoundSurface>> facesList;
-    std::vector<std::shared_ptr<Geometry::BoundSurface>> planesList;
-    for(const auto& face : ShapeView<TopAbs_FACE>{solid}){
-        // Update UV points of the face.
-        BRepTools::Update(face);
-        Standard_Boolean rejectCondition = preproc->accessImpl()->checkFace(face);
-        if (!rejectCondition){
-            ++faceNumber;
-            preproc->accessImpl()->fixFace(face);
-            std::shared_ptr<Geometry::BoundSurface> boundSurface =
-                    generateSurface<McCAD::Geometry::PLSolid>(
-                        face, solidObj.accesSImpl()->boxSquareLength);
-            boundSurface->accessSImpl()->surfaceNumber = faceNumber;
-            if (boundSurface->accessBSImpl()->generateMesh(meshDeflection)){
-                boundSurface->accessBSImpl()->generateEdges();
-                planesList.push_back(std::move(boundSurface));
-            }
-        }
-    }
-    std::cout << "     - There are " << planesList.size() << " planes in the "
-                                                             "solid" << std::endl;
-    mergeSurfaces(planesList);
-    facesList.insert(facesList.end(), planesList.begin(), planesList.end());
-    return facesList;
-}
-
 template<>
 std::shared_ptr<McCAD::Geometry::BoundSurface>
 McCAD::Decomposition::GenerateFacesList::generateSurface<McCAD::Geometry::PLSolid>(
-        const TopoDS_Face& face, Standard_Integer mode, Standard_Real& boxSquareLength){
+        const TopoDS_Face& face, Standard_Real& boxSquareLength,
+        Standard_Integer mode){
     if (mode == Standard_Integer(0)){
         std::shared_ptr<Geometry::BoundSurfacePlane> boundSurfacePlane =
                 std::make_shared<Geometry::BoundSurfacePlane>();
@@ -50,52 +19,47 @@ McCAD::Decomposition::GenerateFacesList::generateSurface<McCAD::Geometry::PLSoli
     } else return nullptr;
 }
 
-// Cylindrical solids.
-std::vector<std::shared_ptr<Geometry::BoundSurface>>
+std::vector<std::shared_ptr<McCAD::Geometry::BoundSurface>>
 McCAD::Decomposition::GenerateFacesList::operator()(
-        const McCAD::Geometry::CYLSolid& solidObj){
-    TopoDS_Solid solid = solidObj.accesSImpl()->solid;
+        const McCAD::Geometry::PLSolid& solidObj){
+    // Generate a list of solid faces.
+    TopoDS_Solid solid = solidObj.accessSImpl()->solid;
+    TopoDS_Face face;
     Standard_Integer faceNumber = 0;
     std::vector<std::shared_ptr<Geometry::BoundSurface>> facesList;
     std::vector<std::shared_ptr<Geometry::BoundSurface>> planesList;
-    std::vector<std::shared_ptr<Geometry::BoundSurface>> cylindersList;
-    for(const auto& face : ShapeView<TopAbs_FACE>{solid}){
+    for(const auto& aFace : ShapeView<TopAbs_FACE>{solid}){
+        // Update UV points of the face.
+        face = aFace;
         BRepTools::Update(face);
         Standard_Boolean rejectCondition = preproc->accessImpl()->checkFace(face);
         if (!rejectCondition){
             ++faceNumber;
             preproc->accessImpl()->fixFace(face);
             std::shared_ptr<Geometry::BoundSurface> boundSurface =
-                    generateSurface<McCAD::Geometry::CYLSolid>(face);
+                    generateSurface<McCAD::Geometry::PLSolid>(
+                        face, solidObj.accessSImpl()->boxSquareLength);
             boundSurface->accessSImpl()->surfaceNumber = faceNumber;
-            if (boundSurface->accessBSImpl()->generateMesh(meshDeflection)){
+            if (boundSurface->accessBSImpl()->generateMesh(
+                        solidObj.accessSImpl()->meshDeflection)){
                 boundSurface->accessBSImpl()->generateEdges();
-                if(boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
-                    planesList.push_back(std::move(boundSurface));
-                }
-                } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder)){
-                    cylindersList.push_back(std::move(boundSurface));
-                }
-            } else{
-            //std::cout << "face rejected" << std::endl;
-            continue;
+                planesList.push_back(std::move(boundSurface));
+            }
         }
     }
-    std::cout << "     - There are " << planesList.size() <<
-                 " planes in the solid" << std::endl;
-    mergeSurfaces(planesList);
+    std::cout << "     - There are " << planesList.size() << " planes in the "
+                                                             "solid" << std::endl;
+    mergeSurfaces(planesList, solidObj.accessSImpl()->boxSquareLength);
     facesList.insert(facesList.end(), planesList.begin(), planesList.end());
-    std::cout << "     - There are " << cylindersList.size() <<
-                 " cylinders in the solid" << std::endl;
-    mergeSurfaces(cylindersList);
-    facesList.insert(facesList.end(), cylindersList.begin(), cylindersList.end());
     return facesList;
 }
 
+// Cylindrical solids.
 template<>
 std::shared_ptr<McCAD::Geometry::BoundSurface>
 McCAD::Decomposition::GenerateFacesList::generateSurface<McCAD::Geometry::CYLSolid>(
-        const TopoDS_Face& face, Standard_Integer mode, Standard_Real& boxSquareLength){
+        const TopoDS_Face& face, Standard_Real& boxSquareLength,
+        Standard_Integer mode){
     if (mode == Standard_Integer(0)){
         BRepAdaptor_Surface surface(face, Standard_True);
         GeomAdaptor_Surface AdaptorSurface = surface.Surface();
@@ -116,4 +80,49 @@ McCAD::Decomposition::GenerateFacesList::generateSurface<McCAD::Geometry::CYLSol
         }
     }
     return nullptr;
+}
+
+std::vector<std::shared_ptr<McCAD::Geometry::BoundSurface>>
+McCAD::Decomposition::GenerateFacesList::operator()(
+        const McCAD::Geometry::CYLSolid& solidObj){
+    TopoDS_Solid solid = solidObj.accessSImpl()->solid;
+    TopoDS_Face face;
+    Standard_Integer faceNumber = 0;
+    std::vector<std::shared_ptr<Geometry::BoundSurface>> facesList;
+    std::vector<std::shared_ptr<Geometry::BoundSurface>> planesList;
+    std::vector<std::shared_ptr<Geometry::BoundSurface>> cylindersList;
+    for(const auto& aFace : ShapeView<TopAbs_FACE>{solid}){
+        face = aFace;
+        BRepTools::Update(face);
+        Standard_Boolean rejectCondition = preproc->accessImpl()->checkFace(face);
+        if (!rejectCondition){
+            ++faceNumber;
+            preproc->accessImpl()->fixFace(face);
+            std::shared_ptr<Geometry::BoundSurface> boundSurface =
+                    generateSurface<McCAD::Geometry::CYLSolid>(
+                        face, solidObj.accessSImpl()->boxSquareLength);
+            boundSurface->accessSImpl()->surfaceNumber = faceNumber;
+            if (boundSurface->accessBSImpl()->generateMesh(
+                        solidObj.accessSImpl()->meshDeflection)){
+                boundSurface->accessBSImpl()->generateEdges();
+                if(boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
+                    planesList.push_back(std::move(boundSurface));
+                }
+                } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder)){
+                    cylindersList.push_back(std::move(boundSurface));
+                }
+            } else{
+            //std::cout << "face rejected" << std::endl;
+            continue;
+        }
+    }
+    std::cout << "     - There are " << planesList.size() <<
+                 " planes in the solid" << std::endl;
+    mergeSurfaces(planesList, solidObj.accessSImpl()->boxSquareLength);
+    facesList.insert(facesList.end(), planesList.begin(), planesList.end());
+    std::cout << "     - There are " << cylindersList.size() <<
+                 " cylinders in the solid" << std::endl;
+    mergeSurfaces(cylindersList, solidObj.accessSImpl()->boxSquareLength);
+    facesList.insert(facesList.end(), cylindersList.begin(), cylindersList.end());
+    return facesList;
 }

@@ -7,21 +7,23 @@ McCAD::Decomposition::Preprocessor::Preprocessor(){
 McCAD::Decomposition::Preprocessor::~Preprocessor(){
 }
 
-variantType
+McCAD::Decomposition::Preprocessor::variantType
 McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
-    variantType solidVariant;
+    Preprocessor::variantType solidVariant;
     auto& solid = TopoDS::Solid(shape);
     if (!checkBndSurfaces(solid)){
         switch (determineSolidType(solid)){
-        case solidType.planarSolid:
+        case solidType.planarSolid:{
             solidVariant = SolidObjConstructor{}.constructObj<
                     McCAD::Geometry::PLSolid>(shape);
             return solidVariant;
-        case solidType.cylindricalSolid:
+        }
+        case solidType.cylindricalSolid:{
             auto solidVariant1 = SolidObjConstructor{}.constructObj<
                     McCAD::Geometry::CYLSolid>(shape);
             goto rejectSolid; // reject solid for now till splitting functions are added.
             //return solidVariant;
+        }
         default:
             goto rejectSolid;
         }
