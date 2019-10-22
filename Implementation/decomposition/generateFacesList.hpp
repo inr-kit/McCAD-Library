@@ -5,19 +5,27 @@
 #include <memory>
 //McCAD
 #include "boundSurface_impl.hpp"
-#include "boundSurfacePlane_impl.hpp"
+#include "planarSolid_impl.hpp"
+#include "cylSolid_impl.hpp"
 //OCC
-
+#include <TopoDS_Face.hxx>
+#include <Standard.hxx>
 
 namespace McCAD::Decomposition{
     class GenerateFacesList{
     public:
       GenerateFacesList() = default;
 
+      std::vector<std::shared_ptr<Geometry::BoundSurface>> operator()(
+              const Geometry::PLSolid& solidObj);
+      std::vector<std::shared_ptr<Geometry::BoundSurface>> operator()(
+              const Geometry::CYLSolid& solidObj);
       template<typename solidObjType>
-      std::vector<std::shared_ptr<BoundSurface>> operator(const solidObjType& solidObj);
-      std::unique_ptr<McCAD::Geometry::BoundSurface> generateSurface(
-              const TopoDS_Face& face, Standard_Integer mode);
+      std::shared_ptr<Geometry::BoundSurface> generateSurface(
+              const TopoDS_Face& face, Standard_Integer mode = 0,
+              Standard_Real& boxSquareLength);
+      void mergeSurfaces(std::vector<std::shared_ptr<
+                         Geometry::BoundSurface>>& surfacesList);
     };
 }
 
