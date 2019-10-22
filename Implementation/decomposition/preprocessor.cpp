@@ -7,11 +7,9 @@ McCAD::Decomposition::Preprocessor::Preprocessor(){
 McCAD::Decomposition::Preprocessor::~Preprocessor(){
 }
 
-std::variant<std::monostate, std::shared_ptr<McCAD::Geometry::PLSolid>,
-std::shared_ptr<McCAD::Geometry::CYLSolid>>
+variantType
 McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
-    std::variant<std::monostate, std::shared_ptr<McCAD::Geometry::PLSolid>,
-            std::shared_ptr<McCAD::Geometry::CYLSolid>> solidVariant;
+    variantType solidVariant;
     auto& solid = TopoDS::Solid(shape);
     if (!checkBndSurfaces(solid)){
         switch (determineSolidType(solid)){
@@ -20,11 +18,11 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
                     McCAD::Geometry::PLSolid>(shape);
             return solidVariant;
         case solidType.cylindricalSolid:
-            solidVariant = SolidObjConstructor{}.constructObj<
+            auto solidVariant1 = SolidObjConstructor{}.constructObj<
                     McCAD::Geometry::CYLSolid>(shape);
-            return solidVariant;
+            goto rejectSolid; // reject solid for now till splitting functions are added.
+            //return solidVariant;
         default:
-            std::cout << "other" << std::endl;
             goto rejectSolid;
         }
     }

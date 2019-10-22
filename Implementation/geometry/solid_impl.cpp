@@ -86,7 +86,7 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTol
         }
     }
 }
-
+/*
 void
 McCAD::Geometry::Solid::Impl::generateSurfacesList(){
     // Generate a list of faces of the solid.
@@ -186,7 +186,7 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
                 filename += std::to_string(kk);
                 filename += suffix;
                 writer6.Write(filename.c_str());
-                */
+
                 // Test if the two surfaces can be fused.
                 if (*surfacesList[i] << *surfacesList[j]){
                     //std::cout << "*** equal fuse" << std::endl;
@@ -239,7 +239,7 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
                     filename += std::to_string(kk);
                     filename += suffix;
                     writer7.Write(filename.c_str());
-                    */
+
                     surfacesList.erase(surfacesList.begin() + j);
                     --j;
                 }
@@ -250,3 +250,4 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
         }
     }
 }
+*/

@@ -4,6 +4,7 @@ add_library(GEOMETRY_IFACE OBJECT
   surface.cpp
   boundSurface.cpp
   boundSurfacePlane.cpp
+  boundSurfaceCyl.cpp
   solid.cpp
   planarSolid.cpp
   cylSolid.cpp)
@@ -14,6 +15,7 @@ install(FILES
   surface.hpp
   boundSurface.hpp
   boundSurfacePlane.hpp
+  boundSurfaceCyl.hpp
   solid.hpp
   planarSolid.hpp
   cylSolid.hpp

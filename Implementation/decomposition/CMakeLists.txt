@@ -6,7 +6,8 @@ add_library(DECOMPOSITION_IMPL OBJECT
   SolidRebuilder.cpp
   SolidSplitter.cpp
   SolidRepairer.cpp
-  preprocessor.cpp)
+  preprocessor.cpp
+  generateFacesList.cpp)
 
 install(FILES
   splitsurfaces_impl.hpp

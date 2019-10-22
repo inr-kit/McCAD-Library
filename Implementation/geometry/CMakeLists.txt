@@ -13,6 +13,7 @@ add_library(GEOMETRY_IMPL OBJECT
   surface_impl.cpp
   boundSurface_impl.cpp
   boundSurfacePlane_impl.cpp
+  boundSurfaceCyl_impl.cpp
   solid_impl.cpp
   planarSolid_impl.cpp
   cylSolid_impl.cpp
@@ -24,6 +25,7 @@ install(FILES
   surface_impl.hpp
   boundSurface_impl.hpp
   boundSurfacePlane_impl.hpp
+  boundSurfaceCyl_impl.hpp
   solid_impl.hpp
   planarSolid_impl.hpp
   cylSolid_impl.hpp
