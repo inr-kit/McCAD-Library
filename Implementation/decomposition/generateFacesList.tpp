@@ -2,6 +2,7 @@
 #include "generateFacesList.hpp"
 //OCC
 #include <TopoDS_Solid.hxx>
+#include <BRepTools.hxx>
 
 // Planar solids
 template<>
@@ -9,6 +10,7 @@ std::shared_ptr<McCAD::Geometry::BoundSurface>
 McCAD::Decomposition::GenerateFacesList::generateSurface<McCAD::Geometry::PLSolid>(
         const TopoDS_Face& face, Standard_Real& boxSquareLength,
         Standard_Integer mode){
+    std::cout << "generateSurface<McCAD::Geometry::PLSolid>" << std::endl;
     if (mode == Standard_Integer(0)){
         std::shared_ptr<Geometry::BoundSurfacePlane> boundSurfacePlane =
                 std::make_shared<Geometry::BoundSurfacePlane>();
@@ -16,12 +18,16 @@ McCAD::Decomposition::GenerateFacesList::generateSurface<McCAD::Geometry::PLSoli
         boundSurfacePlane->accessSImpl()->initiate(face);
         boundSurfacePlane->accessBSPImpl()->generateExtendedPlane(boxSquareLength);
         return boundSurfacePlane;
-    } else return nullptr;
+    } else{
+        std::cout << "nullptr" << std::endl;
+        return nullptr;
+    }
 }
 
 std::vector<std::shared_ptr<McCAD::Geometry::BoundSurface>>
 McCAD::Decomposition::GenerateFacesList::operator()(
         const McCAD::Geometry::PLSolid& solidObj){
+    std::cout << "GenerateFacesList::operator()<McCAD::Geometry::PLSolid>" << std::endl;
     // Generate a list of solid faces.
     TopoDS_Solid solid = solidObj.accessSImpl()->solid;
     TopoDS_Face face;
@@ -60,6 +66,7 @@ std::shared_ptr<McCAD::Geometry::BoundSurface>
 McCAD::Decomposition::GenerateFacesList::generateSurface<McCAD::Geometry::CYLSolid>(
         const TopoDS_Face& face, Standard_Real& boxSquareLength,
         Standard_Integer mode){
+    std::cout << "generateSurface<McCAD::Geometry::CYLSolid>" << std::endl;
     if (mode == Standard_Integer(0)){
         BRepAdaptor_Surface surface(face, Standard_True);
         GeomAdaptor_Surface AdaptorSurface = surface.Surface();
@@ -79,13 +86,16 @@ McCAD::Decomposition::GenerateFacesList::generateSurface<McCAD::Geometry::CYLSol
             return boundSurfaceCyl;
         }
     }
+    std::cout << "nullptr" << std::endl;
     return nullptr;
 }
 
 std::vector<std::shared_ptr<McCAD::Geometry::BoundSurface>>
 McCAD::Decomposition::GenerateFacesList::operator()(
         const McCAD::Geometry::CYLSolid& solidObj){
+    std::cout << "GenerateFacesList::operator()<McCAD::Geometry::CYLSolid>" << std::endl;
     TopoDS_Solid solid = solidObj.accessSImpl()->solid;
+    std::cout << "solidObj.accessSImpl()->solid" << std::endl;
     TopoDS_Face face;
     Standard_Integer faceNumber = 0;
     std::vector<std::shared_ptr<Geometry::BoundSurface>> facesList;
@@ -93,11 +103,15 @@ McCAD::Decomposition::GenerateFacesList::operator()(
     std::vector<std::shared_ptr<Geometry::BoundSurface>> cylindersList;
     for(const auto& aFace : ShapeView<TopAbs_FACE>{solid}){
         face = aFace;
+        std::cout << "face = aFace;" << std::endl;
         BRepTools::Update(face);
+        std::cout << "BRepTools::Update(face);" << std::endl;
         Standard_Boolean rejectCondition = preproc->accessImpl()->checkFace(face);
+        std::cout << "checkFace(face)" << std::endl;
         if (!rejectCondition){
             ++faceNumber;
             preproc->accessImpl()->fixFace(face);
+            std::cout << "fixFace(face)" << std::endl;
             std::shared_ptr<Geometry::BoundSurface> boundSurface =
                     generateSurface<McCAD::Geometry::CYLSolid>(
                         face, solidObj.accessSImpl()->boxSquareLength);
