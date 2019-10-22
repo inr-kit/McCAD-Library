@@ -1,10 +1,12 @@
 //McCAD
 #include "generateFacesList.hpp"
 #include "planarSolid_impl.hpp"
+#include "cylSolid_impl.hpp"
 
 void
 McCAD::Decomposition::GenerateFacesList::mergeSurfaces(
-        std::vector<std::shared_ptr<Geometry::BoundSurface>>& surfacesList){
+        std::vector<std::shared_ptr<Geometry::BoundSurface>>& surfacesList,
+        Standard_Real& boxSquareLength){
     for (Standard_Integer i = 0; i <= surfacesList.size() - 2; ++i){
         for (Standard_Integer j = i+1; j <= surfacesList.size() - 1; ++j){
             if (*surfacesList[i] == *surfacesList[j]){
@@ -36,7 +38,8 @@ McCAD::Decomposition::GenerateFacesList::mergeSurfaces(
                                     surfacesList[i]->accessSImpl()->face,
                                     surfacesList[j]->accessSImpl()->face);
                         std::shared_ptr<Geometry::BoundSurface> newboundSurface =
-                                generateSurface<McCAD::Geometry::PLSolid>(newFace);
+                                generateSurface<McCAD::Geometry::PLSolid>(
+                                    newFace, boxSquareLength);
                         newboundSurface->accessSImpl()->surfaceNumber =
                                 surfacesList[i]->accessSImpl()->surfaceNumber;
                         // Add triangles of surface i.

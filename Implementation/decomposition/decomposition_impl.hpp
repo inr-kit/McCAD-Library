@@ -9,6 +9,7 @@
 #include "decomposition.hpp"
 #include "inputdata_impl.hpp"
 #include "planarSolid_impl.hpp"
+#include "cylSolid_impl.hpp"
 #include "preprocessor.hpp"
 #include "decomposeSolid_impl.hpp"
 #include "ShapeView.hpp"

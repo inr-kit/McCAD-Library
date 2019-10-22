@@ -1,6 +1,5 @@
 //McCAD
 #include "constructSolidObj.hpp"
-#include "generateFacesList.hpp"
 
 template<typename solidObjType>
 std::shared_ptr<solidObjType>
@@ -19,7 +18,7 @@ McCAD::Decomposition::SolidObjConstructor::constructObj(const TopoDS_Shape& shap
     solidImpl.updateEdgesConvexity();
     // Generate the boundary surfaces list of the solid.
     std::cout << "solidImpl.generateSurfacesList();" << std::endl;
-    solidImpl.facesList = GenerateFacesList{}(solidObj);
+    solidImpl.facesList = GenerateFacesList{}(*solidObj);
     // Repair solid.
     solidImpl.repairSolid();
     return solidObj;
