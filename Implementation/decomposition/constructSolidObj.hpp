@@ -5,7 +5,6 @@
 #include <memory>
 //McCAD
 #include "solid_impl.hpp"
-#include "generateFacesList.hpp"
 //OCC
 #include <TopoDS_Shape.hxx>
 

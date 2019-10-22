@@ -10,6 +10,11 @@
 #include "planarSolid_impl.hpp"
 #include "cylSolid_impl.hpp"
 #include "tools_impl.hpp"
+#include "SurfaceUtilities.hpp"
+#include "CurveUtilities.hpp"
+#include "PlaneFuser.hpp"
+#include "FaceParameters.hpp"
+#include "ShapeView.hpp"
 //OCC
 #include <TopoDS_Face.hxx>
 #include <Standard.hxx>
@@ -17,8 +22,8 @@
 namespace McCAD::Decomposition{
     class GenerateFacesList{
     public:
-      GenerateFacesList();
-      ~GenerateFacesList();
+      //GenerateFacesList();
+      //~GenerateFacesList();
 
       std::unique_ptr<Tools::Preprocessor> preproc;
 
@@ -35,8 +40,5 @@ namespace McCAD::Decomposition{
               Standard_Real& boxSquareLength);
     };
 }
-
-//McCAD
-#include "generateFacesList.tpp"
 
 #endif //GENERATEFACESLIST_HPP

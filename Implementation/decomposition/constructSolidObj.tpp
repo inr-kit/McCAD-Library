@@ -1,5 +1,6 @@
 //McCAD
 #include "constructSolidObj.hpp"
+#include "generateFacesList.hpp"
 
 template<typename solidObjType>
 std::shared_ptr<solidObjType>

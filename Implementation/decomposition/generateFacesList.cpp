@@ -1,12 +1,12 @@
 //McCAD
 #include "generateFacesList.hpp"
-#include "planarSolid_impl.hpp"
-#include "cylSolid_impl.hpp"
+#include "generateFacesList.tpp"
 
 void
 McCAD::Decomposition::GenerateFacesList::mergeSurfaces(
         std::vector<std::shared_ptr<Geometry::BoundSurface>>& surfacesList,
         Standard_Real& boxSquareLength){
+    std::cout << "mergeSurfaces" << std::endl;
     for (Standard_Integer i = 0; i <= surfacesList.size() - 2; ++i){
         for (Standard_Integer j = i+1; j <= surfacesList.size() - 1; ++j){
             if (*surfacesList[i] == *surfacesList[j]){
@@ -68,7 +68,7 @@ McCAD::Decomposition::GenerateFacesList::mergeSurfaces(
                         break;
                     }
                 } else{
-                    //std::cout << "*** equal, erase one" << std::endl;
+                    std::cout << "*** equal, erase one" << std::endl;
                     // Erase pointer surfacesList[j] from surfacesList.
                     /*
                     STEPControl_Writer writer7;
