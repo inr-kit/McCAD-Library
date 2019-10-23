@@ -80,17 +80,17 @@ McCAD::Decomposition::Decompose::Impl::perform(){
             } else{
                 rejectedInputSolidsList->Append(shape);
             }
-            break;}
-        case solidType.cylindricalSolid:{
-            std::cout << "solidType.cylindricalSolid" << std::endl;
+            break;
+        } case solidType.cylindricalSolid:{
+            std::cout << "   - Processing of solids with non-planar surfaces"
+                         " is not yet supported!.\n     Solid will be added"
+                         " to rejected solids file" << std::endl;
             rejectedInputSolidsList->Append(shape);
-            break;}
-        case solidType.sphericalSolid:{
-            std::cout << "solidType.sphericalSolid" << std::endl;
-            rejectedInputSolidsList->Append(shape);
-            break;}
-        default:
-            std::cout << "solidType.mixedSolid" << std::endl;
+            break;
+        } default:
+            std::cout << "   - Processing of solids with non-planar surfaces"
+                         " is not yet supported!.\n     Solid will be added"
+                         " to rejected solids file" << std::endl;
             rejectedInputSolidsList->Append(shape);
         }
     }
