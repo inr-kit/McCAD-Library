@@ -2,18 +2,28 @@
 #include "generateFacesList.hpp"
 #include "generateFacesList.tpp"
 
+McCAD::Decomposition::GenerateFacesList::GenerateFacesList()
+    : preproc{std::make_unique<Tools::Preprocessor>()}{
+}
+
+McCAD::Decomposition::GenerateFacesList::~GenerateFacesList(){
+}
+
 void
 McCAD::Decomposition::GenerateFacesList::mergeSurfaces(
         std::vector<std::shared_ptr<Geometry::BoundSurface>>& surfacesList,
         Standard_Real& boxSquareLength){
-    std::cout << "mergeSurfaces" << std::endl;
+    //std::cout << "mergeSurfaces" << std::endl;
+    if (surfacesList.size() < 2){
+        return;
+    }
     for (Standard_Integer i = 0; i <= surfacesList.size() - 2; ++i){
         for (Standard_Integer j = i+1; j <= surfacesList.size() - 1; ++j){
             if (*surfacesList[i] == *surfacesList[j]){
                 surfacesList[j]->accessSImpl()->surfaceNumber =
                         surfacesList[i]->accessSImpl()->surfaceNumber;
+                //std::cout << "*** equal" << std::endl;
                 /*
-                std::cout << "*** equal" << std::endl;
                 // Save surfaces to step file for comparison/debugging.
                 STEPControl_Writer writer6;
                 writer6.Transfer(surfacesList[j]->accessSImpl()->face,
@@ -68,7 +78,7 @@ McCAD::Decomposition::GenerateFacesList::mergeSurfaces(
                         break;
                     }
                 } else{
-                    std::cout << "*** equal, erase one" << std::endl;
+                    //std::cout << "*** equal, erase one" << std::endl;
                     // Erase pointer surfacesList[j] from surfacesList.
                     /*
                     STEPControl_Writer writer7;

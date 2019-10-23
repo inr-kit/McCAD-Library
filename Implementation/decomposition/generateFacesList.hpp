@@ -22,8 +22,8 @@
 namespace McCAD::Decomposition{
     class GenerateFacesList{
     public:
-      //GenerateFacesList();
-      //~GenerateFacesList();
+      GenerateFacesList();
+      ~GenerateFacesList();
 
       std::unique_ptr<Tools::Preprocessor> preproc;
 

@@ -19,10 +19,9 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
             return solidVariant;
         }
         case solidType.cylindricalSolid:{
-            auto solidVariant1 = SolidObjConstructor{}.constructObj<
+            solidVariant = SolidObjConstructor{}.constructObj<
                     McCAD::Geometry::CYLSolid>(shape);
-            goto rejectSolid; // reject solid for now till splitting functions are added.
-            //return solidVariant;
+            return solidVariant;
         }
         default:
             goto rejectSolid;
