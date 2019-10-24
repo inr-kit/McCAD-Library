@@ -1,10 +1,9 @@
+// C++
+#include <iterator>
 // McCAD
 #include "splitsolid_impl.hpp"
 #include "SolidSplitter.hpp"
 #include "SolidRepairer.hpp"
-
-// C++
-#include <iterator>
 
 bool
 McCAD::Decomposition::SplitSolid::Impl::operator()(
@@ -16,10 +15,8 @@ McCAD::Decomposition::SplitSolid::Impl::operator()(
 
     auto halfSolids = SolidSplitter{}(solid, obb, surface.accessSImpl()->extendedFace);
     if(!halfSolids) return false;
-
     subSolidsList.Append(halfSolids->first);
     subSolidsList.Append(halfSolids->second);
-
     return filterAndRepair(subSolidsList);
 }
 

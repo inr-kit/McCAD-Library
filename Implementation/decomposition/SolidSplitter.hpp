@@ -28,7 +28,7 @@ namespace McCAD::Decomposition{
         using ShapePair = std::pair<TopoDS_Shape, TopoDS_Shape>;
 
         TopoDS_Shape calculateOBB(
-                Bnd_OBB obb) const;
+                Bnd_OBB obb, Standard_Real clearanceTolerance = 0.4) const;
 
         PointPair calculatePoints(
                 const TopoDS_Face& splittingFace) const;
