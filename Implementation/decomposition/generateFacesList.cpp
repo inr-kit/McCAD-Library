@@ -22,24 +22,6 @@ McCAD::Decomposition::GenerateFacesList::mergeSurfaces(
             if (*surfacesList[i] == *surfacesList[j]){
                 surfacesList[j]->accessSImpl()->surfaceNumber =
                         surfacesList[i]->accessSImpl()->surfaceNumber;
-                //std::cout << "*** equal" << std::endl;
-                /*
-                // Save surfaces to step file for comparison/debugging.
-                STEPControl_Writer writer6;
-                writer6.Transfer(surfacesList[j]->accessSImpl()->face,
-                                 STEPControl_StepModelType::STEPControl_AsIs);
-                writer6.Transfer(surfacesList[i]->accessSImpl()->face,
-                                 STEPControl_StepModelType::STEPControl_AsIs);
-                Standard_Integer kk = 0;
-                std::string filename = "../examples/bbox/equalsurfaces";
-                std::string suffix = ".stp";
-                while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
-                    ++kk;
-                }
-                filename += std::to_string(kk);
-                filename += suffix;
-                writer6.Write(filename.c_str());
-                */
                 // Test if the two surfaces can be fused.
                 if (*surfacesList[i] << *surfacesList[j]){
                     //std::cout << "*** equal fuse" << std::endl;
@@ -79,20 +61,6 @@ McCAD::Decomposition::GenerateFacesList::mergeSurfaces(
                     }
                 } else{
                     //std::cout << "*** equal, erase one" << std::endl;
-                    // Erase pointer surfacesList[j] from surfacesList.
-                    /*
-                    STEPControl_Writer writer7;
-                    writer7.Transfer(surfacesList[j]->accessSImpl()->face,
-                                     STEPControl_StepModelType::STEPControl_AsIs);
-                    std::string filename = "../examples/bbox/equalsurfacedelete";
-                    std::string suffix = ".stp";
-                    while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
-                        ++kk;
-                    }
-                    filename += std::to_string(kk);
-                    filename += suffix;
-                    writer7.Write(filename.c_str());
-                    */
                     surfacesList.erase(surfacesList.begin() + j);
                     --j;
                 }
