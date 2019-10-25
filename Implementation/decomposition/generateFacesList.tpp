@@ -53,8 +53,8 @@ McCAD::Decomposition::GenerateFacesList::operator()(
             }
         }
     }
-    std::cout << "     - There are " << planesList.size() << " planes in the "
-                                                             "solid" << std::endl;
+    //std::cout << "     - There are " << planesList.size() << " planes in the "
+    //                                                         "solid" << std::endl;
     mergeSurfaces(planesList, solidObj.accessSImpl()->boxSquareLength);
     facesList.insert(facesList.end(), planesList.begin(), planesList.end());
     return facesList;
@@ -132,12 +132,12 @@ McCAD::Decomposition::GenerateFacesList::operator()(
             }
         }
     }
-    std::cout << "     - There are " << planesList.size() <<
-                 " planes in the solid" << std::endl;
+    //std::cout << "     - There are " << planesList.size() <<
+    //             " planes in the solid" << std::endl;
     mergeSurfaces(planesList, solidObj.accessSImpl()->boxSquareLength);
     facesList.insert(facesList.end(), planesList.begin(), planesList.end());
-    std::cout << "     - There are " << cylindersList.size() <<
-                 " cylinders in the solid" << std::endl;
+    //std::cout << "     - There are " << cylindersList.size() <<
+    //             " cylinders in the solid" << std::endl;
     mergeSurfaces(cylindersList, solidObj.accessSImpl()->boxSquareLength);
     facesList.insert(facesList.end(), cylindersList.begin(), cylindersList.end());
     return facesList;

@@ -38,6 +38,7 @@ namespace McCAD::Decomposition{
 
     void flattenSolidHierarchy(const Handle_TopTools_HSequenceOfShape& inputSolidsList);
     void perform();
+    void extractSolids(const Geometry::Solid::Impl& solidImpl);
   };
 }
 

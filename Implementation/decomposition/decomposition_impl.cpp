@@ -30,25 +30,29 @@ McCAD::Decomposition::Decompose::Impl::~Impl(){
 void
 McCAD::Decomposition::Decompose::Impl::flattenSolidHierarchy(
         const Handle_TopTools_HSequenceOfShape& inputSolidsList){
+    Standard_Integer compSolid{0}, solid{0}, invalidShape{0};
     for(const auto& shape : *inputSolidsList){
         switch(shape.ShapeType()){
         case TopAbs_COMPOUND:
             [[fallthrough]];
         case TopAbs_COMPSOLID:
-            std::cout << "   - Found a compound solid" << std::endl;
+            ++compSolid;
             for(const auto& solid : ShapeView<TopAbs_SOLID>{shape}){
                 splitInputSolidsList->Append(solid);
             };
             break;
         case TopAbs_SOLID:
-            std::cout << "   - Found a solid" << std::endl;
+            ++solid;
             splitInputSolidsList->Append(shape);
             break;
         default:
-            std::cout << "   - Found invalid shape" << std::endl;
+            ++invalidShape;
             rejectedInputSolidsList->Append(shape);
         }
     }
+    std::cout << "   - Found " << compSolid << " compound solid(s)" << std::endl;
+    std::cout << "   - Found " << solid << " solid(s)" << std::endl;
+    std::cout << "   - Found " << invalidShape << " invalid shape(s)" << std::endl;
 }
 
 void
@@ -64,19 +68,11 @@ McCAD::Decomposition::Decompose::Impl::perform(){
         // for each specific type of solid object.
         switch (Standard_Integer(solid.index())){
         case solidType.planarSolid:{
-            //std::cout << "solidType.planarSolid" << std::endl;
             auto& solidImpl = *std::get<solidType.planarSolid>(solid)->accessSImpl();
             // Perform decomposition on the repaired solid.
             std::cout << "   - Decomposing solid" << std::endl;
             if (DecomposeSolid{}.accessDSImpl()->perform(solidImpl)){
-                for(const auto& resultSolid : *solidImpl.splitSolidList){
-                    resultSolidsList->Append(resultSolid);
-                }
-                if (solidImpl.rejectedsubSolidsList->Length() >= 1){
-                    for(const auto& rejectedSubSolid : *solidImpl.rejectedsubSolidsList){
-                        rejectedsubSolidsList->Append(rejectedSubSolid);
-                    }
-                }
+                extractSolids(solidImpl);
             } else{
                 rejectedInputSolidsList->Append(shape);
             }
@@ -101,4 +97,17 @@ McCAD::Decomposition::Decompose::Impl::perform(){
     std::cout << "   - There are " << rejectedsubSolidsList->Length() <<
                  " rejected subsolid(s)." << std::endl;
     rejectedInputSolidsList->Append(*rejectedsubSolidsList);
+}
+
+void
+McCAD::Decomposition::Decompose::Impl::extractSolids(
+        const Geometry::Solid::Impl& solidImpl){
+    for(const auto& resultSolid : *solidImpl.splitSolidList){
+        resultSolidsList->Append(resultSolid);
+    }
+    if (solidImpl.rejectedsubSolidsList->Length() >= 1){
+        for(const auto& rejectedSubSolid : *solidImpl.rejectedsubSolidsList){
+            rejectedsubSolidsList->Append(rejectedSubSolid);
+        }
+    }
 }
