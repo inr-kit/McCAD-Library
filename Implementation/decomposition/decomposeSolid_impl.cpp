@@ -74,6 +74,8 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
                 auto& subSolidImpl = *std::get<solidType.planarSolid>(subSolid)->accessSImpl();
                 // Mesh deflection is calculated for every solid in DecomposeSolid.
                 if (DecomposeSolid::Impl{recurrenceDepth}(subSolidImpl)){
+                    extractSolids(solidImpl, subSolidImpl, i);
+                    /*
                     if (subSolidImpl.splitSolidList->Length() >= 2){
                         //splitSolidList->Remove(i);
                         for(const auto& el : *subSolidImpl.splitSolidList){
@@ -86,6 +88,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
                     solidImpl.rejectedsubSolidsList->Append(
                                 *subSolidImpl.rejectedsubSolidsList);
                     //return Standard_True;
+                    */
                 } else{
                     //return Standard_False;
                     solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
@@ -205,4 +208,20 @@ McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(
     SplitSurfaces::Impl::generateSplitFacesList(solidImpl.splitFacesList,
                                                 solidImpl.selectedSplitFacesList);
     return !solidImpl.selectedSplitFacesList.empty();
+}
+
+void
+McCAD::Decomposition::DecomposeSolid::Impl::extractSolids(
+        Geometry::Solid::Impl& solidImpl,
+        const Geometry::Solid::Impl& subSolidImpl,
+        Standard_Integer& i){
+    if (subSolidImpl.splitSolidList->Length() >= 2){
+        for(const auto& resultsubSolid : *subSolidImpl.splitSolidList){
+            solidImpl.splitSolidList->InsertAfter(i, resultsubSolid);
+        }
+        solidImpl.splitSolidList->Remove(i);
+        i += subSolidImpl.splitSolidList->Length() - 1;
+    }
+    // Add rejected subSolids
+    solidImpl.rejectedsubSolidsList->Append(*subSolidImpl.rejectedsubSolidsList);
 }
