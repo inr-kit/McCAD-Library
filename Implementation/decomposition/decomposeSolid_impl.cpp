@@ -26,9 +26,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
     judgeDecomposeSurfaces(*solidImpl);
-    //judgeThroughConcaveEdges(splitFacesList);
     if(!SplitSurfaces::Impl::throughNoBoundarySurfaces(solidImpl->splitFacesList)){
-        //std::cout << "throughNoBoundarySurfaces false" << std::endl;
         judgeThroughConcaveEdges(solidImpl->splitFacesList);
     }
      return perform(*solidImpl);
@@ -37,7 +35,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
 Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         std::shared_ptr<Geometry::CYLSolid>& solidObj){
-    return Standard_False;/*
     // The operator will be called recursively on a solid.
     // A condition has to be set for termination (Now only 20 recursion levels).
     // Increment the recurrence depth by 1.
@@ -46,19 +43,21 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     if(recurrenceDepth >= 20){
         return Standard_False;
     }
-    auto solidImpl = *solidObj.accessSImpl();
+    auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
-    judgeDecomposeSurfaces(solidImpl);
-    //judgeThroughConcaveEdges(splitFacesList);
-    if(!SplitSurfaces::Impl::throughNoBoundarySurfaces(solidImpl.splitFacesList)){
-        judgeThroughConcaveEdges(solidImpl.splitFacesList);
-         if (!splitSurfaces.accessSSImpl()->planeSplitOnlyPlane(splitFacesList)){
+    judgeDecomposeSurfaces(*solidImpl);
+    /*
+    if(!SplitSurfaces::Impl::throughNoBoundarySurfaces(solidImpl->splitFacesList)){
+        judgeThroughConcaveEdges(solidImpl->splitFacesList);
+         if (!splitSurfaces.accessSSImpl()->planeSplitOnlyPlane(
+                     solidImpl->splitFacesList)){
              //generateAssistingSurfaces();
              //judgeAssistingDecomposeSurfaces();
              //judgeThroughConcaveEdges(assistingFacesList);
          }
-    }
-    return perform(solidImpl);*/
+    }*/
+    return Standard_False;
+    //return perform(solidImpl);
 }
 
 Standard_Boolean
@@ -126,17 +125,18 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(
     }
     //std::cout << "facesList.size(): " << facesList.size() << std::endl;
     for (Standard_Integer i = 0; i <= facesList.size() - 1; ++i){
+        //std::cout << "i=" << i << std::endl;
         auto iFace = facesList[i]->accessSImpl();
-        //std::cout << "judge: " << i << std::endl;;
         Standard_Integer positiveFaces = 0;
         Standard_Integer negativeFaces = 0;
         Standard_Integer numberCollidingSurfaces = 0;
         Standard_Integer numberCollidingCurvedSurfaces = 0;
         for (Standard_Integer j = 0; j <= facesList.size() - 1; ++j){
+            //std::cout << "j=" << i << std::endl;
             auto jFace = facesList[j]->accessSImpl();
-            //std::cout << "judge:    " << j << std::endl;
             if (i != j && iFace->surfaceNumber != jFace->surfaceNumber){
                 Standard_Integer side = 0;
+                //std::cout << "facecollision" << std::endl;
                 if (facesList[i]->accessBSImpl()->faceCollision(*facesList[j], side)){
                     ++numberCollidingSurfaces;
                     //std::cout << "facecollision True" << std::endl;
@@ -159,7 +159,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(
             //std::cout << "splitsutface True, pos & neg" << std::endl;
             iFace->splitSurface = Standard_True;
         }
-        if (facesList[i]->accessSImpl()->splitSurface){
+        if (iFace->splitSurface){
             //std::cout << "set collidingsurfaces" << std::endl;
             iFace->numberCollidingSurfaces = numberCollidingSurfaces;
             iFace->numberCollidingCurvedSurfaces = numberCollidingCurvedSurfaces;
