@@ -8,7 +8,7 @@
 // OCC
 
 namespace McCAD::Geometry{
-  class PLSolid::Impl {
+  class PLSolid::Impl{
   public:
     Impl();
     ~Impl();
