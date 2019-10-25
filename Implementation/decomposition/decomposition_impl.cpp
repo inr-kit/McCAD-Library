@@ -68,20 +68,22 @@ McCAD::Decomposition::Decompose::Impl::perform(){
         // for each specific type of solid object.
         switch (Standard_Integer(solid.index())){
         case solidType.planarSolid:{
-            auto& solidImpl = *std::get<solidType.planarSolid>(solid)->accessSImpl();
-            // Perform decomposition on the repaired solid.
-            std::cout << "   - Decomposing solid" << std::endl;
-            if (DecomposeSolid{}.accessDSImpl()->perform(solidImpl)){
-                extractSolids(solidImpl);
+            //std::cout << "   - Decomposing solid" << std::endl;
+            if (DecomposeSolid{}.accessDSImpl()->operator()(
+                        std::get<solidType.planarSolid>(solid))){
+                extractSolids(*std::get<solidType.planarSolid>(solid)->accessSImpl());
             } else{
                 rejectedInputSolidsList->Append(shape);
             }
             break;
         } case solidType.cylindricalSolid:{
-            std::cout << "   - Processing of solids with non-planar surfaces"
-                         " is not yet supported!.\n     Solid will be added"
-                         " to rejected solids file" << std::endl;
-            rejectedInputSolidsList->Append(shape);
+            //std::cout << "   - Decomposing solid" << std::endl;
+            if (DecomposeSolid{}.accessDSImpl()->operator()(
+                        std::get<solidType.cylindricalSolid>(solid))){
+                extractSolids(*std::get<solidType.cylindricalSolid>(solid)->accessSImpl());
+            } else{
+                rejectedInputSolidsList->Append(shape);
+            }
             break;
         } default:
             std::cout << "   - Processing of solids with non-planar surfaces"
