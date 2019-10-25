@@ -18,39 +18,31 @@ McCAD::Geometry::BoundSurface::Impl::isEqual(const McCAD::Geometry::BoundSurface
 
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::canFuse(const McCAD::Geometry::BoundSurface& that){
-  Standard_Boolean equalityCondition
-          = Tools::PlaneComparator{}(boundSurface->accessSImpl()->face,
-                                      that.accessSImpl()->face);
-  if (!equalityCondition)
-    {
+    Standard_Boolean equalityCondition = Tools::PlaneComparator{}(
+                boundSurface->accessSImpl()->face, that.accessSImpl()->face);
+  if (!equalityCondition){
       return Standard_False;
-    }
+  }
   // Check common edges of the two faces.
-  for (Standard_Integer i = 0; i <= edgesList.size() - 2; ++i)
-    {
+  for (Standard_Integer i = 0; i <= edgesList.size() - 2; ++i){
       for (Standard_Integer j = i+1; j <= that.accessBSImpl()->edgesList.size() - 1;
-	   ++j)
-	{
-	  if (*edgesList[i] == *that.accessBSImpl()->edgesList[j])
-	    {
-	      return Standard_True;
-	    }
-	}
-    }
+           ++j){
+          if (*edgesList[i] == *that.accessBSImpl()->edgesList[j]){
+              return Standard_True;
+          }
+      }
+  }
   return Standard_False;
 }
 
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::faceCollision(const BoundSurface& aFace,
-						   Standard_Integer& aSide){
+                                                   Standard_Integer& aSide){
   Standard_Boolean collision = Standard_False;
   Standard_Integer positiveTriangles = 0;
   Standard_Integer negativeTriangles = 0;
-
-  //std::cout << "length of list: " << aFace.accessBSImpl()->meshTrianglesList.size() << std::endl;
   for (Standard_Integer i = 0; i <= aFace.accessBSImpl()->meshTrianglesList.size() - 1;
-       ++i)
-    {
+       ++i){
       //std::cout << i << std::endl;
       Standard_Integer side = 0;
       if (triangleCollision(*(aFace.accessBSImpl()->meshTrianglesList[i]), side))
@@ -149,37 +141,31 @@ McCAD::Geometry::BoundSurface::Impl::generateMesh(const Standard_Real& meshDefle
 
 void
 McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
-  TopoDS_Face face = boundSurface->accessSImpl()->face;
-  for (const auto& tempEdge : ShapeView<TopAbs_EDGE>{face})  
-    {
-      std::unique_ptr<Edge> edge = std::make_unique<Edge>();
-      edge->accessEImpl()->initiate(tempEdge);
-      // Get type of Edge.
-      BRepAdaptor_Curve curveAdaptor(tempEdge);
-      //curveAdaptor.Initialize(tempEdge);
-      edge->setEdgeType(Tools::toTypeName(curveAdaptor.GetType()));
-      edge->accessEImpl()->convexity = tempEdge.Convex();
-      if (tempEdge.Convex() == Standard_Integer(0))
-	{
-	  boundSurface->accessSImpl()->throughConcaveEdges += 1;
-	}
-
-      // Add flag if the edge can be used for assisting splitting surface.
-      if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder) &&
-	  edge->getEdgeType() == Tools::toTypeName(GeomAbs_Line))
-	{
-          std::array<Standard_Real, 4> edgeUV, surfaceUV;
-          BRepTools::UVBounds(face, tempEdge, edgeUV[0], edgeUV[1], edgeUV[2],
-			      edgeUV[3]);
-          BRepTools::UVBounds(face, surfaceUV[0], surfaceUV[1], surfaceUV[2],
-			      surfaceUV[3]);
-          if (std::abs(edgeUV[0] - surfaceUV[0]) < uvTolerance ||
-	      std::abs(edgeUV[1] - surfaceUV[1]) < uvTolerance)
-	    {
-              edge->accessEImpl()->useForSplitSurface = Standard_True;
+    TopoDS_Face face = boundSurface->accessSImpl()->face;
+    for (const auto& tempEdge : ShapeView<TopAbs_EDGE>{face}){
+        std::unique_ptr<Edge> edge = std::make_unique<Edge>();
+        edge->accessEImpl()->initiate(tempEdge);
+        // Get type of Edge.
+        BRepAdaptor_Curve curveAdaptor(tempEdge);
+        edge->setEdgeType(Tools::toTypeName(curveAdaptor.GetType()));
+        edge->accessEImpl()->convexity = tempEdge.Convex();
+        if (tempEdge.Convex() == Standard_Integer(0)){
+            boundSurface->accessSImpl()->throughConcaveEdges += 1;
+        }
+        // Add flag if the edge can be used for assisting splitting surface.
+        if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder) &&
+                edge->getEdgeType() == Tools::toTypeName(GeomAbs_Line)){
+            std::array<Standard_Real, 4> edgeUV, surfaceUV;
+            BRepTools::UVBounds(face, tempEdge, edgeUV[0], edgeUV[1], edgeUV[2],
+                    edgeUV[3]);
+            BRepTools::UVBounds(face, surfaceUV[0], surfaceUV[1], surfaceUV[2],
+                    surfaceUV[3]);
+            if (std::abs(edgeUV[0] - surfaceUV[0]) < uvTolerance ||
+                    std::abs(edgeUV[1] - surfaceUV[1]) < uvTolerance){
+                edge->accessEImpl()->useForSplitSurface = Standard_True;
             }
         }
-      edgesList.push_back(std::move(edge));
+        edgesList.push_back(std::move(edge));
     }
 }
    
