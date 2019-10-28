@@ -22,9 +22,10 @@ McCAD::Decomposition::GenerateFacesList::mergeSurfaces(
             if (*surfacesList[i] == *surfacesList[j]){
                 surfacesList[j]->accessSImpl()->surfaceNumber =
                         surfacesList[i]->accessSImpl()->surfaceNumber;
+                 //std::cout << "*** equal" << std::endl;
                 // Test if the two surfaces can be fused.
                 if (*surfacesList[i] << *surfacesList[j]){
-                    //std::cout << "*** equal fuse" << std::endl;
+                    //std::cout << "*** equal, fuse" << std::endl;
                     if (surfacesList[i]->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
                         TopoDS_Face newFace = Tools::PlaneFuser{}(
                                     surfacesList[i]->accessSImpl()->face,

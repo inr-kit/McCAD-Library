@@ -64,7 +64,6 @@ namespace McCAD::Decomposition{
     SplitSolid splitSolid;
 
     Standard_Boolean perform(Geometry::Solid::Impl& solidImpl);
-    void judgeDecomposeSurfaces(Geometry::Solid::Impl& solidImpl);
     void judgeThroughConcaveEdges(std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList);
     Standard_Boolean selectSplitSurface(Geometry::Solid::Impl& solidImpl);
     void extractSolids(Geometry::Solid::Impl& solidImpl,

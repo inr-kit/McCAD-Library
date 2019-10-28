@@ -45,16 +45,17 @@ namespace McCAD::Geometry{
     Standard_Boolean isEqual(const BoundSurface& that);
     Standard_Boolean canFuse(const BoundSurface& that);
     Standard_Boolean faceCollision(const BoundSurface& aFace,
-				     Standard_Integer& aSide);
-    Standard_Boolean triangleCollision(const MeshTriangle& aTriangle,
-					 Standard_Integer& aSide,
-					 Standard_Real tolerance = 1e-2,
-					 Standard_Real tolerance2 = 1e-3);
-    Standard_Boolean pointOnSurface(const gp_Pnt& aPoint,
-				    const Standard_Real& distanceTolerance);
+                                   Standard_Integer& aSide);
+    //Standard_Boolean triangleCollision(const MeshTriangle& aTriangle,
+    //                                   Standard_Integer& aSide,
+    //                                   Standard_Real tolerance = 1e-2,
+    //                                   Standard_Real tolerance2 = 1e-3);
+    //Standard_Boolean pointOnSurface(const gp_Pnt& aPoint,
+    //                                const Standard_Real& distanceTolerance);
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
     void generateEdges(Standard_Real uvTolerance = 1.0e-3);
-    Standard_Boolean edgeOnSurface(const Edge& aEdge, Standard_Real tolerance = 1.0e-4);
+    Standard_Boolean edgeOnSurface(const Edge& aEdge,
+                                   Standard_Real tolerance = 1.0e-4);
     void combineEdges(std::vector<std::unique_ptr<Edge>>& aEdgesList);
   };
 }
