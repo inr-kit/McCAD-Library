@@ -1,5 +1,6 @@
 // McCAD
 #include "boundSurface_impl.hpp"
+#include "faceeCollision.hpp"
 
 McCAD::Geometry::BoundSurface::Impl::Impl(BoundSurface* backReference)
   : boundSurface{backReference}{
@@ -10,9 +11,9 @@ McCAD::Geometry::BoundSurface::Impl::~Impl(){
 
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::isEqual(const McCAD::Geometry::BoundSurface& that){
-  Standard_Boolean equalityCondition
-          = Tools::PlaneComparator{}(boundSurface->accessSImpl()->face,
-                                      that.accessSImpl()->face);
+    Standard_Boolean equalityCondition
+            = Tools::PlaneComparator{}(boundSurface->accessSImpl()->face,
+                                       that.accessSImpl()->face);
   return equalityCondition;
 }
 
@@ -38,46 +39,34 @@ McCAD::Geometry::BoundSurface::Impl::canFuse(const McCAD::Geometry::BoundSurface
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::faceCollision(const BoundSurface& aFace,
                                                    Standard_Integer& aSide){
-  Standard_Boolean collision = Standard_False;
-  Standard_Integer positiveTriangles = 0;
-  Standard_Integer negativeTriangles = 0;
-  for (Standard_Integer i = 0; i <= aFace.accessBSImpl()->meshTrianglesList.size() - 1;
-       ++i){
-      //std::cout << i << std::endl;
-      Standard_Integer side = 0;
-      if (triangleCollision(*(aFace.accessBSImpl()->meshTrianglesList[i]), side))
-	{
-	  collision = Standard_True;
-	  break;
-	}
-      else
-	{
-	  if (side == 1)
-	    {
-	      ++positiveTriangles;
-	    }
-	  else if (side == -1)
-	    {
-	      ++negativeTriangles;
-	    }
-	}
-      if (positiveTriangles > 0 && negativeTriangles > 0)
-	{
-	  collision = Standard_True;
-	  break;
-	}
+    Standard_Boolean collision = Standard_False;
+    Standard_Integer positiveTriangles = 0;
+    Standard_Integer negativeTriangles = 0;
+    auto& meshTriangleList = aFace.accessBSImpl()->meshTrianglesList;
+    for (Standard_Integer i = 0; i <= meshTriangleList.size() - 1; ++i){
+        Standard_Integer side = 0;
+        if (triangleCollision(*(meshTriangleList[i]), side)){
+            collision = Standard_True;
+            break;
+        } else{
+            if (side == 1){
+                ++positiveTriangles;
+            } else if (side == -1){
+                ++negativeTriangles;
+            }
+        }
+        if (positiveTriangles > 0 && negativeTriangles > 0){
+            collision = Standard_True;
+            break;
+        }
     }
-  // Update side.
-  if (positiveTriangles > 0 && negativeTriangles == 0)
-    {
-      aSide = 1;
+    // Update side.
+    if (positiveTriangles > 0 && negativeTriangles == 0){
+        aSide = 1;
+    } else if (positiveTriangles == 0 && negativeTriangles > 0){
+        aSide = -1;
     }
-  else if (positiveTriangles == 0 && negativeTriangles > 0)
-    {
-      aSide = -1;
-    }
-  //std::cout << "faceCollision return"	<< std::endl;
-  return collision;
+    return collision;
 }
 
 Standard_Boolean
@@ -168,7 +157,7 @@ McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
         edgesList.push_back(std::move(edge));
     }
 }
-   
+/*
 // This function is used as virtual one in BndSurfPlane. Should be modified later.
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::triangleCollision(const MeshTriangle& aTriangle,
@@ -251,7 +240,7 @@ McCAD::Geometry::BoundSurface::Impl::pointOnSurface(const gp_Pnt& aPoint, const 
     }
   //std::cout << "pointOnSurface return"	<< std::endl;
   return Standard_False;
-}
+}*/
 
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::edgeOnSurface(const Edge& aEdge,

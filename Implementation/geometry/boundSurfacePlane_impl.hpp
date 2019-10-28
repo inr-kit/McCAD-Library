@@ -26,7 +26,7 @@ namespace McCAD::Geometry{
 
     std::string surfaceType = "Plane";
     void generateExtendedPlane(const Standard_Real& boxSquareLength,
-			       Standard_Real degenerateEdgesTolerance = 1.0e-7);
+                               Standard_Real degenerateEdgesTolerance = 1.0e-7);
   };
 }
 

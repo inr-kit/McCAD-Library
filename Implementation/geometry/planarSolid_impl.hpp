@@ -2,6 +2,7 @@
 #define PLSOLID_IMPL_HPP
 
 // C++
+#include<memory>
 // McCAD
 #include "planarSolid.hpp"
 #include "solid_impl.hpp"
@@ -12,6 +13,8 @@ namespace McCAD::Geometry{
   public:
     Impl();
     ~Impl();
+
+    void judgeDecomposeSurfaces(Solid::Impl*& solidImpl);
   };
 }
 

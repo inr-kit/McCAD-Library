@@ -19,13 +19,13 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     // A condition has to be set for termination (Now only 20 recursion levels).
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
-    //std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
+    std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
     if(recurrenceDepth >= 20){
         return Standard_False;
     }
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
-    judgeDecomposeSurfaces(*solidImpl);
+    solidObj->accessPSImpl()->judgeDecomposeSurfaces(solidImpl);
     if(!SplitSurfaces::Impl::throughNoBoundarySurfaces(solidImpl->splitFacesList)){
         judgeThroughConcaveEdges(solidImpl->splitFacesList);
     }
@@ -39,13 +39,13 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     // A condition has to be set for termination (Now only 20 recursion levels).
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
-    //std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
+    std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
     if(recurrenceDepth >= 20){
         return Standard_False;
     }
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
-    judgeDecomposeSurfaces(*solidImpl);
+    solidObj->accessCSImpl()->judgeDecomposeSurfaces(solidImpl);
     /*
     if(!SplitSurfaces::Impl::throughNoBoundarySurfaces(solidImpl->splitFacesList)){
         judgeThroughConcaveEdges(solidImpl->splitFacesList);
@@ -74,8 +74,8 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
         }
         // Loop over the resulting subsolids and split each one of them recursively.
         for (Standard_Integer i = 1; i <= solidImpl.splitSolidList->Length(); ++i){
-            //std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/"
-            //          << solidImpl.splitSolidList->Length() << "/" << i << std::endl;
+            std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/"
+                      << solidImpl.splitSolidList->Length() << "/" << i << std::endl;
             //std::cout << splitSolidList->Length() << std::endl;
             auto subSolid = Preprocessor{}.perform(solidImpl.splitSolidList->Value(i));
             if (std::holds_alternative<std::monostate>(subSolid)){
@@ -112,62 +112,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
         solidImpl.splitSolidList->Append(solidImpl.solid);
     }
     return Standard_True;
-}
-
-void
-McCAD::Decomposition::DecomposeSolid::Impl::judgeDecomposeSurfaces(
-        Geometry::Solid::Impl& solidImpl){
-    // Judge whether boundary surfaces of the solid can be used for decomposition.
-    //std::cout << "judgeDecomposeSurfaces" << std::endl;
-    auto& facesList = solidImpl.facesList;
-    if (facesList.size() < 2){
-        return;
-    }
-    //std::cout << "facesList.size(): " << facesList.size() << std::endl;
-    for (Standard_Integer i = 0; i <= facesList.size() - 1; ++i){
-        //std::cout << "i=" << i << std::endl;
-        auto iFace = facesList[i]->accessSImpl();
-        Standard_Integer positiveFaces = 0;
-        Standard_Integer negativeFaces = 0;
-        Standard_Integer numberCollidingSurfaces = 0;
-        Standard_Integer numberCollidingCurvedSurfaces = 0;
-        for (Standard_Integer j = 0; j <= facesList.size() - 1; ++j){
-            //std::cout << "j=" << i << std::endl;
-            auto jFace = facesList[j]->accessSImpl();
-            if (i != j && iFace->surfaceNumber != jFace->surfaceNumber){
-                Standard_Integer side = 0;
-                //std::cout << "facecollision" << std::endl;
-                if (facesList[i]->accessBSImpl()->faceCollision(*facesList[j], side)){
-                    ++numberCollidingSurfaces;
-                    //std::cout << "facecollision True" << std::endl;
-                    iFace->splitSurface = Standard_True;
-                    if (facesList[j]->getSurfaceType() != "Plane"){
-                        ++numberCollidingCurvedSurfaces;
-                    }
-                } else{
-                    //std::cout << "facecollision False" << std::endl;
-                    //std::cout << "side" << side << std::endl;
-                    if (side == 1){
-                        ++positiveFaces;
-                    } else if (side == -1){
-                        ++negativeFaces;
-                    }
-                }
-            }
-        }
-        if (positiveFaces > 0 && negativeFaces > 0){
-            //std::cout << "splitsutface True, pos & neg" << std::endl;
-            iFace->splitSurface = Standard_True;
-        }
-        if (iFace->splitSurface){
-            //std::cout << "set collidingsurfaces" << std::endl;
-            iFace->numberCollidingSurfaces = numberCollidingSurfaces;
-            iFace->numberCollidingCurvedSurfaces = numberCollidingCurvedSurfaces;
-            //std::cout << "adding to split surfaces list" << std::endl;
-            solidImpl.splitFacesList.push_back(facesList[i]);
-            solidImpl.splitSurface = Standard_True;
-        }
-    }
 }
 
 void
