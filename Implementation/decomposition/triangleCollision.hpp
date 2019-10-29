@@ -6,6 +6,7 @@
 //McCAD
 #include <Standard.hxx>
 #include "meshtriangle_impl.hpp"
+#include "boundSurface_impl.hpp"
 //OCC
 
 namespace McCAD::Decomposition{
@@ -13,15 +14,13 @@ namespace McCAD::Decomposition{
     public:
       TriangleCollision() = default;
 
-      template<typename surfaceType>
-      Standard_Boolean triangleCollision(const TopoDS_Face& face,
-                                         const McCAD::Geometry::MeshTriangle& aTriangle,
-                                         Standard_Integer& aSide,
-                                         Standard_Real tolerance = 1.0e-2,
-                                         Standard_Real tolerance2 = 1.0e-3);
+      Standard_Boolean triangleCollisionPlane(
+              const McCAD::Geometry::BoundSurface& iFace,
+              const McCAD::Geometry::MeshTriangle& aTriangle,
+              Standard_Integer& aSide,
+              Standard_Real tolerance = 1.0e-2,
+              Standard_Real tolerance2 = 1.0e-3);
     };
 }
-
-#include "triangleCollision.tpp"
 
 #endif //TRIANGLECOLLISION_HPP

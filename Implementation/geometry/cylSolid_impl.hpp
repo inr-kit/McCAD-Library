@@ -13,7 +13,7 @@ namespace McCAD::Geometry{
     Impl();
     ~Impl();
 
-    void judgeDecomposeSurfaces(Solid::Impl*& solidImpl);
+    //void judgeDecomposeSurfaces(Solid::Impl*& solidImpl);
   };
 }
 

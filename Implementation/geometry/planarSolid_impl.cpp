@@ -1,8 +1,8 @@
 // McCAD
 #include "planarSolid_impl.hpp"
 #include "boundSurface_impl.hpp"
-#include "../decomposition/faceCollision.hpp"
 #include "../decomposition/edgeOnSurface.hpp"
+#include "../decomposition/faceCollision.hpp"
 
 McCAD::Geometry::PLSolid::Impl::Impl(){
 }
@@ -13,7 +13,7 @@ McCAD::Geometry::PLSolid::Impl::~Impl(){
 void
 McCAD::Geometry::PLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl){
     // Judge whether boundary surfaces of the solid can be used for decomposition.
-    std::cout << "judgeDecomposeSurfaces, PLSolid" << std::endl;
+    //std::cout << "judgeDecomposeSurfaces, PLSolid" << std::endl;
     auto& facesList = solidImpl->facesList;
     if (facesList.size() < 2){
         return;
@@ -80,7 +80,7 @@ McCAD::Geometry::PLSolid::Impl::judgeThroughConcaveEdges(Solid::Impl*& solidImpl
                 auto& edgesList = facesList[j]->accessBSImpl()->edgesList;
                 for (Standard_Integer k = 0; k <= edgesList.size() - 1; ++k){
                     if (edgesList[k]->accessEImpl()->convexity == 0 &&
-                            Decomposition::EdgeOnSurface{}.edgeOnSurface<BoundSurfacePlane>(
+                            Decomposition::EdgeOnSurface{}.edgeOnPlane(
                                 facesList[i]->accessSImpl()->face, *(edgesList[k]))){
                         ++throughConcaveEdges;
                     }
