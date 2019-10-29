@@ -54,8 +54,8 @@ namespace McCAD::Geometry{
     //                                const Standard_Real& distanceTolerance);
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
     void generateEdges(Standard_Real uvTolerance = 1.0e-3);
-    Standard_Boolean edgeOnSurface(const Edge& aEdge,
-                                   Standard_Real tolerance = 1.0e-4);
+    //Standard_Boolean edgeOnSurface(const Edge& aEdge,
+    //                               Standard_Real tolerance = 1.0e-4);
     void combineEdges(std::vector<std::unique_ptr<Edge>>& aEdgesList);
   };
 }

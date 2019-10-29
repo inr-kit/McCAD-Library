@@ -11,12 +11,11 @@
 namespace McCAD::Decomposition{
     class TriangleCollision{
     public:
-      TriangleCollision();
-      ~TriangleCollision();
+      TriangleCollision() = default;
 
       template<typename surfaceType>
-      Standard_Boolean triangleCollision(const TopoDS_Face& extendedFace,
-                                         const MeshTriangle& aTriangle,
+      Standard_Boolean triangleCollision(const TopoDS_Face& face,
+                                         const McCAD::Geometry::MeshTriangle& aTriangle,
                                          Standard_Integer& aSide,
                                          Standard_Real tolerance = 1.0e-2,
                                          Standard_Real tolerance2 = 1.0e-3);
