@@ -1,6 +1,5 @@
 // McCAD
 #include "boundSurface_impl.hpp"
-#include "faceeCollision.hpp"
 
 McCAD::Geometry::BoundSurface::Impl::Impl(BoundSurface* backReference)
   : boundSurface{backReference}{
@@ -35,7 +34,7 @@ McCAD::Geometry::BoundSurface::Impl::canFuse(const McCAD::Geometry::BoundSurface
   }
   return Standard_False;
 }
-
+/*
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::faceCollision(const BoundSurface& aFace,
                                                    Standard_Integer& aSide){
@@ -68,7 +67,7 @@ McCAD::Geometry::BoundSurface::Impl::faceCollision(const BoundSurface& aFace,
     }
     return collision;
 }
-
+*/
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::generateMesh(const Standard_Real& meshDeflection){
   // Get surface from base class; Surface.
@@ -241,10 +240,10 @@ McCAD::Geometry::BoundSurface::Impl::pointOnSurface(const gp_Pnt& aPoint, const 
   //std::cout << "pointOnSurface return"	<< std::endl;
   return Standard_False;
 }*/
-
+/*
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::edgeOnSurface(const Edge& aEdge,
-						   Standard_Real tolerance){
+                                                   Standard_Real tolerance){
   gp_Pnt startPoint = aEdge.accessEImpl()->startPoint;
   gp_Pnt endPoint   = aEdge.accessEImpl()->endPoint;
   //std::cout << startPoint.X() << "," << startPoint.Y() << "," << startPoint.Z() << "," << std::endl;
@@ -271,7 +270,7 @@ McCAD::Geometry::BoundSurface::Impl::edgeOnSurface(const Edge& aEdge,
 	}
     }
   return Standard_False;
-}
+}*/
 
 void
 McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::unique_ptr<Edge>>& aEdgesList){

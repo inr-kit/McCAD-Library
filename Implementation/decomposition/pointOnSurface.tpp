@@ -1,17 +1,18 @@
 //C++
-#include <array>
 //McCAD
-#include "triangleCollision.hpp"
+#include "boundSurfacePlane_impl.hpp"
 //OCC
 #include <BRepTools.hxx>
+#include "BRepAdaptor_Surface.hxx"
+#include "Extrema_ExtPS.hxx"
 
 template<>
 Standard_Boolean
-McCAD::Decomposition::PointOnSurface::pointOnSurface<Geometry::BoundSurfacePlane>(
-        const gp_Pnt& aPoint, const TopoDS_Face& extendedFace,
+McCAD::Decomposition::PointOnSurface::pointOnSurface<McCAD::Geometry::BoundSurfacePlane>(
+        const TopoDS_Face& face, const gp_Pnt& aPoint,
         const Standard_Real& distanceTolerance){
-    //std::cout << "pointOnSurface" << std::endl;
-    BRepAdaptor_Surface surfaceAdaptor(extendedFace, Standard_True);
+    std::cout << "pointOnSurface, Plane" << std::endl;
+    BRepAdaptor_Surface surfaceAdaptor(face, Standard_True);
     Standard_Real uvTolerance = surfaceAdaptor.Tolerance();
     std::array<Standard_Real, 4> uvParameters;
     uvParameters[0] = surfaceAdaptor.FirstUParameter();
@@ -30,6 +31,5 @@ McCAD::Decomposition::PointOnSurface::pointOnSurface<Geometry::BoundSurfacePlane
           return Standard_True;
       }
     }
-    //std::cout << "pointOnSurface return"	<< std::endl;
     return Standard_False;
 }

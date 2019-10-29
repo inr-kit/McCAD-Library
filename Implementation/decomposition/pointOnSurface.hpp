@@ -2,23 +2,21 @@
 #define POINTONSURFACE_HPP
 
 //C++
-#include <memory>
 //McCAD
-#include "boundSurface_impl.hpp"
+#include <Standard.hxx>
 //OCC
 #include <TopoDS_Face.hxx>
-#include <Standard.hxx>
+#include "gp_Pnt.hxx"
 
 namespace McCAD::Decomposition{
     class PointOnSurface{
     public:
-      PointOnSurface();
-      ~PointOnSurface();
+        PointOnSurface() = default;
 
-      template<typename surfaceType>
-      Standard_Boolean pointOnSurface(const gp_Pnt& aPoint,
-                                      const TopoDS_Face& extendedFace,
-                                      const Standard_Real& distanceTolerance);
+        template<typename surfaceType>
+        Standard_Boolean pointOnSurface(const TopoDS_Face& face,
+                                        const gp_Pnt& aPoint,
+                                        const Standard_Real& distanceTolerance);
     };
 }
 
