@@ -13,13 +13,10 @@ namespace McCAD::Decomposition{
     public:
         PointOnSurface() = default;
 
-        template<typename surfaceType>
-        Standard_Boolean pointOnSurface(const TopoDS_Face& face,
-                                        const gp_Pnt& aPoint,
-                                        const Standard_Real& distanceTolerance);
+        Standard_Boolean pointOnPlane(const TopoDS_Face& face,
+                                      const gp_Pnt& aPoint,
+                                      const Standard_Real& distanceTolerance);
     };
 }
-
-#include "pointOnSurface.tpp"
 
 #endif //POINTONSURFACE_HPP

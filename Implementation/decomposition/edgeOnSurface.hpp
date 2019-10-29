@@ -14,13 +14,10 @@ namespace McCAD::Decomposition{
     public:
       EdgeOnSurface() = default;
 
-      template<typename surfaceType>
-      Standard_Boolean edgeOnSurface(const TopoDS_Face& face,
-                                     const McCAD::Geometry::Edge& aEdge,
-                                     Standard_Real tolerance = 1.0e-4);
+      Standard_Boolean edgeOnPlane(const TopoDS_Face& face,
+                                   const McCAD::Geometry::Edge& aEdge,
+                                   Standard_Real tolerance = 1.0e-4);
     };
 }
-
-#include "edgeOnSurface.tpp"
 
 #endif //EDGEONSURFACE_HPP

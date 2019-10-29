@@ -45,7 +45,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     }
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
-    solidObj->accessCSImpl()->judgeDecomposeSurfaces(solidImpl);
+    //solidObj->accessCSImpl()->judgeDecomposeSurfaces(solidImpl);
     /*
     if(!SplitSurfaces::Impl::throughNoBoundarySurfaces(solidImpl->splitFacesList)){
         judgeThroughConcaveEdges(solidImpl->splitFacesList);
@@ -113,38 +113,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
     }
     return Standard_True;
 }
-/*
-void
-McCAD::Decomposition::DecomposeSolid::Impl::judgeThroughConcaveEdges(
-        std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList){
-    // Judge how many concave edges each boundary face of solid goes through.
-    if (facesList.size() == 0){
-        //std::cout << "return" << std::endl;
-        return;
-    }
-    for (Standard_Integer i = 0; i <= facesList.size() - 1; ++i){
-        // Don't update throughConcaveEdges if it already has a value.
-        // Only update surfaces that result from fusing others.
-        if (facesList[i]->accessSImpl()->throughConcaveEdges != 0) continue;
-        Standard_Integer throughConcaveEdges = 0;
-        for (Standard_Integer j = 0; j <= facesList.size() - 1; ++j){
-            if (i != j && facesList[i]->accessSImpl()->surfaceNumber !=
-                    facesList[j]->accessSImpl()->surfaceNumber){
-                //std::cout << "checking edges" << std::endl;
-                for (Standard_Integer k = 0; k <= facesList[j]->accessBSImpl()->edgesList.size() - 1; ++k){
-                    if (facesList[j]->accessBSImpl()->edgesList[k]->accessEImpl()->convexity
-                            == 0 && facesList[i]->accessBSImpl()->edgeOnSurface(
-                                *(facesList[j]->accessBSImpl()->edgesList[k]))){
-                        ++throughConcaveEdges;
-                    }
-                }
-            }
-        }
-        facesList[i]->accessSImpl()->throughConcaveEdges = throughConcaveEdges;
-        //std::cout << "throughConcaveEdges: " << throughConcaveEdges << std::endl;
-    }
-}
-*/
+
 Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(
         Geometry::Solid::Impl& solidImpl){

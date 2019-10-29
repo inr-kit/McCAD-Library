@@ -12,9 +12,8 @@ McCAD::Decomposition::FaceCollision::operator()(
         Standard_Integer& aSide){
     auto surfaceType = iFace.getSurfaceType();
     if (surfaceType == "Plane"){
-        auto& face = iFace.accessSImpl()->face;
         auto& meshTriangleList = jFace.accessBSImpl()->meshTrianglesList;
-        return faceCollisionPlane(face, meshTriangleList, aSide);
+        return faceCollisionPlane(iFace, meshTriangleList, aSide);
     } else if (surfaceType == "Cylinder"){
         //return faceCollisionCylinder(iFace, , jFace, aSide);
     }
@@ -23,16 +22,18 @@ McCAD::Decomposition::FaceCollision::operator()(
 
 Standard_Boolean
 McCAD::Decomposition::FaceCollision::faceCollisionPlane(
-        const TopoDS_Face& face,
+        const McCAD::Geometry::BoundSurface& iFace,
         const std::vector<std::unique_ptr<McCAD::Geometry::MeshTriangle>>& meshTriangleList,
         Standard_Integer& aSide){
+    auto& face = iFace.accessSImpl()->face;
     Standard_Boolean collision = Standard_False;
     Standard_Integer positiveTriangles = 0;
     Standard_Integer negativeTriangles = 0;
     for (Standard_Integer i = 0; i <= meshTriangleList.size() - 1; ++i){
         Standard_Integer side = 0;
-        if (TriangleCollision{}.triangleCollision<Geometry::BoundSurfacePlane>(
-                    face, *(meshTriangleList[i]), side)){
+        if (TriangleCollision{}.triangleCollisionPlane(iFace,
+                                                       *(meshTriangleList[i]),
+                                                       side)){
             collision = Standard_True;
             break;
         } else{

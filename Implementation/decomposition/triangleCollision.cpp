@@ -1,29 +1,28 @@
 //McCAD
+#include "triangleCollision.hpp"
 #include "pointOnSurface.hpp"
-#include "boundSurfacePlane_impl.hpp"
 //OCC
 #include "TopoDS_Face.hxx"
 #include "BRepAdaptor_Surface.hxx"
 #include "GeomAdaptor_Surface.hxx"
 #include "gp_Pln.hxx"
 
-template<>
 Standard_Boolean
-McCAD::Decomposition::TriangleCollision::triangleCollision<McCAD::Geometry::BoundSurfacePlane>(
-        const TopoDS_Face& face, const McCAD::Geometry::MeshTriangle& aTriangle,
+McCAD::Decomposition::TriangleCollision::triangleCollisionPlane(
+        const McCAD::Geometry::BoundSurface& iFace,
+        const McCAD::Geometry::MeshTriangle& aTriangle,
         Standard_Integer& aSide, Standard_Real tolerance,
         Standard_Real tolerance2){
-    std::cout << "triangleCollision, Plane" << std::endl;
+    //std::cout << "triangleCollision, Plane" << std::endl;
+    auto& face = iFace.accessSImpl()->face;
+    auto& extendedFace = iFace.accessSImpl()->extendedFace;
     Standard_Boolean collision = Standard_False;
     Standard_Integer positivePoints = 0;
     Standard_Integer negativePoints = 0;
     auto& points = aTriangle.accessMTImpl()->points;
     for (Standard_Integer i = 0; i <= points.size() - 1; ++i){
-        if (PointOnSurface{}.pointOnSurface<McCAD::Geometry::BoundSurfacePlane>(
-                    face, points[i], tolerance)) continue;
+        if (PointOnSurface{}.pointOnPlane(extendedFace, points[i], tolerance)) continue;
         Standard_Real evaluate;
-        //BRepAdaptor_Surface surfaceAdaptor(face, Standard_True);
-        //GeomAdaptor_Surface surfaceGeomAdaptor= surfaceAdaptor.Surface();
         GeomAdaptor_Surface surfaceGeomAdaptor =
                 BRepAdaptor_Surface{face, Standard_True}.Surface();
         gp_Pln Plane = surfaceGeomAdaptor.Plane();

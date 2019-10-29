@@ -18,7 +18,7 @@ namespace McCAD::Decomposition{
                                   const McCAD::Geometry::BoundSurface& jFace,
                                   Standard_Integer& aSide);
       Standard_Boolean faceCollisionPlane(
-              const TopoDS_Face& face,
+              const McCAD::Geometry::BoundSurface& iFace,
               const std::vector<std::unique_ptr<McCAD::Geometry::MeshTriangle>>& meshTriangleList,
               Standard_Integer& aSide);
     };

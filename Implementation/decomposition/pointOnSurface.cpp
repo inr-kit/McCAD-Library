@@ -1,17 +1,17 @@
 //C++
 //McCAD
+#include "pointOnSurface.hpp"
 #include "boundSurfacePlane_impl.hpp"
 //OCC
 #include <BRepTools.hxx>
 #include "BRepAdaptor_Surface.hxx"
 #include "Extrema_ExtPS.hxx"
 
-template<>
 Standard_Boolean
-McCAD::Decomposition::PointOnSurface::pointOnSurface<McCAD::Geometry::BoundSurfacePlane>(
+McCAD::Decomposition::PointOnSurface::pointOnPlane(
         const TopoDS_Face& face, const gp_Pnt& aPoint,
         const Standard_Real& distanceTolerance){
-    std::cout << "pointOnSurface, Plane" << std::endl;
+    //std::cout << "pointOnPlane, Plane" << std::endl;
     BRepAdaptor_Surface surfaceAdaptor(face, Standard_True);
     Standard_Real uvTolerance = surfaceAdaptor.Tolerance();
     std::array<Standard_Real, 4> uvParameters;
