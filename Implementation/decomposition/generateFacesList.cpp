@@ -25,6 +25,14 @@ McCAD::Decomposition::FacesListGenerator::mergeSurfaces(
                 // Test if the two surfaces can be fused.
                 if (*surfacesList[i] << *surfacesList[j]){
                     //std::cout << "*** equal, fuse" << std::endl;
+                    TopoDS_Face newFace = Tools::SurfacesFuser{}(
+                                surfacesList[i]->accessSImpl()->face,
+                                surfacesList[j]->accessSImpl()->face).value();
+                    std::shared_ptr<Geometry::BoundSurface> newboundSurface =
+                            GenerateFacesList{}(newFace, boxSquareLength);
+                    newboundSurface->accessSImpl()->surfaceNumber =
+                            surfacesList[i]->accessSImpl()->surfaceNumber;
+                    /*
                     if (surfacesList[i]->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
                         TopoDS_Face newFace = Tools::PlaneFuser{}(
                                     surfacesList[i]->accessSImpl()->face,
@@ -59,6 +67,18 @@ McCAD::Decomposition::FacesListGenerator::mergeSurfaces(
                         surfacesList.push_back(std::move(newboundSurface));
                         break;
                     }
+                    // Combine edges.
+                    newboundSurface->accessBSImpl()->combineEdges(
+                                surfacesList[i]->accessBSImpl()->edgesList);
+                    newboundSurface->accessBSImpl()->combineEdges(
+                                surfacesList[j]->accessBSImpl()->edgesList);
+                    // Erase pointer surfacesList[j] & [i] from surfacesList.
+                    surfacesList.erase(surfacesList.begin() + j);
+                    --j;
+                    surfacesList.erase(surfacesList.begin() + i);
+                    --i;
+                    surfacesList.push_back(std::move(newboundSurface));
+                    break;
                 } else{
                     //std::cout << "*** equal, erase one" << std::endl;
                     surfacesList.erase(surfacesList.begin() + j);

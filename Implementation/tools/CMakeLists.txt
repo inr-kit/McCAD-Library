@@ -4,7 +4,7 @@ add_library(TOOLS_IMPL OBJECT
     SurfaceUtilities.cpp
     surfaceComparator.cpp
     planeComparator.cpp
-    PlaneFuser.cpp
+    surfacesFuser.cpp
     FaceParameters.cpp)
 
 install(FILES
@@ -13,10 +13,10 @@ install(FILES
   SurfaceUtilities.hpp
   surfaceComparator.hpp
   planeComparator.hpp
-  PlaneFuser.hpp
+  surfacesFuser.hpp
   FaceParameters.hpp
   ShapeView.hpp
-  SolidType.hpp
+  solidType.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/tools)
 
 add_subdirectory(FloatingPoint)

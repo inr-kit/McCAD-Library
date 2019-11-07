@@ -5,13 +5,13 @@
 #include <memory>
 //McCAD
 #include "boundSurface_impl.hpp"
-#include "boundSurfacePlane_impl.hpp"
+#include "boundSurface_impl.hpp"
 #include "boundSurfaceCyl_impl.hpp"
 #include "planarSolid_impl.hpp"
 #include "cylSolid_impl.hpp"
 #include "SurfaceUtilities.hpp"
 #include "CurveUtilities.hpp"
-#include "PlaneFuser.hpp"
+#include "surfacesFuser.hpp"
 #include "FaceParameters.hpp"
 #include "ShapeView.hpp"
 //OCC
@@ -30,6 +30,9 @@ namespace McCAD::Decomposition{
               const Geometry::PLSolid& solidObj);
       std::vector<BS> operator()(
               const Geometry::CYLSolid& solidObj);
+      std::shared_ptr<Geometry::BoundSurface> operator()(
+              const TopoDS_Face& face, Standard_Real& boxSquareLength,
+              Standard_Integer mode = 0);
       template<typename solidObjType>
       BS generateSurface(const TopoDS_Face& face,
                          Standard_Real& boxSquareLength,
