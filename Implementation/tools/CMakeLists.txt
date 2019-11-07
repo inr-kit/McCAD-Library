@@ -2,7 +2,8 @@ add_library(TOOLS_IMPL OBJECT
     tools_impl.cpp
     CurveUtilities.cpp
     SurfaceUtilities.cpp
-    PlaneComparator.cpp
+    surfaceComparator.cpp
+    planeComparator.cpp
     PlaneFuser.cpp
     FaceParameters.cpp)
 
@@ -10,7 +11,8 @@ install(FILES
   tools_impl.hpp
   CurveUtilities.hpp
   SurfaceUtilities.hpp
-  PlaneComparator.hpp
+  surfaceComparator.hpp
+  planeComparator.hpp
   PlaneFuser.hpp
   FaceParameters.hpp
   ShapeView.hpp
