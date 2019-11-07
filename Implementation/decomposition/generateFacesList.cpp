@@ -26,40 +26,55 @@ McCAD::Decomposition::GenerateFacesList::mergeSurfaces(
                 // Test if the two surfaces can be fused.
                 if (*surfacesList[i] << *surfacesList[j]){
                     //std::cout << "*** equal, fuse" << std::endl;
+                    TopoDS_Face newFace = Tools::SurfacesFuser{}(
+                                surfacesList[i]->accessSImpl()->face,
+                                surfacesList[j]->accessSImpl()->face).value();
+                    std::shared_ptr<Geometry::BoundSurface> newboundSurface =
+                            GenerateFacesList{}(newFace, boxSquareLength);
+                    newboundSurface->accessSImpl()->surfaceNumber =
+                            surfacesList[i]->accessSImpl()->surfaceNumber;
+                    /*
                     if (surfacesList[i]->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
                         TopoDS_Face newFace = Tools::PlaneFuser{}(
                                     surfacesList[i]->accessSImpl()->face,
                                     surfacesList[j]->accessSImpl()->face);
-                        std::shared_ptr<Geometry::BoundSurface> newboundSurface =
-                                generateSurface<McCAD::Geometry::PLSolid>(
+                        newboundSurface = generateSurface<McCAD::Geometry::PLSolid>(
                                     newFace, boxSquareLength);
                         newboundSurface->accessSImpl()->surfaceNumber =
                                 surfacesList[i]->accessSImpl()->surfaceNumber;
-                        // Add triangles of surface i.
-                        for (Standard_Integer k = 0; k <=
-                             surfacesList[i]->accessBSImpl()->meshTrianglesList.size() - 1; ++k){
-                            newboundSurface->accessBSImpl()->meshTrianglesList.push_back(
-                                        std::move(surfacesList[i]->accessBSImpl()->meshTrianglesList[k]));
-                        }
-                        // Add triangles of surface j.
-                        for (Standard_Integer k = 0; k <=
-                             surfacesList[j]->accessBSImpl()->meshTrianglesList.size() - 1; ++k){
-                            newboundSurface->accessBSImpl()->meshTrianglesList.push_back(
-                                        std::move(surfacesList[j]->accessBSImpl()->meshTrianglesList[k]));
-                        }
-                        // Combine edges.
-                        newboundSurface->accessBSImpl()->combineEdges(
-                                    surfacesList[i]->accessBSImpl()->edgesList);
-                        newboundSurface->accessBSImpl()->combineEdges(
-                                    surfacesList[j]->accessBSImpl()->edgesList);
-                        // Erase pointer surfacesList[j] & [i] from surfacesList.
-                        surfacesList.erase(surfacesList.begin() + j);
-                        --j;
-                        surfacesList.erase(surfacesList.begin() + i);
-                        --i;
-                        surfacesList.push_back(std::move(newboundSurface));
-                        break;
+                    } else if (surfacesList[i]->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder)){
+                        TopoDS_Face newFace = Tools::CylFuser{}(
+                                    surfacesList[i]->accessSImpl()->face,
+                                    surfacesList[j]->accessSImpl()->face);
+                        newboundSurface = generateSurface<McCAD::Geometry::CYLSolid>(
+                                    newFace, boxSquareLength);
+                        newboundSurface->accessSImpl()->surfaceNumber =
+                                surfacesList[i]->accessSImpl()->surfaceNumber;
+                    }*/
+                    // Add triangles of surface i.
+                    for (Standard_Integer k = 0; k <=
+                         surfacesList[i]->accessBSImpl()->meshTrianglesList.size() - 1; ++k){
+                        newboundSurface->accessBSImpl()->meshTrianglesList.push_back(
+                                    std::move(surfacesList[i]->accessBSImpl()->meshTrianglesList[k]));
                     }
+                    // Add triangles of surface j.
+                    for (Standard_Integer k = 0; k <=
+                         surfacesList[j]->accessBSImpl()->meshTrianglesList.size() - 1; ++k){
+                        newboundSurface->accessBSImpl()->meshTrianglesList.push_back(
+                                    std::move(surfacesList[j]->accessBSImpl()->meshTrianglesList[k]));
+                    }
+                    // Combine edges.
+                    newboundSurface->accessBSImpl()->combineEdges(
+                                surfacesList[i]->accessBSImpl()->edgesList);
+                    newboundSurface->accessBSImpl()->combineEdges(
+                                surfacesList[j]->accessBSImpl()->edgesList);
+                    // Erase pointer surfacesList[j] & [i] from surfacesList.
+                    surfacesList.erase(surfacesList.begin() + j);
+                    --j;
+                    surfacesList.erase(surfacesList.begin() + i);
+                    --i;
+                    surfacesList.push_back(std::move(newboundSurface));
+                    break;
                 } else{
                     //std::cout << "*** equal, erase one" << std::endl;
                     surfacesList.erase(surfacesList.begin() + j);

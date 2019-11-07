@@ -10,17 +10,14 @@ McCAD::Geometry::BoundSurface::Impl::~Impl(){
 
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::isEqual(const McCAD::Geometry::BoundSurface& that){
-    Standard_Boolean equalityCondition
-            = Tools::SurfaceComparator{}(boundSurface->accessSImpl()->face,
-                                         that.accessSImpl()->face);
-  return equalityCondition;
+    return Tools::SurfaceComparator{}(boundSurface->accessSImpl()->face,
+                                      that.accessSImpl()->face);
 }
 
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::canFuse(const McCAD::Geometry::BoundSurface& that){
-    Standard_Boolean equalityCondition = Tools::SurfaceComparator{}(
-                boundSurface->accessSImpl()->face, that.accessSImpl()->face);
-  if (!equalityCondition){
+    if (!Tools::SurfaceComparator{}(boundSurface->accessSImpl()->face,
+                                    that.accessSImpl()->face)){
       return Standard_False;
   }
   // Check common edges of the two faces.

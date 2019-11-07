@@ -139,3 +139,11 @@ McCAD::Decomposition::GenerateFacesList::operator()(
     facesList.insert(facesList.end(), cylindersList.begin(), cylindersList.end());
     return facesList;
 }
+
+//General Solid
+std::shared_ptr<McCAD::Geometry::BoundSurface>
+McCAD::Decomposition::GenerateFacesList::operator()(const TopoDS_Face& face,
+                                                    Standard_Real& boxSquareLength,
+                                                    Standard_Integer mode){
+    return generateSurface<McCAD::Geometry::CYLSolid>(face, boxSquareLength);
+}

@@ -23,7 +23,6 @@
 #include "CurveUtilities.hpp"
 #include "FaceParameters.hpp"
 #include "ShapeView.hpp"
-#include "PlaneFuser.hpp"
 #include "FaceParameters.hpp"
 #include "solidType.hpp"
 // OCC
