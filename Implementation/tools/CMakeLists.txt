@@ -5,7 +5,8 @@ add_library(TOOLS_IMPL OBJECT
     surfaceComparator.cpp
     planeComparator.cpp
     surfacesFuser.cpp
-    FaceParameters.cpp)
+    FaceParameters.cpp
+    distanceEvaluateor.cpp)
 
 install(FILES
   tools_impl.hpp
@@ -17,6 +18,7 @@ install(FILES
   FaceParameters.hpp
   ShapeView.hpp
   solidType.hpp
+  distanceEvaluateor.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/tools)
 
 add_subdirectory(FloatingPoint)

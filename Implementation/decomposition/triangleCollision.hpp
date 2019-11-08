@@ -14,12 +14,24 @@ namespace McCAD::Decomposition{
     public:
       TriangleCollision() = default;
 
+      Standard_Boolean operator()(const McCAD::Geometry::BoundSurface& iFace,
+                                  const McCAD::Geometry::MeshTriangle& aTriangle,
+                                  Standard_Integer& aSide);
+
+    private:
       Standard_Boolean triangleCollisionPlane(
               const McCAD::Geometry::BoundSurface& iFace,
               const McCAD::Geometry::MeshTriangle& aTriangle,
               Standard_Integer& aSide,
-              Standard_Real tolerance = 1.0e-2,
-              Standard_Real tolerance2 = 1.0e-3);
+              Standard_Real distanceTolerance = 1.0e-2,
+              Standard_Real senseTolerance = 1.0e-3);
+      Standard_Boolean triangleCollisionCyl(
+              const McCAD::Geometry::BoundSurface& iFace,
+              const McCAD::Geometry::MeshTriangle& aTriangle,
+              Standard_Integer& aSide,
+              Standard_Real distanceTolerance = 1.0e-2,
+              Standard_Real senseTolerance = 1.0e-3);
+
     };
 }
 

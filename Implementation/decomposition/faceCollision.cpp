@@ -1,6 +1,7 @@
 //McCAD
 #include "faceCollision.hpp"
 #include "triangleCollision.hpp"
+#include "tools_impl.hpp"
 //OCC
 #include <TopoDS_Face.hxx>
 #include <BRepTools.hxx>
@@ -10,18 +11,12 @@ McCAD::Decomposition::FaceCollision::operator()(
         const McCAD::Geometry::BoundSurface& iFace,
         const McCAD::Geometry::BoundSurface& jFace,
         Standard_Integer& aSide){
-    auto surfaceType = iFace.getSurfaceType();
-    if (surfaceType == "Plane"){
-        auto& meshTriangleList = jFace.accessBSImpl()->meshTrianglesList;
-        return faceCollisionPlane(iFace, meshTriangleList, aSide);
-    } else if (surfaceType == "Cylinder"){
-        //return faceCollisionCylinder(iFace, , jFace, aSide);
-    }
-    return Standard_False;
+    auto& meshTriangleList = jFace.accessBSImpl()->meshTrianglesList;
+    return faceCollision(iFace, meshTriangleList, aSide);
 }
 
 Standard_Boolean
-McCAD::Decomposition::FaceCollision::faceCollisionPlane(
+McCAD::Decomposition::FaceCollision::faceCollision(
         const McCAD::Geometry::BoundSurface& iFace,
         const std::vector<std::unique_ptr<McCAD::Geometry::MeshTriangle>>& meshTriangleList,
         Standard_Integer& aSide){
@@ -31,9 +26,7 @@ McCAD::Decomposition::FaceCollision::faceCollisionPlane(
     Standard_Integer negativeTriangles = 0;
     for (Standard_Integer i = 0; i <= meshTriangleList.size() - 1; ++i){
         Standard_Integer side = 0;
-        if (TriangleCollision{}.triangleCollisionPlane(iFace,
-                                                       *(meshTriangleList[i]),
-                                                       side)){
+        if (TriangleCollision{}(iFace, *(meshTriangleList[i]), side)){
             collision = Standard_True;
             break;
         } else{

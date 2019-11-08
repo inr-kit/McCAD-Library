@@ -17,7 +17,8 @@ namespace McCAD::Decomposition{
       Standard_Boolean operator()(const McCAD::Geometry::BoundSurface& iFace,
                                   const McCAD::Geometry::BoundSurface& jFace,
                                   Standard_Integer& aSide);
-      Standard_Boolean faceCollisionPlane(
+    private:
+      Standard_Boolean faceCollision(
               const McCAD::Geometry::BoundSurface& iFace,
               const std::vector<std::unique_ptr<McCAD::Geometry::MeshTriangle>>& meshTriangleList,
               Standard_Integer& aSide);
