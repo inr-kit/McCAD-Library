@@ -45,10 +45,10 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     }
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
-    //solidObj->accessCSImpl()->judgeDecomposeSurfaces(solidImpl);
+    solidObj->accessCSImpl()->judgeDecomposeSurfaces(solidImpl);
     /*
     if(!SplitSurfaces::Impl::throughNoBoundarySurfaces(solidImpl->splitFacesList)){
-        judgeThroughConcaveEdges(solidImpl->splitFacesList);
+        solidObj->accessPSImpl()->judgeThroughConcaveEdges(solidImpl);
          if (!splitSurfaces.accessSSImpl()->planeSplitOnlyPlane(
                      solidImpl->splitFacesList)){
              //generateAssistingSurfaces();

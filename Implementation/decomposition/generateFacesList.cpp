@@ -33,24 +33,6 @@ McCAD::Decomposition::GenerateFacesList::mergeSurfaces(
                             GenerateFacesList{}(newFace, boxSquareLength);
                     newboundSurface->accessSImpl()->surfaceNumber =
                             surfacesList[i]->accessSImpl()->surfaceNumber;
-                    /*
-                    if (surfacesList[i]->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
-                        TopoDS_Face newFace = Tools::PlaneFuser{}(
-                                    surfacesList[i]->accessSImpl()->face,
-                                    surfacesList[j]->accessSImpl()->face);
-                        newboundSurface = generateSurface<McCAD::Geometry::PLSolid>(
-                                    newFace, boxSquareLength);
-                        newboundSurface->accessSImpl()->surfaceNumber =
-                                surfacesList[i]->accessSImpl()->surfaceNumber;
-                    } else if (surfacesList[i]->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder)){
-                        TopoDS_Face newFace = Tools::CylFuser{}(
-                                    surfacesList[i]->accessSImpl()->face,
-                                    surfacesList[j]->accessSImpl()->face);
-                        newboundSurface = generateSurface<McCAD::Geometry::CYLSolid>(
-                                    newFace, boxSquareLength);
-                        newboundSurface->accessSImpl()->surfaceNumber =
-                                surfacesList[i]->accessSImpl()->surfaceNumber;
-                    }*/
                     // Add triangles of surface i.
                     for (Standard_Integer k = 0; k <=
                          surfacesList[i]->accessBSImpl()->meshTrianglesList.size() - 1; ++k){

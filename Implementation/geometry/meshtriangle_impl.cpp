@@ -2,8 +2,13 @@
 #include "meshtriangle_impl.hpp"
 
 void
-McCAD::Geometry::MeshTriangle::Impl::initiate(const TopoDS_Face& face){
-  Bnd_Box boundingBox;
-  BRepBndLib::Add(face, boundingBox);
-  boundingBox.SetGap(0.0);
+McCAD::Geometry::MeshTriangle::Impl::initiate(const TopoDS_Face& aFace){
+    face = aFace;
+    createOBB(face);
+}
+
+void
+McCAD::Geometry::MeshTriangle::Impl::createOBB(const TopoDS_Face& aFace,
+                                               Standard_Real bndBoxGap){
+    BRepBndLib::AddOBB(aFace, obb);
 }

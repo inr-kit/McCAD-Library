@@ -1,16 +1,23 @@
 // McCAD
 #include "cylSolid_impl.hpp"
+//#include "boundSurface_impl.hpp"
+//#include "../decomposition/edgeOnSurface.hpp"
+#include "../decomposition/faceCollision.hpp"
+#include "tools_impl.hpp"
+//OCC
+#include <GeomAbs_SurfaceType.hxx>
+
 
 McCAD::Geometry::CYLSolid::Impl::Impl(){
 }
 
 McCAD::Geometry::CYLSolid::Impl::~Impl(){
 }
-/*
+
 void
 McCAD::Geometry::CYLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl){
     // Judge whether boundary surfaces of the solid can be used for decomposition.
-    std::cout << "judgeDecomposeSurfaces, CYLSolid" << std::endl;
+    //std::cout << "judgeDecomposeSurfaces, CYLSolid" << std::endl;
     auto& facesList = solidImpl->facesList;
     if (facesList.size() < 2){
         return;
@@ -29,11 +36,12 @@ McCAD::Geometry::CYLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl)
             if (i != j && iFace->surfaceNumber != jFace->surfaceNumber){
                 Standard_Integer side = 0;
                 //std::cout << "facecollision" << std::endl;
-                if (facesList[i]->accessBSImpl()->faceCollision(*facesList[j], side)){
+                if (Decomposition::FaceCollision{}.operator()(
+                            *facesList[i], *facesList[j], side)){
                     ++numberCollidingSurfaces;
                     //std::cout << "facecollision True" << std::endl;
                     iFace->splitSurface = Standard_True;
-                    if (facesList[j]->getSurfaceType() == "Cylinder"){
+                    if (facesList[j]->getSurfaceType() != Tools::toTypeName(GeomAbs_Plane)){
                         ++numberCollidingCurvedSurfaces;
                     }
                 } else{
@@ -61,4 +69,4 @@ McCAD::Geometry::CYLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl)
         }
     }
 }
-*/
+

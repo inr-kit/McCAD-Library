@@ -13,9 +13,9 @@ namespace McCAD::Decomposition{
     public:
         PointOnSurface() = default;
 
-        Standard_Boolean pointOnPlane(const TopoDS_Face& face,
-                                      const gp_Pnt& aPoint,
-                                      const Standard_Real& distanceTolerance);
+        Standard_Boolean operator()(const TopoDS_Face& face,
+                                    const gp_Pnt& aPoint,
+                                    const Standard_Real& distanceTolerance);
     };
 }
 

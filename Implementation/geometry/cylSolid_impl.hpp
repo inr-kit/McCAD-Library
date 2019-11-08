@@ -7,13 +7,14 @@
 #include "solid_impl.hpp"
 // OCC
 
+
 namespace McCAD::Geometry{
   class CYLSolid::Impl {
   public:
     Impl();
     ~Impl();
 
-    //void judgeDecomposeSurfaces(Solid::Impl*& solidImpl);
+    void judgeDecomposeSurfaces(Solid::Impl*& solidImpl);
   };
 }
 

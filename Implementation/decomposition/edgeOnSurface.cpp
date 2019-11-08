@@ -15,8 +15,8 @@ McCAD::Decomposition::EdgeOnSurface::edgeOnPlane(
     //std::cout << startPoint.X() << "," << startPoint.Y() << "," << startPoint.Z() << "," << std::endl;
     //std::cout << endPoint.X() << "," << endPoint.Y() << "," << endPoint.Z() << "," << std::endl;
     tolerance = BRep_Tool::Tolerance(face);
-    if (PointOnSurface{}.pointOnPlane(face, startPoint, tolerance) &&
-            PointOnSurface{}.pointOnPlane(face, endPoint, tolerance)){
+    if (PointOnSurface{}(face, startPoint, tolerance) &&
+            PointOnSurface{}(face, endPoint, tolerance)){
         //std::cout << "points on surface" << std::endl;
         if (aEdge.accessEImpl()->edgeType == "Line"){
             //std::cout	<< "line" << std::endl;
@@ -24,8 +24,8 @@ McCAD::Decomposition::EdgeOnSurface::edgeOnPlane(
         } else{
             gp_Pnt middlePoint = aEdge.accessEImpl()->middlePoint;
             gp_Pnt extraPoint = aEdge.accessEImpl()->extraPoint;
-            if (PointOnSurface{}.pointOnPlane(face, middlePoint, tolerance) &&
-                    PointOnSurface{}.pointOnPlane(face, extraPoint, tolerance)){
+            if (PointOnSurface{}(face, middlePoint, tolerance) &&
+                    PointOnSurface{}(face, extraPoint, tolerance)){
                 //std::cout << "no line" << std::endl;
                 return Standard_True;
             }

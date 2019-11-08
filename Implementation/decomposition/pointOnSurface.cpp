@@ -8,7 +8,7 @@
 #include "Extrema_ExtPS.hxx"
 
 Standard_Boolean
-McCAD::Decomposition::PointOnSurface::pointOnPlane(
+McCAD::Decomposition::PointOnSurface::operator()(
         const TopoDS_Face& face, const gp_Pnt& aPoint,
         const Standard_Real& distanceTolerance){
     //std::cout << "pointOnPlane, Plane" << std::endl;
