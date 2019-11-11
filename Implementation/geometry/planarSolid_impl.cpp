@@ -4,12 +4,6 @@
 #include "../decomposition/edgeOnSurface.hpp"
 #include "../decomposition/faceCollision.hpp"
 
-McCAD::Geometry::PLSolid::Impl::Impl(){
-}
-
-McCAD::Geometry::PLSolid::Impl::~Impl(){
-}
-
 void
 McCAD::Geometry::PLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl){
     // Judge whether boundary surfaces of the solid can be used for decomposition.

@@ -26,10 +26,17 @@ namespace McCAD::Decomposition{
 
       using BS = std::shared_ptr<Geometry::BoundSurface>;
 
+<<<<<<< HEAD
       std::vector<BS> operator()(
               const Geometry::PLSolid& solidObj);
       std::vector<BS> operator()(
               const Geometry::CYLSolid& solidObj);
+=======
+      std::vector<std::shared_ptr<Geometry::BoundSurface>> operator()(
+              Geometry::PLSolid& solidObj);
+      std::vector<std::shared_ptr<Geometry::BoundSurface>> operator()(
+              Geometry::CYLSolid& solidObj);
+>>>>>>> splitting working with cylinders. Assisting surfaces utilities are yet to be added
       std::shared_ptr<Geometry::BoundSurface> operator()(
               const TopoDS_Face& face, Standard_Real& boxSquareLength,
               Standard_Integer mode = 0);
