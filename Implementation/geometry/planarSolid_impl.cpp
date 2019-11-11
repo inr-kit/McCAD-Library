@@ -80,7 +80,7 @@ McCAD::Geometry::PLSolid::Impl::judgeThroughConcaveEdges(Solid::Impl*& solidImpl
                 auto& edgesList = facesList[j]->accessBSImpl()->edgesList;
                 for (Standard_Integer k = 0; k <= edgesList.size() - 1; ++k){
                     if (edgesList[k]->accessEImpl()->convexity == 0 &&
-                            Decomposition::EdgeOnSurface{}.edgeOnPlane(
+                            Decomposition::EdgeOnSurface{}(
                                 facesList[i]->accessSImpl()->face, *(edgesList[k]))){
                         ++throughConcaveEdges;
                     }

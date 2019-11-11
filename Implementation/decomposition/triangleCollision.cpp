@@ -1,7 +1,7 @@
 //McCAD
 #include "triangleCollision.hpp"
 #include "pointOnSurface.hpp"
-#include "distanceEvaluateor.hpp"
+#include "senseEvaluateor.hpp"
 #include "tools_impl.hpp"
 //OCC
 #include <TopoDS_Face.hxx>
@@ -46,7 +46,7 @@ McCAD::Decomposition::TriangleCollision::triangleCollisionPlane(
     auto& points = aTriangle.accessMTImpl()->points;
     for (Standard_Integer i = 0; i <= points.size() - 1; ++i){
         if (PointOnSurface{}(extendedFace, points[i], distanceTolerance)) continue;
-        auto evaluate = Tools::DistanceEvaluator{}(face, points[i]);
+        auto evaluate = Tools::SenseEvaluator{}(face, points[i]);
         if (evaluate > senseTolerance){
           ++positivePoints;
         } else if (evaluate < senseTolerance){
@@ -85,7 +85,7 @@ McCAD::Decomposition::TriangleCollision::triangleCollisionCyl(
     auto& points = aTriangle.accessMTImpl()->points;
     for (Standard_Integer i = 0; i <= points.size() - 1; ++i){
         if (PointOnSurface{}(extendedFace, points[i], distanceTolerance)) continue;
-        auto evaluate = Tools::DistanceEvaluator{}(face, points[i]);
+        auto evaluate = Tools::SenseEvaluator{}(face, points[i]);
         if (evaluate > senseTolerance){
             ++positivePoints;
         } else if (evaluate < senseTolerance){

@@ -1,5 +1,6 @@
 // McCAD
 #include "decomposeSolid_impl.hpp"
+#include "SurfaceUtilities.hpp"
 
 McCAD::Decomposition::DecomposeSolid::Impl::Impl()
     : recurrenceDepth{0}{
@@ -26,7 +27,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
     solidObj->accessPSImpl()->judgeDecomposeSurfaces(solidImpl);
-    if(!SplitSurfaces::Impl::throughNoBoundarySurfaces(solidImpl->splitFacesList)){
+    if(!throughNoBoundarySurfaces(solidImpl->splitFacesList)){
         solidObj->accessPSImpl()->judgeThroughConcaveEdges(solidImpl);
     }
      return perform(*solidImpl);
@@ -46,16 +47,14 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
     solidObj->accessCSImpl()->judgeDecomposeSurfaces(solidImpl);
-    /*
-    if(!SplitSurfaces::Impl::throughNoBoundarySurfaces(solidImpl->splitFacesList)){
-        solidObj->accessPSImpl()->judgeThroughConcaveEdges(solidImpl);
-         if (!splitSurfaces.accessSSImpl()->planeSplitOnlyPlane(
-                     solidImpl->splitFacesList)){
+    if(!throughNoBoundarySurfaces(solidImpl->splitFacesList)){
+        //solidObj->accessCSImpl()->judgeThroughConcaveEdges(solidImpl);
+         if (!planeSplitOnlyPlane(solidImpl->splitFacesList)){
              //generateAssistingSurfaces();
              //judgeAssistingDecomposeSurfaces();
              //judgeThroughConcaveEdges(assistingFacesList);
          }
-    }*/
+    }
     return Standard_False;
     //return perform(solidImpl);
 }
@@ -120,6 +119,25 @@ McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(
     SplitSurfaces::Impl::generateSplitFacesList(solidImpl.splitFacesList,
                                                 solidImpl.selectedSplitFacesList);
     return !solidImpl.selectedSplitFacesList.empty();
+}
+
+Standard_Boolean
+McCAD::Decomposition::DecomposeSolid::Impl::throughNoBoundarySurfaces(
+        const std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList){
+    return std::any_of(facesList.cbegin(), facesList.cend(),
+                       [](const std::shared_ptr<Geometry::BoundSurface>& face){
+        return face->accessSImpl()->numberCollidingSurfaces == 0;
+    });
+}
+
+Standard_Boolean
+McCAD::Decomposition::DecomposeSolid::Impl::planeSplitOnlyPlane(
+        const std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList){
+    return std::any_of(facesList.cbegin(), facesList.cend(),
+                       [](const std::shared_ptr<Geometry::BoundSurface>& face){
+        return face->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)
+                && face->accessSImpl()->numberCollidingCurvedSurfaces == 0;
+    });
 }
 
 void
