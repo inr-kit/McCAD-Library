@@ -15,6 +15,7 @@ namespace McCAD::Geometry{
     ~Impl();
 
     void judgeDecomposeSurfaces(Solid::Impl*& solidImpl);
+    void judgeThroughConcaveEdges(Solid::Impl*& solidImpl);
   };
 }
 

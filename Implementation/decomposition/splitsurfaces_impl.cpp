@@ -1,31 +1,7 @@
-// McCAD                                                                             
+// McCAD
 #include "splitsurfaces_impl.hpp"
-
 // C++
 #include <algorithm>
-
-bool
-McCAD::Decomposition::SplitSurfaces::Impl::throughNoBoundarySurfaces(
-        const std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList){
-    return std::any_of(
-                facesList.cbegin(),
-                facesList.cend(),
-                [](const std::shared_ptr<Geometry::BoundSurface>& face){
-                    return face->accessSImpl()->numberCollidingSurfaces == 0;
-                });
-}
-
-Standard_Boolean
-McCAD::Decomposition::SplitSurfaces::Impl::planeSplitOnlyPlane(
-        std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList){
-    return std::any_of(
-                facesList.cbegin(),
-                facesList.cend(),
-                [](const std::shared_ptr<Geometry::BoundSurface>& face){
-                    return face->getSurfaceType() == "Plane"
-                            && face->accessSImpl()->numberCollidingCurvedSurfaces == 0;
-                });
-}
 
 void
 McCAD::Decomposition::SplitSurfaces::Impl::generateSplitFacesList(

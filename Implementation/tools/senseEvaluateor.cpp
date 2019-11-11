@@ -1,25 +1,25 @@
 // McCAD
-#include "distanceEvaluateor.hpp"
+#include "senseEvaluateor.hpp"
 //OCC
 #include <GeomAdaptor_Surface.hxx>
 #include <BRep_Tool.hxx>
 
 Standard_Real
-McCAD::Tools::DistanceEvaluator::operator()(const TopoDS_Face& face,
+McCAD::Tools::SenseEvaluator::operator()(const TopoDS_Face& face,
                                             const gp_Pnt& point){
     GeomAdaptor_Surface surfaceAdaptor{BRep_Tool::Surface(face)};
     if (surfaceAdaptor.GetType() == GeomAbs_Plane){
         gp_Pln plane = surfaceAdaptor.Plane();
-        return distanceToPlane(plane, point);
+        return senseToPlane(plane, point);
     } else if (surfaceAdaptor.GetType() == GeomAbs_Cylinder){
         gp_Cylinder cylinder = surfaceAdaptor.Cylinder();
-        return distanceToCyl(cylinder, point);
+        return senseToCyl(cylinder, point);
     }
     else return 0;
 }
 
 Standard_Real
-McCAD::Tools::DistanceEvaluator::distanceToPlane(const gp_Pln& plane,
+McCAD::Tools::SenseEvaluator::senseToPlane(const gp_Pln& plane,
                                                  const gp_Pnt& point){
     std::array<Standard_Real, 4> parameters;
     //A * X + B * Y + C * Z + D = 0
@@ -29,7 +29,7 @@ McCAD::Tools::DistanceEvaluator::distanceToPlane(const gp_Pln& plane,
 }
 
 Standard_Real
-McCAD::Tools::DistanceEvaluator::distanceToCyl(const gp_Cylinder& cylinder,
+McCAD::Tools::SenseEvaluator::senseToCyl(const gp_Cylinder& cylinder,
                                                const gp_Pnt& point){
     std::array<Standard_Real, 10> parameters;
     // A1.X**2 + A2.Y**2 + A3.Z**2 + 2.(B1.X.Y + B2.X.Z + B3.Y.Z) + 2.(C1.X + C2.Y + C3.Z) + D = 0.0

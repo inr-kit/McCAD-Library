@@ -2,16 +2,16 @@
 //McCAD
 #include "pointOnSurface.hpp"
 #include "boundSurfacePlane_impl.hpp"
+#include "senseEvaluateor.hpp"
 //OCC
 #include <BRepTools.hxx>
-#include "BRepAdaptor_Surface.hxx"
+//#include "BRepAdaptor_Surface.hxx"
 #include "Extrema_ExtPS.hxx"
 
 Standard_Boolean
 McCAD::Decomposition::PointOnSurface::operator()(
         const TopoDS_Face& face, const gp_Pnt& aPoint,
         const Standard_Real& distanceTolerance){
-    //std::cout << "pointOnPlane, Plane" << std::endl;
     BRepAdaptor_Surface surfaceAdaptor(face, Standard_True);
     Standard_Real uvTolerance = surfaceAdaptor.Tolerance();
     std::array<Standard_Real, 4> uvParameters;
@@ -23,12 +23,9 @@ McCAD::Decomposition::PointOnSurface::operator()(
             uvParameters[1], uvParameters[2], uvParameters[3], uvTolerance,
             uvTolerance);
     if (extremumDistances.IsDone() && extremumDistances.NbExt() != 0){
-        gp_Pnt point = extremumDistances.Point(1).Value();
-        Standard_Real distance = std::sqrt(std::pow(aPoint.X() - point.X(), 2) +
-                                           std::pow(aPoint.Y() - point.Y(), 2) +
-                                           std::pow(aPoint.Z() - point.Z(), 2));
-      if (distance < distanceTolerance){
-          return Standard_True;
+        auto distance = std::sqrt(extremumDistances.SquareDistance(1));
+        if (distance < distanceTolerance){
+            return Standard_True;
       }
     }
     return Standard_False;
