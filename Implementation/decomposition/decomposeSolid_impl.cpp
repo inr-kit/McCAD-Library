@@ -20,7 +20,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     // A condition has to be set for termination (Now only 20 recursion levels).
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
-    std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
+    //std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
     if(recurrenceDepth >= 20){
         return Standard_False;
     }
@@ -40,7 +40,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     // A condition has to be set for termination (Now only 20 recursion levels).
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
-    std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
+    //std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
     if(recurrenceDepth >= 20){
         return Standard_False;
     }
@@ -48,15 +48,15 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     // Judge which surfaces are decompose surfaces from the generated list.
     solidObj->accessCSImpl()->judgeDecomposeSurfaces(solidImpl);
     if(!throughNoBoundarySurfaces(solidImpl->splitFacesList)){
-        //solidObj->accessCSImpl()->judgeThroughConcaveEdges(solidImpl);
+        solidObj->accessCSImpl()->judgeThroughConcaveEdges(solidImpl);
          if (!planeSplitOnlyPlane(solidImpl->splitFacesList)){
              //generateAssistingSurfaces();
              //judgeAssistingDecomposeSurfaces();
              //judgeThroughConcaveEdges(assistingFacesList);
          }
     }
-    return Standard_False;
-    //return perform(solidImpl);
+    //return Standard_False;
+    return perform(*solidImpl);
 }
 
 Standard_Boolean
@@ -73,8 +73,8 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
         }
         // Loop over the resulting subsolids and split each one of them recursively.
         for (Standard_Integer i = 1; i <= solidImpl.splitSolidList->Length(); ++i){
-            std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/"
-                      << solidImpl.splitSolidList->Length() << "/" << i << std::endl;
+            //std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/"
+             //         << solidImpl.splitSolidList->Length() << "/" << i << std::endl;
             //std::cout << splitSolidList->Length() << std::endl;
             auto subSolid = Preprocessor{}.perform(solidImpl.splitSolidList->Value(i));
             if (std::holds_alternative<std::monostate>(subSolid)){

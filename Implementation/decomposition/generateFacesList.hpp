@@ -28,9 +28,9 @@ namespace McCAD::Decomposition{
       std::unique_ptr<Tools::Preprocessor> preproc;
 
       std::vector<std::shared_ptr<Geometry::BoundSurface>> operator()(
-              const Geometry::PLSolid& solidObj);
+              Geometry::PLSolid& solidObj);
       std::vector<std::shared_ptr<Geometry::BoundSurface>> operator()(
-              const Geometry::CYLSolid& solidObj);
+              Geometry::CYLSolid& solidObj);
       std::shared_ptr<Geometry::BoundSurface> operator()(
               const TopoDS_Face& face, Standard_Real& boxSquareLength,
               Standard_Integer mode = 0);

@@ -7,13 +7,6 @@
 //OCC
 #include <GeomAbs_SurfaceType.hxx>
 
-
-McCAD::Geometry::CYLSolid::Impl::Impl(){
-}
-
-McCAD::Geometry::CYLSolid::Impl::~Impl(){
-}
-
 void
 McCAD::Geometry::CYLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl){
     // Judge whether boundary surfaces of the solid can be used for decomposition.

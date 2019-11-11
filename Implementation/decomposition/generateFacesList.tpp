@@ -26,7 +26,7 @@ McCAD::Decomposition::GenerateFacesList::generateSurface<McCAD::Geometry::PLSoli
 
 std::vector<std::shared_ptr<McCAD::Geometry::BoundSurface>>
 McCAD::Decomposition::GenerateFacesList::operator()(
-        const McCAD::Geometry::PLSolid& solidObj){
+        McCAD::Geometry::PLSolid& solidObj){
     //std::cout << "GenerateFacesList::operator()<McCAD::Geometry::PLSolid>" << std::endl;
     // Generate a list of solid faces.
     TopoDS_Solid solid = solidObj.accessSImpl()->solid;
@@ -55,6 +55,7 @@ McCAD::Decomposition::GenerateFacesList::operator()(
     }
     //std::cout << "     - There are " << planesList.size() << " planes in the "
     //                                                         "solid" << std::endl;
+    solidObj.accessPSImpl()->planesList = planesList;
     mergeSurfaces(planesList, solidObj.accessSImpl()->boxSquareLength);
     facesList.insert(facesList.end(), planesList.begin(), planesList.end());
     return facesList;
@@ -91,7 +92,7 @@ McCAD::Decomposition::GenerateFacesList::generateSurface<McCAD::Geometry::CYLSol
 
 std::vector<std::shared_ptr<McCAD::Geometry::BoundSurface>>
 McCAD::Decomposition::GenerateFacesList::operator()(
-        const McCAD::Geometry::CYLSolid& solidObj){
+        McCAD::Geometry::CYLSolid& solidObj){
     //std::cout << "GenerateFacesList::operator()<McCAD::Geometry::CYLSolid>" << std::endl;
     TopoDS_Solid solid = solidObj.accessSImpl()->solid;
     //std::cout << "solidObj.accessSImpl()->solid" << std::endl;
@@ -131,10 +132,12 @@ McCAD::Decomposition::GenerateFacesList::operator()(
     }
     //std::cout << "     - There are " << planesList.size() <<
     //             " planes in the solid" << std::endl;
+    solidObj.accessCSImpl()->planesList = planesList;
     mergeSurfaces(planesList, solidObj.accessSImpl()->boxSquareLength);
     facesList.insert(facesList.end(), planesList.begin(), planesList.end());
     //std::cout << "     - There are " << cylindersList.size() <<
     //             " cylinders in the solid" << std::endl;
+    solidObj.accessCSImpl()->cylindersList = cylindersList;
     mergeSurfaces(cylindersList, solidObj.accessSImpl()->boxSquareLength);
     facesList.insert(facesList.end(), cylindersList.begin(), cylindersList.end());
     return facesList;
