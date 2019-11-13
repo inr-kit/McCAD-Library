@@ -1,5 +1,9 @@
+//C++
+#include <filesystem>
 // McCAD
 #include "boundSurface_impl.hpp"
+//OCC
+#include <STEPControl_Writer.hxx>
 
 McCAD::Geometry::BoundSurface::Impl::Impl(BoundSurface* backReference)
   : boundSurface{backReference}{
@@ -19,17 +23,17 @@ McCAD::Geometry::BoundSurface::Impl::canFuse(const McCAD::Geometry::BoundSurface
     if (!Tools::SurfaceComparator{}(boundSurface->accessSImpl()->face,
                                     that.accessSImpl()->face)){
       return Standard_False;
-  }
-  // Check common edges of the two faces.
-  for (Standard_Integer i = 0; i <= edgesList.size() - 2; ++i){
-      for (Standard_Integer j = i+1; j <= that.accessBSImpl()->edgesList.size() - 1;
-           ++j){
-          if (*edgesList[i] == *that.accessBSImpl()->edgesList[j]){
-              return Standard_True;
-          }
-      }
-  }
-  return Standard_False;
+    }
+    // Check common edges of the two faces.
+    for (Standard_Integer i = 0; i <= edgesList.size() - 2; ++i){
+        for (Standard_Integer j = i+1; j <= that.accessBSImpl()->edgesList.size() - 1;
+             ++j){
+            if (*edgesList[i] == *that.accessBSImpl()->edgesList[j]){
+                return Standard_True;
+            }
+        }
+    }
+    return Standard_False;
 }
 
 Standard_Boolean
@@ -93,6 +97,7 @@ McCAD::Geometry::BoundSurface::Impl::generateMesh(const Standard_Real& meshDefle
 
 void
 McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
+    //std::cout << "generateEdges" << std::endl;
     TopoDS_Face face = boundSurface->accessSImpl()->face;
     for (const auto& tempEdge : ShapeView<TopAbs_EDGE>{face}){
         std::unique_ptr<Edge> edge = std::make_unique<Edge>();
@@ -123,33 +128,47 @@ McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
 
 void
 McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::unique_ptr<Edge>>& aEdgesList){
-  if (edgesList.size() == 0)
-    {
-      // If the current list is empty, append to it the new one.
-      for (Standard_Integer i = 0; i <= aEdgesList.size() - 1; ++i)
-	{
-	  edgesList.push_back(std::move(aEdgesList[i]));
-	}
-    }
-  else
-    {
-      // Compare and add only if different.
-      for (Standard_Integer i = 0; i <= aEdgesList.size() - 1; ++i)
-	{
-	  Standard_Integer sameEdge = 0;
-	  for (Standard_Integer j = 0; j <= edgesList.size() - 1; ++j)
-	    {
-	      if (*(edgesList[j]) == *(aEdgesList[i]))
-		{
-		  edgesList.erase(edgesList.begin() + j);
-		  ++sameEdge;
-		  --j;
-		}
-	    }
-	  if (sameEdge == 0)
-	    {
-	      edgesList.push_back(std::move(aEdgesList[i]));
-	    }
-	}
+    //std::cout << "combineEdges" << std::endl;
+    if (edgesList.size() == 0){
+        // If the current list is empty, append to it the new one.
+        for (Standard_Integer i = 0; i <= aEdgesList.size() - 1; ++i){
+            std::cout << "combineEdges, add all" << std::endl;
+            edgesList.push_back(std::move(aEdgesList[i]));
+        }
+    } else{
+        // Compare and add only if different.
+        std::cout << "combineEdges, add different" << std::endl;
+        for (Standard_Integer i = 0; i <= aEdgesList.size() - 1; ++i){
+            Standard_Integer sameEdge = 0;
+            for (Standard_Integer j = 0; j <= edgesList.size() - 1; ++j){
+                std::cout << "i: " << i << ", j: " << j << std::endl;
+                if (*(edgesList[j]) == *(aEdgesList[i])){
+                    // /* //debug
+                    STEPControl_Writer writer1;
+                    writer1.Transfer(edgesList[j]->accessEImpl()->edge,
+                                     STEPControl_StepModelType::STEPControl_AsIs);
+                    writer1.Transfer(edgesList[i]->accessEImpl()->edge,
+                                     STEPControl_StepModelType::STEPControl_AsIs);
+                    Standard_Integer kk = 0;
+                    std::string filename = "/home/mharb/opt/McCAD_refactor/examples/bbox/edges";
+                    std::string suffix = ".stp";
+                    while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
+                        ++kk;
+                    }
+                    filename += std::to_string(kk);
+                    filename += suffix;
+                    writer1.Write(filename.c_str());
+                    // */ //debug
+                    std::cout << "combineEdges, equal, erase" << std::endl;
+                    edgesList.erase(edgesList.begin() + j);
+                    ++sameEdge;
+                    --j;
+                    std::cout << edgesList.size() << ", j: " << j << std::endl;
+                }
+            }
+            if (sameEdge == 0){
+                edgesList.push_back(std::move(aEdgesList[i]));
+            }
+        }
     }
 }

@@ -10,6 +10,7 @@
 #include "solid_impl.hpp"
 #include "boundSurface_impl.hpp"
 #include "ShapeView.hpp"
+#include <Standard.hxx>
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>
 #include <BRepBndLib.hxx>
@@ -36,21 +37,16 @@ namespace McCAD::Decomposition{
     public:
         Impl() = default;
 
-        bool operator()(
-                const TopoDS_Solid& solid,
-                const Bnd_OBB& obb,
-                const Geometry::BoundSurface& surface,
-                TopTools_HSequenceOfShape& subSolidsList) const;
+        Standard_Boolean operator()(const TopoDS_Solid& solid,
+                                    const Bnd_OBB& obb,
+                                    const Geometry::BoundSurface& surface,
+                                    TopTools_HSequenceOfShape& subSolidsList) const;
 
     private:
-        bool filterAndRepair(
-                TopTools_HSequenceOfShape& subSolidsList,
-                Standard_Real tolerance = 1.0e-4) const;
-
-        TopTools_HSequenceOfShape gatherSubSolids(
-                TopTools_HSequenceOfShape& solids,
-                Standard_Real tolerance = 1.0e-4) const;
-
+        Standard_Boolean filterAndRepair(TopTools_HSequenceOfShape& subSolidsList,
+                                         Standard_Real tolerance = 1.0e-4) const;
+        TopTools_HSequenceOfShape gatherSubSolids(TopTools_HSequenceOfShape& solids,
+                                                  Standard_Real tolerance = 1.0e-4) const;
     };
 }
 

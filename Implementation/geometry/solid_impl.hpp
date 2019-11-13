@@ -53,7 +53,7 @@ namespace McCAD::Geometry{
     TopoDS_Solid solid;
     TopoDS_Shape solidShape;
     Standard_Real meshDeflection;
-    Standard_Real boxSquareLength;
+    Standard_Real boxDiagonalLength;
     Standard_Boolean splitSurface = Standard_False;
     
     std::vector<std::shared_ptr<BoundSurface>> facesList;

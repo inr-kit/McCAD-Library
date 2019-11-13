@@ -12,7 +12,7 @@ McCAD::Decomposition::GenerateFacesList::~GenerateFacesList(){
 void
 McCAD::Decomposition::GenerateFacesList::mergeSurfaces(
         std::vector<std::shared_ptr<Geometry::BoundSurface>>& surfacesList,
-        Standard_Real& boxSquareLength){
+        Standard_Real& boxDiagonalLength){
     //std::cout << "mergeSurfaces" << std::endl;
     if (surfacesList.size() < 2){
         return;
@@ -30,7 +30,7 @@ McCAD::Decomposition::GenerateFacesList::mergeSurfaces(
                                 surfacesList[i]->accessSImpl()->face,
                                 surfacesList[j]->accessSImpl()->face).value();
                     std::shared_ptr<Geometry::BoundSurface> newboundSurface =
-                            GenerateFacesList{}(newFace, boxSquareLength);
+                            GenerateFacesList{}(newFace, boxDiagonalLength);
                     newboundSurface->accessSImpl()->surfaceNumber =
                             surfacesList[i]->accessSImpl()->surfaceNumber;
                     // Add triangles of surface i.

@@ -55,7 +55,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
              //judgeThroughConcaveEdges(assistingFacesList);
          }
     }
-    //return Standard_False;
     return perform(*solidImpl);
 }
 
@@ -69,12 +68,13 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
         if(!(SplitSolid::Impl{}(solidImpl.solid, solidImpl.obb,
                                 *solidImpl.selectedSplitFacesList[0],
                                 *solidImpl.splitSolidList))){
+            std::cout << "SplitSolid return false" << std::endl;
             return Standard_False;
         }
         // Loop over the resulting subsolids and split each one of them recursively.
         for (Standard_Integer i = 1; i <= solidImpl.splitSolidList->Length(); ++i){
             //std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/"
-             //         << solidImpl.splitSolidList->Length() << "/" << i << std::endl;
+            //          << solidImpl.splitSolidList->Length() << "/" << i << std::endl;
             //std::cout << splitSolidList->Length() << std::endl;
             auto subSolid = Preprocessor{}.perform(solidImpl.splitSolidList->Value(i));
             if (std::holds_alternative<std::monostate>(subSolid)){

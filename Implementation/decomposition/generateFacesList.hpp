@@ -32,15 +32,15 @@ namespace McCAD::Decomposition{
       std::vector<std::shared_ptr<Geometry::BoundSurface>> operator()(
               Geometry::CYLSolid& solidObj);
       std::shared_ptr<Geometry::BoundSurface> operator()(
-              const TopoDS_Face& face, Standard_Real& boxSquareLength,
+              const TopoDS_Face& face, Standard_Real& boxDiagonalLength,
               Standard_Integer mode = 0);
       template<typename solidObjType>
       std::shared_ptr<Geometry::BoundSurface> generateSurface(
-              const TopoDS_Face& face, Standard_Real& boxSquareLength,
+              const TopoDS_Face& face, Standard_Real& boxDiagonalLength,
               Standard_Integer mode = 0);
       void mergeSurfaces(
               std::vector<std::shared_ptr<Geometry::BoundSurface>>& surfacesList,
-              Standard_Real& boxSquareLength);
+              Standard_Real& boxDiagonalLength);
     };
 }
 
