@@ -75,13 +75,32 @@ McCAD::Decomposition::Decompose::Impl::perform(const TopoDS_Shape& shape){
         } else{
             rejectedInputSolidsList->Append(shape);
         }
-        break;
-    } case solidType.cylindricalSolid:{
-        std::cout << "   - Decomposing solid" << std::endl;
-        if (DecomposeSolid{}.accessDSImpl()->operator()(
-                    std::get<solidType.cylindricalSolid>(solid))){
-            extractSolids(*std::get<solidType.cylindricalSolid>(solid)->accessSImpl());
-        } else{
+        // Using switch for now. Should be separated in a separate class an called
+        // for each specific type of solid object.
+        switch (Standard_Integer(solid.index())){
+        case solidType.planarSolid:{
+            std::cout << "   - Decomposing planar solid" << std::endl;
+            if (DecomposeSolid{}.accessDSImpl()->operator()(
+                        std::get<solidType.planarSolid>(solid))){
+                extractSolids(*std::get<solidType.planarSolid>(solid)->accessSImpl());
+            } else{
+                rejectedInputSolidsList->Append(shape);
+            }
+            break;
+        } case solidType.cylindricalSolid:{
+            std::cout << "   - Decomposing cylindrical solid" << std::endl;
+            if (DecomposeSolid{}.accessDSImpl()->operator()(
+                        std::get<solidType.cylindricalSolid>(solid))){
+                extractSolids(*std::get<solidType.cylindricalSolid>(solid)->accessSImpl());
+            } else{
+                std::cout << "   - rejected cylindrical solid" << std::endl;
+                rejectedInputSolidsList->Append(shape);
+            }
+            break;
+        } default:
+            std::cout << "   - Processing of solids with non-planar surfaces"
+                         " is not yet supported!.\n     Solid will be added"
+                         " to rejected solids file" << std::endl;
             rejectedInputSolidsList->Append(shape);
         }
         break;

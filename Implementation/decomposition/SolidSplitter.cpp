@@ -2,6 +2,7 @@
 #include "SolidSplitter.hpp"
 // C++
 #include <array>
+#include <filesystem>
 // OCC
 #include <BRepAdaptor_Surface.hxx>
 #include <BRepBndLib.hxx>
@@ -11,12 +12,29 @@
 #include <BRepPrimAPI_MakeHalfSpace.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
 #include <gp_Pln.hxx>
+#include <STEPControl_Writer.hxx>
 
 std::optional<std::pair<TopoDS_Shape, TopoDS_Shape>>
 McCAD::Decomposition::SolidSplitter::operator()(
         const TopoDS_Solid& solidToSplit, const Bnd_OBB& obb,
         const TopoDS_Face& splittingFace) const{
     auto boundingBox = calculateOBB(obb);
+    /* //debug
+    STEPControl_Writer writer0;
+    writer0.Transfer(boundingBox, STEPControl_StepModelType::STEPControl_AsIs);
+    writer0.Transfer(solidToSplit, STEPControl_StepModelType::STEPControl_AsIs);
+    writer0.Transfer(splittingFace, STEPControl_StepModelType::STEPControl_AsIs);
+    std::cout << "OBB sqrt square extent: " << sqrt(obb.SquareExtent()) << std::endl;
+    Standard_Integer kk = 0;
+    std::string filename = "/home/mharb/opt/McCAD_refactor/examples/bbox/solid";
+    std::string suffix = ".stp";
+    while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
+        ++kk;
+    }
+    filename += std::to_string(kk);
+    filename += suffix;
+    writer0.Write(filename.c_str());
+    */ //debug
     auto halfBoundingBoxes = calculateHalfBB(splittingFace, boundingBox);
     if(!halfBoundingBoxes) return std::nullopt;
     return calculateHalfSolids(solidToSplit, *halfBoundingBoxes);

@@ -12,7 +12,7 @@ McCAD::Geometry::BoundSurfaceCyl::Impl::~Impl(){
 
 void
 McCAD::Geometry::BoundSurfaceCyl::Impl::generateExtendedCyl(
-        const Standard_Real& boxSquareLength, Standard_Real tolerance){
+        const Standard_Real& boxDiagonalLength, Standard_Real tolerance){
   TopoDS_Face face = boundSurfaceCyl->accessSImpl()->face;
   Handle_Geom_Surface surface = BRep_Tool::Surface(face);
   std::array<Standard_Real, 4> uvParameters;
@@ -24,8 +24,8 @@ McCAD::Geometry::BoundSurfaceCyl::Impl::generateExtendedCyl(
   std::array<Standard_Real, 4> newUVParameters;
   newUVParameters[0] = 0;
   newUVParameters[1] = 2*M_PI;
-  newUVParameters[2] = uvParameters[2] - boxSquareLength;
-  newUVParameters[3] = uvParameters[3] + boxSquareLength;
+  newUVParameters[2] = uvParameters[2] - boxDiagonalLength;
+  newUVParameters[3] = uvParameters[3] + boxDiagonalLength;
 
   boundSurfaceCyl->accessSImpl()->extendedFace =
     BRepBuilderAPI_MakeFace(surface, newUVParameters[0], newUVParameters[1],

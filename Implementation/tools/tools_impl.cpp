@@ -23,11 +23,8 @@ McCAD::Tools::Preprocessor::Impl::repairSolid(TopoDS_Solid& solid){
 Standard_Boolean
 McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face,
                                             Standard_Real tolerance){
-    //std::cout << "checkFace" << std::endl;
     ShapeAnalysis_CheckSmallFace shapeAnalysis;
     TopoDS_Edge edge1, edge2;
-    //std::cout << shapeAnalysis.CheckSpotFace(face, tolerance) << std::endl;
-    //std::cout << shapeAnalysis.CheckStripFace(face, edge1, edge2, tolerance) << std::endl;
     if( shapeAnalysis.CheckSpotFace(face, tolerance) ||
             shapeAnalysis.CheckStripFace(face, edge1, edge2, tolerance)){
         return Standard_True;

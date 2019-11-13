@@ -15,7 +15,7 @@
 namespace McCAD::Geometry{
   class Edge::Impl {
   public:
-    Impl() = default;
+    //Impl() = default;
 
     std::unique_ptr<Tools::Preprocessor> preproc;
     

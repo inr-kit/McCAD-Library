@@ -18,7 +18,7 @@ namespace McCAD::Geometry{
 
     std::string surfaceType = "Cylinder";
     Standard_Real rangeRadian;
-    void generateExtendedCyl(const Standard_Real& boxSquareLength,
+    void generateExtendedCyl(const Standard_Real& boxDiagonalLength,
                              Standard_Real tolerance = 1.0e-7);
   };
 }

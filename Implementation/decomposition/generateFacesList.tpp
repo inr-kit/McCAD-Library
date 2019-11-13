@@ -17,7 +17,7 @@ McCAD::Decomposition::FacesListGenerator::generateSurface<McCAD::Geometry::PLSol
                 std::make_shared<Geometry::BoundSurfacePlane>();
         boundSurfacePlane->setSurfaceType(Tools::toTypeName(GeomAbs_Plane));
         boundSurfacePlane->accessSImpl()->initiate(face);
-        boundSurfacePlane->accessBSPImpl()->generateExtendedPlane(boxSquareLength);
+        boundSurfacePlane->accessBSPImpl()->generateExtendedPlane(boxDiagonalLength);
         return boundSurfacePlane;
     } else{
         //std::cout << "nullptr" << std::endl;
@@ -57,7 +57,7 @@ McCAD::Decomposition::FacesListGenerator::operator()(
     //std::cout << "     - There are " << planesList.size() << " planes in the "
     //                                                         "solid" << std::endl;
     solidObj.accessPSImpl()->planesList = planesList;
-    mergeSurfaces(planesList, solidObj.accessSImpl()->boxSquareLength);
+    mergeSurfaces(planesList, solidObj.accessSImpl()->boxDiagonalLength);
     facesList.insert(facesList.end(), planesList.begin(), planesList.end());
     return facesList;
 }
@@ -77,14 +77,14 @@ McCAD::Decomposition::FacesListGenerator::generateSurface<McCAD::Geometry::CYLSo
                     std::make_shared<Geometry::BoundSurfacePlane>();
             boundSurfacePlane->setSurfaceType(Tools::toTypeName(GeomAbs_Plane));
             boundSurfacePlane->accessSImpl()->initiate(face);
-            boundSurfacePlane->accessBSPImpl()->generateExtendedPlane(boxSquareLength);
+            boundSurfacePlane->accessBSPImpl()->generateExtendedPlane(boxDiagonalLength);
             return boundSurfacePlane;
         } else if (AdaptorSurface.GetType() == GeomAbs_Cylinder){
             std::shared_ptr<Geometry::BoundSurfaceCyl> boundSurfaceCyl =
                     std::make_shared<Geometry::BoundSurfaceCyl>();
             boundSurfaceCyl->setSurfaceType(Tools::toTypeName(GeomAbs_Cylinder));
             boundSurfaceCyl->accessSImpl()->initiate(face);
-            boundSurfaceCyl->accessBSCImpl()->generateExtendedCyl(boxSquareLength);
+            boundSurfaceCyl->accessBSCImpl()->generateExtendedCyl(boxDiagonalLength);
             return boundSurfaceCyl;
         }
     }
@@ -132,12 +132,12 @@ McCAD::Decomposition::FacesListGenerator::operator()(
     //std::cout << "     - There are " << planesList.size() <<
     //             " planes in the solid" << std::endl;
     solidObj.accessCSImpl()->planesList = planesList;
-    mergeSurfaces(planesList, solidObj.accessSImpl()->boxSquareLength);
+    mergeSurfaces(planesList, solidObj.accessSImpl()->boxDiagonalLength);
     facesList.insert(facesList.end(), planesList.begin(), planesList.end());
     //std::cout << "     - There are " << cylindersList.size() <<
     //             " cylinders in the solid" << std::endl;
     solidObj.accessCSImpl()->cylindersList = cylindersList;
-    mergeSurfaces(cylindersList, solidObj.accessSImpl()->boxSquareLength);
+    mergeSurfaces(cylindersList, solidObj.accessSImpl()->boxDiagonalLength);
     facesList.insert(facesList.end(), cylindersList.begin(), cylindersList.end());
     return facesList;
 }
@@ -147,5 +147,5 @@ std::shared_ptr<McCAD::Geometry::BoundSurface>
 McCAD::Decomposition::FacesListGenerator::operator()(const TopoDS_Face& face,
                                                     Standard_Real& boxSquareLength,
                                                     Standard_Integer mode){
-    return generateSurface<McCAD::Geometry::CYLSolid>(face, boxSquareLength);
+    return generateSurface<McCAD::Geometry::CYLSolid>(face, boxDiagonalLength);
 }
