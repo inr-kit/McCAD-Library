@@ -37,6 +37,7 @@ namespace McCAD::Decomposition{
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
 
     void flattenSolidHierarchy(const Handle_TopTools_HSequenceOfShape& inputSolidsList);
+    void perform(const TopoDS_Shape& shape);
     void perform();
     void extractSolids(const Geometry::Solid::Impl& solidImpl);
   };

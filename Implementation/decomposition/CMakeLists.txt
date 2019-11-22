@@ -31,4 +31,5 @@ install(FILES
   DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/decomposition)
 
 target_link_libraries(DECOMPOSITION_IMPL
-  OCC)
+  OCC
+  TOOLS_IFACE)
