@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <chrono>
+
 // McCAD
 #include "inputdata.hpp"
 #include "stepreader.hpp"
@@ -18,6 +19,8 @@ int main (){
     std::cout << "Specify the path to save the rejected solids step file: " <<
                  std::endl;
     getline(std::cin, rejectFileName);
+
+    auto start = std::chrono::high_resolution_clock::now();
     
     auto start = std::chrono::high_resolution_clock::now();
     // Load the input file.
