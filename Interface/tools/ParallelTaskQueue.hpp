@@ -1,7 +1,7 @@
 #ifndef PARALLELTASKQUEUE_HPP
 #define PARALLELTASKQUEUE_HPP
 
-#include <boost/asio/thread_pool.hpp>
+#include <thread_pool.hpp>
 #include <functional>
 
 namespace McCAD{

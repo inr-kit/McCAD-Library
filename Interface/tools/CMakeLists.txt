@@ -12,5 +12,5 @@ install(FILES
 
 target_link_libraries(TOOLS_IFACE
   PUBLIC
-  Boost
+  BOOST
   TOOLS_IMPL)
