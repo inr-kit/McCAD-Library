@@ -1,6 +1,7 @@
 // C++
 #include <iostream>
 #include <string>
+#include <chrono>
 // McCAD
 #include "inputdata.hpp"
 #include "stepreader.hpp"
@@ -18,6 +19,7 @@ int main (){
                  std::endl;
     getline(std::cin, rejectFileName);
     
+    auto start = std::chrono::high_resolution_clock::now();
     // Load the input file.
     std::cout << "***************************" << std::endl;
     std::cout << "** Loading the STEP file **" << std::endl;
@@ -40,5 +42,8 @@ int main (){
     McCAD::IO::STEPWriter{resultFileName, outputData_result};
     McCAD::IO::STEPWriter{rejectFileName, outputData_reject};
 
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> elapsed = end-start;
+    std::cout << "Elapsed time: " << elapsed.count() << " ms" << std::endl;
     return 0;
 }
