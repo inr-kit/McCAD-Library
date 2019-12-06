@@ -3,10 +3,8 @@ cmake_minimum_required(VERSION 3.14.4 FATAL_ERROR)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-option(Use_Linux_OS "Linux OS is assumed by default. Change to OFF for Windows" ON)
+option(Use_Linux_OS "Linux OS is assumed by default. " ON)
 message("-- Use_Linux_OS: " ${Use_Linux_OS})
-option(Use_MultiProc "MultiProcessing is on by default." ON)
-message("-- Use_MultiProc: " ${Use_MultiProc})
 
 # Set project name
 project(McCAD LANGUAGES CXX)
@@ -85,8 +83,8 @@ target_link_libraries(DECOMPOSITION INTERFACE GEOMETRY)
 # add the executable
 add_executable(${PROJECT_NAME} "main.cpp")
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    BOOST
     OCC
+    BOOST
     INPUTDATA
     IO
     TOOLS
