@@ -83,12 +83,13 @@ target_link_libraries(DECOMPOSITION INTERFACE GEOMETRY)
 # add the executable
 add_executable(${PROJECT_NAME} "main.cpp")
 target_link_libraries(${PROJECT_NAME} PRIVATE
-  OCC
-  INPUTDATA
-  IO
-  TOOLS
-  GEOMETRY
-  DECOMPOSITION)
+    OCC
+    BOOST
+    INPUTDATA
+    IO
+    TOOLS
+    GEOMETRY
+    DECOMPOSITION)
 
 install(TARGETS ${PROJECT_NAME}
   DESTINATION ${PROJECT_BINARY_DIR}/bin)
