@@ -37,7 +37,7 @@ McCAD::Decomposition::Decompose::Impl::flattenSolidHierarchy(
             [[fallthrough]];
         case TopAbs_COMPSOLID:
             ++compSolid;
-            for(const auto& solid : ShapeView<TopAbs_SOLID>{shape}){
+            for(const auto& solid : detail::ShapeView<TopAbs_SOLID>{shape}){
                 splitInputSolidsList->Append(solid);
             };
             break;

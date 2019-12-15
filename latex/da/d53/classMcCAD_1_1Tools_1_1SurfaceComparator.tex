@@ -1,0 +1,112 @@
+\hypertarget{classMcCAD_1_1Tools_1_1SurfaceComparator}{}\doxysection{Mc\+C\+AD\+::Tools\+::Surface\+Comparator Class Reference}
+\label{classMcCAD_1_1Tools_1_1SurfaceComparator}\index{McCAD::Tools::SurfaceComparator@{McCAD::Tools::SurfaceComparator}}
+
+
+{\ttfamily \#include $<$/home/mharb/\+Documents/\+Mc\+C\+A\+D\+\_\+refactor/build/includes/implementation/tools/surface\+Comparator.\+hpp$>$}
+
+
+
+Collaboration diagram for Mc\+C\+AD\+::Tools\+::Surface\+Comparator\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=253pt]{d7/dea/classMcCAD_1_1Tools_1_1SurfaceComparator__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfaceComparator_a43905b4c49b4a27e5fc809b37a96c308}{Surface\+Comparator}} ()=default
+\item 
+Standard\+\_\+\+Boolean \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfaceComparator_a4c95d31c14ea0c9f442d378ab65d9b1f}{operator()}} (const Topo\+D\+S\+\_\+\+Face \&first\+Face, const Topo\+D\+S\+\_\+\+Face \&second\+Face) const
+\item 
+\mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfaceComparator_a43905b4c49b4a27e5fc809b37a96c308}{Surface\+Comparator}} ()=default
+\item 
+Standard\+\_\+\+Boolean \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfaceComparator_a4c95d31c14ea0c9f442d378ab65d9b1f}{operator()}} (const Topo\+D\+S\+\_\+\+Face \&first\+Face, const Topo\+D\+S\+\_\+\+Face \&second\+Face) const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 16 of file build/includes/implementation/tools/surface\+Comparator.\+hpp.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1SurfaceComparator_a43905b4c49b4a27e5fc809b37a96c308}\label{classMcCAD_1_1Tools_1_1SurfaceComparator_a43905b4c49b4a27e5fc809b37a96c308}} 
+\index{McCAD::Tools::SurfaceComparator@{McCAD::Tools::SurfaceComparator}!SurfaceComparator@{SurfaceComparator}}
+\index{SurfaceComparator@{SurfaceComparator}!McCAD::Tools::SurfaceComparator@{McCAD::Tools::SurfaceComparator}}
+\doxysubsubsection{\texorpdfstring{SurfaceComparator()}{SurfaceComparator()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Mc\+C\+A\+D\+::\+Tools\+::\+Surface\+Comparator\+::\+Surface\+Comparator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1SurfaceComparator_a43905b4c49b4a27e5fc809b37a96c308}\label{classMcCAD_1_1Tools_1_1SurfaceComparator_a43905b4c49b4a27e5fc809b37a96c308}} 
+\index{McCAD::Tools::SurfaceComparator@{McCAD::Tools::SurfaceComparator}!SurfaceComparator@{SurfaceComparator}}
+\index{SurfaceComparator@{SurfaceComparator}!McCAD::Tools::SurfaceComparator@{McCAD::Tools::SurfaceComparator}}
+\doxysubsubsection{\texorpdfstring{SurfaceComparator()}{SurfaceComparator()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Mc\+C\+A\+D\+::\+Tools\+::\+Surface\+Comparator\+::\+Surface\+Comparator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1SurfaceComparator_a4c95d31c14ea0c9f442d378ab65d9b1f}\label{classMcCAD_1_1Tools_1_1SurfaceComparator_a4c95d31c14ea0c9f442d378ab65d9b1f}} 
+\index{McCAD::Tools::SurfaceComparator@{McCAD::Tools::SurfaceComparator}!operator()@{operator()}}
+\index{operator()@{operator()}!McCAD::Tools::SurfaceComparator@{McCAD::Tools::SurfaceComparator}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Standard\+\_\+\+Boolean Mc\+C\+A\+D\+::\+Tools\+::\+Surface\+Comparator\+::operator() (\begin{DoxyParamCaption}\item[{const Topo\+D\+S\+\_\+\+Face \&}]{first\+Face,  }\item[{const Topo\+D\+S\+\_\+\+Face \&}]{second\+Face }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line 6 of file surface\+Comparator.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{7                                                                                 \{}
+\DoxyCodeLine{8     \textcolor{comment}{// Compare orientations}}
+\DoxyCodeLine{9     \textcolor{keywordflow}{if}(firstFace.Orientation() != secondFace.Orientation())\{}
+\DoxyCodeLine{10         \textcolor{comment}{//std::cout << "Orientation different" << std::endl;}}
+\DoxyCodeLine{11         \textcolor{keywordflow}{return} Standard\_False;}
+\DoxyCodeLine{12     \}}
+\DoxyCodeLine{13     TopLoc\_Location firstLocation;}
+\DoxyCodeLine{14     GeomAdaptor\_Surface firstAdaptor\{}
+\DoxyCodeLine{15         BRep\_Tool::Surface(firstFace, firstLocation)\};}
+\DoxyCodeLine{16 }
+\DoxyCodeLine{17     TopLoc\_Location secondLocation;}
+\DoxyCodeLine{18     GeomAdaptor\_Surface secondAdaptor\{}
+\DoxyCodeLine{19         BRep\_Tool::Surface(secondFace, secondLocation)\};}
+\DoxyCodeLine{20     \textcolor{comment}{// Compare surfaces types.}}
+\DoxyCodeLine{21     \textcolor{keywordflow}{if}(firstAdaptor.GetType() != secondAdaptor.GetType())\{}
+\DoxyCodeLine{22         \textcolor{comment}{//std::cout << "Orientation different" << std::endl;}}
+\DoxyCodeLine{23         \textcolor{keywordflow}{return} Standard\_False;}
+\DoxyCodeLine{24     \}}
+\DoxyCodeLine{25     \textcolor{comment}{// Compare locations}}
+\DoxyCodeLine{26     \textcolor{keywordflow}{if}(firstLocation != secondLocation)\{}
+\DoxyCodeLine{27         \textcolor{comment}{//std::cout << "Location different" << std::endl;}}
+\DoxyCodeLine{28         \textcolor{keywordflow}{return} Standard\_False;}
+\DoxyCodeLine{29     \}}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{31     \textcolor{comment}{// Compare surfaces parameters}}
+\DoxyCodeLine{32     \textcolor{keywordflow}{if} (firstAdaptor.GetType() == GeomAbs\_Plane \&\&}
+\DoxyCodeLine{33             firstAdaptor.GetType() == GeomAbs\_Plane)\{}
+\DoxyCodeLine{34         \textcolor{keyword}{auto} condition = PlaneComparator\{\}(firstAdaptor, secondAdaptor);}
+\DoxyCodeLine{35         \textcolor{keywordflow}{return} condition.value();}
+\DoxyCodeLine{36     \}}
+\DoxyCodeLine{37     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (firstAdaptor.GetType() == GeomAbs\_Cylinder}
+\DoxyCodeLine{38              \&\& firstAdaptor.GetType() == GeomAbs\_Cylinder)}
+\DoxyCodeLine{39         \textcolor{keywordflow}{return} Standard\_False; \textcolor{comment}{//CylComparator\{\}(firstAdaptor, secondAdaptor);}}
+\DoxyCodeLine{40     \textcolor{keywordflow}{else} \textcolor{keywordflow}{return} Standard\_False;}
+\DoxyCodeLine{41 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1SurfaceComparator_a4c95d31c14ea0c9f442d378ab65d9b1f}\label{classMcCAD_1_1Tools_1_1SurfaceComparator_a4c95d31c14ea0c9f442d378ab65d9b1f}} 
+\index{McCAD::Tools::SurfaceComparator@{McCAD::Tools::SurfaceComparator}!operator()@{operator()}}
+\index{operator()@{operator()}!McCAD::Tools::SurfaceComparator@{McCAD::Tools::SurfaceComparator}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Standard\+\_\+\+Boolean Mc\+C\+A\+D\+::\+Tools\+::\+Surface\+Comparator\+::operator() (\begin{DoxyParamCaption}\item[{const Topo\+D\+S\+\_\+\+Face \&}]{first\+Face,  }\item[{const Topo\+D\+S\+\_\+\+Face \&}]{second\+Face }\end{DoxyParamCaption}) const}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{build_2includes_2implementation_2tools_2surfaceComparator_8hpp}{build/includes/implementation/tools/surface\+Comparator.\+hpp}}\item 
+\mbox{\hyperlink{surfaceComparator_8cpp}{surface\+Comparator.\+cpp}}\end{DoxyCompactItemize}

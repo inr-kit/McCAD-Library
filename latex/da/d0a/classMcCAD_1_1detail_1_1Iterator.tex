@@ -1,0 +1,193 @@
+\hypertarget{classMcCAD_1_1detail_1_1Iterator}{}\doxysection{Mc\+C\+AD\+::detail\+::Iterator$<$ shape\+Tag $>$ Class Template Reference}
+\label{classMcCAD_1_1detail_1_1Iterator}\index{McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}}
+
+
+{\ttfamily \#include $<$/home/mharb/\+Documents/\+Mc\+C\+A\+D\+\_\+refactor/\+Implementation/tools/\+Iterator.\+hpp$>$}
+
+
+
+Collaboration diagram for Mc\+C\+AD\+::detail\+::Iterator$<$ shape\+Tag $>$\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=205pt]{da/dd9/classMcCAD_1_1detail_1_1Iterator__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_af35396d00c2403ccfbf1b6aa51cbf40e}{value\+\_\+type}} = typename \mbox{\hyperlink{structMcCAD_1_1detail_1_1TopClass}{detail\+::\+Top\+Class}}$<$ shape\+Tag $>$\+::type
+\item 
+using \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_a99d36aa906470f6e3f2783b921c71ff5}{reference}} = \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_af35396d00c2403ccfbf1b6aa51cbf40e}{value\+\_\+type}} \&
+\item 
+using \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_af8329892a305bc807e47158f8b877597}{pointer}} = \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_af35396d00c2403ccfbf1b6aa51cbf40e}{value\+\_\+type}} $\ast$
+\item 
+using \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_a2d88b5eee2150a77a3a80f9662155b1d}{difference\+\_\+type}} = std\+::size\+\_\+t
+\item 
+using \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_a07b12fbe05817cbfe4cb3ef7c9c9162a}{iterator\+\_\+category}} = std\+::forward\+\_\+iterator\+\_\+tag
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_a7864eac2dca2a5901f7e220014eab96c}{Iterator}} ()=default
+\item 
+\mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_ab1bd690b069222067c183bc010467f13}{Iterator}} (const Topo\+D\+S\+\_\+\+Shape \&shape)
+\item 
+bool \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_aa8c123d22356404064f03b2f148d7932}{operator==}} (const \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Iterator}} \&that) const
+\item 
+bool \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_ac12679f4148d74b4a812e8cc3f260ada}{operator!=}} (const \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Iterator}} \&that) const
+\item 
+\mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Iterator}} \& \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_ae8af9de0efeb7fa97b6c37686909f0f3}{operator++}} ()
+\item 
+\mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Iterator}} \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_a54d5d98592dcf959c5acaeb30c5f37ac}{operator++}} (int)
+\item 
+const \mbox{\hyperlink{structMcCAD_1_1detail_1_1TopClass}{detail\+::\+Top\+Class}}$<$ shape\+Tag $>$\+::type \& \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_af292a9686a6fe67635de0cea6b807f7f}{operator$\ast$}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ Top\+Exp\+\_\+\+Explorer $>$ \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_a49cc02fa92619690477efd1334df03c1}{explorer}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$Top\+Abs\+\_\+\+Shape\+Enum shape\+Tag$>$\newline
+class Mc\+C\+A\+D\+::detail\+::\+Iterator$<$ shape\+Tag $>$}
+
+
+
+Definition at line 77 of file Iterator.\+hpp.
+
+
+
+\doxysubsection{Member Typedef Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1detail_1_1Iterator_a2d88b5eee2150a77a3a80f9662155b1d}\label{classMcCAD_1_1detail_1_1Iterator_a2d88b5eee2150a77a3a80f9662155b1d}} 
+\index{McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}!difference\_type@{difference\_type}}
+\index{difference\_type@{difference\_type}!McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}}
+\doxysubsubsection{\texorpdfstring{difference\_type}{difference\_type}}
+{\footnotesize\ttfamily template$<$Top\+Abs\+\_\+\+Shape\+Enum shape\+Tag$>$ \\
+using \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Mc\+C\+A\+D\+::detail\+::\+Iterator}}$<$ shape\+Tag $>$\+::\mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_a2d88b5eee2150a77a3a80f9662155b1d}{difference\+\_\+type}} =  std\+::size\+\_\+t}
+
+
+
+Definition at line 83 of file Iterator.\+hpp.
+
+\mbox{\Hypertarget{classMcCAD_1_1detail_1_1Iterator_a07b12fbe05817cbfe4cb3ef7c9c9162a}\label{classMcCAD_1_1detail_1_1Iterator_a07b12fbe05817cbfe4cb3ef7c9c9162a}} 
+\index{McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}!iterator\_category@{iterator\_category}}
+\index{iterator\_category@{iterator\_category}!McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}}
+\doxysubsubsection{\texorpdfstring{iterator\_category}{iterator\_category}}
+{\footnotesize\ttfamily template$<$Top\+Abs\+\_\+\+Shape\+Enum shape\+Tag$>$ \\
+using \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Mc\+C\+A\+D\+::detail\+::\+Iterator}}$<$ shape\+Tag $>$\+::\mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_a07b12fbe05817cbfe4cb3ef7c9c9162a}{iterator\+\_\+category}} =  std\+::forward\+\_\+iterator\+\_\+tag}
+
+
+
+Definition at line 84 of file Iterator.\+hpp.
+
+\mbox{\Hypertarget{classMcCAD_1_1detail_1_1Iterator_af8329892a305bc807e47158f8b877597}\label{classMcCAD_1_1detail_1_1Iterator_af8329892a305bc807e47158f8b877597}} 
+\index{McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}!pointer@{pointer}}
+\index{pointer@{pointer}!McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}}
+\doxysubsubsection{\texorpdfstring{pointer}{pointer}}
+{\footnotesize\ttfamily template$<$Top\+Abs\+\_\+\+Shape\+Enum shape\+Tag$>$ \\
+using \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Mc\+C\+A\+D\+::detail\+::\+Iterator}}$<$ shape\+Tag $>$\+::\mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_af8329892a305bc807e47158f8b877597}{pointer}} =  \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_af35396d00c2403ccfbf1b6aa51cbf40e}{value\+\_\+type}}$\ast$}
+
+
+
+Definition at line 82 of file Iterator.\+hpp.
+
+\mbox{\Hypertarget{classMcCAD_1_1detail_1_1Iterator_a99d36aa906470f6e3f2783b921c71ff5}\label{classMcCAD_1_1detail_1_1Iterator_a99d36aa906470f6e3f2783b921c71ff5}} 
+\index{McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}!reference@{reference}}
+\index{reference@{reference}!McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}}
+\doxysubsubsection{\texorpdfstring{reference}{reference}}
+{\footnotesize\ttfamily template$<$Top\+Abs\+\_\+\+Shape\+Enum shape\+Tag$>$ \\
+using \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Mc\+C\+A\+D\+::detail\+::\+Iterator}}$<$ shape\+Tag $>$\+::\mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_a99d36aa906470f6e3f2783b921c71ff5}{reference}} =  \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_af35396d00c2403ccfbf1b6aa51cbf40e}{value\+\_\+type}}\&}
+
+
+
+Definition at line 81 of file Iterator.\+hpp.
+
+\mbox{\Hypertarget{classMcCAD_1_1detail_1_1Iterator_af35396d00c2403ccfbf1b6aa51cbf40e}\label{classMcCAD_1_1detail_1_1Iterator_af35396d00c2403ccfbf1b6aa51cbf40e}} 
+\index{McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}!value\_type@{value\_type}}
+\index{value\_type@{value\_type}!McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}}
+\doxysubsubsection{\texorpdfstring{value\_type}{value\_type}}
+{\footnotesize\ttfamily template$<$Top\+Abs\+\_\+\+Shape\+Enum shape\+Tag$>$ \\
+using \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Mc\+C\+A\+D\+::detail\+::\+Iterator}}$<$ shape\+Tag $>$\+::\mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator_af35396d00c2403ccfbf1b6aa51cbf40e}{value\+\_\+type}} =  typename \mbox{\hyperlink{structMcCAD_1_1detail_1_1TopClass}{detail\+::\+Top\+Class}}$<$shape\+Tag$>$\+::type}
+
+
+
+Definition at line 80 of file Iterator.\+hpp.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1detail_1_1Iterator_a7864eac2dca2a5901f7e220014eab96c}\label{classMcCAD_1_1detail_1_1Iterator_a7864eac2dca2a5901f7e220014eab96c}} 
+\index{McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}!Iterator@{Iterator}}
+\index{Iterator@{Iterator}!McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}}
+\doxysubsubsection{\texorpdfstring{Iterator()}{Iterator()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$Top\+Abs\+\_\+\+Shape\+Enum shape\+Tag$>$ \\
+\mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Mc\+C\+A\+D\+::detail\+::\+Iterator}}$<$ shape\+Tag $>$\+::\mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Iterator}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\mbox{\Hypertarget{classMcCAD_1_1detail_1_1Iterator_ab1bd690b069222067c183bc010467f13}\label{classMcCAD_1_1detail_1_1Iterator_ab1bd690b069222067c183bc010467f13}} 
+\index{McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}!Iterator@{Iterator}}
+\index{Iterator@{Iterator}!McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}}
+\doxysubsubsection{\texorpdfstring{Iterator()}{Iterator()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$Top\+Abs\+\_\+\+Shape\+Enum shape\+Tag$>$ \\
+\mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Mc\+C\+A\+D\+::detail\+::\+Iterator}}$<$ shape\+Tag $>$\+::\mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Iterator}} (\begin{DoxyParamCaption}\item[{const Topo\+D\+S\+\_\+\+Shape \&}]{shape }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1detail_1_1Iterator_ac12679f4148d74b4a812e8cc3f260ada}\label{classMcCAD_1_1detail_1_1Iterator_ac12679f4148d74b4a812e8cc3f260ada}} 
+\index{McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}}
+\doxysubsubsection{\texorpdfstring{operator"!=()}{operator!=()}}
+{\footnotesize\ttfamily template$<$Top\+Abs\+\_\+\+Shape\+Enum shape\+Tag$>$ \\
+bool \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Mc\+C\+A\+D\+::detail\+::\+Iterator}}$<$ shape\+Tag $>$\+::operator!= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Iterator}}$<$ shape\+Tag $>$ \&}]{that }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classMcCAD_1_1detail_1_1Iterator_af292a9686a6fe67635de0cea6b807f7f}\label{classMcCAD_1_1detail_1_1Iterator_af292a9686a6fe67635de0cea6b807f7f}} 
+\index{McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}!operator$\ast$@{operator$\ast$}}
+\index{operator$\ast$@{operator$\ast$}!McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}}
+\doxysubsubsection{\texorpdfstring{operator$\ast$()}{operator*()}}
+{\footnotesize\ttfamily template$<$Top\+Abs\+\_\+\+Shape\+Enum shape\+Tag$>$ \\
+const \mbox{\hyperlink{structMcCAD_1_1detail_1_1TopClass}{detail\+::\+Top\+Class}}$<$shape\+Tag$>$\+::type\& \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Mc\+C\+A\+D\+::detail\+::\+Iterator}}$<$ shape\+Tag $>$\+::operator$\ast$ (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classMcCAD_1_1detail_1_1Iterator_ae8af9de0efeb7fa97b6c37686909f0f3}\label{classMcCAD_1_1detail_1_1Iterator_ae8af9de0efeb7fa97b6c37686909f0f3}} 
+\index{McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}!operator++@{operator++}}
+\index{operator++@{operator++}!McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}}
+\doxysubsubsection{\texorpdfstring{operator++()}{operator++()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$Top\+Abs\+\_\+\+Shape\+Enum shape\+Tag$>$ \\
+\mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Iterator}}\& \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Mc\+C\+A\+D\+::detail\+::\+Iterator}}$<$ shape\+Tag $>$\+::operator++ (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classMcCAD_1_1detail_1_1Iterator_a54d5d98592dcf959c5acaeb30c5f37ac}\label{classMcCAD_1_1detail_1_1Iterator_a54d5d98592dcf959c5acaeb30c5f37ac}} 
+\index{McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}!operator++@{operator++}}
+\index{operator++@{operator++}!McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}}
+\doxysubsubsection{\texorpdfstring{operator++()}{operator++()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$Top\+Abs\+\_\+\+Shape\+Enum shape\+Tag$>$ \\
+\mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Iterator}} \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Mc\+C\+A\+D\+::detail\+::\+Iterator}}$<$ shape\+Tag $>$\+::operator++ (\begin{DoxyParamCaption}\item[{int}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classMcCAD_1_1detail_1_1Iterator_aa8c123d22356404064f03b2f148d7932}\label{classMcCAD_1_1detail_1_1Iterator_aa8c123d22356404064f03b2f148d7932}} 
+\index{McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}!operator==@{operator==}}
+\index{operator==@{operator==}!McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}}
+\doxysubsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily template$<$Top\+Abs\+\_\+\+Shape\+Enum shape\+Tag$>$ \\
+bool \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Mc\+C\+A\+D\+::detail\+::\+Iterator}}$<$ shape\+Tag $>$\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Iterator}}$<$ shape\+Tag $>$ \&}]{that }\end{DoxyParamCaption}) const}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1detail_1_1Iterator_a49cc02fa92619690477efd1334df03c1}\label{classMcCAD_1_1detail_1_1Iterator_a49cc02fa92619690477efd1334df03c1}} 
+\index{McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}!explorer@{explorer}}
+\index{explorer@{explorer}!McCAD::detail::Iterator$<$ shapeTag $>$@{McCAD::detail::Iterator$<$ shapeTag $>$}}
+\doxysubsubsection{\texorpdfstring{explorer}{explorer}}
+{\footnotesize\ttfamily template$<$Top\+Abs\+\_\+\+Shape\+Enum shape\+Tag$>$ \\
+std\+::shared\+\_\+ptr$<$Top\+Exp\+\_\+\+Explorer$>$ \mbox{\hyperlink{classMcCAD_1_1detail_1_1Iterator}{Mc\+C\+A\+D\+::detail\+::\+Iterator}}$<$ shape\+Tag $>$\+::explorer\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 98 of file Iterator.\+hpp.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{Iterator_8hpp}{Iterator.\+hpp}}\end{DoxyCompactItemize}

@@ -34,7 +34,7 @@ McCAD::Decomposition::GenerateFacesList::operator()(
     Standard_Integer faceNumber = 0;
     std::vector<std::shared_ptr<Geometry::BoundSurface>> facesList;
     std::vector<std::shared_ptr<Geometry::BoundSurface>> planesList;
-    for(const auto& aFace : ShapeView<TopAbs_FACE>{solid}){
+    for(const auto& aFace : detail::ShapeView<TopAbs_FACE>{solid}){
         // Update UV points of the face.
         face = aFace;
         BRepTools::Update(face);
@@ -101,7 +101,7 @@ McCAD::Decomposition::GenerateFacesList::operator()(
     std::vector<std::shared_ptr<Geometry::BoundSurface>> facesList;
     std::vector<std::shared_ptr<Geometry::BoundSurface>> planesList;
     std::vector<std::shared_ptr<Geometry::BoundSurface>> cylindersList;
-    for(const auto& aFace : ShapeView<TopAbs_FACE>{solid}){
+    for(const auto& aFace : detail::ShapeView<TopAbs_FACE>{solid}){
         face = aFace;
         //std::cout << "face = aFace;" << std::endl;
         BRepTools::Update(face);

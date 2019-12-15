@@ -1,0 +1,28 @@
+<map id="McCAD::Geometry::BoundSurfaceCyl" name="McCAD::Geometry::BoundSurfaceCyl">
+<area shape="rect" id="node1" title=" " alt="" coords="111,1917,355,2068"/>
+<area shape="rect" id="node26" href="$db/d39/classMcCAD_1_1Geometry_1_1BoundSurfaceCyl_1_1Impl.html" title=" " alt="" coords="132,2167,356,2333"/>
+<area shape="rect" id="node2" href="$d9/d01/classMcCAD_1_1Geometry_1_1BoundSurface.html" title=" " alt="" coords="281,1645,505,1855"/>
+<area shape="rect" id="node9" href="$dd/d85/classMcCAD_1_1Geometry_1_1BoundSurface_1_1Impl.html" title=" " alt="" coords="556,2131,780,2369"/>
+<area shape="rect" id="node3" href="$d1/d2b/classMcCAD_1_1Geometry_1_1Surface.html" title=" " alt="" coords="300,1359,487,1568"/>
+<area shape="rect" id="node4" title=" " alt="" coords="301,1182,486,1274"/>
+<area shape="rect" id="node5" href="$d2/d1a/classMcCAD_1_1Geometry_1_1Surface_1_1Impl.html" title=" " alt="" coords="283,873,504,1097"/>
+<area shape="rect" id="node6" title="STL class." alt="" coords="353,711,433,789"/>
+<area shape="rect" id="node14" href="$d9/d92/classMcCAD_1_1Geometry_1_1Edge_1_1Impl.html" title=" " alt="" coords="582,859,754,1112"/>
+<area shape="rect" id="node7" title="STL class." alt="" coords="330,520,457,612"/>
+<area shape="rect" id="node8" title=" " alt="" coords="385,2432,562,2539"/>
+<area shape="rect" id="node10" title=" " alt="" coords="580,1939,756,2046"/>
+<area shape="rect" id="node11" title=" " alt="" coords="585,1704,751,1796"/>
+<area shape="rect" id="node12" href="$d4/ddf/classMcCAD_1_1Geometry_1_1Edge.html" title=" " alt="" coords="582,1344,754,1583"/>
+<area shape="rect" id="node13" title=" " alt="" coords="583,1182,753,1274"/>
+<area shape="rect" id="node15" title=" " alt="" coords="587,704,754,796"/>
+<area shape="rect" id="node16" href="$d6/d68/classMcCAD_1_1Tools_1_1Preprocessor.html" title=" " alt="" coords="653,491,848,641"/>
+<area shape="rect" id="node17" title=" " alt="" coords="667,321,834,428"/>
+<area shape="rect" id="node18" href="$d2/d2a/classMcCAD_1_1Tools_1_1Preprocessor_1_1Impl.html" title=" " alt="" coords="653,5,848,259"/>
+<area shape="rect" id="node19" title=" " alt="" coords="833,1939,1009,2046"/>
+<area shape="rect" id="node20" title=" " alt="" coords="839,1704,1025,1796"/>
+<area shape="rect" id="node21" href="$d7/d5c/classMcCAD_1_1Geometry_1_1MeshTriangle.html" title=" " alt="" coords="831,1388,1051,1539"/>
+<area shape="rect" id="node22" title=" " alt="" coords="855,1175,1028,1281"/>
+<area shape="rect" id="node23" href="$df/d9a/classMcCAD_1_1Geometry_1_1MeshTriangle_1_1Impl.html" title=" " alt="" coords="831,895,1051,1075"/>
+<area shape="rect" id="node24" title=" " alt="" coords="863,711,1020,789"/>
+<area shape="rect" id="node25" title=" " alt="" coords="33,2432,231,2539"/>
+</map>

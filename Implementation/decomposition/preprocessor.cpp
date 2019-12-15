@@ -35,7 +35,7 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
 
 Standard_Boolean
 McCAD::Decomposition::Preprocessor::checkBndSurfaces(const TopoDS_Solid& solid){
-    for(const auto& face : ShapeView<TopAbs_FACE>{solid}){
+    for(const auto& face : detail::ShapeView<TopAbs_FACE>{solid}){
         GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
         if(surfAdaptor.GetType() == GeomAbs_Torus){
             std::cout << "    -- The current verion doesn't support processing "
@@ -54,7 +54,7 @@ Standard_Integer
 McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid){
     Standard_Boolean plSolid, cylSolid, sphSolid, mxdSolid;
     cylSolid = sphSolid = plSolid = mxdSolid = Standard_False;
-    for(const auto& face : ShapeView<TopAbs_FACE>{solid}){
+    for(const auto& face : detail::ShapeView<TopAbs_FACE>{solid}){
         GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
         switch (surfAdaptor.GetType()){
         case  GeomAbs_Plane:

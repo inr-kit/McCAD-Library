@@ -1,0 +1,230 @@
+\hypertarget{classMcCAD_1_1Tools_1_1PlaneComparator}{}\doxysection{Mc\+C\+AD\+::Tools\+::Plane\+Comparator Class Reference}
+\label{classMcCAD_1_1Tools_1_1PlaneComparator}\index{McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}}
+
+
+{\ttfamily \#include $<$/home/mharb/\+Documents/\+Mc\+C\+A\+D\+\_\+refactor/build/includes/implementation/tools/plane\+Comparator.\+hpp$>$}
+
+
+
+Collaboration diagram for Mc\+C\+AD\+::Tools\+::Plane\+Comparator\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=244pt]{d7/d47/classMcCAD_1_1Tools_1_1PlaneComparator__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a01aad597a147022419ddbb4625c6370d}{Plane\+Comparator}} (Standard\+\_\+\+Real \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_adef35ba390ab77e8e03eadec54a87d5d}{parameter\+Tolerance}}=1.\+0e-\/7, Standard\+\_\+\+Real \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a7a12aa43a017dfa6242fc51d87310232}{angular\+Tolerance}}=1.\+0e-\/3 $\ast$M\+\_\+\+PI, Standard\+\_\+\+Real \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a6e41cff0b95b5a5aa18de33ee9925e04}{distance\+Tolerance}}=1.\+0e-\/5)
+\item 
+std\+::optional$<$ Standard\+\_\+\+Boolean $>$ \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a179788a56a6c3b5ca10c5d0a5f2c3622}{operator()}} (const Geom\+Adaptor\+\_\+\+Surface \&first\+Adaptor, const Geom\+Adaptor\+\_\+\+Surface \&second\+Adaptor)
+\item 
+\mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a01aad597a147022419ddbb4625c6370d}{Plane\+Comparator}} (Standard\+\_\+\+Real \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_adef35ba390ab77e8e03eadec54a87d5d}{parameter\+Tolerance}}=1.\+0e-\/7, Standard\+\_\+\+Real \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a7a12aa43a017dfa6242fc51d87310232}{angular\+Tolerance}}=1.\+0e-\/3 $\ast$M\+\_\+\+PI, Standard\+\_\+\+Real \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a6e41cff0b95b5a5aa18de33ee9925e04}{distance\+Tolerance}}=1.\+0e-\/5)
+\item 
+std\+::optional$<$ Standard\+\_\+\+Boolean $>$ \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a65ce918d05f4784556212045fe4ceddc}{operator()}} (const Geom\+Adaptor\+\_\+\+Surface \&first\+Adaptor, const Geom\+Adaptor\+\_\+\+Surface \&second\+Adaptor)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::array$<$ Standard\+\_\+\+Real, 4 $>$ \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a1b61d399885072e2af2e3cd03d1ca6c3}{plane\+Parameters}} (const gp\+\_\+\+Pln \&plane) const
+\item 
+Standard\+\_\+\+Boolean \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a6b3939e79155c791bdc5da4dc7d3b980}{equivalent\+Plane\+Parameters}} (const gp\+\_\+\+Pln \&first, const gp\+\_\+\+Pln \&second) const
+\item 
+std\+::array$<$ Standard\+\_\+\+Real, 4 $>$ \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a67ad4238f5b52bdd3734710bcd43014c}{plane\+Parameters}} (const gp\+\_\+\+Pln \&plane) const
+\item 
+Standard\+\_\+\+Boolean \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a6b3939e79155c791bdc5da4dc7d3b980}{equivalent\+Plane\+Parameters}} (const gp\+\_\+\+Pln \&first, const gp\+\_\+\+Pln \&second) const
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Standard\+\_\+\+Real \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_adef35ba390ab77e8e03eadec54a87d5d}{parameter\+Tolerance}}
+\item 
+Standard\+\_\+\+Real \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a7a12aa43a017dfa6242fc51d87310232}{angular\+Tolerance}}
+\item 
+Standard\+\_\+\+Real \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a6e41cff0b95b5a5aa18de33ee9925e04}{distance\+Tolerance}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 15 of file build/includes/implementation/tools/plane\+Comparator.\+hpp.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1PlaneComparator_a01aad597a147022419ddbb4625c6370d}\label{classMcCAD_1_1Tools_1_1PlaneComparator_a01aad597a147022419ddbb4625c6370d}} 
+\index{McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}!PlaneComparator@{PlaneComparator}}
+\index{PlaneComparator@{PlaneComparator}!McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}}
+\doxysubsubsection{\texorpdfstring{PlaneComparator()}{PlaneComparator()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Mc\+C\+A\+D\+::\+Tools\+::\+Plane\+Comparator\+::\+Plane\+Comparator (\begin{DoxyParamCaption}\item[{Standard\+\_\+\+Real}]{parameter\+Tolerance = {\ttfamily 1.0e-\/7},  }\item[{Standard\+\_\+\+Real}]{angular\+Tolerance = {\ttfamily 1.0e-\/3~$\ast$~M\+\_\+PI},  }\item[{Standard\+\_\+\+Real}]{distance\+Tolerance = {\ttfamily 1.0e-\/5} }\end{DoxyParamCaption})}
+
+
+
+Definition at line 4 of file plane\+Comparator.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{7     : \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_adef35ba390ab77e8e03eadec54a87d5d}{parameterTolerance}}\{\mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_adef35ba390ab77e8e03eadec54a87d5d}{parameterTolerance}}\},}
+\DoxyCodeLine{8       \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a7a12aa43a017dfa6242fc51d87310232}{angularTolerance}}\{\mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a7a12aa43a017dfa6242fc51d87310232}{angularTolerance}}\},}
+\DoxyCodeLine{9       \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a6e41cff0b95b5a5aa18de33ee9925e04}{distanceTolerance}}\{\mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a6e41cff0b95b5a5aa18de33ee9925e04}{distanceTolerance}}\}\{}
+\DoxyCodeLine{10 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1PlaneComparator_a01aad597a147022419ddbb4625c6370d}\label{classMcCAD_1_1Tools_1_1PlaneComparator_a01aad597a147022419ddbb4625c6370d}} 
+\index{McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}!PlaneComparator@{PlaneComparator}}
+\index{PlaneComparator@{PlaneComparator}!McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}}
+\doxysubsubsection{\texorpdfstring{PlaneComparator()}{PlaneComparator()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Mc\+C\+A\+D\+::\+Tools\+::\+Plane\+Comparator\+::\+Plane\+Comparator (\begin{DoxyParamCaption}\item[{Standard\+\_\+\+Real}]{parameter\+Tolerance = {\ttfamily 1.0e-\/7},  }\item[{Standard\+\_\+\+Real}]{angular\+Tolerance = {\ttfamily 1.0e-\/3~$\ast$M\+\_\+PI},  }\item[{Standard\+\_\+\+Real}]{distance\+Tolerance = {\ttfamily 1.0e-\/5} }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1PlaneComparator_a6b3939e79155c791bdc5da4dc7d3b980}\label{classMcCAD_1_1Tools_1_1PlaneComparator_a6b3939e79155c791bdc5da4dc7d3b980}} 
+\index{McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}!equivalentPlaneParameters@{equivalentPlaneParameters}}
+\index{equivalentPlaneParameters@{equivalentPlaneParameters}!McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}}
+\doxysubsubsection{\texorpdfstring{equivalentPlaneParameters()}{equivalentPlaneParameters()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Standard\+\_\+\+Boolean Mc\+C\+A\+D\+::\+Tools\+::\+Plane\+Comparator\+::equivalent\+Plane\+Parameters (\begin{DoxyParamCaption}\item[{const gp\+\_\+\+Pln \&}]{first,  }\item[{const gp\+\_\+\+Pln \&}]{second }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 40 of file plane\+Comparator.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{41                                                                                     \{}
+\DoxyCodeLine{42     \textcolor{keywordflow}{try}\{}
+\DoxyCodeLine{43         \textcolor{keyword}{auto} firstPlaneParameters = \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a1b61d399885072e2af2e3cd03d1ca6c3}{planeParameters}}(first);}
+\DoxyCodeLine{44         gp\_Dir firstPlaneDirection\{}
+\DoxyCodeLine{45             firstPlaneParameters[0],}
+\DoxyCodeLine{46             firstPlaneParameters[1],}
+\DoxyCodeLine{47             firstPlaneParameters[2]}
+\DoxyCodeLine{48         \};}
+\DoxyCodeLine{49         \textcolor{keyword}{auto} secondPlaneParameters = \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a1b61d399885072e2af2e3cd03d1ca6c3}{planeParameters}}(second);}
+\DoxyCodeLine{50         gp\_Dir secondPlaneDirection\{}
+\DoxyCodeLine{51             secondPlaneParameters[0],}
+\DoxyCodeLine{52             secondPlaneParameters[1],}
+\DoxyCodeLine{53             secondPlaneParameters[2]}
+\DoxyCodeLine{54         \};}
+\DoxyCodeLine{55         \textcolor{keywordflow}{return} (firstPlaneDirection.IsEqual(secondPlaneDirection, \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a7a12aa43a017dfa6242fc51d87310232}{angularTolerance}})}
+\DoxyCodeLine{56                 \&\& std::abs(firstPlaneParameters[3] -\/ secondPlaneParameters[3])}
+\DoxyCodeLine{57                 <= \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a6e41cff0b95b5a5aa18de33ee9925e04}{distanceTolerance}}) ||}
+\DoxyCodeLine{58                (firstPlaneDirection.IsOpposite(secondPlaneDirection, \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a7a12aa43a017dfa6242fc51d87310232}{angularTolerance}})}
+\DoxyCodeLine{59                 \&\& std::abs(firstPlaneParameters[3] + secondPlaneParameters[3])}
+\DoxyCodeLine{60                 <= \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a6e41cff0b95b5a5aa18de33ee9925e04}{distanceTolerance}});}
+\DoxyCodeLine{61     \} \textcolor{keywordflow}{catch}(\textcolor{keyword}{const} Standard\_ConstructionError\&)\{}
+\DoxyCodeLine{62         \textcolor{comment}{// Plane parameters cannot form a normed direction vector;}}
+\DoxyCodeLine{63         \textcolor{comment}{// not distinguishable from zero vector}}
+\DoxyCodeLine{64         \textcolor{keywordflow}{return} Standard\_False;}
+\DoxyCodeLine{65       \}}
+\DoxyCodeLine{66 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1PlaneComparator_a6b3939e79155c791bdc5da4dc7d3b980}\label{classMcCAD_1_1Tools_1_1PlaneComparator_a6b3939e79155c791bdc5da4dc7d3b980}} 
+\index{McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}!equivalentPlaneParameters@{equivalentPlaneParameters}}
+\index{equivalentPlaneParameters@{equivalentPlaneParameters}!McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}}
+\doxysubsubsection{\texorpdfstring{equivalentPlaneParameters()}{equivalentPlaneParameters()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Standard\+\_\+\+Boolean Mc\+C\+A\+D\+::\+Tools\+::\+Plane\+Comparator\+::equivalent\+Plane\+Parameters (\begin{DoxyParamCaption}\item[{const gp\+\_\+\+Pln \&}]{first,  }\item[{const gp\+\_\+\+Pln \&}]{second }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1PlaneComparator_a65ce918d05f4784556212045fe4ceddc}\label{classMcCAD_1_1Tools_1_1PlaneComparator_a65ce918d05f4784556212045fe4ceddc}} 
+\index{McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}!operator()@{operator()}}
+\index{operator()@{operator()}!McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily std\+::optional$<$Standard\+\_\+\+Boolean$>$ Mc\+C\+A\+D\+::\+Tools\+::\+Plane\+Comparator\+::operator() (\begin{DoxyParamCaption}\item[{const Geom\+Adaptor\+\_\+\+Surface \&}]{first\+Adaptor,  }\item[{const Geom\+Adaptor\+\_\+\+Surface \&}]{second\+Adaptor }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1PlaneComparator_a179788a56a6c3b5ca10c5d0a5f2c3622}\label{classMcCAD_1_1Tools_1_1PlaneComparator_a179788a56a6c3b5ca10c5d0a5f2c3622}} 
+\index{McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}!operator()@{operator()}}
+\index{operator()@{operator()}!McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily std\+::optional$<$ Standard\+\_\+\+Boolean $>$ Mc\+C\+A\+D\+::\+Tools\+::\+Plane\+Comparator\+::operator() (\begin{DoxyParamCaption}\item[{const Geom\+Adaptor\+\_\+\+Surface \&}]{first\+Adaptor,  }\item[{const Geom\+Adaptor\+\_\+\+Surface \&}]{second\+Adaptor }\end{DoxyParamCaption})}
+
+
+
+Definition at line 13 of file plane\+Comparator.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{14                                                                                    \{}
+\DoxyCodeLine{15     \textcolor{keyword}{auto} firstPlane = firstAdaptor.Plane();}
+\DoxyCodeLine{16     \textcolor{keyword}{auto} secondPlane = secondAdaptor.Plane();}
+\DoxyCodeLine{17     \textcolor{comment}{// Scale planes}}
+\DoxyCodeLine{18     firstPlane.Scale(gp\_Pnt\{0.0, 0.0, 0.0\}, 0.1);}
+\DoxyCodeLine{19     secondPlane.Scale(gp\_Pnt\{0.0, 0.0, 0.0\}, 0.1);}
+\DoxyCodeLine{20     \textcolor{comment}{// Compare distance between planes.}}
+\DoxyCodeLine{21     \textcolor{keywordflow}{if} (firstPlane.Distance(secondPlane) > \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a6e41cff0b95b5a5aa18de33ee9925e04}{distanceTolerance}})\{}
+\DoxyCodeLine{22         \textcolor{keywordflow}{return} Standard\_False;}
+\DoxyCodeLine{23     \}}
+\DoxyCodeLine{24     \textcolor{comment}{// Compare plane parameters}}
+\DoxyCodeLine{25     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a6b3939e79155c791bdc5da4dc7d3b980}{equivalentPlaneParameters}}(firstPlane, secondPlane);}
+\DoxyCodeLine{26 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1PlaneComparator_a1b61d399885072e2af2e3cd03d1ca6c3}\label{classMcCAD_1_1Tools_1_1PlaneComparator_a1b61d399885072e2af2e3cd03d1ca6c3}} 
+\index{McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}!planeParameters@{planeParameters}}
+\index{planeParameters@{planeParameters}!McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}}
+\doxysubsubsection{\texorpdfstring{planeParameters()}{planeParameters()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily std\+::array$<$ Standard\+\_\+\+Real, 4 $>$ Mc\+C\+A\+D\+::\+Tools\+::\+Plane\+Comparator\+::plane\+Parameters (\begin{DoxyParamCaption}\item[{const gp\+\_\+\+Pln \&}]{plane }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 29 of file plane\+Comparator.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{29                                                                    \{}
+\DoxyCodeLine{30     std::array<Standard\_Real, 4> \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a1b61d399885072e2af2e3cd03d1ca6c3}{planeParameters}};}
+\DoxyCodeLine{31     plane.Coefficients(\mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a1b61d399885072e2af2e3cd03d1ca6c3}{planeParameters}}[0], \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a1b61d399885072e2af2e3cd03d1ca6c3}{planeParameters}}[1],}
+\DoxyCodeLine{32             \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a1b61d399885072e2af2e3cd03d1ca6c3}{planeParameters}}[2], \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a1b61d399885072e2af2e3cd03d1ca6c3}{planeParameters}}[3]);}
+\DoxyCodeLine{33     \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\& parameter : \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a1b61d399885072e2af2e3cd03d1ca6c3}{planeParameters}})\{}
+\DoxyCodeLine{34         \textcolor{keywordflow}{if}(parameter <= \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_adef35ba390ab77e8e03eadec54a87d5d}{parameterTolerance}}) parameter = 0.0;}
+\DoxyCodeLine{35     \}}
+\DoxyCodeLine{36     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMcCAD_1_1Tools_1_1PlaneComparator_a1b61d399885072e2af2e3cd03d1ca6c3}{planeParameters}};}
+\DoxyCodeLine{37 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1PlaneComparator_a67ad4238f5b52bdd3734710bcd43014c}\label{classMcCAD_1_1Tools_1_1PlaneComparator_a67ad4238f5b52bdd3734710bcd43014c}} 
+\index{McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}!planeParameters@{planeParameters}}
+\index{planeParameters@{planeParameters}!McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}}
+\doxysubsubsection{\texorpdfstring{planeParameters()}{planeParameters()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily std\+::array$<$Standard\+\_\+\+Real, 4$>$ Mc\+C\+A\+D\+::\+Tools\+::\+Plane\+Comparator\+::plane\+Parameters (\begin{DoxyParamCaption}\item[{const gp\+\_\+\+Pln \&}]{plane }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1PlaneComparator_a7a12aa43a017dfa6242fc51d87310232}\label{classMcCAD_1_1Tools_1_1PlaneComparator_a7a12aa43a017dfa6242fc51d87310232}} 
+\index{McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}!angularTolerance@{angularTolerance}}
+\index{angularTolerance@{angularTolerance}!McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}}
+\doxysubsubsection{\texorpdfstring{angularTolerance}{angularTolerance}}
+{\footnotesize\ttfamily Standard\+\_\+\+Real Mc\+C\+A\+D\+::\+Tools\+::\+Plane\+Comparator\+::angular\+Tolerance\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 25 of file build/includes/implementation/tools/plane\+Comparator.\+hpp.
+
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1PlaneComparator_a6e41cff0b95b5a5aa18de33ee9925e04}\label{classMcCAD_1_1Tools_1_1PlaneComparator_a6e41cff0b95b5a5aa18de33ee9925e04}} 
+\index{McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}!distanceTolerance@{distanceTolerance}}
+\index{distanceTolerance@{distanceTolerance}!McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}}
+\doxysubsubsection{\texorpdfstring{distanceTolerance}{distanceTolerance}}
+{\footnotesize\ttfamily Standard\+\_\+\+Real Mc\+C\+A\+D\+::\+Tools\+::\+Plane\+Comparator\+::distance\+Tolerance\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 26 of file build/includes/implementation/tools/plane\+Comparator.\+hpp.
+
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1PlaneComparator_adef35ba390ab77e8e03eadec54a87d5d}\label{classMcCAD_1_1Tools_1_1PlaneComparator_adef35ba390ab77e8e03eadec54a87d5d}} 
+\index{McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}!parameterTolerance@{parameterTolerance}}
+\index{parameterTolerance@{parameterTolerance}!McCAD::Tools::PlaneComparator@{McCAD::Tools::PlaneComparator}}
+\doxysubsubsection{\texorpdfstring{parameterTolerance}{parameterTolerance}}
+{\footnotesize\ttfamily Standard\+\_\+\+Real Mc\+C\+A\+D\+::\+Tools\+::\+Plane\+Comparator\+::parameter\+Tolerance\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 24 of file build/includes/implementation/tools/plane\+Comparator.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{build_2includes_2implementation_2tools_2planeComparator_8hpp}{build/includes/implementation/tools/plane\+Comparator.\+hpp}}\item 
+\mbox{\hyperlink{planeComparator_8cpp}{plane\+Comparator.\+cpp}}\end{DoxyCompactItemize}

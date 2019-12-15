@@ -39,7 +39,7 @@ McCAD::Decomposition::SplitSolid::Impl::gatherSubSolids(
         Standard_Real tolerance) const{
     TopTools_HSequenceOfShape subSolids;
     for(const auto& solid : solids){
-        for(const auto& subSolid : ShapeView<TopAbs_SOLID>{solid}){
+        for(const auto& subSolid : detail::ShapeView<TopAbs_SOLID>{solid}){
             if(subSolid.IsNull()) continue;
             GProp_GProps geoProps;
             BRepGProp::VolumeProperties(subSolid, geoProps);

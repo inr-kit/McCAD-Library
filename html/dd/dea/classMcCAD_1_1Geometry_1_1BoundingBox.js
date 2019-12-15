@@ -1,0 +1,26 @@
+var classMcCAD_1_1Geometry_1_1BoundingBox =
+[
+    [ "BoundingBox", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#aa9d7c831f4053d6eff0e2c484a2a0c92", null ],
+    [ "BoundingBox", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#a7ed4eaad9315ad7414c2518ef49e2af5", null ],
+    [ "BoundingBox", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#aa9d7c831f4053d6eff0e2c484a2a0c92", null ],
+    [ "BoundingBox", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#a7ed4eaad9315ad7414c2518ef49e2af5", null ],
+    [ "diagonal", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#afe4d5ffa8973b4db685b7e50fbbd4cea", null ],
+    [ "diagonal", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#a2ffebee933ad8a3fa968a9f614cda1ea", null ],
+    [ "getGap", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#a9463a92bf72696016011e2bcd967b8de", null ],
+    [ "getGap", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#adbe61ac8fb863c3370a96cc37eccd820", null ],
+    [ "maxima", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#a27a33efbf58672db1c6d654fb9727aee", null ],
+    [ "maxima", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#abecf8327e0985ccbc63f167da3aaf763", null ],
+    [ "maxSize", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#a27a008c7c82c9fdc8489e9c877a744a8", null ],
+    [ "maxSize", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#a04ff6e5333ef4eabf48ab7db149caeea", null ],
+    [ "minima", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#a571f053b8fc4575dfe5857df084b6e19", null ],
+    [ "minima", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#a9e1e0e801553cdabc4e5e370badd5e22", null ],
+    [ "minSize", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#aa9ebd35538bff8861f199f37c34e086b", null ],
+    [ "minSize", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#af44f612439bea152e7d2a866a8f992ff", null ],
+    [ "resetGap", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#abdedc7a259eca39fbfab2fa8fdd17a07", null ],
+    [ "resetGap", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#abdedc7a259eca39fbfab2fa8fdd17a07", null ],
+    [ "setGap", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#a78c149a7c7e7d6074a2b726a63c3c400", null ],
+    [ "setGap", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#a78c149a7c7e7d6074a2b726a63c3c400", null ],
+    [ "gap_", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#a1da14473a49c952f47135446c3c90ae9", null ],
+    [ "maxima_", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#aa69d74a92caca3795ecd4089c3f71a87", null ],
+    [ "minima_", "dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#a2fbfb7dc1c01528377da86ff313fc6e6", null ]
+];
