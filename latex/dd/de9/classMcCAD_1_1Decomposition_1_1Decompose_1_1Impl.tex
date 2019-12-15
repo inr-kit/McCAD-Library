@@ -1,0 +1,333 @@
+\hypertarget{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl}{}\doxysection{Mc\+C\+AD\+::Decomposition\+::Decompose\+::Impl Class Reference}
+\label{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl}\index{McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}}
+
+
+{\ttfamily \#include $<$/home/mharb/\+Documents/\+Mc\+C\+A\+D\+\_\+refactor/build/includes/implementation/decomposition/decomposition\+\_\+impl.\+hpp$>$}
+
+
+
+Collaboration diagram for Mc\+C\+AD\+::Decomposition\+::Decompose\+::Impl\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{db/dac/classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a24332343b354e30f922a867e90631d6c}{Impl}} (const \mbox{\hyperlink{classMcCAD_1_1General_1_1InputData}{General\+::\+Input\+Data}} \&input\+Data)
+\item 
+\mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a79fb6438d2360f5842f2c0fa6ba493fb}{$\sim$\+Impl}} ()
+\item 
+void \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_ab0605ffa40a113571d949c93e5994122}{flatten\+Solid\+Hierarchy}} (const Handle\+\_\+\+Top\+Tools\+\_\+\+H\+Sequence\+Of\+Shape \&input\+Solids\+List)
+\item 
+void \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a71700a5c5ec1eaa1b414cb232d1a073b}{perform}} ()
+\item 
+void \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a72d35db075f7a695c1bf3f99ccf8d8a8}{extract\+Solids}} (const \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl}{Geometry\+::\+Solid\+::\+Impl}} \&solid\+Impl)
+\item 
+\mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a24332343b354e30f922a867e90631d6c}{Impl}} (const \mbox{\hyperlink{classMcCAD_1_1General_1_1InputData}{General\+::\+Input\+Data}} \&input\+Data)
+\item 
+\mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a79fb6438d2360f5842f2c0fa6ba493fb}{$\sim$\+Impl}} ()
+\item 
+void \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_ab0605ffa40a113571d949c93e5994122}{flatten\+Solid\+Hierarchy}} (const Handle\+\_\+\+Top\+Tools\+\_\+\+H\+Sequence\+Of\+Shape \&input\+Solids\+List)
+\item 
+void \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a71700a5c5ec1eaa1b414cb232d1a073b}{perform}} ()
+\item 
+void \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a72d35db075f7a695c1bf3f99ccf8d8a8}{extract\+Solids}} (const \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl}{Geometry\+::\+Solid\+::\+Impl}} \&solid\+Impl)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMcCAD_1_1Tools_1_1SolidType}{Tools\+::\+Solid\+Type}} \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a4d66091bde14a60985a5998376612a6c}{solid\+Type}}
+\item 
+std\+::unique\+\_\+ptr$<$ Top\+Tools\+\_\+\+H\+Sequence\+Of\+Shape $>$ \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a9da06719a71fdc8438190a3c3112e82b}{split\+Input\+Solids\+List}}
+\item 
+std\+::unique\+\_\+ptr$<$ Top\+Tools\+\_\+\+H\+Sequence\+Of\+Shape $>$ \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_afa4c71b9552009320911095b0e9c638e}{rejected\+Input\+Solids\+List}}
+\item 
+std\+::unique\+\_\+ptr$<$ Top\+Tools\+\_\+\+H\+Sequence\+Of\+Shape $>$ \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a75b53d768ed797dff26c6bf7308f0bea}{result\+Solids\+List}}
+\item 
+std\+::unique\+\_\+ptr$<$ Top\+Tools\+\_\+\+H\+Sequence\+Of\+Shape $>$ \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a513935cebc47e2e4dd599963bfbb8008}{rejectedsub\+Solids\+List}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 27 of file build/includes/implementation/decomposition/decomposition\+\_\+impl.\+hpp.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a24332343b354e30f922a867e90631d6c}\label{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a24332343b354e30f922a867e90631d6c}} 
+\index{McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}!Impl@{Impl}}
+\index{Impl@{Impl}!McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}}
+\doxysubsubsection{\texorpdfstring{Impl()}{Impl()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Mc\+C\+A\+D\+::\+Decomposition\+::\+Decompose\+::\+Impl\+::\+Impl (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMcCAD_1_1General_1_1InputData}{General\+::\+Input\+Data}} \&}]{input\+Data }\end{DoxyParamCaption})}
+
+
+
+Definition at line 4 of file decomposition\+\_\+impl.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{5   : \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a9da06719a71fdc8438190a3c3112e82b}{splitInputSolidsList}}\{std::make\_unique<TopTools\_HSequenceOfShape>()\},}
+\DoxyCodeLine{6     \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_afa4c71b9552009320911095b0e9c638e}{rejectedInputSolidsList}}\{std::make\_unique<TopTools\_HSequenceOfShape>()\},}
+\DoxyCodeLine{7     \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a75b53d768ed797dff26c6bf7308f0bea}{resultSolidsList}}\{std::make\_unique<TopTools\_HSequenceOfShape>()\},}
+\DoxyCodeLine{8     \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a513935cebc47e2e4dd599963bfbb8008}{rejectedsubSolidsList}}\{std::make\_unique<TopTools\_HSequenceOfShape>()\}\{}
+\DoxyCodeLine{9   \textcolor{comment}{// Get input solids list from the Input Data object.}}
+\DoxyCodeLine{10   \textcolor{keyword}{auto}\& inputSolidsList = inputData.accessImpl()-\/>inputSolidsList;}
+\DoxyCodeLine{11   \textcolor{keywordflow}{if} (inputSolidsList-\/>Length() > 0)\{}
+\DoxyCodeLine{12       std::cout << \textcolor{stringliteral}{"> Found "} << inputSolidsList-\/>Length() <<}
+\DoxyCodeLine{13                    \textcolor{stringliteral}{" solid(s) in the input step file."} << std::endl;}
+\DoxyCodeLine{14       std::cout << \textcolor{stringliteral}{" > Spliting compound input solids"} << std::endl;}
+\DoxyCodeLine{15       \textcolor{comment}{// Split compound input solids.}}
+\DoxyCodeLine{16       \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_ab0605ffa40a113571d949c93e5994122}{flattenSolidHierarchy}}(inputSolidsList);}
+\DoxyCodeLine{17       std::cout << \textcolor{stringliteral}{"   -\/ There are "} << \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a9da06719a71fdc8438190a3c3112e82b}{splitInputSolidsList}}-\/>Length() <<}
+\DoxyCodeLine{18                    \textcolor{stringliteral}{" solid(s) in the flattened solids heirarchy."} <<std::endl;}
+\DoxyCodeLine{19       std::cout << \textcolor{stringliteral}{" > Decomposing solid(s)"} << std::endl;}
+\DoxyCodeLine{20       \textcolor{comment}{// Perform the decomposition.}}
+\DoxyCodeLine{21       \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a71700a5c5ec1eaa1b414cb232d1a073b}{perform}}();}
+\DoxyCodeLine{22     \} \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{23       \textcolor{keywordflow}{throw} std::runtime\_error(\textcolor{stringliteral}{"Input solids list is empty!."});}
+\DoxyCodeLine{24     \}}
+\DoxyCodeLine{25 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a79fb6438d2360f5842f2c0fa6ba493fb}\label{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a79fb6438d2360f5842f2c0fa6ba493fb}} 
+\index{McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}!````~Impl@{$\sim$Impl}}
+\index{````~Impl@{$\sim$Impl}!McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}}
+\doxysubsubsection{\texorpdfstring{$\sim$Impl()}{~Impl()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Mc\+C\+A\+D\+::\+Decomposition\+::\+Decompose\+::\+Impl\+::$\sim$\+Impl (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 27 of file decomposition\+\_\+impl.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{27                                       \{}
+\DoxyCodeLine{28 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a24332343b354e30f922a867e90631d6c}\label{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a24332343b354e30f922a867e90631d6c}} 
+\index{McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}!Impl@{Impl}}
+\index{Impl@{Impl}!McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}}
+\doxysubsubsection{\texorpdfstring{Impl()}{Impl()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Mc\+C\+A\+D\+::\+Decomposition\+::\+Decompose\+::\+Impl\+::\+Impl (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMcCAD_1_1General_1_1InputData}{General\+::\+Input\+Data}} \&}]{input\+Data }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a79fb6438d2360f5842f2c0fa6ba493fb}\label{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a79fb6438d2360f5842f2c0fa6ba493fb}} 
+\index{McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}!````~Impl@{$\sim$Impl}}
+\index{````~Impl@{$\sim$Impl}!McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}}
+\doxysubsubsection{\texorpdfstring{$\sim$Impl()}{~Impl()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Mc\+C\+A\+D\+::\+Decomposition\+::\+Decompose\+::\+Impl\+::$\sim$\+Impl (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a72d35db075f7a695c1bf3f99ccf8d8a8}\label{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a72d35db075f7a695c1bf3f99ccf8d8a8}} 
+\index{McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}!extractSolids@{extractSolids}}
+\index{extractSolids@{extractSolids}!McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}}
+\doxysubsubsection{\texorpdfstring{extractSolids()}{extractSolids()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Mc\+C\+A\+D\+::\+Decomposition\+::\+Decompose\+::\+Impl\+::extract\+Solids (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl}{Geometry\+::\+Solid\+::\+Impl}} \&}]{solid\+Impl }\end{DoxyParamCaption})}
+
+
+
+Definition at line 106 of file decomposition\+\_\+impl.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{107                                            \{}
+\DoxyCodeLine{108     \textcolor{keywordflow}{for}(\textcolor{keyword}{const} \textcolor{keyword}{auto}\& resultSolid : *solidImpl.splitSolidList)\{}
+\DoxyCodeLine{109         \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a75b53d768ed797dff26c6bf7308f0bea}{resultSolidsList}}-\/>Append(resultSolid);}
+\DoxyCodeLine{110     \}}
+\DoxyCodeLine{111     \textcolor{keywordflow}{if} (solidImpl.rejectedsubSolidsList-\/>Length() >= 1)\{}
+\DoxyCodeLine{112         \textcolor{keywordflow}{for}(\textcolor{keyword}{const} \textcolor{keyword}{auto}\& rejectedSubSolid : *solidImpl.rejectedsubSolidsList)\{}
+\DoxyCodeLine{113             \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a513935cebc47e2e4dd599963bfbb8008}{rejectedsubSolidsList}}-\/>Append(rejectedSubSolid);}
+\DoxyCodeLine{114         \}}
+\DoxyCodeLine{115     \}}
+\DoxyCodeLine{116 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a72d35db075f7a695c1bf3f99ccf8d8a8}\label{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a72d35db075f7a695c1bf3f99ccf8d8a8}} 
+\index{McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}!extractSolids@{extractSolids}}
+\index{extractSolids@{extractSolids}!McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}}
+\doxysubsubsection{\texorpdfstring{extractSolids()}{extractSolids()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Mc\+C\+A\+D\+::\+Decomposition\+::\+Decompose\+::\+Impl\+::extract\+Solids (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl}{Geometry\+::\+Solid\+::\+Impl}} \&}]{solid\+Impl }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_ab0605ffa40a113571d949c93e5994122}\label{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_ab0605ffa40a113571d949c93e5994122}} 
+\index{McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}!flattenSolidHierarchy@{flattenSolidHierarchy}}
+\index{flattenSolidHierarchy@{flattenSolidHierarchy}!McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}}
+\doxysubsubsection{\texorpdfstring{flattenSolidHierarchy()}{flattenSolidHierarchy()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Mc\+C\+A\+D\+::\+Decomposition\+::\+Decompose\+::\+Impl\+::flatten\+Solid\+Hierarchy (\begin{DoxyParamCaption}\item[{const Handle\+\_\+\+Top\+Tools\+\_\+\+H\+Sequence\+Of\+Shape \&}]{input\+Solids\+List }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_ab0605ffa40a113571d949c93e5994122}\label{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_ab0605ffa40a113571d949c93e5994122}} 
+\index{McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}!flattenSolidHierarchy@{flattenSolidHierarchy}}
+\index{flattenSolidHierarchy@{flattenSolidHierarchy}!McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}}
+\doxysubsubsection{\texorpdfstring{flattenSolidHierarchy()}{flattenSolidHierarchy()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Mc\+C\+A\+D\+::\+Decomposition\+::\+Decompose\+::\+Impl\+::flatten\+Solid\+Hierarchy (\begin{DoxyParamCaption}\item[{const Handle\+\_\+\+Top\+Tools\+\_\+\+H\+Sequence\+Of\+Shape \&}]{input\+Solids\+List }\end{DoxyParamCaption})}
+
+
+
+Definition at line 31 of file decomposition\+\_\+impl.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{32                                                                 \{}
+\DoxyCodeLine{33     Standard\_Integer compSolid\{0\}, solid\{0\}, invalidShape\{0\};}
+\DoxyCodeLine{34     \textcolor{keywordflow}{for}(\textcolor{keyword}{const} \textcolor{keyword}{auto}\& shape : *inputSolidsList)\{}
+\DoxyCodeLine{35         \textcolor{keywordflow}{switch}(shape.ShapeType())\{}
+\DoxyCodeLine{36         \textcolor{keywordflow}{case} TopAbs\_COMPOUND:}
+\DoxyCodeLine{37             [[fallthrough]];}
+\DoxyCodeLine{38         \textcolor{keywordflow}{case} TopAbs\_COMPSOLID:}
+\DoxyCodeLine{39             ++compSolid;}
+\DoxyCodeLine{40             \textcolor{keywordflow}{for}(\textcolor{keyword}{const} \textcolor{keyword}{auto}\& solid : detail::ShapeView<TopAbs\_SOLID>\{shape\})\{}
+\DoxyCodeLine{41                 \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a9da06719a71fdc8438190a3c3112e82b}{splitInputSolidsList}}-\/>Append(solid);}
+\DoxyCodeLine{42             \};}
+\DoxyCodeLine{43             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{44         \textcolor{keywordflow}{case} TopAbs\_SOLID:}
+\DoxyCodeLine{45             ++solid;}
+\DoxyCodeLine{46             \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a9da06719a71fdc8438190a3c3112e82b}{splitInputSolidsList}}-\/>Append(shape);}
+\DoxyCodeLine{47             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{48         \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{49             ++invalidShape;}
+\DoxyCodeLine{50             \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_afa4c71b9552009320911095b0e9c638e}{rejectedInputSolidsList}}-\/>Append(shape);}
+\DoxyCodeLine{51         \}}
+\DoxyCodeLine{52     \}}
+\DoxyCodeLine{53     std::cout << \textcolor{stringliteral}{"   -\/ Found "} << compSolid << \textcolor{stringliteral}{" compound solid(s)"} << std::endl;}
+\DoxyCodeLine{54     std::cout << \textcolor{stringliteral}{"   -\/ Found "} << solid << \textcolor{stringliteral}{" solid(s)"} << std::endl;}
+\DoxyCodeLine{55     std::cout << \textcolor{stringliteral}{"   -\/ Found "} << invalidShape << \textcolor{stringliteral}{" invalid shape(s)"} << std::endl;}
+\DoxyCodeLine{56 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a71700a5c5ec1eaa1b414cb232d1a073b}\label{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a71700a5c5ec1eaa1b414cb232d1a073b}} 
+\index{McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}!perform@{perform}}
+\index{perform@{perform}!McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}}
+\doxysubsubsection{\texorpdfstring{perform()}{perform()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Mc\+C\+A\+D\+::\+Decomposition\+::\+Decompose\+::\+Impl\+::perform (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 59 of file decomposition\+\_\+impl.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{59                                         \{}
+\DoxyCodeLine{60     \textcolor{keywordflow}{for}(\textcolor{keyword}{const} \textcolor{keyword}{auto}\& shape : *\mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a9da06719a71fdc8438190a3c3112e82b}{splitInputSolidsList}})\{}
+\DoxyCodeLine{61         \textcolor{keyword}{auto} solid = Preprocessor\{\}.perform(shape);}
+\DoxyCodeLine{62         \textcolor{keywordflow}{if} (std::holds\_alternative<std::monostate>(solid))\{}
+\DoxyCodeLine{63             \textcolor{comment}{//std::cout << "empty variant" << std::endl;}}
+\DoxyCodeLine{64             \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_afa4c71b9552009320911095b0e9c638e}{rejectedInputSolidsList}}-\/>Append(shape);}
+\DoxyCodeLine{65             \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{66         \}}
+\DoxyCodeLine{67         \textcolor{comment}{// Using switch for now. Should be separated in a separate class an called}}
+\DoxyCodeLine{68         \textcolor{comment}{// for each specific type of solid object.}}
+\DoxyCodeLine{69         \textcolor{keywordflow}{switch} (Standard\_Integer(solid.index()))\{}
+\DoxyCodeLine{70         \textcolor{keywordflow}{case} \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a4d66091bde14a60985a5998376612a6c}{solidType}}.\mbox{\hyperlink{classMcCAD_1_1Tools_1_1SolidType_a69c62abbe9fa709ccbaf47d4daf356e1a6575b2097af628fdd10d5eb9ef33a9df}{planarSolid}}:\{}
+\DoxyCodeLine{71             std::cout << \textcolor{stringliteral}{"   -\/ Decomposing planar solid"} << std::endl;}
+\DoxyCodeLine{72             \textcolor{keywordflow}{if} (DecomposeSolid\{\}.accessDSImpl()-\/>\textcolor{keyword}{operator}()(}
+\DoxyCodeLine{73                         std::get<solidType.planarSolid>(solid)))\{}
+\DoxyCodeLine{74                 \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a72d35db075f7a695c1bf3f99ccf8d8a8}{extractSolids}}(*std::get<solidType.planarSolid>(solid)-\/>accessSImpl());}
+\DoxyCodeLine{75             \} \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{76                 \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_afa4c71b9552009320911095b0e9c638e}{rejectedInputSolidsList}}-\/>Append(shape);}
+\DoxyCodeLine{77             \}}
+\DoxyCodeLine{78             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{79         \} \textcolor{keywordflow}{case} \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a4d66091bde14a60985a5998376612a6c}{solidType}}.\mbox{\hyperlink{classMcCAD_1_1Tools_1_1SolidType_a69c62abbe9fa709ccbaf47d4daf356e1ad6a28a7bc20e1c7978f64d22d28f141a}{cylindricalSolid}}:\{}
+\DoxyCodeLine{80             std::cout << \textcolor{stringliteral}{"   -\/ Decomposing cylindrical solid"} << std::endl;}
+\DoxyCodeLine{81             \textcolor{keywordflow}{if} (DecomposeSolid\{\}.accessDSImpl()-\/>\textcolor{keyword}{operator}()(}
+\DoxyCodeLine{82                         std::get<solidType.cylindricalSolid>(solid)))\{}
+\DoxyCodeLine{83                 \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a72d35db075f7a695c1bf3f99ccf8d8a8}{extractSolids}}(*std::get<solidType.cylindricalSolid>(solid)-\/>accessSImpl());}
+\DoxyCodeLine{84             \} \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{85                 std::cout << \textcolor{stringliteral}{"   -\/ rejected cylindrical solid"} << std::endl;}
+\DoxyCodeLine{86                 \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_afa4c71b9552009320911095b0e9c638e}{rejectedInputSolidsList}}-\/>Append(shape);}
+\DoxyCodeLine{87             \}}
+\DoxyCodeLine{88             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{89         \} \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{90             std::cout << \textcolor{stringliteral}{"   -\/ Processing of solids with non-\/planar surfaces"}}
+\DoxyCodeLine{91                          \textcolor{stringliteral}{" is not yet supported!.\(\backslash\)n     Solid will be added"}}
+\DoxyCodeLine{92                          \textcolor{stringliteral}{" to rejected solids file"} << std::endl;}
+\DoxyCodeLine{93             \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_afa4c71b9552009320911095b0e9c638e}{rejectedInputSolidsList}}-\/>Append(shape);}
+\DoxyCodeLine{94         \}}
+\DoxyCodeLine{95     \}}
+\DoxyCodeLine{96     std::cout << \textcolor{stringliteral}{"   -\/ There are "} << \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_afa4c71b9552009320911095b0e9c638e}{rejectedInputSolidsList}}-\/>Length() <<}
+\DoxyCodeLine{97                  \textcolor{stringliteral}{" rejected input solid(s)."} << std::endl;}
+\DoxyCodeLine{98     std::cout << \textcolor{stringliteral}{"   -\/ There are "} << \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a75b53d768ed797dff26c6bf7308f0bea}{resultSolidsList}}-\/>Length() <<}
+\DoxyCodeLine{99                  \textcolor{stringliteral}{" result solid(s)."} << std::endl;}
+\DoxyCodeLine{100     std::cout << \textcolor{stringliteral}{"   -\/ There are "} << \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a513935cebc47e2e4dd599963bfbb8008}{rejectedsubSolidsList}}-\/>Length() <<}
+\DoxyCodeLine{101                  \textcolor{stringliteral}{" rejected subsolid(s)."} << std::endl;}
+\DoxyCodeLine{102     \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_afa4c71b9552009320911095b0e9c638e}{rejectedInputSolidsList}}-\/>Append(*\mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a513935cebc47e2e4dd599963bfbb8008}{rejectedsubSolidsList}});}
+\DoxyCodeLine{103 \}}
+
+\end{DoxyCode}
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{dd/de9/classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a71700a5c5ec1eaa1b414cb232d1a073b_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a71700a5c5ec1eaa1b414cb232d1a073b}\label{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a71700a5c5ec1eaa1b414cb232d1a073b}} 
+\index{McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}!perform@{perform}}
+\index{perform@{perform}!McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}}
+\doxysubsubsection{\texorpdfstring{perform()}{perform()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Mc\+C\+A\+D\+::\+Decomposition\+::\+Decompose\+::\+Impl\+::perform (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_afa4c71b9552009320911095b0e9c638e}\label{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_afa4c71b9552009320911095b0e9c638e}} 
+\index{McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}!rejectedInputSolidsList@{rejectedInputSolidsList}}
+\index{rejectedInputSolidsList@{rejectedInputSolidsList}!McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}}
+\doxysubsubsection{\texorpdfstring{rejectedInputSolidsList}{rejectedInputSolidsList}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$ Top\+Tools\+\_\+\+H\+Sequence\+Of\+Shape $>$ Mc\+C\+A\+D\+::\+Decomposition\+::\+Decompose\+::\+Impl\+::rejected\+Input\+Solids\+List}
+
+
+
+Definition at line 35 of file build/includes/implementation/decomposition/decomposition\+\_\+impl.\+hpp.
+
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a513935cebc47e2e4dd599963bfbb8008}\label{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a513935cebc47e2e4dd599963bfbb8008}} 
+\index{McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}!rejectedsubSolidsList@{rejectedsubSolidsList}}
+\index{rejectedsubSolidsList@{rejectedsubSolidsList}!McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}}
+\doxysubsubsection{\texorpdfstring{rejectedsubSolidsList}{rejectedsubSolidsList}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$ Top\+Tools\+\_\+\+H\+Sequence\+Of\+Shape $>$ Mc\+C\+A\+D\+::\+Decomposition\+::\+Decompose\+::\+Impl\+::rejectedsub\+Solids\+List}
+
+
+
+Definition at line 37 of file build/includes/implementation/decomposition/decomposition\+\_\+impl.\+hpp.
+
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a75b53d768ed797dff26c6bf7308f0bea}\label{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a75b53d768ed797dff26c6bf7308f0bea}} 
+\index{McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}!resultSolidsList@{resultSolidsList}}
+\index{resultSolidsList@{resultSolidsList}!McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}}
+\doxysubsubsection{\texorpdfstring{resultSolidsList}{resultSolidsList}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$ Top\+Tools\+\_\+\+H\+Sequence\+Of\+Shape $>$ Mc\+C\+A\+D\+::\+Decomposition\+::\+Decompose\+::\+Impl\+::result\+Solids\+List}
+
+
+
+Definition at line 36 of file build/includes/implementation/decomposition/decomposition\+\_\+impl.\+hpp.
+
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a4d66091bde14a60985a5998376612a6c}\label{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a4d66091bde14a60985a5998376612a6c}} 
+\index{McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}!solidType@{solidType}}
+\index{solidType@{solidType}!McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}}
+\doxysubsubsection{\texorpdfstring{solidType}{solidType}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SolidType}{Tools\+::\+Solid\+Type}} Mc\+C\+A\+D\+::\+Decomposition\+::\+Decompose\+::\+Impl\+::solid\+Type}
+
+
+
+Definition at line 32 of file build/includes/implementation/decomposition/decomposition\+\_\+impl.\+hpp.
+
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a9da06719a71fdc8438190a3c3112e82b}\label{classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl_a9da06719a71fdc8438190a3c3112e82b}} 
+\index{McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}!splitInputSolidsList@{splitInputSolidsList}}
+\index{splitInputSolidsList@{splitInputSolidsList}!McCAD::Decomposition::Decompose::Impl@{McCAD::Decomposition::Decompose::Impl}}
+\doxysubsubsection{\texorpdfstring{splitInputSolidsList}{splitInputSolidsList}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$ Top\+Tools\+\_\+\+H\+Sequence\+Of\+Shape $>$ Mc\+C\+A\+D\+::\+Decomposition\+::\+Decompose\+::\+Impl\+::split\+Input\+Solids\+List}
+
+
+
+Definition at line 34 of file build/includes/implementation/decomposition/decomposition\+\_\+impl.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{build_2includes_2implementation_2decomposition_2decomposition__impl_8hpp}{build/includes/implementation/decomposition/decomposition\+\_\+impl.\+hpp}}\item 
+\mbox{\hyperlink{decomposition__impl_8cpp}{decomposition\+\_\+impl.\+cpp}}\end{DoxyCompactItemize}

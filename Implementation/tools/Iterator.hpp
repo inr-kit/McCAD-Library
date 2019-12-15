@@ -71,7 +71,7 @@ namespace McCAD::detail{
 
 }
 
-namespace McCAD{
+namespace McCAD::detail{
 
     template<TopAbs_ShapeEnum shapeTag>
     class Iterator{

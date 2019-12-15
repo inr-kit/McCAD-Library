@@ -1,0 +1,32 @@
+\hypertarget{namespaceMcCAD_1_1Geometry_1_1detail}{}\doxysection{Mc\+C\+AD\+::Geometry\+::detail Namespace Reference}
+\label{namespaceMcCAD_1_1Geometry_1_1detail}\index{McCAD::Geometry::detail@{McCAD::Geometry::detail}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundingBox}{Bounding\+Box}} \mbox{\hyperlink{namespaceMcCAD_1_1Geometry_1_1detail_a3f1c19867072234af3dd8cca827d75d2}{make\+Bounding\+Box}} (const Topo\+D\+S\+\_\+\+Solid \&solid)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespaceMcCAD_1_1Geometry_1_1detail_a3f1c19867072234af3dd8cca827d75d2}\label{namespaceMcCAD_1_1Geometry_1_1detail_a3f1c19867072234af3dd8cca827d75d2}} 
+\index{McCAD::Geometry::detail@{McCAD::Geometry::detail}!makeBoundingBox@{makeBoundingBox}}
+\index{makeBoundingBox@{makeBoundingBox}!McCAD::Geometry::detail@{McCAD::Geometry::detail}}
+\doxysubsubsection{\texorpdfstring{makeBoundingBox()}{makeBoundingBox()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundingBox}{Bounding\+Box}} Mc\+C\+A\+D\+::\+Geometry\+::detail\+::make\+Bounding\+Box (\begin{DoxyParamCaption}\item[{const Topo\+D\+S\+\_\+\+Solid \&}]{solid }\end{DoxyParamCaption})}
+
+
+
+Definition at line 74 of file bounding\+Box\+\_\+impl.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{75                                   \{}
+\DoxyCodeLine{76     Bnd\_Box boundingBox;}
+\DoxyCodeLine{77     BRepBndLib::Add(solid, boundingBox);}
+\DoxyCodeLine{78     Coord3D min, max;}
+\DoxyCodeLine{79     boundingBox.Get(min.x.value, min.y.value, min.z.value,}
+\DoxyCodeLine{80                     max.x.value, max.y.value, max.z.value);}
+\DoxyCodeLine{81     \textcolor{keywordflow}{return} \{min, max\};}
+\DoxyCodeLine{82 \}}
+
+\end{DoxyCode}

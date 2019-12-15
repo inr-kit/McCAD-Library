@@ -1,0 +1,165 @@
+\hypertarget{classMcCAD_1_1IO_1_1STEPReader_1_1Impl}{}\doxysection{Mc\+C\+AD\+::IO\+::S\+T\+E\+P\+Reader\+::Impl Class Reference}
+\label{classMcCAD_1_1IO_1_1STEPReader_1_1Impl}\index{McCAD::IO::STEPReader::Impl@{McCAD::IO::STEPReader::Impl}}
+
+
+{\ttfamily \#include $<$/home/mharb/\+Documents/\+Mc\+C\+A\+D\+\_\+refactor/build/includes/implementation/io/stepreader\+\_\+impl.\+hpp$>$}
+
+
+
+Collaboration diagram for Mc\+C\+AD\+::IO\+::S\+T\+E\+P\+Reader\+::Impl\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=212pt]{da/dab/classMcCAD_1_1IO_1_1STEPReader_1_1Impl__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_a5be8cf4f0e40571ffdff4ecba69265ce}{Impl}} (const std\+::string \&\mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_ad06c3157407f90e8a4b4524da0c9ceba}{file\+Name}})
+\item 
+void \mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_adf3fe2fde0c4b949317c2e07b2fa57b9}{read\+S\+T\+EP}} ()
+\item 
+\mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_a5be8cf4f0e40571ffdff4ecba69265ce}{Impl}} (const std\+::string \&\mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_ad06c3157407f90e8a4b4524da0c9ceba}{file\+Name}})
+\item 
+void \mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_adf3fe2fde0c4b949317c2e07b2fa57b9}{read\+S\+T\+EP}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_ad06c3157407f90e8a4b4524da0c9ceba}{file\+Name}}
+\item 
+Handle\+\_\+\+Top\+Tools\+\_\+\+H\+Sequence\+Of\+Shape \mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_a420bbc46a0f7740eca71ef5aa6ce5e55}{sequence\+Of\+Shape}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 24 of file build/includes/implementation/io/stepreader\+\_\+impl.\+hpp.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_a5be8cf4f0e40571ffdff4ecba69265ce}\label{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_a5be8cf4f0e40571ffdff4ecba69265ce}} 
+\index{McCAD::IO::STEPReader::Impl@{McCAD::IO::STEPReader::Impl}!Impl@{Impl}}
+\index{Impl@{Impl}!McCAD::IO::STEPReader::Impl@{McCAD::IO::STEPReader::Impl}}
+\doxysubsubsection{\texorpdfstring{Impl()}{Impl()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Mc\+C\+A\+D\+::\+I\+O\+::\+S\+T\+E\+P\+Reader\+::\+Impl\+::\+Impl (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{file\+Name }\end{DoxyParamCaption})}
+
+
+
+Definition at line 4 of file stepreader\+\_\+impl.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{5     : \mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_ad06c3157407f90e8a4b4524da0c9ceba}{fileName}}\{\mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_ad06c3157407f90e8a4b4524da0c9ceba}{fileName}}\}}
+\DoxyCodeLine{6     , \mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_a420bbc46a0f7740eca71ef5aa6ce5e55}{sequenceOfShape}}\{\textcolor{keyword}{new} TopTools\_HSequenceOfShape\}\{}
+\DoxyCodeLine{7       }
+\DoxyCodeLine{8     \textcolor{keywordflow}{if}(!std::filesystem::exists(\mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_ad06c3157407f90e8a4b4524da0c9ceba}{fileName}}))}
+\DoxyCodeLine{9       \{}
+\DoxyCodeLine{10       \textcolor{keywordflow}{throw} std::runtime\_error(\textcolor{stringliteral}{"The specified STEP file couldn't be found!"});}
+\DoxyCodeLine{11       \}}
+\DoxyCodeLine{12 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_a5be8cf4f0e40571ffdff4ecba69265ce}\label{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_a5be8cf4f0e40571ffdff4ecba69265ce}} 
+\index{McCAD::IO::STEPReader::Impl@{McCAD::IO::STEPReader::Impl}!Impl@{Impl}}
+\index{Impl@{Impl}!McCAD::IO::STEPReader::Impl@{McCAD::IO::STEPReader::Impl}}
+\doxysubsubsection{\texorpdfstring{Impl()}{Impl()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Mc\+C\+A\+D\+::\+I\+O\+::\+S\+T\+E\+P\+Reader\+::\+Impl\+::\+Impl (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{file\+Name }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_adf3fe2fde0c4b949317c2e07b2fa57b9}\label{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_adf3fe2fde0c4b949317c2e07b2fa57b9}} 
+\index{McCAD::IO::STEPReader::Impl@{McCAD::IO::STEPReader::Impl}!readSTEP@{readSTEP}}
+\index{readSTEP@{readSTEP}!McCAD::IO::STEPReader::Impl@{McCAD::IO::STEPReader::Impl}}
+\doxysubsubsection{\texorpdfstring{readSTEP()}{readSTEP()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Mc\+C\+A\+D\+::\+I\+O\+::\+S\+T\+E\+P\+Reader\+::\+Impl\+::read\+S\+T\+EP (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 15 of file stepreader\+\_\+impl.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{15                                \{}
+\DoxyCodeLine{16     std::cout << \textcolor{stringliteral}{" > Populating the input solids list: "} << std::endl;}
+\DoxyCodeLine{17     ofstream runLog;}
+\DoxyCodeLine{18     runLog.open(\textcolor{stringliteral}{"runLog.txt"});}
+\DoxyCodeLine{19     STEPControl\_Reader reader;}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21     \textcolor{keywordflow}{if}(reader.ReadFile(\mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_ad06c3157407f90e8a4b4524da0c9ceba}{fileName}}.c\_str()) == IFSelect\_RetDone)}
+\DoxyCodeLine{22       \{}
+\DoxyCodeLine{23     Standard\_Boolean failsonly = Standard\_False;}
+\DoxyCodeLine{24     reader.PrintCheckLoad(failsonly, IFSelect\_ItemsByEntity);}
+\DoxyCodeLine{25     reader.PrintCheckTransfer(failsonly, IFSelect\_ItemsByEntity);}
+\DoxyCodeLine{26     }
+\DoxyCodeLine{27     Standard\_Integer numberOfRoots = reader.NbRootsForTransfer();}
+\DoxyCodeLine{28     \textcolor{keywordflow}{if} (numberOfRoots != 0)}
+\DoxyCodeLine{29       \{}
+\DoxyCodeLine{30         \textcolor{keywordflow}{for}(Standard\_Integer i = 1;}
+\DoxyCodeLine{31         i <= numberOfRoots; ++i)}
+\DoxyCodeLine{32           \{}
+\DoxyCodeLine{33         \textcolor{keywordflow}{if}(reader.TransferRoot(i))}
+\DoxyCodeLine{34           \{}
+\DoxyCodeLine{35             TopoDS\_Shape  solidShape = reader.Shape(i);}
+\DoxyCodeLine{36             TopExp\_Explorer explorer;}
+\DoxyCodeLine{37             TopoDS\_CompSolid compSolid;}
+\DoxyCodeLine{38                     TopoDS\_Builder builder;}
+\DoxyCodeLine{39             \textcolor{keywordflow}{for}(explorer.Init(solidShape, TopAbs\_SOLID);}
+\DoxyCodeLine{40             explorer.More(); explorer.Next())}
+\DoxyCodeLine{41               \{}
+\DoxyCodeLine{42             TopoDS\_Solid tempSolid = TopoDS::Solid(explorer.Current());}
+\DoxyCodeLine{43             builder.MakeCompSolid(compSolid);}
+\DoxyCodeLine{44                         builder.Add(compSolid,tempSolid);}
+\DoxyCodeLine{45                         \mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_a420bbc46a0f7740eca71ef5aa6ce5e55}{sequenceOfShape}}-\/>Append(compSolid);}
+\DoxyCodeLine{46               \}}
+\DoxyCodeLine{47           \}}
+\DoxyCodeLine{48         \textcolor{keywordflow}{else}}
+\DoxyCodeLine{49           \{}
+\DoxyCodeLine{50             \textcolor{keywordflow}{throw} std::runtime\_error(\textcolor{stringliteral}{"Error reading file, a shape could not be read!"});}
+\DoxyCodeLine{51           \}}
+\DoxyCodeLine{52           \}}
+\DoxyCodeLine{53       \}}
+\DoxyCodeLine{54       \}}
+\DoxyCodeLine{55     runLog.close();}
+\DoxyCodeLine{56 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_adf3fe2fde0c4b949317c2e07b2fa57b9}\label{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_adf3fe2fde0c4b949317c2e07b2fa57b9}} 
+\index{McCAD::IO::STEPReader::Impl@{McCAD::IO::STEPReader::Impl}!readSTEP@{readSTEP}}
+\index{readSTEP@{readSTEP}!McCAD::IO::STEPReader::Impl@{McCAD::IO::STEPReader::Impl}}
+\doxysubsubsection{\texorpdfstring{readSTEP()}{readSTEP()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Mc\+C\+A\+D\+::\+I\+O\+::\+S\+T\+E\+P\+Reader\+::\+Impl\+::read\+S\+T\+EP (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_ad06c3157407f90e8a4b4524da0c9ceba}\label{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_ad06c3157407f90e8a4b4524da0c9ceba}} 
+\index{McCAD::IO::STEPReader::Impl@{McCAD::IO::STEPReader::Impl}!fileName@{fileName}}
+\index{fileName@{fileName}!McCAD::IO::STEPReader::Impl@{McCAD::IO::STEPReader::Impl}}
+\doxysubsubsection{\texorpdfstring{fileName}{fileName}}
+{\footnotesize\ttfamily std\+::string Mc\+C\+A\+D\+::\+I\+O\+::\+S\+T\+E\+P\+Reader\+::\+Impl\+::file\+Name}
+
+
+
+Definition at line 30 of file build/includes/implementation/io/stepreader\+\_\+impl.\+hpp.
+
+\mbox{\Hypertarget{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_a420bbc46a0f7740eca71ef5aa6ce5e55}\label{classMcCAD_1_1IO_1_1STEPReader_1_1Impl_a420bbc46a0f7740eca71ef5aa6ce5e55}} 
+\index{McCAD::IO::STEPReader::Impl@{McCAD::IO::STEPReader::Impl}!sequenceOfShape@{sequenceOfShape}}
+\index{sequenceOfShape@{sequenceOfShape}!McCAD::IO::STEPReader::Impl@{McCAD::IO::STEPReader::Impl}}
+\doxysubsubsection{\texorpdfstring{sequenceOfShape}{sequenceOfShape}}
+{\footnotesize\ttfamily Handle\+\_\+\+Top\+Tools\+\_\+\+H\+Sequence\+Of\+Shape Mc\+C\+A\+D\+::\+I\+O\+::\+S\+T\+E\+P\+Reader\+::\+Impl\+::sequence\+Of\+Shape}
+
+
+
+Definition at line 31 of file build/includes/implementation/io/stepreader\+\_\+impl.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{build_2includes_2implementation_2io_2stepreader__impl_8hpp}{build/includes/implementation/io/stepreader\+\_\+impl.\+hpp}}\item 
+\mbox{\hyperlink{stepreader__impl_8cpp}{stepreader\+\_\+impl.\+cpp}}\end{DoxyCompactItemize}

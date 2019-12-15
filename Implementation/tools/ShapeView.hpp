@@ -3,7 +3,7 @@
 
 #include "Iterator.hpp"
 
-namespace McCAD{
+namespace McCAD::detail{
 
     template<TopAbs_ShapeEnum shapeTag>
     class ShapeView{

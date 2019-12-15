@@ -1,0 +1,241 @@
+\hypertarget{classMcCAD_1_1Tools_1_1SurfacesFuser}{}\doxysection{Mc\+C\+AD\+::Tools\+::Surfaces\+Fuser Class Reference}
+\label{classMcCAD_1_1Tools_1_1SurfacesFuser}\index{McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}}
+
+
+{\ttfamily \#include $<$/home/mharb/\+Documents/\+Mc\+C\+A\+D\+\_\+refactor/build/includes/implementation/tools/surfaces\+Fuser.\+hpp$>$}
+
+
+
+Collaboration diagram for Mc\+C\+AD\+::Tools\+::Surfaces\+Fuser\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=232pt]{df/d0c/classMcCAD_1_1Tools_1_1SurfacesFuser__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a7e369e5001c4e14ccb690d61faa0018c}{Surfaces\+Fuser}} (Standard\+\_\+\+Real \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a7ff8c39d261160d8c0e81be599ce9835}{zero\+Tolerance}}=1.\+0e-\/7, Standard\+\_\+\+Real \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_ad93b6c71e01c6b0692203d1671b7e8a4}{tolerance}}=1.\+0e-\/7)
+\item 
+std\+::optional$<$ Topo\+D\+S\+\_\+\+Face $>$ \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a82a8e6526205fbfd22dbb93e01f24994}{operator()}} (const Topo\+D\+S\+\_\+\+Face \&first\+Face, const Topo\+D\+S\+\_\+\+Face \&second\+Face)
+\item 
+\mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a7e369e5001c4e14ccb690d61faa0018c}{Surfaces\+Fuser}} (Standard\+\_\+\+Real \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a7ff8c39d261160d8c0e81be599ce9835}{zero\+Tolerance}}=1.\+0e-\/7, Standard\+\_\+\+Real \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_ad93b6c71e01c6b0692203d1671b7e8a4}{tolerance}}=1.\+0e-\/7)
+\item 
+std\+::optional$<$ Topo\+D\+S\+\_\+\+Face $>$ \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a474383c6856eeb901ff8f947c8dca9ed}{operator()}} (const Topo\+D\+S\+\_\+\+Face \&first\+Face, const Topo\+D\+S\+\_\+\+Face \&second\+Face)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::array$<$ Standard\+\_\+\+Real, 4 $>$ \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a5525c22611c4982eeded8b867928e2db}{uv\+Bounds}} (const Topo\+D\+S\+\_\+\+Face \&face) const
+\item 
+Topo\+D\+S\+\_\+\+Face \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a8afb3a95157d8185bccdc4ba5f372ada}{fuse\+Planes}} (const Topo\+D\+S\+\_\+\+Face \&first, const Topo\+D\+S\+\_\+\+Face \&second)
+\item 
+Topo\+D\+S\+\_\+\+Face \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a803a59817fecd64ef1d8bf4a41c320ed}{fuse\+Cyls}} (const Topo\+D\+S\+\_\+\+Face \&first, const Topo\+D\+S\+\_\+\+Face \&second)
+\item 
+std\+::array$<$ Standard\+\_\+\+Real, 4 $>$ \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_ab67c77b9bf4e860c5424bc91ca73095d}{uv\+Bounds}} (const Topo\+D\+S\+\_\+\+Face \&face) const
+\item 
+Topo\+D\+S\+\_\+\+Face \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a8afb3a95157d8185bccdc4ba5f372ada}{fuse\+Planes}} (const Topo\+D\+S\+\_\+\+Face \&first, const Topo\+D\+S\+\_\+\+Face \&second)
+\item 
+Topo\+D\+S\+\_\+\+Face \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a803a59817fecd64ef1d8bf4a41c320ed}{fuse\+Cyls}} (const Topo\+D\+S\+\_\+\+Face \&first, const Topo\+D\+S\+\_\+\+Face \&second)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Standard\+\_\+\+Real \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a7ff8c39d261160d8c0e81be599ce9835}{zero\+Tolerance}}
+\item 
+Standard\+\_\+\+Real \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_ad93b6c71e01c6b0692203d1671b7e8a4}{tolerance}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 16 of file build/includes/implementation/tools/surfaces\+Fuser.\+hpp.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1SurfacesFuser_a7e369e5001c4e14ccb690d61faa0018c}\label{classMcCAD_1_1Tools_1_1SurfacesFuser_a7e369e5001c4e14ccb690d61faa0018c}} 
+\index{McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}!SurfacesFuser@{SurfacesFuser}}
+\index{SurfacesFuser@{SurfacesFuser}!McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}}
+\doxysubsubsection{\texorpdfstring{SurfacesFuser()}{SurfacesFuser()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Mc\+C\+A\+D\+::\+Tools\+::\+Surfaces\+Fuser\+::\+Surfaces\+Fuser (\begin{DoxyParamCaption}\item[{Standard\+\_\+\+Real}]{zero\+Tolerance = {\ttfamily 1.0e-\/7},  }\item[{Standard\+\_\+\+Real}]{tolerance = {\ttfamily 1.0e-\/7} }\end{DoxyParamCaption})}
+
+
+
+Definition at line 4 of file surfaces\+Fuser.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{6     : \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a7ff8c39d261160d8c0e81be599ce9835}{zeroTolerance}}\{\mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a7ff8c39d261160d8c0e81be599ce9835}{zeroTolerance}}\}, \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_ad93b6c71e01c6b0692203d1671b7e8a4}{tolerance}}\{\mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_ad93b6c71e01c6b0692203d1671b7e8a4}{tolerance}}\}\{}
+\DoxyCodeLine{7 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1SurfacesFuser_a7e369e5001c4e14ccb690d61faa0018c}\label{classMcCAD_1_1Tools_1_1SurfacesFuser_a7e369e5001c4e14ccb690d61faa0018c}} 
+\index{McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}!SurfacesFuser@{SurfacesFuser}}
+\index{SurfacesFuser@{SurfacesFuser}!McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}}
+\doxysubsubsection{\texorpdfstring{SurfacesFuser()}{SurfacesFuser()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Mc\+C\+A\+D\+::\+Tools\+::\+Surfaces\+Fuser\+::\+Surfaces\+Fuser (\begin{DoxyParamCaption}\item[{Standard\+\_\+\+Real}]{zero\+Tolerance = {\ttfamily 1.0e-\/7},  }\item[{Standard\+\_\+\+Real}]{tolerance = {\ttfamily 1.0e-\/7} }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1SurfacesFuser_a803a59817fecd64ef1d8bf4a41c320ed}\label{classMcCAD_1_1Tools_1_1SurfacesFuser_a803a59817fecd64ef1d8bf4a41c320ed}} 
+\index{McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}!fuseCyls@{fuseCyls}}
+\index{fuseCyls@{fuseCyls}!McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}}
+\doxysubsubsection{\texorpdfstring{fuseCyls()}{fuseCyls()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Topo\+D\+S\+\_\+\+Face Mc\+C\+A\+D\+::\+Tools\+::\+Surfaces\+Fuser\+::fuse\+Cyls (\begin{DoxyParamCaption}\item[{const Topo\+D\+S\+\_\+\+Face \&}]{first,  }\item[{const Topo\+D\+S\+\_\+\+Face \&}]{second }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 46 of file surfaces\+Fuser.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{47                                                                 \{}
+\DoxyCodeLine{48     \textcolor{keyword}{auto} firstUV = \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a5525c22611c4982eeded8b867928e2db}{uvBounds}}(first);}
+\DoxyCodeLine{49     \textcolor{keyword}{auto} secondUV = \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a5525c22611c4982eeded8b867928e2db}{uvBounds}}(second);}
+\DoxyCodeLine{50     std::array<Standard\_Real, 4> newUV;}
+\DoxyCodeLine{51     \textcolor{keywordflow}{if} (std::abs(firstUV[1] -\/ firstUV[0]) + std::abs(secondUV[1] -\/ secondUV[0]) >=}
+\DoxyCodeLine{52             2*M\_PI)\{}
+\DoxyCodeLine{53         \textcolor{comment}{//Two surfaces form a closed cylinder.}}
+\DoxyCodeLine{54         newUV[0] = 0.0;}
+\DoxyCodeLine{55         newUV[1] = 2*M\_PI;}
+\DoxyCodeLine{56     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{57         newUV[0] = (firstUV[0] <= secondUV[0]) ? firstUV[0] : secondUV[0];}
+\DoxyCodeLine{58         newUV[1] = (firstUV[1] >= secondUV[1]) ? firstUV[1] : secondUV[1];}
+\DoxyCodeLine{59     \}}
+\DoxyCodeLine{60     newUV[2] = (firstUV[2] <= secondUV[2]) ? firstUV[2] : secondUV[2];}
+\DoxyCodeLine{61     newUV[3] = (firstUV[3] >= secondUV[3]) ? firstUV[3] : secondUV[3];}
+\DoxyCodeLine{62     Handle\_Geom\_Surface newSurface = BRep\_Tool::Surface(first);}
+\DoxyCodeLine{63     TopoDS\_Face newFace = BRepBuilderAPI\_MakeFace(newSurface, newUV[0], newUV[1],}
+\DoxyCodeLine{64             newUV[2], newUV[3], \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_ad93b6c71e01c6b0692203d1671b7e8a4}{tolerance}}).Face();}
+\DoxyCodeLine{65     newFace.Orientation(first.Orientation());}
+\DoxyCodeLine{66     \textcolor{keywordflow}{return} newFace;}
+\DoxyCodeLine{67 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1SurfacesFuser_a803a59817fecd64ef1d8bf4a41c320ed}\label{classMcCAD_1_1Tools_1_1SurfacesFuser_a803a59817fecd64ef1d8bf4a41c320ed}} 
+\index{McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}!fuseCyls@{fuseCyls}}
+\index{fuseCyls@{fuseCyls}!McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}}
+\doxysubsubsection{\texorpdfstring{fuseCyls()}{fuseCyls()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Topo\+D\+S\+\_\+\+Face Mc\+C\+A\+D\+::\+Tools\+::\+Surfaces\+Fuser\+::fuse\+Cyls (\begin{DoxyParamCaption}\item[{const Topo\+D\+S\+\_\+\+Face \&}]{first,  }\item[{const Topo\+D\+S\+\_\+\+Face \&}]{second }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1SurfacesFuser_a8afb3a95157d8185bccdc4ba5f372ada}\label{classMcCAD_1_1Tools_1_1SurfacesFuser_a8afb3a95157d8185bccdc4ba5f372ada}} 
+\index{McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}!fusePlanes@{fusePlanes}}
+\index{fusePlanes@{fusePlanes}!McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}}
+\doxysubsubsection{\texorpdfstring{fusePlanes()}{fusePlanes()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Topo\+D\+S\+\_\+\+Face Mc\+C\+A\+D\+::\+Tools\+::\+Surfaces\+Fuser\+::fuse\+Planes (\begin{DoxyParamCaption}\item[{const Topo\+D\+S\+\_\+\+Face \&}]{first,  }\item[{const Topo\+D\+S\+\_\+\+Face \&}]{second }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 29 of file surfaces\+Fuser.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{30                                                                   \{}
+\DoxyCodeLine{31     \textcolor{keyword}{auto} firstUV = \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a5525c22611c4982eeded8b867928e2db}{uvBounds}}(first);}
+\DoxyCodeLine{32     \textcolor{keyword}{auto} secondUV = \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a5525c22611c4982eeded8b867928e2db}{uvBounds}}(second);}
+\DoxyCodeLine{33     std::array<Standard\_Real, 4> newUV;}
+\DoxyCodeLine{34     newUV[0] = (firstUV[0] <= secondUV[0]) ? firstUV[0] : secondUV[0];}
+\DoxyCodeLine{35     newUV[1] = (firstUV[1] >= secondUV[1]) ? firstUV[1] : secondUV[1];}
+\DoxyCodeLine{36     newUV[2] = (firstUV[2] <= secondUV[2]) ? firstUV[2] : secondUV[2];}
+\DoxyCodeLine{37     newUV[3] = (firstUV[3] >= secondUV[3]) ? firstUV[3] : secondUV[3];}
+\DoxyCodeLine{38     Handle\_Geom\_Surface newSurface = BRep\_Tool::Surface(first);}
+\DoxyCodeLine{39     TopoDS\_Face newFace = BRepBuilderAPI\_MakeFace(newSurface, newUV[0], newUV[1],}
+\DoxyCodeLine{40             newUV[2], newUV[3], \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_ad93b6c71e01c6b0692203d1671b7e8a4}{tolerance}}).Face();}
+\DoxyCodeLine{41     newFace.Orientation(first.Orientation());}
+\DoxyCodeLine{42     \textcolor{keywordflow}{return} newFace;}
+\DoxyCodeLine{43 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1SurfacesFuser_a8afb3a95157d8185bccdc4ba5f372ada}\label{classMcCAD_1_1Tools_1_1SurfacesFuser_a8afb3a95157d8185bccdc4ba5f372ada}} 
+\index{McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}!fusePlanes@{fusePlanes}}
+\index{fusePlanes@{fusePlanes}!McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}}
+\doxysubsubsection{\texorpdfstring{fusePlanes()}{fusePlanes()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Topo\+D\+S\+\_\+\+Face Mc\+C\+A\+D\+::\+Tools\+::\+Surfaces\+Fuser\+::fuse\+Planes (\begin{DoxyParamCaption}\item[{const Topo\+D\+S\+\_\+\+Face \&}]{first,  }\item[{const Topo\+D\+S\+\_\+\+Face \&}]{second }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1SurfacesFuser_a474383c6856eeb901ff8f947c8dca9ed}\label{classMcCAD_1_1Tools_1_1SurfacesFuser_a474383c6856eeb901ff8f947c8dca9ed}} 
+\index{McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}!operator()@{operator()}}
+\index{operator()@{operator()}!McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily std\+::optional$<$Topo\+D\+S\+\_\+\+Face$>$ Mc\+C\+A\+D\+::\+Tools\+::\+Surfaces\+Fuser\+::operator() (\begin{DoxyParamCaption}\item[{const Topo\+D\+S\+\_\+\+Face \&}]{first\+Face,  }\item[{const Topo\+D\+S\+\_\+\+Face \&}]{second\+Face }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1SurfacesFuser_a82a8e6526205fbfd22dbb93e01f24994}\label{classMcCAD_1_1Tools_1_1SurfacesFuser_a82a8e6526205fbfd22dbb93e01f24994}} 
+\index{McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}!operator()@{operator()}}
+\index{operator()@{operator()}!McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily std\+::optional$<$ Topo\+D\+S\+\_\+\+Face $>$ Mc\+C\+A\+D\+::\+Tools\+::\+Surfaces\+Fuser\+::operator() (\begin{DoxyParamCaption}\item[{const Topo\+D\+S\+\_\+\+Face \&}]{first\+Face,  }\item[{const Topo\+D\+S\+\_\+\+Face \&}]{second\+Face }\end{DoxyParamCaption})}
+
+
+
+Definition at line 10 of file surfaces\+Fuser.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{11                                                                       \{}
+\DoxyCodeLine{12     GeomAdaptor\_Surface firstAdaptor\{BRep\_Tool::Surface(firstFace)\};}
+\DoxyCodeLine{13     \textcolor{keywordflow}{if} (firstAdaptor.GetType() == GeomAbs\_Plane)}
+\DoxyCodeLine{14         \textcolor{keywordflow}{return} \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a8afb3a95157d8185bccdc4ba5f372ada}{fusePlanes}}(firstFace, secondFace);}
+\DoxyCodeLine{15     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (firstAdaptor.GetType() == GeomAbs\_Cylinder)}
+\DoxyCodeLine{16         \textcolor{keywordflow}{return} \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a803a59817fecd64ef1d8bf4a41c320ed}{fuseCyls}}(firstFace, secondFace);}
+\DoxyCodeLine{17 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1SurfacesFuser_ab67c77b9bf4e860c5424bc91ca73095d}\label{classMcCAD_1_1Tools_1_1SurfacesFuser_ab67c77b9bf4e860c5424bc91ca73095d}} 
+\index{McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}!uvBounds@{uvBounds}}
+\index{uvBounds@{uvBounds}!McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}}
+\doxysubsubsection{\texorpdfstring{uvBounds()}{uvBounds()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily std\+::array$<$Standard\+\_\+\+Real, 4$>$ Mc\+C\+A\+D\+::\+Tools\+::\+Surfaces\+Fuser\+::uv\+Bounds (\begin{DoxyParamCaption}\item[{const Topo\+D\+S\+\_\+\+Face \&}]{face }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1SurfacesFuser_a5525c22611c4982eeded8b867928e2db}\label{classMcCAD_1_1Tools_1_1SurfacesFuser_a5525c22611c4982eeded8b867928e2db}} 
+\index{McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}!uvBounds@{uvBounds}}
+\index{uvBounds@{uvBounds}!McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}}
+\doxysubsubsection{\texorpdfstring{uvBounds()}{uvBounds()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily std\+::array$<$ Standard\+\_\+\+Real, 4 $>$ Mc\+C\+A\+D\+::\+Tools\+::\+Surfaces\+Fuser\+::uv\+Bounds (\begin{DoxyParamCaption}\item[{const Topo\+D\+S\+\_\+\+Face \&}]{face }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 20 of file surfaces\+Fuser.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{20                                                               \{}
+\DoxyCodeLine{21     std::array<Standard\_Real, 4> \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a5525c22611c4982eeded8b867928e2db}{uvBounds}};}
+\DoxyCodeLine{22     BRepTools::UVBounds(face, \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a5525c22611c4982eeded8b867928e2db}{uvBounds}}[0], \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a5525c22611c4982eeded8b867928e2db}{uvBounds}}[1], \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a5525c22611c4982eeded8b867928e2db}{uvBounds}}[2], \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a5525c22611c4982eeded8b867928e2db}{uvBounds}}[3]);}
+\DoxyCodeLine{23     \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\& uv : \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a5525c22611c4982eeded8b867928e2db}{uvBounds}})}
+\DoxyCodeLine{24         \textcolor{keywordflow}{if}(uv <= \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a7ff8c39d261160d8c0e81be599ce9835}{zeroTolerance}}) uv = 0.0;}
+\DoxyCodeLine{25     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMcCAD_1_1Tools_1_1SurfacesFuser_a5525c22611c4982eeded8b867928e2db}{uvBounds}};}
+\DoxyCodeLine{26 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1SurfacesFuser_ad93b6c71e01c6b0692203d1671b7e8a4}\label{classMcCAD_1_1Tools_1_1SurfacesFuser_ad93b6c71e01c6b0692203d1671b7e8a4}} 
+\index{McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}!tolerance@{tolerance}}
+\index{tolerance@{tolerance}!McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}}
+\doxysubsubsection{\texorpdfstring{tolerance}{tolerance}}
+{\footnotesize\ttfamily Standard\+\_\+\+Real Mc\+C\+A\+D\+::\+Tools\+::\+Surfaces\+Fuser\+::tolerance\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 25 of file build/includes/implementation/tools/surfaces\+Fuser.\+hpp.
+
+\mbox{\Hypertarget{classMcCAD_1_1Tools_1_1SurfacesFuser_a7ff8c39d261160d8c0e81be599ce9835}\label{classMcCAD_1_1Tools_1_1SurfacesFuser_a7ff8c39d261160d8c0e81be599ce9835}} 
+\index{McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}!zeroTolerance@{zeroTolerance}}
+\index{zeroTolerance@{zeroTolerance}!McCAD::Tools::SurfacesFuser@{McCAD::Tools::SurfacesFuser}}
+\doxysubsubsection{\texorpdfstring{zeroTolerance}{zeroTolerance}}
+{\footnotesize\ttfamily Standard\+\_\+\+Real Mc\+C\+A\+D\+::\+Tools\+::\+Surfaces\+Fuser\+::zero\+Tolerance\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 24 of file build/includes/implementation/tools/surfaces\+Fuser.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{build_2includes_2implementation_2tools_2surfacesFuser_8hpp}{build/includes/implementation/tools/surfaces\+Fuser.\+hpp}}\item 
+\mbox{\hyperlink{surfacesFuser_8cpp}{surfaces\+Fuser.\+cpp}}\end{DoxyCompactItemize}

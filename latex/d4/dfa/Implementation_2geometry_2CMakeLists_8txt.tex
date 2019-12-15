@@ -1,0 +1,56 @@
+\hypertarget{Implementation_2geometry_2CMakeLists_8txt}{}\doxysection{C\+Make\+Lists.\+txt File Reference}
+\label{Implementation_2geometry_2CMakeLists_8txt}\index{CMakeLists.txt@{CMakeLists.txt}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{Implementation_2geometry_2CMakeLists_8txt_a0c8f1f619073b70b53ff29758120117c}{include\+\_\+directories}} (\char`\"{}\$\{P\+R\+O\+J\+E\+C\+T\+\_\+\+S\+O\+U\+R\+C\+E\+\_\+\+D\+IR\}/Implementation/geometry/Coordinates\char`\"{} \char`\"{}\$\{P\+R\+O\+J\+E\+C\+T\+\_\+\+S\+O\+U\+R\+C\+E\+\_\+\+D\+IR\}/Implementation/geometry/Coordinates/common\char`\"{} \char`\"{}\$\{P\+R\+O\+J\+E\+C\+T\+\_\+\+S\+O\+U\+R\+C\+E\+\_\+\+D\+IR\}/Implementation/geometry/Coordinates/1D\char`\"{} \char`\"{}\$\{P\+R\+O\+J\+E\+C\+T\+\_\+\+S\+O\+U\+R\+C\+E\+\_\+\+D\+IR\}/Implementation/geometry/Coordinates/2D\char`\"{} \char`\"{}\$\{P\+R\+O\+J\+E\+C\+T\+\_\+\+S\+O\+U\+R\+C\+E\+\_\+\+D\+IR\}/Implementation/geometry/Coordinates/3D\char`\"{}) add\+\_\+subdirectory(Coordinates) \mbox{\hyperlink{Interface_2tools_2CMakeLists_8txt_a922319f873b19fdfc30ddd75f722dd78}{add\+\_\+library}}(G\+E\+O\+M\+E\+T\+R\+Y\+\_\+\+I\+M\+PL O\+B\+J\+E\+CT edge\+\_\+impl.\+cpp meshtriangle\+\_\+impl.\+cpp surface\+\_\+impl.\+cpp bound\+Surface\+\_\+impl.\+cpp bound\+Surface\+Plane\+\_\+impl.\+cpp bound\+Surface\+Cyl\+\_\+impl.\+cpp solid\+\_\+impl.\+cpp planar\+Solid\+\_\+impl.\+cpp cyl\+Solid\+\_\+impl.\+cpp bounding\+Box\+\_\+impl.\+cpp) install(F\+I\+L\+ES edge\+\_\+impl.\+hpp meshtriangle\+\_\+impl.\+hpp surface\+\_\+impl.\+hpp bound\+Surface\+\_\+impl.\+hpp bound\+Surface\+Plane\+\_\+impl.\+hpp bound\+Surface\+Cyl\+\_\+impl.\+hpp solid\+\_\+impl.\+hpp planar\+Solid\+\_\+impl.\+hpp cyl\+Solid\+\_\+impl.\+hpp bounding\+Box\+\_\+impl.\+hpp D\+E\+S\+T\+I\+N\+A\+T\+I\+ON \$
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{Implementation_2geometry_2CMakeLists_8txt_a0c8f1f619073b70b53ff29758120117c}\label{Implementation_2geometry_2CMakeLists_8txt_a0c8f1f619073b70b53ff29758120117c}} 
+\index{Implementation/geometry/CMakeLists.txt@{Implementation/geometry/CMakeLists.txt}!include\_directories@{include\_directories}}
+\index{include\_directories@{include\_directories}!Implementation/geometry/CMakeLists.txt@{Implementation/geometry/CMakeLists.txt}}
+\doxysubsubsection{\texorpdfstring{include\_directories()}{include\_directories()}}
+{\footnotesize\ttfamily include\+\_\+directories (\begin{DoxyParamCaption}\item[{\char`\"{}\$\{P\+R\+O\+J\+E\+C\+T\+\_\+\+S\+O\+U\+R\+C\+E\+\_\+\+D\+IR\}/Implementation/geometry/Coordinates\char`\"{} \char`\"{}\$\{P\+R\+O\+J\+E\+C\+T\+\_\+\+S\+O\+U\+R\+C\+E\+\_\+\+D\+IR\}/Implementation/geometry/Coordinates/common\char`\"{} \char`\"{}\$\{P\+R\+O\+J\+E\+C\+T\+\_\+\+S\+O\+U\+R\+C\+E\+\_\+\+D\+IR\}/Implementation/geometry/Coordinates/1D\char`\"{} \char`\"{}\$\{P\+R\+O\+J\+E\+C\+T\+\_\+\+S\+O\+U\+R\+C\+E\+\_\+\+D\+IR\}/Implementation/geometry/Coordinates/2D\char`\"{} \char`\"{}\$\{P\+R\+O\+J\+E\+C\+T\+\_\+\+S\+O\+U\+R\+C\+E\+\_\+\+D\+IR\}/Implementation/geometry/Coordinates/3D\char`\"{}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1 of file Implementation/geometry/\+C\+Make\+Lists.\+txt.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{2     \{PROJECT\_SOURCE\_DIR\}/Implementation/geometry/Coordinates\textcolor{stringliteral}{"}}
+\DoxyCodeLine{3 \textcolor{stringliteral}{  "}\$\{PROJECT\_SOURCE\_DIR\}/Implementation/geometry/Coordinates/common\textcolor{stringliteral}{"}}
+\DoxyCodeLine{4 \textcolor{stringliteral}{  "}\$\{PROJECT\_SOURCE\_DIR\}/Implementation/geometry/Coordinates/1D\textcolor{stringliteral}{"}}
+\DoxyCodeLine{5 \textcolor{stringliteral}{  "}\$\{PROJECT\_SOURCE\_DIR\}/Implementation/geometry/Coordinates/2D\textcolor{stringliteral}{"}}
+\DoxyCodeLine{6 \textcolor{stringliteral}{  "}\$\{PROJECT\_SOURCE\_DIR\}/Implementation/geometry/Coordinates/3D\textcolor{stringliteral}{")}}
+\DoxyCodeLine{7 \textcolor{stringliteral}{}}
+\DoxyCodeLine{8 \textcolor{stringliteral}{add\_subdirectory(Coordinates)}}
+\DoxyCodeLine{9 \textcolor{stringliteral}{}}
+\DoxyCodeLine{10 \textcolor{stringliteral}{add\_library(GEOMETRY\_IMPL OBJECT}}
+\DoxyCodeLine{11 \textcolor{stringliteral}{  edge\_impl.cpp}}
+\DoxyCodeLine{12 \textcolor{stringliteral}{  meshtriangle\_impl.cpp}}
+\DoxyCodeLine{13 \textcolor{stringliteral}{  surface\_impl.cpp}}
+\DoxyCodeLine{14 \textcolor{stringliteral}{  boundSurface\_impl.cpp}}
+\DoxyCodeLine{15 \textcolor{stringliteral}{  boundSurfacePlane\_impl.cpp}}
+\DoxyCodeLine{16 \textcolor{stringliteral}{  boundSurfaceCyl\_impl.cpp}}
+\DoxyCodeLine{17 \textcolor{stringliteral}{  solid\_impl.cpp}}
+\DoxyCodeLine{18 \textcolor{stringliteral}{  planarSolid\_impl.cpp}}
+\DoxyCodeLine{19 \textcolor{stringliteral}{  cylSolid\_impl.cpp}}
+\DoxyCodeLine{20 \textcolor{stringliteral}{  boundingBox\_impl.cpp)}}
+\DoxyCodeLine{21 \textcolor{stringliteral}{}}
+\DoxyCodeLine{22 \textcolor{stringliteral}{install(FILES}}
+\DoxyCodeLine{23 \textcolor{stringliteral}{  edge\_impl.hpp}}
+\DoxyCodeLine{24 \textcolor{stringliteral}{  meshtriangle\_impl.hpp}}
+\DoxyCodeLine{25 \textcolor{stringliteral}{  surface\_impl.hpp}}
+\DoxyCodeLine{26 \textcolor{stringliteral}{  boundSurface\_impl.hpp}}
+\DoxyCodeLine{27 \textcolor{stringliteral}{  boundSurfacePlane\_impl.hpp}}
+\DoxyCodeLine{28 \textcolor{stringliteral}{  boundSurfaceCyl\_impl.hpp}}
+\DoxyCodeLine{29 \textcolor{stringliteral}{  solid\_impl.hpp}}
+\DoxyCodeLine{30 \textcolor{stringliteral}{  planarSolid\_impl.hpp}}
+\DoxyCodeLine{31 \textcolor{stringliteral}{  cylSolid\_impl.hpp}}
+\DoxyCodeLine{32 \textcolor{stringliteral}{  boundingBox\_impl.hpp}}
+\DoxyCodeLine{33 \textcolor{stringliteral}{  DESTINATION \$\{PROJECT\_BINARY\_DIR\}/includes/implementation/geometry)}}
+
+\end{DoxyCode}

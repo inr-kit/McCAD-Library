@@ -37,7 +37,7 @@ McCAD::Decomposition::SolidRebuilder::solidToFaces(
         const TopoDS_Solid& solid) const{
     std::vector<const TopoDS_Face*> faces;
 
-    for(const auto& face : ShapeView<TopAbs_FACE>{solid}){
+    for(const auto& face : detail::ShapeView<TopAbs_FACE>{solid}){
         if(face.IsNull()) continue;
         GProp_GProps geometryProperties;
         BRepGProp::SurfaceProperties(face, geometryProperties);
@@ -67,7 +67,7 @@ std::optional<TopoDS_Shell>
 McCAD::Decomposition::SolidRebuilder::shapeToSingleShell(
         const TopoDS_Shape& shape) const{
 
-    ShapeView<TopAbs_SHELL> shapeView{shape};
+    detail::ShapeView<TopAbs_SHELL> shapeView{shape};
     if(shapeView.size() == 1)
         return *shapeView.begin();
 

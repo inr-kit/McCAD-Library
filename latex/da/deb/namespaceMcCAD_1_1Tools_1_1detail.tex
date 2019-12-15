@@ -1,0 +1,74 @@
+\hypertarget{namespaceMcCAD_1_1Tools_1_1detail}{}\doxysection{Mc\+C\+AD\+::Tools\+::detail Namespace Reference}
+\label{namespaceMcCAD_1_1Tools_1_1detail}\index{McCAD::Tools::detail@{McCAD::Tools::detail}}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{namespaceMcCAD_1_1Tools_1_1detail_a1e45a87ac7426f4a0d25bdecb437dcce}{Surface\+Function\+Pointer}} = \mbox{\hyperlink{structMcCAD_1_1Tools_1_1PositionUV}{Position\+UV}}($\ast$)(const B\+Rep\+Adaptor\+\_\+\+Surface \&, const gp\+\_\+\+Pnt \&)
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$Geom\+Abs\+\_\+\+Surface\+Type surface\+Type$>$ }\\\mbox{\hyperlink{structMcCAD_1_1Tools_1_1PositionUV}{Position\+UV}} \mbox{\hyperlink{namespaceMcCAD_1_1Tools_1_1detail_a8d54cda4879b503acfb373d66202dc3b}{to\+Position\+UV}} (const B\+Rep\+Adaptor\+\_\+\+Surface \&surface, const gp\+\_\+\+Pnt \&point)
+\item 
+\mbox{\hyperlink{namespaceMcCAD_1_1Tools_1_1detail_a1e45a87ac7426f4a0d25bdecb437dcce}{Surface\+Function\+Pointer}} \mbox{\hyperlink{namespaceMcCAD_1_1Tools_1_1detail_a119ac0e14da83e25dcc976a37b4e7f3f}{get\+Surf\+F\+Ptr}} (Geom\+Abs\+\_\+\+Surface\+Type surface\+Type)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{namespaceMcCAD_1_1Tools_1_1detail_a1e45a87ac7426f4a0d25bdecb437dcce}\label{namespaceMcCAD_1_1Tools_1_1detail_a1e45a87ac7426f4a0d25bdecb437dcce}} 
+\index{McCAD::Tools::detail@{McCAD::Tools::detail}!SurfaceFunctionPointer@{SurfaceFunctionPointer}}
+\index{SurfaceFunctionPointer@{SurfaceFunctionPointer}!McCAD::Tools::detail@{McCAD::Tools::detail}}
+\doxysubsubsection{\texorpdfstring{SurfaceFunctionPointer}{SurfaceFunctionPointer}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{structMcCAD_1_1Tools_1_1PositionUV}{Position\+UV}}($\ast$ \mbox{\hyperlink{namespaceMcCAD_1_1Tools_1_1detail_a1e45a87ac7426f4a0d25bdecb437dcce}{Mc\+C\+A\+D\+::\+Tools\+::detail\+::\+Surface\+Function\+Pointer}})(const B\+Rep\+Adaptor\+\_\+\+Surface \&, const gp\+\_\+\+Pnt \&)}
+
+
+
+Definition at line 33 of file build/includes/implementation/tools/\+Face\+Parameters.\+hpp.
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespaceMcCAD_1_1Tools_1_1detail_a119ac0e14da83e25dcc976a37b4e7f3f}\label{namespaceMcCAD_1_1Tools_1_1detail_a119ac0e14da83e25dcc976a37b4e7f3f}} 
+\index{McCAD::Tools::detail@{McCAD::Tools::detail}!getSurfFPtr@{getSurfFPtr}}
+\index{getSurfFPtr@{getSurfFPtr}!McCAD::Tools::detail@{McCAD::Tools::detail}}
+\doxysubsubsection{\texorpdfstring{getSurfFPtr()}{getSurfFPtr()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespaceMcCAD_1_1Tools_1_1detail_a1e45a87ac7426f4a0d25bdecb437dcce}{Surface\+Function\+Pointer}} Mc\+C\+A\+D\+::\+Tools\+::detail\+::get\+Surf\+F\+Ptr (\begin{DoxyParamCaption}\item[{Geom\+Abs\+\_\+\+Surface\+Type}]{surface\+Type }\end{DoxyParamCaption})}
+
+
+
+Definition at line 37 of file Face\+Parameters.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{37                                                             \{}
+\DoxyCodeLine{38     \textcolor{keywordflow}{switch}(surfaceType)\{}
+\DoxyCodeLine{39     \textcolor{keywordflow}{case} GeomAbs\_Plane:}
+\DoxyCodeLine{40         \textcolor{keywordflow}{return} \&toPositionUV<GeomAbs\_Plane>;}
+\DoxyCodeLine{41     \textcolor{keywordflow}{case} GeomAbs\_Cylinder:}
+\DoxyCodeLine{42         \textcolor{keywordflow}{return} \&toPositionUV<GeomAbs\_Cylinder>;}
+\DoxyCodeLine{43     \textcolor{keywordflow}{case} GeomAbs\_Cone:}
+\DoxyCodeLine{44         \textcolor{keywordflow}{return} \&toPositionUV<GeomAbs\_Cone>;}
+\DoxyCodeLine{45     \textcolor{keywordflow}{case} GeomAbs\_Sphere:}
+\DoxyCodeLine{46         \textcolor{keywordflow}{return} \&toPositionUV<GeomAbs\_Sphere>;}
+\DoxyCodeLine{47     \textcolor{keywordflow}{case} GeomAbs\_Torus:}
+\DoxyCodeLine{48         \textcolor{keywordflow}{return} \&toPositionUV<GeomAbs\_Sphere>;}
+\DoxyCodeLine{49     \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{50         \textcolor{keywordflow}{return} \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{51     \}}
+\DoxyCodeLine{52 \}}
+
+\end{DoxyCode}
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{da/deb/namespaceMcCAD_1_1Tools_1_1detail_a119ac0e14da83e25dcc976a37b4e7f3f_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespaceMcCAD_1_1Tools_1_1detail_a8d54cda4879b503acfb373d66202dc3b}\label{namespaceMcCAD_1_1Tools_1_1detail_a8d54cda4879b503acfb373d66202dc3b}} 
+\index{McCAD::Tools::detail@{McCAD::Tools::detail}!toPositionUV@{toPositionUV}}
+\index{toPositionUV@{toPositionUV}!McCAD::Tools::detail@{McCAD::Tools::detail}}
+\doxysubsubsection{\texorpdfstring{toPositionUV()}{toPositionUV()}}
+{\footnotesize\ttfamily template$<$Geom\+Abs\+\_\+\+Surface\+Type surface\+Type$>$ \\
+\mbox{\hyperlink{structMcCAD_1_1Tools_1_1PositionUV}{Position\+UV}} Mc\+C\+A\+D\+::\+Tools\+::detail\+::to\+Position\+UV (\begin{DoxyParamCaption}\item[{const B\+Rep\+Adaptor\+\_\+\+Surface \&}]{surface,  }\item[{const gp\+\_\+\+Pnt \&}]{point }\end{DoxyParamCaption})}
+
