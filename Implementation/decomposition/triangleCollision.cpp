@@ -42,7 +42,7 @@ McCAD::Decomposition::TriangleCollision::triangleCollisionPlane(
     Bnd_OBB obbFace;
     BRepBndLib::AddOBB(extendedFace, obbFace);
     if (aTriangle.accessMTImpl()->obb.IsOut(obbFace)) {
-        //debug
+        /* //debug
         STEPControl_Writer writer2;
         writer2.Transfer(iFace.accessSImpl()->face, STEPControl_StepModelType::STEPControl_AsIs);
         Bnd_OBB obbFace1;
@@ -59,7 +59,7 @@ McCAD::Decomposition::TriangleCollision::triangleCollisionPlane(
         filename += std::to_string(kk);
         filename += suffix;
         writer2.Write(filename.c_str());
-        //debug
+        */ //debug
         return Standard_False;
     }
     /* //debug
