@@ -26,10 +26,10 @@ namespace McCAD::Decomposition{
         using PointPair = std::pair<gp_Pnt, gp_Pnt>;
         using SolidPair = std::pair<TopoDS_Solid, TopoDS_Solid>;
         using ShapePair = std::pair<TopoDS_Shape, TopoDS_Shape>;
-
+    public:
         TopoDS_Shape calculateOBB(
                 Bnd_OBB obb, Standard_Real clearanceTolerance = 0.4) const;
-
+    private:
         PointPair calculatePoints(
                 const TopoDS_Face& splittingFace) const;
 
