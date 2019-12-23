@@ -14,12 +14,12 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
     if (!checkBndSurfaces(solid)){
         switch (determineSolidType(solid)){
         case solidType.planarSolid:{
-            solidVariant = SolidObjConstructor{}.constructObj<
+            solidVariant = SolidObjCreator{}.createObj<
                     McCAD::Geometry::PLSolid>(shape);
             return solidVariant;
         }
         case solidType.cylindricalSolid:{
-            solidVariant = SolidObjConstructor{}.constructObj<
+            solidVariant = SolidObjCreator{}.createObj<
                     McCAD::Geometry::CYLSolid>(shape);
             return solidVariant;
         }

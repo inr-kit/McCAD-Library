@@ -7,7 +7,7 @@
 // Planar solids
 template<>
 std::shared_ptr<McCAD::Geometry::BoundSurface>
-McCAD::Decomposition::GenerateFacesList::generateSurface<McCAD::Geometry::PLSolid>(
+McCAD::Decomposition::FacesListGenerator::generateSurface<McCAD::Geometry::PLSolid>(
         const TopoDS_Face& face, Standard_Real& boxSquareLength,
         Standard_Integer mode){
     //std::cout << "generateSurface<McCAD::Geometry::PLSolid>" << std::endl;
@@ -25,7 +25,7 @@ McCAD::Decomposition::GenerateFacesList::generateSurface<McCAD::Geometry::PLSoli
 }
 
 std::vector<std::shared_ptr<McCAD::Geometry::BoundSurface>>
-McCAD::Decomposition::GenerateFacesList::operator()(
+McCAD::Decomposition::FacesListGenerator::operator()(
         const McCAD::Geometry::PLSolid& solidObj){
     //std::cout << "GenerateFacesList::operator()<McCAD::Geometry::PLSolid>" << std::endl;
     // Generate a list of solid faces.
@@ -63,7 +63,7 @@ McCAD::Decomposition::GenerateFacesList::operator()(
 // Cylindrical solids.
 template<>
 std::shared_ptr<McCAD::Geometry::BoundSurface>
-McCAD::Decomposition::GenerateFacesList::generateSurface<McCAD::Geometry::CYLSolid>(
+McCAD::Decomposition::FacesListGenerator::generateSurface<McCAD::Geometry::CYLSolid>(
         const TopoDS_Face& face, Standard_Real& boxSquareLength,
         Standard_Integer mode){
     if (mode == Standard_Integer(0)){
@@ -93,7 +93,7 @@ McCAD::Decomposition::GenerateFacesList::generateSurface<McCAD::Geometry::CYLSol
 }
 
 std::vector<std::shared_ptr<McCAD::Geometry::BoundSurface>>
-McCAD::Decomposition::GenerateFacesList::operator()(
+McCAD::Decomposition::FacesListGenerator::operator()(
         const McCAD::Geometry::CYLSolid& solidObj){
     //std::cout << "GenerateFacesList::operator()<McCAD::Geometry::CYLSolid>" << std::endl;
     TopoDS_Solid solid = solidObj.accessSImpl()->solid;

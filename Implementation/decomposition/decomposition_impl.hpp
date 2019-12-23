@@ -14,7 +14,7 @@
 #include "decomposeSolid_impl.hpp"
 #include "ShapeView.hpp"
 #include <Standard.hxx>
-#include "solidType.hpp"
+#include "SolidType.hpp"
 #include "tools_impl.hpp"
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>

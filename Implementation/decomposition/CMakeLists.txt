@@ -18,7 +18,7 @@ install(FILES
   SolidSplitter.hpp
   SolidRepairer.hpp
   preprocessor.hpp
-  constructSolidObj.hpp
+  createSolidObj.hpp
   generateFacesList.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/decomposition)
 

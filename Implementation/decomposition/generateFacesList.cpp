@@ -2,15 +2,15 @@
 #include "generateFacesList.hpp"
 #include "generateFacesList.tpp"
 
-McCAD::Decomposition::GenerateFacesList::GenerateFacesList()
+McCAD::Decomposition::FacesListGenerator::FacesListGenerator()
     : preproc{std::make_unique<Tools::Preprocessor>()}{
 }
 
-McCAD::Decomposition::GenerateFacesList::~GenerateFacesList(){
+McCAD::Decomposition::FacesListGenerator::~FacesListGenerator(){
 }
 
 void
-McCAD::Decomposition::GenerateFacesList::mergeSurfaces(
+McCAD::Decomposition::FacesListGenerator::mergeSurfaces(
         std::vector<std::shared_ptr<Geometry::BoundSurface>>& surfacesList,
         Standard_Real& boxSquareLength){
     //std::cout << "mergeSurfaces" << std::endl;

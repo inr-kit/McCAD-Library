@@ -23,7 +23,7 @@
 #include "ShapeView.hpp"
 #include "PlaneFuser.hpp"
 #include "FaceParameters.hpp"
-#include "solidType.hpp"
+#include "SolidType.hpp"
 // OCC
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>

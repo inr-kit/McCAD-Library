@@ -20,10 +20,10 @@
 #include <Standard.hxx>
 
 namespace McCAD::Decomposition{
-    class GenerateFacesList{
+    class FacesListGenerator{
     public:
-      GenerateFacesList();
-      ~GenerateFacesList();
+      FacesListGenerator();
+      ~FacesListGenerator();
 
       std::unique_ptr<Tools::Preprocessor> preproc;
 

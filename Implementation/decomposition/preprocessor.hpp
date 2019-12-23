@@ -7,10 +7,10 @@
 // McCAD
 #include <Standard.hxx>
 #include "ShapeView.hpp"
-#include "solidType.hpp"
+#include "SolidType.hpp"
 #include "planarSolid_impl.hpp"
 #include "cylSolid_impl.hpp"
-#include "constructSolidObj.hpp"
+#include "createSolidObj.hpp"
 // OCC
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
