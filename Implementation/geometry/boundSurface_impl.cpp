@@ -132,18 +132,18 @@ McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::unique_ptr<Ed
     if (edgesList.size() == 0){
         // If the current list is empty, append to it the new one.
         for (Standard_Integer i = 0; i <= aEdgesList.size() - 1; ++i){
-            std::cout << "combineEdges, add all" << std::endl;
+            //std::cout << "combineEdges, add all" << std::endl;
             edgesList.push_back(std::move(aEdgesList[i]));
         }
     } else{
         // Compare and add only if different.
-        std::cout << "combineEdges, add different" << std::endl;
+        //std::cout << "combineEdges, add different" << std::endl;
         for (Standard_Integer i = 0; i <= aEdgesList.size() - 1; ++i){
             Standard_Integer sameEdge = 0;
             for (Standard_Integer j = 0; j <= edgesList.size() - 1; ++j){
-                std::cout << "i: " << i << ", j: " << j << std::endl;
+                //std::cout << "i: " << i << ", j: " << j << std::endl;
                 if (*(edgesList[j]) == *(aEdgesList[i])){
-                    // /* //debug
+                    /* //debug
                     STEPControl_Writer writer1;
                     writer1.Transfer(edgesList[j]->accessEImpl()->edge,
                                      STEPControl_StepModelType::STEPControl_AsIs);
@@ -158,12 +158,12 @@ McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::unique_ptr<Ed
                     filename += std::to_string(kk);
                     filename += suffix;
                     writer1.Write(filename.c_str());
-                    // */ //debug
-                    std::cout << "combineEdges, equal, erase" << std::endl;
+                    */ //debug
+                    //std::cout << "combineEdges, equal, erase" << std::endl;
                     edgesList.erase(edgesList.begin() + j);
                     ++sameEdge;
                     --j;
-                    std::cout << edgesList.size() << ", j: " << j << std::endl;
+                    //std::cout << edgesList.size() << ", j: " << j << std::endl;
                 }
             }
             if (sameEdge == 0){
