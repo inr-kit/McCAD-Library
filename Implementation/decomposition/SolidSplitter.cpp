@@ -26,7 +26,7 @@ McCAD::Decomposition::SolidSplitter::operator()(
     writer0.Transfer(splittingFace, STEPControl_StepModelType::STEPControl_AsIs);
     std::cout << "OBB sqrt square extent: " << sqrt(obb.SquareExtent()) << std::endl;
     Standard_Integer kk = 0;
-    std::string filename = "/home/mharb/opt/McCAD_refactor/examples/bbox/solid";
+    std::string filename = "/home/mharb/Documents/McCAD_refactor/examples/bbox/solid";
     std::string suffix = ".stp";
     while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
         ++kk;

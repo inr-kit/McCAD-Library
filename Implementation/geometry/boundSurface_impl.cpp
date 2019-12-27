@@ -29,6 +29,22 @@ McCAD::Geometry::BoundSurface::Impl::canFuse(const McCAD::Geometry::BoundSurface
         for (Standard_Integer j = i+1; j <= that.accessBSImpl()->edgesList.size() - 1;
              ++j){
             if (*edgesList[i] == *that.accessBSImpl()->edgesList[j]){
+                /* //debug
+                STEPControl_Writer writer3;
+                writer3.Transfer(edgesList[i]->accessEImpl()->edge,
+                                 STEPControl_StepModelType::STEPControl_AsIs);
+                writer3.Transfer(that.accessBSImpl()->edgesList[j]->accessEImpl()->edge,
+                                 STEPControl_StepModelType::STEPControl_AsIs);
+                Standard_Integer kk = 0;
+                std::string filename = "/home/mharb/Documents/McCAD_refactor/examples/bbox/edge";
+                std::string suffix = ".stp";
+                while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
+                    ++kk;
+                }
+                filename += std::to_string(kk);
+                filename += suffix;
+                writer3.Write(filename.c_str());
+                */ //debug
                 return Standard_True;
             }
         }
