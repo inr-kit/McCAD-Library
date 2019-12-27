@@ -28,6 +28,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     // Judge which surfaces are decompose surfaces from the generated list.
     solidObj->accessPSImpl()->judgeDecomposeSurfaces(solidImpl);
     if(!throughNoBoundarySurfaces(solidImpl->splitFacesList)){
+        //std::cout << "no throughNoBoundarySurfaces" << std::endl;
         solidObj->accessPSImpl()->judgeThroughConcaveEdges(solidImpl);
     }
      return perform(*solidImpl);

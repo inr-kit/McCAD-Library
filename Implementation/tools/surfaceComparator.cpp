@@ -19,7 +19,7 @@ McCAD::Tools::SurfaceComparator::operator()(const TopoDS_Face& firstFace,
         BRep_Tool::Surface(secondFace, secondLocation)};
     // Compare surfaces types.
     if(firstAdaptor.GetType() != secondAdaptor.GetType()){
-        //std::cout << "Orientation different" << std::endl;
+        //std::cout << "Type different" << std::endl;
         return Standard_False;
     }
     // Compare locations
@@ -29,13 +29,11 @@ McCAD::Tools::SurfaceComparator::operator()(const TopoDS_Face& firstFace,
     }
 
     // Compare surfaces parameters
-    if (firstAdaptor.GetType() == GeomAbs_Plane &&
-            firstAdaptor.GetType() == GeomAbs_Plane){
+    if (firstAdaptor.GetType() == GeomAbs_Plane){
         auto condition = PlaneComparator{}(firstAdaptor, secondAdaptor);
         return condition.value();
     }
-    else if (firstAdaptor.GetType() == GeomAbs_Cylinder
-             && firstAdaptor.GetType() == GeomAbs_Cylinder)
+    else if (firstAdaptor.GetType() == GeomAbs_Cylinder)
         return Standard_False; //CylComparator{}(firstAdaptor, secondAdaptor);
     else return Standard_False;
 }

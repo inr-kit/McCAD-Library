@@ -57,6 +57,7 @@ namespace McCAD::Tools{
                  Standard_Real maxTolerance = 1.0e-3);
     Standard_Boolean isSameEdge(const TopoDS_Edge& firstEdge,
                                 const TopoDS_Edge& secondEdge,
+                                Standard_Real angularTolerance = 1.0e-3 * M_PI,
                                 Standard_Real distanceTolerance = 1.0e-5);
   };
 }

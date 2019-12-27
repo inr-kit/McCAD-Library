@@ -33,6 +33,24 @@ McCAD::Decomposition::GenerateFacesList::mergeSurfaces(
                             GenerateFacesList{}(newFace, boxDiagonalLength);
                     newboundSurface->accessSImpl()->surfaceNumber =
                             surfacesList[i]->accessSImpl()->surfaceNumber;
+                    /* //debug
+                    STEPControl_Writer writer2;
+                    writer2.Transfer(surfacesList[i]->accessSImpl()->face,
+                                     STEPControl_StepModelType::STEPControl_AsIs);
+                    writer2.Transfer(surfacesList[j]->accessSImpl()->face,
+                                     STEPControl_StepModelType::STEPControl_AsIs);
+                    writer2.Transfer(newFace,
+                                     STEPControl_StepModelType::STEPControl_AsIs);
+                    Standard_Integer kk = 0;
+                    std::string filename = "/home/mharb/Documents/McCAD_refactor/examples/bbox/surface";
+                    std::string suffix = ".stp";
+                    while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
+                        ++kk;
+                    }
+                    filename += std::to_string(kk);
+                    filename += suffix;
+                    writer2.Write(filename.c_str());
+                    */ //debug
                     // Add triangles of surface i.
                     for (Standard_Integer k = 0; k <=
                          surfacesList[i]->accessBSImpl()->meshTrianglesList.size() - 1; ++k){
@@ -46,11 +64,21 @@ McCAD::Decomposition::GenerateFacesList::mergeSurfaces(
                                     std::move(surfacesList[j]->accessBSImpl()->meshTrianglesList[k]));
                     }
                     // Combine edges.
+                    //std::cout << "combin edges" << std::endl;
+                    //std::cout << "edges list of surface i: " <<
+                    //             surfacesList[i]->accessBSImpl()->edgesList.size()
+                    //          << std::endl;
                     newboundSurface->accessBSImpl()->combineEdges(
                                 surfacesList[i]->accessBSImpl()->edgesList);
+                    //std::cout << "combined edges of surface i" << std::endl;
+                    //std::cout << "edges list of surface j: " <<
+                    //             surfacesList[j]->accessBSImpl()->edgesList.size()
+                    //          << std::endl;
                     newboundSurface->accessBSImpl()->combineEdges(
                                 surfacesList[j]->accessBSImpl()->edgesList);
+                    //std::cout << "combined edges of surface j" << std::endl;
                     // Erase pointer surfacesList[j] & [i] from surfacesList.
+                    //std::cout << "erase pointers to surfaces i and j" << std::endl;
                     surfacesList.erase(surfacesList.begin() + j);
                     --j;
                     surfacesList.erase(surfacesList.begin() + i);

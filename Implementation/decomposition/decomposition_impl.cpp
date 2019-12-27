@@ -66,6 +66,7 @@ McCAD::Decomposition::Decompose::Impl::perform(){
         }
         // Using switch for now. Should be separated in a separate class an called
         // for each specific type of solid object.
+        //std::cout << "switching between solid types" << std::endl;
         switch (Standard_Integer(solid.index())){
         case solidType.planarSolid:{
             std::cout << "   - Decomposing planar solid" << std::endl;
@@ -82,7 +83,7 @@ McCAD::Decomposition::Decompose::Impl::perform(){
                         std::get<solidType.cylindricalSolid>(solid))){
                 extractSolids(*std::get<solidType.cylindricalSolid>(solid)->accessSImpl());
             } else{
-                std::cout << "   - rejected cylindrical solid" << std::endl;
+                //std::cout << "   - rejected cylindrical solid" << std::endl;
                 rejectedInputSolidsList->Append(shape);
             }
             break;
