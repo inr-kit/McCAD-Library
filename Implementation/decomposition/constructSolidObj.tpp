@@ -16,7 +16,7 @@ McCAD::Decomposition::SolidObjConstructor::constructObj(const TopoDS_Shape& shap
     // Update edges convexity of the solid.
     solidImpl.updateEdgesConvexity();
     // Generate the boundary surfaces list of the solid.
-    //solidImpl.facesList = GenerateFacesList{}(*solidObj);
+    solidImpl.facesList = GenerateFacesList{}(*solidObj);
     // Repair solid.
     solidImpl.repairSolid();
     return solidObj;

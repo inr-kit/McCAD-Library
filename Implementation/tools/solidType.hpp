@@ -10,11 +10,11 @@ public:
     SolidType() = default;
 
     enum customSolidType{
-        planarSolid = 1,
-        cylindricalSolid,
-        torusSolid,
-        sphericalSolid,
-        mixedSolid
+        planar = 1,
+        cylindrical,
+        toroidal,
+        spherical,
+        mixed
     };
 };
 }

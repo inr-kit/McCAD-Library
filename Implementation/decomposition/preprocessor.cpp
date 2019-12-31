@@ -13,17 +13,17 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
     auto& solid = TopoDS::Solid(shape);
     if (!checkBndSurfaces(solid)){
         switch (determineSolidType(solid)){
-        case solidType.planarSolid:{
+        case solidType.planar:{
             solidVariant = SolidObjConstructor{}.constructObj<
                     McCAD::Geometry::PLSolid>(shape);
             return solidVariant;
         }
-        case solidType.cylindricalSolid:{
+        case solidType.cylindrical:{
             solidVariant = SolidObjConstructor{}.constructObj<
                     McCAD::Geometry::CYLSolid>(shape);
             return solidVariant;
         }
-        case solidType.torusSolid:{
+        case solidType.toroidal:{
             solidVariant = SolidObjConstructor{}.constructObj<
                     McCAD::Geometry::TORSolid>(shape);
             return solidVariant;
@@ -53,32 +53,33 @@ McCAD::Decomposition::Preprocessor::checkBndSurfaces(const TopoDS_Solid& solid){
 
 Standard_Integer
 McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid){
-    Standard_Boolean plSolid, cylSolid, torSolid, sphSolid, mxdSolid;
-    cylSolid = sphSolid = plSolid = mxdSolid = Standard_False;
+    Standard_Boolean planar, cylindrical, toroidal, spherical, mixed;
+    planar = cylindrical = toroidal = spherical = mixed = Standard_False;
     for(const auto& face : detail::ShapeView<TopAbs_FACE>{solid}){
         GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
         switch (surfAdaptor.GetType()){
         case  GeomAbs_Plane:
-            plSolid = Standard_True;
+            planar = Standard_True;
             break;
         case GeomAbs_Cylinder:
-            cylSolid = Standard_True;
+            cylindrical = Standard_True;
             break;
         case GeomAbs_Torus:
-            torSolid = Standard_True;
+            toroidal = Standard_True;
             break;
         case GeomAbs_Sphere:
-            sphSolid = Standard_True;
+            spherical = Standard_True;
             break;
         default:
-            mxdSolid = Standard_True;
+            mixed = Standard_True;
         }
     }
     // Determine solid type based on surfaces types.
     // This is to be modified as was done in SurfaceUtilities.
-    if (mxdSolid || (cylSolid && sphSolid)) return solidType.mixedSolid;
-    else if (sphSolid) return solidType.sphericalSolid;
-    else if (cylSolid) return solidType.cylindricalSolid;
-    else if (torSolid) return solidType.torusSolid;
-    else return solidType.planarSolid;
+    if (mixed || (cylindrical && spherical) || (cylindrical && toroidal) ||
+            (toroidal && spherical)) return solidType.mixed;
+    else if (spherical) return solidType.spherical;
+    else if (cylindrical) return solidType.cylindrical;
+    else if (toroidal) return solidType.toroidal;
+    else return solidType.mixed;
 }
