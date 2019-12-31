@@ -11,6 +11,7 @@
 #include "planarSolid_impl.hpp"
 #include "cylSolid_impl.hpp"
 #include "createSolidObj.hpp"
+#include "torSolid_impl.hpp"
 // OCC
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
@@ -30,7 +31,8 @@ namespace McCAD::Decomposition{
   private:
     using VariantType = std::variant<std::monostate,
     std::shared_ptr<McCAD::Geometry::PLSolid>,
-    std::shared_ptr<McCAD::Geometry::CYLSolid>>;
+    std::shared_ptr<McCAD::Geometry::CYLSolid>,
+    std::shared_ptr<McCAD::Geometry::TORSolid>>;
 
   public:
     McCAD::Tools::SolidType solidType;

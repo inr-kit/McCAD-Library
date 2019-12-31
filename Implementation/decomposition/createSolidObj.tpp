@@ -15,7 +15,6 @@ McCAD::Decomposition::SolidObjCreator::createObj(const TopoDS_Shape& shape){
     // Calculate mesh deflection of the solid.
     solidImpl.calcMeshDeflection();
     // Update edges convexity of the solid.
-    //std::cout << "solidImpl.updateEdgesConvexity();" << std::endl;
     solidImpl.updateEdgesConvexity();
     // Generate the boundary surfaces list of the solid.
     //std::cout << "solidImpl.generateSurfacesList();" << std::endl;

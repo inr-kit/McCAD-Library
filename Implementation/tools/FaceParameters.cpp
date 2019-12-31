@@ -40,11 +40,11 @@ McCAD::Tools::detail::getSurfFPtr(GeomAbs_SurfaceType surfaceType){
         return &toPositionUV<GeomAbs_Plane>;
     case GeomAbs_Cylinder:
         return &toPositionUV<GeomAbs_Cylinder>;
+    case GeomAbs_Torus:
+        return &toPositionUV<GeomAbs_Torus>;
     case GeomAbs_Cone:
         return &toPositionUV<GeomAbs_Cone>;
     case GeomAbs_Sphere:
-        return &toPositionUV<GeomAbs_Sphere>;
-    case GeomAbs_Torus:
         return &toPositionUV<GeomAbs_Sphere>;
     default:
         return nullptr;

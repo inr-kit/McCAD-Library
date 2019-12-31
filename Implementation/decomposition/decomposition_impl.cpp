@@ -98,6 +98,9 @@ McCAD::Decomposition::Decompose::Impl::perform(const TopoDS_Shape& shape){
                 rejectedInputSolidsList->Append(shape);
             }
             break;
+        } case solidType.torusSolid:{
+            std::cout << "   - Decomposing torus solid" << std::endl;
+            break;
         } default:
             std::cout << "   - Processing of solids with non-planar surfaces"
                          " is not yet supported!.\n     Solid will be added"
@@ -122,7 +125,7 @@ McCAD::Decomposition::Decompose::Impl::perform(){
         });
     }
     taskQueue.complete();
-
+    std::cout << " > Result" << std::endl;
     std::cout << "   - There are " << rejectedInputSolidsList->Length() <<
                  " rejected input solid(s)." << std::endl;
     std::cout << "   - There are " << resultSolidsList->Length() <<
