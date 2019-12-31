@@ -79,26 +79,26 @@ McCAD::Decomposition::Decompose::Impl::perform(const TopoDS_Shape& shape){
         // for each specific type of solid object.
         //std::cout << "switching between solid types" << std::endl;
         switch (Standard_Integer(solid.index())){
-        case solidType.planarSolid:{
+        case solidType.planar:{
             std::cout << "   - Decomposing planar solid" << std::endl;
             if (DecomposeSolid{}.accessDSImpl()->operator()(
-                        std::get<solidType.planarSolid>(solid))){
-                extractSolids(*std::get<solidType.planarSolid>(solid)->accessSImpl());
+                        std::get<solidType.planar>(solid))){
+                extractSolids(*std::get<solidType.planar>(solid)->accessSImpl());
             } else{
                 rejectedInputSolidsList->Append(shape);
             }
             break;
-        } case solidType.cylindricalSolid:{
+        } case solidType.cylindrical:{
             std::cout << "   - Decomposing cylindrical solid" << std::endl;
             if (DecomposeSolid{}.accessDSImpl()->operator()(
-                        std::get<solidType.cylindricalSolid>(solid))){
-                extractSolids(*std::get<solidType.cylindricalSolid>(solid)->accessSImpl());
+                        std::get<solidType.cylindrical>(solid))){
+                extractSolids(*std::get<solidType.cylindrical>(solid)->accessSImpl());
             } else{
                 //std::cout << "   - rejected cylindrical solid" << std::endl;
                 rejectedInputSolidsList->Append(shape);
             }
             break;
-        } case solidType.torusSolid:{
+        } case solidType.toroidal:{
             std::cout << "   - Decomposing torus solid" << std::endl;
             break;
         } default:

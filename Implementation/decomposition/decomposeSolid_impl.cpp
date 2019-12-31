@@ -120,19 +120,19 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
             // Using switch for now. Should be separated in a separate class an called
             // for each specific type of solid object.
             switch (Standard_Integer(subSolid.index())){
-            case solidType.planarSolid:{
-                auto& subSolidImpl = *std::get<solidType.planarSolid>(subSolid)->accessSImpl();
+            case solidType.planar:{
+                auto& subSolidImpl = *std::get<solidType.planar>(subSolid)->accessSImpl();
                 // Mesh deflection is calculated for every solid in DecomposeSolid.
-                if (DecomposeSolid::Impl{recurrenceDepth}(std::get<solidType.planarSolid>(subSolid))){
+                if (DecomposeSolid::Impl{recurrenceDepth}(std::get<solidType.planar>(subSolid))){
                     extractSolids(solidImpl, subSolidImpl, i);
                 } else{
                     //return Standard_False;
                     solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
                 }
                 break;
-            } case solidType.cylindricalSolid:{
-                auto& subSolidImpl = *std::get<solidType.cylindricalSolid>(subSolid)->accessSImpl();
-                if (DecomposeSolid::Impl{recurrenceDepth}(std::get<solidType.cylindricalSolid>(subSolid))){
+            } case solidType.cylindrical:{
+                auto& subSolidImpl = *std::get<solidType.cylindrical>(subSolid)->accessSImpl();
+                if (DecomposeSolid::Impl{recurrenceDepth}(std::get<solidType.cylindrical>(subSolid))){
                     extractSolids(solidImpl, subSolidImpl, i);
                 } else{
                     solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
