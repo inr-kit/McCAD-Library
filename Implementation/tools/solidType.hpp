@@ -12,6 +12,7 @@ public:
     enum customSolidType{
         planarSolid = 1,
         cylindricalSolid,
+        torusSolid,
         sphericalSolid,
         mixedSolid
     };

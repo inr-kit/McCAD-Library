@@ -23,6 +23,11 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
                     McCAD::Geometry::CYLSolid>(shape);
             return solidVariant;
         }
+        case solidType.torusSolid:{
+            solidVariant = SolidObjConstructor{}.constructObj<
+                    McCAD::Geometry::TORSolid>(shape);
+            return solidVariant;
+        }
         default:
             goto rejectSolid;
         }
@@ -37,11 +42,7 @@ Standard_Boolean
 McCAD::Decomposition::Preprocessor::checkBndSurfaces(const TopoDS_Solid& solid){
     for(const auto& face : detail::ShapeView<TopAbs_FACE>{solid}){
         GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
-        if(surfAdaptor.GetType() == GeomAbs_Torus){
-            std::cout << "    -- The current verion doesn't support processing "
-                         "of Tori. Solid will be rejected!" << std::endl;
-            return Standard_True;
-        } else if (surfAdaptor.GetType() == GeomAbs_BSplineSurface){
+        if (surfAdaptor.GetType() == GeomAbs_BSplineSurface){
             std::cout << "    -- The current verion doesn't support processing "
                          "of splines. Solid will be rejected!" << std::endl;
             return Standard_True;
@@ -52,7 +53,7 @@ McCAD::Decomposition::Preprocessor::checkBndSurfaces(const TopoDS_Solid& solid){
 
 Standard_Integer
 McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid){
-    Standard_Boolean plSolid, cylSolid, sphSolid, mxdSolid;
+    Standard_Boolean plSolid, cylSolid, torSolid, sphSolid, mxdSolid;
     cylSolid = sphSolid = plSolid = mxdSolid = Standard_False;
     for(const auto& face : detail::ShapeView<TopAbs_FACE>{solid}){
         GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
@@ -62,6 +63,9 @@ McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid
             break;
         case GeomAbs_Cylinder:
             cylSolid = Standard_True;
+            break;
+        case GeomAbs_Torus:
+            torSolid = Standard_True;
             break;
         case GeomAbs_Sphere:
             sphSolid = Standard_True;
@@ -75,5 +79,6 @@ McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid
     if (mxdSolid || (cylSolid && sphSolid)) return solidType.mixedSolid;
     else if (sphSolid) return solidType.sphericalSolid;
     else if (cylSolid) return solidType.cylindricalSolid;
+    else if (torSolid) return solidType.torusSolid;
     else return solidType.planarSolid;
 }
