@@ -8,13 +8,9 @@ McCAD::Decomposition::SolidObjCreator::createObj(const TopoDS_Shape& shape){
     //std::cout << "Preprocessor::constructObj" << std::endl;
     std::shared_ptr<solidObjType> solidObj = std::make_shared<solidObjType>();
     auto& solidImpl = *solidObj->accessSImpl();
-    // Initiate solid.
     solidImpl.initiate(shape);
-    // Calculate OBB of the solid.
     solidImpl.createOBB();
-    // Calculate mesh deflection of the solid.
     solidImpl.calcMeshDeflection();
-    // Update edges convexity of the solid.
     solidImpl.updateEdgesConvexity();
     // Generate the boundary surfaces list of the solid.
     //std::cout << "solidImpl.generateSurfacesList();" << std::endl;

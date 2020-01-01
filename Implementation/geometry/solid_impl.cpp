@@ -25,7 +25,6 @@ McCAD::Geometry::Solid::Impl::repairSolid(){
 
 void
 McCAD::Geometry::Solid::Impl::createOBB(Standard_Real bndBoxGap){
-    // Calculate the bounding box of the solid.
     BRepBndLib::AddOBB(solid, obb);
     obb.Enlarge(bndBoxGap);
 }
