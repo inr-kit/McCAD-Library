@@ -1,6 +1,8 @@
 add_library(DECOMPOSITION_IMPL OBJECT
   preprocessor.cpp
+  surfaceObjCerator.cpp
   generateFacesList.cpp
+  surfacesMerger.cpp
   pointOnSurface.cpp
   triangleCollision.cpp
   edgeOnSurface.cpp
@@ -14,6 +16,11 @@ add_library(DECOMPOSITION_IMPL OBJECT
   SolidRepairer.cpp)
 
 install(FILES
+  preprocessor.hpp
+  surfaceObjCerator.hpp
+  constructSolidObj.hpp
+  generateFacesList.hpp
+  surfacesMerger.hpp
   pointOnSurface.hpp
   triangleCollision.hpp
   edgeOnSurface.hpp
