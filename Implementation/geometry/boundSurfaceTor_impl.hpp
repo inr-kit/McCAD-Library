@@ -17,6 +17,8 @@ namespace McCAD::Geometry{
     BoundSurfaceTor* boundSurfaceTor;
 
     std::string surfaceType = "Torus";
+    void generateExtendedTor(const Standard_Real& boxDiagonalLength,
+                               Standard_Real degenerateEdgesTolerance = 1.0e-7);
   };
 }
 
