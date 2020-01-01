@@ -10,17 +10,17 @@ McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inp
   auto& inputSolidsList = inputData.accessImpl()->inputSolidsList;
   if (inputSolidsList->Length() > 0){
       std::cout << "> Found " << inputSolidsList->Length() <<
-                   " solid(s) in the input step file." << std::endl;
+                   " solid(s) in the input step file" << std::endl;
       std::cout << " > Spliting compound input solids" << std::endl;
       // Split compound input solids.
       flattenSolidHierarchy(inputSolidsList);
       std::cout << "   - There are " << splitInputSolidsList->Length() <<
-                   " solid(s) in the flattened solids heirarchy." <<std::endl;
+                   " solid(s) in the flattened solids heirarchy" <<std::endl;
       std::cout << " > Decomposing solid(s)" << std::endl;
       // Perform the decomposition.
       perform();
     } else{
-      throw std::runtime_error("Input solids list is empty!.");
+      throw std::runtime_error("Input solids list is empty!");
     }
 }
 
@@ -66,26 +66,20 @@ McCAD::Decomposition::Decompose::Impl::perform(){
         }
         // Using switch for now. Should be separated in a separate class an called
         // for each specific type of solid object.
-        //std::cout << "switching between solid types" << std::endl;
         switch (Standard_Integer(solid.index())){
         case solidType.planar:{
             std::cout << "   - Decomposing planar solid" << std::endl;
             if (DecomposeSolid{}.accessDSImpl()->operator()(
                         std::get<solidType.planar>(solid))){
                 extractSolids(*std::get<solidType.planar>(solid)->accessSImpl());
-            } else{
-                rejectedInputSolidsList->Append(shape);
-            }
+            } else rejectedInputSolidsList->Append(shape);
             break;
         } case solidType.cylindrical:{
             std::cout << "   - Decomposing cylindrical solid" << std::endl;
             if (DecomposeSolid{}.accessDSImpl()->operator()(
                         std::get<solidType.cylindrical>(solid))){
                 extractSolids(*std::get<solidType.cylindrical>(solid)->accessSImpl());
-            } else{
-                //std::cout << "   - rejected cylindrical solid" << std::endl;
-                rejectedInputSolidsList->Append(shape);
-            }
+            } else rejectedInputSolidsList->Append(shape);
             break;
         } case solidType.toroidal:{
             std::cout << "   - Decomposing torus solid" << std::endl;

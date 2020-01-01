@@ -53,8 +53,9 @@ McCAD::Decomposition::Preprocessor::checkBndSurfaces(const TopoDS_Solid& solid){
 
 Standard_Integer
 McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid){
-    Standard_Boolean planar, cylindrical, toroidal, spherical, mixed;
-    planar = cylindrical = toroidal = spherical = mixed = Standard_False;
+    Standard_Boolean planar{Standard_False}, cylindrical{Standard_False},
+                     toroidal{Standard_False}, spherical{Standard_False},
+                     mixed{Standard_False};
     for(const auto& face : detail::ShapeView<TopAbs_FACE>{solid}){
         GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
         switch (surfAdaptor.GetType()){
@@ -74,12 +75,12 @@ McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid
             mixed = Standard_True;
         }
     }
-    // Determine solid type based on surfaces types.
-    // This is to be modified as was done in SurfaceUtilities.
+    // Determine custom solid type based on surfaces types.
     if (mixed || (cylindrical && spherical) || (cylindrical && toroidal) ||
-            (toroidal && spherical)) return solidType.mixed;
-    else if (spherical) return solidType.spherical;
+            (toroidal && spherical) || (cylindrical && spherical && toroidal))
+        return solidType.mixed;
     else if (cylindrical) return solidType.cylindrical;
     else if (toroidal) return solidType.toroidal;
-    else return solidType.mixed;
+    else if (spherical) return solidType.spherical;
+    else return solidType.planar;
 }

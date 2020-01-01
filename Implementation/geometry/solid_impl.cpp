@@ -25,7 +25,6 @@ McCAD::Geometry::Solid::Impl::repairSolid(){
 
 void
 McCAD::Geometry::Solid::Impl::createOBB(Standard_Real bndBoxGap){
-    // Calculate the bounding box of the solid.
     BRepBndLib::AddOBB(solid, obb);
     obb.Enlarge(bndBoxGap);
 }
@@ -35,7 +34,7 @@ McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real scalingFactor){
     // Calculate the oriented bounding box of the solid.
     meshDeflection = 2 * std::max(std::max(obb.XHSize(), obb.YHSize()),
                                   obb.ZHSize()) / scalingFactor;
-    // error in Bnd_OBB.hxx. calculate it till the method is fixed
+    // Error in Bnd_OBB.hxx in OCC. calculate it here till the method is fixed
     // boxDiagonalLength = sqrt(obb.SquareExtent());
     boxDiagonalLength = 2 * sqrt(std::pow(obb.XHSize(), 2) +
                                  std::pow(obb.YHSize(), 2) +

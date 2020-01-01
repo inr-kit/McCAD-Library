@@ -16,8 +16,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::~Impl(){
 Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         std::shared_ptr<Geometry::PLSolid>& solidObj){
-    // The operator will be called recursively on a solid.
-    // A condition has to be set for termination (Now only 20 recursion levels).
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
     //std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
@@ -37,8 +35,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
 Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         std::shared_ptr<Geometry::CYLSolid>& solidObj){
-    // The operator will be called recursively on a solid.
-    // A condition has to be set for termination (Now only 20 recursion levels).
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
     //std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
@@ -90,18 +86,13 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
                 // Mesh deflection is calculated for every solid in DecomposeSolid.
                 if (DecomposeSolid::Impl{recurrenceDepth}(std::get<solidType.planar>(subSolid))){
                     extractSolids(solidImpl, subSolidImpl, i);
-                } else{
-                    //return Standard_False;
-                    solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
-                }
+                } else solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
                 break;
             } case solidType.cylindrical:{
                 auto& subSolidImpl = *std::get<solidType.cylindrical>(subSolid)->accessSImpl();
                 if (DecomposeSolid::Impl{recurrenceDepth}(std::get<solidType.cylindrical>(subSolid))){
                     extractSolids(solidImpl, subSolidImpl, i);
-                } else{
-                    solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
-                }
+                } else solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
                 break;
             } default:
                 solidImpl.rejectedsubSolidsList->Append(solidImpl.splitSolidList->Value(i));

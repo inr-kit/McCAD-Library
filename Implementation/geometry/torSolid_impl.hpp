@@ -14,7 +14,7 @@ namespace McCAD::Geometry{
     Impl() = default;
 
     std::vector<std::shared_ptr<Geometry::BoundSurface>> planesList;
-    std::vector<std::shared_ptr<Geometry::BoundSurface>> cylindersList;
+    std::vector<std::shared_ptr<Geometry::BoundSurface>> toriList;
   };
 }
 
