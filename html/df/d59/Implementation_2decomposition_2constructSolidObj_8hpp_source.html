@@ -96,29 +96,27 @@ $(document).ready(function(){initNavTree('df/d59/Implementation_2decomposition_2
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//C++</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//McCAD</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;solid_impl.hpp&quot;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//OCC</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;TopoDS_Shape.hxx&gt;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../dc/d41/namespaceMcCAD_1_1Decomposition.html">McCAD::Decomposition</a>{</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keyword">class </span>SolidObjConstructor{</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;      <a class="code" href="../../da/d1f/classMcCAD_1_1Decomposition_1_1SolidObjConstructor.html#a018feab8711c05f53e0a9b70720c997c">SolidObjConstructor</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;      </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;      <span class="keyword">template</span>&lt;<span class="keyword">typename</span> sol<span class="keywordtype">id</span>ObjType&gt;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;      std::shared_ptr&lt;solidObjType&gt; <a class="code" href="../../da/d1f/classMcCAD_1_1Decomposition_1_1SolidObjConstructor.html#a7135c0c35fcbf02b5d8285d500de6cfb">constructObj</a>(<span class="keyword">const</span> TopoDS_Shape&amp; shape);</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    };</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;}</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//McCAD</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;constructSolidObj.tpp&quot;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#endif //CONSTRUCTSOLIDOBJ_HPP</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">//OCC</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;TopoDS_Shape.hxx&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span><a class="code" href="../../dc/d41/namespaceMcCAD_1_1Decomposition.html">McCAD::Decomposition</a>{</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="keyword">class </span>SolidObjConstructor{</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;      <a class="code" href="../../da/d1f/classMcCAD_1_1Decomposition_1_1SolidObjConstructor.html#a018feab8711c05f53e0a9b70720c997c">SolidObjConstructor</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;      </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;      <span class="keyword">template</span>&lt;<span class="keyword">typename</span> sol<span class="keywordtype">id</span>ObjType&gt;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;      std::shared_ptr&lt;solidObjType&gt; <a class="code" href="../../da/d1f/classMcCAD_1_1Decomposition_1_1SolidObjConstructor.html#a7135c0c35fcbf02b5d8285d500de6cfb">constructObj</a>(<span class="keyword">const</span> TopoDS_Shape&amp; shape);</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    };</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;}</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">//McCAD</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;constructSolidObj.tpp&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#endif //CONSTRUCTSOLIDOBJ_HPP</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclassMcCAD_1_1Decomposition_1_1SolidObjConstructor_html_a7135c0c35fcbf02b5d8285d500de6cfb"><div class="ttname"><a href="../../da/d1f/classMcCAD_1_1Decomposition_1_1SolidObjConstructor.html#a7135c0c35fcbf02b5d8285d500de6cfb">McCAD::Decomposition::SolidObjConstructor::constructObj</a></div><div class="ttdeci">std::shared_ptr&lt; solidObjType &gt; constructObj(const TopoDS_Shape &amp;shape)</div></div>
-<div class="ttc" id="anamespaceMcCAD_1_1Decomposition_html"><div class="ttname"><a href="../../dc/d41/namespaceMcCAD_1_1Decomposition.html">McCAD::Decomposition</a></div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d97/build_2includes_2implementation_2decomposition_2constructSolidObj_8hpp_source.html#l00011">build/includes/implementation/decomposition/constructSolidObj.hpp:11</a></div></div>
+<div class="ttc" id="anamespaceMcCAD_1_1Decomposition_html"><div class="ttname"><a href="../../dc/d41/namespaceMcCAD_1_1Decomposition.html">McCAD::Decomposition</a></div><div class="ttdef"><b>Definition:</b> <a href="../../d6/d97/build_2includes_2implementation_2decomposition_2constructSolidObj_8hpp_source.html#l00009">build/includes/implementation/decomposition/constructSolidObj.hpp:9</a></div></div>
 <div class="ttc" id="aclassMcCAD_1_1Decomposition_1_1SolidObjConstructor_html_a018feab8711c05f53e0a9b70720c997c"><div class="ttname"><a href="../../da/d1f/classMcCAD_1_1Decomposition_1_1SolidObjConstructor.html#a018feab8711c05f53e0a9b70720c997c">McCAD::Decomposition::SolidObjConstructor::SolidObjConstructor</a></div><div class="ttdeci">SolidObjConstructor()=default</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

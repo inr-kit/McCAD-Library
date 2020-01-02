@@ -213,7 +213,7 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        BRep_Tool::Surface(secondFace, secondLocation)};</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="comment">// Compare surfaces types.</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keywordflow">if</span>(firstAdaptor.GetType() != secondAdaptor.GetType()){</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="comment">//std::cout &lt;&lt; &quot;Orientation different&quot; &lt;&lt; std::endl;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="comment">//std::cout &lt;&lt; &quot;Type different&quot; &lt;&lt; std::endl;</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keywordflow">return</span> Standard_False;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    }</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="comment">// Compare locations</span></div>
@@ -223,14 +223,14 @@ Public Member Functions</h2></td></tr>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    }</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="comment">// Compare surfaces parameters</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keywordflow">if</span> (firstAdaptor.GetType() == GeomAbs_Plane &amp;&amp;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            firstAdaptor.GetType() == GeomAbs_Plane){</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keyword">auto</span> condition = PlaneComparator{}(firstAdaptor, secondAdaptor);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keywordflow">return</span> condition.value();</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    }</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (firstAdaptor.GetType() == GeomAbs_Cylinder</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;             &amp;&amp; firstAdaptor.GetType() == GeomAbs_Cylinder)</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">return</span> Standard_False; <span class="comment">//CylComparator{}(firstAdaptor, secondAdaptor);</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keywordflow">if</span> (firstAdaptor.GetType() == GeomAbs_Plane){</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keyword">auto</span> condition = PlaneComparator{}(firstAdaptor, secondAdaptor);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordflow">return</span> condition.value();</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    }</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (firstAdaptor.GetType() == GeomAbs_Cylinder)</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordflow">return</span> Standard_False; <span class="comment">//CylComparator{}(firstAdaptor, secondAdaptor);</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (firstAdaptor.GetType() == GeomAbs_Torus)</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">return</span> Standard_False; <span class="comment">//TorComparator{}(firstAdaptor, secondAdaptor);</span></div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">return</span> Standard_False;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div>
 </div><!-- fragment -->

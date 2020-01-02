@@ -196,6 +196,7 @@
 \input{d9/d01/classMcCAD_1_1Geometry_1_1BoundSurface}
 \input{d8/ddb/classMcCAD_1_1Geometry_1_1BoundSurfaceCyl}
 \input{d8/dbd/classMcCAD_1_1Geometry_1_1BoundSurfacePlane}
+\input{de/d82/classMcCAD_1_1Geometry_1_1BoundSurfaceTor}
 \input{dc/d5c/classMcCAD_1_1Geometry_1_1Coord}
 \input{d0/d07/classMcCAD_1_1Geometry_1_1Coord2D}
 \input{d3/ddf/classMcCAD_1_1Geometry_1_1Coord3D}
@@ -230,6 +231,8 @@
 \input{db/d48/structstd_1_1hash_3_01McCAD_1_1Geometry_1_1Coord_01_4}
 \input{d7/da8/structstd_1_1hash_3_01McCAD_1_1Geometry_1_1Coord2D_01_4}
 \input{d5/dca/structstd_1_1hash_3_01McCAD_1_1Geometry_1_1Coord3D_01_4}
+\input{d2/d1a/classMcCAD_1_1Geometry_1_1Surface_1_1Impl}
+\input{d2/d2a/classMcCAD_1_1Tools_1_1Preprocessor_1_1Impl}
 \input{d5/d45/classMcCAD_1_1Decomposition_1_1DecomposeSolid_1_1Impl}
 \input{dd/de9/classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl}
 \input{d2/d85/classMcCAD_1_1Decomposition_1_1SplitSolid_1_1Impl}
@@ -238,15 +241,15 @@
 \input{dd/d85/classMcCAD_1_1Geometry_1_1BoundSurface_1_1Impl}
 \input{db/d39/classMcCAD_1_1Geometry_1_1BoundSurfaceCyl_1_1Impl}
 \input{df/dfe/classMcCAD_1_1Geometry_1_1BoundSurfacePlane_1_1Impl}
-\input{d9/d92/classMcCAD_1_1Geometry_1_1Edge_1_1Impl}
+\input{d7/d5b/classMcCAD_1_1Geometry_1_1BoundSurfaceTor_1_1Impl}
+\input{d4/d93/classMcCAD_1_1Geometry_1_1CYLSolid_1_1Impl}
 \input{df/d9a/classMcCAD_1_1Geometry_1_1MeshTriangle_1_1Impl}
 \input{d7/d68/classMcCAD_1_1Geometry_1_1PLSolid_1_1Impl}
-\input{d2/d1a/classMcCAD_1_1Geometry_1_1Surface_1_1Impl}
+\input{dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl}
+\input{df/d96/classMcCAD_1_1Geometry_1_1TORSolid_1_1Impl}
 \input{de/d1b/classMcCAD_1_1IO_1_1STEPReader_1_1Impl}
 \input{db/dca/classMcCAD_1_1IO_1_1STEPWriter_1_1Impl}
-\input{d4/d93/classMcCAD_1_1Geometry_1_1CYLSolid_1_1Impl}
-\input{dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl}
-\input{d2/d2a/classMcCAD_1_1Tools_1_1Preprocessor_1_1Impl}
+\input{d9/d92/classMcCAD_1_1Geometry_1_1Edge_1_1Impl}
 \input{d9/d8a/classMcCAD_1_1General_1_1InputData}
 \input{da/d0a/classMcCAD_1_1detail_1_1Iterator}
 \input{d7/d5c/classMcCAD_1_1Geometry_1_1MeshTriangle}
@@ -272,7 +275,9 @@
 \input{d0/d9f/classMcCAD_1_1IO_1_1STEPWriter}
 \input{d1/d2b/classMcCAD_1_1Geometry_1_1Surface}
 \input{da/d53/classMcCAD_1_1Tools_1_1SurfaceComparator}
+\input{d4/dac/classMcCAD_1_1Decomposition_1_1SurfaceObjCreator}
 \input{d5/d31/classMcCAD_1_1Tools_1_1SurfacesFuser}
+\input{d3/d8b/classMcCAD_1_1Decomposition_1_1SurfacesMerger}
 \input{dc/d26/structMcCAD_1_1detail_1_1TopClass}
 \input{d1/d8e/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__COMPOUND_01_4}
 \input{db/da7/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__COMPSOLID_01_4}
@@ -282,6 +287,7 @@
 \input{de/d31/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__SOLID_01_4}
 \input{d1/dd0/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__VERTEX_01_4}
 \input{d3/d3e/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__WIRE_01_4}
+\input{d5/d3e/classMcCAD_1_1Geometry_1_1TORSolid}
 \input{d7/dc6/classMcCAD_1_1Decomposition_1_1TriangleCollision}
 \chapter{File Documentation}
 \input{d6/d9e/BinaryDecomposition_8hpp}
@@ -306,6 +312,12 @@
 \input{d4/d08/boundSurfacePlane__impl_8cpp}
 \input{d8/d9e/build_2includes_2implementation_2geometry_2boundSurfacePlane__impl_8hpp}
 \input{df/da1/Implementation_2geometry_2boundSurfacePlane__impl_8hpp}
+\input{d8/dc4/boundSurfaceTor_8cpp}
+\input{d5/d94/build_2includes_2interface_2geometry_2boundSurfaceTor_8hpp}
+\input{db/d40/Interface_2geometry_2boundSurfaceTor_8hpp}
+\input{d1/d1b/boundSurfaceTor__impl_8cpp}
+\input{d8/d1c/build_2includes_2implementation_2geometry_2boundSurfaceTor__impl_8hpp}
+\input{dc/dce/Implementation_2geometry_2boundSurfaceTor__impl_8hpp}
 \input{de/dbe/CMakeCache_8txt}
 \input{d6/d83/CMakeCXXCompilerId_8cpp}
 \input{d3/dde/3rd__party_2Boost__dependency_2CMakeLists_8txt}
@@ -425,7 +437,6 @@
 \input{d3/dca/FaceParameters_8cpp}
 \input{dd/d7a/build_2includes_2implementation_2tools_2FaceParameters_8hpp}
 \input{de/d71/Implementation_2tools_2FaceParameters_8hpp}
-\input{d7/d2b/generateFacesList_8cpp}
 \input{d5/de4/build_2includes_2implementation_2decomposition_2generateFacesList_8hpp}
 \input{dc/df2/Implementation_2decomposition_2generateFacesList_8hpp}
 \input{db/df7/inputdata_8cpp}
@@ -462,6 +473,7 @@
 \input{d3/da9/build_2includes_2implementation_2decomposition_2preprocessor_8hpp}
 \input{d8/df9/Implementation_2decomposition_2preprocessor_8hpp}
 \input{da/ddd/README_8md}
+\input{d5/d33/runLog_8txt}
 \input{df/dd1/senseEvaluateor_8cpp}
 \input{d6/d5b/build_2includes_2implementation_2tools_2senseEvaluateor_8hpp}
 \input{da/dc7/Implementation_2tools_2senseEvaluateor_8hpp}
@@ -518,9 +530,15 @@
 \input{d1/d2a/surfaceComparator_8cpp}
 \input{d0/def/build_2includes_2implementation_2tools_2surfaceComparator_8hpp}
 \input{df/dc5/Implementation_2tools_2surfaceComparator_8hpp}
+\input{d8/dc6/surfaceObjCerator_8cpp}
+\input{dd/d89/build_2includes_2implementation_2decomposition_2surfaceObjCerator_8hpp}
+\input{d8/d35/Implementation_2decomposition_2surfaceObjCerator_8hpp}
 \input{d7/de9/surfacesFuser_8cpp}
 \input{db/d7b/build_2includes_2implementation_2tools_2surfacesFuser_8hpp}
 \input{d4/d23/Implementation_2tools_2surfacesFuser_8hpp}
+\input{d4/d68/surfacesMerger_8cpp}
+\input{df/d7e/build_2includes_2implementation_2decomposition_2surfacesMerger_8hpp}
+\input{d1/dd8/Implementation_2decomposition_2surfacesMerger_8hpp}
 \input{de/da8/SurfaceUtilities_8cpp}
 \input{da/db9/build_2includes_2implementation_2tools_2SurfaceUtilities_8hpp}
 \input{db/d29/Implementation_2tools_2SurfaceUtilities_8hpp}
@@ -531,6 +549,12 @@
 \input{d2/dcd/tools__impl_8cpp}
 \input{d6/df1/build_2includes_2implementation_2tools_2tools__impl_8hpp}
 \input{d1/d3a/Implementation_2tools_2tools__impl_8hpp}
+\input{d9/de7/torSolid_8cpp}
+\input{d8/d40/build_2includes_2interface_2geometry_2torSolid_8hpp}
+\input{de/d3d/Interface_2geometry_2torSolid_8hpp}
+\input{df/dc3/torSolid__impl_8cpp}
+\input{d3/ded/build_2includes_2implementation_2geometry_2torSolid__impl_8hpp}
+\input{d3/dee/Implementation_2geometry_2torSolid__impl_8hpp}
 \input{dc/d43/triangleCollision_8cpp}
 \input{db/d3d/build_2includes_2implementation_2decomposition_2triangleCollision_8hpp}
 \input{d0/d45/Implementation_2decomposition_2triangleCollision_8hpp}

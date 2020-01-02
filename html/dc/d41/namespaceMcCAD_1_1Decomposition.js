@@ -13,5 +13,7 @@ var namespaceMcCAD_1_1Decomposition =
     [ "SolidSplitter", "de/dbe/classMcCAD_1_1Decomposition_1_1SolidSplitter.html", "de/dbe/classMcCAD_1_1Decomposition_1_1SolidSplitter" ],
     [ "SplitSolid", "d5/d5d/classMcCAD_1_1Decomposition_1_1SplitSolid.html", "d5/d5d/classMcCAD_1_1Decomposition_1_1SplitSolid" ],
     [ "SplitSurfaces", "d4/de5/classMcCAD_1_1Decomposition_1_1SplitSurfaces.html", "d4/de5/classMcCAD_1_1Decomposition_1_1SplitSurfaces" ],
+    [ "SurfaceObjCreator", "d4/dac/classMcCAD_1_1Decomposition_1_1SurfaceObjCreator.html", "d4/dac/classMcCAD_1_1Decomposition_1_1SurfaceObjCreator" ],
+    [ "SurfacesMerger", "d3/d8b/classMcCAD_1_1Decomposition_1_1SurfacesMerger.html", "d3/d8b/classMcCAD_1_1Decomposition_1_1SurfacesMerger" ],
     [ "TriangleCollision", "d7/dc6/classMcCAD_1_1Decomposition_1_1TriangleCollision.html", "d7/dc6/classMcCAD_1_1Decomposition_1_1TriangleCollision" ]
 ];

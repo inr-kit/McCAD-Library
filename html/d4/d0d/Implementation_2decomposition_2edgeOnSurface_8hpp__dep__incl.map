@@ -1,6 +1,7 @@
 <map id="edgeOnSurface.hpp" name="edgeOnSurface.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="160,5,297,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="239,5,376,32"/>
 <area shape="rect" id="node2" href="$dd/da5/edgeOnSurface_8cpp.html" title=" " alt="" coords="5,80,143,107"/>
 <area shape="rect" id="node3" href="$d8/d5d/cylSolid__impl_8cpp.html" title=" " alt="" coords="167,80,291,107"/>
 <area shape="rect" id="node4" href="$d0/d3d/planarSolid__impl_8cpp.html" title=" " alt="" coords="315,80,457,107"/>
+<area shape="rect" id="node5" href="$df/dc3/torSolid__impl_8cpp.html" title=" " alt="" coords="482,80,605,107"/>
 </map>

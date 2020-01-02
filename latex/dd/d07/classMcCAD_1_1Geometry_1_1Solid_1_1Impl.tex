@@ -6,7 +6,8 @@
 
 
 
-Collaboration diagram for Mc\+C\+AD\+::Geometry\+::Solid\+::Impl\+:\nopagebreak
+Collaboration diagram for Mc\+C\+AD\+::Geometry\+::Solid\+::Impl\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -34,7 +35,7 @@ void \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a9031d6cc6e8a87cf4
 \item 
 std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Bound\+Surface}} $>$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_ac4e7efed489a9be21162676c6dff0b6b}{generate\+Surface}} (const Topo\+D\+S\+\_\+\+Face \&face, Standard\+\_\+\+Integer mode=0)
 \item 
-void \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a7f434941fa38e84186ebb026342984c8}{merge\+Surfaces}} (std\+::vector$<$ std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Bound\+Surface}} $>$$>$ \&planes\+List)
+void \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a7f434941fa38e84186ebb026342984c8}{merge\+Surfaces}} (std\+::vector$<$ std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Bound\+Surface}} $>$$>$ \&\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a5b4fb46f10895ab3f6fe12243f317ef6}{planes\+List}})
 \item 
 \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a0e6034dcecdd2804371ed09fef697e3d}{Impl}} ()
 \item 
@@ -54,7 +55,7 @@ void \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a9031d6cc6e8a87cf4
 \item 
 std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Bound\+Surface}} $>$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_ac4e7efed489a9be21162676c6dff0b6b}{generate\+Surface}} (const Topo\+D\+S\+\_\+\+Face \&face, Standard\+\_\+\+Integer mode=0)
 \item 
-void \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a7f434941fa38e84186ebb026342984c8}{merge\+Surfaces}} (std\+::vector$<$ std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Bound\+Surface}} $>$$>$ \&planes\+List)
+void \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a7f434941fa38e84186ebb026342984c8}{merge\+Surfaces}} (std\+::vector$<$ std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Bound\+Surface}} $>$$>$ \&\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a5b4fb46f10895ab3f6fe12243f317ef6}{planes\+List}})
 \end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -74,6 +75,12 @@ Standard\+\_\+\+Real \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a7
 Standard\+\_\+\+Boolean \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a541bb95b820e30d0086d1ee1026acfcd}{split\+Surface}} = Standard\+\_\+\+False
 \item 
 std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Bound\+Surface}} $>$ $>$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a7127bb4d730197014b421e43ac19edfa}{faces\+List}}
+\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Geometry\+::\+Bound\+Surface}} $>$ $>$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a5b4fb46f10895ab3f6fe12243f317ef6}{planes\+List}}
+\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Geometry\+::\+Bound\+Surface}} $>$ $>$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_ac1b821a1379d379eea144aabe2c34e89}{cylinders\+List}}
+\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Geometry\+::\+Bound\+Surface}} $>$ $>$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a32250ff3ecc553321430d595d92989c0}{tori\+List}}
 \item 
 std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Bound\+Surface}} $>$ $>$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a642e79e9fa8db428b1c731c100c53517}{split\+Faces\+List}}
 \item 
@@ -150,20 +157,20 @@ Definition at line 10 of file solid\+\_\+impl.\+cpp.
 
 
 
-Definition at line 34 of file solid\+\_\+impl.\+cpp.
+Definition at line 33 of file solid\+\_\+impl.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{34                                                                      \{}
-\DoxyCodeLine{35     \textcolor{comment}{// Calculate the oriented bounding box of the solid.}}
-\DoxyCodeLine{36     \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_af8a04ab67e6fa83736a4ae9ebcfcc877}{meshDeflection}} = 2 * std::max(std::max(\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_abb00ec0b4230c6e484b751812bcc9050}{obb}}.XHSize(), \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_abb00ec0b4230c6e484b751812bcc9050}{obb}}.YHSize()),}
-\DoxyCodeLine{37                                   \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_abb00ec0b4230c6e484b751812bcc9050}{obb}}.ZHSize()) / scalingFactor;}
-\DoxyCodeLine{38     \textcolor{comment}{// error in Bnd\_OBB.hxx. calculate it till the method is fixed}}
-\DoxyCodeLine{39     \textcolor{comment}{// boxDiagonalLength = sqrt(obb.SquareExtent());}}
-\DoxyCodeLine{40     \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a797ace8ee10123eab4bd27ef4385cbd3}{boxDiagonalLength}} = 2 * sqrt(std::pow(\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_abb00ec0b4230c6e484b751812bcc9050}{obb}}.XHSize(), 2) +}
-\DoxyCodeLine{41                                  std::pow(\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_abb00ec0b4230c6e484b751812bcc9050}{obb}}.YHSize(), 2) +}
-\DoxyCodeLine{42                                  std::pow(\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_abb00ec0b4230c6e484b751812bcc9050}{obb}}.ZHSize(), 2));}
-\DoxyCodeLine{43 \}}
+\DoxyCodeLine{33                                                                      \{}
+\DoxyCodeLine{34     \textcolor{comment}{// Calculate the oriented bounding box of the solid.}}
+\DoxyCodeLine{35     \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_af8a04ab67e6fa83736a4ae9ebcfcc877}{meshDeflection}} = 2 * std::max(std::max(\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_abb00ec0b4230c6e484b751812bcc9050}{obb}}.XHSize(), \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_abb00ec0b4230c6e484b751812bcc9050}{obb}}.YHSize()),}
+\DoxyCodeLine{36                                   \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_abb00ec0b4230c6e484b751812bcc9050}{obb}}.ZHSize()) / scalingFactor;}
+\DoxyCodeLine{37     \textcolor{comment}{// Error in Bnd\_OBB.hxx in OCC. calculate it here till the method is fixed}}
+\DoxyCodeLine{38     \textcolor{comment}{// boxDiagonalLength = sqrt(obb.SquareExtent());}}
+\DoxyCodeLine{39     \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a797ace8ee10123eab4bd27ef4385cbd3}{boxDiagonalLength}} = 2 * sqrt(std::pow(\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_abb00ec0b4230c6e484b751812bcc9050}{obb}}.XHSize(), 2) +}
+\DoxyCodeLine{40                                  std::pow(\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_abb00ec0b4230c6e484b751812bcc9050}{obb}}.YHSize(), 2) +}
+\DoxyCodeLine{41                                  std::pow(\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_abb00ec0b4230c6e484b751812bcc9050}{obb}}.ZHSize(), 2));}
+\DoxyCodeLine{42 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a0ef5f0f364356801915a7bc7a38a02ff}\label{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a0ef5f0f364356801915a7bc7a38a02ff}} 
@@ -191,10 +198,9 @@ Definition at line 27 of file solid\+\_\+impl.\+cpp.
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{27                                                         \{}
-\DoxyCodeLine{28     \textcolor{comment}{// Calculate the bounding box of the solid.}}
-\DoxyCodeLine{29     BRepBndLib::AddOBB(\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a279f71c11f2a7b285e3093879baf9362}{solid}}, \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_abb00ec0b4230c6e484b751812bcc9050}{obb}});}
-\DoxyCodeLine{30     \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_abb00ec0b4230c6e484b751812bcc9050}{obb}}.Enlarge(bndBoxGap);}
-\DoxyCodeLine{31 \}}
+\DoxyCodeLine{28     BRepBndLib::AddOBB(\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a279f71c11f2a7b285e3093879baf9362}{solid}}, \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_abb00ec0b4230c6e484b751812bcc9050}{obb}});}
+\DoxyCodeLine{29     \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_abb00ec0b4230c6e484b751812bcc9050}{obb}}.Enlarge(bndBoxGap);}
+\DoxyCodeLine{30 \}}
 
 \end{DoxyCode}
 \mbox{\Hypertarget{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_ac4e7efed489a9be21162676c6dff0b6b}\label{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_ac4e7efed489a9be21162676c6dff0b6b}} 
@@ -296,57 +302,57 @@ Definition at line 20 of file solid\+\_\+impl.\+cpp.
 
 
 
-Definition at line 46 of file solid\+\_\+impl.\+cpp.
+Definition at line 45 of file solid\+\_\+impl.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{46                                                                                \{}
-\DoxyCodeLine{47     TopTools\_IndexedDataMapOfShapeListOfShape mapEdgeFace;}
-\DoxyCodeLine{48     TopExp::MapShapesAndAncestors(\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a279f71c11f2a7b285e3093879baf9362}{solid}}, TopAbs\_EDGE, TopAbs\_FACE, mapEdgeFace);}
-\DoxyCodeLine{49     TopTools\_ListOfShape \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a7127bb4d730197014b421e43ac19edfa}{facesList}};}
-\DoxyCodeLine{50     \textcolor{keywordflow}{for} (Standard\_Integer edgeNumber = 1; edgeNumber <= mapEdgeFace.Extent();}
-\DoxyCodeLine{51          ++edgeNumber)\{}
-\DoxyCodeLine{52         TopoDS\_Edge edge = TopoDS::Edge(mapEdgeFace.FindKey(edgeNumber));}
-\DoxyCodeLine{53         BRepAdaptor\_Curve curveAdaptor;}
-\DoxyCodeLine{54         curveAdaptor.Initialize(edge);}
-\DoxyCodeLine{55         \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a7127bb4d730197014b421e43ac19edfa}{facesList}} = mapEdgeFace.FindFromKey(edge);}
-\DoxyCodeLine{56         \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a7127bb4d730197014b421e43ac19edfa}{facesList}}.Extent() != Standard\_Integer(2))\{}
-\DoxyCodeLine{57             \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{58         \}}
-\DoxyCodeLine{59         TopTools\_ListIteratorOfListOfShape iterFace(\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a7127bb4d730197014b421e43ac19edfa}{facesList}});}
-\DoxyCodeLine{60         TopoDS\_Face firstFace = TopoDS::Face(iterFace.Value());}
-\DoxyCodeLine{61         iterFace.Next();}
-\DoxyCodeLine{62         TopoDS\_Face secondFace = TopoDS::Face(iterFace.Value());}
-\DoxyCodeLine{63 }
-\DoxyCodeLine{64         Standard\_Real start, end;}
-\DoxyCodeLine{65         Handle\_Geom\_Curve curve = BRep\_Tool::Curve(edge, start, end);}
-\DoxyCodeLine{66         gp\_Pnt startPoint;}
-\DoxyCodeLine{67         gp\_Vec vector;}
-\DoxyCodeLine{68         curve-\/>D1(start, startPoint, vector);}
-\DoxyCodeLine{69         gp\_Dir direction(vector);}
-\DoxyCodeLine{70 }
-\DoxyCodeLine{71         \textcolor{comment}{// Get the normals of each surface}}
-\DoxyCodeLine{72         gp\_Dir firstNormal = \mbox{\hyperlink{namespaceMcCAD_1_1Tools_a5e0090a8dd0489c030624ee30a098110}{Tools::normalOnFace}}(firstFace, startPoint);}
-\DoxyCodeLine{73         gp\_Dir secondNormal = \mbox{\hyperlink{namespaceMcCAD_1_1Tools_a5e0090a8dd0489c030624ee30a098110}{Tools::normalOnFace}}(secondFace, startPoint);}
-\DoxyCodeLine{74         Standard\_Real \mbox{\hyperlink{namespaceMcCAD_1_1Geometry_aa7ab15668cf6f88ba392926c3039d5e5}{angle}} = firstNormal.AngleWithRef(secondNormal, direction);}
-\DoxyCodeLine{75 }
-\DoxyCodeLine{76         \textcolor{keywordflow}{if}(std::abs(\mbox{\hyperlink{namespaceMcCAD_1_1Geometry_aa7ab15668cf6f88ba392926c3039d5e5}{angle}}) < angleTolerance)\{}
-\DoxyCodeLine{77             \mbox{\hyperlink{namespaceMcCAD_1_1Geometry_aa7ab15668cf6f88ba392926c3039d5e5}{angle}} = Standard\_Real(0);}
-\DoxyCodeLine{78         \}}
-\DoxyCodeLine{79         \textcolor{comment}{// The edge is convex.}}
-\DoxyCodeLine{80         \textcolor{keywordflow}{if}( \mbox{\hyperlink{namespaceMcCAD_1_1Geometry_aa7ab15668cf6f88ba392926c3039d5e5}{angle}} < Standard\_Real(0) \&\& edge.Orientation() == TopAbs\_REVERSED)\{}
-\DoxyCodeLine{81             edge.Convex(1);}
-\DoxyCodeLine{82         \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespaceMcCAD_1_1Geometry_aa7ab15668cf6f88ba392926c3039d5e5}{angle}} > Standard\_Real(0) \&\& edge.Orientation() == TopAbs\_FORWARD)\{}
-\DoxyCodeLine{83             edge.Convex(1);}
-\DoxyCodeLine{84         \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{namespaceMcCAD_1_1Geometry_aa7ab15668cf6f88ba392926c3039d5e5}{angle}} == Standard\_Real(0))\{}
-\DoxyCodeLine{85             \textcolor{comment}{// edge if flat}}
-\DoxyCodeLine{86             edge.Convex(2);}
-\DoxyCodeLine{87         \} \textcolor{keywordflow}{else}\{}
-\DoxyCodeLine{88             \textcolor{comment}{// edge is concave}}
-\DoxyCodeLine{89             edge.Convex(0);}
-\DoxyCodeLine{90         \}}
-\DoxyCodeLine{91     \}}
-\DoxyCodeLine{92 \}}
+\DoxyCodeLine{45                                                                                \{}
+\DoxyCodeLine{46     TopTools\_IndexedDataMapOfShapeListOfShape mapEdgeFace;}
+\DoxyCodeLine{47     TopExp::MapShapesAndAncestors(\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a279f71c11f2a7b285e3093879baf9362}{solid}}, TopAbs\_EDGE, TopAbs\_FACE, mapEdgeFace);}
+\DoxyCodeLine{48     TopTools\_ListOfShape \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a7127bb4d730197014b421e43ac19edfa}{facesList}};}
+\DoxyCodeLine{49     \textcolor{keywordflow}{for} (Standard\_Integer edgeNumber = 1; edgeNumber <= mapEdgeFace.Extent();}
+\DoxyCodeLine{50          ++edgeNumber)\{}
+\DoxyCodeLine{51         TopoDS\_Edge edge = TopoDS::Edge(mapEdgeFace.FindKey(edgeNumber));}
+\DoxyCodeLine{52         BRepAdaptor\_Curve curveAdaptor;}
+\DoxyCodeLine{53         curveAdaptor.Initialize(edge);}
+\DoxyCodeLine{54         \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a7127bb4d730197014b421e43ac19edfa}{facesList}} = mapEdgeFace.FindFromKey(edge);}
+\DoxyCodeLine{55         \textcolor{keywordflow}{if}(\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a7127bb4d730197014b421e43ac19edfa}{facesList}}.Extent() != Standard\_Integer(2))\{}
+\DoxyCodeLine{56             \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{57         \}}
+\DoxyCodeLine{58         TopTools\_ListIteratorOfListOfShape iterFace(\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a7127bb4d730197014b421e43ac19edfa}{facesList}});}
+\DoxyCodeLine{59         TopoDS\_Face firstFace = TopoDS::Face(iterFace.Value());}
+\DoxyCodeLine{60         iterFace.Next();}
+\DoxyCodeLine{61         TopoDS\_Face secondFace = TopoDS::Face(iterFace.Value());}
+\DoxyCodeLine{62 }
+\DoxyCodeLine{63         Standard\_Real start, end;}
+\DoxyCodeLine{64         Handle\_Geom\_Curve curve = BRep\_Tool::Curve(edge, start, end);}
+\DoxyCodeLine{65         gp\_Pnt startPoint;}
+\DoxyCodeLine{66         gp\_Vec vector;}
+\DoxyCodeLine{67         curve-\/>D1(start, startPoint, vector);}
+\DoxyCodeLine{68         gp\_Dir direction(vector);}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{70         \textcolor{comment}{// Get the normals of each surface}}
+\DoxyCodeLine{71         gp\_Dir firstNormal = \mbox{\hyperlink{namespaceMcCAD_1_1Tools_a5e0090a8dd0489c030624ee30a098110}{Tools::normalOnFace}}(firstFace, startPoint);}
+\DoxyCodeLine{72         gp\_Dir secondNormal = \mbox{\hyperlink{namespaceMcCAD_1_1Tools_a5e0090a8dd0489c030624ee30a098110}{Tools::normalOnFace}}(secondFace, startPoint);}
+\DoxyCodeLine{73         Standard\_Real \mbox{\hyperlink{namespaceMcCAD_1_1Geometry_aa7ab15668cf6f88ba392926c3039d5e5}{angle}} = firstNormal.AngleWithRef(secondNormal, direction);}
+\DoxyCodeLine{74 }
+\DoxyCodeLine{75         \textcolor{keywordflow}{if}(std::abs(\mbox{\hyperlink{namespaceMcCAD_1_1Geometry_aa7ab15668cf6f88ba392926c3039d5e5}{angle}}) < angleTolerance)\{}
+\DoxyCodeLine{76             \mbox{\hyperlink{namespaceMcCAD_1_1Geometry_aa7ab15668cf6f88ba392926c3039d5e5}{angle}} = Standard\_Real(0);}
+\DoxyCodeLine{77         \}}
+\DoxyCodeLine{78         \textcolor{comment}{// The edge is convex.}}
+\DoxyCodeLine{79         \textcolor{keywordflow}{if}( \mbox{\hyperlink{namespaceMcCAD_1_1Geometry_aa7ab15668cf6f88ba392926c3039d5e5}{angle}} < Standard\_Real(0) \&\& edge.Orientation() == TopAbs\_REVERSED)\{}
+\DoxyCodeLine{80             edge.Convex(1);}
+\DoxyCodeLine{81         \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(\mbox{\hyperlink{namespaceMcCAD_1_1Geometry_aa7ab15668cf6f88ba392926c3039d5e5}{angle}} > Standard\_Real(0) \&\& edge.Orientation() == TopAbs\_FORWARD)\{}
+\DoxyCodeLine{82             edge.Convex(1);}
+\DoxyCodeLine{83         \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{namespaceMcCAD_1_1Geometry_aa7ab15668cf6f88ba392926c3039d5e5}{angle}} == Standard\_Real(0))\{}
+\DoxyCodeLine{84             \textcolor{comment}{// edge if flat}}
+\DoxyCodeLine{85             edge.Convex(2);}
+\DoxyCodeLine{86         \} \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{87             \textcolor{comment}{// edge is concave}}
+\DoxyCodeLine{88             edge.Convex(0);}
+\DoxyCodeLine{89         \}}
+\DoxyCodeLine{90     \}}
+\DoxyCodeLine{91 \}}
 
 \end{DoxyCode}
 Here is the call graph for this function\+:\nopagebreak
@@ -368,6 +374,16 @@ Here is the call graph for this function\+:\nopagebreak
 
 
 Definition at line 56 of file build/includes/implementation/geometry/solid\+\_\+impl.\+hpp.
+
+\mbox{\Hypertarget{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_ac1b821a1379d379eea144aabe2c34e89}\label{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_ac1b821a1379d379eea144aabe2c34e89}} 
+\index{McCAD::Geometry::Solid::Impl@{McCAD::Geometry::Solid::Impl}!cylindersList@{cylindersList}}
+\index{cylindersList@{cylindersList}!McCAD::Geometry::Solid::Impl@{McCAD::Geometry::Solid::Impl}}
+\doxysubsubsection{\texorpdfstring{cylindersList}{cylindersList}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Geometry\+::\+Bound\+Surface}} $>$ $>$ Mc\+C\+A\+D\+::\+Geometry\+::\+Solid\+::\+Impl\+::cylinders\+List}
+
+
+
+Definition at line 61 of file build/includes/implementation/geometry/solid\+\_\+impl.\+hpp.
 
 \mbox{\Hypertarget{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a7127bb4d730197014b421e43ac19edfa}\label{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a7127bb4d730197014b421e43ac19edfa}} 
 \index{McCAD::Geometry::Solid::Impl@{McCAD::Geometry::Solid::Impl}!facesList@{facesList}}
@@ -399,6 +415,16 @@ Definition at line 55 of file build/includes/implementation/geometry/solid\+\_\+
 
 Definition at line 52 of file build/includes/implementation/geometry/solid\+\_\+impl.\+hpp.
 
+\mbox{\Hypertarget{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a5b4fb46f10895ab3f6fe12243f317ef6}\label{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a5b4fb46f10895ab3f6fe12243f317ef6}} 
+\index{McCAD::Geometry::Solid::Impl@{McCAD::Geometry::Solid::Impl}!planesList@{planesList}}
+\index{planesList@{planesList}!McCAD::Geometry::Solid::Impl@{McCAD::Geometry::Solid::Impl}}
+\doxysubsubsection{\texorpdfstring{planesList}{planesList}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Geometry\+::\+Bound\+Surface}} $>$ $>$ Mc\+C\+A\+D\+::\+Geometry\+::\+Solid\+::\+Impl\+::planes\+List}
+
+
+
+Definition at line 60 of file build/includes/implementation/geometry/solid\+\_\+impl.\+hpp.
+
 \mbox{\Hypertarget{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_ab6393d9ccf9e8046915b6f2b1facfb03}\label{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_ab6393d9ccf9e8046915b6f2b1facfb03}} 
 \index{McCAD::Geometry::Solid::Impl@{McCAD::Geometry::Solid::Impl}!preproc@{preproc}}
 \index{preproc@{preproc}!McCAD::Geometry::Solid::Impl@{McCAD::Geometry::Solid::Impl}}
@@ -417,7 +443,7 @@ Definition at line 50 of file build/includes/implementation/geometry/solid\+\_\+
 
 
 
-Definition at line 63 of file build/includes/implementation/geometry/solid\+\_\+impl.\+hpp.
+Definition at line 67 of file build/includes/implementation/geometry/solid\+\_\+impl.\+hpp.
 
 \mbox{\Hypertarget{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_aa19f7056715424c86510c107459209b8}\label{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_aa19f7056715424c86510c107459209b8}} 
 \index{McCAD::Geometry::Solid::Impl@{McCAD::Geometry::Solid::Impl}!selectedSplitFacesList@{selectedSplitFacesList}}
@@ -427,7 +453,7 @@ Definition at line 63 of file build/includes/implementation/geometry/solid\+\_\+
 
 
 
-Definition at line 61 of file build/includes/implementation/geometry/solid\+\_\+impl.\+hpp.
+Definition at line 65 of file build/includes/implementation/geometry/solid\+\_\+impl.\+hpp.
 
 \mbox{\Hypertarget{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a279f71c11f2a7b285e3093879baf9362}\label{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a279f71c11f2a7b285e3093879baf9362}} 
 \index{McCAD::Geometry::Solid::Impl@{McCAD::Geometry::Solid::Impl}!solid@{solid}}
@@ -457,7 +483,7 @@ Definition at line 54 of file build/includes/implementation/geometry/solid\+\_\+
 
 
 
-Definition at line 60 of file build/includes/implementation/geometry/solid\+\_\+impl.\+hpp.
+Definition at line 64 of file build/includes/implementation/geometry/solid\+\_\+impl.\+hpp.
 
 \mbox{\Hypertarget{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a962b0107f7c5cda9270fdd4e5e0024a3}\label{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a962b0107f7c5cda9270fdd4e5e0024a3}} 
 \index{McCAD::Geometry::Solid::Impl@{McCAD::Geometry::Solid::Impl}!splitSolidList@{splitSolidList}}
@@ -467,7 +493,7 @@ Definition at line 60 of file build/includes/implementation/geometry/solid\+\_\+
 
 
 
-Definition at line 62 of file build/includes/implementation/geometry/solid\+\_\+impl.\+hpp.
+Definition at line 66 of file build/includes/implementation/geometry/solid\+\_\+impl.\+hpp.
 
 \mbox{\Hypertarget{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a541bb95b820e30d0086d1ee1026acfcd}\label{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a541bb95b820e30d0086d1ee1026acfcd}} 
 \index{McCAD::Geometry::Solid::Impl@{McCAD::Geometry::Solid::Impl}!splitSurface@{splitSurface}}
@@ -478,6 +504,16 @@ Definition at line 62 of file build/includes/implementation/geometry/solid\+\_\+
 
 
 Definition at line 57 of file build/includes/implementation/geometry/solid\+\_\+impl.\+hpp.
+
+\mbox{\Hypertarget{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a32250ff3ecc553321430d595d92989c0}\label{classMcCAD_1_1Geometry_1_1Solid_1_1Impl_a32250ff3ecc553321430d595d92989c0}} 
+\index{McCAD::Geometry::Solid::Impl@{McCAD::Geometry::Solid::Impl}!toriList@{toriList}}
+\index{toriList@{toriList}!McCAD::Geometry::Solid::Impl@{McCAD::Geometry::Solid::Impl}}
+\doxysubsubsection{\texorpdfstring{toriList}{toriList}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Geometry\+::\+Bound\+Surface}} $>$ $>$ Mc\+C\+A\+D\+::\+Geometry\+::\+Solid\+::\+Impl\+::tori\+List}
+
+
+
+Definition at line 62 of file build/includes/implementation/geometry/solid\+\_\+impl.\+hpp.
 
 
 

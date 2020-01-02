@@ -68,19 +68,19 @@ Definition at line 13 of file build/includes/implementation/decomposition/triang
 
 
 
-Definition at line 16 of file triangle\+Collision.\+cpp.
+Definition at line 20 of file triangle\+Collision.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{19                                 \{}
-\DoxyCodeLine{20     \textcolor{keyword}{auto} surfaceType = iFace.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_ac81308cae2d3fd458dfa311adea23688}{getSurfaceType}}();}
-\DoxyCodeLine{21     \textcolor{keywordflow}{if} (surfaceType == \mbox{\hyperlink{namespaceMcCAD_1_1Tools_a2c3c43d2878c73f69424e7b32f87bb2b}{Tools::toTypeName}}(GeomAbs\_Plane))\{}
-\DoxyCodeLine{22         \textcolor{keywordflow}{return} \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1TriangleCollision_aa9f5d8a29c70ea403e8a690108c31cc7}{triangleCollisionPlane}}(iFace, aTriangle, aSide);}
-\DoxyCodeLine{23     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (surfaceType == \mbox{\hyperlink{namespaceMcCAD_1_1Tools_a2c3c43d2878c73f69424e7b32f87bb2b}{Tools::toTypeName}}(GeomAbs\_Cylinder))\{}
-\DoxyCodeLine{24         \textcolor{keywordflow}{return} \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1TriangleCollision_a80f29dce3e63b4e8c6b54290260c1ca5}{triangleCollisionCyl}}(iFace, aTriangle, aSide);}
-\DoxyCodeLine{25     \}}
-\DoxyCodeLine{26     \textcolor{keywordflow}{else} \textcolor{keywordflow}{return} Standard\_False;}
-\DoxyCodeLine{27 \}}
+\DoxyCodeLine{23                                 \{}
+\DoxyCodeLine{24     \textcolor{keyword}{auto} surfaceType = iFace.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_ac81308cae2d3fd458dfa311adea23688}{getSurfaceType}}();}
+\DoxyCodeLine{25     \textcolor{keywordflow}{if} (surfaceType == \mbox{\hyperlink{namespaceMcCAD_1_1Tools_a2c3c43d2878c73f69424e7b32f87bb2b}{Tools::toTypeName}}(GeomAbs\_Plane))\{}
+\DoxyCodeLine{26         \textcolor{keywordflow}{return} \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1TriangleCollision_aa9f5d8a29c70ea403e8a690108c31cc7}{triangleCollisionPlane}}(iFace, aTriangle, aSide);}
+\DoxyCodeLine{27     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (surfaceType == \mbox{\hyperlink{namespaceMcCAD_1_1Tools_a2c3c43d2878c73f69424e7b32f87bb2b}{Tools::toTypeName}}(GeomAbs\_Cylinder))\{}
+\DoxyCodeLine{28         \textcolor{keywordflow}{return} \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1TriangleCollision_a80f29dce3e63b4e8c6b54290260c1ca5}{triangleCollisionCyl}}(iFace, aTriangle, aSide);}
+\DoxyCodeLine{29     \}}
+\DoxyCodeLine{30     \textcolor{keywordflow}{else} \textcolor{keywordflow}{return} Standard\_False;}
+\DoxyCodeLine{31 \}}
 
 \end{DoxyCode}
 Here is the call graph for this function\+:\nopagebreak
@@ -110,43 +110,43 @@ Here is the call graph for this function\+:\nopagebreak
 
 
 
-Definition at line 69 of file triangle\+Collision.\+cpp.
+Definition at line 111 of file triangle\+Collision.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{73                                      \{}
-\DoxyCodeLine{74     \textcolor{comment}{//std::cout << "triangleCollision, Plane" << std::endl;}}
-\DoxyCodeLine{75     \textcolor{keyword}{auto}\& extendedFace = iFace.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_a989de1f9ebe3de043412014ed25e52eb}{accessSImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_1_1Impl_afaca81a1a3f54b93988737ac7085a0f2}{extendedFace}};}
-\DoxyCodeLine{76     \textcolor{comment}{// Quick check for collision using OBB}}
-\DoxyCodeLine{77     Bnd\_OBB obbFace;}
-\DoxyCodeLine{78     BRepBndLib::AddOBB(extendedFace, obbFace);}
-\DoxyCodeLine{79     \textcolor{keywordflow}{if} (aTriangle.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle_abd8b4e7b4f1dc5da17651c741bc6fada}{accessMTImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle_1_1Impl_a1b7bcf68b5df6bca6d87f674eb048a4d}{obb}}.IsOut(obbFace)) \textcolor{keywordflow}{return} Standard\_False;}
-\DoxyCodeLine{80     \textcolor{comment}{// Proceed to check with points of the triangle.}}
-\DoxyCodeLine{81     \textcolor{keyword}{auto}\& face = iFace.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_a989de1f9ebe3de043412014ed25e52eb}{accessSImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_1_1Impl_abf7c4dc859404ce42b425c7d6b578f69}{face}};}
-\DoxyCodeLine{82     Standard\_Boolean collision = Standard\_False;}
-\DoxyCodeLine{83     Standard\_Integer positivePoints = 0;}
-\DoxyCodeLine{84     Standard\_Integer negativePoints = 0;}
-\DoxyCodeLine{85     \textcolor{keyword}{auto}\& points = aTriangle.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle_abd8b4e7b4f1dc5da17651c741bc6fada}{accessMTImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle_1_1Impl_ab03401cf518b9b9576fdf1807a1db4bc}{points}};}
-\DoxyCodeLine{86     \textcolor{keywordflow}{for} (Standard\_Integer i = 0; i <= points.size() -\/ 1; ++i)\{}
-\DoxyCodeLine{87         \textcolor{keywordflow}{if} (PointOnSurface\{\}(extendedFace, points[i], distanceTolerance)) \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{88         \textcolor{keyword}{auto} evaluate = Tools::SenseEvaluator\{\}(face, points[i]);}
-\DoxyCodeLine{89         \textcolor{keywordflow}{if} (evaluate > senseTolerance)\{}
-\DoxyCodeLine{90             ++positivePoints;}
-\DoxyCodeLine{91         \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (evaluate < senseTolerance)\{}
-\DoxyCodeLine{92             ++negativePoints;}
-\DoxyCodeLine{93         \}}
-\DoxyCodeLine{94         \textcolor{keywordflow}{if} (positivePoints > 0 \&\& negativePoints > 0)\{}
-\DoxyCodeLine{95             collision = Standard\_True;}
-\DoxyCodeLine{96             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{97         \}}
-\DoxyCodeLine{98     \}}
-\DoxyCodeLine{99     \textcolor{keywordflow}{if} (positivePoints > 0 \&\& negativePoints == 0)\{}
-\DoxyCodeLine{100         aSide = 1;}
-\DoxyCodeLine{101     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (positivePoints == 0 \&\& negativePoints > 0)\{}
-\DoxyCodeLine{102         aSide = -\/1;}
-\DoxyCodeLine{103     \}}
-\DoxyCodeLine{104     \textcolor{keywordflow}{return} collision;}
-\DoxyCodeLine{105 \}}
+\DoxyCodeLine{115                                      \{}
+\DoxyCodeLine{116     \textcolor{comment}{//std::cout << "triangleCollision, Plane" << std::endl;}}
+\DoxyCodeLine{117     \textcolor{keyword}{auto}\& extendedFace = iFace.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_a989de1f9ebe3de043412014ed25e52eb}{accessSImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_1_1Impl_afaca81a1a3f54b93988737ac7085a0f2}{extendedFace}};}
+\DoxyCodeLine{118     \textcolor{comment}{// Quick check for collision using OBB}}
+\DoxyCodeLine{119     Bnd\_OBB obbFace;}
+\DoxyCodeLine{120     BRepBndLib::AddOBB(extendedFace, obbFace);}
+\DoxyCodeLine{121     \textcolor{keywordflow}{if} (aTriangle.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle_abd8b4e7b4f1dc5da17651c741bc6fada}{accessMTImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle_1_1Impl_a1b7bcf68b5df6bca6d87f674eb048a4d}{obb}}.IsOut(obbFace)) \textcolor{keywordflow}{return} Standard\_False;}
+\DoxyCodeLine{122     \textcolor{comment}{// Proceed to check with points of the triangle.}}
+\DoxyCodeLine{123     \textcolor{keyword}{auto}\& face = iFace.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_a989de1f9ebe3de043412014ed25e52eb}{accessSImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_1_1Impl_abf7c4dc859404ce42b425c7d6b578f69}{face}};}
+\DoxyCodeLine{124     Standard\_Boolean collision = Standard\_False;}
+\DoxyCodeLine{125     Standard\_Integer positivePoints = 0;}
+\DoxyCodeLine{126     Standard\_Integer negativePoints = 0;}
+\DoxyCodeLine{127     \textcolor{keyword}{auto}\& points = aTriangle.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle_abd8b4e7b4f1dc5da17651c741bc6fada}{accessMTImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle_1_1Impl_ab03401cf518b9b9576fdf1807a1db4bc}{points}};}
+\DoxyCodeLine{128     \textcolor{keywordflow}{for} (Standard\_Integer i = 0; i <= points.size() -\/ 1; ++i)\{}
+\DoxyCodeLine{129         \textcolor{keywordflow}{if} (PointOnSurface\{\}(extendedFace, points[i], distanceTolerance)) \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{130         \textcolor{keyword}{auto} evaluate = Tools::SenseEvaluator\{\}(face, points[i]);}
+\DoxyCodeLine{131         \textcolor{keywordflow}{if} (evaluate > senseTolerance)\{}
+\DoxyCodeLine{132             ++positivePoints;}
+\DoxyCodeLine{133         \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (evaluate < senseTolerance)\{}
+\DoxyCodeLine{134             ++negativePoints;}
+\DoxyCodeLine{135         \}}
+\DoxyCodeLine{136         \textcolor{keywordflow}{if} (positivePoints > 0 \&\& negativePoints > 0)\{}
+\DoxyCodeLine{137             collision = Standard\_True;}
+\DoxyCodeLine{138             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{139         \}}
+\DoxyCodeLine{140     \}}
+\DoxyCodeLine{141     \textcolor{keywordflow}{if} (positivePoints > 0 \&\& negativePoints == 0)\{}
+\DoxyCodeLine{142         aSide = 1;}
+\DoxyCodeLine{143     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (positivePoints == 0 \&\& negativePoints > 0)\{}
+\DoxyCodeLine{144         aSide = -\/1;}
+\DoxyCodeLine{145     \}}
+\DoxyCodeLine{146     \textcolor{keywordflow}{return} collision;}
+\DoxyCodeLine{147 \}}
 
 \end{DoxyCode}
 Here is the call graph for this function\+:\nopagebreak
@@ -171,43 +171,81 @@ Here is the caller graph for this function\+:\nopagebreak
 
 
 
-Definition at line 30 of file triangle\+Collision.\+cpp.
+Definition at line 34 of file triangle\+Collision.\+cpp.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{34                                      \{}
-\DoxyCodeLine{35     \textcolor{comment}{//std::cout << "triangleCollision, Plane" << std::endl;}}
-\DoxyCodeLine{36     \textcolor{keyword}{auto}\& extendedFace = iFace.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_a989de1f9ebe3de043412014ed25e52eb}{accessSImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_1_1Impl_afaca81a1a3f54b93988737ac7085a0f2}{extendedFace}};}
-\DoxyCodeLine{37     \textcolor{comment}{// Quick check for collision using OBB}}
-\DoxyCodeLine{38     Bnd\_OBB obbFace;}
-\DoxyCodeLine{39     BRepBndLib::AddOBB(extendedFace, obbFace);}
-\DoxyCodeLine{40     \textcolor{keywordflow}{if} (aTriangle.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle_abd8b4e7b4f1dc5da17651c741bc6fada}{accessMTImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle_1_1Impl_a1b7bcf68b5df6bca6d87f674eb048a4d}{obb}}.IsOut(obbFace)) \textcolor{keywordflow}{return} Standard\_False;}
-\DoxyCodeLine{41     \textcolor{comment}{// Proceed to check with points of the triangle.}}
-\DoxyCodeLine{42     \textcolor{keyword}{auto}\& face = iFace.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_a989de1f9ebe3de043412014ed25e52eb}{accessSImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_1_1Impl_abf7c4dc859404ce42b425c7d6b578f69}{face}};}
-\DoxyCodeLine{43     Standard\_Boolean collision = Standard\_False;}
-\DoxyCodeLine{44     Standard\_Integer positivePoints = 0;}
-\DoxyCodeLine{45     Standard\_Integer negativePoints = 0;}
-\DoxyCodeLine{46     \textcolor{keyword}{auto}\& points = aTriangle.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle_abd8b4e7b4f1dc5da17651c741bc6fada}{accessMTImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle_1_1Impl_ab03401cf518b9b9576fdf1807a1db4bc}{points}};}
-\DoxyCodeLine{47     \textcolor{keywordflow}{for} (Standard\_Integer i = 0; i <= points.size() -\/ 1; ++i)\{}
-\DoxyCodeLine{48         \textcolor{keywordflow}{if} (PointOnSurface\{\}(extendedFace, points[i], distanceTolerance)) \textcolor{keywordflow}{continue};}
-\DoxyCodeLine{49         \textcolor{keyword}{auto} evaluate = Tools::SenseEvaluator\{\}(face, points[i]);}
-\DoxyCodeLine{50         \textcolor{keywordflow}{if} (evaluate > senseTolerance)\{}
-\DoxyCodeLine{51           ++positivePoints;}
-\DoxyCodeLine{52         \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (evaluate < senseTolerance)\{}
-\DoxyCodeLine{53           ++negativePoints;}
-\DoxyCodeLine{54         \}}
-\DoxyCodeLine{55         \textcolor{keywordflow}{if} (positivePoints > 0 \&\& negativePoints > 0)\{}
-\DoxyCodeLine{56           collision = Standard\_True;}
-\DoxyCodeLine{57           \textcolor{keywordflow}{break};}
-\DoxyCodeLine{58         \}}
-\DoxyCodeLine{59     \}}
-\DoxyCodeLine{60     \textcolor{keywordflow}{if} (positivePoints > 0 \&\& negativePoints == 0)\{}
-\DoxyCodeLine{61         aSide = 1;}
-\DoxyCodeLine{62     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (positivePoints == 0 \&\& negativePoints > 0)\{}
-\DoxyCodeLine{63         aSide = -\/1;}
+\DoxyCodeLine{38                                      \{}
+\DoxyCodeLine{39     \textcolor{comment}{//std::cout << "triangleCollision, Plane" << std::endl;}}
+\DoxyCodeLine{40     \textcolor{keyword}{auto}\& extendedFace = iFace.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_a989de1f9ebe3de043412014ed25e52eb}{accessSImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_1_1Impl_afaca81a1a3f54b93988737ac7085a0f2}{extendedFace}};}
+\DoxyCodeLine{41     \textcolor{comment}{// Quick check for collision using OBB}}
+\DoxyCodeLine{42     Bnd\_OBB obbFace;}
+\DoxyCodeLine{43     BRepBndLib::AddOBB(extendedFace, obbFace);}
+\DoxyCodeLine{44     \textcolor{keywordflow}{if} (aTriangle.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle_abd8b4e7b4f1dc5da17651c741bc6fada}{accessMTImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle_1_1Impl_a1b7bcf68b5df6bca6d87f674eb048a4d}{obb}}.IsOut(obbFace)) \{}
+\DoxyCodeLine{45         \textcolor{comment}{/* //debug}}
+\DoxyCodeLine{46 \textcolor{comment}{        STEPControl\_Writer writer2;}}
+\DoxyCodeLine{47 \textcolor{comment}{        writer2.Transfer(iFace.accessSImpl()-\/>face, STEPControl\_StepModelType::STEPControl\_AsIs);}}
+\DoxyCodeLine{48 \textcolor{comment}{        Bnd\_OBB obbFace1;}}
+\DoxyCodeLine{49 \textcolor{comment}{        BRepBndLib::AddOBB(iFace.accessSImpl()-\/>face, obbFace1);}}
+\DoxyCodeLine{50 \textcolor{comment}{        writer2.Transfer(SolidSplitter\{\}.calculateOBB(obbFace1), STEPControl\_StepModelType::STEPControl\_AsIs);}}
+\DoxyCodeLine{51 \textcolor{comment}{        writer2.Transfer(aTriangle.accessMTImpl()-\/>face, STEPControl\_StepModelType::STEPControl\_AsIs);}}
+\DoxyCodeLine{52 \textcolor{comment}{        writer2.Transfer(SolidSplitter\{\}.calculateOBB(aTriangle.accessMTImpl()-\/>obb), STEPControl\_StepModelType::STEPControl\_AsIs);}}
+\DoxyCodeLine{53 \textcolor{comment}{        Standard\_Integer kk = 0;}}
+\DoxyCodeLine{54 \textcolor{comment}{        std::string filename = "/home/mharb/Documents/McCAD\_refactor/examples/t/T";}}
+\DoxyCodeLine{55 \textcolor{comment}{        std::string suffix = ".stp";}}
+\DoxyCodeLine{56 \textcolor{comment}{        while (std::filesystem::exists(filename + std::to\_string(kk) + suffix))\{}}
+\DoxyCodeLine{57 \textcolor{comment}{            ++kk;}}
+\DoxyCodeLine{58 \textcolor{comment}{        \}}}
+\DoxyCodeLine{59 \textcolor{comment}{        filename += std::to\_string(kk);}}
+\DoxyCodeLine{60 \textcolor{comment}{        filename += suffix;}}
+\DoxyCodeLine{61 \textcolor{comment}{        writer2.Write(filename.c\_str());}}
+\DoxyCodeLine{62 \textcolor{comment}{        */} \textcolor{comment}{//debug}}
+\DoxyCodeLine{63         \textcolor{keywordflow}{return} Standard\_False;}
 \DoxyCodeLine{64     \}}
-\DoxyCodeLine{65     \textcolor{keywordflow}{return} collision;}
-\DoxyCodeLine{66 \}}
+\DoxyCodeLine{65     \textcolor{comment}{/* //debug}}
+\DoxyCodeLine{66 \textcolor{comment}{    STEPControl\_Writer writer2;}}
+\DoxyCodeLine{67 \textcolor{comment}{    writer2.Transfer(iFace.accessSImpl()-\/>face, STEPControl\_StepModelType::STEPControl\_AsIs);}}
+\DoxyCodeLine{68 \textcolor{comment}{    Bnd\_OBB obbFace1;}}
+\DoxyCodeLine{69 \textcolor{comment}{    BRepBndLib::AddOBB(iFace.accessSImpl()-\/>face, obbFace1);}}
+\DoxyCodeLine{70 \textcolor{comment}{    writer2.Transfer(SolidSplitter\{\}.calculateOBB(obbFace1), STEPControl\_StepModelType::STEPControl\_AsIs);}}
+\DoxyCodeLine{71 \textcolor{comment}{    writer2.Transfer(aTriangle.accessMTImpl()-\/>face, STEPControl\_StepModelType::STEPControl\_AsIs);}}
+\DoxyCodeLine{72 \textcolor{comment}{    writer2.Transfer(SolidSplitter\{\}.calculateOBB(aTriangle.accessMTImpl()-\/>obb), STEPControl\_StepModelType::STEPControl\_AsIs);}}
+\DoxyCodeLine{73 \textcolor{comment}{    Standard\_Integer kk = 0;}}
+\DoxyCodeLine{74 \textcolor{comment}{    std::string filename = "/home/mharb/Documents/McCAD\_refactor/examples/t/T";}}
+\DoxyCodeLine{75 \textcolor{comment}{    std::string suffix = ".stp";}}
+\DoxyCodeLine{76 \textcolor{comment}{    while (std::filesystem::exists(filename + std::to\_string(kk) + suffix))\{}}
+\DoxyCodeLine{77 \textcolor{comment}{        ++kk;}}
+\DoxyCodeLine{78 \textcolor{comment}{    \}}}
+\DoxyCodeLine{79 \textcolor{comment}{    filename += std::to\_string(kk);}}
+\DoxyCodeLine{80 \textcolor{comment}{    filename += suffix;}}
+\DoxyCodeLine{81 \textcolor{comment}{    writer2.Write(filename.c\_str());}}
+\DoxyCodeLine{82 \textcolor{comment}{    */} \textcolor{comment}{//debug}}
+\DoxyCodeLine{83     \textcolor{comment}{// Proceed to check with points of the triangle.}}
+\DoxyCodeLine{84     \textcolor{keyword}{auto}\& face = iFace.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_a989de1f9ebe3de043412014ed25e52eb}{accessSImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_1_1Impl_abf7c4dc859404ce42b425c7d6b578f69}{face}};}
+\DoxyCodeLine{85     Standard\_Boolean collision = Standard\_False;}
+\DoxyCodeLine{86     Standard\_Integer positivePoints = 0;}
+\DoxyCodeLine{87     Standard\_Integer negativePoints = 0;}
+\DoxyCodeLine{88     \textcolor{keyword}{auto}\& points = aTriangle.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle_abd8b4e7b4f1dc5da17651c741bc6fada}{accessMTImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle_1_1Impl_ab03401cf518b9b9576fdf1807a1db4bc}{points}};}
+\DoxyCodeLine{89     \textcolor{keywordflow}{for} (Standard\_Integer i = 0; i <= points.size() -\/ 1; ++i)\{}
+\DoxyCodeLine{90         \textcolor{keywordflow}{if} (PointOnSurface\{\}(extendedFace, points[i], distanceTolerance)) \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{91         \textcolor{keyword}{auto} evaluate = Tools::SenseEvaluator\{\}(face, points[i]);}
+\DoxyCodeLine{92         \textcolor{keywordflow}{if} (evaluate > senseTolerance)\{}
+\DoxyCodeLine{93           ++positivePoints;}
+\DoxyCodeLine{94         \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (evaluate < senseTolerance)\{}
+\DoxyCodeLine{95           ++negativePoints;}
+\DoxyCodeLine{96         \}}
+\DoxyCodeLine{97         \textcolor{keywordflow}{if} (positivePoints > 0 \&\& negativePoints > 0)\{}
+\DoxyCodeLine{98           collision = Standard\_True;}
+\DoxyCodeLine{99           \textcolor{keywordflow}{break};}
+\DoxyCodeLine{100         \}}
+\DoxyCodeLine{101     \}}
+\DoxyCodeLine{102     \textcolor{keywordflow}{if} (positivePoints > 0 \&\& negativePoints == 0)\{}
+\DoxyCodeLine{103         aSide = 1;}
+\DoxyCodeLine{104     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (positivePoints == 0 \&\& negativePoints > 0)\{}
+\DoxyCodeLine{105         aSide = -\/1;}
+\DoxyCodeLine{106     \}}
+\DoxyCodeLine{107     \textcolor{keywordflow}{return} collision;}
+\DoxyCodeLine{108 \}}
 
 \end{DoxyCode}
 Here is the call graph for this function\+:\nopagebreak

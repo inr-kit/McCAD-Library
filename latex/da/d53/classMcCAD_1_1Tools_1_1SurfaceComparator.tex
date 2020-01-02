@@ -76,7 +76,7 @@ Definition at line 6 of file surface\+Comparator.\+cpp.
 \DoxyCodeLine{19         BRep\_Tool::Surface(secondFace, secondLocation)\};}
 \DoxyCodeLine{20     \textcolor{comment}{// Compare surfaces types.}}
 \DoxyCodeLine{21     \textcolor{keywordflow}{if}(firstAdaptor.GetType() != secondAdaptor.GetType())\{}
-\DoxyCodeLine{22         \textcolor{comment}{//std::cout << "Orientation different" << std::endl;}}
+\DoxyCodeLine{22         \textcolor{comment}{//std::cout << "Type different" << std::endl;}}
 \DoxyCodeLine{23         \textcolor{keywordflow}{return} Standard\_False;}
 \DoxyCodeLine{24     \}}
 \DoxyCodeLine{25     \textcolor{comment}{// Compare locations}}
@@ -86,14 +86,14 @@ Definition at line 6 of file surface\+Comparator.\+cpp.
 \DoxyCodeLine{29     \}}
 \DoxyCodeLine{30 }
 \DoxyCodeLine{31     \textcolor{comment}{// Compare surfaces parameters}}
-\DoxyCodeLine{32     \textcolor{keywordflow}{if} (firstAdaptor.GetType() == GeomAbs\_Plane \&\&}
-\DoxyCodeLine{33             firstAdaptor.GetType() == GeomAbs\_Plane)\{}
-\DoxyCodeLine{34         \textcolor{keyword}{auto} condition = PlaneComparator\{\}(firstAdaptor, secondAdaptor);}
-\DoxyCodeLine{35         \textcolor{keywordflow}{return} condition.value();}
-\DoxyCodeLine{36     \}}
-\DoxyCodeLine{37     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (firstAdaptor.GetType() == GeomAbs\_Cylinder}
-\DoxyCodeLine{38              \&\& firstAdaptor.GetType() == GeomAbs\_Cylinder)}
-\DoxyCodeLine{39         \textcolor{keywordflow}{return} Standard\_False; \textcolor{comment}{//CylComparator\{\}(firstAdaptor, secondAdaptor);}}
+\DoxyCodeLine{32     \textcolor{keywordflow}{if} (firstAdaptor.GetType() == GeomAbs\_Plane)\{}
+\DoxyCodeLine{33         \textcolor{keyword}{auto} condition = PlaneComparator\{\}(firstAdaptor, secondAdaptor);}
+\DoxyCodeLine{34         \textcolor{keywordflow}{return} condition.value();}
+\DoxyCodeLine{35     \}}
+\DoxyCodeLine{36     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (firstAdaptor.GetType() == GeomAbs\_Cylinder)}
+\DoxyCodeLine{37         \textcolor{keywordflow}{return} Standard\_False; \textcolor{comment}{//CylComparator\{\}(firstAdaptor, secondAdaptor);}}
+\DoxyCodeLine{38     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (firstAdaptor.GetType() == GeomAbs\_Torus)}
+\DoxyCodeLine{39         \textcolor{keywordflow}{return} Standard\_False; \textcolor{comment}{//TorComparator\{\}(firstAdaptor, secondAdaptor);}}
 \DoxyCodeLine{40     \textcolor{keywordflow}{else} \textcolor{keywordflow}{return} Standard\_False;}
 \DoxyCodeLine{41 \}}
 

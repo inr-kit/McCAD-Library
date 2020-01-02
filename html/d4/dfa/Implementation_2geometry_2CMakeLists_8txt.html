@@ -96,12 +96,12 @@ $(document).ready(function(){initNavTree('d4/dfa/Implementation_2geometry_2CMake
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a0c8f1f619073b70b53ff29758120117c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/dfa/Implementation_2geometry_2CMakeLists_8txt.html#a0c8f1f619073b70b53ff29758120117c">include_directories</a> (&quot;${PROJECT_SOURCE_DIR}/Implementation/geometry/Coordinates&quot; &quot;${PROJECT_SOURCE_DIR}/Implementation/geometry/Coordinates/common&quot; &quot;${PROJECT_SOURCE_DIR}/Implementation/geometry/Coordinates/1D&quot; &quot;${PROJECT_SOURCE_DIR}/Implementation/geometry/Coordinates/2D&quot; &quot;${PROJECT_SOURCE_DIR}/Implementation/geometry/Coordinates/3D&quot;) add_subdirectory(Coordinates) <a class="el" href="../../da/d55/Interface_2tools_2CMakeLists_8txt.html#a922319f873b19fdfc30ddd75f722dd78">add_library</a>(GEOMETRY_IMPL OBJECT edge_impl.cpp meshtriangle_impl.cpp surface_impl.cpp boundSurface_impl.cpp boundSurfacePlane_impl.cpp boundSurfaceCyl_impl.cpp solid_impl.cpp planarSolid_impl.cpp cylSolid_impl.cpp boundingBox_impl.cpp) install(FILES edge_impl.hpp meshtriangle_impl.hpp surface_impl.hpp boundSurface_impl.hpp boundSurfacePlane_impl.hpp boundSurfaceCyl_impl.hpp solid_impl.hpp planarSolid_impl.hpp cylSolid_impl.hpp boundingBox_impl.hpp DESTINATION $</td></tr>
-<tr class="separator:a0c8f1f619073b70b53ff29758120117c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57d585be535eab7945e2bc0c2e9b7b57"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/dfa/Implementation_2geometry_2CMakeLists_8txt.html#a57d585be535eab7945e2bc0c2e9b7b57">include_directories</a> (&quot;${PROJECT_SOURCE_DIR}/Implementation/geometry/Coordinates&quot; &quot;${PROJECT_SOURCE_DIR}/Implementation/geometry/Coordinates/common&quot; &quot;${PROJECT_SOURCE_DIR}/Implementation/geometry/Coordinates/1D&quot; &quot;${PROJECT_SOURCE_DIR}/Implementation/geometry/Coordinates/2D&quot; &quot;${PROJECT_SOURCE_DIR}/Implementation/geometry/Coordinates/3D&quot;) add_subdirectory(Coordinates) <a class="el" href="../../da/d55/Interface_2tools_2CMakeLists_8txt.html#a922319f873b19fdfc30ddd75f722dd78">add_library</a>(GEOMETRY_IMPL OBJECT edge_impl.cpp meshtriangle_impl.cpp surface_impl.cpp boundSurface_impl.cpp boundSurfacePlane_impl.cpp boundSurfaceCyl_impl.cpp boundSurfaceTor_impl.cpp solid_impl.cpp planarSolid_impl.cpp cylSolid_impl.cpp torSolid_impl.cpp boundingBox_impl.cpp) install(FILES edge_impl.hpp meshtriangle_impl.hpp surface_impl.hpp boundSurface_impl.hpp boundSurfacePlane_impl.hpp boundSurfaceCyl_impl.hpp boundSurfaceTor_impl.hpp solid_impl.hpp planarSolid_impl.hpp cylSolid_impl.hpp torSolid_impl.hpp boundingBox_impl.hpp DESTINATION $</td></tr>
+<tr class="separator:a57d585be535eab7945e2bc0c2e9b7b57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a0c8f1f619073b70b53ff29758120117c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c8f1f619073b70b53ff29758120117c">&#9670;&nbsp;</a></span>include_directories()</h2>
+<a id="a57d585be535eab7945e2bc0c2e9b7b57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57d585be535eab7945e2bc0c2e9b7b57">&#9670;&nbsp;</a></span>include_directories()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -132,23 +132,27 @@ Functions</h2></td></tr>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="stringliteral">  boundSurface_impl.cpp</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="stringliteral">  boundSurfacePlane_impl.cpp</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="stringliteral">  boundSurfaceCyl_impl.cpp</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="stringliteral">  solid_impl.cpp</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="stringliteral">  planarSolid_impl.cpp</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="stringliteral">  cylSolid_impl.cpp</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="stringliteral">  boundingBox_impl.cpp)</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="stringliteral">install(FILES</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="stringliteral">  edge_impl.hpp</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="stringliteral">  meshtriangle_impl.hpp</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="stringliteral">  surface_impl.hpp</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="stringliteral">  boundSurface_impl.hpp</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="stringliteral">  boundSurfacePlane_impl.hpp</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="stringliteral">  boundSurfaceCyl_impl.hpp</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="stringliteral">  solid_impl.hpp</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="stringliteral">  planarSolid_impl.hpp</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="stringliteral">  cylSolid_impl.hpp</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="stringliteral">  boundingBox_impl.hpp</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="stringliteral">  DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/geometry)</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="stringliteral">  boundSurfaceTor_impl.cpp</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="stringliteral">  solid_impl.cpp</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="stringliteral">  planarSolid_impl.cpp</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="stringliteral">  cylSolid_impl.cpp</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="stringliteral">  torSolid_impl.cpp</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="stringliteral">  boundingBox_impl.cpp)</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="stringliteral">install(FILES</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="stringliteral">  edge_impl.hpp</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="stringliteral">  meshtriangle_impl.hpp</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="stringliteral">  surface_impl.hpp</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="stringliteral">  boundSurface_impl.hpp</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="stringliteral">  boundSurfacePlane_impl.hpp</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="stringliteral">  boundSurfaceCyl_impl.hpp</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="stringliteral">  boundSurfaceTor_impl.hpp</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="stringliteral">  solid_impl.hpp</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="stringliteral">  planarSolid_impl.hpp</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="stringliteral">  cylSolid_impl.hpp</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="stringliteral">  torSolid_impl.hpp</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="stringliteral">  boundingBox_impl.hpp</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="stringliteral">  DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/geometry)</span></div>
 </div><!-- fragment -->
 </div>
 </div>

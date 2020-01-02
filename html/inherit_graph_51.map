@@ -1,3 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$d2/d1a/classMcCAD_1_1Geometry_1_1Surface_1_1Impl.html" title=" " alt="" coords="5,5,192,47"/>
+<area shape="rect" id="node1" href="$d1/d65/classMcCAD_1_1Geometry_1_1Solid.html" title=" " alt="" coords="5,56,176,83"/>
+<area shape="rect" id="node2" href="$dd/daa/classMcCAD_1_1Geometry_1_1CYLSolid.html" title=" " alt="" coords="225,5,422,32"/>
+<area shape="rect" id="node3" href="$db/d54/classMcCAD_1_1Geometry_1_1PLSolid.html" title=" " alt="" coords="230,56,417,83"/>
+<area shape="rect" id="node4" href="$d5/d3e/classMcCAD_1_1Geometry_1_1TORSolid.html" title=" " alt="" coords="224,107,423,133"/>
 </map>

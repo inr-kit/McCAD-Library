@@ -21,9 +21,11 @@ var classMcCAD_1_1Geometry_1_1Solid_1_1Impl =
     [ "updateEdgesConvexity", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#a120c6cee4bc3e3d3fb9bd9f12d163c69", null ],
     [ "updateEdgesConvexity", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#a120c6cee4bc3e3d3fb9bd9f12d163c69", null ],
     [ "boxDiagonalLength", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#a797ace8ee10123eab4bd27ef4385cbd3", null ],
+    [ "cylindersList", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#ac1b821a1379d379eea144aabe2c34e89", null ],
     [ "facesList", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#a7127bb4d730197014b421e43ac19edfa", null ],
     [ "meshDeflection", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#af8a04ab67e6fa83736a4ae9ebcfcc877", null ],
     [ "obb", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#abb00ec0b4230c6e484b751812bcc9050", null ],
+    [ "planesList", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#a5b4fb46f10895ab3f6fe12243f317ef6", null ],
     [ "preproc", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#ab6393d9ccf9e8046915b6f2b1facfb03", null ],
     [ "rejectedsubSolidsList", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#a464bf027934dad6084175700222b1582", null ],
     [ "selectedSplitFacesList", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#aa19f7056715424c86510c107459209b8", null ],
@@ -31,5 +33,6 @@ var classMcCAD_1_1Geometry_1_1Solid_1_1Impl =
     [ "solidShape", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#afcbcbf0a3fa169631d546d96e430f91f", null ],
     [ "splitFacesList", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#a642e79e9fa8db428b1c731c100c53517", null ],
     [ "splitSolidList", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#a962b0107f7c5cda9270fdd4e5e0024a3", null ],
-    [ "splitSurface", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#a541bb95b820e30d0086d1ee1026acfcd", null ]
+    [ "splitSurface", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#a541bb95b820e30d0086d1ee1026acfcd", null ],
+    [ "toriList", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#a32250ff3ecc553321430d595d92989c0", null ]
 ];

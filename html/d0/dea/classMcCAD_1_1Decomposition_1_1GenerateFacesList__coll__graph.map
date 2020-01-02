@@ -1,7 +1,28 @@
 <map id="McCAD::Decomposition::GenerateFacesList" name="McCAD::Decomposition::GenerateFacesList">
-<area shape="rect" id="node1" title=" " alt="" coords="21,859,185,1141"/>
-<area shape="rect" id="node2" title=" " alt="" coords="19,704,186,796"/>
-<area shape="rect" id="node3" href="$d6/d68/classMcCAD_1_1Tools_1_1Preprocessor.html" title=" " alt="" coords="5,491,200,641"/>
-<area shape="rect" id="node4" title=" " alt="" coords="19,321,186,428"/>
-<area shape="rect" id="node5" href="$d2/d2a/classMcCAD_1_1Tools_1_1Preprocessor_1_1Impl.html" title=" " alt="" coords="5,5,200,259"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,3561,169,3815"/>
+<area shape="rect" id="node2" href="$d6/d68/classMcCAD_1_1Tools_1_1Preprocessor.html" title=" " alt="" coords="270,491,465,641"/>
+<area shape="rect" id="node14" href="$dd/d85/classMcCAD_1_1Geometry_1_1BoundSurface_1_1Impl.html" title=" " alt="" coords="255,2451,479,2689"/>
+<area shape="rect" id="node20" title=" " alt="" coords="405,704,572,796"/>
+<area shape="rect" id="node3" title=" " alt="" coords="284,321,451,428"/>
+<area shape="rect" id="node4" href="$d2/d2a/classMcCAD_1_1Tools_1_1Preprocessor_1_1Impl.html" title=" " alt="" coords="270,5,465,259"/>
+<area shape="rect" id="node5" title=" " alt="" coords="106,3348,282,3455"/>
+<area shape="rect" id="node6" title=" " alt="" coords="163,3193,353,3285"/>
+<area shape="rect" id="node7" href="$d9/d01/classMcCAD_1_1Geometry_1_1BoundSurface.html" title=" " alt="" coords="263,2921,487,3131"/>
+<area shape="rect" id="node8" href="$d1/d2b/classMcCAD_1_1Geometry_1_1Surface.html" title=" " alt="" coords="562,1893,749,2103"/>
+<area shape="rect" id="node9" title=" " alt="" coords="579,1515,764,1607"/>
+<area shape="rect" id="node10" href="$d2/d1a/classMcCAD_1_1Geometry_1_1Surface_1_1Impl.html" title=" " alt="" coords="562,1136,783,1360"/>
+<area shape="rect" id="node11" title="STL class." alt="" coords="615,711,695,789"/>
+<area shape="rect" id="node19" href="$d9/d92/classMcCAD_1_1Geometry_1_1Edge_1_1Impl.html" title=" " alt="" coords="407,859,579,1112"/>
+<area shape="rect" id="node12" title="STL class." alt="" coords="592,520,719,612"/>
+<area shape="rect" id="node13" title=" " alt="" coords="431,2752,608,2859"/>
+<area shape="rect" id="node15" title=" " alt="" coords="405,2281,581,2388"/>
+<area shape="rect" id="node16" title=" " alt="" coords="409,2127,576,2219"/>
+<area shape="rect" id="node17" href="$d4/ddf/classMcCAD_1_1Geometry_1_1Edge.html" title=" " alt="" coords="407,1631,579,1869"/>
+<area shape="rect" id="node18" title=" " alt="" coords="407,1391,578,1483"/>
+<area shape="rect" id="node21" title=" " alt="" coords="146,2281,322,2388"/>
+<area shape="rect" id="node22" title=" " alt="" coords="136,2127,321,2219"/>
+<area shape="rect" id="node23" href="$d7/d5c/classMcCAD_1_1Geometry_1_1MeshTriangle.html" title=" " alt="" coords="109,1675,329,1825"/>
+<area shape="rect" id="node24" title=" " alt="" coords="133,1384,306,1491"/>
+<area shape="rect" id="node25" href="$df/d9a/classMcCAD_1_1Geometry_1_1MeshTriangle_1_1Impl.html" title=" " alt="" coords="109,895,329,1075"/>
+<area shape="rect" id="node26" title=" " alt="" coords="141,711,298,789"/>
 </map>
