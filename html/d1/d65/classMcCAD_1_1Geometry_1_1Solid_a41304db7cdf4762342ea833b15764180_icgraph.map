@@ -1,5 +1,6 @@
 <map id="McCAD::Geometry::Solid::accessSImpl" name="McCAD::Geometry::Solid::accessSImpl">
-<area shape="rect" id="node1" title=" " alt="" coords="284,39,455,80"/>
-<area shape="rect" id="node2" href="$d7/d68/classMcCAD_1_1Geometry_1_1PLSolid_1_1Impl.html#ae5417ef1064dfe04a3eac50198626860" title=" " alt="" coords="5,5,236,47"/>
-<area shape="rect" id="node3" href="$d4/d93/classMcCAD_1_1Geometry_1_1CYLSolid_1_1Impl.html#af6d38fd0e850f8c0d52a90f1269a6220" title=" " alt="" coords="5,71,236,112"/>
+<area shape="rect" id="node1" title=" " alt="" coords="284,71,455,112"/>
+<area shape="rect" id="node2" href="$d4/d93/classMcCAD_1_1Geometry_1_1CYLSolid_1_1Impl.html#af6d38fd0e850f8c0d52a90f1269a6220" title=" " alt="" coords="5,5,236,47"/>
+<area shape="rect" id="node3" href="$d7/d68/classMcCAD_1_1Geometry_1_1PLSolid_1_1Impl.html#ae5417ef1064dfe04a3eac50198626860" title=" " alt="" coords="5,71,236,112"/>
+<area shape="rect" id="node4" href="$df/d96/classMcCAD_1_1Geometry_1_1TORSolid_1_1Impl.html#ae87961a3b9af4f02c3d6735587544218" title=" " alt="" coords="5,136,236,177"/>
 </map>

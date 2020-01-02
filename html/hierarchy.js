@@ -35,6 +35,8 @@ var hierarchy =
     [ "std::hash< McCAD::Geometry::Coord >", "db/d48/structstd_1_1hash_3_01McCAD_1_1Geometry_1_1Coord_01_4.html", null ],
     [ "std::hash< McCAD::Geometry::Coord2D >", "d7/da8/structstd_1_1hash_3_01McCAD_1_1Geometry_1_1Coord2D_01_4.html", null ],
     [ "std::hash< McCAD::Geometry::Coord3D >", "d5/dca/structstd_1_1hash_3_01McCAD_1_1Geometry_1_1Coord3D_01_4.html", null ],
+    [ "McCAD::Geometry::Surface::Impl", "d2/d1a/classMcCAD_1_1Geometry_1_1Surface_1_1Impl.html", null ],
+    [ "McCAD::Tools::Preprocessor::Impl", "d2/d2a/classMcCAD_1_1Tools_1_1Preprocessor_1_1Impl.html", null ],
     [ "McCAD::Decomposition::DecomposeSolid::Impl", "d5/d45/classMcCAD_1_1Decomposition_1_1DecomposeSolid_1_1Impl.html", null ],
     [ "McCAD::Decomposition::Decompose::Impl", "dd/de9/classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl.html", null ],
     [ "McCAD::Decomposition::SplitSolid::Impl", "d2/d85/classMcCAD_1_1Decomposition_1_1SplitSolid_1_1Impl.html", null ],
@@ -43,15 +45,15 @@ var hierarchy =
     [ "McCAD::Geometry::BoundSurface::Impl", "dd/d85/classMcCAD_1_1Geometry_1_1BoundSurface_1_1Impl.html", null ],
     [ "McCAD::Geometry::BoundSurfaceCyl::Impl", "db/d39/classMcCAD_1_1Geometry_1_1BoundSurfaceCyl_1_1Impl.html", null ],
     [ "McCAD::Geometry::BoundSurfacePlane::Impl", "df/dfe/classMcCAD_1_1Geometry_1_1BoundSurfacePlane_1_1Impl.html", null ],
-    [ "McCAD::Geometry::Edge::Impl", "d9/d92/classMcCAD_1_1Geometry_1_1Edge_1_1Impl.html", null ],
+    [ "McCAD::Geometry::BoundSurfaceTor::Impl", "d7/d5b/classMcCAD_1_1Geometry_1_1BoundSurfaceTor_1_1Impl.html", null ],
+    [ "McCAD::Geometry::CYLSolid::Impl", "d4/d93/classMcCAD_1_1Geometry_1_1CYLSolid_1_1Impl.html", null ],
     [ "McCAD::Geometry::MeshTriangle::Impl", "df/d9a/classMcCAD_1_1Geometry_1_1MeshTriangle_1_1Impl.html", null ],
     [ "McCAD::Geometry::PLSolid::Impl", "d7/d68/classMcCAD_1_1Geometry_1_1PLSolid_1_1Impl.html", null ],
-    [ "McCAD::Geometry::Surface::Impl", "d2/d1a/classMcCAD_1_1Geometry_1_1Surface_1_1Impl.html", null ],
+    [ "McCAD::Geometry::Solid::Impl", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html", null ],
+    [ "McCAD::Geometry::TORSolid::Impl", "df/d96/classMcCAD_1_1Geometry_1_1TORSolid_1_1Impl.html", null ],
     [ "McCAD::IO::STEPReader::Impl", "de/d1b/classMcCAD_1_1IO_1_1STEPReader_1_1Impl.html", null ],
     [ "McCAD::IO::STEPWriter::Impl", "db/dca/classMcCAD_1_1IO_1_1STEPWriter_1_1Impl.html", null ],
-    [ "McCAD::Geometry::CYLSolid::Impl", "d4/d93/classMcCAD_1_1Geometry_1_1CYLSolid_1_1Impl.html", null ],
-    [ "McCAD::Geometry::Solid::Impl", "dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html", null ],
-    [ "McCAD::Tools::Preprocessor::Impl", "d2/d2a/classMcCAD_1_1Tools_1_1Preprocessor_1_1Impl.html", null ],
+    [ "McCAD::Geometry::Edge::Impl", "d9/d92/classMcCAD_1_1Geometry_1_1Edge_1_1Impl.html", null ],
     [ "McCAD::General::InputData", "d9/d8a/classMcCAD_1_1General_1_1InputData.html", null ],
     [ "McCAD::detail::Iterator< shapeTag >", "da/d0a/classMcCAD_1_1detail_1_1Iterator.html", null ],
     [ "McCAD::Geometry::MeshTriangle", "d7/d5c/classMcCAD_1_1Geometry_1_1MeshTriangle.html", null ],
@@ -66,7 +68,8 @@ var hierarchy =
     [ "McCAD::detail::ShapeView< shapeTag >", "d1/da2/classMcCAD_1_1detail_1_1ShapeView.html", null ],
     [ "McCAD::Geometry::Solid", "d1/d65/classMcCAD_1_1Geometry_1_1Solid.html", [
       [ "McCAD::Geometry::CYLSolid", "dd/daa/classMcCAD_1_1Geometry_1_1CYLSolid.html", null ],
-      [ "McCAD::Geometry::PLSolid", "db/d54/classMcCAD_1_1Geometry_1_1PLSolid.html", null ]
+      [ "McCAD::Geometry::PLSolid", "db/d54/classMcCAD_1_1Geometry_1_1PLSolid.html", null ],
+      [ "McCAD::Geometry::TORSolid", "d5/d3e/classMcCAD_1_1Geometry_1_1TORSolid.html", null ]
     ] ],
     [ "McCAD::Decomposition::SolidObjConstructor", "da/d1f/classMcCAD_1_1Decomposition_1_1SolidObjConstructor.html", null ],
     [ "McCAD::Decomposition::SolidRebuilder", "d2/d82/classMcCAD_1_1Decomposition_1_1SolidRebuilder.html", null ],
@@ -80,11 +83,14 @@ var hierarchy =
     [ "McCAD::Geometry::Surface", "d1/d2b/classMcCAD_1_1Geometry_1_1Surface.html", [
       [ "McCAD::Geometry::BoundSurface", "d9/d01/classMcCAD_1_1Geometry_1_1BoundSurface.html", [
         [ "McCAD::Geometry::BoundSurfaceCyl", "d8/ddb/classMcCAD_1_1Geometry_1_1BoundSurfaceCyl.html", null ],
-        [ "McCAD::Geometry::BoundSurfacePlane", "d8/dbd/classMcCAD_1_1Geometry_1_1BoundSurfacePlane.html", null ]
+        [ "McCAD::Geometry::BoundSurfacePlane", "d8/dbd/classMcCAD_1_1Geometry_1_1BoundSurfacePlane.html", null ],
+        [ "McCAD::Geometry::BoundSurfaceTor", "de/d82/classMcCAD_1_1Geometry_1_1BoundSurfaceTor.html", null ]
       ] ]
     ] ],
     [ "McCAD::Tools::SurfaceComparator", "da/d53/classMcCAD_1_1Tools_1_1SurfaceComparator.html", null ],
+    [ "McCAD::Decomposition::SurfaceObjCreator", "d4/dac/classMcCAD_1_1Decomposition_1_1SurfaceObjCreator.html", null ],
     [ "McCAD::Tools::SurfacesFuser", "d5/d31/classMcCAD_1_1Tools_1_1SurfacesFuser.html", null ],
+    [ "McCAD::Decomposition::SurfacesMerger", "d3/d8b/classMcCAD_1_1Decomposition_1_1SurfacesMerger.html", null ],
     [ "McCAD::detail::TopClass< shapeTag >", "dc/d26/structMcCAD_1_1detail_1_1TopClass.html", null ],
     [ "McCAD::detail::TopClass< TopAbs_ShapeEnum::TopAbs_COMPOUND >", "d1/d8e/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__COMPOUND_01_4.html", null ],
     [ "McCAD::detail::TopClass< TopAbs_ShapeEnum::TopAbs_COMPSOLID >", "db/da7/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__COMPSOLID_01_4.html", null ],

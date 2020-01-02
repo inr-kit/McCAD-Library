@@ -6,7 +6,8 @@
 
 
 
-Collaboration diagram for Mc\+C\+AD\+::Decomposition\+::Solid\+Splitter\+:\nopagebreak
+Collaboration diagram for Mc\+C\+AD\+::Decomposition\+::Solid\+Splitter\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -18,7 +19,11 @@ Collaboration diagram for Mc\+C\+AD\+::Decomposition\+::Solid\+Splitter\+:\nopag
 \item 
 std\+::optional$<$ std\+::pair$<$ Topo\+D\+S\+\_\+\+Shape, Topo\+D\+S\+\_\+\+Shape $>$ $>$ \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_a9c6cda3267256f5bf28ff4a007226499}{operator()}} (const Topo\+D\+S\+\_\+\+Solid \&solid\+To\+Split, const Bnd\+\_\+\+O\+BB \&obb, const Topo\+D\+S\+\_\+\+Face \&splitting\+Face) const
 \item 
+Topo\+D\+S\+\_\+\+Shape \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_a24c086a0f489167076acfee3bd61d991}{calculate\+O\+BB}} (Bnd\+\_\+\+O\+BB obb, Standard\+\_\+\+Real clearance\+Tolerance=0.\+4) const
+\item 
 std\+::optional$<$ std\+::pair$<$ Topo\+D\+S\+\_\+\+Shape, Topo\+D\+S\+\_\+\+Shape $>$ $>$ \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_a34b6260bdc707b7cde534dda0572eb69}{operator()}} (const Topo\+D\+S\+\_\+\+Solid \&solid\+To\+Split, const Bnd\+\_\+\+O\+BB \&obb, const Topo\+D\+S\+\_\+\+Face \&splitting\+Face) const
+\item 
+Topo\+D\+S\+\_\+\+Shape \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_a24c086a0f489167076acfee3bd61d991}{calculate\+O\+BB}} (Bnd\+\_\+\+O\+BB obb, Standard\+\_\+\+Real clearance\+Tolerance=0.\+4) const
 \end{DoxyCompactItemize}
 \doxysubsection*{Private Types}
 \begin{DoxyCompactItemize}
@@ -38,8 +43,6 @@ using \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_a6d92618f379
 \doxysubsection*{Private Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-Topo\+D\+S\+\_\+\+Shape \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_a24c086a0f489167076acfee3bd61d991}{calculate\+O\+BB}} (Bnd\+\_\+\+O\+BB obb, Standard\+\_\+\+Real clearance\+Tolerance=0.\+4) const
-\item 
 \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_af1bd2cdc22fc3e59277ea6fd04afc42b}{Point\+Pair}} \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_ab9be5e10e5544c26055144c72de0e499}{calculate\+Points}} (const Topo\+D\+S\+\_\+\+Face \&splitting\+Face) const
 \item 
 \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_a89a95e43f161348b456a72c9acce0826}{Solid\+Pair}} \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_a30fbfd5f3829a840d6cbe4d50f71fa00}{calculate\+Half\+Spaces}} (const Topo\+D\+S\+\_\+\+Face \&splitting\+Face) const
@@ -51,8 +54,6 @@ std\+::optional$<$ \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter
 std\+::optional$<$ Topo\+D\+S\+\_\+\+Shape $>$ \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_aa2399efe97e9013c846b4c41907c9339}{calculate\+Half\+Solid}} (const Topo\+D\+S\+\_\+\+Solid \&solid\+To\+Split, const Topo\+D\+S\+\_\+\+Shape \&box\+To\+Intersect, const Topo\+D\+S\+\_\+\+Shape \&box\+To\+Subtract) const
 \item 
 std\+::optional$<$ \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_a6d92618f3790cfc7403c6f421bd66411}{Shape\+Pair}} $>$ \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_a96441384cc19440a4884adca0bc26be3}{calculate\+Half\+Solids}} (const Topo\+D\+S\+\_\+\+Solid \&solid\+To\+Split, const \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_a6d92618f3790cfc7403c6f421bd66411}{Shape\+Pair}} \&half\+Bounding\+Boxes) const
-\item 
-Topo\+D\+S\+\_\+\+Shape \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_a24c086a0f489167076acfee3bd61d991}{calculate\+O\+BB}} (Bnd\+\_\+\+O\+BB obb, Standard\+\_\+\+Real clearance\+Tolerance=0.\+4) const
 \item 
 \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_af1bd2cdc22fc3e59277ea6fd04afc42b}{Point\+Pair}} \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1SolidSplitter_a5d2f4d3aab2322de064fd5e1e0dc5a1e}{calculate\+Points}} (const Topo\+D\+S\+\_\+\+Face \&splitting\+Face) const
 \item 
@@ -314,13 +315,13 @@ Definition at line 79 of file Solid\+Splitter.\+cpp.
 \index{McCAD::Decomposition::SolidSplitter@{McCAD::Decomposition::SolidSplitter}!calculateOBB@{calculateOBB}}
 \index{calculateOBB@{calculateOBB}!McCAD::Decomposition::SolidSplitter@{McCAD::Decomposition::SolidSplitter}}
 \doxysubsubsection{\texorpdfstring{calculateOBB()}{calculateOBB()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily Topo\+D\+S\+\_\+\+Shape Mc\+C\+A\+D\+::\+Decomposition\+::\+Solid\+Splitter\+::calculate\+O\+BB (\begin{DoxyParamCaption}\item[{Bnd\+\_\+\+O\+BB}]{obb,  }\item[{Standard\+\_\+\+Real}]{clearance\+Tolerance = {\ttfamily 0.4} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily Topo\+D\+S\+\_\+\+Shape Mc\+C\+A\+D\+::\+Decomposition\+::\+Solid\+Splitter\+::calculate\+O\+BB (\begin{DoxyParamCaption}\item[{Bnd\+\_\+\+O\+BB}]{obb,  }\item[{Standard\+\_\+\+Real}]{clearance\+Tolerance = {\ttfamily 0.4} }\end{DoxyParamCaption}) const}
 
 \mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1SolidSplitter_a24c086a0f489167076acfee3bd61d991}\label{classMcCAD_1_1Decomposition_1_1SolidSplitter_a24c086a0f489167076acfee3bd61d991}} 
 \index{McCAD::Decomposition::SolidSplitter@{McCAD::Decomposition::SolidSplitter}!calculateOBB@{calculateOBB}}
 \index{calculateOBB@{calculateOBB}!McCAD::Decomposition::SolidSplitter@{McCAD::Decomposition::SolidSplitter}}
 \doxysubsubsection{\texorpdfstring{calculateOBB()}{calculateOBB()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily Topo\+D\+S\+\_\+\+Shape Mc\+C\+A\+D\+::\+Decomposition\+::\+Solid\+Splitter\+::calculate\+O\+BB (\begin{DoxyParamCaption}\item[{Bnd\+\_\+\+O\+BB}]{obb,  }\item[{Standard\+\_\+\+Real}]{clearance\+Tolerance = {\ttfamily 0.4} }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily Topo\+D\+S\+\_\+\+Shape Mc\+C\+A\+D\+::\+Decomposition\+::\+Solid\+Splitter\+::calculate\+O\+BB (\begin{DoxyParamCaption}\item[{Bnd\+\_\+\+O\+BB}]{obb,  }\item[{Standard\+\_\+\+Real}]{clearance\+Tolerance = {\ttfamily 0.4} }\end{DoxyParamCaption}) const}
 
 
 
@@ -413,7 +414,7 @@ Definition at line 18 of file Solid\+Splitter.\+cpp.
 \DoxyCodeLine{26 \textcolor{comment}{    writer0.Transfer(splittingFace, STEPControl\_StepModelType::STEPControl\_AsIs);}}
 \DoxyCodeLine{27 \textcolor{comment}{    std::cout << "OBB sqrt square extent: " << sqrt(obb.SquareExtent()) << std::endl;}}
 \DoxyCodeLine{28 \textcolor{comment}{    Standard\_Integer kk = 0;}}
-\DoxyCodeLine{29 \textcolor{comment}{    std::string filename = "/home/mharb/opt/McCAD\_refactor/examples/bbox/solid";}}
+\DoxyCodeLine{29 \textcolor{comment}{    std::string filename = "/home/mharb/Documents/McCAD\_refactor/examples/bbox/solid";}}
 \DoxyCodeLine{30 \textcolor{comment}{    std::string suffix = ".stp";}}
 \DoxyCodeLine{31 \textcolor{comment}{    while (std::filesystem::exists(filename + std::to\_string(kk) + suffix))\{}}
 \DoxyCodeLine{32 \textcolor{comment}{        ++kk;}}

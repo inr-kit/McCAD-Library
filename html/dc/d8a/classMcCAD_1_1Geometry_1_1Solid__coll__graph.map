@@ -1,7 +1,7 @@
 <map id="McCAD::Geometry::Solid" name="McCAD::Geometry::Solid">
-<area shape="rect" id="node1" title=" " alt="" coords="135,4076,306,4227"/>
-<area shape="rect" id="node2" title=" " alt="" coords="136,3921,305,4013"/>
-<area shape="rect" id="node3" href="$dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html" title=" " alt="" coords="132,3547,309,3859"/>
+<area shape="rect" id="node1" title=" " alt="" coords="135,4120,306,4271"/>
+<area shape="rect" id="node2" title=" " alt="" coords="136,3965,305,4057"/>
+<area shape="rect" id="node3" href="$dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html" title=" " alt="" coords="132,3591,309,3903"/>
 <area shape="rect" id="node4" title=" " alt="" coords="5,704,172,796"/>
 <area shape="rect" id="node23" href="$d9/d92/classMcCAD_1_1Geometry_1_1Edge_1_1Impl.html" title=" " alt="" coords="429,859,601,1112"/>
 <area shape="rect" id="node5" href="$d6/d68/classMcCAD_1_1Tools_1_1Preprocessor.html" title=" " alt="" coords="249,491,443,641"/>

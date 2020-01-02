@@ -46,6 +46,20 @@ var files_dup =
     [ "Implementation/geometry/boundSurfacePlane_impl.hpp", "df/da1/Implementation_2geometry_2boundSurfacePlane__impl_8hpp.html", [
       [ "Impl", "df/dfe/classMcCAD_1_1Geometry_1_1BoundSurfacePlane_1_1Impl.html", "df/dfe/classMcCAD_1_1Geometry_1_1BoundSurfacePlane_1_1Impl" ]
     ] ],
+    [ "boundSurfaceTor.cpp", "d8/dc4/boundSurfaceTor_8cpp.html", null ],
+    [ "build/includes/interface/geometry/boundSurfaceTor.hpp", "d5/d94/build_2includes_2interface_2geometry_2boundSurfaceTor_8hpp.html", [
+      [ "BoundSurfaceTor", "de/d82/classMcCAD_1_1Geometry_1_1BoundSurfaceTor.html", "de/d82/classMcCAD_1_1Geometry_1_1BoundSurfaceTor" ]
+    ] ],
+    [ "Interface/geometry/boundSurfaceTor.hpp", "db/d40/Interface_2geometry_2boundSurfaceTor_8hpp.html", [
+      [ "BoundSurfaceTor", "de/d82/classMcCAD_1_1Geometry_1_1BoundSurfaceTor.html", "de/d82/classMcCAD_1_1Geometry_1_1BoundSurfaceTor" ]
+    ] ],
+    [ "boundSurfaceTor_impl.cpp", "d1/d1b/boundSurfaceTor__impl_8cpp.html", null ],
+    [ "build/includes/implementation/geometry/boundSurfaceTor_impl.hpp", "d8/d1c/build_2includes_2implementation_2geometry_2boundSurfaceTor__impl_8hpp.html", [
+      [ "Impl", "d7/d5b/classMcCAD_1_1Geometry_1_1BoundSurfaceTor_1_1Impl.html", "d7/d5b/classMcCAD_1_1Geometry_1_1BoundSurfaceTor_1_1Impl" ]
+    ] ],
+    [ "Implementation/geometry/boundSurfaceTor_impl.hpp", "dc/dce/Implementation_2geometry_2boundSurfaceTor__impl_8hpp.html", [
+      [ "Impl", "d7/d5b/classMcCAD_1_1Geometry_1_1BoundSurfaceTor_1_1Impl.html", "d7/d5b/classMcCAD_1_1Geometry_1_1BoundSurfaceTor_1_1Impl" ]
+    ] ],
     [ "CMakeCXXCompilerId.cpp", "d6/d83/CMakeCXXCompilerId_8cpp.html", "d6/d83/CMakeCXXCompilerId_8cpp" ],
     [ "build/includes/implementation/coordinates/common/common.ipp", "d8/d8a/build_2includes_2implementation_2coordinates_2common_2common_8ipp.html", null ],
     [ "Implementation/geometry/Coordinates/common/common.ipp", "dc/dd7/Implementation_2geometry_2Coordinates_2common_2common_8ipp.html", null ],
@@ -200,7 +214,6 @@ var files_dup =
     [ "FaceParameters.cpp", "d3/dca/FaceParameters_8cpp.html", null ],
     [ "build/includes/implementation/tools/FaceParameters.hpp", "dd/d7a/build_2includes_2implementation_2tools_2FaceParameters_8hpp.html", "dd/d7a/build_2includes_2implementation_2tools_2FaceParameters_8hpp" ],
     [ "Implementation/tools/FaceParameters.hpp", "de/d71/Implementation_2tools_2FaceParameters_8hpp.html", "de/d71/Implementation_2tools_2FaceParameters_8hpp" ],
-    [ "generateFacesList.cpp", "d7/d2b/generateFacesList_8cpp.html", null ],
     [ "build/includes/implementation/decomposition/generateFacesList.hpp", "d5/de4/build_2includes_2implementation_2decomposition_2generateFacesList_8hpp.html", [
       [ "GenerateFacesList", "de/d74/classMcCAD_1_1Decomposition_1_1GenerateFacesList.html", "de/d74/classMcCAD_1_1Decomposition_1_1GenerateFacesList" ]
     ] ],
@@ -417,12 +430,26 @@ var files_dup =
     [ "Implementation/tools/surfaceComparator.hpp", "df/dc5/Implementation_2tools_2surfaceComparator_8hpp.html", [
       [ "SurfaceComparator", "da/d53/classMcCAD_1_1Tools_1_1SurfaceComparator.html", "da/d53/classMcCAD_1_1Tools_1_1SurfaceComparator" ]
     ] ],
+    [ "surfaceObjCerator.cpp", "d8/dc6/surfaceObjCerator_8cpp.html", null ],
+    [ "build/includes/implementation/decomposition/surfaceObjCerator.hpp", "dd/d89/build_2includes_2implementation_2decomposition_2surfaceObjCerator_8hpp.html", [
+      [ "SurfaceObjCreator", "d4/dac/classMcCAD_1_1Decomposition_1_1SurfaceObjCreator.html", "d4/dac/classMcCAD_1_1Decomposition_1_1SurfaceObjCreator" ]
+    ] ],
+    [ "Implementation/decomposition/surfaceObjCerator.hpp", "d8/d35/Implementation_2decomposition_2surfaceObjCerator_8hpp.html", [
+      [ "SurfaceObjCreator", "d4/dac/classMcCAD_1_1Decomposition_1_1SurfaceObjCreator.html", "d4/dac/classMcCAD_1_1Decomposition_1_1SurfaceObjCreator" ]
+    ] ],
     [ "surfacesFuser.cpp", "d7/de9/surfacesFuser_8cpp.html", null ],
     [ "build/includes/implementation/tools/surfacesFuser.hpp", "db/d7b/build_2includes_2implementation_2tools_2surfacesFuser_8hpp.html", [
       [ "SurfacesFuser", "d5/d31/classMcCAD_1_1Tools_1_1SurfacesFuser.html", "d5/d31/classMcCAD_1_1Tools_1_1SurfacesFuser" ]
     ] ],
     [ "Implementation/tools/surfacesFuser.hpp", "d4/d23/Implementation_2tools_2surfacesFuser_8hpp.html", [
       [ "SurfacesFuser", "d5/d31/classMcCAD_1_1Tools_1_1SurfacesFuser.html", "d5/d31/classMcCAD_1_1Tools_1_1SurfacesFuser" ]
+    ] ],
+    [ "surfacesMerger.cpp", "d4/d68/surfacesMerger_8cpp.html", null ],
+    [ "build/includes/implementation/decomposition/surfacesMerger.hpp", "df/d7e/build_2includes_2implementation_2decomposition_2surfacesMerger_8hpp.html", [
+      [ "SurfacesMerger", "d3/d8b/classMcCAD_1_1Decomposition_1_1SurfacesMerger.html", "d3/d8b/classMcCAD_1_1Decomposition_1_1SurfacesMerger" ]
+    ] ],
+    [ "Implementation/decomposition/surfacesMerger.hpp", "d1/dd8/Implementation_2decomposition_2surfacesMerger_8hpp.html", [
+      [ "SurfacesMerger", "d3/d8b/classMcCAD_1_1Decomposition_1_1SurfacesMerger.html", "d3/d8b/classMcCAD_1_1Decomposition_1_1SurfacesMerger" ]
     ] ],
     [ "SurfaceUtilities.cpp", "de/da8/SurfaceUtilities_8cpp.html", null ],
     [ "build/includes/implementation/tools/SurfaceUtilities.hpp", "da/db9/build_2includes_2implementation_2tools_2SurfaceUtilities_8hpp.html", "da/db9/build_2includes_2implementation_2tools_2SurfaceUtilities_8hpp" ],
@@ -440,6 +467,20 @@ var files_dup =
     ] ],
     [ "Implementation/tools/tools_impl.hpp", "d1/d3a/Implementation_2tools_2tools__impl_8hpp.html", [
       [ "Impl", "d2/d2a/classMcCAD_1_1Tools_1_1Preprocessor_1_1Impl.html", "d2/d2a/classMcCAD_1_1Tools_1_1Preprocessor_1_1Impl" ]
+    ] ],
+    [ "torSolid.cpp", "d9/de7/torSolid_8cpp.html", null ],
+    [ "build/includes/interface/geometry/torSolid.hpp", "d8/d40/build_2includes_2interface_2geometry_2torSolid_8hpp.html", [
+      [ "TORSolid", "d5/d3e/classMcCAD_1_1Geometry_1_1TORSolid.html", "d5/d3e/classMcCAD_1_1Geometry_1_1TORSolid" ]
+    ] ],
+    [ "Interface/geometry/torSolid.hpp", "de/d3d/Interface_2geometry_2torSolid_8hpp.html", [
+      [ "TORSolid", "d5/d3e/classMcCAD_1_1Geometry_1_1TORSolid.html", "d5/d3e/classMcCAD_1_1Geometry_1_1TORSolid" ]
+    ] ],
+    [ "torSolid_impl.cpp", "df/dc3/torSolid__impl_8cpp.html", null ],
+    [ "build/includes/implementation/geometry/torSolid_impl.hpp", "d3/ded/build_2includes_2implementation_2geometry_2torSolid__impl_8hpp.html", [
+      [ "Impl", "df/d96/classMcCAD_1_1Geometry_1_1TORSolid_1_1Impl.html", "df/d96/classMcCAD_1_1Geometry_1_1TORSolid_1_1Impl" ]
+    ] ],
+    [ "Implementation/geometry/torSolid_impl.hpp", "d3/dee/Implementation_2geometry_2torSolid__impl_8hpp.html", [
+      [ "Impl", "df/d96/classMcCAD_1_1Geometry_1_1TORSolid_1_1Impl.html", "df/d96/classMcCAD_1_1Geometry_1_1TORSolid_1_1Impl" ]
     ] ],
     [ "triangleCollision.cpp", "dc/d43/triangleCollision_8cpp.html", null ],
     [ "build/includes/implementation/decomposition/triangleCollision.hpp", "db/d3d/build_2includes_2implementation_2decomposition_2triangleCollision_8hpp.html", [
