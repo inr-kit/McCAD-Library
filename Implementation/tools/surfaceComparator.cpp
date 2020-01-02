@@ -35,5 +35,7 @@ McCAD::Tools::SurfaceComparator::operator()(const TopoDS_Face& firstFace,
     }
     else if (firstAdaptor.GetType() == GeomAbs_Cylinder)
         return Standard_False; //CylComparator{}(firstAdaptor, secondAdaptor);
+    else if (firstAdaptor.GetType() == GeomAbs_Torus)
+        return Standard_False; //TorComparator{}(firstAdaptor, secondAdaptor);
     else return Standard_False;
 }

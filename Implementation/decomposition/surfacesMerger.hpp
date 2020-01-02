@@ -6,7 +6,6 @@
 //McCAD
 #include <Standard.hxx>
 #include "boundSurface_impl.hpp"
-#include "generateFacesList.hpp"
 //OCC
 #include <TopoDS_Face.hxx>
 

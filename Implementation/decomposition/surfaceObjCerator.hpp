@@ -6,6 +6,7 @@
 //McCAD
 #include "boundSurface_impl.hpp"
 //OCC
+#include <TopoDS_Face.hxx>
 
 namespace McCAD::Decomposition{
     class SurfaceObjCreator{

@@ -55,6 +55,7 @@ namespace McCAD::Decomposition{
     
     Standard_Boolean operator()(std::shared_ptr<Geometry::PLSolid>& solidObj);
     Standard_Boolean operator()(std::shared_ptr<Geometry::CYLSolid>& solidObj);
+    Standard_Boolean operator()(std::shared_ptr<Geometry::TORSolid>& solidObj);
 
     Tools::SolidType solidType;
     Standard_Integer recurrenceDepth;

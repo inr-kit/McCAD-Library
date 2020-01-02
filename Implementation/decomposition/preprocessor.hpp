@@ -1,5 +1,5 @@
-#ifndef Preprocessor_HPP
-#define Preprocessor_HPP
+#ifndef PREPROCESSOR_HPP
+#define PREPROCESSOR_HPP
 
 // C++
 #include <variant>
@@ -11,7 +11,6 @@
 #include "planarSolid_impl.hpp"
 #include "cylSolid_impl.hpp"
 #include "torSolid_impl.hpp"
-#include "constructSolidObj.hpp"
 // OCC
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
@@ -25,8 +24,7 @@
 namespace McCAD::Decomposition{
   class Preprocessor{
   public:
-    Preprocessor();
-    ~Preprocessor();
+    Preprocessor() = default;
 
   private:
     using variantType = std::variant<std::monostate,
@@ -43,4 +41,4 @@ namespace McCAD::Decomposition{
   };
 }
 
-#endif //Preprocessor_HPP
+#endif //PREPROCESSOR_HPP

@@ -21,21 +21,30 @@
 namespace McCAD::Decomposition{
     class GenerateFacesList{
     public:
-      GenerateFacesList();
-      ~GenerateFacesList();
+      GenerateFacesList() = default;
 
-      std::unique_ptr<Tools::Preprocessor> preproc;
+      Tools::Preprocessor preproc;
 
+    private:
+      std::vector<std::shared_ptr<Geometry::BoundSurface>> facesList;
+      std::vector<std::shared_ptr<Geometry::BoundSurface>> planesList;
+      std::vector<std::shared_ptr<Geometry::BoundSurface>> cylindersList;
+      std::vector<std::shared_ptr<Geometry::BoundSurface>> toriList;
+
+    public:
+      template <typename solidObjType>
       std::vector<std::shared_ptr<Geometry::BoundSurface>> operator()(
-              Geometry::PLSolid& solidObj);
-      std::vector<std::shared_ptr<Geometry::BoundSurface>> operator()(
-              Geometry::CYLSolid& solidObj);
-      std::vector<std::shared_ptr<Geometry::BoundSurface>> operator()(
-              Geometry::TORSolid& solidObj);
-      std::shared_ptr<Geometry::BoundSurface> operator()(
-              const TopoDS_Face& face, Standard_Real& boxDiagonalLength,
-              Standard_Integer mode = 0);
+             solidObjType& solidObj);
+      template <typename solidObjType>
+      void addListsToSolidObj(solidObjType& solidObj);
+
+      void mergePlanesList(Standard_Real& boxDiagonalLength);
+      void mergeCylindersList(Standard_Real& boxDiagonalLength);
+      void mergeToriList(Standard_Real& boxDiagonalLength);
     };
 }
+
+//McCAD
+#include "generateFacesList.tpp"
 
 #endif //GENERATEFACESLIST_HPP

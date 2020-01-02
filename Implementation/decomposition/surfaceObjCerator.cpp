@@ -1,9 +1,8 @@
 //McCAD
 #include "surfaceObjCerator.hpp"
-#include "boundSurfaceCyl_impl.hpp"
 #include "boundSurfacePlane_impl.hpp"
+#include "boundSurfaceCyl_impl.hpp"
 #include "boundSurfaceTor_impl.hpp"
-#include "generateFacesList.hpp"
 
 std::shared_ptr<McCAD::Geometry::BoundSurface>
 McCAD::Decomposition::SurfaceObjCreator::operator()(const TopoDS_Face& face,
@@ -32,7 +31,7 @@ McCAD::Decomposition::SurfaceObjCreator::operator()(const TopoDS_Face& face,
                     std::make_shared<Geometry::BoundSurfaceTor>();
             boundSurfaceTor->setSurfaceType(Tools::toTypeName(GeomAbs_Torus));
             boundSurfaceTor->accessSImpl()->initiate(face);
-            boundSurfaceTor->accessBSTImpl()->generateExtendedTor(boxDiagonalLength);
+            //boundSurfaceTor->accessBSTImpl()->generateExtendedTor(boxDiagonalLength);
             return boundSurfaceTor;
         }
     }
