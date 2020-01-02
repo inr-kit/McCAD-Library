@@ -13,6 +13,7 @@ McCAD::Decomposition::SurfaceObjCreator::operator()(const TopoDS_Face& face,
         BRepAdaptor_Surface surface(face, Standard_True);
         GeomAdaptor_Surface AdaptorSurface = surface.Surface();
         if (AdaptorSurface.GetType() == GeomAbs_Plane){
+            std::cout << "Plane surface" << std::endl;
             std::shared_ptr<Geometry::BoundSurfacePlane> boundSurfacePlane =
                     std::make_shared<Geometry::BoundSurfacePlane>();
             boundSurfacePlane->setSurfaceType(Tools::toTypeName(GeomAbs_Plane));
@@ -20,6 +21,7 @@ McCAD::Decomposition::SurfaceObjCreator::operator()(const TopoDS_Face& face,
             boundSurfacePlane->accessBSPImpl()->generateExtendedPlane(boxDiagonalLength);
             return boundSurfacePlane;
         } else if (AdaptorSurface.GetType() == GeomAbs_Cylinder){
+            std::cout << "Cylinder surface" << std::endl;
             std::shared_ptr<Geometry::BoundSurfaceCyl> boundSurfaceCyl =
                     std::make_shared<Geometry::BoundSurfaceCyl>();
             boundSurfaceCyl->setSurfaceType(Tools::toTypeName(GeomAbs_Cylinder));
@@ -27,6 +29,7 @@ McCAD::Decomposition::SurfaceObjCreator::operator()(const TopoDS_Face& face,
             boundSurfaceCyl->accessBSCImpl()->generateExtendedCyl(boxDiagonalLength);
             return boundSurfaceCyl;
         } else if (AdaptorSurface.GetType() == GeomAbs_Torus){
+            std::cout << "Torus surface" << std::endl;
             std::shared_ptr<Geometry::BoundSurfaceTor> boundSurfaceTor =
                     std::make_shared<Geometry::BoundSurfaceTor>();
             boundSurfaceTor->setSurfaceType(Tools::toTypeName(GeomAbs_Torus));

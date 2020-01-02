@@ -1,6 +1,7 @@
 // McCAD
 #include "decomposeSolid_impl.hpp"
 #include "SurfaceUtilities.hpp"
+#include "AssistSurfaceGenerator.hpp"
 
 McCAD::Decomposition::DecomposeSolid::Impl::Impl()
     : recurrenceDepth{0}{
@@ -71,7 +72,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         solidObj->accessTSImpl()->judgeThroughConcaveEdges(solidImpl);
         // If the toroidal solid has split surface then use it.
         // If not, then judge if part torus or full torus and generate assisting surfces
-        //generateAssistingSurfaces();
+        AssistSurfaceGenerator{}(*solidObj);
     }
     //return perform(*solidImpl);
 }

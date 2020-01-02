@@ -1,6 +1,9 @@
-// McCAD
+//C++
+#include <filesystem>
 //McCAD
 #include "boundSurfacePlane_impl.hpp"
+//OCC
+#include "STEPControl_Writer.hxx"
 
 McCAD::Geometry::BoundSurfacePlane::Impl::Impl(
         McCAD::Geometry::BoundSurfacePlane* backReference)
@@ -24,13 +27,27 @@ McCAD::Geometry::BoundSurfacePlane::Impl::generateExtendedPlane(
     newUVParameters[1] = uvParameters[1] + boxDiagonalLength;
     newUVParameters[2] = uvParameters[2] - boxDiagonalLength;
     newUVParameters[3] = uvParameters[3] + boxDiagonalLength;
-    /* //debug
+    boundSurfacePlane->accessSImpl()->extendedFace =
+    BRepBuilderAPI_MakeFace(surface, newUVParameters[0], newUVParameters[1],
+          newUVParameters[2], newUVParameters[3], degenerateEdgesTolerance);
+    //debug
     std::cout << "old UV: " << uvParameters[0] << " ," << uvParameters[1] <<
                  " ," << uvParameters[2] << " ," << uvParameters[3] << std::endl;
     std::cout << "new UV: " << newUVParameters[0] << " ," << newUVParameters[1] <<
                  " ," << newUVParameters[2] << " ," << newUVParameters[3] << std::endl;
-    */ //debug
-    boundSurfacePlane->accessSImpl()->extendedFace =
-    BRepBuilderAPI_MakeFace(surface, newUVParameters[0], newUVParameters[1],
-          newUVParameters[2], newUVParameters[3], degenerateEdgesTolerance);
+    STEPControl_Writer writer5;
+    writer5.Transfer(boundSurfacePlane->accessSImpl()->face,
+                     STEPControl_StepModelType::STEPControl_AsIs);
+    writer5.Transfer(boundSurfacePlane->accessSImpl()->extendedFace,
+                     STEPControl_StepModelType::STEPControl_AsIs);
+    Standard_Integer kk = 0;
+    std::string filename = "/home/mharb/Documents/McCAD_refactor/examples/bbox/extSurface";
+    std::string suffix = ".stp";
+    while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
+        ++kk;
+    }
+    filename += std::to_string(kk);
+    filename += suffix;
+    writer5.Write(filename.c_str());
+    //debug
 }
