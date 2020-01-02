@@ -94,6 +94,10 @@ McCAD::Decomposition::Decompose::Impl::perform(const TopoDS_Shape& shape){
             break;
         } case solidType.toroidal:{
             std::cout << "   - Decomposing torus solid" << std::endl;
+            if (DecomposeSolid{}.accessDSImpl()->operator()(
+                        std::get<solidType.toroidal>(solid))){
+                extractSolids(*std::get<solidType.toroidal>(solid)->accessSImpl());
+            } else rejectedInputSolidsList->Append(shape);
             break;
         } default:
             std::cout << "   - Processing of solids with non-planar surfaces"

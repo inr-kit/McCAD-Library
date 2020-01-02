@@ -1,5 +1,6 @@
 //McCAD
 #include "createSolidObj.hpp"
+#include "solid_impl.hpp"
 #include "generateFacesList.hpp"
 
 template<typename solidObjType>

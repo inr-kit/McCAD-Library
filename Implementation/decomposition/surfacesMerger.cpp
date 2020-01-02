@@ -1,5 +1,7 @@
 // McCAD
 #include "surfacesMerger.hpp"
+#include "surfaceObjCerator.hpp"
+#include "surfacesFuser.hpp"
 
 void
 McCAD::Decomposition::SurfacesMerger::operator()(
@@ -19,7 +21,7 @@ McCAD::Decomposition::SurfacesMerger::operator()(
                                 surfacesList[i]->accessSImpl()->face,
                                 surfacesList[j]->accessSImpl()->face).value();
                     std::shared_ptr<Geometry::BoundSurface> newboundSurface =
-                            GenerateFacesList{}(newFace, boxDiagonalLength);
+                            SurfaceObjCreator{}(newFace, boxDiagonalLength);
                     newboundSurface->accessSImpl()->surfaceNumber =
                             surfacesList[i]->accessSImpl()->surfaceNumber;
                     /* //debug

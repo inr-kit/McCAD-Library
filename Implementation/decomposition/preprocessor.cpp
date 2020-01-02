@@ -1,34 +1,26 @@
 // McCAD
 #include "preprocessor.hpp"
-
-McCAD::Decomposition::Preprocessor::Preprocessor(){
-}
-
-McCAD::Decomposition::Preprocessor::~Preprocessor(){
-}
+#include "constructSolidObj.hpp"
 
 McCAD::Decomposition::Preprocessor::VariantType
 McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
     VariantType solidVariant;
     if (auto& solid = TopoDS::Solid(shape); !checkBndSurfaces(solid)){
         switch (determineSolidType(solid)){
-        case solidType.planarSolid:{
+        case solidType.planar:{
             solidVariant = SolidObjCreator{}.createObj<
                     McCAD::Geometry::PLSolid>(shape);
             return solidVariant;
         }
-        case solidType.cylindricalSolid:{
+        case solidType.cylindrical:{
             solidVariant = SolidObjCreator{}.createObj<
                     McCAD::Geometry::CYLSolid>(shape);
             return solidVariant;
-        }
-        case solidType.toroidal:{
+        case solidType.toroidal:
             solidVariant = SolidObjConstructor{}.constructObj<
                     McCAD::Geometry::TORSolid>(shape);
             return solidVariant;
-        }
-        default:
-            goto rejectSolid;
+        default: goto rejectSolid;
         }
     }
     rejectSolid: std::cout << "   - Processing of solids with non-planar surfaces"

@@ -91,6 +91,27 @@ McCAD::Decomposition::DecomposeSolid::Impl::splitSubsolid(
 }
 
 Standard_Boolean
+McCAD::Decomposition::DecomposeSolid::Impl::operator()(
+        std::shared_ptr<Geometry::TORSolid>& solidObj){
+    // Increment the recurrence depth by 1.
+    ++recurrenceDepth;
+    //std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
+    if(recurrenceDepth >= 20){
+        return Standard_False;
+    }
+    auto solidImpl = solidObj->accessSImpl();
+    // Judge which surfaces are decompose surfaces from the generated list.
+    solidObj->accessTSImpl()->judgeDecomposeSurfaces(solidImpl);
+    if(!throughNoBoundarySurfaces(solidImpl->splitFacesList)){
+        solidObj->accessTSImpl()->judgeThroughConcaveEdges(solidImpl);
+        // If the toroidal solid has split surface then use it.
+        // If not, then judge if part torus or full torus and generate assisting surfces
+        //generateAssistingSurfaces();
+    }
+    //return perform(*solidImpl);
+}
+
+Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solidImpl){
     if(solidImpl.splitSurface){
         //std::cout << "Solid has a split surface" << std::endl;

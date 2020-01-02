@@ -1,5 +1,5 @@
-#ifndef Preprocessor_HPP
-#define Preprocessor_HPP
+#ifndef PREPROCESSOR_HPP
+#define PREPROCESSOR_HPP
 
 // C++
 #include <variant>
@@ -25,8 +25,7 @@
 namespace McCAD::Decomposition{
   class Preprocessor{
   public:
-    Preprocessor();
-    ~Preprocessor();
+    Preprocessor() = default;
 
   private:
     using VariantType = std::variant<std::monostate,
@@ -43,4 +42,4 @@ namespace McCAD::Decomposition{
   };
 }
 
-#endif //Preprocessor_HPP
+#endif //PREPROCESSOR_HPP

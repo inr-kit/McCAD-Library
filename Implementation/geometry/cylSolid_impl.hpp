@@ -13,9 +13,6 @@ namespace McCAD::Geometry{
   public:
     Impl() = default;
 
-    std::vector<std::shared_ptr<Geometry::BoundSurface>> planesList;
-    std::vector<std::shared_ptr<Geometry::BoundSurface>> cylindersList;
-
     void judgeDecomposeSurfaces(Solid::Impl*& solidImpl);
     void judgeThroughConcaveEdges(Solid::Impl*& solidImpl);
   };
