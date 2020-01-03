@@ -6,7 +6,7 @@
 
 Standard_Real
 McCAD::Tools::SenseEvaluator::operator()(const TopoDS_Face& face,
-                                            const gp_Pnt& point){
+                                         const gp_Pnt& point){
     GeomAdaptor_Surface surfaceAdaptor{BRep_Tool::Surface(face)};
     if (surfaceAdaptor.GetType() == GeomAbs_Plane){
         gp_Pln plane = surfaceAdaptor.Plane();

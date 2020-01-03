@@ -109,7 +109,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         // If not, then judge if part torus or full torus and generate assisting surfces
         AssistSurfaceGenerator{}(*solidObj);
     }
-    //return perform(*solidImpl);
+    return perform(*solidImpl);
 }
 
 Standard_Boolean
@@ -148,6 +148,12 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
             } case solidType.cylindrical:{
                 auto& subSolidImpl = *std::get<solidType.cylindrical>(subSolid)->accessSImpl();
                 if (DecomposeSolid::Impl{recurrenceDepth}(std::get<solidType.cylindrical>(subSolid))){
+                    extractSolids(solidImpl, subSolidImpl, i);
+                } else solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
+                break;
+            } case solidType.toroidal:{
+                auto& subSolidImpl = *std::get<solidType.toroidal>(subSolid)->accessSImpl();
+                if (DecomposeSolid::Impl{recurrenceDepth}(std::get<solidType.toroidal>(subSolid))){
                     extractSolids(solidImpl, subSolidImpl, i);
                 } else solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
                 break;
