@@ -1,57 +1,45 @@
+//C++
+#include <math.h>
 // McCAD
 #include "AssistSurfaceGenerator.hpp"
 #include "surfaceObjCerator.hpp"
 #include "boundSurface_impl.hpp"
+#include "ShapeView.hpp"
+#include "senseEvaluateor.hpp"
 //OCC
 #include <AIS_AngleDimension.hxx>
-#include "gp_Ax1.hxx"
-#include "GeomAdaptor_Surface.hxx"
-#include "BRep_Tool.hxx"
-#include "gp_Pln.hxx"
-#include "BRepBuilderAPI_MakeFace.hxx"
-#include "STEPControl_Writer.hxx"
+#include <gp_Ax1.hxx>
+#include <gp_Trsf.hxx>
+#include <BRepBuilderAPI_Transform.hxx>
 
 void
 McCAD::Decomposition::AssistSurfaceGenerator::operator()(
-        Geometry::TORSolid& solidObj){
-    // Work on case of partial torus; quarter for ex.
+        Geometry::TORSolid& solidObj, Standard_Real angleTolerance){
+    // Work on the case of partial torus; quarter for example.
     auto& planesList = solidObj.accessSImpl()->planesList;
     auto& toriList = solidObj.accessSImpl()->toriList;
-    if (planesList.size() == 2 && toriList.size() > 0){
-        // measure angle between extended surfaces
-        AIS_AngleDimension angleDimension{planesList[0]->accessSImpl()->extendedFace,
-                    planesList[1]->accessSImpl()->extendedFace};
-        auto radianAngle = angleDimension.GetValue();
-        // create an extended plane mid-distance between the measured planes.
-        gp_Ax1 axis = GeomAdaptor_Surface{BRep_Tool::Surface(
-                                            toriList[0]->accessSImpl()->face)}.Torus().Axis();
-        std::cout << axis.Direction().X() << ", " << axis.Direction().Y()
-                  << ", " << axis.Direction().Z() << std::endl;
-        auto assistPlane = GeomAdaptor_Surface{BRep_Tool::Surface(
-                    planesList[0]->accessSImpl()->face)}.Plane();
-        assistPlane.Rotate(axis, radianAngle);
-        std::cout << "distance: " << assistPlane.Distance(GeomAdaptor_Surface{
-                  BRep_Tool::Surface(planesList[0]->accessSImpl()->face)}.Plane())
-                  << std::endl;
-        auto assistantFace = BRepBuilderAPI_MakeFace(assistPlane).Face();
-        auto assistantSurfaceObj = SurfaceObjCreator{}(
-                    assistantFace, solidObj.accessSImpl()->boxDiagonalLength);
-        solidObj.accessSImpl()->splitFacesList.push_back(
-                std::move(assistantSurfaceObj));
-        solidObj.accessSImpl()->splitSurface = Standard_True;
-        //debug
-        STEPControl_Writer writer6;
-        writer6.Transfer(assistantFace, STEPControl_StepModelType::STEPControl_AsIs);
-        Standard_Integer kk = 0;
-        std::string filename = "/home/mharb/Documents/McCAD_refactor/examples/bbox/assistSurface";
-        std::string suffix = ".stp";
-        while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
-            ++kk;
-        }
-        filename += std::to_string(kk);
-        filename += suffix;
-        writer6.Write(filename.c_str());
-        //debug
-        }
+    if (planesList.size() != 2) return;
+    // Measure angle between extended surfaces
+    AIS_AngleDimension angleDimension{planesList[0]->accessSImpl()->extendedFace,
+                planesList[1]->accessSImpl()->extendedFace};
+    auto radianAngle = angleDimension.GetValue();
+    if (radianAngle <= angleTolerance) return;
+    // Get axis of symmetry of torus and set rotation angle.
+    gp_Ax1 axis = BRepAdaptor_Surface(toriList[0]->accessSImpl()->face).Torus().Axis();
+    // Note: the method of determining the rotation sense has to be more robust.
+    // could depend on axis direction, axises of surfaces.
+    auto sense = Tools::SenseEvaluator{}(planesList[0]->accessSImpl()->face,
+            BRepAdaptor_Surface(planesList[1]->accessSImpl()->face).Plane().Location());
+    Standard_Real rotationSense = signbit(sense) ? -1.0 : +1.0;
+    gp_Trsf rotation;
+    rotation.SetRotation(axis, rotationSense*radianAngle/2.0);
+    BRepBuilderAPI_Transform transform{rotation};
+    transform.Perform(planesList[0]->accessSImpl()->face);
+    auto assistShape = transform.ModifiedShape(planesList[0]->accessSImpl()->face);
+    for(const auto& assistFace : detail::ShapeView<TopAbs_FACE>{assistShape}){
+        auto assistSurfaceObj = SurfaceObjCreator{}(assistFace,
+                                                    solidObj.accessSImpl()->boxDiagonalLength);
+        solidObj.accessSImpl()->splitFacesList.push_back(std::move(assistSurfaceObj));
+    }
+    solidObj.accessSImpl()->splitSurface = Standard_True;
 }
-

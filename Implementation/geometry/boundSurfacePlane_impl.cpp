@@ -30,7 +30,7 @@ McCAD::Geometry::BoundSurfacePlane::Impl::generateExtendedPlane(
     boundSurfacePlane->accessSImpl()->extendedFace =
     BRepBuilderAPI_MakeFace(surface, newUVParameters[0], newUVParameters[1],
           newUVParameters[2], newUVParameters[3], degenerateEdgesTolerance);
-    //debug
+    /*//debug
     //std::cout << "old UV: " << uvParameters[0] << " ," << uvParameters[1] <<
     //             " ," << uvParameters[2] << " ," << uvParameters[3] << std::endl;
     //std::cout << "new UV: " << newUVParameters[0] << " ," << newUVParameters[1] <<
@@ -49,5 +49,5 @@ McCAD::Geometry::BoundSurfacePlane::Impl::generateExtendedPlane(
     filename += std::to_string(kk);
     filename += suffix;
     writer5.Write(filename.c_str());
-    //debug
+    *///debug
 }

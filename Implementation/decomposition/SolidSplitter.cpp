@@ -19,12 +19,12 @@ McCAD::Decomposition::SolidSplitter::operator()(
         const TopoDS_Solid& solidToSplit, const Bnd_OBB& obb,
         const TopoDS_Face& splittingFace) const{
     auto boundingBox = calculateOBB(obb);
-    /* //debug
+    //debug
     STEPControl_Writer writer0;
     writer0.Transfer(boundingBox, STEPControl_StepModelType::STEPControl_AsIs);
     writer0.Transfer(solidToSplit, STEPControl_StepModelType::STEPControl_AsIs);
     writer0.Transfer(splittingFace, STEPControl_StepModelType::STEPControl_AsIs);
-    std::cout << "OBB sqrt square extent: " << sqrt(obb.SquareExtent()) << std::endl;
+    //std::cout << "OBB sqrt square extent: " << sqrt(obb.SquareExtent()) << std::endl;
     Standard_Integer kk = 0;
     std::string filename = "/home/mharb/Documents/McCAD_refactor/examples/bbox/solid";
     std::string suffix = ".stp";
@@ -34,7 +34,7 @@ McCAD::Decomposition::SolidSplitter::operator()(
     filename += std::to_string(kk);
     filename += suffix;
     writer0.Write(filename.c_str());
-    */ //debug
+    //debug
     auto halfBoundingBoxes = calculateHalfBB(splittingFace, boundingBox);
     if(!halfBoundingBoxes) return std::nullopt;
     return calculateHalfSolids(solidToSplit, *halfBoundingBoxes);

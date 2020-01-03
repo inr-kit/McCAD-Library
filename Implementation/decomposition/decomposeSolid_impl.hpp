@@ -15,6 +15,7 @@
 #include "solid_impl.hpp"
 #include "cylSolid_impl.hpp"
 #include "planarSolid_impl.hpp"
+#include "torSolid_impl.hpp"
 #include "boundSurface_impl.hpp"
 #include "splitsurfaces_impl.hpp"
 #include "splitsolid_impl.hpp"

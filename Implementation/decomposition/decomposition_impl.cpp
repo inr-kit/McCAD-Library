@@ -82,7 +82,7 @@ McCAD::Decomposition::Decompose::Impl::perform(){
             } else rejectedInputSolidsList->Append(shape);
             break;
         } case solidType.toroidal:{
-            std::cout << "   - Decomposing torus solid" << std::endl;
+            std::cout << "   - Decomposing toroidal solid" << std::endl;
             if (DecomposeSolid{}.accessDSImpl()->operator()(
                         std::get<solidType.toroidal>(solid))){
                 extractSolids(*std::get<solidType.toroidal>(solid)->accessSImpl());
