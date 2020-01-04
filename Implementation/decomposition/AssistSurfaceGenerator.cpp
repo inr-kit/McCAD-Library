@@ -26,11 +26,17 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(
     if (radianAngle <= angleTolerance) return;
     // Get axis of symmetry of torus and set rotation angle.
     gp_Ax1 axis = BRepAdaptor_Surface(toriList[0]->accessSImpl()->face).Torus().Axis();
-    // Note: the method of determining the rotation sense has to be more robust.
-    // could depend on axis direction, axises of surfaces.
-    auto sense = Tools::SenseEvaluator{}(planesList[0]->accessSImpl()->face,
-            BRepAdaptor_Surface(planesList[1]->accessSImpl()->face).Plane().Location());
-    Standard_Real rotationSense = signbit(sense) ? -1.0 : +1.0;
+    // Calculate the sense of the surfaces relative to the axis of rotation.
+    gp_XYZ firstVec = gp_Vec(axis.Location(),
+                             BRepAdaptor_Surface(
+                                 planesList[0]->accessSImpl()->face).Plane().Location()).XYZ();
+    gp_XYZ secondVec = gp_Vec(axis.Location(),
+                             BRepAdaptor_Surface(
+                                  planesList[1]->accessSImpl()->face).Plane().Location()).XYZ();
+    gp_Dir crossProd = gp_Dir(firstVec).Crossed(gp_Dir(secondVec));
+    auto sense = axis.Direction().Dot(crossProd);
+    //std::cout << "sense: " << sense << std::endl;
+    Standard_Real rotationSense = signbit(sense) ? -1.0 : 1.0;
     gp_Trsf rotation;
     rotation.SetRotation(axis, rotationSense*radianAngle/2.0);
     BRepBuilderAPI_Transform transform{rotation};

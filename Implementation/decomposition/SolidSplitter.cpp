@@ -19,7 +19,7 @@ McCAD::Decomposition::SolidSplitter::operator()(
         const TopoDS_Solid& solidToSplit, const Bnd_OBB& obb,
         const TopoDS_Face& splittingFace) const{
     auto boundingBox = calculateOBB(obb);
-    //debug
+    /*//debug
     STEPControl_Writer writer0;
     writer0.Transfer(boundingBox, STEPControl_StepModelType::STEPControl_AsIs);
     writer0.Transfer(solidToSplit, STEPControl_StepModelType::STEPControl_AsIs);
@@ -34,7 +34,7 @@ McCAD::Decomposition::SolidSplitter::operator()(
     filename += std::to_string(kk);
     filename += suffix;
     writer0.Write(filename.c_str());
-    //debug
+    *///debug
     auto halfBoundingBoxes = calculateHalfBB(splittingFace, boundingBox);
     if(!halfBoundingBoxes) return std::nullopt;
     return calculateHalfSolids(solidToSplit, *halfBoundingBoxes);
