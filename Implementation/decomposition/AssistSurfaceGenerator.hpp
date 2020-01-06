@@ -16,7 +16,8 @@ namespace McCAD::Decomposition{
   public:
     AssistSurfaceGenerator() = default;
 
-    void operator()(Geometry::TORSolid& solidObj, Standard_Real angleTolerance = 0.35);
+    void operator()(Geometry::TORSolid& solidObj,
+                    Standard_Real angleTolerance = 0.35);
   };
 }
 

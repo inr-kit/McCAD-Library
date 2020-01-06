@@ -1,5 +1,6 @@
 // McCAD
 #include "decomposition_impl.hpp"
+#include "torusConvertor.hpp"
 
 McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData)
   : splitInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()},
@@ -85,6 +86,8 @@ McCAD::Decomposition::Decompose::Impl::perform(){
             std::cout << "   - Decomposing toroidal solid" << std::endl;
             if (DecomposeSolid{}.accessDSImpl()->operator()(
                         std::get<solidType.toroidal>(solid))){
+                // Convert tori to cylinders.
+                TorusConvertor{}(*std::get<solidType.toroidal>(solid)->accessSImpl());
                 extractSolids(*std::get<solidType.toroidal>(solid)->accessSImpl());
             } else rejectedInputSolidsList->Append(shape);
             break;

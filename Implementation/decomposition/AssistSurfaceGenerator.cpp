@@ -35,7 +35,6 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(
                                   planesList[1]->accessSImpl()->face).Plane().Location()).XYZ();
     gp_Dir crossProd = gp_Dir(firstVec).Crossed(gp_Dir(secondVec));
     auto sense = axis.Direction().Dot(crossProd);
-    //std::cout << "sense: " << sense << std::endl;
     Standard_Real rotationSense = signbit(sense) ? -1.0 : 1.0;
     gp_Trsf rotation;
     rotation.SetRotation(axis, rotationSense*radianAngle/2.0);
@@ -48,4 +47,7 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(
         solidObj.accessSImpl()->splitFacesList.push_back(std::move(assistSurfaceObj));
     }
     solidObj.accessSImpl()->splitSurface = Standard_True;
+    //for(const auto& edge : detail::ShapeView<TopAbs_EDGE>{assistShape}){
+    //    std::cout << Tools::toTypeName(BRepAdaptor_Curve(edge).GetType()) << std::endl;
+    //}
 }
