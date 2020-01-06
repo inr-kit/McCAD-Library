@@ -9,6 +9,7 @@ add_library(DECOMPOSITION_IMPL OBJECT
   splitsurfaces_impl.cpp
   splitsolid_impl.cpp
   preprocessor.cpp
+  torusConvertor.cpp
   decomposeSolid_impl.cpp
   decomposition_impl.cpp
   SolidRebuilder.cpp
@@ -28,6 +29,7 @@ install(FILES
   splitsolid_impl.hpp
   constructSolidObj.hpp
   preprocessor.hpp
+  torusConvertor.hpp
   decomposeSolid_impl.hpp
   decomposition_impl.hpp
   SolidRebuilder.hpp
