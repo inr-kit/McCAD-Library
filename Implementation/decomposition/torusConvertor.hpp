@@ -19,7 +19,7 @@ namespace McCAD::Decomposition{
     void operator()(Geometry::Solid::Impl& solidImpl);
     TopoDS_Shape convertTorusToCylinder(const TopoDS_Shape& shape,
                                         Standard_Real scaleFactor = 1.1);
-    std::optional<TopoDS_Solid> retrieveSolid(TopoDS_Solid& cylinder,
+    std::optional<TopoDS_Shape> retrieveSolid(TopoDS_Solid& cylinder,
                                               std::vector<TopoDS_Face>& planesList);
   };
 }

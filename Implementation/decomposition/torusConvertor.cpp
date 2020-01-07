@@ -3,6 +3,7 @@
 #include "preprocessor.hpp"
 #include "solidType.hpp"
 #include "ShapeView.hpp"
+#include "solid_impl.hpp"
 #include "boundSurfacePlane_impl.hpp"
 #include "surfaceObjCerator.hpp"
 #include "SolidSplitter.hpp"
@@ -12,6 +13,8 @@
 #include <gp_Ax2.hxx>
 #include <gp_Vec.hxx>
 #include <gp_Dir.hxx>
+#include <BRepBndLib.hxx>
+#include <Bnd_OBB.hxx>
 #include <STEPControl_Writer.hxx>
 
 void
@@ -64,19 +67,51 @@ McCAD::Decomposition::TorusConvertor::convertTorusToCylinder(
     filename += suffix;
     writer7.Write(filename.c_str());
     //debug
-    return newSolid;
+    std::cout << "return new shape" << std::endl;
+    return *newSolid;
 }
 
-std::optional<TopoDS_Solid>
+std::optional<TopoDS_Shape>
 McCAD::Decomposition::TorusConvertor::retrieveSolid(
         TopoDS_Solid& cylinder, std::vector<TopoDS_Face>& planesList){
-    auto solidObj = Solid::Impl{};
-    solidObj.initiate(cylinder);
-    solidObj.createOBB();
-    solidObj.calcMeshDeflection();
-    auto firstExtFace = generateExtendedFace(planesList[0], solidObj.boxDiagonalLength);
-    auto solids = SolidSplitter{}(cylinder, solidObj.obb, firstExtFace);
-    if(!solids) return std::nullopt;
-    return solids.first;
+    // Split extra part on one side of the cylinder
+    auto firstSolidObj = Geometry::Solid::Impl{};
+    firstSolidObj.initiate(cylinder);
+    firstSolidObj.createOBB();
+    firstSolidObj.calcMeshDeflection();
+    auto firstExtFace = SurfaceObjCreator{}(planesList[0],
+            firstSolidObj.boxDiagonalLength);
+    auto firstSolids = SolidSplitter{}(cylinder, firstSolidObj.obb,
+                                       firstExtFace->accessSImpl()->extendedFace);
+    if(!firstSolids.has_value()) return std::nullopt;
+    // Split on the other side of cylinder
+    Bnd_OBB testSolidOBB;
+    BRepBndLib::AddOBB(firstSolids->first, testSolidOBB);
+    if (!testSolidOBB.IsOut(BRepAdaptor_Surface(planesList[1]).Plane().Location())){
+        //  Split solid
+        auto secondSolidObj = Geometry::Solid::Impl{};
+        secondSolidObj.initiate(TopoDS::Solid(firstSolids->first));
+        secondSolidObj.createOBB();
+        secondSolidObj.calcMeshDeflection();
+        auto secondExtFace = SurfaceObjCreator{}(planesList[1],
+                secondSolidObj.boxDiagonalLength);
+        auto secondSolids = SolidSplitter{}(TopoDS::Solid(firstSolids->first),
+                                            secondSolidObj.obb,
+                                            secondExtFace->accessSImpl()->extendedFace);
+        if(!secondSolids.has_value()) return std::nullopt;
+        return secondSolids->second;
+    } else {
+        //  Split solid
+        auto secondSolidObj = Geometry::Solid::Impl{};
+        secondSolidObj.initiate(TopoDS::Solid(firstSolids->second));
+        secondSolidObj.createOBB();
+        secondSolidObj.calcMeshDeflection();
+        auto secondExtFace = SurfaceObjCreator{}(planesList[1],
+                secondSolidObj.boxDiagonalLength);
+        auto secondSolids = SolidSplitter{}(TopoDS::Solid(firstSolids->second),
+                                            secondSolidObj.obb,
+                                            secondExtFace->accessSImpl()->extendedFace);
+        if(!secondSolids.has_value()) return std::nullopt;
+        return secondSolids->second;
+    }
 }
-
