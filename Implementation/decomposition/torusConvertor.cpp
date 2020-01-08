@@ -6,6 +6,7 @@
 #include "solid_impl.hpp"
 #include "boundSurfacePlane_impl.hpp"
 #include "surfaceObjCerator.hpp"
+#include "pointInSolid.hpp"
 #include "SolidSplitter.hpp"
 //OCC
 #include <TopTools_HSequenceOfShape.hxx>
@@ -23,13 +24,15 @@ McCAD::Decomposition::TorusConvertor::operator()(Geometry::Solid::Impl& solidImp
     for(Standard_Integer index = 1; index <= solidsList.Length(); ++index){
         if (Preprocessor{}.determineSolidType(TopoDS::Solid(solidsList(index))) ==
                 Tools::SolidType{}.toroidal){
-            solidsList.InsertAfter(index, convertTorusToCylinder(solidsList(index)));
+            auto newShape = convertTorusToCylinder(solidsList(index));
+            if (!newShape.has_value()) continue;
+            solidsList.InsertAfter(index, *newShape);
             solidsList.Remove(index);
         }
     }
 }
 
-TopoDS_Shape
+std::optional<TopoDS_Shape>
 McCAD::Decomposition::TorusConvertor::convertTorusToCylinder(
         const TopoDS_Shape& shape, Standard_Real scaleFactor){
     std::vector<TopoDS_Face> planesList;
@@ -43,7 +46,7 @@ McCAD::Decomposition::TorusConvertor::convertTorusToCylinder(
         }
     }
     if (planesList.size() != 2) return shape;
-    // create cylinder
+    // Create cylinder
     gp_Vec vector(BRepAdaptor_Surface(planesList[0]).Plane().Location(),
             BRepAdaptor_Surface(planesList[1]).Plane().Location());
     gp_Ax2 axis(BRepAdaptor_Surface(planesList[0]).Plane().Location(), gp_Dir(vector));
@@ -52,22 +55,6 @@ McCAD::Decomposition::TorusConvertor::convertTorusToCylinder(
                                                      scaleFactor*vector.Magnitude());
     auto newSolid = retrieveSolid(cylinder, planesList);
     if(!newSolid.has_value()) return shape;
-    //debug
-    STEPControl_Writer writer7;
-    writer7.Transfer(cylinder, STEPControl_StepModelType::STEPControl_AsIs);
-    writer7.Transfer(shape, STEPControl_StepModelType::STEPControl_AsIs);
-    writer7.Transfer(*newSolid, STEPControl_StepModelType::STEPControl_AsIs);
-    Standard_Integer kk = 0;
-    std::string filename = "/home/mharb/Documents/McCAD_refactor/examples/bbox/torCyl";
-    std::string suffix = ".stp";
-    while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
-        ++kk;
-    }
-    filename += std::to_string(kk);
-    filename += suffix;
-    writer7.Write(filename.c_str());
-    //debug
-    std::cout << "return new shape" << std::endl;
     return *newSolid;
 }
 
@@ -75,43 +62,44 @@ std::optional<TopoDS_Shape>
 McCAD::Decomposition::TorusConvertor::retrieveSolid(
         TopoDS_Solid& cylinder, std::vector<TopoDS_Face>& planesList){
     // Split extra part on one side of the cylinder
-    auto firstSolidObj = Geometry::Solid::Impl{};
-    firstSolidObj.initiate(cylinder);
-    firstSolidObj.createOBB();
-    firstSolidObj.calcMeshDeflection();
-    auto firstExtFace = SurfaceObjCreator{}(planesList[0],
-            firstSolidObj.boxDiagonalLength);
-    auto firstSolids = SolidSplitter{}(cylinder, firstSolidObj.obb,
-                                       firstExtFace->accessSImpl()->extendedFace);
+    auto firstSolids = splitSolid(cylinder, planesList[0]);
     if(!firstSolids.has_value()) return std::nullopt;
-    // Split on the other side of cylinder
-    Bnd_OBB testSolidOBB;
-    BRepBndLib::AddOBB(firstSolids->first, testSolidOBB);
-    if (!testSolidOBB.IsOut(BRepAdaptor_Surface(planesList[1]).Plane().Location())){
-        //  Split solid
-        auto secondSolidObj = Geometry::Solid::Impl{};
-        secondSolidObj.initiate(TopoDS::Solid(firstSolids->first));
-        secondSolidObj.createOBB();
-        secondSolidObj.calcMeshDeflection();
-        auto secondExtFace = SurfaceObjCreator{}(planesList[1],
-                secondSolidObj.boxDiagonalLength);
-        auto secondSolids = SolidSplitter{}(TopoDS::Solid(firstSolids->first),
-                                            secondSolidObj.obb,
-                                            secondExtFace->accessSImpl()->extendedFace);
+    // Split extra part on the other side of cylinder
+    if (PointInSolid{}(firstSolids->first,
+                       BRepAdaptor_Surface(planesList[1]).Plane().Location())){
+        TopoDS_Solid solid;
+        for(const auto& aSolid : detail::ShapeView<TopAbs_SOLID>{firstSolids->first}){
+            solid = aSolid;
+        }
+        auto secondSolids = splitSolid(solid, planesList[1]);
         if(!secondSolids.has_value()) return std::nullopt;
-        return secondSolids->second;
+        else if (PointInSolid{}(secondSolids->first,
+                                BRepAdaptor_Surface(planesList[0]).Plane().Location())){
+            return secondSolids->first;
+        } else return secondSolids->second;
     } else {
-        //  Split solid
-        auto secondSolidObj = Geometry::Solid::Impl{};
-        secondSolidObj.initiate(TopoDS::Solid(firstSolids->second));
-        secondSolidObj.createOBB();
-        secondSolidObj.calcMeshDeflection();
-        auto secondExtFace = SurfaceObjCreator{}(planesList[1],
-                secondSolidObj.boxDiagonalLength);
-        auto secondSolids = SolidSplitter{}(TopoDS::Solid(firstSolids->second),
-                                            secondSolidObj.obb,
-                                            secondExtFace->accessSImpl()->extendedFace);
+        TopoDS_Solid solid;
+        for(const auto& aSolid : detail::ShapeView<TopAbs_SOLID>{firstSolids->second}){
+            solid = aSolid;
+        }
+        auto secondSolids = splitSolid(solid, planesList[1]);
         if(!secondSolids.has_value()) return std::nullopt;
-        return secondSolids->second;
+        else if (PointInSolid{}(secondSolids->first,
+                                BRepAdaptor_Surface(planesList[0]).Plane().Location())){
+            return secondSolids->first;
+        } else return secondSolids->second;
     }
+}
+
+std::optional<std::pair<TopoDS_Shape, TopoDS_Shape>>
+McCAD::Decomposition::TorusConvertor::splitSolid(TopoDS_Solid& solid,
+                                                 TopoDS_Face& splitFace){
+    auto solidObj = Geometry::Solid::Impl{};
+    solidObj.initiate(solid);
+    solidObj.createOBB();
+    solidObj.calcMeshDeflection();
+    auto extFace = SurfaceObjCreator{}(splitFace, solidObj.boxDiagonalLength);
+    auto resultSolids = SolidSplitter{}(solid, solidObj.obb,
+                                        extFace->accessSImpl()->extendedFace);
+    return resultSolids;
 }
