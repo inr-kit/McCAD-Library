@@ -11,6 +11,7 @@
 #include <gp_Ax1.hxx>
 #include <gp_Trsf.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
+#include <STEPControl_Writer.hxx>
 
 void
 McCAD::Decomposition::AssistSurfaceGenerator::operator()(
@@ -50,4 +51,26 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(
     //for(const auto& edge : detail::ShapeView<TopAbs_EDGE>{assistShape}){
     //    std::cout << Tools::toTypeName(BRepAdaptor_Curve(edge).GetType()) << std::endl;
     //}
+    /*//debug
+    std::cout << "angle: " << radianAngle << std::endl;
+    auto plane0 = BRepAdaptor_Surface(planesList[0]->accessSImpl()->face).Plane().Location();
+    std::cout << "plane 0: " << plane0.X() << ", " << plane0.Y() << ", " << plane0.Z()
+              << std::endl;
+    auto plane1 = BRepAdaptor_Surface(planesList[1]->accessSImpl()->face).Plane().Location();
+    std::cout << "plane 1: " << plane1.X() << ", " << plane1.Y() << ", " << plane1.Z()
+              << std::endl;
+    STEPControl_Writer writer9;
+    writer9.Transfer(planesList[0]->accessSImpl()->face, STEPControl_StepModelType::STEPControl_AsIs);
+    writer9.Transfer(planesList[1]->accessSImpl()->face, STEPControl_StepModelType::STEPControl_AsIs);
+    writer9.Transfer(assistShape, STEPControl_StepModelType::STEPControl_AsIs);
+    Standard_Integer kk = 0;
+    std::string filename = "/home/mharb/Documents/McCAD_refactor/examples/bbox/cyltor";
+    std::string suffix = ".stp";
+    while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
+        ++kk;
+    }
+    filename += std::to_string(kk);
+    filename += suffix;
+    writer9.Write(filename.c_str());
+    *///debug
 }
