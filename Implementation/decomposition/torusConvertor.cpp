@@ -49,7 +49,7 @@ McCAD::Decomposition::TorusConvertor::convertTorusToCylinder(
     }
     for(const auto& edge : detail::ShapeView<TopAbs_EDGE>{shape}){
         if (Tools::toTypeName(BRepAdaptor_Curve(edge).GetType()) == "Circle" &&
-            BRepAdaptor_Curve(edge).Circle().Radius() < torusRadius){
+            BRepAdaptor_Curve(edge).Circle().Radius() < radius){
                 inner_radius = BRepAdaptor_Curve(edge).Circle().Radius();
             }
     }
@@ -69,15 +69,16 @@ McCAD::Decomposition::TorusConvertor::convertTorusToCylinder(
 void
 McCAD::Decomposition::TorusConvertor::retrieveSolid(
         TopoDS_Solid& cylinder, const std::vector<TopoDS_Face>& planesList,
-        Standard_Real torusRadius, const Standard_Real& scaleFactor){
+        Standard_Real innerRadius, const Standard_Real& scaleFactor){
     // If the original torus solid was hollow the created cylinder also shoudld be.
     gp_Vec vector(BRepAdaptor_Surface(planesList[0]).Plane().Location(),
             BRepAdaptor_Surface(planesList[1]).Plane().Location());
     gp_Ax2 axis(BRepAdaptor_Surface(planesList[0]).Plane().Location(),
             gp_Dir(vector));
+    axis.Translate(0.5*(1 - 1.5*scaleFactor)*vector);
     TopoDS_Solid innerCylinder = BRepPrimAPI_MakeCylinder(axis,
-                                                          inner_radius,
-                                                          scaleFactor*vector.Magnitude());
+                                                          innerRadius,
+                                                          1.5*scaleFactor*vector.Magnitude());
     std::cout << "cutting" << std::endl;
     BRepAlgoAPI_Cut cutter{cylinder, innerCylinder};
     if (cutter.IsDone()){
