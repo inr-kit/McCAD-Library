@@ -1,3 +1,5 @@
+// C++
+#include <set>
 // McCAD
 #include "torusConvertor.hpp"
 #include "preprocessor.hpp"
@@ -16,8 +18,6 @@
 #include <gp_Dir.hxx>
 #include <BRepBndLib.hxx>
 #include <Bnd_OBB.hxx>
-#include <BRepAdaptor_Curve.hxx>
-#include <gp_Circ.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
 
 void
@@ -38,29 +38,25 @@ std::optional<TopoDS_Shape>
 McCAD::Decomposition::TorusConvertor::convertTorusToCylinder(
         const TopoDS_Shape& shape, Standard_Real scaleFactor){
     std::vector<TopoDS_Face> planesList;
-    Standard_Real radius, inner_radius{0};
+    std::set<Standard_Real> radii;
     for(const auto& face : detail::ShapeView<TopAbs_FACE>{shape}){
         if (BRepAdaptor_Surface(face).GetType() == GeomAbs_Plane){
             planesList.push_back(face);
         }
         else if (BRepAdaptor_Surface(face).GetType() == GeomAbs_Torus){
-            radius = BRepAdaptor_Surface(face).Torus().MinorRadius();
+            radii.insert(BRepAdaptor_Surface(face).Torus().MinorRadius());
         }
     }
-    for(const auto& edge : detail::ShapeView<TopAbs_EDGE>{shape}){
-        if (Tools::toTypeName(BRepAdaptor_Curve(edge).GetType()) == "Circle" &&
-            BRepAdaptor_Curve(edge).Circle().Radius() < radius){
-                inner_radius = BRepAdaptor_Curve(edge).Circle().Radius();
-            }
-    }
-    if (planesList.size() != 2) return shape;
+    if (planesList.size() != 2 || radii.size() > 2) return shape;
     // Create cylinder
     gp_Vec vector(BRepAdaptor_Surface(planesList[0]).Plane().Location(),
             BRepAdaptor_Surface(planesList[1]).Plane().Location());
     gp_Ax2 axis(BRepAdaptor_Surface(planesList[0]).Plane().Location(), gp_Dir(vector));
     axis.Translate(0.5*(1 - scaleFactor)*vector);
-    TopoDS_Solid cylinder = BRepPrimAPI_MakeCylinder(axis, radius, scaleFactor*vector.Magnitude());
-    if (inner_radius > 0) retrieveSolid(cylinder, planesList, inner_radius, scaleFactor);
+    TopoDS_Solid cylinder = BRepPrimAPI_MakeCylinder(axis, *radii.rbegin(),
+                                                     scaleFactor*vector.Magnitude());
+    if (radii.size() == 2) retrieveSolid(cylinder, planesList, *(++radii.rbegin()),
+                                         scaleFactor);
     auto newSolid = fitCylinder(cylinder, planesList);
     if(!newSolid.has_value()) return shape;
     return *newSolid;
@@ -75,14 +71,12 @@ McCAD::Decomposition::TorusConvertor::retrieveSolid(
             BRepAdaptor_Surface(planesList[1]).Plane().Location());
     gp_Ax2 axis(BRepAdaptor_Surface(planesList[0]).Plane().Location(),
             gp_Dir(vector));
-    axis.Translate(0.5*(1 - 1.5*scaleFactor)*vector);
+    axis.Translate(0.5*(1 - 2*scaleFactor)*vector);
     TopoDS_Solid innerCylinder = BRepPrimAPI_MakeCylinder(axis,
                                                           innerRadius,
-                                                          1.5*scaleFactor*vector.Magnitude());
-    std::cout << "cutting" << std::endl;
+                                                          2*scaleFactor*vector.Magnitude());
     BRepAlgoAPI_Cut cutter{cylinder, innerCylinder};
     if (cutter.IsDone()){
-        std::cout << "casting" << std::endl;
         for (const auto& solid : detail::ShapeView<TopAbs_SOLID>{cutter.Shape()}){
             cylinder = solid;
             return;
