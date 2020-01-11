@@ -9,7 +9,6 @@
 #include "boundSurfaceCyl_impl.hpp"
 #include "planarSolid_impl.hpp"
 #include "cylSolid_impl.hpp"
-#include "tools_impl.hpp"
 #include "SurfaceUtilities.hpp"
 #include "CurveUtilities.hpp"
 #include "PlaneFuser.hpp"
@@ -24,8 +23,6 @@ namespace McCAD::Decomposition{
     public:
       FacesListGenerator();
       ~FacesListGenerator();
-
-      std::unique_ptr<Tools::Preprocessor> preproc;
 
       std::vector<std::shared_ptr<Geometry::BoundSurface>> operator()(
               const Geometry::PLSolid& solidObj);

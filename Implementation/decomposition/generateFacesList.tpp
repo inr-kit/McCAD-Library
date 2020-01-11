@@ -1,5 +1,6 @@
 //McCAD
 #include "generateFacesList.hpp"
+#include "tools_impl.hpp"
 //OCC
 #include <TopoDS_Solid.hxx>
 #include <BRepTools.hxx>
@@ -38,10 +39,11 @@ McCAD::Decomposition::FacesListGenerator::operator()(
         // Update UV points of the face.
         face = aFace;
         BRepTools::Update(face);
-        Standard_Boolean rejectCondition = preproc->accessImpl()->checkFace(face);
+        Standard_Boolean rejectCondition =
+                Tools::Preprocessor{}.accessImpl()->checkFace(face);
         if (!rejectCondition){
             ++faceNumber;
-            preproc->accessImpl()->fixFace(face);
+            Tools::Preprocessor{}.accessImpl()->fixFace(face);
             std::shared_ptr<Geometry::BoundSurface> boundSurface =
                     generateSurface<McCAD::Geometry::PLSolid>(
                         face, solidObj.accessSImpl()->boxSquareLength);
@@ -108,11 +110,11 @@ McCAD::Decomposition::FacesListGenerator::operator()(
         //std::cout << "face = aFace;" << std::endl;
         BRepTools::Update(face);
         //std::cout << "BRepTools::Update(face);" << std::endl;
-        Standard_Boolean rejectCondition = preproc->accessImpl()->checkFace(face);
+        Standard_Boolean rejectCondition = Tools::Preprocessor{}.accessImpl()->checkFace(face);
         //std::cout << "checkFace(face)" << std::endl;
         if (!rejectCondition){
             ++faceNumber;
-            preproc->accessImpl()->fixFace(face);
+            Tools::Preprocessor{}.accessImpl()->fixFace(face);
             //std::cout << "fixFace(face)" << std::endl;
             std::shared_ptr<Geometry::BoundSurface> boundSurface =
                     generateSurface<McCAD::Geometry::CYLSolid>(

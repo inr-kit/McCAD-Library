@@ -2,8 +2,7 @@
 #include "generateFacesList.hpp"
 #include "generateFacesList.tpp"
 
-McCAD::Decomposition::FacesListGenerator::FacesListGenerator()
-    : preproc{std::make_unique<Tools::Preprocessor>()}{
+McCAD::Decomposition::FacesListGenerator::FacesListGenerator(){
 }
 
 McCAD::Decomposition::FacesListGenerator::~FacesListGenerator(){
