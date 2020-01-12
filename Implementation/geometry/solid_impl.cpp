@@ -33,8 +33,8 @@ McCAD::Geometry::Solid::Impl::createOBB(Standard_Real bndBoxGap){
 void
 McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real scalingFactor){
     // Calculate the oriented bounding box of the solid.
-    meshDeflection = 2 * std::max(std::max(obb.XHSize(), obb.YHSize()),
-                                  obb.ZHSize()) / scalingFactor;
+    meshDeflection = 2 * std::max({obb.XHSize(), obb.YHSize(), obb.ZHSize()}) /
+            scalingFactor;
     boxSquareLength = sqrt(obb.SquareExtent());
 }
 

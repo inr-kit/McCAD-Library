@@ -10,8 +10,7 @@ McCAD::Decomposition::Preprocessor::~Preprocessor(){
 McCAD::Decomposition::Preprocessor::VariantType
 McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
     VariantType solidVariant;
-    auto& solid = TopoDS::Solid(shape);
-    if (!checkBndSurfaces(solid)){
+    if (auto& solid = TopoDS::Solid(shape); !checkBndSurfaces(solid)){
         switch (determineSolidType(solid)){
         case solidType.planarSolid:{
             solidVariant = SolidObjCreator{}.createObj<
