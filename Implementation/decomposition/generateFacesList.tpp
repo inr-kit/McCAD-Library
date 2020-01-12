@@ -130,7 +130,6 @@ McCAD::Decomposition::FacesListGenerator::operator()(
                 }
             } else{
             //std::cout << "face rejected" << std::endl;
-            continue;
             }
         }
     }

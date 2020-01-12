@@ -28,14 +28,14 @@ namespace McCAD::Decomposition{
     ~Preprocessor();
 
   private:
-    using variantType = std::variant<std::monostate,
+    using VariantType = std::variant<std::monostate,
     std::shared_ptr<McCAD::Geometry::PLSolid>,
     std::shared_ptr<McCAD::Geometry::CYLSolid>>;
 
   public:
     McCAD::Tools::SolidType solidType;
 
-    variantType perform(const TopoDS_Shape& shape);
+    VariantType perform(const TopoDS_Shape& shape);
     Standard_Boolean checkBndSurfaces(const TopoDS_Solid& solid);
     Standard_Integer determineSolidType(const TopoDS_Solid& solid);
   };

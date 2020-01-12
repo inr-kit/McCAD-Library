@@ -16,8 +16,8 @@ McCAD::Decomposition::FacesListGenerator::mergeSurfaces(
     if (surfacesList.size() < 2){
         return;
     }
-    for (Standard_Integer i = 0; i <= surfacesList.size() - 2; ++i){
-        for (Standard_Integer j = i+1; j <= surfacesList.size() - 1; ++j){
+    for (Standard_Integer i = 0; i < surfacesList.size(); ++i){
+        for (Standard_Integer j = i+1; j < surfacesList.size(); ++j){
             if (*surfacesList[i] == *surfacesList[j]){
                 surfacesList[j]->accessSImpl()->surfaceNumber =
                         surfacesList[i]->accessSImpl()->surfaceNumber;
@@ -52,14 +52,14 @@ McCAD::Decomposition::FacesListGenerator::mergeSurfaces(
                         newboundSurface->accessSImpl()->surfaceNumber =
                                 surfacesList[i]->accessSImpl()->surfaceNumber;
                         // Add triangles of surface i.
-                        for (Standard_Integer k = 0; k <=
-                             surfacesList[i]->accessBSImpl()->meshTrianglesList.size() - 1; ++k){
+                        for (Standard_Integer k = 0; k <
+                             surfacesList[i]->accessBSImpl()->meshTrianglesList.size(); ++k){
                             newboundSurface->accessBSImpl()->meshTrianglesList.push_back(
                                         std::move(surfacesList[i]->accessBSImpl()->meshTrianglesList[k]));
                         }
                         // Add triangles of surface j.
-                        for (Standard_Integer k = 0; k <=
-                             surfacesList[j]->accessBSImpl()->meshTrianglesList.size() - 1; ++k){
+                        for (Standard_Integer k = 0; k <
+                             surfacesList[j]->accessBSImpl()->meshTrianglesList.size(); ++k){
                             newboundSurface->accessBSImpl()->meshTrianglesList.push_back(
                                         std::move(surfacesList[j]->accessBSImpl()->meshTrianglesList[k]));
                         }
