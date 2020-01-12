@@ -9,7 +9,7 @@ McCAD::Decomposition::Preprocessor::~Preprocessor(){
 
 McCAD::Decomposition::Preprocessor::VariantType
 McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
-    Preprocessor::VariantType solidVariant;
+    VariantType solidVariant;
     auto& solid = TopoDS::Solid(shape);
     if (!checkBndSurfaces(solid)){
         switch (determineSolidType(solid)){

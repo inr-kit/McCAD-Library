@@ -24,17 +24,18 @@ namespace McCAD::Decomposition{
       FacesListGenerator();
       ~FacesListGenerator();
 
-      std::vector<std::shared_ptr<Geometry::BoundSurface>> operator()(
+      using BS = std::shared_ptr<Geometry::BoundSurface>;
+
+      std::vector<BS> operator()(
               const Geometry::PLSolid& solidObj);
-      std::vector<std::shared_ptr<Geometry::BoundSurface>> operator()(
+      std::vector<BS> operator()(
               const Geometry::CYLSolid& solidObj);
       template<typename solidObjType>
-      std::shared_ptr<Geometry::BoundSurface> generateSurface(
-              const TopoDS_Face& face, Standard_Real& boxSquareLength,
-              Standard_Integer mode = 0);
-      void mergeSurfaces(
-              std::vector<std::shared_ptr<Geometry::BoundSurface>>& surfacesList,
-              Standard_Real& boxSquareLength);
+      BS generateSurface(const TopoDS_Face& face,
+                         Standard_Real& boxSquareLength,
+                         Standard_Integer mode = 0);
+      void mergeSurfaces(std::vector<BS>& surfacesList,
+                         Standard_Real& boxSquareLength);
     };
 }
 

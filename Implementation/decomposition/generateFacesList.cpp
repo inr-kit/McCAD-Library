@@ -10,7 +10,7 @@ McCAD::Decomposition::FacesListGenerator::~FacesListGenerator(){
 
 void
 McCAD::Decomposition::FacesListGenerator::mergeSurfaces(
-        std::vector<std::shared_ptr<Geometry::BoundSurface>>& surfacesList,
+        std::vector<BS>& surfacesList,
         Standard_Real& boxSquareLength){
     //std::cout << "mergeSurfaces" << std::endl;
     if (surfacesList.size() < 2){
@@ -46,7 +46,7 @@ McCAD::Decomposition::FacesListGenerator::mergeSurfaces(
                         TopoDS_Face newFace = Tools::PlaneFuser{}(
                                     surfacesList[i]->accessSImpl()->face,
                                     surfacesList[j]->accessSImpl()->face);
-                        std::shared_ptr<Geometry::BoundSurface> newboundSurface =
+                        BS newboundSurface =
                                 generateSurface<McCAD::Geometry::PLSolid>(
                                     newFace, boxSquareLength);
                         newboundSurface->accessSImpl()->surfaceNumber =

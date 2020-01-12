@@ -33,8 +33,8 @@ McCAD::Decomposition::FacesListGenerator::operator()(
     TopoDS_Solid solid = solidObj.accessSImpl()->solid;
     TopoDS_Face face;
     Standard_Integer faceNumber = 0;
-    std::vector<std::shared_ptr<Geometry::BoundSurface>> facesList;
-    std::vector<std::shared_ptr<Geometry::BoundSurface>> planesList;
+    std::vector<BS> facesList;
+    std::vector<BS> planesList;
     for(const auto& aFace : ShapeView<TopAbs_FACE>{solid}){
         // Update UV points of the face.
         face = aFace;
@@ -44,8 +44,7 @@ McCAD::Decomposition::FacesListGenerator::operator()(
         if (!rejectCondition){
             ++faceNumber;
             Tools::Preprocessor{}.accessImpl()->fixFace(face);
-            std::shared_ptr<Geometry::BoundSurface> boundSurface =
-                    generateSurface<McCAD::Geometry::PLSolid>(
+            BS boundSurface = generateSurface<McCAD::Geometry::PLSolid>(
                         face, solidObj.accessSImpl()->boxSquareLength);
             boundSurface->accessSImpl()->surfaceNumber = faceNumber;
             if (boundSurface->accessBSImpl()->generateMesh(
@@ -102,9 +101,9 @@ McCAD::Decomposition::FacesListGenerator::operator()(
     //std::cout << "solidObj.accessSImpl()->solid" << std::endl;
     TopoDS_Face face;
     Standard_Integer faceNumber = 0;
-    std::vector<std::shared_ptr<Geometry::BoundSurface>> facesList;
-    std::vector<std::shared_ptr<Geometry::BoundSurface>> planesList;
-    std::vector<std::shared_ptr<Geometry::BoundSurface>> cylindersList;
+    std::vector<BS> facesList;
+    std::vector<BS> planesList;
+    std::vector<BS> cylindersList;
     for(const auto& aFace : ShapeView<TopAbs_FACE>{solid}){
         face = aFace;
         //std::cout << "face = aFace;" << std::endl;
@@ -116,8 +115,7 @@ McCAD::Decomposition::FacesListGenerator::operator()(
             ++faceNumber;
             Tools::Preprocessor{}.accessImpl()->fixFace(face);
             //std::cout << "fixFace(face)" << std::endl;
-            std::shared_ptr<Geometry::BoundSurface> boundSurface =
-                    generateSurface<McCAD::Geometry::CYLSolid>(
+            BS boundSurface = generateSurface<McCAD::Geometry::CYLSolid>(
                         face, solidObj.accessSImpl()->boxSquareLength);
             boundSurface->accessSImpl()->surfaceNumber = faceNumber;
             if (boundSurface->accessBSImpl()->generateMesh(
