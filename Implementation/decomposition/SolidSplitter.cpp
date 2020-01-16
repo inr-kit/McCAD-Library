@@ -1,10 +1,8 @@
+//McCAD
 #include "SolidSplitter.hpp"
-
 // C++
 #include <array>
-
 // OCC
-#include <Bnd_Box.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <BRepBndLib.hxx>
 #include <BRepAlgoAPI_Common.hxx>
@@ -16,52 +14,29 @@
 
 std::optional<std::pair<TopoDS_Shape, TopoDS_Shape>>
 McCAD::Decomposition::SolidSplitter::operator()(
-        const TopoDS_Solid& solidToSplit,
-        const Bnd_OBB& obb,
+        const TopoDS_Solid& solidToSplit, const Bnd_OBB& obb,
         const TopoDS_Face& splittingFace) const{
     auto boundingBox = calculateOBB(obb);
-
     auto halfBoundingBoxes = calculateHalfBB(splittingFace, boundingBox);
     if(!halfBoundingBoxes) return std::nullopt;
-
     return calculateHalfSolids(solidToSplit, *halfBoundingBoxes);
 }
 
 TopoDS_Shape
 McCAD::Decomposition::SolidSplitter::calculateOBB(
-        Bnd_OBB obb) const{
-    obb.Enlarge(0.4); // where does 0.4 come from? Should it be a parameter/tolerance for this class object?
-    //boxSquareLength = sqrt(bndBox.SquareExtent());
+        Bnd_OBB obb, Standard_Real clearanceTolerance) const{
+    obb.Enlarge(clearanceTolerance);
     std::array<gp_Pnt, 8> corners;
     obb.GetVertex(&corners[0]);
-
     gp_Trsf transformation;
-    transformation.SetTransformation(
-                gp_Ax3{
-                    gp_Pnt(0, 0, 0),
-                    obb.ZDirection(),
-                    obb.XDirection()
-                });
+    transformation.SetTransformation(gp_Ax3{gp_Pnt(0, 0, 0), obb.ZDirection(),
+                                            obb.XDirection()});
     auto boundingBox = BRepPrimAPI_MakeBox{
-            corners[0].Transformed(transformation.Inverted()),
-            corners[7].Transformed(transformation.Inverted())
-        }.Shape();
-
-    BRepBuilderAPI_Transform boxTransform{transformation};
+            corners[0].Transformed(transformation),
+            corners[7].Transformed(transformation)}.Shape();
+    BRepBuilderAPI_Transform boxTransform{transformation.Inverted()};
     boxTransform.Perform(boundingBox);
     return boxTransform.ModifiedShape(boundingBox);
-//    Bnd_Box boundingBox;
-//    BRepBndLib::Add(solid, boundingBox);
-//    boundingBox.SetGap(0.5);
-
-//    std::array<Standard_Real, 3> minCoords;
-//    std::array<Standard_Real, 3> maxCoords;
-//    boundingBox.Get(minCoords[0], minCoords[1], minCoords[2],
-//                    maxCoords[0], maxCoords[1], maxCoords[2]);
-//    return BRepPrimAPI_MakeBox{
-//        gp_Pnt{minCoords[0], minCoords[1], minCoords[2]},
-//        gp_Pnt{maxCoords[0], maxCoords[1], maxCoords[2]}
-//    }.Shape();
 }
 
 std::pair<gp_Pnt, gp_Pnt>
