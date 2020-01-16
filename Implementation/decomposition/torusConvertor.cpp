@@ -24,6 +24,7 @@ void
 McCAD::Decomposition::TorusConvertor::operator()(Geometry::Solid::Impl& solidImpl){
     auto& solidsList = *solidImpl.splitSolidList;
     for(Standard_Integer index = 1; index <= solidsList.Length(); ++index){
+        //std::cout << "TorusConvertor" << std::endl;
         if (Preprocessor{}.determineSolidType(TopoDS::Solid(solidsList(index))) ==
                 Tools::SolidType{}.toroidal){
             auto newShape = convertTorusToCylinder(solidsList(index));
@@ -37,6 +38,7 @@ McCAD::Decomposition::TorusConvertor::operator()(Geometry::Solid::Impl& solidImp
 std::optional<TopoDS_Shape>
 McCAD::Decomposition::TorusConvertor::convertTorusToCylinder(
         const TopoDS_Shape& shape, Standard_Real scaleFactor){
+    //std::cout << "convertTorusToCylinder" << std::endl;
     std::vector<TopoDS_Face> planesList;
     std::set<Standard_Real> radii;
     for(const auto& face : detail::ShapeView<TopAbs_FACE>{shape}){
@@ -66,6 +68,7 @@ void
 McCAD::Decomposition::TorusConvertor::retrieveSolid(
         TopoDS_Solid& cylinder, const std::vector<TopoDS_Face>& planesList,
         Standard_Real innerRadius, const Standard_Real& scaleFactor){
+    //std::cout << "retrieveSolid" << std::endl;
     // If the original torus solid was hollow the created cylinder also shoudld be.
     gp_Vec vector(BRepAdaptor_Surface(planesList[0]).Plane().Location(),
             BRepAdaptor_Surface(planesList[1]).Plane().Location());
@@ -87,6 +90,7 @@ McCAD::Decomposition::TorusConvertor::retrieveSolid(
 std::optional<TopoDS_Shape>
 McCAD::Decomposition::TorusConvertor::fitCylinder(
         TopoDS_Solid& cylinder, std::vector<TopoDS_Face>& planesList){
+    //std::cout << "fitCylinder" << std::endl;
     // Split extra part on one side of the cylinder
     auto firstSolids = splitSolid(cylinder, planesList[0]);
     if(!firstSolids.has_value()) return std::nullopt;
@@ -120,6 +124,7 @@ McCAD::Decomposition::TorusConvertor::fitCylinder(
 std::optional<std::pair<TopoDS_Shape, TopoDS_Shape>>
 McCAD::Decomposition::TorusConvertor::splitSolid(TopoDS_Solid& solid,
                                                  TopoDS_Face& splitFace){
+    //std::cout << "splitSolid" << std::endl;
     auto solidObj = Geometry::Solid::Impl{};
     solidObj.initiate(solid);
     solidObj.createOBB();
