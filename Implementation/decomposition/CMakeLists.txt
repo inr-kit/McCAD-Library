@@ -14,9 +14,6 @@ add_library(DECOMPOSITION_IMPL OBJECT
   SolidRepairer.cpp)
 
 install(FILES
-  preprocessor.hpp
-  constructSolidObj.hpp
-  generateFacesList.hpp
   pointOnSurface.hpp
   triangleCollision.hpp
   edgeOnSurface.hpp

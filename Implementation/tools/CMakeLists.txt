@@ -17,7 +17,7 @@ install(FILES
   surfacesFuser.hpp
   FaceParameters.hpp
   ShapeView.hpp
-  solidType.hpp
+  SolidType.hpp
   senseEvaluateor.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/tools)
 

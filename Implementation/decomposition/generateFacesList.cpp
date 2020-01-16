@@ -29,14 +29,13 @@ McCAD::Decomposition::FacesListGenerator::mergeSurfaces(
                                 surfacesList[i]->accessSImpl()->face,
                                 surfacesList[j]->accessSImpl()->face).value();
                     std::shared_ptr<Geometry::BoundSurface> newboundSurface =
-                            GenerateFacesList{}(newFace, boxSquareLength);
+                            FacesListGenerator{}(newFace, boxSquareLength);
                     newboundSurface->accessSImpl()->surfaceNumber =
                             surfacesList[i]->accessSImpl()->surfaceNumber;
-                    /*
                     if (surfacesList[i]->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
-                        TopoDS_Face newFace = Tools::PlaneFuser{}(
+                        TopoDS_Face newFace = Tools::SurfacesFuser{}(
                                     surfacesList[i]->accessSImpl()->face,
-                                    surfacesList[j]->accessSImpl()->face);
+                                    surfacesList[j]->accessSImpl()->face).value();
                         BS newboundSurface =
                                 generateSurface<McCAD::Geometry::PLSolid>(
                                     newFace, boxSquareLength);
