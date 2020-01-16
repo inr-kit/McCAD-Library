@@ -19,6 +19,7 @@
 #include <BRepBndLib.hxx>
 #include <Bnd_OBB.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
+#include <BRepBuilderAPI_Transform.hxx>
 
 void
 McCAD::Decomposition::TorusConvertor::operator()(Geometry::Solid::Impl& solidImpl){
@@ -41,25 +42,78 @@ McCAD::Decomposition::TorusConvertor::convertTorusToCylinder(
     //std::cout << "convertTorusToCylinder" << std::endl;
     std::vector<TopoDS_Face> planesList;
     std::set<Standard_Real> radii;
+    gp_Dir torDir;
+    //gp_Ax3 torCoor, cylCoor;
     for(const auto& face : detail::ShapeView<TopAbs_FACE>{shape}){
         if (BRepAdaptor_Surface(face).GetType() == GeomAbs_Plane){
             planesList.push_back(face);
         }
         else if (BRepAdaptor_Surface(face).GetType() == GeomAbs_Torus){
             radii.insert(BRepAdaptor_Surface(face).Torus().MinorRadius());
+            torDir = BRepAdaptor_Surface(face).Torus().Axis().Direction();
+            //torCoor = BRepAdaptor_Surface(face).Torus().Position();
         }
     }
     if (planesList.size() != 2 || radii.size() > 2) return shape;
     // Create cylinder
     gp_Vec vector(BRepAdaptor_Surface(planesList[0]).Plane().Location(),
             BRepAdaptor_Surface(planesList[1]).Plane().Location());
+    if (!PointInSolid{}(shape, BRepAdaptor_Surface(planesList[0]).Plane().Location()) ||
+            !PointInSolid{}(shape, BRepAdaptor_Surface(planesList[1]).Plane().Location())){
+        std::cout << "***** outside *******" << std::endl;
+        return shape;
+    }
+    //if (gp_Dir(vector).Angle(torDir) != 1.5708) return shape;
     gp_Ax2 axis(BRepAdaptor_Surface(planesList[0]).Plane().Location(), gp_Dir(vector));
     axis.Translate(0.5*(1 - scaleFactor)*vector);
     TopoDS_Solid cylinder = BRepPrimAPI_MakeCylinder(axis, *radii.rbegin(),
                                                      scaleFactor*vector.Magnitude());
+    /*
+    for(const auto& face : detail::ShapeView<TopAbs_FACE>{cylinder}){
+        if (BRepAdaptor_Surface(face).GetType() == GeomAbs_Cylinder){
+            std::cout << "cyl axis: " << BRepAdaptor_Surface(face).Cylinder().Axis().Direction().X() <<
+                         ", " << BRepAdaptor_Surface(face).Cylinder().Axis().Direction().Y() <<
+                         ", " << BRepAdaptor_Surface(face).Cylinder().Axis().Direction().Z() << std::endl;
+            std::cout << "cyl axis angle w vecotr: " << BRepAdaptor_Surface(face).Cylinder().Axis().Direction().Angle(gp_Dir(vector)) << std::endl;
+            std::cout << "cyl axis angle w torAxis: " << BRepAdaptor_Surface(face).Cylinder().Axis().Direction().Angle(torDir) << std::endl;
+            cylCoor = BRepAdaptor_Surface(face).Cylinder().Position();
+        }}
+    std::cout << "Coord: " << torCoor.Angle(cylCoor) << std::endl;
+    STEPControl_Writer writer0;
+    writer0.Transfer(shape, STEPControl_StepModelType::STEPControl_AsIs);
+    writer0.Transfer(cylinder, STEPControl_StepModelType::STEPControl_AsIs);*/
     if (radii.size() == 2) retrieveSolid(cylinder, planesList, *(++radii.rbegin()),
                                          scaleFactor);
+    /*
+    for(const auto& face : detail::ShapeView<TopAbs_FACE>{cylinder}){
+        if (BRepAdaptor_Surface(face).GetType() == GeomAbs_Cylinder){
+            std::cout << "cyl axis: " << BRepAdaptor_Surface(face).Cylinder().Axis().Direction().X() <<
+                         ", " << BRepAdaptor_Surface(face).Cylinder().Axis().Direction().Y() <<
+                         ", " << BRepAdaptor_Surface(face).Cylinder().Axis().Direction().Z() << std::endl;
+            std::cout << "cyl symmetry: " << BRepAdaptor_Surface(face).Cylinder().Axis().Direction().Angle(gp_Dir(vector)) << std::endl;
+            std::cout << "cyl symmetry: " << BRepAdaptor_Surface(face).Cylinder().Axis().Direction().Angle(torDir) << std::endl;
+            cylCoor = BRepAdaptor_Surface(face).Cylinder().Position();
+        }}
+    gp_Trsf transformation;
+    transformation.SetTransformation(cylCoor, torCoor);
+    BRepBuilderAPI_Transform cylTransform{transformation};
+    cylTransform.Perform(cylinder);
+    for (const auto& solid : detail::ShapeView<TopAbs_SOLID>{cylTransform.ModifiedShape(cylinder)}){
+        cylinder = solid;
+    }*/
     auto newSolid = fitCylinder(cylinder, planesList);
+    /*//debug
+    writer0.Transfer(cylinder, STEPControl_StepModelType::STEPControl_AsIs);
+    Standard_Integer kk = 0;
+    std::string filename = "/home/mharb/Documents/McCAD_refactor/examples/bbox/cyl";
+    std::string suffix = ".stp";
+    while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
+        ++kk;
+    }
+    filename += std::to_string(kk);
+    filename += suffix;
+    writer0.Write(filename.c_str());
+    *///debug
     if(!newSolid.has_value()) return shape;
     return *newSolid;
 }

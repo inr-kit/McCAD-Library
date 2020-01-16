@@ -20,6 +20,7 @@ McCAD::Decomposition::SolidSplitter::operator()(
         const TopoDS_Face& splittingFace) const{
     auto boundingBox = calculateOBB(obb);
     /*//debug
+    std::cout << "SolidSplitter" << std::endl;
     STEPControl_Writer writer0;
     writer0.Transfer(boundingBox, STEPControl_StepModelType::STEPControl_AsIs);
     writer0.Transfer(solidToSplit, STEPControl_StepModelType::STEPControl_AsIs);
