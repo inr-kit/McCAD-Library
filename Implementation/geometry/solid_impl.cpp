@@ -12,6 +12,7 @@ McCAD::Geometry::Solid::Impl::~Impl(){
 
 void
 McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
+    //std::cout << "initiate" << std::endl;
     solidShape = aSolidShape;
     solid = TopoDS::Solid(solidShape);
 }
