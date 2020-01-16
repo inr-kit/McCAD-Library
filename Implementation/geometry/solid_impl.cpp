@@ -12,11 +12,8 @@ McCAD::Geometry::Solid::Impl::~Impl(){
 
 void
 McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
-    //std::cout << "solid initiate" << std::endl;
     solidShape = aSolidShape;
-    //std::cout << "solidShape" << std::endl;
     solid = TopoDS::Solid(solidShape);
-    //std::cout << "solid" << std::endl;
 }
 
 void
@@ -36,10 +33,9 @@ McCAD::Geometry::Solid::Impl::createOBB(Standard_Real bndBoxGap){
 void
 McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real scalingFactor){
     // Calculate the oriented bounding box of the solid.
-    meshDeflection = 2 * std::max(std::max(obb.XHSize(), obb.YHSize()),
-                                  obb.ZHSize()) / scalingFactor;
+    meshDeflection = 2 * std::max({obb.XHSize(), obb.YHSize(), obb.ZHSize()}) /
+            scalingFactor;
     boxSquareLength = sqrt(obb.SquareExtent());
-    //std::cout << "boxSquareLength: " << boxSquareLength << std::endl;
 }
 
 void
@@ -90,7 +86,7 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTol
         }
     }
 }
-
+/*
 void
 McCAD::Geometry::Solid::Impl::generateSurfacesList(){
     // Generate a list of faces of the solid.
@@ -155,8 +151,6 @@ McCAD::Geometry::Solid::Impl::generateSurface(const TopoDS_Face& face,
             return boundSurfacePlane;
         } else if (AdaptorSurface.GetType() == GeomAbs_Cylinder){
             return nullptr;
-        } else if (AdaptorSurface.GetType() == GeomAbs_Cone){
-            return nullptr;
         } else{
             return nullptr;
         }
@@ -192,7 +186,7 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
                 filename += std::to_string(kk);
                 filename += suffix;
                 writer6.Write(filename.c_str());
-                */
+
                 // Test if the two surfaces can be fused.
                 if (*surfacesList[i] << *surfacesList[j]){
                     //std::cout << "*** equal fuse" << std::endl;
@@ -245,7 +239,7 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
                     filename += std::to_string(kk);
                     filename += suffix;
                     writer7.Write(filename.c_str());
-                    */
+
                     surfacesList.erase(surfacesList.begin() + j);
                     --j;
                 }
@@ -256,3 +250,4 @@ McCAD::Geometry::Solid::Impl::mergeSurfaces(std::vector<std::unique_ptr<BoundSur
         }
     }
 }
+*/

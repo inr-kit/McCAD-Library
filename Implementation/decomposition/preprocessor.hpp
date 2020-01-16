@@ -3,10 +3,14 @@
 
 // C++
 #include <variant>
+#include <memory>
 // McCAD
-#include "planarSolid_impl.hpp"
 #include <Standard.hxx>
 #include "ShapeView.hpp"
+#include "SolidType.hpp"
+#include "planarSolid_impl.hpp"
+#include "cylSolid_impl.hpp"
+#include "createSolidObj.hpp"
 // OCC
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
@@ -23,11 +27,17 @@ namespace McCAD::Decomposition{
     Preprocessor();
     ~Preprocessor();
 
-    std::variant<std::monostate, std::shared_ptr<McCAD::Geometry::PLSolid>> perform(const TopoDS_Shape& shape);
+  private:
+    using VariantType = std::variant<std::monostate,
+    std::shared_ptr<McCAD::Geometry::PLSolid>,
+    std::shared_ptr<McCAD::Geometry::CYLSolid>>;
+
+  public:
+    McCAD::Tools::SolidType solidType;
+
+    VariantType perform(const TopoDS_Shape& shape);
     Standard_Boolean checkBndSurfaces(const TopoDS_Solid& solid);
-    std::string determineSolidType(const TopoDS_Solid& solid);
-    template<typename objType>
-    std::shared_ptr<objType> constructObj(const TopoDS_Shape& shape);
+    Standard_Integer determineSolidType(const TopoDS_Solid& solid);
   };
 }
 

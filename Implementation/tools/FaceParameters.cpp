@@ -2,27 +2,13 @@
 #include "FaceParameters.hpp"
 
 gp_Dir
-McCAD::Tools::normalOnFace(
-        const TopoDS_Face& face,
-        const gp_Pnt& point){
-
+McCAD::Tools::normalOnFace(const TopoDS_Face& face, const gp_Pnt& point){
     BRepAdaptor_Surface surfaceAdaptor{face, Standard_True};
     auto f_ptr = detail::getSurfFPtr(surfaceAdaptor.GetType());
-
-    if(!f_ptr)
-        return gp_Dir{1.0, 0.0, 0.0};
-
-    auto direction
-            = normalOnFace(
-                calcDerivative(
-                    surfaceAdaptor,
-                    (*f_ptr)(surfaceAdaptor, point)
-                    )
-                );
-
-    if (face.Orientation() == TopAbs_FORWARD)
-        direction.Reverse();
-
+    if(!f_ptr) return gp_Dir{1.0, 0.0, 0.0};
+    auto direction = normalOnFace(calcDerivative(surfaceAdaptor,
+                                                 (*f_ptr)(surfaceAdaptor, point)));
+    if (face.Orientation() == TopAbs_FORWARD) direction.Reverse();
     return direction;
 }
 
@@ -39,20 +25,16 @@ McCAD::Tools::normalOnFace(
 }
 
 McCAD::Tools::DerivativeUV
-McCAD::Tools::calcDerivative(
-        const BRepAdaptor_Surface& surface,
-        const PositionUV& position){
+McCAD::Tools::calcDerivative(const BRepAdaptor_Surface& surface,
+                             const PositionUV& position){
     gp_Pnt dummyPoint;
     DerivativeUV deriv;
-    surface.D1(position.u, position.v,
-               dummyPoint,
-               deriv.u, deriv.v);
+    surface.D1(position.u, position.v, dummyPoint, deriv.u, deriv.v);
     return deriv;
 }
 
 McCAD::Tools::detail::SurfaceFunctionPointer
-McCAD::Tools::detail::getSurfFPtr(
-        GeomAbs_SurfaceType surfaceType){
+McCAD::Tools::detail::getSurfFPtr(GeomAbs_SurfaceType surfaceType){
     switch(surfaceType){
     case GeomAbs_Plane:
         return &toPositionUV<GeomAbs_Plane>;

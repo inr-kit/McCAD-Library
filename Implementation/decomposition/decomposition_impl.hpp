@@ -9,10 +9,13 @@
 #include "decomposition.hpp"
 #include "inputdata_impl.hpp"
 #include "planarSolid_impl.hpp"
+#include "cylSolid_impl.hpp"
 #include "preprocessor.hpp"
 #include "decomposeSolid_impl.hpp"
 #include "ShapeView.hpp"
 #include <Standard.hxx>
+#include "SolidType.hpp"
+#include "tools_impl.hpp"
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>
 #include <TopoDS.hxx>
@@ -25,6 +28,8 @@ namespace McCAD::Decomposition{
   public:
     Impl(const General::InputData& inputData);
     ~Impl();
+
+    Tools::SolidType solidType;
 
     std::unique_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;

@@ -10,7 +10,7 @@ McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inp
   auto& inputSolidsList = inputData.accessImpl()->inputSolidsList;
   if (inputSolidsList->Length() > 0){
       std::cout << "> Found " << inputSolidsList->Length() <<
-                   " solid(s) in the input file." << std::endl;
+                   " solid(s) in the input step file." << std::endl;
       std::cout << " > Spliting compound input solids" << std::endl;
       // Split compound input solids.
       flattenSolidHierarchy(inputSolidsList);
@@ -56,28 +56,42 @@ McCAD::Decomposition::Decompose::Impl::perform(){
     for(const auto& shape : *splitInputSolidsList){
         auto solid = Preprocessor{}.perform(shape);
         if (std::holds_alternative<std::monostate>(solid)){
+            //std::cout << "empty variant" << std::endl;
             rejectedInputSolidsList->Append(shape);
-        } else{
-            // Using switch for now. Should be separated in a separate class an called
-            // for each specific type of solid object.
-            switch (Standard_Integer(solid.index())){
-            default:
-                auto& solidImpl = *std::get<1>(solid)->accessSImpl();
-                // Perform decomposition on the repaired solid.
-                std::cout << "   - Decomposing solid" << std::endl;
-                if (DecomposeSolid{}.accessDSImpl()->perform(solidImpl)){
-                    for(const auto& resultSolid : *solidImpl.splitSolidList){
-                        resultSolidsList->Append(resultSolid);
-                    }
-                    if (solidImpl.rejectedsubSolidsList->Length() >= 1){
-                        for(const auto& rejectedSubSolid : *solidImpl.rejectedsubSolidsList){
-                            rejectedsubSolidsList->Append(rejectedSubSolid);
-                        }
-                    }
-                } else{
-                    rejectedInputSolidsList->Append(shape);
+            continue;
+        }
+        // Using switch for now. Should be separated in a separate class an called
+        // for each specific type of solid object.
+        switch (Standard_Integer(solid.index())){
+        case solidType.planarSolid:{
+            //std::cout << "solidType.planarSolid" << std::endl;
+            auto& solidImpl = *std::get<solidType.planarSolid>(solid)->accessSImpl();
+            // Perform decomposition on the repaired solid.
+            std::cout << "   - Decomposing solid" << std::endl;
+            if (DecomposeSolid{}.accessDSImpl()->perform(solidImpl)){
+                for(const auto& resultSolid : *solidImpl.splitSolidList){
+                    resultSolidsList->Append(resultSolid);
                 }
+                if (solidImpl.rejectedsubSolidsList->Length() >= 1){
+                    for(const auto& rejectedSubSolid : *solidImpl.rejectedsubSolidsList){
+                        rejectedsubSolidsList->Append(rejectedSubSolid);
+                    }
+                }
+            } else{
+                rejectedInputSolidsList->Append(shape);
             }
+            break;
+        } case solidType.cylindricalSolid:{
+            std::cout << "   - Processing of solids with non-planar surfaces"
+                         " is not yet supported!.\n     Solid will be added"
+                         " to rejected solids file" << std::endl;
+            rejectedInputSolidsList->Append(shape);
+            break;
+        } default:
+            std::cout << "   - Processing of solids with non-planar surfaces"
+                         " is not yet supported!.\n     Solid will be added"
+                         " to rejected solids file" << std::endl;
+            rejectedInputSolidsList->Append(shape);
         }
     }
     std::cout << "   - There are " << rejectedInputSolidsList->Length() <<
