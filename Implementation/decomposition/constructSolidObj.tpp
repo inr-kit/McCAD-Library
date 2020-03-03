@@ -3,10 +3,10 @@
 #include "solid_impl.hpp"
 #include "generateFacesList.hpp"
 
-template<typename solidObjType>
-std::shared_ptr<solidObjType>
-McCAD::Decomposition::SolidObjConstructor::constructObj(const TopoDS_Shape& shape){
-    std::shared_ptr<solidObjType> solidObj = std::make_shared<solidObjType>();
+template<typename SolidObjType>
+std::shared_ptr<SolidObjType>
+McCAD::Decomposition::constructObj(const TopoDS_Shape& shape){
+    std::shared_ptr<SolidObjType> solidObj = std::make_shared<SolidObjType>();
     auto& solidImpl = *solidObj->accessSImpl();
     solidImpl.initiate(shape);
     solidImpl.createOBB();

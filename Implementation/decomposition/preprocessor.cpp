@@ -9,16 +9,13 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
     if (!checkBndSurfaces(solid)){
         switch (determineSolidType(solid)){
         case solidType.planar:
-            solidVariant = SolidObjConstructor{}.constructObj<
-                    McCAD::Geometry::PLSolid>(shape);
+            solidVariant = constructObj<McCAD::Geometry::PLSolid>(shape);
             return solidVariant;
         case solidType.cylindrical:
-            solidVariant = SolidObjConstructor{}.constructObj<
-                    McCAD::Geometry::CYLSolid>(shape);
+            solidVariant = constructObj<McCAD::Geometry::CYLSolid>(shape);
             return solidVariant;
         case solidType.toroidal:
-            solidVariant = SolidObjConstructor{}.constructObj<
-                    McCAD::Geometry::TORSolid>(shape);
+            solidVariant = constructObj<McCAD::Geometry::TORSolid>(shape);
             return solidVariant;
         default: goto rejectSolid;
         }

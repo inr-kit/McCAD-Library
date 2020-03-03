@@ -7,13 +7,8 @@
 #include <TopoDS_Shape.hxx>
 
 namespace McCAD::Decomposition{
-    class SolidObjConstructor{
-    public:
-      SolidObjConstructor() = default;
-      
-      template<typename solidObjType>
-      std::shared_ptr<solidObjType> constructObj(const TopoDS_Shape& shape);
-    };
+template<typename SolidObjType>
+std::shared_ptr<SolidObjType> constructObj(const TopoDS_Shape& shape);
 }
 
 //McCAD

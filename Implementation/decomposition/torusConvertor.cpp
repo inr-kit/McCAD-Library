@@ -47,7 +47,7 @@ McCAD::Decomposition::TorusConvertor::convertTorusToCylinder(
     axis.Translate(0.5*(1 - scaleFactor)*vector);
     TopoDS_Face cylinder = BRepPrimAPI_MakeCylinder(axis, radius,
                                                     scaleFactor*vector.Magnitude());
-    createSolid(cylinder, planesList);
+    //createSolid(cylinder, planesList);
     //debug
     STEPControl_Writer writer7;
     writer7.Transfer(cylinder, STEPControl_StepModelType::STEPControl_AsIs);
