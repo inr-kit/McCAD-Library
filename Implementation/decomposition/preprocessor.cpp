@@ -17,8 +17,7 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
                     McCAD::Geometry::CYLSolid>(shape);
             return solidVariant;
         case solidType.toroidal:
-            solidVariant = SolidObjConstructor{}.constructObj<
-                    McCAD::Geometry::TORSolid>(shape);
+            solidVariant = constructObj<McCAD::Geometry::TORSolid>(shape);
             return solidVariant;
         default: goto rejectSolid;
         }
