@@ -1,7 +1,25 @@
-McCAD_refactor project.
+McCAD v1.0L
 ----------------------
-This project aims at a cleanup and isolation of the core algorithms of the MCNP-to-CAD code "McCAD"
-based on the latest updates/changes implemented in the code (https://github.com/McCadKIT/FreeCAD-McCad).
+McCAD is an interface library that aides in the conversion of CAD solid models "BRep" to MCNP "CSG".
+The library is rwritten in C++ and is decomposed into three main parts:
+- Decompostion: carries tasks related to simplification of complex solid models by means of decomposition
+  into primitive convex solids.
+- Void generation and Conversion: the main responsibility is the generation of void and conversion of the
+  resulting primitive solids into MCNP input syntax.
+- Material: maps material definitions to resulting decomposed solids to be written to MCNP input format.
 
--------
-More details on the project and the installation will be added in the furture.
+Decomposition
+-------------
+An isolated and improved algorithm based on the latest updates/changes implemented in (https://github.com/McCadKIT/FreeCAD-McCad).
+
+Void generation and Conversion
+------------------------------
+coming soon
+
+Materials
+---------
+Coming soon
+
+Building the library:
+Prerequisites:
+--------------

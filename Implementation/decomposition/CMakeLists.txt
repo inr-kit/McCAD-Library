@@ -21,6 +21,7 @@ install(FILES
   surfacesMerger.hpp
   generateFacesList.hpp
   pointOnSurface.hpp
+  pointInSolid.hpp
   triangleCollision.hpp
   edgeOnSurface.hpp
   faceCollision.hpp

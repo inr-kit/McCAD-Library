@@ -17,10 +17,16 @@ namespace McCAD::Decomposition{
     TorusConvertor() = default;
 
     void operator()(Geometry::Solid::Impl& solidImpl);
-    TopoDS_Shape convertTorusToCylinder(const TopoDS_Shape& shape,
-                                        Standard_Real scaleFactor = 2.0);
-    void createSolid(TopoDS_Face& cylinder,
-                             std::vector<BRepAdaptor_Surface>& planesList);
+    std::optional<TopoDS_Shape> convertTorusToCylinder(const TopoDS_Shape& shape,
+                                                       Standard_Real scaleFactor = 1.6);
+    void retrieveSolid(TopoDS_Solid& cylinder,
+                       const std::vector<TopoDS_Face>& planesList,
+                       Standard_Real innerRadius,
+                       const Standard_Real& scaleFactor);
+    std::optional<TopoDS_Shape> fitCylinder(TopoDS_Solid& cylinder,
+                                              std::vector<TopoDS_Face>& planesList);
+    std::optional<std::pair<TopoDS_Shape, TopoDS_Shape>> splitSolid(TopoDS_Solid& solid,
+                                                                    TopoDS_Face& splitFace);
   };
 }
 
