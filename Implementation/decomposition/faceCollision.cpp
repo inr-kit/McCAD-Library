@@ -18,7 +18,7 @@ McCAD::Decomposition::FaceCollision::operator()(
 Standard_Boolean
 McCAD::Decomposition::FaceCollision::faceCollision(
         const McCAD::Geometry::BoundSurface& firstFace,
-        const std::vector<std::unique_ptr<McCAD::Geometry::MeshTriangle>>& meshTriangleList,
+        const std::vector<std::shared_ptr<McCAD::Geometry::MeshTriangle>>& meshTriangleList,
         Standard_Integer& aSide){
     auto& face = firstFace.accessSImpl()->face;
     Standard_Boolean collision = Standard_False;

@@ -39,8 +39,8 @@ namespace McCAD::Geometry{
     BoundSurface* boundSurface;
     Tools::Preprocessor preproc;
     
-    std::vector<std::unique_ptr<Edge>> edgesList;
-    std::vector<std::unique_ptr<MeshTriangle>> meshTrianglesList;
+    std::vector<std::shared_ptr<Edge>> edgesList;
+    std::vector<std::shared_ptr<MeshTriangle>> meshTrianglesList;
 
     Standard_Boolean isEqual(const BoundSurface& that);
     Standard_Boolean canFuse(const BoundSurface& that);
@@ -48,7 +48,7 @@ namespace McCAD::Geometry{
                                    Standard_Integer& aSide);
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
     void generateEdges(Standard_Real uvTolerance = 1.0e-3);
-    void combineEdges(std::vector<std::unique_ptr<Edge>>& aEdgesList);
+    void combineEdges(std::vector<std::shared_ptr<Edge>>& aEdgesList);
   };
 }
 #endif //BOUNDSURFACE_IMPL_HPP
