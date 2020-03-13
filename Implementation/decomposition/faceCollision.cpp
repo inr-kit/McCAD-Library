@@ -8,25 +8,25 @@
 
 Standard_Boolean
 McCAD::Decomposition::FaceCollision::operator()(
-        const McCAD::Geometry::BoundSurface& iFace,
-        const McCAD::Geometry::BoundSurface& jFace,
+        const McCAD::Geometry::BoundSurface& firstFace,
+        const McCAD::Geometry::BoundSurface& secondFace,
         Standard_Integer& aSide){
-    auto& meshTriangleList = jFace.accessBSImpl()->meshTrianglesList;
-    return faceCollision(iFace, meshTriangleList, aSide);
+    return faceCollision(firstFace, secondFace.accessBSImpl()->meshTrianglesList,
+                         aSide);
 }
 
 Standard_Boolean
 McCAD::Decomposition::FaceCollision::faceCollision(
-        const McCAD::Geometry::BoundSurface& iFace,
+        const McCAD::Geometry::BoundSurface& firstFace,
         const std::vector<std::unique_ptr<McCAD::Geometry::MeshTriangle>>& meshTriangleList,
         Standard_Integer& aSide){
-    auto& face = iFace.accessSImpl()->face;
+    auto& face = firstFace.accessSImpl()->face;
     Standard_Boolean collision = Standard_False;
     Standard_Integer positiveTriangles = 0;
     Standard_Integer negativeTriangles = 0;
     for (Standard_Integer i = 0; i <= meshTriangleList.size() - 1; ++i){
         Standard_Integer side = 0;
-        if (TriangleCollision{}(iFace, *(meshTriangleList[i]), side)){
+        if (TriangleCollision{}(firstFace, *(meshTriangleList[i]), side)){
             collision = Standard_True;
             break;
         } else{

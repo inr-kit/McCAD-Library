@@ -12,8 +12,6 @@
 namespace McCAD::Decomposition{
     class FaceCollision{
     public:
-      FaceCollision() = default;
-
       Standard_Boolean operator()(const McCAD::Geometry::BoundSurface& iFace,
                                   const McCAD::Geometry::BoundSurface& jFace,
                                   Standard_Integer& aSide);
