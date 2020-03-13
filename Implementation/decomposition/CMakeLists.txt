@@ -5,6 +5,8 @@ add_library(DECOMPOSITION_IMPL OBJECT
   triangleCollision.cpp
   edgeOnSurface.cpp
   faceCollision.cpp
+  edgescombiner.cpp
+  commonedgefinder.cpp
   AssistSurfaceGenerator.cpp
   splitsurfaces_impl.cpp
   splitsolid_impl.cpp
@@ -25,6 +27,8 @@ install(FILES
   triangleCollision.hpp
   edgeOnSurface.hpp
   faceCollision.hpp
+  edgescombiner.hpp
+  commonedgefinder.hpp
   AssistSurfaceGenerator.hpp
   splitsurfaces_impl.hpp
   splitsolid_impl.hpp

@@ -12,13 +12,13 @@
 namespace McCAD::Decomposition{
     class FaceCollision{
     public:
-      Standard_Boolean operator()(const McCAD::Geometry::BoundSurface& iFace,
-                                  const McCAD::Geometry::BoundSurface& jFace,
+      Standard_Boolean operator()(const McCAD::Geometry::BoundSurface& firstFace,
+                                  const McCAD::Geometry::BoundSurface& secondFace,
                                   Standard_Integer& aSide);
     private:
       Standard_Boolean faceCollision(
-              const McCAD::Geometry::BoundSurface& iFace,
-              const std::vector<std::unique_ptr<McCAD::Geometry::MeshTriangle>>& meshTriangleList,
+              const McCAD::Geometry::BoundSurface& firstFace,
+              const std::vector<std::shared_ptr<McCAD::Geometry::MeshTriangle>>& meshTriangleList,
               Standard_Integer& aSide);
     };
 }

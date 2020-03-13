@@ -87,10 +87,10 @@ McCAD::Geometry::BoundSurface::Impl::generateMesh(const Standard_Real& meshDefle
               TopoDS_Wire wire = BRepBuilderAPI_MakePolygon(points[0], points[1],
                       points[2], Standard_True);
               TopoDS_Face triangleFace = BRepBuilderAPI_MakeFace(wire, Standard_True);
-              std::unique_ptr<MeshTriangle> meshTriangle = std::make_unique<MeshTriangle>();
+              std::shared_ptr<MeshTriangle> meshTriangle = std::make_shared<MeshTriangle>();
               meshTriangle->accessMTImpl()->initiate(triangleFace);
               meshTriangle->accessMTImpl()->points = points;
-              meshTrianglesList.push_back(std::move(meshTriangle));
+              meshTrianglesList.push_back(meshTriangle);
           }
           return Standard_True;
       } else{
@@ -107,7 +107,7 @@ McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
     //std::cout << "generateEdges" << std::endl;
     TopoDS_Face face = boundSurface->accessSImpl()->face;
     for (const auto& tempEdge : detail::ShapeView<TopAbs_EDGE>{face}){
-        std::unique_ptr<Edge> edge = std::make_unique<Edge>();
+        std::shared_ptr<Edge> edge = std::make_shared<Edge>();
         edge->accessEImpl()->initiate(tempEdge);
         // Get type of Edge.
         BRepAdaptor_Curve curveAdaptor(tempEdge);
@@ -129,18 +129,18 @@ McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
                 edge->accessEImpl()->useForSplitSurface = Standard_True;
             }
         }
-        edgesList.push_back(std::move(edge));
+        edgesList.push_back(edge);
     }
 }
 
 void
-McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::unique_ptr<Edge>>& aEdgesList){
+McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Edge>>& aEdgesList){
     //std::cout << "combineEdges" << std::endl;
     if (edgesList.size() == 0){
         // If the current list is empty, append to it the new one.
         for (Standard_Integer i = 0; i <= aEdgesList.size() - 1; ++i){
             //std::cout << "combineEdges, add all" << std::endl;
-            edgesList.push_back(std::move(aEdgesList[i]));
+            edgesList.push_back(aEdgesList[i]);
         }
     } else{
         // Compare and add only if different.
@@ -174,7 +174,7 @@ McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::unique_ptr<Ed
                 }
             }
             if (sameEdge == 0){
-                edgesList.push_back(std::move(aEdgesList[i]));
+                edgesList.push_back(aEdgesList[i]);
             }
         }
     }
