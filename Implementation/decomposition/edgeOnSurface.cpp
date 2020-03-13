@@ -23,10 +23,8 @@ McCAD::Decomposition::EdgeOnSurface::operator()(
         } else{
             gp_Pnt middlePoint = aEdge.accessEImpl()->middlePoint;
             gp_Pnt extraPoint = aEdge.accessEImpl()->extraPoint;
-            if (PointOnSurface{}(face, middlePoint, tolerance) &&
-                    PointOnSurface{}(face, extraPoint, tolerance)){
-                return Standard_True;
-            }
+            return (PointOnSurface{}(face, middlePoint, tolerance) &&
+                    PointOnSurface{}(face, extraPoint, tolerance));
         }
     }
     return Standard_False;

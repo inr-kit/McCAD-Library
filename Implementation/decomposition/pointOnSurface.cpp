@@ -23,10 +23,7 @@ McCAD::Decomposition::PointOnSurface::operator()(
             uvParameters[1], uvParameters[2], uvParameters[3], uvTolerance,
             uvTolerance);
     if (extremumDistances.IsDone() && extremumDistances.NbExt() != 0){
-        auto distance = std::sqrt(extremumDistances.SquareDistance(1));
-        if (distance < distanceTolerance){
-            return Standard_True;
-      }
+        return (extremumDistances.SquareDistance(1) < distanceTolerance * distanceTolerance);
     }
     return Standard_False;
 }

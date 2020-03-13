@@ -8,7 +8,7 @@
 #include <GeomAbs_SurfaceType.hxx>
 
 void
-McCAD::Geometry::CYLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl){
+McCAD::Geometry::CYLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl* solidImpl){
     // Judge whether boundary surfaces of the solid can be used for decomposition.
     //std::cout << "judgeDecomposeSurfaces, CYLSolid" << std::endl;
     auto& facesList = solidImpl->facesList;
@@ -64,7 +64,7 @@ McCAD::Geometry::CYLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl)
 }
 
 void
-McCAD::Geometry::CYLSolid::Impl::judgeThroughConcaveEdges(Solid::Impl*& solidImpl){
+McCAD::Geometry::CYLSolid::Impl::judgeThroughConcaveEdges(Solid::Impl* solidImpl){
     // Judge how many concave edges each boundary face of solid goes through.
     auto& facesList = solidImpl->splitFacesList;
     if (facesList.size() == 0){
