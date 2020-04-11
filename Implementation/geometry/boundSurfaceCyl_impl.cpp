@@ -1,5 +1,6 @@
 // McCAD
 #include "boundSurfaceCyl_impl.hpp"
+#include <array>
 
 McCAD::Geometry::BoundSurfaceCyl::Impl::Impl(
         McCAD::Geometry::BoundSurfaceCyl* backReference)

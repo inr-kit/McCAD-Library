@@ -66,6 +66,10 @@ namespace McCAD::Decomposition{
     static Standard_Boolean planeSplitOnlyPlane(
             const std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList);
     Standard_Boolean perform(Geometry::Solid::Impl& solidImpl);
+
+    void splitSubsolid(Geometry::Solid::Impl& solidImpl,
+                       Standard_Integer& index);
+
     Standard_Boolean selectSplitSurface(Geometry::Solid::Impl& solidImpl);
     void extractSolids(Geometry::Solid::Impl& solidImpl,
                        const Geometry::Solid::Impl& subSolidImpl,

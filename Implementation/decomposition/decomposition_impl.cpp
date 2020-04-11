@@ -1,5 +1,6 @@
 // McCAD
 #include "decomposition_impl.hpp"
+#include "TaskQueue.hpp"
 
 McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData)
   : splitInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()},
@@ -56,42 +57,52 @@ McCAD::Decomposition::Decompose::Impl::flattenSolidHierarchy(
 }
 
 void
-McCAD::Decomposition::Decompose::Impl::perform(){
-    for(const auto& shape : *splitInputSolidsList){
-        auto solid = Preprocessor{}.perform(shape);
-        if (std::holds_alternative<std::monostate>(solid)){
-            //std::cout << "empty variant" << std::endl;
-            rejectedInputSolidsList->Append(shape);
-            continue;
-        }
-        // Using switch for now. Should be separated in a separate class an called
-        // for each specific type of solid object.
-        switch (Standard_Integer(solid.index())){
-        case solidType.planarSolid:{
-            std::cout << "   - Decomposing solid" << std::endl;
-            if (DecomposeSolid{}.accessDSImpl()->operator()(
-                        std::get<solidType.planarSolid>(solid))){
-                extractSolids(*std::get<solidType.planarSolid>(solid)->accessSImpl());
-            } else{
-                rejectedInputSolidsList->Append(shape);
-            }
-            break;
-        } case solidType.cylindricalSolid:{
-            std::cout << "   - Decomposing solid" << std::endl;
-            if (DecomposeSolid{}.accessDSImpl()->operator()(
-                        std::get<solidType.cylindricalSolid>(solid))){
-                extractSolids(*std::get<solidType.cylindricalSolid>(solid)->accessSImpl());
-            } else{
-                rejectedInputSolidsList->Append(shape);
-            }
-            break;
-        } default:
-            std::cout << "   - Processing of solids with non-planar surfaces"
-                         " is not yet supported!.\n     Solid will be added"
-                         " to rejected solids file" << std::endl;
-            rejectedInputSolidsList->Append(shape);
-        }
+McCAD::Decomposition::Decompose::Impl::perform(const TopoDS_Shape& shape){
+    auto solid = Preprocessor{}.perform(shape);
+    if (std::holds_alternative<std::monostate>(solid)){
+        //std::cout << "empty variant" << std::endl;
+        rejectedInputSolidsList->Append(shape);
+        return;
     }
+    // Using switch for now. Should be separated in a separate class an called
+    // for each specific type of solid object.
+    switch (Standard_Integer(solid.index())){
+    case solidType.planarSolid:{
+        std::cout << "   - Decomposing solid" << std::endl;
+        if (DecomposeSolid{}.accessDSImpl()->operator()(
+                    std::get<solidType.planarSolid>(solid))){
+            extractSolids(*std::get<solidType.planarSolid>(solid)->accessSImpl());
+        } else{
+            rejectedInputSolidsList->Append(shape);
+        }
+        break;
+    } case solidType.cylindricalSolid:{
+        std::cout << "   - Decomposing solid" << std::endl;
+        if (DecomposeSolid{}.accessDSImpl()->operator()(
+                    std::get<solidType.cylindricalSolid>(solid))){
+            extractSolids(*std::get<solidType.cylindricalSolid>(solid)->accessSImpl());
+        } else{
+            rejectedInputSolidsList->Append(shape);
+        }
+        break;
+    } default:
+        std::cout << "   - Processing of solids with non-planar surfaces"
+                     " is not yet supported!.\n     Solid will be added"
+                     " to rejected solids file" << std::endl;
+        rejectedInputSolidsList->Append(shape);
+    }
+}
+
+void
+McCAD::Decomposition::Decompose::Impl::perform(){
+    TaskQueue<Policy::Parallel> taskQueue;
+    for(const auto& shape : *splitInputSolidsList){
+        taskQueue.submit([this, &shape](){
+            perform(shape);
+        });
+    }
+    taskQueue.complete();
+
     std::cout << "   - There are " << rejectedInputSolidsList->Length() <<
                  " rejected input solid(s)." << std::endl;
     std::cout << "   - There are " << resultSolidsList->Length() <<
