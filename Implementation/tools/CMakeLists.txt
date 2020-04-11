@@ -2,19 +2,23 @@ add_library(TOOLS_IMPL OBJECT
     tools_impl.cpp
     CurveUtilities.cpp
     SurfaceUtilities.cpp
-    PlaneComparator.cpp
-    PlaneFuser.cpp
-    FaceParameters.cpp)
+    surfaceComparator.cpp
+    planeComparator.cpp
+    surfacesFuser.cpp
+    FaceParameters.cpp
+    senseEvaluateor.cpp)
 
 install(FILES
   tools_impl.hpp
   CurveUtilities.hpp
   SurfaceUtilities.hpp
-  PlaneComparator.hpp
-  PlaneFuser.hpp
+  surfaceComparator.hpp
+  planeComparator.hpp
+  surfacesFuser.hpp
   FaceParameters.hpp
   ShapeView.hpp
   SolidType.hpp
+  senseEvaluateor.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/tools)
 
 add_subdirectory(FloatingPoint)

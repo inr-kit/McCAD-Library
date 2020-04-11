@@ -1,15 +1,23 @@
 add_library(DECOMPOSITION_IMPL OBJECT
+  preprocessor.cpp
+  generateFacesList.cpp
+  pointOnSurface.cpp
+  triangleCollision.cpp
+  edgeOnSurface.cpp
+  faceCollision.cpp
   splitsurfaces_impl.cpp
   splitsolid_impl.cpp
   decomposeSolid_impl.cpp
   decomposition_impl.cpp
   SolidRebuilder.cpp
   SolidSplitter.cpp
-  SolidRepairer.cpp
-  preprocessor.cpp
-  generateFacesList.cpp)
+  SolidRepairer.cpp)
 
 install(FILES
+  pointOnSurface.hpp
+  triangleCollision.hpp
+  edgeOnSurface.hpp
+  faceCollision.hpp
   splitsurfaces_impl.hpp
   splitsolid_impl.hpp
   decomposeSolid_impl.hpp

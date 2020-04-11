@@ -13,6 +13,8 @@
 #include "preprocessor.hpp"
 #include "tools_impl.hpp"
 #include "solid_impl.hpp"
+#include "cylSolid_impl.hpp"
+#include "planarSolid_impl.hpp"
 #include "boundSurface_impl.hpp"
 #include "splitsurfaces_impl.hpp"
 #include "splitsolid_impl.hpp"
@@ -21,7 +23,6 @@
 #include "CurveUtilities.hpp"
 #include "FaceParameters.hpp"
 #include "ShapeView.hpp"
-#include "PlaneFuser.hpp"
 #include "FaceParameters.hpp"
 #include "SolidType.hpp"
 // OCC
@@ -52,19 +53,23 @@ namespace McCAD::Decomposition{
     Impl(Standard_Integer recurrenceDepth);
     ~Impl();
     
-    Standard_Boolean operator()(Geometry::Solid::Impl& solidImpl);
+    Standard_Boolean operator()(std::shared_ptr<Geometry::PLSolid>& solidObj);
+    Standard_Boolean operator()(std::shared_ptr<Geometry::CYLSolid>& solidObj);
 
     Tools::SolidType solidType;
     Standard_Integer recurrenceDepth;
     SplitSurfaces splitSurfaces;
     SplitSolid splitSolid;
 
+    static Standard_Boolean throughNoBoundarySurfaces(
+            const std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList);
+    static Standard_Boolean planeSplitOnlyPlane(
+            const std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList);
     Standard_Boolean perform(Geometry::Solid::Impl& solidImpl);
-    //Standard_Boolean perform(Geometry::Solid::Impl& solidImpl);
-    void judgeDecomposeSurfaces(Geometry::Solid::Impl& solidImpl);
-    void judgeThroughConcaveEdges(std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList);
-    void generateAssistingSurfaces();
     Standard_Boolean selectSplitSurface(Geometry::Solid::Impl& solidImpl);
+    void extractSolids(Geometry::Solid::Impl& solidImpl,
+                       const Geometry::Solid::Impl& subSolidImpl,
+                       Standard_Integer& i);
   };
 }
 

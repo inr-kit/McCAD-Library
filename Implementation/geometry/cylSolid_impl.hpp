@@ -7,11 +7,17 @@
 #include "solid_impl.hpp"
 // OCC
 
+
 namespace McCAD::Geometry{
   class CYLSolid::Impl {
   public:
-    Impl();
-    ~Impl();
+    Impl() = default;
+
+    std::vector<std::shared_ptr<Geometry::BoundSurface>> planesList;
+    std::vector<std::shared_ptr<Geometry::BoundSurface>> cylindersList;
+
+    void judgeDecomposeSurfaces(Solid::Impl*& solidImpl);
+    void judgeThroughConcaveEdges(Solid::Impl*& solidImpl);
   };
 }
 
