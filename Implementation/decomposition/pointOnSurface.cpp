@@ -2,7 +2,6 @@
 //McCAD
 #include "pointOnSurface.hpp"
 #include "boundSurfacePlane_impl.hpp"
-#include "senseEvaluateor.hpp"
 //OCC
 #include <BRepTools.hxx>
 //#include "BRepAdaptor_Surface.hxx"

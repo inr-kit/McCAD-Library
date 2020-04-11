@@ -18,8 +18,8 @@ namespace McCAD::Tools{
 
       Standard_Real operator()(const TopoDS_Face& face, const gp_Pnt& point);
   private:
-      Standard_Real senseToPlane(const gp_Pln& plane, const gp_Pnt& point);
-      Standard_Real senseToCyl(const gp_Cylinder& cylinder, const gp_Pnt& point);
+      Standard_Real senseRelativeToPlane(const gp_Pln& plane, const gp_Pnt& point);
+      Standard_Real senseRelativeToCyl(const gp_Cylinder& cylinder, const gp_Pnt& point);
   };
 }
 

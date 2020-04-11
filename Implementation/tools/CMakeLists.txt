@@ -6,7 +6,7 @@ add_library(TOOLS_IMPL OBJECT
     planeComparator.cpp
     surfacesFuser.cpp
     FaceParameters.cpp
-    senseEvaluateor.cpp)
+    senseEvaluator.cpp)
 
 install(FILES
   tools_impl.hpp
@@ -18,7 +18,7 @@ install(FILES
   FaceParameters.hpp
   ShapeView.hpp
   solidType.hpp
-  senseEvaluateor.hpp
+  senseEvaluator.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/tools)
 
 add_subdirectory(FloatingPoint)
