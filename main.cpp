@@ -21,8 +21,6 @@ int main (){
     getline(std::cin, rejectFileName);
 
     auto start = std::chrono::high_resolution_clock::now();
-    
-    auto start = std::chrono::high_resolution_clock::now();
     // Load the input file.
     std::cout << "***************************" << std::endl;
     std::cout << "** Loading the STEP file **" << std::endl;
