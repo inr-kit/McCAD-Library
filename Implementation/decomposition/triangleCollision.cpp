@@ -3,7 +3,7 @@
 //McCAD
 #include "triangleCollision.hpp"
 #include "pointOnSurface.hpp"
-#include "senseEvaluateor.hpp"
+#include "senseEvaluator.hpp"
 #include "tools_impl.hpp"
 #include "SolidSplitter.hpp"
 //OCC
@@ -89,11 +89,9 @@ McCAD::Decomposition::TriangleCollision::triangleCollisionPlane(
     for (Standard_Integer i = 0; i <= points.size() - 1; ++i){
         if (PointOnSurface{}(extendedFace, points[i], distanceTolerance)) continue;
         auto evaluate = Tools::SenseEvaluator{}(face, points[i]);
-        if (evaluate > senseTolerance){
-          ++positivePoints;
-        } else if (evaluate < senseTolerance){
+        if (std::signbit(evaluate)){
           ++negativePoints;
-        }
+        } else ++positivePoints;
         if (positivePoints > 0 && negativePoints > 0){
           collision = Standard_True;
           break;

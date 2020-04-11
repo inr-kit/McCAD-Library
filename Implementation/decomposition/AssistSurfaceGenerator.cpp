@@ -5,7 +5,6 @@
 #include "surfaceObjCerator.hpp"
 #include "boundSurface_impl.hpp"
 #include "ShapeView.hpp"
-#include "senseEvaluateor.hpp"
 #include "commonedgefinder.hpp"
 #include "edgescombiner.hpp"
 //OCC
