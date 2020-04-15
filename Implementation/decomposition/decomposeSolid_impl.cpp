@@ -1,4 +1,4 @@
-// McCAD
+//
 #include "decomposeSolid_impl.hpp"
 #include "SurfaceUtilities.hpp"
 #include "AssistSurfaceGenerator.hpp"
