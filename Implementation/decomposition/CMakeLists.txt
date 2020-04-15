@@ -32,7 +32,7 @@ install(FILES
   AssistSurfaceGenerator.hpp
   splitsurfaces_impl.hpp
   splitsolid_impl.hpp
-  constructSolidObj.hpp
+  createSolidObj.hpp
   preprocessor.hpp
   torusConvertor.hpp
   decomposeSolid_impl.hpp
@@ -40,9 +40,6 @@ install(FILES
   SolidRebuilder.hpp
   SolidSplitter.hpp
   SolidRepairer.hpp
-  preprocessor.hpp
-  createSolidObj.hpp
-  generateFacesList.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/decomposition)
 
 target_link_libraries(DECOMPOSITION_IMPL

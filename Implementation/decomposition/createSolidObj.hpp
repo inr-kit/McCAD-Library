@@ -3,8 +3,6 @@
 
 //C++
 #include <memory>
-//McCAD
-#include "solid_impl.hpp"
 //OCC
 #include <TopoDS_Shape.hxx>
 

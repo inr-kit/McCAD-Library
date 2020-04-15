@@ -10,7 +10,6 @@
 #include "SolidType.hpp"
 #include "planarSolid_impl.hpp"
 #include "cylSolid_impl.hpp"
-#include "createSolidObj.hpp"
 #include "torSolid_impl.hpp"
 // OCC
 #include <TopoDS.hxx>

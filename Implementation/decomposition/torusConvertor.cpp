@@ -3,7 +3,7 @@
 // McCAD
 #include "torusConvertor.hpp"
 #include "preprocessor.hpp"
-#include "solidType.hpp"
+#include "SolidType.hpp"
 #include "ShapeView.hpp"
 #include "solid_impl.hpp"
 #include "boundSurfacePlane_impl.hpp"

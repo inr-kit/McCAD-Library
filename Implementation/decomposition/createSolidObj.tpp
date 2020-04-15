@@ -13,10 +13,7 @@ McCAD::Decomposition::SolidObjCreator::createObj(const TopoDS_Shape& shape){
     solidImpl.createOBB();
     solidImpl.calcMeshDeflection();
     solidImpl.updateEdgesConvexity();
-    // Generate the boundary surfaces list of the solid.
-    //std::cout << "solidImpl.generateSurfacesList();" << std::endl;
     solidImpl.facesList = FacesListGenerator{}(*solidObj);
-    // Repair solid.
     solidImpl.repairSolid();
     return solidObj;
 }

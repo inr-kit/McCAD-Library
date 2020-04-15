@@ -31,7 +31,7 @@ namespace McCAD::Decomposition{
 
     public:
       template <typename solidObjType>
-      std::vector<std::shared_ptr<Geometry::BoundSurface>> operator()(
+      std::vector<BS> operator()(
              solidObjType& solidObj);
       template <typename solidObjType>
       void addListsToSolidObj(solidObjType& solidObj);

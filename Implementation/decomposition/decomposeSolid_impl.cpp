@@ -1,4 +1,4 @@
-//
+// McCAD
 #include "decomposeSolid_impl.hpp"
 #include "SurfaceUtilities.hpp"
 #include "AssistSurfaceGenerator.hpp"
@@ -54,41 +54,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
          }
     }
     return perform(*solidImpl);
-}
-
-void
-McCAD::Decomposition::DecomposeSolid::Impl::splitSubsolid(
-        Geometry::Solid::Impl& solidImpl,
-        Standard_Integer& index){
-    auto subSolid = Preprocessor{}.perform(solidImpl.splitSolidList->Value(index));
-    if (std::holds_alternative<std::monostate>(subSolid)){
-        solidImpl.rejectedsubSolidsList->Append(solidImpl.splitSolidList->Value(index));
-        return;
-    }
-    // Using switch for now. Should be separated in a separate class an called
-    // for each specific type of solid object.
-    switch (Standard_Integer(subSolid.index())){
-    case solidType.planarSolid:{
-        auto& subSolidImpl = *std::get<solidType.planarSolid>(subSolid)->accessSImpl();
-        // Mesh deflection is calculated for every solid in DecomposeSolid.
-        if (DecomposeSolid::Impl{recurrenceDepth}(std::get<solidType.planarSolid>(subSolid))){
-            extractSolids(solidImpl, subSolidImpl, index);
-        } else{
-            //return Standard_False;
-            solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
-        }
-        break;
-    } case solidType.cylindricalSolid:{
-        auto& subSolidImpl = *std::get<solidType.cylindricalSolid>(subSolid)->accessSImpl();
-        if (DecomposeSolid::Impl{recurrenceDepth}(std::get<solidType.cylindricalSolid>(subSolid))){
-            extractSolids(solidImpl, subSolidImpl, index);
-        } else{
-            solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
-        }
-        break;
-    } default:
-        solidImpl.rejectedsubSolidsList->Append(solidImpl.splitSolidList->Value(index));
-    }
 }
 
 Standard_Boolean

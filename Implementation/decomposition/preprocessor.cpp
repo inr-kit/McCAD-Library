@@ -1,6 +1,6 @@
 // McCAD
 #include "preprocessor.hpp"
-#include "constructSolidObj.hpp"
+#include "createSolidObj.hpp"
 
 McCAD::Decomposition::Preprocessor::VariantType
 McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
@@ -16,8 +16,10 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
             solidVariant = SolidObjCreator{}.createObj<
                     McCAD::Geometry::CYLSolid>(shape);
             return solidVariant;
+        }
         case solidType.toroidal:
-            solidVariant = constructObj<McCAD::Geometry::TORSolid>(shape);
+            solidVariant = SolidObjCreator{}.createObj<
+                    McCAD::Geometry::TORSolid>(shape);
             return solidVariant;
         default: goto rejectSolid;
         }

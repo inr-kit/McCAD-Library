@@ -10,17 +10,18 @@
 
 template <typename solidObjType>
 std::vector<std::shared_ptr<McCAD::Geometry::BoundSurface>>
-McCAD::Decomposition::GenerateFacesList::operator()(solidObjType& solidObj){
+McCAD::Decomposition::FacesListGenerator::operator()(solidObjType& solidObj){
     TopoDS_Solid solid = solidObj.accessSImpl()->solid;
     TopoDS_Face face;
     Standard_Integer faceNumber = 0;
     for(const auto& aFace : detail::ShapeView<TopAbs_FACE>{solid}){
         face = aFace;
         BRepTools::Update(face);
-        Standard_Boolean rejectCondition = preproc.accessImpl()->checkFace(face);
+        Standard_Boolean rejectCondition =
+                Tools::Preprocessor{}.accessImpl()->checkFace(face);
         if (!rejectCondition){
             ++faceNumber;
-            preproc.accessImpl()->fixFace(face);
+            Tools::Preprocessor{}.accessImpl()->fixFace(face);
             std::shared_ptr<Geometry::BoundSurface> boundSurface =
                     SurfaceObjCreator{}(face,
                                         solidObj.accessSImpl()->boxDiagonalLength);
@@ -44,7 +45,7 @@ McCAD::Decomposition::GenerateFacesList::operator()(solidObjType& solidObj){
 
 template <typename solidObjType>
 void
-McCAD::Decomposition::GenerateFacesList::addListsToSolidObj(solidObjType& solidObj){
+McCAD::Decomposition::FacesListGenerator::addListsToSolidObj(solidObjType& solidObj){
     if (typeid(solidObjType) == typeid(McCAD::Geometry::PLSolid)){
         mergePlanesList(solidObj.accessSImpl()->boxDiagonalLength);
         solidObj.accessSImpl()->planesList = planesList;
@@ -62,7 +63,7 @@ McCAD::Decomposition::GenerateFacesList::addListsToSolidObj(solidObjType& solidO
 }
 
 void
-McCAD::Decomposition::GenerateFacesList::mergePlanesList(Standard_Real& boxDiagonalLength){
+McCAD::Decomposition::FacesListGenerator::mergePlanesList(Standard_Real& boxDiagonalLength){
     //std::cout << "     - There are " << planesList.size() <<
     //             " planes in the solid" << std::endl;
     SurfacesMerger{}(planesList, boxDiagonalLength);
@@ -70,7 +71,7 @@ McCAD::Decomposition::GenerateFacesList::mergePlanesList(Standard_Real& boxDiago
 }
 
 void
-McCAD::Decomposition::GenerateFacesList::mergeCylindersList(Standard_Real& boxDiagonalLength){
+McCAD::Decomposition::FacesListGenerator::mergeCylindersList(Standard_Real& boxDiagonalLength){
     //std::cout << "     - There are " << cylindersList.size() <<
     //             " cylinders in the solid" << std::endl;
     SurfacesMerger{}(cylindersList, boxDiagonalLength);
@@ -78,7 +79,7 @@ McCAD::Decomposition::GenerateFacesList::mergeCylindersList(Standard_Real& boxDi
 }
 
 void
-McCAD::Decomposition::GenerateFacesList::mergeToriList(Standard_Real& boxDiagonalLength){
+McCAD::Decomposition::FacesListGenerator::mergeToriList(Standard_Real& boxDiagonalLength){
     //std::cout << "     - There are " << toriList.size() <<
     //             " tori in the solid" << std::endl;
     SurfacesMerger{}(toriList, boxDiagonalLength);
