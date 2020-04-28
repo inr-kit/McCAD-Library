@@ -1,5 +1,5 @@
-\hypertarget{main_8cpp}{}\doxysection{main.\+cpp File Reference}
-\label{main_8cpp}\index{main.cpp@{main.cpp}}
+\hypertarget{main_8cpp}{}\section{main.\+cpp File Reference}
+\label{main_8cpp}\index{main.\+cpp@{main.\+cpp}}
 {\ttfamily \#include $<$iostream$>$}\newline
 {\ttfamily \#include $<$string$>$}\newline
 {\ttfamily \#include $<$chrono$>$}\newline
@@ -7,78 +7,67 @@
 {\ttfamily \#include \char`\"{}stepreader.\+hpp\char`\"{}}\newline
 {\ttfamily \#include \char`\"{}stepwriter.\+hpp\char`\"{}}\newline
 {\ttfamily \#include \char`\"{}decomposition.\+hpp\char`\"{}}\newline
-Include dependency graph for main.\+cpp\+:\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{da/dce/main_8cpp__incl}
-\end{center}
-\end{figure}
-\doxysubsection*{Functions}
+Include dependency graph for main.\+cpp\+:
+% FIG 0
+\subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-int \mbox{\hyperlink{main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}} ()
+int \hyperlink{main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}{main} ()
 \end{DoxyCompactItemize}
 
 
-\doxysubsection{Function Documentation}
+\subsection{Function Documentation}
 \mbox{\Hypertarget{main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}} 
-\index{main.cpp@{main.cpp}!main@{main}}
-\index{main@{main}!main.cpp@{main.cpp}}
-\doxysubsubsection{\texorpdfstring{main()}{main()}}
+\index{main.\+cpp@{main.\+cpp}!main@{main}}
+\index{main@{main}!main.\+cpp@{main.\+cpp}}
+\subsubsection{\texorpdfstring{main()}{main()}}
 {\footnotesize\ttfamily int main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 
 
-Definition at line 11 of file main.\+cpp.
+Definition at line 12 of file main.\+cpp.
 
 
-\begin{DoxyCode}{0}
-\DoxyCodeLine{11            \{}
-\DoxyCodeLine{12     std::string inputFileName, resultFileName, rejectFileName;}
-\DoxyCodeLine{13     std::cout << \textcolor{stringliteral}{"Specify the path to the input step file: "} << std::endl;}
-\DoxyCodeLine{14     getline(std::cin, inputFileName);}
-\DoxyCodeLine{15     std::cout << \textcolor{stringliteral}{"Specify the path to save the result solids step file: "} <<}
-\DoxyCodeLine{16                  std::endl;}
-\DoxyCodeLine{17     getline(std::cin, resultFileName);}
-\DoxyCodeLine{18     std::cout << \textcolor{stringliteral}{"Specify the path to save the rejected solids step file: "} <<}
-\DoxyCodeLine{19                  std::endl;}
-\DoxyCodeLine{20     getline(std::cin, rejectFileName);}
-\DoxyCodeLine{21     }
-\DoxyCodeLine{22     \textcolor{keyword}{auto} start = std::chrono::high\_resolution\_clock::now();}
-\DoxyCodeLine{23     \textcolor{comment}{// Load the input file.}}
-\DoxyCodeLine{24     std::cout << \textcolor{stringliteral}{"***************************"} << std::endl;}
-\DoxyCodeLine{25     std::cout << \textcolor{stringliteral}{"** Loading the STEP file **"} << std::endl;}
-\DoxyCodeLine{26     std::cout << \textcolor{stringliteral}{"***************************"} << std::endl;}
-\DoxyCodeLine{27     \mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPReader}{McCAD::IO::STEPReader}} reader\{inputFileName\};}
-\DoxyCodeLine{28     \textcolor{keyword}{auto} inputData = reader.\mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPReader_a2c2f8e3747b56a13713ad8507334d4d4}{getInputData}}();}
-\DoxyCodeLine{29 }
-\DoxyCodeLine{30     \textcolor{comment}{// Start decomposition.}}
-\DoxyCodeLine{31     std::cout << \textcolor{stringliteral}{"****************************"} << std::endl;}
-\DoxyCodeLine{32     std::cout << \textcolor{stringliteral}{"** Starting decomposition **"} << std::endl;}
-\DoxyCodeLine{33     std::cout << \textcolor{stringliteral}{"****************************"} << std::endl;}
-\DoxyCodeLine{34     \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose}{McCAD::Decomposition::Decompose}} decompose\{inputData\};}
-\DoxyCodeLine{35     \textcolor{keyword}{auto} outputData\_result = decompose.\mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_a5db8eec150047c16365cf090d2ec0cdf}{getResultSolids}}();}
-\DoxyCodeLine{36     \textcolor{keyword}{auto} outputData\_reject = decompose.getRejectedSolids();}
-\DoxyCodeLine{37 }
-\DoxyCodeLine{38     \textcolor{comment}{// Write output STEP files.}}
-\DoxyCodeLine{39     std::cout << \textcolor{stringliteral}{"****************************"} << std::endl;}
-\DoxyCodeLine{40     std::cout << \textcolor{stringliteral}{"**  Saving to STEP file   **"} << std::endl;}
-\DoxyCodeLine{41     std::cout << \textcolor{stringliteral}{"****************************"} << std::endl;}
-\DoxyCodeLine{42     \mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPWriter}{McCAD::IO::STEPWriter}}\{resultFileName, outputData\_result\};}
-\DoxyCodeLine{43     \mbox{\hyperlink{classMcCAD_1_1IO_1_1STEPWriter}{McCAD::IO::STEPWriter}}\{rejectFileName, outputData\_reject\};}
-\DoxyCodeLine{44 }
-\DoxyCodeLine{45     \textcolor{keyword}{auto} end = std::chrono::high\_resolution\_clock::now();}
-\DoxyCodeLine{46     std::chrono::duration<double, std::milli> elapsed = end-\/start;}
-\DoxyCodeLine{47     std::cout << \textcolor{stringliteral}{"Elapsed time: "} << elapsed.count() << \textcolor{stringliteral}{" ms"} << std::endl;}
-\DoxyCodeLine{48     \textcolor{keywordflow}{return} 0;}
-\DoxyCodeLine{49 \}}
-
+\begin{DoxyCode}
+12            \{
+13     std::string inputFileName, resultFileName, rejectFileName;
+14     std::cout << \textcolor{stringliteral}{"Specify the path to the input step file: "} << std::endl;
+15     getline(std::cin, inputFileName);
+16     std::cout << \textcolor{stringliteral}{"Specify the path to save the result solids step file: "} <<
+17                  std::endl;
+18     getline(std::cin, resultFileName);
+19     std::cout << \textcolor{stringliteral}{"Specify the path to save the rejected solids step file: "} <<
+20                  std::endl;
+21     getline(std::cin, rejectFileName);
+22 
+23     \textcolor{keyword}{auto} start = std::chrono::high\_resolution\_clock::now();
+24     \textcolor{comment}{// Load the input file.}
+25     std::cout << \textcolor{stringliteral}{"***************************"} << std::endl;
+26     std::cout << \textcolor{stringliteral}{"** Loading the STEP file **"} << std::endl;
+27     std::cout << \textcolor{stringliteral}{"***************************"} << std::endl;
+28     \hyperlink{classMcCAD_1_1IO_1_1STEPReader}{McCAD::IO::STEPReader} reader\{inputFileName\};
+29     \textcolor{keyword}{auto} inputData = reader.\hyperlink{classMcCAD_1_1IO_1_1STEPReader_a2c2f8e3747b56a13713ad8507334d4d4}{getInputData}();
+30 
+31     \textcolor{comment}{// Start decomposition.}
+32     std::cout << \textcolor{stringliteral}{"****************************"} << std::endl;
+33     std::cout << \textcolor{stringliteral}{"** Starting decomposition **"} << std::endl;
+34     std::cout << \textcolor{stringliteral}{"****************************"} << std::endl;
+35     \hyperlink{classMcCAD_1_1Decomposition_1_1Decompose}{McCAD::Decomposition::Decompose} decompose\{inputData\};
+36     \textcolor{keyword}{auto} outputData\_result = decompose.\hyperlink{classMcCAD_1_1Decomposition_1_1Decompose_a5db8eec150047c16365cf090d2ec0cdf}{getResultSolids}();
+37     \textcolor{keyword}{auto} outputData\_reject = decompose.getRejectedSolids();
+38 
+39     \textcolor{comment}{// Write output STEP files.}
+40     std::cout << \textcolor{stringliteral}{"****************************"} << std::endl;
+41     std::cout << \textcolor{stringliteral}{"**  Saving to STEP file   **"} << std::endl;
+42     std::cout << \textcolor{stringliteral}{"****************************"} << std::endl;
+43     \hyperlink{classMcCAD_1_1IO_1_1STEPWriter}{McCAD::IO::STEPWriter}\{resultFileName, outputData\_result\};
+44     \hyperlink{classMcCAD_1_1IO_1_1STEPWriter}{McCAD::IO::STEPWriter}\{rejectFileName, outputData\_reject\};
+45 
+46     \textcolor{keyword}{auto} end = std::chrono::high\_resolution\_clock::now();
+47     std::chrono::duration<double, std::milli> elapsed = end-start;
+48     std::cout << \textcolor{stringliteral}{"Elapsed time: "} << elapsed.count() << \textcolor{stringliteral}{" ms"} << std::endl;
+49     \textcolor{keywordflow}{return} 0;
+50 \}
 \end{DoxyCode}
-Here is the call graph for this function\+:\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{df/d0a/main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4_cgraph}
-\end{center}
-\end{figure}
+Here is the call graph for this function\+:
+% FIG 1

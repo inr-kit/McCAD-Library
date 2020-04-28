@@ -2,8 +2,8 @@ var classMcCAD_1_1Decomposition_1_1SolidRebuilder =
 [
     [ "SolidRebuilder", "d2/d82/classMcCAD_1_1Decomposition_1_1SolidRebuilder.html#a44d8d2538e3297c5c8b843a6e5aa130d", null ],
     [ "SolidRebuilder", "d2/d82/classMcCAD_1_1Decomposition_1_1SolidRebuilder.html#a44d8d2538e3297c5c8b843a6e5aa130d", null ],
-    [ "facesToShape", "d2/d82/classMcCAD_1_1Decomposition_1_1SolidRebuilder.html#a5539e79f99bd17436801e6146770d249", null ],
-    [ "facesToShape", "d2/d82/classMcCAD_1_1Decomposition_1_1SolidRebuilder.html#a5539e79f99bd17436801e6146770d249", null ],
+    [ "facesToShape", "d2/d82/classMcCAD_1_1Decomposition_1_1SolidRebuilder.html#a999dae53070de2c6681c51cfc6a56cd5", null ],
+    [ "facesToShape", "d2/d82/classMcCAD_1_1Decomposition_1_1SolidRebuilder.html#a999dae53070de2c6681c51cfc6a56cd5", null ],
     [ "operator()", "d2/d82/classMcCAD_1_1Decomposition_1_1SolidRebuilder.html#acd4a860cd5e7e2fa349ae891da81556a", null ],
     [ "operator()", "d2/d82/classMcCAD_1_1Decomposition_1_1SolidRebuilder.html#acf06e8ef7a0849111550f4ca05ff44da", null ],
     [ "shapeToSingleShell", "d2/d82/classMcCAD_1_1Decomposition_1_1SolidRebuilder.html#abcbb84bed6ab279e3f5ed3342d439f22", null ],

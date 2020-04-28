@@ -11,8 +11,6 @@
 namespace McCAD::Geometry{
   class PLSolid::Impl{
   public:
-    Impl() = default;
-
     void judgeDecomposeSurfaces(Solid::Impl*& solidImpl);
     void judgeThroughConcaveEdges(Solid::Impl*& solidImpl);
   };

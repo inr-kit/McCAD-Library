@@ -1,159 +1,119 @@
-\hypertarget{classMcCAD_1_1Decomposition_1_1FaceCollision}{}\doxysection{Mc\+C\+AD\+::Decomposition\+::Face\+Collision Class Reference}
-\label{classMcCAD_1_1Decomposition_1_1FaceCollision}\index{McCAD::Decomposition::FaceCollision@{McCAD::Decomposition::FaceCollision}}
+\hypertarget{classMcCAD_1_1Decomposition_1_1FaceCollision}{}\section{Mc\+C\+AD\+:\+:Decomposition\+:\+:Face\+Collision Class Reference}
+\label{classMcCAD_1_1Decomposition_1_1FaceCollision}\index{Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision@{Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision}}
 
 
-{\ttfamily \#include $<$/home/mharb/\+Documents/\+Mc\+C\+A\+D\+\_\+refactor/build/includes/implementation/decomposition/face\+Collision.\+hpp$>$}
+{\ttfamily \#include $<$/home/mharb/opt/\+Mc\+C\+A\+D\+\_\+refactor/build/includes/implementation/decomposition/face\+Collision.\+hpp$>$}
 
 
 
-Collaboration diagram for Mc\+C\+AD\+::Decomposition\+::Face\+Collision\+:\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=203pt]{d2/d21/classMcCAD_1_1Decomposition_1_1FaceCollision__coll__graph}
-\end{center}
-\end{figure}
-\doxysubsection*{Public Member Functions}
+Collaboration diagram for Mc\+C\+AD\+:\+:Decomposition\+:\+:Face\+Collision\+:
+% FIG 0
+\subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1FaceCollision_a7c1f2f2a818d696fe7bc1c3eb310a354}{Face\+Collision}} ()=default
+Standard\+\_\+\+Boolean \hyperlink{classMcCAD_1_1Decomposition_1_1FaceCollision_a081f71aa83d64fca9a0d0483854f9e9d}{operator()} (const \hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface} \&first\+Face, const \hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface} \&second\+Face, Standard\+\_\+\+Integer \&a\+Side)
 \item 
-Standard\+\_\+\+Boolean \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1FaceCollision_a078f7d0a0b34f4dfabef258b87c47476}{operator()}} (const \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface}} \&i\+Face, const \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface}} \&j\+Face, Standard\+\_\+\+Integer \&a\+Side)
-\item 
-\mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1FaceCollision_a7c1f2f2a818d696fe7bc1c3eb310a354}{Face\+Collision}} ()=default
-\item 
-Standard\+\_\+\+Boolean \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1FaceCollision_a078f7d0a0b34f4dfabef258b87c47476}{operator()}} (const \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface}} \&i\+Face, const \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface}} \&j\+Face, Standard\+\_\+\+Integer \&a\+Side)
+Standard\+\_\+\+Boolean \hyperlink{classMcCAD_1_1Decomposition_1_1FaceCollision_a081f71aa83d64fca9a0d0483854f9e9d}{operator()} (const \hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface} \&first\+Face, const \hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface} \&second\+Face, Standard\+\_\+\+Integer \&a\+Side)
 \end{DoxyCompactItemize}
-\doxysubsection*{Private Member Functions}
+\subsection*{Private Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-Standard\+\_\+\+Boolean \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1FaceCollision_a38f78ae9b744b721999dcdc5428fb24a}{face\+Collision}} (const \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface}} \&i\+Face, const std\+::vector$<$ std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle}{Mc\+C\+A\+D\+::\+Geometry\+::\+Mesh\+Triangle}} $>$$>$ \&mesh\+Triangle\+List, Standard\+\_\+\+Integer \&a\+Side)
+Standard\+\_\+\+Boolean \hyperlink{classMcCAD_1_1Decomposition_1_1FaceCollision_ab4dffccfd15895b37362d8f4a46dff0f}{face\+Collision} (const \hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface} \&first\+Face, const std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle}{Mc\+C\+A\+D\+::\+Geometry\+::\+Mesh\+Triangle} $>$$>$ \&mesh\+Triangle\+List, Standard\+\_\+\+Integer \&a\+Side)
 \item 
-Standard\+\_\+\+Boolean \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1FaceCollision_a38f78ae9b744b721999dcdc5428fb24a}{face\+Collision}} (const \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface}} \&i\+Face, const std\+::vector$<$ std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle}{Mc\+C\+A\+D\+::\+Geometry\+::\+Mesh\+Triangle}} $>$$>$ \&mesh\+Triangle\+List, Standard\+\_\+\+Integer \&a\+Side)
+Standard\+\_\+\+Boolean \hyperlink{classMcCAD_1_1Decomposition_1_1FaceCollision_ab4dffccfd15895b37362d8f4a46dff0f}{face\+Collision} (const \hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface} \&first\+Face, const std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle}{Mc\+C\+A\+D\+::\+Geometry\+::\+Mesh\+Triangle} $>$$>$ \&mesh\+Triangle\+List, Standard\+\_\+\+Integer \&a\+Side)
 \end{DoxyCompactItemize}
 
 
-\doxysubsection{Detailed Description}
+\subsection{Detailed Description}
 
 
 Definition at line 13 of file build/includes/implementation/decomposition/face\+Collision.\+hpp.
 
 
 
-\doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1FaceCollision_a7c1f2f2a818d696fe7bc1c3eb310a354}\label{classMcCAD_1_1Decomposition_1_1FaceCollision_a7c1f2f2a818d696fe7bc1c3eb310a354}} 
-\index{McCAD::Decomposition::FaceCollision@{McCAD::Decomposition::FaceCollision}!FaceCollision@{FaceCollision}}
-\index{FaceCollision@{FaceCollision}!McCAD::Decomposition::FaceCollision@{McCAD::Decomposition::FaceCollision}}
-\doxysubsubsection{\texorpdfstring{FaceCollision()}{FaceCollision()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision\+::\+Face\+Collision (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
-
-\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1FaceCollision_a7c1f2f2a818d696fe7bc1c3eb310a354}\label{classMcCAD_1_1Decomposition_1_1FaceCollision_a7c1f2f2a818d696fe7bc1c3eb310a354}} 
-\index{McCAD::Decomposition::FaceCollision@{McCAD::Decomposition::FaceCollision}!FaceCollision@{FaceCollision}}
-\index{FaceCollision@{FaceCollision}!McCAD::Decomposition::FaceCollision@{McCAD::Decomposition::FaceCollision}}
-\doxysubsubsection{\texorpdfstring{FaceCollision()}{FaceCollision()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision\+::\+Face\+Collision (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
-
-
-
-\doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1FaceCollision_a38f78ae9b744b721999dcdc5428fb24a}\label{classMcCAD_1_1Decomposition_1_1FaceCollision_a38f78ae9b744b721999dcdc5428fb24a}} 
-\index{McCAD::Decomposition::FaceCollision@{McCAD::Decomposition::FaceCollision}!faceCollision@{faceCollision}}
-\index{faceCollision@{faceCollision}!McCAD::Decomposition::FaceCollision@{McCAD::Decomposition::FaceCollision}}
-\doxysubsubsection{\texorpdfstring{faceCollision()}{faceCollision()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily Standard\+\_\+\+Boolean Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision\+::face\+Collision (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface}} \&}]{i\+Face,  }\item[{const std\+::vector$<$ std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle}{Mc\+C\+A\+D\+::\+Geometry\+::\+Mesh\+Triangle}} $>$$>$ \&}]{mesh\+Triangle\+List,  }\item[{Standard\+\_\+\+Integer \&}]{a\+Side }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1FaceCollision_ab4dffccfd15895b37362d8f4a46dff0f}\label{classMcCAD_1_1Decomposition_1_1FaceCollision_ab4dffccfd15895b37362d8f4a46dff0f}} 
+\index{Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision@{Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision}!face\+Collision@{face\+Collision}}
+\index{face\+Collision@{face\+Collision}!Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision@{Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision}}
+\subsubsection{\texorpdfstring{face\+Collision()}{faceCollision()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Standard\+\_\+\+Boolean Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision\+::face\+Collision (\begin{DoxyParamCaption}\item[{const \hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface} \&}]{first\+Face,  }\item[{const std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle}{Mc\+C\+A\+D\+::\+Geometry\+::\+Mesh\+Triangle} $>$$>$ \&}]{mesh\+Triangle\+List,  }\item[{Standard\+\_\+\+Integer \&}]{a\+Side }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
 Definition at line 19 of file face\+Collision.\+cpp.
 
 
-\begin{DoxyCode}{0}
-\DoxyCodeLine{22                                 \{}
-\DoxyCodeLine{23     \textcolor{keyword}{auto}\& face = iFace.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_a989de1f9ebe3de043412014ed25e52eb}{accessSImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1Surface_1_1Impl_abf7c4dc859404ce42b425c7d6b578f69}{face}};}
-\DoxyCodeLine{24     Standard\_Boolean collision = Standard\_False;}
-\DoxyCodeLine{25     Standard\_Integer positiveTriangles = 0;}
-\DoxyCodeLine{26     Standard\_Integer negativeTriangles = 0;}
-\DoxyCodeLine{27     \textcolor{keywordflow}{for} (Standard\_Integer i = 0; i <= meshTriangleList.size() -\/ 1; ++i)\{}
-\DoxyCodeLine{28         Standard\_Integer side = 0;}
-\DoxyCodeLine{29         \textcolor{keywordflow}{if} (TriangleCollision\{\}(iFace, *(meshTriangleList[i]), side))\{}
-\DoxyCodeLine{30             collision = Standard\_True;}
-\DoxyCodeLine{31             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{32         \} \textcolor{keywordflow}{else}\{}
-\DoxyCodeLine{33             \textcolor{keywordflow}{if} (side == 1)\{}
-\DoxyCodeLine{34                 ++positiveTriangles;}
-\DoxyCodeLine{35             \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (side == -\/1)\{}
-\DoxyCodeLine{36                 ++negativeTriangles;}
-\DoxyCodeLine{37             \}}
-\DoxyCodeLine{38         \}}
-\DoxyCodeLine{39         \textcolor{keywordflow}{if} (positiveTriangles > 0 \&\& negativeTriangles > 0)\{}
-\DoxyCodeLine{40             collision = Standard\_True;}
-\DoxyCodeLine{41             \textcolor{keywordflow}{break};}
-\DoxyCodeLine{42         \}}
-\DoxyCodeLine{43     \}}
-\DoxyCodeLine{44     \textcolor{comment}{// Update side.}}
-\DoxyCodeLine{45     \textcolor{keywordflow}{if} (positiveTriangles > 0 \&\& negativeTriangles == 0)\{}
-\DoxyCodeLine{46         aSide = 1;}
-\DoxyCodeLine{47     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (positiveTriangles == 0 \&\& negativeTriangles > 0)\{}
-\DoxyCodeLine{48         aSide = -\/1;}
-\DoxyCodeLine{49     \}}
-\DoxyCodeLine{50     \textcolor{keywordflow}{return} collision;}
-\DoxyCodeLine{51 \}}
-
+\begin{DoxyCode}
+22                                 \{
+23     \textcolor{keyword}{auto}& face = firstFace.\hyperlink{classMcCAD_1_1Geometry_1_1Surface_a989de1f9ebe3de043412014ed25e52eb}{accessSImpl}()->\hyperlink{classMcCAD_1_1Geometry_1_1Surface_1_1Impl_abf7c4dc859404ce42b425c7d6b578f69}{face};
+24     Standard\_Boolean collision = Standard\_False;
+25     Standard\_Integer positiveTriangles = 0;
+26     Standard\_Integer negativeTriangles = 0;
+27     \textcolor{keywordflow}{for} (Standard\_Integer i = 0; i <= meshTriangleList.size() - 1; ++i)\{
+28         Standard\_Integer side = 0;
+29         \textcolor{keywordflow}{if} (TriangleCollision\{\}(firstFace, *(meshTriangleList[i]), side))\{
+30             collision = Standard\_True;
+31             \textcolor{keywordflow}{break};
+32         \} \textcolor{keywordflow}{else}\{
+33             \textcolor{keywordflow}{if} (side == 1)\{
+34                 ++positiveTriangles;
+35             \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (side == -1)\{
+36                 ++negativeTriangles;
+37             \}
+38         \}
+39         \textcolor{keywordflow}{if} (positiveTriangles > 0 && negativeTriangles > 0)\{
+40             collision = Standard\_True;
+41             \textcolor{keywordflow}{break};
+42         \}
+43     \}
+44     \textcolor{comment}{// Update side.}
+45     \textcolor{keywordflow}{if} (positiveTriangles > 0 && negativeTriangles == 0)\{
+46         aSide = 1;
+47     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (positiveTriangles == 0 && negativeTriangles > 0)\{
+48         aSide = -1;
+49     \}
+50     \textcolor{keywordflow}{return} collision;
+51 \}
 \end{DoxyCode}
-Here is the call graph for this function\+:\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{d1/d5b/classMcCAD_1_1Decomposition_1_1FaceCollision_a38f78ae9b744b721999dcdc5428fb24a_cgraph}
-\end{center}
-\end{figure}
-Here is the caller graph for this function\+:\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{d1/d5b/classMcCAD_1_1Decomposition_1_1FaceCollision_a38f78ae9b744b721999dcdc5428fb24a_icgraph}
-\end{center}
-\end{figure}
-\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1FaceCollision_a38f78ae9b744b721999dcdc5428fb24a}\label{classMcCAD_1_1Decomposition_1_1FaceCollision_a38f78ae9b744b721999dcdc5428fb24a}} 
-\index{McCAD::Decomposition::FaceCollision@{McCAD::Decomposition::FaceCollision}!faceCollision@{faceCollision}}
-\index{faceCollision@{faceCollision}!McCAD::Decomposition::FaceCollision@{McCAD::Decomposition::FaceCollision}}
-\doxysubsubsection{\texorpdfstring{faceCollision()}{faceCollision()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily Standard\+\_\+\+Boolean Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision\+::face\+Collision (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface}} \&}]{i\+Face,  }\item[{const std\+::vector$<$ std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle}{Mc\+C\+A\+D\+::\+Geometry\+::\+Mesh\+Triangle}} $>$$>$ \&}]{mesh\+Triangle\+List,  }\item[{Standard\+\_\+\+Integer \&}]{a\+Side }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+Here is the call graph for this function\+:
+% FIG 1
+Here is the caller graph for this function\+:
+% FIG 2
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1FaceCollision_ab4dffccfd15895b37362d8f4a46dff0f}\label{classMcCAD_1_1Decomposition_1_1FaceCollision_ab4dffccfd15895b37362d8f4a46dff0f}} 
+\index{Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision@{Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision}!face\+Collision@{face\+Collision}}
+\index{face\+Collision@{face\+Collision}!Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision@{Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision}}
+\subsubsection{\texorpdfstring{face\+Collision()}{faceCollision()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Standard\+\_\+\+Boolean Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision\+::face\+Collision (\begin{DoxyParamCaption}\item[{const \hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface} \&}]{first\+Face,  }\item[{const std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \hyperlink{classMcCAD_1_1Geometry_1_1MeshTriangle}{Mc\+C\+A\+D\+::\+Geometry\+::\+Mesh\+Triangle} $>$$>$ \&}]{mesh\+Triangle\+List,  }\item[{Standard\+\_\+\+Integer \&}]{a\+Side }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
-\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1FaceCollision_a078f7d0a0b34f4dfabef258b87c47476}\label{classMcCAD_1_1Decomposition_1_1FaceCollision_a078f7d0a0b34f4dfabef258b87c47476}} 
-\index{McCAD::Decomposition::FaceCollision@{McCAD::Decomposition::FaceCollision}!operator()@{operator()}}
-\index{operator()@{operator()}!McCAD::Decomposition::FaceCollision@{McCAD::Decomposition::FaceCollision}}
-\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily Standard\+\_\+\+Boolean Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision\+::operator() (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface}} \&}]{i\+Face,  }\item[{const \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface}} \&}]{j\+Face,  }\item[{Standard\+\_\+\+Integer \&}]{a\+Side }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1FaceCollision_a081f71aa83d64fca9a0d0483854f9e9d}\label{classMcCAD_1_1Decomposition_1_1FaceCollision_a081f71aa83d64fca9a0d0483854f9e9d}} 
+\index{Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision@{Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision}!operator()@{operator()}}
+\index{operator()@{operator()}!Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision@{Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision}}
+\subsubsection{\texorpdfstring{operator()()}{operator()()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Standard\+\_\+\+Boolean Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision\+::operator() (\begin{DoxyParamCaption}\item[{const \hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface} \&}]{first\+Face,  }\item[{const \hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface} \&}]{second\+Face,  }\item[{Standard\+\_\+\+Integer \&}]{a\+Side }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1FaceCollision_a078f7d0a0b34f4dfabef258b87c47476}\label{classMcCAD_1_1Decomposition_1_1FaceCollision_a078f7d0a0b34f4dfabef258b87c47476}} 
-\index{McCAD::Decomposition::FaceCollision@{McCAD::Decomposition::FaceCollision}!operator()@{operator()}}
-\index{operator()@{operator()}!McCAD::Decomposition::FaceCollision@{McCAD::Decomposition::FaceCollision}}
-\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily Standard\+\_\+\+Boolean Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision\+::operator() (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface}} \&}]{i\+Face,  }\item[{const \mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface}} \&}]{j\+Face,  }\item[{Standard\+\_\+\+Integer \&}]{a\+Side }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{classMcCAD_1_1Decomposition_1_1FaceCollision_a081f71aa83d64fca9a0d0483854f9e9d}\label{classMcCAD_1_1Decomposition_1_1FaceCollision_a081f71aa83d64fca9a0d0483854f9e9d}} 
+\index{Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision@{Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision}!operator()@{operator()}}
+\index{operator()@{operator()}!Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision@{Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision}}
+\subsubsection{\texorpdfstring{operator()()}{operator()()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Standard\+\_\+\+Boolean Mc\+C\+A\+D\+::\+Decomposition\+::\+Face\+Collision\+::operator() (\begin{DoxyParamCaption}\item[{const \hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface} \&}]{first\+Face,  }\item[{const \hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface}{Mc\+C\+A\+D\+::\+Geometry\+::\+Bound\+Surface} \&}]{second\+Face,  }\item[{Standard\+\_\+\+Integer \&}]{a\+Side }\end{DoxyParamCaption})}
 
 
 
 Definition at line 10 of file face\+Collision.\+cpp.
 
 
-\begin{DoxyCode}{0}
-\DoxyCodeLine{13                                 \{}
-\DoxyCodeLine{14     \textcolor{keyword}{auto}\& meshTriangleList = jFace.\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface_aaf5a1d89894e9a90fee2e1f355638d0b}{accessBSImpl}}()-\/>\mbox{\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface_1_1Impl_a18c3e8c8f72430744268d0d1e31d28b5}{meshTrianglesList}};}
-\DoxyCodeLine{15     \textcolor{keywordflow}{return} \mbox{\hyperlink{classMcCAD_1_1Decomposition_1_1FaceCollision_a38f78ae9b744b721999dcdc5428fb24a}{faceCollision}}(iFace, meshTriangleList, aSide);}
-\DoxyCodeLine{16 \}}
-
+\begin{DoxyCode}
+13                                 \{
+14     \textcolor{keywordflow}{return} \hyperlink{classMcCAD_1_1Decomposition_1_1FaceCollision_ab4dffccfd15895b37362d8f4a46dff0f}{faceCollision}(firstFace, secondFace.\hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface_aaf5a1d89894e9a90fee2e1f355638d0b}{accessBSImpl}()->
+      \hyperlink{classMcCAD_1_1Geometry_1_1BoundSurface_1_1Impl_a707439343badaddb4fc5590b2c35e4c9}{meshTrianglesList},
+15                          aSide);
+16 \}
 \end{DoxyCode}
-Here is the call graph for this function\+:\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{d1/d5b/classMcCAD_1_1Decomposition_1_1FaceCollision_a078f7d0a0b34f4dfabef258b87c47476_cgraph}
-\end{center}
-\end{figure}
+Here is the call graph for this function\+:
+% FIG 3
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{build_2includes_2implementation_2decomposition_2faceCollision_8hpp}{build/includes/implementation/decomposition/face\+Collision.\+hpp}}\item 
-\mbox{\hyperlink{faceCollision_8cpp}{face\+Collision.\+cpp}}\end{DoxyCompactItemize}
+\hyperlink{build_2includes_2implementation_2decomposition_2faceCollision_8hpp}{build/includes/implementation/decomposition/face\+Collision.\+hpp}\item 
+\hyperlink{faceCollision_8cpp}{face\+Collision.\+cpp}\end{DoxyCompactItemize}

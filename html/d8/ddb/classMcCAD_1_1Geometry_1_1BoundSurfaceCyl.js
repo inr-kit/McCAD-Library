@@ -19,7 +19,5 @@ var classMcCAD_1_1Geometry_1_1BoundSurfaceCyl =
     [ "operator==", "d8/ddb/classMcCAD_1_1Geometry_1_1BoundSurfaceCyl.html#a5c7eafa600bd89b55fa06ddb9b21cc08", null ],
     [ "setSurfaceType", "d8/ddb/classMcCAD_1_1Geometry_1_1BoundSurfaceCyl.html#a976893834481e58569db0d35db2ba969", null ],
     [ "setSurfaceType", "d8/ddb/classMcCAD_1_1Geometry_1_1BoundSurfaceCyl.html#a976893834481e58569db0d35db2ba969", null ],
-    [ "pBSCImpl", "d8/ddb/classMcCAD_1_1Geometry_1_1BoundSurfaceCyl.html#a01b2ad0ca6e49c27d8fd65e43e7a3cb9", null ],
-    [ "pBSImpl", "d8/ddb/classMcCAD_1_1Geometry_1_1BoundSurfaceCyl.html#ae678fabb46e22b7a68a336051b366ddf", null ],
-    [ "pSImpl", "d8/ddb/classMcCAD_1_1Geometry_1_1BoundSurfaceCyl.html#a0097d4e9bfc1c7cd7cd33d81492b9100", null ]
+    [ "pBSCImpl", "d8/ddb/classMcCAD_1_1Geometry_1_1BoundSurfaceCyl.html#a01b2ad0ca6e49c27d8fd65e43e7a3cb9", null ]
 ];

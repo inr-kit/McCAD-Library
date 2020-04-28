@@ -1,14 +1,22 @@
 var searchData=
 [
-  ['topclass_721',['TopClass',['../dc/d26/structMcCAD_1_1detail_1_1TopClass.html',1,'McCAD::detail']]],
-  ['topclass_3c_20topabs_5fshapeenum_3a_3atopabs_5fcompound_20_3e_722',['TopClass&lt; TopAbs_ShapeEnum::TopAbs_COMPOUND &gt;',['../d1/d8e/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__COMPOUND_01_4.html',1,'McCAD::detail']]],
-  ['topclass_3c_20topabs_5fshapeenum_3a_3atopabs_5fcompsolid_20_3e_723',['TopClass&lt; TopAbs_ShapeEnum::TopAbs_COMPSOLID &gt;',['../db/da7/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__COMPSOLID_01_4.html',1,'McCAD::detail']]],
-  ['topclass_3c_20topabs_5fshapeenum_3a_3atopabs_5fedge_20_3e_724',['TopClass&lt; TopAbs_ShapeEnum::TopAbs_EDGE &gt;',['../de/d79/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__EDGE_01_4.html',1,'McCAD::detail']]],
-  ['topclass_3c_20topabs_5fshapeenum_3a_3atopabs_5fface_20_3e_725',['TopClass&lt; TopAbs_ShapeEnum::TopAbs_FACE &gt;',['../d7/dec/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__FACE_01_4.html',1,'McCAD::detail']]],
-  ['topclass_3c_20topabs_5fshapeenum_3a_3atopabs_5fshell_20_3e_726',['TopClass&lt; TopAbs_ShapeEnum::TopAbs_SHELL &gt;',['../d5/d6b/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__SHELL_01_4.html',1,'McCAD::detail']]],
-  ['topclass_3c_20topabs_5fshapeenum_3a_3atopabs_5fsolid_20_3e_727',['TopClass&lt; TopAbs_ShapeEnum::TopAbs_SOLID &gt;',['../de/d31/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__SOLID_01_4.html',1,'McCAD::detail']]],
-  ['topclass_3c_20topabs_5fshapeenum_3a_3atopabs_5fvertex_20_3e_728',['TopClass&lt; TopAbs_ShapeEnum::TopAbs_VERTEX &gt;',['../d1/dd0/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__VERTEX_01_4.html',1,'McCAD::detail']]],
-  ['topclass_3c_20topabs_5fshapeenum_3a_3atopabs_5fwire_20_3e_729',['TopClass&lt; TopAbs_ShapeEnum::TopAbs_WIRE &gt;',['../d3/d3e/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__WIRE_01_4.html',1,'McCAD::detail']]],
-  ['torsolid_730',['TORSolid',['../d5/d3e/classMcCAD_1_1Geometry_1_1TORSolid.html',1,'McCAD::Geometry']]],
-  ['trianglecollision_731',['TriangleCollision',['../d7/dc6/classMcCAD_1_1Decomposition_1_1TriangleCollision.html',1,'McCAD::Decomposition']]]
+  ['senseevaluator',['SenseEvaluator',['../d1/d31/classMcCAD_1_1Tools_1_1SenseEvaluator.html',1,'McCAD::Tools']]],
+  ['serial',['Serial',['../d0/d1c/classMcCAD_1_1Policy_1_1Serial.html',1,'McCAD::Policy']]],
+  ['serialtaskqueue',['SerialTaskQueue',['../dc/d42/classMcCAD_1_1SerialTaskQueue.html',1,'McCAD']]],
+  ['shapeview',['ShapeView',['../d1/da2/classMcCAD_1_1detail_1_1ShapeView.html',1,'McCAD::detail']]],
+  ['solid',['Solid',['../d1/d65/classMcCAD_1_1Geometry_1_1Solid.html',1,'McCAD::Geometry']]],
+  ['solidobjcreator',['SolidObjCreator',['../d0/d09/classMcCAD_1_1Decomposition_1_1SolidObjCreator.html',1,'McCAD::Decomposition']]],
+  ['solidrebuilder',['SolidRebuilder',['../d2/d82/classMcCAD_1_1Decomposition_1_1SolidRebuilder.html',1,'McCAD::Decomposition']]],
+  ['solidrepairer',['SolidRepairer',['../de/d1c/classMcCAD_1_1Decomposition_1_1SolidRepairer.html',1,'McCAD::Decomposition']]],
+  ['solidsplitter',['SolidSplitter',['../de/dbe/classMcCAD_1_1Decomposition_1_1SolidSplitter.html',1,'McCAD::Decomposition']]],
+  ['solidtype',['SolidType',['../d3/d81/classMcCAD_1_1Tools_1_1SolidType.html',1,'McCAD::Tools']]],
+  ['splitsolid',['SplitSolid',['../d5/d5d/classMcCAD_1_1Decomposition_1_1SplitSolid.html',1,'McCAD::Decomposition']]],
+  ['splitsurfaces',['SplitSurfaces',['../d4/de5/classMcCAD_1_1Decomposition_1_1SplitSurfaces.html',1,'McCAD::Decomposition']]],
+  ['stepreader',['STEPReader',['../d2/d30/classMcCAD_1_1IO_1_1STEPReader.html',1,'McCAD::IO']]],
+  ['stepwriter',['STEPWriter',['../d0/d9f/classMcCAD_1_1IO_1_1STEPWriter.html',1,'McCAD::IO']]],
+  ['surface',['Surface',['../d1/d2b/classMcCAD_1_1Geometry_1_1Surface.html',1,'McCAD::Geometry']]],
+  ['surfacecomparator',['SurfaceComparator',['../da/d53/classMcCAD_1_1Tools_1_1SurfaceComparator.html',1,'McCAD::Tools']]],
+  ['surfaceobjcreator',['SurfaceObjCreator',['../d4/dac/classMcCAD_1_1Decomposition_1_1SurfaceObjCreator.html',1,'McCAD::Decomposition']]],
+  ['surfacesfuser',['SurfacesFuser',['../d5/d31/classMcCAD_1_1Tools_1_1SurfacesFuser.html',1,'McCAD::Tools']]],
+  ['surfacesmerger',['SurfacesMerger',['../d3/d8b/classMcCAD_1_1Decomposition_1_1SurfacesMerger.html',1,'McCAD::Decomposition']]]
 ];

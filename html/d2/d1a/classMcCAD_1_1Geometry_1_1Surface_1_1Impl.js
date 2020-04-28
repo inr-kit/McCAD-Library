@@ -4,6 +4,7 @@ var classMcCAD_1_1Geometry_1_1Surface_1_1Impl =
     [ "Impl", "d2/d1a/classMcCAD_1_1Geometry_1_1Surface_1_1Impl.html#ae1bfecf4b3158933b37d4f4df24133ab", null ],
     [ "initiate", "d2/d1a/classMcCAD_1_1Geometry_1_1Surface_1_1Impl.html#ac86d81ec667089a969dcb10b996d7233", null ],
     [ "initiate", "d2/d1a/classMcCAD_1_1Geometry_1_1Surface_1_1Impl.html#ac86d81ec667089a969dcb10b996d7233", null ],
+    [ "AssistFace", "d2/d1a/classMcCAD_1_1Geometry_1_1Surface_1_1Impl.html#aea34d548cf117c767c27247dfb8da345", null ],
     [ "extendedFace", "d2/d1a/classMcCAD_1_1Geometry_1_1Surface_1_1Impl.html#afaca81a1a3f54b93988737ac7085a0f2", null ],
     [ "face", "d2/d1a/classMcCAD_1_1Geometry_1_1Surface_1_1Impl.html#abf7c4dc859404ce42b425c7d6b578f69", null ],
     [ "numberCollidingCurvedSurfaces", "d2/d1a/classMcCAD_1_1Geometry_1_1Surface_1_1Impl.html#adb23f3b121284586302940d9ae0c1b3d", null ],

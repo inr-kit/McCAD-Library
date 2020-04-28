@@ -8,6 +8,8 @@ var classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl =
     [ "extractSolids", "dd/de9/classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl.html#a72d35db075f7a695c1bf3f99ccf8d8a8", null ],
     [ "flattenSolidHierarchy", "dd/de9/classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl.html#ab0605ffa40a113571d949c93e5994122", null ],
     [ "flattenSolidHierarchy", "dd/de9/classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl.html#ab0605ffa40a113571d949c93e5994122", null ],
+    [ "perform", "dd/de9/classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl.html#a6a1e518d8eee8a533ccb74fd974af2ca", null ],
+    [ "perform", "dd/de9/classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl.html#a6a1e518d8eee8a533ccb74fd974af2ca", null ],
     [ "perform", "dd/de9/classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl.html#a71700a5c5ec1eaa1b414cb232d1a073b", null ],
     [ "perform", "dd/de9/classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl.html#a71700a5c5ec1eaa1b414cb232d1a073b", null ],
     [ "rejectedInputSolidsList", "dd/de9/classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl.html#afa4c71b9552009320911095b0e9c638e", null ],

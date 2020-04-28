@@ -9,6 +9,5 @@ var classMcCAD_1_1Geometry_1_1CYLSolid =
     [ "accessCSImpl", "dd/daa/classMcCAD_1_1Geometry_1_1CYLSolid.html#aa03de7d587fa2bb9ddd1c4e0dab11b19", null ],
     [ "accessSImpl", "dd/daa/classMcCAD_1_1Geometry_1_1CYLSolid.html#a41304db7cdf4762342ea833b15764180", null ],
     [ "accessSImpl", "dd/daa/classMcCAD_1_1Geometry_1_1CYLSolid.html#a1d058cac2d5619e21813a16706dc1826", null ],
-    [ "pCSImpl", "dd/daa/classMcCAD_1_1Geometry_1_1CYLSolid.html#ae0aadc232a3721a7246cbfa0348c7c0b", null ],
-    [ "pSImpl", "dd/daa/classMcCAD_1_1Geometry_1_1CYLSolid.html#a77640dab3831396c6527ead13c953614", null ]
+    [ "pCSImpl", "dd/daa/classMcCAD_1_1Geometry_1_1CYLSolid.html#ae0aadc232a3721a7246cbfa0348c7c0b", null ]
 ];

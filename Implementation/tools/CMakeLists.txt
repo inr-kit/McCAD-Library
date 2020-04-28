@@ -1,6 +1,7 @@
 add_library(TOOLS_IMPL OBJECT
     tools_impl.cpp
     CurveUtilities.cpp
+    EdgesComparator.cpp
     SurfaceUtilities.cpp
     surfaceComparator.cpp
     planeComparator.cpp
@@ -11,6 +12,7 @@ add_library(TOOLS_IMPL OBJECT
 install(FILES
   tools_impl.hpp
   CurveUtilities.hpp
+  EdgesComparator.hpp
   SurfaceUtilities.hpp
   surfaceComparator.hpp
   planeComparator.hpp

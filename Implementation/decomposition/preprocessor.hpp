@@ -27,13 +27,14 @@ namespace McCAD::Decomposition{
     Preprocessor() = default;
 
   private:
+    // The order of solid object types should be synched with Tools::SolidType;
     using VariantType = std::variant<std::monostate,
     std::shared_ptr<McCAD::Geometry::PLSolid>,
     std::shared_ptr<McCAD::Geometry::CYLSolid>,
     std::shared_ptr<McCAD::Geometry::TORSolid>>;
 
   public:
-    McCAD::Tools::SolidType solidType;
+    Tools::SolidType solidType;
 
     VariantType perform(const TopoDS_Shape& shape);
     Standard_Boolean checkBndSurfaces(const TopoDS_Solid& solid);

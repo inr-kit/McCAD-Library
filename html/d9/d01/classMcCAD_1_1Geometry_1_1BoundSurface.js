@@ -17,6 +17,5 @@ var classMcCAD_1_1Geometry_1_1BoundSurface =
     [ "operator==", "d9/d01/classMcCAD_1_1Geometry_1_1BoundSurface.html#a5c7eafa600bd89b55fa06ddb9b21cc08", null ],
     [ "setSurfaceType", "d9/d01/classMcCAD_1_1Geometry_1_1BoundSurface.html#a976893834481e58569db0d35db2ba969", null ],
     [ "setSurfaceType", "d9/d01/classMcCAD_1_1Geometry_1_1BoundSurface.html#a976893834481e58569db0d35db2ba969", null ],
-    [ "pBSImpl", "d9/d01/classMcCAD_1_1Geometry_1_1BoundSurface.html#ae678fabb46e22b7a68a336051b366ddf", null ],
-    [ "pSImpl", "d9/d01/classMcCAD_1_1Geometry_1_1BoundSurface.html#a0097d4e9bfc1c7cd7cd33d81492b9100", null ]
+    [ "pBSImpl", "d9/d01/classMcCAD_1_1Geometry_1_1BoundSurface.html#ae678fabb46e22b7a68a336051b366ddf", null ]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['x_1318',['x',['../d3/ddf/classMcCAD_1_1Geometry_1_1Coord3D.html#a82467d541e4e330484b7f4d589b433b4',1,'McCAD::Geometry::Coord3D']]],
-  ['xi_1319',['xi',['../d0/d07/classMcCAD_1_1Geometry_1_1Coord2D.html#a5b99b9ce570b6bd792bd485fb2f305bb',1,'McCAD::Geometry::Coord2D']]]
+  ['wl',['Wl',['../d1/dbb/link_8txt.html#a8685673d17df1ca70720fe6a7fda61c6',1,'link.txt']]]
 ];

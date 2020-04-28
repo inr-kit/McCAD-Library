@@ -1,17 +1,45 @@
-\hypertarget{namespaceMcCAD}{}\doxysection{Mc\+C\+AD Namespace Reference}
-\label{namespaceMcCAD}\index{McCAD@{McCAD}}
-\doxysubsection*{Namespaces}
+\hypertarget{namespaceMcCAD}{}\section{Mc\+C\+AD Namespace Reference}
+\label{namespaceMcCAD}\index{Mc\+C\+AD@{Mc\+C\+AD}}
+\subsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
- \mbox{\hyperlink{namespaceMcCAD_1_1Decomposition}{Decomposition}}
+ \hyperlink{namespaceMcCAD_1_1Decomposition}{Decomposition}
 \item 
- \mbox{\hyperlink{namespaceMcCAD_1_1detail}{detail}}
+ \hyperlink{namespaceMcCAD_1_1detail}{detail}
 \item 
- \mbox{\hyperlink{namespaceMcCAD_1_1General}{General}}
+ \hyperlink{namespaceMcCAD_1_1General}{General}
 \item 
- \mbox{\hyperlink{namespaceMcCAD_1_1Geometry}{Geometry}}
+ \hyperlink{namespaceMcCAD_1_1Geometry}{Geometry}
 \item 
- \mbox{\hyperlink{namespaceMcCAD_1_1IO}{IO}}
+ \hyperlink{namespaceMcCAD_1_1IO}{IO}
 \item 
- \mbox{\hyperlink{namespaceMcCAD_1_1Tools}{Tools}}
+ \hyperlink{namespaceMcCAD_1_1Policy}{Policy}
+\item 
+ \hyperlink{namespaceMcCAD_1_1Tools}{Tools}
 \end{DoxyCompactItemize}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classMcCAD_1_1ParallelTaskQueue}{Parallel\+Task\+Queue}
+\item 
+class \hyperlink{classMcCAD_1_1SerialTaskQueue}{Serial\+Task\+Queue}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename PolicyT $>$ }\\using \hyperlink{namespaceMcCAD_a3a236cdf837ceb7812628ff36fc0b95e}{Task\+Queue} = typename \hyperlink{structMcCAD_1_1detail_1_1TaskQueueSwitch}{detail\+::\+Task\+Queue\+Switch}$<$ PolicyT $>$\+::type
+\end{DoxyCompactItemize}
+
+
+\subsection{Typedef Documentation}
+\mbox{\Hypertarget{namespaceMcCAD_a3a236cdf837ceb7812628ff36fc0b95e}\label{namespaceMcCAD_a3a236cdf837ceb7812628ff36fc0b95e}} 
+\index{Mc\+C\+AD@{Mc\+C\+AD}!Task\+Queue@{Task\+Queue}}
+\index{Task\+Queue@{Task\+Queue}!Mc\+C\+AD@{Mc\+C\+AD}}
+\subsubsection{\texorpdfstring{Task\+Queue}{TaskQueue}}
+{\footnotesize\ttfamily template$<$typename PolicyT $>$ \\
+using \hyperlink{namespaceMcCAD_a3a236cdf837ceb7812628ff36fc0b95e}{Mc\+C\+A\+D\+::\+Task\+Queue} = typedef typename \hyperlink{structMcCAD_1_1detail_1_1TaskQueueSwitch}{detail\+::\+Task\+Queue\+Switch}$<$PolicyT$>$\+::type}
+
+
+
+Definition at line 31 of file build/includes/interface/tools/\+Task\+Queue.\+hpp.
+

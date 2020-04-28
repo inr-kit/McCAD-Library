@@ -8,15 +8,10 @@
 #include "tools_impl.hpp"
 // OCC
 #include <TopoDS_Edge.hxx>
-#include <Geom_Curve.hxx>
-#include <BRep_Tool.hxx>
-#include <gp_Pnt.hxx>
 
 namespace McCAD::Geometry{
   class Edge::Impl {
   public:
-    //Impl() = default;
-
     std::unique_ptr<Tools::Preprocessor> preproc;
     
     TopoDS_Edge edge;

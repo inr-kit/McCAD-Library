@@ -2,6 +2,9 @@ var namespaceMcCAD_1_1detail =
 [
     [ "Iterator", "da/d0a/classMcCAD_1_1detail_1_1Iterator.html", "da/d0a/classMcCAD_1_1detail_1_1Iterator" ],
     [ "ShapeView", "d1/da2/classMcCAD_1_1detail_1_1ShapeView.html", "d1/da2/classMcCAD_1_1detail_1_1ShapeView" ],
+    [ "TaskQueueSwitch", "d5/dba/structMcCAD_1_1detail_1_1TaskQueueSwitch.html", null ],
+    [ "TaskQueueSwitch< Policy::Parallel >", "d5/d60/structMcCAD_1_1detail_1_1TaskQueueSwitch_3_01Policy_1_1Parallel_01_4.html", "d5/d60/structMcCAD_1_1detail_1_1TaskQueueSwitch_3_01Policy_1_1Parallel_01_4" ],
+    [ "TaskQueueSwitch< Policy::Serial >", "da/d9a/structMcCAD_1_1detail_1_1TaskQueueSwitch_3_01Policy_1_1Serial_01_4.html", "da/d9a/structMcCAD_1_1detail_1_1TaskQueueSwitch_3_01Policy_1_1Serial_01_4" ],
     [ "TopClass", "dc/d26/structMcCAD_1_1detail_1_1TopClass.html", null ],
     [ "TopClass< TopAbs_ShapeEnum::TopAbs_COMPOUND >", "d1/d8e/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__COMPOUND_01_4.html", "d1/d8e/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__COMPOUND_01_4" ],
     [ "TopClass< TopAbs_ShapeEnum::TopAbs_COMPSOLID >", "db/da7/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__COMPSOLID_01_4.html", "db/da7/structMcCAD_1_1detail_1_1TopClass_3_01TopAbs__ShapeEnum_1_1TopAbs__COMPSOLID_01_4" ],

@@ -1,2 +1,79 @@
-\hypertarget{3rd__party_2Boost__dependency_2CMakeLists_8txt}{}\doxysection{C\+Make\+Lists.\+txt File Reference}
-\label{3rd__party_2Boost__dependency_2CMakeLists_8txt}\index{CMakeLists.txt@{CMakeLists.txt}}
+\hypertarget{3rd__party_2Boost__dependency_2CMakeLists_8txt}{}\section{C\+Make\+Lists.\+txt File Reference}
+\label{3rd__party_2Boost__dependency_2CMakeLists_8txt}\index{C\+Make\+Lists.\+txt@{C\+Make\+Lists.\+txt}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{3rd__party_2Boost__dependency_2CMakeLists_8txt_a09e553c496218f39a0eaee39ae118c6a}{find\+\_\+package} (Boost 1.\+71 R\+E\+Q\+U\+I\+R\+ED) \hyperlink{3rd__party_2OCC__dependency_2CMakeLists_8txt_a64a7251a2d6c5f84ee98be006734e24f}{if}(Boost\+\_\+\+F\+O\+U\+ND) message(S\+T\+A\+T\+US \char`\"{}Found Boost \$
+\item 
+\hyperlink{3rd__party_2Boost__dependency_2CMakeLists_8txt_a66950d85e3ec23c90f07b9b9b6de6fe1}{endif} (Boost\+\_\+\+F\+O\+U\+ND) \hyperlink{3rd__party_2OCC__dependency_2CMakeLists_8txt_a64a7251a2d6c5f84ee98be006734e24f}{if}(N\+OT D\+E\+F\+I\+N\+ED Boost\+\_\+\+L\+I\+B\+\_\+\+D\+IR) \hyperlink{3rd__party_2OCC__dependency_2CMakeLists_8txt_a074553c33956a239810d7affac62c071}{set}(Boost\+\_\+\+L\+I\+B\+\_\+\+D\+IR \char`\"{}\$
+\item 
+lib \hyperlink{3rd__party_2Boost__dependency_2CMakeLists_8txt_a1c67195fe1ddac149b1d965678b4217a}{endif} (N\+OT D\+E\+F\+I\+N\+ED Boost\+\_\+\+L\+I\+B\+\_\+\+D\+IR) \hyperlink{3rd__party_2OCC__dependency_2CMakeLists_8txt_a64a7251a2d6c5f84ee98be006734e24f}{if}(D\+E\+F\+I\+N\+ED Boost\+\_\+\+I\+N\+C\+L\+U\+D\+E\+\_\+\+D\+I\+RS A\+ND D\+E\+F\+I\+N\+ED Boost\+\_\+\+L\+I\+B\+\_\+\+D\+IR) \hyperlink{Interface_2tools_2CMakeLists_8txt_a0ce3217fef9c2b9a0d23a3b8db43f787}{add\+\_\+library}(B\+O\+O\+ST I\+N\+T\+E\+R\+F\+A\+CE) install(T\+A\+R\+G\+E\+TS B\+O\+O\+ST D\+E\+S\+T\+I\+N\+A\+T\+I\+ON \$
+\item 
+bin \hyperlink{3rd__party_2Boost__dependency_2CMakeLists_8txt_a497ccbba6ff6df2ce1c4b839efbc42b9}{target\+\_\+link\+\_\+libraries} (B\+O\+O\+ST I\+N\+T\+E\+R\+F\+A\+CE \$\{Boost\+\_\+\+L\+I\+B\+R\+A\+R\+I\+ES\}) \hyperlink{3rd__party_2OCC__dependency_2CMakeLists_8txt_a7716dc48bda2b99d9e8cb80298ce1ce6}{target\+\_\+include\+\_\+directories}(B\+O\+O\+ST I\+N\+T\+E\+R\+F\+A\+CE \$
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{3rd__party_2Boost__dependency_2CMakeLists_8txt_a66950d85e3ec23c90f07b9b9b6de6fe1}\label{3rd__party_2Boost__dependency_2CMakeLists_8txt_a66950d85e3ec23c90f07b9b9b6de6fe1}} 
+\index{3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt@{3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt}!endif@{endif}}
+\index{endif@{endif}!3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt@{3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt}}
+\subsubsection{\texorpdfstring{endif()}{endif()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily endif (\begin{DoxyParamCaption}\item[{Boost\+\_\+\+F\+O\+U\+ND}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 5 of file 3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt.
+
+
+\begin{DoxyCode}
+8                         \{Boost\_INCLUDE\_DIRS\}/../lib\textcolor{stringliteral}{")}
+\end{DoxyCode}
+Here is the caller graph for this function\+:
+% FIG 0
+\mbox{\Hypertarget{3rd__party_2Boost__dependency_2CMakeLists_8txt_a1c67195fe1ddac149b1d965678b4217a}\label{3rd__party_2Boost__dependency_2CMakeLists_8txt_a1c67195fe1ddac149b1d965678b4217a}} 
+\index{3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt@{3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt}!endif@{endif}}
+\index{endif@{endif}!3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt@{3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt}}
+\subsubsection{\texorpdfstring{endif()}{endif()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily lib endif (\begin{DoxyParamCaption}\item[{N\+OT D\+E\+F\+I\+N\+ED}]{Boost\+\_\+\+L\+I\+B\+\_\+\+D\+IR }\end{DoxyParamCaption})}
+
+
+
+Definition at line 9 of file 3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt.
+
+
+\begin{DoxyCode}
+12                                         \{PROJECT\_BINARY\_DIR\}/bin)
+\end{DoxyCode}
+\mbox{\Hypertarget{3rd__party_2Boost__dependency_2CMakeLists_8txt_a09e553c496218f39a0eaee39ae118c6a}\label{3rd__party_2Boost__dependency_2CMakeLists_8txt_a09e553c496218f39a0eaee39ae118c6a}} 
+\index{3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt@{3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt}!find\+\_\+package@{find\+\_\+package}}
+\index{find\+\_\+package@{find\+\_\+package}!3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt@{3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt}}
+\subsubsection{\texorpdfstring{find\+\_\+package()}{find\_package()}}
+{\footnotesize\ttfamily find\+\_\+package (\begin{DoxyParamCaption}\item[{Boost 1.\+71}]{R\+E\+Q\+U\+I\+R\+ED }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1 of file 3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt.
+
+
+\begin{DoxyCode}
+3                                  \{Boost\_VERSION\}\textcolor{stringliteral}{")}
+\end{DoxyCode}
+\mbox{\Hypertarget{3rd__party_2Boost__dependency_2CMakeLists_8txt_a497ccbba6ff6df2ce1c4b839efbc42b9}\label{3rd__party_2Boost__dependency_2CMakeLists_8txt_a497ccbba6ff6df2ce1c4b839efbc42b9}} 
+\index{3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt@{3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt}!target\+\_\+link\+\_\+libraries@{target\+\_\+link\+\_\+libraries}}
+\index{target\+\_\+link\+\_\+libraries@{target\+\_\+link\+\_\+libraries}!3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt@{3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt}}
+\subsubsection{\texorpdfstring{target\+\_\+link\+\_\+libraries()}{target\_link\_libraries()}}
+{\footnotesize\ttfamily bin target\+\_\+link\+\_\+libraries (\begin{DoxyParamCaption}\item[{B\+O\+O\+ST I\+N\+T\+E\+R\+F\+A\+CE \$\{Boost\+\_\+\+L\+I\+B\+R\+A\+R\+I\+ES\}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 13 of file 3rd\+\_\+party/\+Boost\+\_\+dependency/\+C\+Make\+Lists.\+txt.
+
+
+\begin{DoxyCode}
+13                                            \{Boost\_LIBRARIES\})
+14     \hyperlink{3rd__party_2OCC__dependency_2CMakeLists_8txt_a7716dc48bda2b99d9e8cb80298ce1ce6}{target\_include\_directories}(BOOST INTERFACE $\{Boost\_INCLUDE\_DIRS\})
+\end{DoxyCode}
+Here is the call graph for this function\+:
+% FIG 1
+Here is the caller graph for this function\+:
+% FIG 2

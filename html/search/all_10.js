@@ -1,17 +1,4 @@
 var searchData=
 [
-  ['rangeradian_504',['rangeRadian',['../db/d39/classMcCAD_1_1Geometry_1_1BoundSurfaceCyl_1_1Impl.html#ac40ad6964d82450fa6606efd82ac824f',1,'McCAD::Geometry::BoundSurfaceCyl::Impl']]],
-  ['ratio_505',['ratio',['../d7/d5f/namespaceMcCAD_1_1Geometry.html#a9edef0077e899c04c5c006d1920c2a77',1,'McCAD::Geometry']]],
-  ['readme_2emd_506',['README.md',['../da/ddd/README_8md.html',1,'']]],
-  ['readstep_507',['readSTEP',['../de/d1b/classMcCAD_1_1IO_1_1STEPReader_1_1Impl.html#adf3fe2fde0c4b949317c2e07b2fa57b9',1,'McCAD::IO::STEPReader::Impl::readSTEP()'],['../de/d1b/classMcCAD_1_1IO_1_1STEPReader_1_1Impl.html#adf3fe2fde0c4b949317c2e07b2fa57b9',1,'McCAD::IO::STEPReader::Impl::readSTEP()']]],
-  ['recurrencedepth_508',['recurrenceDepth',['../d5/d45/classMcCAD_1_1Decomposition_1_1DecomposeSolid_1_1Impl.html#ad908b2687b52f636d8368b814aa5f770',1,'McCAD::Decomposition::DecomposeSolid::Impl']]],
-  ['reference_509',['reference',['../da/d0a/classMcCAD_1_1detail_1_1Iterator.html#a99d36aa906470f6e3f2783b921c71ff5',1,'McCAD::detail::Iterator']]],
-  ['rejectedinputsolidslist_510',['rejectedInputSolidsList',['../dd/de9/classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl.html#afa4c71b9552009320911095b0e9c638e',1,'McCAD::Decomposition::Decompose::Impl']]],
-  ['rejectedsubsolidslist_511',['rejectedsubSolidsList',['../dd/de9/classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl.html#a513935cebc47e2e4dd599963bfbb8008',1,'McCAD::Decomposition::Decompose::Impl::rejectedsubSolidsList()'],['../dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#a464bf027934dad6084175700222b1582',1,'McCAD::Geometry::Solid::Impl::rejectedsubSolidsList()']]],
-  ['removesmallfaces_512',['removeSmallFaces',['../d2/d2a/classMcCAD_1_1Tools_1_1Preprocessor_1_1Impl.html#acb9e9ceb77f52c6894cbf471bfa15a1b',1,'McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape &amp;solidShape, Standard_Real precision=1.0e-3, Standard_Real maxTolerance=1.0e-3)'],['../d2/d2a/classMcCAD_1_1Tools_1_1Preprocessor_1_1Impl.html#acb9e9ceb77f52c6894cbf471bfa15a1b',1,'McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape &amp;solidShape, Standard_Real precision=1.0e-3, Standard_Real maxTolerance=1.0e-3)']]],
-  ['repairsolid_513',['repairSolid',['../dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#a095d0c53eb4095cee9b643fe1b1f5671',1,'McCAD::Geometry::Solid::Impl::repairSolid()'],['../d2/d2a/classMcCAD_1_1Tools_1_1Preprocessor_1_1Impl.html#a388f2f564e20bdc6b0a238d1a2dc89ab',1,'McCAD::Tools::Preprocessor::Impl::repairSolid()'],['../dd/d07/classMcCAD_1_1Geometry_1_1Solid_1_1Impl.html#a095d0c53eb4095cee9b643fe1b1f5671',1,'McCAD::Geometry::Solid::Impl::repairSolid()'],['../d2/d2a/classMcCAD_1_1Tools_1_1Preprocessor_1_1Impl.html#a388f2f564e20bdc6b0a238d1a2dc89ab',1,'McCAD::Tools::Preprocessor::Impl::repairSolid()']]],
-  ['resetgap_514',['resetGap',['../dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#abdedc7a259eca39fbfab2fa8fdd17a07',1,'McCAD::Geometry::BoundingBox::resetGap()'],['../dd/dea/classMcCAD_1_1Geometry_1_1BoundingBox.html#abdedc7a259eca39fbfab2fa8fdd17a07',1,'McCAD::Geometry::BoundingBox::resetGap()']]],
-  ['resultsolidslist_515',['resultSolidsList',['../dd/de9/classMcCAD_1_1Decomposition_1_1Decompose_1_1Impl.html#a75b53d768ed797dff26c6bf7308f0bea',1,'McCAD::Decomposition::Decompose::Impl']]],
-  ['rpath_516',['rpath',['../d1/dbb/link_8txt.html#af81fe329d800f5ae4c9aa46a2dac1ec8',1,'link.txt']]],
-  ['runlog_2etxt_517',['runLog.txt',['../d5/d33/runLog_8txt.html',1,'']]]
+  ['queue',['queue',['../dc/d42/classMcCAD_1_1SerialTaskQueue.html#afec801f3b68d815c30f6b5539a8136bb',1,'McCAD::SerialTaskQueue']]]
 ];

@@ -5,8 +5,8 @@
 #include "surfaceObjCerator.hpp"
 #include "boundSurface_impl.hpp"
 #include "ShapeView.hpp"
-#include "commonedgefinder.hpp"
-#include "edgescombiner.hpp"
+#include "CommonEdgeFinder.hpp"
+#include "EdgesCombiner.hpp"
 //OCC
 #include <AIS_AngleDimension.hxx>
 #include <gp_Ax1.hxx>
@@ -19,13 +19,13 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& sol
     auto& planesList = solidObj.accessSImpl()->planesList;
     auto& cylindersList = solidObj.accessSImpl()->cylindersList;
     if (cylindersList.size() >= 2){
-        std::vector<std::shared_ptr<Geometry::Edge>> commonCurvedEdges;
+        std::vector<std::shared_ptr<Geometry::Edge>> commonEdges;
         for(Standard_Integer i = 0; i < cylindersList.size(); ++i){
             for(Standard_Integer j = i+1; j < cylindersList.size(); ++j){
                 std::cout << "i: " << i << " j, " << j << std::endl;
                 if (*cylindersList[i] == *cylindersList[j]) continue;
                 auto temp = CommonEdgeFinder{}(cylindersList[i], cylindersList[j]);
-                commonCurvedEdges.insert(commonCurvedEdges.end(), temp.begin(), temp.end());
+                commonEdges.insert(commonEdges.end(), temp.begin(), temp.end());
                 /*//debug
                 STEPControl_Writer writer10;
                 writer10.Transfer(cylindersList[i]->accessSImpl()->face, STEPControl_StepModelType::STEPControl_AsIs);
@@ -42,15 +42,16 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& sol
                 *///debug
             }
         }
-        EdgesCombiner{}(commonCurvedEdges);
-        //debug
+        EdgesCombiner{}(commonEdges);
+        // sort edges into respective types lists
+        /*//debug
         STEPControl_Writer writer11;
         for (Standard_Integer i = 0; i < commonCurvedEdges.size(); ++i){
             writer11.Transfer(commonCurvedEdges[i]->accessEImpl()->edge,
                               STEPControl_StepModelType::STEPControl_AsIs);
         }
         Standard_Integer kk = 0;
-        std::string filename = "/home/mharb/opt/McCAD_refactor/examples/bbox/commoncurvededges";
+        std::string filename = "/home/mharb/opt/McCAD_refactor/examples/bbox/commonedges";
         std::string suffix = ".stp";
         while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
             ++kk;
@@ -58,7 +59,7 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& sol
         filename += std::to_string(kk);
         filename += suffix;
         writer11.Write(filename.c_str());
-        //debug
+        *///debug
     }
 }
 

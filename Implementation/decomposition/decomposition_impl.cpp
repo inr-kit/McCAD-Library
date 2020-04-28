@@ -63,7 +63,7 @@ McCAD::Decomposition::Decompose::Impl::perform(const TopoDS_Shape& shape){
     if (std::holds_alternative<std::monostate>(solid)){
         //std::cout << "empty variant" << std::endl;
         rejectedInputSolidsList->Append(shape);
-        return;
+        goto decompositionPass;
     }
     // Using switch for now. Should be separated in a separate class an called
     // for each specific type of solid object.
@@ -97,6 +97,8 @@ McCAD::Decomposition::Decompose::Impl::perform(const TopoDS_Shape& shape){
                      " to rejected solids file" << std::endl;
         rejectedInputSolidsList->Append(shape);
     }
+    // Pass as there is no solid to decompose;
+    decompositionPass: ;
 }
 
 void
@@ -108,13 +110,13 @@ McCAD::Decomposition::Decompose::Impl::perform(){
         });
     }
     taskQueue.complete();
-    std::cout << " > Result" << std::endl;
+    std::cout << " > Results:" << std::endl;
     std::cout << "   - There are " << rejectedInputSolidsList->Length() <<
                  " rejected input solid(s)." << std::endl;
-    std::cout << "   - There are " << resultSolidsList->Length() <<
-                 " result solid(s)." << std::endl;
     std::cout << "   - There are " << rejectedsubSolidsList->Length() <<
                  " rejected subsolid(s)." << std::endl;
+    std::cout << "   - There are " << resultSolidsList->Length() <<
+                 " result solid(s)." << std::endl;
     rejectedInputSolidsList->Append(*rejectedsubSolidsList);
 }
 

@@ -1,6 +1,6 @@
 // McCAD
 #include "preprocessor.hpp"
-#include "createSolidObj.hpp"
+#include "solidObjCreator.hpp"
 
 McCAD::Decomposition::Preprocessor::VariantType
 McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){

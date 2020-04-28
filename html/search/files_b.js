@@ -1,25 +1,5 @@
 var searchData=
 [
-  ['senseevaluateor_2ecpp_961',['senseEvaluateor.cpp',['../df/dd1/senseEvaluateor_8cpp.html',1,'']]],
-  ['solid_2ecpp_962',['solid.cpp',['../dc/d9f/solid_8cpp.html',1,'']]],
-  ['solid_5fimpl_2ecpp_963',['solid_impl.cpp',['../d8/d20/solid__impl_8cpp.html',1,'']]],
-  ['solidrebuilder_2ecpp_964',['SolidRebuilder.cpp',['../de/d4a/SolidRebuilder_8cpp.html',1,'']]],
-  ['solidrepairer_2ecpp_965',['SolidRepairer.cpp',['../d9/d16/SolidRepairer_8cpp.html',1,'']]],
-  ['solidsplitter_2ecpp_966',['SolidSplitter.cpp',['../dd/d24/SolidSplitter_8cpp.html',1,'']]],
-  ['splitsolid_2ecpp_967',['splitsolid.cpp',['../da/d5e/splitsolid_8cpp.html',1,'']]],
-  ['splitsolid_5fimpl_2ecpp_968',['splitsolid_impl.cpp',['../dd/dea/splitsolid__impl_8cpp.html',1,'']]],
-  ['splitsurfaces_2ecpp_969',['splitsurfaces.cpp',['../d9/da7/splitsurfaces_8cpp.html',1,'']]],
-  ['splitsurfaces_5fimpl_2ecpp_970',['splitsurfaces_impl.cpp',['../d4/ded/splitsurfaces__impl_8cpp.html',1,'']]],
-  ['staticpow_2ehpp_971',['StaticPow.hpp',['../d4/db9/StaticPow_8hpp.html',1,'']]],
-  ['stepreader_2ecpp_972',['stepreader.cpp',['../de/d3b/stepreader_8cpp.html',1,'']]],
-  ['stepreader_5fimpl_2ecpp_973',['stepreader_impl.cpp',['../d7/dc9/stepreader__impl_8cpp.html',1,'']]],
-  ['stepwriter_2ecpp_974',['stepwriter.cpp',['../d6/d1e/stepwriter_8cpp.html',1,'']]],
-  ['stepwriter_5fimpl_2ecpp_975',['stepwriter_impl.cpp',['../dc/d44/stepwriter__impl_8cpp.html',1,'']]],
-  ['surface_2ecpp_976',['surface.cpp',['../d7/d13/surface_8cpp.html',1,'']]],
-  ['surface_5fimpl_2ecpp_977',['surface_impl.cpp',['../d7/da2/surface__impl_8cpp.html',1,'']]],
-  ['surfacecomparator_2ecpp_978',['surfaceComparator.cpp',['../d1/d2a/surfaceComparator_8cpp.html',1,'']]],
-  ['surfaceobjcerator_2ecpp_979',['surfaceObjCerator.cpp',['../d8/dc6/surfaceObjCerator_8cpp.html',1,'']]],
-  ['surfacesfuser_2ecpp_980',['surfacesFuser.cpp',['../d7/de9/surfacesFuser_8cpp.html',1,'']]],
-  ['surfacesmerger_2ecpp_981',['surfacesMerger.cpp',['../d4/d68/surfacesMerger_8cpp.html',1,'']]],
-  ['surfaceutilities_2ecpp_982',['SurfaceUtilities.cpp',['../de/da8/SurfaceUtilities_8cpp.html',1,'']]]
+  ['readme_2emd',['README.md',['../da/ddd/README_8md.html',1,'']]],
+  ['runlog_2etxt',['runLog.txt',['../d5/d33/runLog_8txt.html',1,'']]]
 ];
