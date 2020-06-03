@@ -23,8 +23,10 @@ Prerequisites:
 --------------
 1- OpenCascade                  : https://www.opencascade.com/content/latest-release
   - Geometry engine for solids manipulations and decomposition.
+  
 2- CMake (version 3.14 or above): https://cmake.org/download/
   - Standard build system for McCAD v1.0L library.
+  
 3- Boost C++ Library: https://www.boost.org/
   - Used for multiprocessing.
 
