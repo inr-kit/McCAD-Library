@@ -2,15 +2,18 @@
 #include <iostream>
 #include <string>
 #include <chrono>
+#include <filesystem>
 
 // McCAD
 #include "inputdata.hpp"
+#include "Inputconfig.hpp"
 #include "stepreader.hpp"
 #include "stepwriter.hpp"
 #include "decomposition.hpp"
 
 int main (){
-    std::string inputFileName, resultFileName, rejectFileName;
+    McCAD::IO::InputConfig(std::filesystem::current_path());
+    /*std::string inputFileName, resultFileName, rejectFileName;
     std::cout << "Specify the path to the input step file: " << std::endl;
     getline(std::cin, inputFileName);
     std::cout << "Specify the path to save the result solids step file: " <<
@@ -45,6 +48,6 @@ int main (){
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::milli> elapsed = end-start;
-    std::cout << "Elapsed time: " << elapsed.count() << " ms" << std::endl;
+    std::cout << "Elapsed time: " << elapsed.count() << " ms" << std::endl;*/
     return 0;
 }
