@@ -11,8 +11,14 @@
 #include "stepwriter.hpp"
 #include "decomposition.hpp"
 
-int main (){
-    McCAD::IO::InputConfig(std::filesystem::current_path());
+int main (int argc, char *argv[]){
+    std::string currentPath = std::filesystem::current_path();
+    McCAD::IO::InputConfig inpufConfig{currentPath};
+    if (argc == 1){
+        inpufConfig.writeTemplate();
+    } else if(argc == 2) {
+        inpufConfig.readTemplate();
+    }
     /*std::string inputFileName, resultFileName, rejectFileName;
     std::cout << "Specify the path to the input step file: " << std::endl;
     getline(std::cin, inputFileName);
