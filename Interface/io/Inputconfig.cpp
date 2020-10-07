@@ -17,20 +17,23 @@ McCAD::IO::InputConfig::writeTemplate(){
     std::ofstream inputConfig;
     inputConfig.open("McCADInputConfig.txt");
     inputConfig << "# McCAD Input Parameters\n"
-                   "# ======================" << std::endl;
-    inputConfig << "#> Path to the input STL file\n"
-                   "inputFileName:" << std::endl;
-    inputConfig << "# McCAD decomposition\n"
-                   "====================="
-                   "#> Desired name of the decomposed solids output STL file\n"
-                   "resultFileName:\n"
-                   "#> Desired name of the rejected solids output STL file\n"
-                   "rejectFileName:\n"
+                   "# ======================\n" << std::endl;
+    inputConfig << "# Input\n"
+                   "# =====\n"
+                   "# > Path to the input STL file;\n"
+                   "inputFileName = input.stl\n" << std::endl;
+    inputConfig << "# Decomposition\n"
+                   "# ===================\n"
+                   "# > Desired name of the decomposed solids output STL file;\n"
+                   "resultFileName = result.stl\n"
+                   "# > Desired name of the rejected solids output STL file;\n"
+                   "rejectFileName = reject.stl\n"
+                   "# > Other parameters;\n"
                    "tolerance = 1.0e-7\n"
                    "minInputSolidVol = 1.0\n"
-                   "angleTolerance = 1.0e-3" << std::endl;
-    inputConfig << "# McCAD conversion\n"
-                   "=================="
+                   "angleTolerance = 1.0e-3\n" << std::endl;
+    inputConfig << "# Conversion\n"
+                   "# ==================\n"
                    "writeCollisionFile = false\n"
                    "voidGeneration = true\n"
                    "maxDiscLength = 200\n"
@@ -44,20 +47,47 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "RResolution = 0.0314\n"
                    "maxSamplPntNum = 50\n"
                    "minSamplPntNum = 20\n"
-                   "initNumVoidBoxes = 1" << std::endl;
+                   "initNumVoidBoxes = 1\n" << std::endl;
     inputConfig.close();
 }
 
 void
 McCAD::IO::InputConfig::readTemplate(){
     std::ifstream inputConfig("McCADInputConfig.txt");
-    if (!inputConfig) std::cout << "Config file is missing!" << std::endl;
-    // Read files and populate parameters
-    std::string line;
-    std::cout << "running" << std::endl;
-    //while (!inputConfig.eof()){
-    //    inputConfig.getline(inputLine);
-    //    if(line.Value(1) == '#') continue;
-    //   else{std::cout << line << std::endl;}
-    //}
+    if (!inputConfig){
+        inputFileName = currentPath + "/" + defaultInput;
+        resultFileName = currentPath + "/" + defaultResult;
+        rejectFileName = currentPath + "/" + defaultReject;
+        std::cout << "McCADInputConfig.txt is missing!. Proceeding with default "
+                     "parameters:\n"
+                     "Input = " << inputFileName << std::endl;
+    } else {
+        // Read file and populate parameters
+        while (!inputConfig.eof()){
+            std::string line;
+            getline(inputConfig, line);
+           std::vector<std::string> lineSplit = splitLine(line, ' ');
+           if (lineSplit.size() == 0 || lineSplit[0] == "#") continue;
+           else {
+               if (lineSplit[0] == "inputFileName")
+                   inputFileName = lineSplit[2];
+               else if (lineSplit[0] == "resultFileName")
+                   resultFileName = lineSplit[2];
+               else if (lineSplit[0] == "rejectFileName")
+                   rejectFileName = lineSplit[2];
+               else continue;
+           }
+        }
+    }
+}
+
+std::vector<std::string>
+McCAD::IO::InputConfig::splitLine(const std::string& line, char delimiter){
+    std::istringstream ss(line);
+    std::vector<std::string> lineSplit;
+    std::string s;
+    while (std::getline(ss, s, delimiter)){
+        lineSplit.push_back(s);
+    }
+    return lineSplit;
 }

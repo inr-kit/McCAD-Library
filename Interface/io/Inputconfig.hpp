@@ -3,6 +3,7 @@
 
 //C++
 #include <string>
+#include <vector>
 
 namespace McCAD::IO{
 class InputConfig{
@@ -12,11 +13,14 @@ public:
 
     std::string currentPath;
     void writeTemplate();
+    std::vector<std::string> splitLine(const std::string& line, char delimiter);
     void readTemplate();
 
     //Define default values
-    std::string inputFileName, resultFileName, rejectFileName;
-    std::string materialFileName;
+    std::string defaultInput = "input.stl";
+    std::string defaultReject = "reject.stl";
+    std::string defaultResult = "result.stl";
+    std::string inputFileName, resultFileName, rejectFileName, materialFileName;
     // Decomposition
     double tolerance = 1.0e-7;
     double minInputSolidVol = 1.0;
