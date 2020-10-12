@@ -16,6 +16,9 @@ namespace McCAD::General{
     ~Impl();
 
     Handle_TopTools_HSequenceOfShape inputSolidsList;
+    int size{0};
+
+    void updateSize();
   };
 }
 

@@ -17,20 +17,19 @@ McCAD::Decomposition::Decompose::accessDImpl() const{
 McCAD::General::InputData
 McCAD::Decomposition::Decompose::getResultSolids(){
   General::InputData outputData;
-  for (Standard_Integer i = 1; i <= pDImpl->resultSolidsList->Length(); ++i)
-    {
-      outputData.accessImpl()->inputSolidsList->Append(pDImpl->resultSolidsList->Value(i));
-    }
+  for (Standard_Integer i = 1; i <= pDImpl->resultSolidsList->Length(); ++i){
+      outputData.accessImpl()->inputSolidsList->Append(
+                  pDImpl->resultSolidsList->Value(i));}
+  outputData.accessImpl()->updateSize();
   return outputData;
 }
 
 McCAD::General::InputData
 McCAD::Decomposition::Decompose::getRejectedSolids(){
   General::InputData outputData;
-  for (Standard_Integer i = 1; i <= pDImpl->rejectedInputSolidsList->Length(); ++i)
-    {
-      outputData.accessImpl()->inputSolidsList->Append(pDImpl->rejectedInputSolidsList->Value(i));
-    }
+  for (Standard_Integer i = 1; i <= pDImpl->rejectedInputSolidsList->Length(); ++i){
+      outputData.accessImpl()->inputSolidsList->Append(
+                  pDImpl->rejectedInputSolidsList->Value(i));}
+  outputData.accessImpl()->updateSize();
   return outputData;
 }
-

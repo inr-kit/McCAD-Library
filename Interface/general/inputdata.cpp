@@ -37,3 +37,9 @@ McCAD::General::InputData::Impl*
 McCAD::General::InputData::accessImpl() const{
     return pImpl.get();
 }
+
+int
+McCAD::General::InputData::getSize(){
+    return pImpl->size;
+}
+

@@ -22,12 +22,12 @@ public:
     std::string defaultResult = "result.stl";
     std::string inputFileName, resultFileName, rejectFileName, materialFileName;
     // Decomposition
-    bool decompose = False;
+    bool decompose = false;
     double tolerance = 1.0e-7;
     double minInputSolidVol = 1.0;
     double angleTolerance = 1.0e-3;
     // Conversion
-    bool convert = False;
+    bool convert = false;
     bool writeCollisionFile =false;
     bool voidGeneration = true;
     double maxDiscLength = 200;

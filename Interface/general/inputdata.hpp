@@ -18,6 +18,7 @@ namespace McCAD::General{
     
     InputData& operator=(const InputData& that);
     InputData& operator=(InputData&& that);
+    int getSize();
 
     Impl* accessImpl() const;
     
