@@ -20,38 +20,35 @@ int main (int argc, char *argv[]){
         inpufConfig.writeTemplate();
     } else if(argc == 2) {
         if (std::string(argv[1]) == "help") {
-            std::cout << "Usage:   < >: create parameters file McCADInputConfig.txt\n"
-                         "       <run>: execute McCAD" << std::endl;
+            std::cout << "Usage:   < >: creates parameters file McCADInputConfig.txt\n"
+                         "       <run>: executes McCAD" << std::endl;
         } else if (std::string(argv[1]) == "run") {
-        std::cerr << "Usage: Running McCAD v1.0L!" << std::endl;
-        inpufConfig.readTemplate();
+            std::cerr << "Usage: Running McCAD v1.0L!" << std::endl;
+            inpufConfig.readTemplate();
+            auto start = std::chrono::high_resolution_clock::now();
+            // Load the input file.
+            std::cout << "***********************" << std::endl;
+            std::cout << "** Loading STEP file **" << std::endl;
+            std::cout << "***********************" << std::endl;
+            McCAD::IO::STEPReader reader{inpufConfig.inputFileName};
+            auto inputData = reader.getInputData();
+            // Start decomposition.
+            std::cout << "****************************" << std::endl;
+            std::cout << "** Starting decomposition **" << std::endl;
+            std::cout << "****************************" << std::endl;
+            McCAD::Decomposition::Decompose decompose{inputData};
+            auto outputData_result = decompose.getResultSolids();
+            auto outputData_reject = decompose.getRejectedSolids();
+            // Write output STEP files.
+            std::cout << "*************************" << std::endl;
+            std::cout << "** Saving to STEP file **" << std::endl;
+            std::cout << "*************************" << std::endl;
+            McCAD::IO::STEPWriter{inpufConfig.resultFileName, outputData_result};
+            McCAD::IO::STEPWriter{inpufConfig.rejectFileName, outputData_reject};
 
-        auto start = std::chrono::high_resolution_clock::now();
-        // Load the input file.
-        std::cout << "***********************" << std::endl;
-        std::cout << "** Loading STEP file **" << std::endl;
-        std::cout << "***********************" << std::endl;
-        McCAD::IO::STEPReader reader{inpufConfig.inputFileName};
-        auto inputData = reader.getInputData();
-
-        // Start decomposition.
-        std::cout << "****************************" << std::endl;
-        std::cout << "** Starting decomposition **" << std::endl;
-        std::cout << "****************************" << std::endl;
-        McCAD::Decomposition::Decompose decompose{inputData};
-        auto outputData_result = decompose.getResultSolids();
-        auto outputData_reject = decompose.getRejectedSolids();
-
-        // Write output STEP files.
-        std::cout << "****************************" << std::endl;
-        std::cout << "**  Saving to STEP file   **" << std::endl;
-        std::cout << "****************************" << std::endl;
-        McCAD::IO::STEPWriter{inpufConfig.resultFileName, outputData_result};
-        McCAD::IO::STEPWriter{inpufConfig.rejectFileName, outputData_reject};
-
-        auto end = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double, std::milli> elapsed = end - start;
-        std::cout << "Elapsed time: " << elapsed.count() << " ms" << std::endl;}
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double, std::milli> elapsed = end - start;
+            std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;}
     } else std::cerr << "Usage: only [] or [run] are acceptable arguments!"
                      << std::endl;
     return 0;

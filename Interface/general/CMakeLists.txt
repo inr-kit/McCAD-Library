@@ -6,4 +6,4 @@ install(FILES
   DESTINATION ${PROJECT_BINARY_DIR}/includes/interface/general)
 
 target_link_libraries(INPUTDATA_IFACE
-  INPUTDATA_IMPL)
+    INPUTDATA_IMPL)

@@ -24,6 +24,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "inputFileName = input.stl\n" << std::endl;
     inputConfig << "# Decomposition\n"
                    "# ===================\n"
+                   "decompose = False\n"
                    "# > Desired name of the decomposed solids output STL file;\n"
                    "resultFileName = result.stl\n"
                    "# > Desired name of the rejected solids output STL file;\n"
@@ -34,6 +35,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "angleTolerance = 1.0e-3\n" << std::endl;
     inputConfig << "# Conversion\n"
                    "# ==================\n"
+                   "convert = False\n"
                    "writeCollisionFile = false\n"
                    "voidGeneration = true\n"
                    "maxDiscLength = 200\n"
@@ -71,10 +73,14 @@ McCAD::IO::InputConfig::readTemplate(){
            else {
                if (lineSplit[0] == "inputFileName")
                    inputFileName = lineSplit[2];
+               else if (lineSplit[0] == "decompose")
+                   decompose = lineSplit[2];
                else if (lineSplit[0] == "resultFileName")
                    resultFileName = lineSplit[2];
                else if (lineSplit[0] == "rejectFileName")
                    rejectFileName = lineSplit[2];
+               else if (lineSplit[0] == "convert")
+                   convert = lineSplit[2];
                else continue;
            }
         }
