@@ -10,6 +10,7 @@
 #include "stepreader.hpp"
 #include "stepwriter.hpp"
 #include "decomposition.hpp"
+#include "conversion.hpp"
 
 int main (int argc, char *argv[]){
     std::string currentPath = std::filesystem::current_path();
@@ -49,13 +50,23 @@ int main (int argc, char *argv[]){
                 McCAD::IO::STEPWriter{inputConfig.resultFileName, outputData_result};
                 McCAD::IO::STEPWriter{inputConfig.rejectFileName, outputData_reject};
 
-                bool rejectConversion = outputData_reject.getSize() == 0 ? false : true;
-                if (convertCondition && !rejectConversion);// do conversion;
-                else if (rejectConversion)
+                bool rejectConversion = outputData_reject.getSize() == 0 ? false
+                                                                         : true;
+                if (convertCondition && !rejectConversion){
+                    McCAD::Conversion::Convert convert{outputData_result};
+                } else if (rejectConversion)
                     std::cout << "Decomposition resulted in rejected solids, please "
                                  "check the solids and then submit again for conversion!"
                               << std::endl;
-            } else if (convertCondition); //do conversion
+            } else if (convertCondition){
+                // Load the input file.
+                std::cout << "***********************" << std::endl;
+                std::cout << "** Loading STEP file **" << std::endl;
+                std::cout << "***********************" << std::endl;
+                McCAD::IO::STEPReader reader{inputConfig.inputFileName};
+                auto inputData = reader.getInputData();
+                McCAD::Conversion::Convert convert{inputData};
+            };
 
             auto end = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double, std::milli> elapsed = end - start;
