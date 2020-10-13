@@ -15,9 +15,9 @@ int main (int argc, char *argv[]){
     std::string currentPath = std::filesystem::current_path();
     McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
-        std::cerr << "Usage: A template file with run parameters will be "
-                     "created!" << std::endl;
         inputConfig.writeTemplate();
+        std::cerr << "Usage: A template file with run parameters has been "
+                     "created!" << std::endl;
     } else if(argc == 2) {
         if (std::string(argv[1]) == "help") {
             std::cout << "Usage:   < >: creates parameters file McCADInputConfig.txt\n"

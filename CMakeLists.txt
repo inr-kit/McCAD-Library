@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 option(Use_Linux_OS "Linux OS is assumed by default. Change to OFF for Windows" ON)
-message("-- Use_Linux_OS: " ${Use_Linux_OS})
+message("--Use_Linux_OS: " ${Use_Linux_OS})
 
 # Set project name
 project(McCAD LANGUAGES CXX)
@@ -14,7 +14,7 @@ set (McCAD_VERSION_MAJOR 1)
 set (McCAD_VERSION_MINOR 0)
 set (McCAD_VERSION_RELEASE 0)
 
-# configure a header file to pass some of the CMake settings to the source code
+# Configure a header file to pass some of the CMake settings to the source code
 configure_file (
   "${PROJECT_SOURCE_DIR}/McCADConfig.h.in"
   "${PROJECT_BINARY_DIR}/McCADConfig.hpp"
@@ -80,6 +80,18 @@ target_sources(DECOMPOSITION INTERFACE
   $<TARGET_OBJECTS:DECOMPOSITION_IMPL>)
 target_link_libraries(DECOMPOSITION INTERFACE GEOMETRY)
 
+# Conversion library
+include_directories(
+  "${PROJECT_SOURCE_DIR}/Interface/conversion"
+  "${PROJECT_SOURCE_DIR}/Implementation/conversion")
+add_subdirectory (Implementation/conversion)
+add_subdirectory (Interface/conversion)
+add_library(CONVERSION INTERFACE)
+target_sources(CONVERSION INTERFACE
+  $<TARGET_OBJECTS:CONVERSION_IFACE>
+  $<TARGET_OBJECTS:CONVERSION_IMPL>)
+target_link_libraries(CONVERSION INTERFACE GEOMETRY)
+
 # add the executable
 add_executable(${PROJECT_NAME} "main.cpp")
 target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -89,7 +101,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     IO
     TOOLS
     GEOMETRY
-    DECOMPOSITION)
+    DECOMPOSITION
+    CONVERSION)
 
 install(TARGETS ${PROJECT_NAME}
   DESTINATION ${PROJECT_BINARY_DIR}/bin)
