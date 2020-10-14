@@ -21,16 +21,18 @@ public:
     std::string defaultReject = "reject.stl";
     std::string defaultResult = "result.stl";
     std::string inputFileName, resultFileName, rejectFileName, materialFileName;
+    std::string units = "cm";
     // Decomposition
     bool decompose = false;
     double tolerance = 1.0e-7;
     double minInputSolidVol = 1.0;
     double angleTolerance = 1.0e-3;
+    double maxDecomposeLength = 20;
     // Conversion
     bool convert = false;
     bool writeCollisionFile =false;
     bool voidGeneration = true;
-    double maxDiscLength = 200;
+    double maxCellExprLength = 200;
     double minDecomFaceArea = 50;
     double minVoidVol = 1.0;
     unsigned int voidDecomposeDepth = 10;
@@ -42,6 +44,7 @@ public:
     unsigned int maxSamplPntNum = 50;
     unsigned int minSamplPntNum = 20;
     unsigned int initNumVoidBoxes = 1;
+    std::string matFileName = "mat";
   };
 }
 

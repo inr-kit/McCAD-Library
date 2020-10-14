@@ -6,4 +6,7 @@ install(FILES
   conversion_impl.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/conversion)
 
-target_link_libraries(CONVERSION_IMPL)
+target_link_libraries(CONVERSION_IMPL
+    OCC
+    DECOMPOSITION_IMPL
+    TOOLS_IFACE)

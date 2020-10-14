@@ -16,10 +16,11 @@ void
 McCAD::IO::InputConfig::writeTemplate(){
     std::ofstream inputConfig;
     inputConfig.open("McCADInputConfig.txt");
-    inputConfig << "# McCAD Input Parameters\n"
-                   "# ======================\n" << std::endl;
+    inputConfig << "# McCAD Run Parameters\n"
+                   "# ====================\n" << std::endl;
     inputConfig << "# Input\n"
                    "# =====\n"
+                   "units = cm\n"
                    "# > Path to the input STL file;\n"
                    "inputFileName = input.stl\n" << std::endl;
     inputConfig << "# Decomposition\n"
@@ -28,17 +29,19 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "# > Desired name of the decomposed solids output STL file;\n"
                    "resultFileName = result.stl\n"
                    "# > Desired name of the rejected solids output STL file;\n"
-                   "rejectFileName = reject.stl\n"
+                   "rejectFileName = rejected.stl\n"
                    "# > Other parameters;\n"
                    "tolerance = 1.0e-7\n"
                    "minInputSolidVol = 1.0\n"
-                   "angleTolerance = 1.0e-3\n" << std::endl;
+                   "angleTolerance = 1.0e-3\n"
+                   "maxDecomposeLength = 20\n" << std::endl;
     inputConfig << "# Conversion\n"
                    "# ==================\n"
                    "convert = false\n"
+                   "code = mcnp\n"
                    "writeCollisionFile = false\n"
                    "voidGeneration = true\n"
-                   "maxDiscLength = 200\n"
+                   "maxCellExprLength = 200\n"
                    "minDecomFaceArea = 50\n"
                    "minVoidVol = 1.0\n"
                    "voidDecomposeDepth = 10\n"
@@ -49,7 +52,8 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "RResolution = 0.0314\n"
                    "maxSamplPntNum = 50\n"
                    "minSamplPntNum = 20\n"
-                   "initNumVoidBoxes = 1\n" << std::endl;
+                   "initNumVoidBoxes = 1\n"
+                   "matFileName = ''\n" << std::endl;
     inputConfig.close();
 }
 

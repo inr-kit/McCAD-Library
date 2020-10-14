@@ -53,7 +53,11 @@ int main (int argc, char *argv[]){
                 bool rejectConversion = outputData_reject.getSize() == 0 ? false
                                                                          : true;
                 if (convertCondition && !rejectConversion){
-                    McCAD::Conversion::Convert convert{outputData_result};
+                    std::cout << "*************************" << std::endl;
+                    std::cout << "** Starting conversion **" << std::endl;
+                    std::cout << "*************************" << std::endl;
+                    McCAD::Conversion::Convert convert{inputConfig,
+                                outputData_result};
                 } else if (rejectConversion)
                     std::cout << "Decomposition resulted in rejected solids, please "
                                  "check the solids and then submit again for conversion!"
@@ -65,7 +69,10 @@ int main (int argc, char *argv[]){
                 std::cout << "***********************" << std::endl;
                 McCAD::IO::STEPReader reader{inputConfig.inputFileName};
                 auto inputData = reader.getInputData();
-                McCAD::Conversion::Convert convert{inputData};
+                std::cout << "*************************" << std::endl;
+                std::cout << "** Starting conversion **" << std::endl;
+                std::cout << "*************************" << std::endl;
+                McCAD::Conversion::Convert convert{inputConfig, inputData};
             };
 
             auto end = std::chrono::high_resolution_clock::now();

@@ -4,6 +4,7 @@
 // C++
 #include <memory>
 // McCAD
+#include "inputconfig.hpp"
 #include "inputdata.hpp"
 
 namespace McCAD::Conversion{
@@ -11,7 +12,8 @@ namespace McCAD::Conversion{
     private:
         class Impl;
     public:
-        Convert(const General::InputData& inputData);
+        Convert(const IO::InputConfig& inputConfig,
+                const General::InputData& inputData);
         ~Convert();
 
         Impl* accessCImpl() const;
