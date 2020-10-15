@@ -8,7 +8,6 @@
 // McCAD
 #include "conversion.hpp"
 #include "inputdata_impl.hpp"
-#include "ShapeView.hpp"
 #include <Standard.hxx>
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>
@@ -28,7 +27,6 @@ namespace McCAD::Conversion {
       std::unique_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;
       std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;
 
-      void flattenSolidHierarchy(const Handle_TopTools_HSequenceOfShape& inputSolidsList);
       void perform(const TopoDS_Shape& shape);
       void perform();
     };

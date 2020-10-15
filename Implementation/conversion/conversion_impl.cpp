@@ -2,6 +2,7 @@
 #include <iostream>
 // McCAD
 #include "conversion_impl.hpp"
+#include "heirarchyFlatter.hpp"
 #include "preprocessor.hpp"
 #include "TaskQueue.hpp"
 
@@ -16,10 +17,13 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig,
                      " solid(s) in the input step file" << std::endl;
         std::cout << " > Spliting compound input solids" << std::endl;
         // Split compound input solids.
-        flattenSolidHierarchy(inputSolidsList);
+        auto product = Tools::HeirarchyFlatter{}.flattenSolidHierarchy(
+                    inputSolidsList);
+        splitInputSolidsList = std::move(product.first);
+        rejectedInputSolidsList = std::move(product.second);
         std::cout << "   - There are " << splitInputSolidsList->Length() <<
                      " solid(s) in the flattened solids heirarchy" <<std::endl;
-        std::cout << " > Decomposing solid(s)" << std::endl;
+        std::cout << " > Converting solid(s)" << std::endl;
         // Perform the conversion.
         perform();
       } else{
@@ -28,34 +32,6 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig,
 }
 
 McCAD::Conversion::Convert::Impl::~Impl(){
-}
-
-void
-McCAD::Conversion::Convert::Impl::flattenSolidHierarchy(
-        const Handle_TopTools_HSequenceOfShape& inputSolidsList){
-    Standard_Integer compSolid{0}, solid{0}, invalidShape{0};
-    for(const auto& shape : *inputSolidsList){
-        switch(shape.ShapeType()){
-        case TopAbs_COMPOUND:
-            [[fallthrough]];
-        case TopAbs_COMPSOLID:
-            ++compSolid;
-            for(const auto& solid : detail::ShapeView<TopAbs_SOLID>{shape}){
-                splitInputSolidsList->Append(solid);
-            };
-            break;
-        case TopAbs_SOLID:
-            ++solid;
-            splitInputSolidsList->Append(shape);
-            break;
-        default:
-            ++invalidShape;
-            rejectedInputSolidsList->Append(shape);
-        }
-    }
-    std::cout << "   - Found " << compSolid << " compound solid(s)" << std::endl;
-    std::cout << "   - Found " << solid << " solid(s)" << std::endl;
-    std::cout << "   - Found " << invalidShape << " invalid shape(s)" << std::endl;
 }
 
 void

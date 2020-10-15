@@ -7,7 +7,8 @@ add_library(TOOLS_IMPL OBJECT
     planeComparator.cpp
     surfacesFuser.cpp
     FaceParameters.cpp
-    senseEvaluator.cpp)
+    senseEvaluator.cpp
+    heirarchyFlatter.cpp)
 
 install(FILES
   tools_impl.hpp
@@ -21,6 +22,7 @@ install(FILES
   ShapeView.hpp
   SolidType.hpp
   senseEvaluator.hpp
+  heirarchyFlatter.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/tools)
 
 add_subdirectory(FloatingPoint)
