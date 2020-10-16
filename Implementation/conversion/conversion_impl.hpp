@@ -24,10 +24,11 @@ namespace McCAD::Conversion {
            const General::InputData& inputData);
       ~Impl();
 
-      std::unique_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;
-      std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;
+      std::shared_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;
+      std::shared_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;
 
-      void perform(const TopoDS_Shape& shape);
+      void getGeomData();
+      void getMatData();
       void perform();
     };
 }

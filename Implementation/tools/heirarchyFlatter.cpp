@@ -37,9 +37,9 @@ McCAD::Tools::HeirarchyFlatter::flattenSolidHierarchy(
             rejectedInputSolidsList->Append(shape);
         }
     }
-    std::cout << "   - Found " << compSolid << " compound solid(s)" << std::endl;
-    std::cout << "   - Found " << solid << " solid(s)" << std::endl;
-    std::cout << "   - Found " << invalidShape << " invalid shape(s)" << std::endl;
+    std::cout << "   " << compSolid << " compound solid(s)" << std::endl;
+    std::cout << "   " << solid << " solid(s)" << std::endl;
+    std::cout << "   " << invalidShape << " invalid shape(s)" << std::endl;
     return std::make_pair(std::move(splitInputSolidsList),
                           std::move(rejectedInputSolidsList));
 }

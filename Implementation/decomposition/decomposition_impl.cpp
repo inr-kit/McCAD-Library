@@ -9,25 +9,18 @@ McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inp
     rejectedInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()},
     resultSolidsList{std::make_unique<TopTools_HSequenceOfShape>()},
     rejectedsubSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
-  // Get input solids list from the Input Data object.
-  auto& inputSolidsList = inputData.accessImpl()->inputSolidsList;
-  if (inputSolidsList->Length() > 0){
-      std::cout << "> Found " << inputSolidsList->Length() <<
-                   " solid(s) in the input step file" << std::endl;
-      std::cout << " > Spliting compound input solids" << std::endl;
-      // Split compound input solids.
-      auto product = Tools::HeirarchyFlatter{}.flattenSolidHierarchy(
-                  inputSolidsList);
-      splitInputSolidsList = std::move(product.first);
-      rejectedInputSolidsList = std::move(product.second);
-      std::cout << "   - There are " << splitInputSolidsList->Length() <<
-                   " solid(s) in the flattened solids heirarchy" <<std::endl;
-      std::cout << " > Decomposing solid(s)" << std::endl;
-      // Perform the decomposition.
-      perform();
-    } else{
-      throw std::runtime_error("Input solids list is empty!");
-    }
+    // Get input solids list from the Input Data object.
+    auto& inputSolidsList = inputData.accessImpl()->inputSolidsList;
+    if (!inputSolidsList->Length() > 0)
+        throw std::runtime_error("Input solids list is empty!");
+    std::cout << "> Found " << inputSolidsList->Length() <<
+                 " solid(s) in the input step file" << std::endl;
+    auto product = Tools::HeirarchyFlatter{}.flattenSolidHierarchy(inputSolidsList);
+    splitInputSolidsList = std::move(product.first);
+    rejectedInputSolidsList = std::move(product.second);
+    std::cout << " > Decomposing " << splitInputSolidsList->Length() <<
+                 " solid(s)" << std::endl;
+    perform();
 }
 
 McCAD::Decomposition::Decompose::Impl::~Impl(){
