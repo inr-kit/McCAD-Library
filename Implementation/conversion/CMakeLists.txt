@@ -1,8 +1,10 @@
 
 add_library(CONVERSION_IMPL OBJECT
+  voidGenerator.cpp
   conversion_impl.cpp)
 
 install(FILES
+  voidGenerator.hpp
   conversion_impl.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/conversion)
 
