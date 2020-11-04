@@ -17,7 +17,7 @@
 #include <TopoDS_Compound.hxx>
 
 namespace McCAD::Conversion {
-    class Convert::Impl {
+    class Convert::Impl{
       
     public:
       Impl(const IO::InputConfig& inputConfig,

@@ -6,6 +6,7 @@
 #include "preprocessor.hpp"
 #include "voidGenerator.hpp"
 #include "TaskQueue.hpp"
+#include "BVHCreator.hpp"
 
 McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig,
                                        const General::InputData& inputData) :
@@ -21,8 +22,9 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig,
                 inputSolidsList);
     splitInputSolidsList = std::move(product.first);
     rejectedInputSolidsList = std::move(product.second);
-    getGeomData();
-    getMatData();
+    Conversion::Impl::BVHCreator{splitInputSolidsList};
+    //getGeomData();
+    //getMatData();
     std::cout << " > Converting " << splitInputSolidsList->Length() <<
                  " solid(s)" << std::endl;
     if (inputConfig.voidGeneration){
