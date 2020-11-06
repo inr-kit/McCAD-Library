@@ -7,6 +7,11 @@
 #include "voidGenerator.hpp"
 #include "TaskQueue.hpp"
 #include "BVHCreator.hpp"
+//OCC
+#include <RWStl.hxx>
+#include <StlAPI_Writer.hxx>
+#include <TopoDS_Builder.hxx>
+#include <TopoDS_Compound.hxx>
 
 McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig,
                                        const General::InputData& inputData) :
@@ -22,7 +27,7 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig,
                 inputSolidsList);
     splitInputSolidsList = std::move(product.first);
     rejectedInputSolidsList = std::move(product.second);
-    Conversion::Impl::BVHCreator{splitInputSolidsList};
+    //Conversion::Impl::BVHCreator{splitInputSolidsList};
     //getGeomData();
     //getMatData();
     std::cout << " > Converting " << splitInputSolidsList->Length() <<
@@ -55,4 +60,17 @@ McCAD::Conversion::Convert::Impl::getMatData(){}
 
 void
 McCAD::Conversion::Convert::Impl::perform(){
+    StlAPI_Writer writer;
+    Standard_Integer i = 0;
+    std::string filename = "model";
+    std::string suffix = ".stl";
+    for(const auto& shape : *splitInputSolidsList){
+        BRepMesh_IncrementalMesh aMesher(shape, 1.0);
+        //builder.Add(compound, shape);
+        while (std::filesystem::exists(filename + std::to_string(i) + suffix)){
+            ++i;
+        }
+        std::string currentFileName = filename + std::to_string(i) + suffix;
+        writer.Write(shape, currentFileName.c_str());
+    }
 }
