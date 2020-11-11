@@ -12,5 +12,6 @@ install(FILES
 
 target_link_libraries(CONVERSION_IMPL
     OCC
+    MOAB
     DECOMPOSITION_IMPL
     TOOLS_IFACE)

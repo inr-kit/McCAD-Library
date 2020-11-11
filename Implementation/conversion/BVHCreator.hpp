@@ -5,6 +5,8 @@
 #include <memory>
 //OCC
 #include <TopTools_HSequenceOfShape.hxx>
+//MOAB
+#include <moab/Core.hpp>
 
 namespace McCAD::Conversion::Impl {
     class BVHCreator {

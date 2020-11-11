@@ -1,7 +1,7 @@
 if(Use_Linux_OS)
   find_package(OpenCASCADE 7.3.0 EXACT REQUIRED)
   if(OpenCASCADE_FOUND)
-    message(STATUS "Found OpenCASCADE ${OpenCASCADE_VERSION}")
+    message(STATUS "OpenCASCADE ${OpenCASCADE_VERSION} found")
     set (OCC_TOOLKITS ${OpenCASCADE_LIBRARIES})
   else(OpenCASCADE_FOUND)
     set(OCC_TOOLKITS TKernel TKMath TKG2d TKG3d TKGeomBase TKBRep TKGeomAlgo
