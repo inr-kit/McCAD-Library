@@ -1,17 +1,15 @@
-
 add_library(CONVERSION_IMPL OBJECT
-  voidGenerator.cpp
-  BVHCreator.cpp
-  conversion_impl.cpp)
+    BVHCreator.cpp
+    voidGenerator.cpp
+    conversion_impl.cpp)
 
 install(FILES
-  voidGenerator.hpp
-  BVHCreator.hpp
-  conversion_impl.hpp
-  DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/conversion)
+    BVHCreator.hpp
+    voidGenerator.hpp
+    conversion_impl.hpp
+    DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/conversion)
 
 target_link_libraries(CONVERSION_IMPL
-    OCC
     MOAB
-    DECOMPOSITION_IMPL
+    OCC
     TOOLS_IFACE)

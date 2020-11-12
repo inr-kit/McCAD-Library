@@ -5,15 +5,13 @@
 #include <memory>
 // McCAD
 #include "inputconfig.hpp"
-#include "inputdata.hpp"
 
 namespace McCAD::Conversion{
     class Convert{
     private:
         class Impl;
     public:
-        Convert(const IO::InputConfig& inputConfig,
-                const General::InputData& inputData);
+        Convert(const IO::InputConfig& inputConfig);
         ~Convert();
 
         Impl* accessCImpl() const;

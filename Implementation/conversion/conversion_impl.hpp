@@ -6,22 +6,16 @@
 #include <deque>
 #include <variant>
 // McCAD
+#include "inputconfig.hpp"
 #include "conversion.hpp"
-#include "inputdata_impl.hpp"
 #include <Standard.hxx>
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>
-#include <TopoDS.hxx>
-#include <TopoDS_Solid.hxx>
-#include <TopoDS_CompSolid.hxx>
-#include <TopoDS_Compound.hxx>
 
 namespace McCAD::Conversion {
     class Convert::Impl{
-      
     public:
-      Impl(const IO::InputConfig& inputConfig,
-           const General::InputData& inputData);
+      Impl(const IO::InputConfig& inputConfig);
       ~Impl();
 
       std::shared_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;

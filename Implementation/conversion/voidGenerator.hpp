@@ -6,7 +6,7 @@
 //OCC
 #include <TopTools_HSequenceOfShape.hxx>
 
-namespace McCAD::Conversion::Impl {
+namespace McCAD::Conversion{
     class VoidGenerator {
     public:
         VoidGenerator(const std::shared_ptr<

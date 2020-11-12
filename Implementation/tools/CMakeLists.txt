@@ -28,4 +28,5 @@ install(FILES
 add_subdirectory(FloatingPoint)
 
 target_link_libraries(TOOLS_IMPL
-  OCC)
+    BOOST
+    OCC)

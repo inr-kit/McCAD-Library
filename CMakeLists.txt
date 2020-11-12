@@ -18,8 +18,7 @@ set (McCAD_VERSION_RELEASE 0)
 # Configure a header file to pass some of the CMake settings to the source code
 configure_file (
   "${PROJECT_SOURCE_DIR}/McCADConfig.h.in"
-  "${PROJECT_BINARY_DIR}/McCADConfig.hpp"
-  )
+  "${PROJECT_BINARY_DIR}/McCADConfig.hpp")
 
 # Dependencies
 add_subdirectory(3rd_party)
@@ -91,19 +90,19 @@ add_library(CONVERSION INTERFACE)
 target_sources(CONVERSION INTERFACE
   $<TARGET_OBJECTS:CONVERSION_IFACE>
   $<TARGET_OBJECTS:CONVERSION_IMPL>)
-target_link_libraries(CONVERSION INTERFACE GEOMETRY)
+target_link_libraries(CONVERSION INTERFACE DECOMPOSITION)
 
 # add the executable
 add_executable(${PROJECT_NAME} "main.cpp")
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    OCC
     BOOST
-    MOAB
+    OCC
     INPUTDATA
     IO
     TOOLS
     GEOMETRY
     DECOMPOSITION
+    MOAB
     CONVERSION)
 
 install(TARGETS ${PROJECT_NAME}

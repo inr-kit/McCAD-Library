@@ -12,7 +12,7 @@
 #include "decomposition.hpp"
 #include "conversion.hpp"
 
-int main (int argc, char *argv[]){
+int main (int argc, char* argv[]){
     std::string currentPath = std::filesystem::current_path();
     McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
@@ -56,25 +56,18 @@ int main (int argc, char *argv[]){
                     std::cout << "*************************" << std::endl;
                     std::cout << "** Starting conversion **" << std::endl;
                     std::cout << "*************************" << std::endl;
-                    McCAD::Conversion::Convert convert{inputConfig,
-                                outputData_result};
+                    inputConfig.inputFileName = inputConfig.resultFileName;
+                    McCAD::Conversion::Convert{inputConfig};
                 } else if (rejectConversion)
                     std::cout << "Decomposition resulted in rejected solids, please "
-                                 "check the solids and then submit again for conversion!"
+                                 "check the solids and then run conversion!"
                               << std::endl;
             } else if (convertCondition){
-                // Load the input file.
-                std::cout << "***********************" << std::endl;
-                std::cout << "** Loading STEP file **" << std::endl;
-                std::cout << "***********************" << std::endl;
-                McCAD::IO::STEPReader reader{inputConfig.inputFileName};
-                auto inputData = reader.getInputData();
                 std::cout << "*************************" << std::endl;
                 std::cout << "** Starting conversion **" << std::endl;
                 std::cout << "*************************" << std::endl;
-                McCAD::Conversion::Convert convert{inputConfig, inputData};
+                McCAD::Conversion::Convert{inputConfig};
             };
-
             auto end = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double, std::milli> elapsed = end - start;
             std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;}

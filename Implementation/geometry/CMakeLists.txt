@@ -36,5 +36,5 @@ install(FILES
   boundingBox_impl.hpp
   DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/geometry)
 
-target_link_libraries(GEOMETRY_IMPL PUBLIC
-  OCC)
+target_link_libraries(GEOMETRY_IMPL
+    OCC)

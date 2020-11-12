@@ -4,19 +4,14 @@
 #include "conversion_impl.hpp"
 #include "heirarchyFlatter.hpp"
 #include "preprocessor.hpp"
-#include "voidGenerator.hpp"
 #include "TaskQueue.hpp"
 #include "BVHCreator.hpp"
-//OCC
-#include <RWStl.hxx>
-#include <StlAPI_Writer.hxx>
-#include <TopoDS_Builder.hxx>
-#include <TopoDS_Compound.hxx>
+#include "voidGenerator.hpp"
 
-McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig,
-                                       const General::InputData& inputData) :
+McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig) :
     splitInputSolidsList{std::make_shared<TopTools_HSequenceOfShape>()} ,
     rejectedInputSolidsList{std::make_shared<TopTools_HSequenceOfShape>()}{
+    /*
     // Get input solids list from the Input Data object.
     auto& inputSolidsList = inputData.accessImpl()->inputSolidsList;
     if (!inputSolidsList->Length() > 0)
@@ -27,9 +22,11 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig,
                 inputSolidsList);
     splitInputSolidsList = std::move(product.first);
     rejectedInputSolidsList = std::move(product.second);
-    //Conversion::Impl::BVHCreator{splitInputSolidsList};
+    */
+    Conversion::BVHCreator{inputConfig.inputFileName};
     //getGeomData();
     //getMatData();
+    /*
     std::cout << " > Converting " << splitInputSolidsList->Length() <<
                  " solid(s)" << std::endl;
     if (inputConfig.voidGeneration){
@@ -37,6 +34,7 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig,
         Conversion::Impl::VoidGenerator{splitInputSolidsList};
     }
     perform();
+    */
 }
 
 McCAD::Conversion::Convert::Impl::~Impl(){
@@ -60,17 +58,5 @@ McCAD::Conversion::Convert::Impl::getMatData(){}
 
 void
 McCAD::Conversion::Convert::Impl::perform(){
-    StlAPI_Writer writer;
-    Standard_Integer i = 0;
-    std::string filename = "model";
-    std::string suffix = ".stl";
-    for(const auto& shape : *splitInputSolidsList){
-        BRepMesh_IncrementalMesh aMesher(shape, 1.0);
-        //builder.Add(compound, shape);
-        while (std::filesystem::exists(filename + std::to_string(i) + suffix)){
-            ++i;
-        }
-        std::string currentFileName = filename + std::to_string(i) + suffix;
-        writer.Write(shape, currentFileName.c_str());
-    }
+
 }

@@ -3,16 +3,17 @@
 
 // C++
 #include <memory>
-//OCC
-#include <TopTools_HSequenceOfShape.hxx>
-//MOAB
-#include <moab/Core.hpp>
+// MOAB
+#include "moab/Core.hpp"
+#include "moab/Interface.hpp"
 
-namespace McCAD::Conversion::Impl {
+namespace McCAD::Conversion{
     class BVHCreator {
     public:
-        BVHCreator(const std::shared_ptr<TopTools_HSequenceOfShape> solidsList);
+        BVHCreator(const std::string& inputFileName);
         ~BVHCreator();
+
+        std::shared_ptr<moab::Interface> moabImpl;
     };
 }
 #endif //BVHCREATOR_HPP

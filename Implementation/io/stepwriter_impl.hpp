@@ -8,7 +8,6 @@
 #include "stepwriter.hpp"
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>
-#include <STEPControl_Writer.hxx>
 
 namespace McCAD::IO{
   class STEPWriter::Impl {
