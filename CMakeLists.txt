@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 option(Use_Linux_OS "Linux OS is assumed by default. Change to OFF for Windows" ON)
 option(MOAB_DIR "Path to MOAB directory")
 message("--Use_Linux_OS: " ${Use_Linux_OS})
+message("--MOAB_DIR: " ${MOAB_DIR})
 
 # Set project name
 project(McCAD LANGUAGES CXX)
@@ -14,11 +15,14 @@ project(McCAD LANGUAGES CXX)
 set (McCAD_VERSION_MAJOR 1)
 set (McCAD_VERSION_MINOR 0)
 set (McCAD_VERSION_RELEASE 0)
+set (McCAD_VERSION ${McCAD_VERSION_MAJOR}.${McCAD_VERSION_MINOR}.${McCAD_VERSION_RELEASE}."L")
 
 # Configure a header file to pass some of the CMake settings to the source code
 configure_file (
   "${PROJECT_SOURCE_DIR}/McCADConfig.h.in"
   "${PROJECT_BINARY_DIR}/McCADConfig.hpp")
+
+set(CMAKE_SHARED_LIBRARY_SUFFIX ".a")
 
 # Dependencies
 add_subdirectory(3rd_party)
@@ -90,7 +94,6 @@ add_library(CONVERSION INTERFACE)
 target_sources(CONVERSION INTERFACE
   $<TARGET_OBJECTS:CONVERSION_IFACE>
   $<TARGET_OBJECTS:CONVERSION_IMPL>)
-target_link_libraries(CONVERSION INTERFACE DECOMPOSITION)
 
 # add the executable
 add_executable(${PROJECT_NAME} "main.cpp")
@@ -102,7 +105,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     TOOLS
     GEOMETRY
     DECOMPOSITION
-    MOAB
     CONVERSION)
 
 install(TARGETS ${PROJECT_NAME}

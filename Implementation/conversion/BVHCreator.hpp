@@ -13,7 +13,7 @@ namespace McCAD::Conversion{
         BVHCreator(const std::string& inputFileName);
         ~BVHCreator();
 
-        std::shared_ptr<moab::Interface> moabImpl;
+        std::shared_ptr<moab::Core::Interface> moabImpl;
     };
 }
 #endif //BVHCREATOR_HPP
