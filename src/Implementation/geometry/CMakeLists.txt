@@ -1,0 +1,40 @@
+add_subdirectory(Coordinates)
+
+include_directories(
+  "${PROJECT_SOURCE_DIR}/src/Implementation/geometry/Coordinates"
+  "${PROJECT_SOURCE_DIR}/src/Implementation/geometry/Coordinates/common"
+  "${PROJECT_SOURCE_DIR}/src/Implementation/geometry/Coordinates/1D"
+  "${PROJECT_SOURCE_DIR}/src/Implementation/geometry/Coordinates/2D"
+  "${PROJECT_SOURCE_DIR}/src/Implementation/geometry/Coordinates/3D")
+
+add_library(GEOMETRY_IMPL OBJECT
+  edge_impl.cpp
+  meshtriangle_impl.cpp
+  surface_impl.cpp
+  boundSurface_impl.cpp
+  boundSurfacePlane_impl.cpp
+  boundSurfaceCyl_impl.cpp
+  boundSurfaceTor_impl.cpp
+  solid_impl.cpp
+  planarSolid_impl.cpp
+  cylSolid_impl.cpp
+  torSolid_impl.cpp
+  boundingBox_impl.cpp)
+
+install(FILES
+  edge_impl.hpp
+  meshtriangle_impl.hpp
+  surface_impl.hpp
+  boundSurface_impl.hpp
+  boundSurfacePlane_impl.hpp
+  boundSurfaceCyl_impl.hpp
+  boundSurfaceTor_impl.hpp
+  solid_impl.hpp
+  planarSolid_impl.hpp
+  cylSolid_impl.hpp
+  torSolid_impl.hpp
+  boundingBox_impl.hpp
+  DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/geometry)
+
+target_link_libraries(GEOMETRY_IMPL
+    OCC)
