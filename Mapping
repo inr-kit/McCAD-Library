@@ -1,5 +1,0 @@
-# This document hosts mappings of old and new McCAD conventions (class, fns, etc.)
-# and where each lives in the new refactored code.
-
-# McCadBndSurface.cxx
- - BRepMesh::Mesh has been removed from OCC and replaced with BRepMesh_IncrementalMesh
