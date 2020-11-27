@@ -1,5 +1,9 @@
 # Find MOAB cmake config file
 # Only used to determine the location of the HDF5 with which MOAB was built
+message("")
+message("-- =============")
+message("-- Locating HDF5")
+message("-- =============")
 set(MOAB_SEARCH_DIRS)
 file(GLOB MOAB_SEARCH_DIRS ${MOAB_SEARCH_DIRS} "${MOAB_DIR}/lib/cmake/MOAB")
 find_path(MOAB_CMAKE_CONFIG
@@ -10,7 +14,7 @@ if (MOAB_CMAKE_CONFIG)
   set(MOAB_CMAKE_CONFIG ${MOAB_CMAKE_CONFIG}/MOABConfig.cmake)
   message(STATUS "MOAB_CMAKE_CONFIG: ${MOAB_CMAKE_CONFIG}")
 else ()
-  message(FATAL_ERROR "Could not find MOAB. Set -DMOAB_DIR=<MOAB_DIR> when running cmake or use the $MOAB_DIR environment variable.")
+  message(FATAL_ERROR "Could not find MOAB. Please, set -DMOAB_DIR=<MOAB_DIR> when running cmake.")
 endif ()
 
 # Find HDF5
@@ -20,13 +24,15 @@ set(CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_STATIC_LIBRARY_SUFFIX})
 find_package(HDF5 REQUIRED)
 set(HDF5_LIBRARIES_STATIC ${HDF5_LIBRARIES})
 set(HDF5_LIBRARIES)
-
 message(STATUS "HDF5_INCLUDE_DIRS: ${HDF5_INCLUDE_DIRS}")
 message(STATUS "HDF5_LIBRARIES_STATIC: ${HDF5_LIBRARIES_STATIC}")
-
 include_directories(${HDF5_INCLUDE_DIRS})
 
-# Find MOAB library (shared)
+message("")
+message("-- =============")
+message("-- Locating MOAB")
+message("-- =============")
+# Find MOAB
 set(CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_STATIC_LIBRARY_SUFFIX})
 find_library(MOAB_LIBRARIES_STATIC
     NAMES MOAB
@@ -42,15 +48,15 @@ if(MOAB_FOUND AND NOT DEFINED MOAB_INCLUDE_DIRS)
     set(MOAB_INCLUDE_DIRS "${MOAB_DIR}/include")
 endif(MOAB_FOUND AND NOT DEFINED MOAB_INCLUDE_DIRS)
 
-message(STATUS "MOAB_INCLUDE_DIRS: ${MOAB_INCLUDE_DIRS}")
-message(STATUS "MOAB_LIBRARY_DIRS: ${MOAB_LIBRARY_DIRS}")
-message(STATUS "MOAB_LIBRARIES_STATIC: ${MOAB_LIBRARIES_STATIC}")
-
-if (MOAB_INCLUDE_DIRS AND MOAB_LIBRARIES_STATIC)
+if (MOAB_FOUND AND MOAB_INCLUDE_DIRS AND MOAB_LIBRARIES_STATIC)
   message(STATUS "Found MOAB")
 else ()
   message(FATAL_ERROR "Could not find MOAB")
 endif ()
-
+message(STATUS "MOAB_INCLUDE_DIRS: ${MOAB_INCLUDE_DIRS}")
+message(STATUS "MOAB_LIBRARY_DIRS: ${MOAB_LIBRARY_DIRS}")
+message(STATUS "MOAB_LIBRARIES_STATIC: ${MOAB_LIBRARIES_STATIC}")
+message(STATUS "MOAB_LIBRARIES: ${MOAB_LIBRARIES}")
 include_directories(${MOAB_INCLUDE_DIRS})
+message("")
 
