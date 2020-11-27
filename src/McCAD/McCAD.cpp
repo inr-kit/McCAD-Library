@@ -3,20 +3,19 @@
 #include <string>
 #include <chrono>
 #include <filesystem>
-
 // McCAD
-#include "inputconfig.hpp"
-#include "inputdata.hpp"
-#include "stepreader.hpp"
-#include "stepwriter.hpp"
-#include "decomposition.hpp"
-#include "conversion.hpp"
+//#include "inputconfig.hpp"
+//#include "inputdata.hpp"
+//#include "stepreader.hpp"
+//#include "stepwriter.hpp"
+//#include "decomposition.hpp"
+//#include "conversion.hpp"
 
 int main (int argc, char* argv[]){
     std::string currentPath = std::filesystem::current_path();
-    McCAD::IO::InputConfig inputConfig{currentPath};
+    //McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
-        inputConfig.writeTemplate();
+        //inputConfig.writeTemplate();
         std::cerr << "Usage: A template file with run parameters has been "
                      "created!" << std::endl;
     } else if(argc == 2) {
@@ -25,6 +24,7 @@ int main (int argc, char* argv[]){
                          "       <run>: executes McCAD" << std::endl;
         } else if (std::string(argv[1]) == "run") {
             std::cerr << "Usage: Running McCAD v1.0L!" << std::endl;
+            /*
             auto start = std::chrono::high_resolution_clock::now();
             inputConfig.readTemplate();
             bool decomposeCondition{inputConfig.decompose},
@@ -70,8 +70,7 @@ int main (int argc, char* argv[]){
             };
             auto end = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double, std::milli> elapsed = end - start;
-            std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;}
+            std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;*/}
     } else std::cerr << "Usage: only [] or [run] are acceptable arguments!"
                      << std::endl;
-    return 0;
 }

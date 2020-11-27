@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_STATIC_LIBRARY_SUFFIX ".a")
 List(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
+include(McCAD_build)
 
 # Installation directories
 set(INSTALL_DIR ${PROJECT_BINARY_DIR})
@@ -19,27 +20,29 @@ set(INSTALL_LIB_DIR ${PROJECT_BINARY_DIR}/lib)
 set(INSTALL_INCLUDE_DIR ${PROJECT_BINARY_DIR}/include)
 
 # Build options
-message("-- =============")
-message("-- Build options")
-message("-- =============")
+message(STATUS "Build options")
 option(Linux_OS "Linux OS is assumed by default. Change to OFF for Windows" ON)
-message("-- Linux_OS: " ${Linux_OS})
+message("   Linux_OS: " ${Linux_OS})
+option(BUILD_STATIC "Build static McCAD library. Default: ON" OFF)
+option(BUILD_SHARED "Build shared McCAD library. Default: ON" ON)
+message("   BUILD_STATIC: " ${BUILD_STATIC})
+message("   BUILD_SHARED: " ${BUILD_SHARED})
 option(MOAB_DIR "Path to MOAB build directory")
-message("-- MOAB_DIR: " ${MOAB_DIR})
+message("   MOAB_DIR: " ${MOAB_DIR})
 
 # Dependencies
-add_subdirectory(dependencies)
+#add_subdirectory(dependencies)
 
 # McCAD
 add_subdirectory(src)
 
 # Make config file
 configure_file (${PROJECT_SOURCE_DIR}/cmake/McCADConfig.cmake.in ${INSTALL_DIR}/McCADConfig.cmake)
-install(FILES ${INSTALL_DIR}/McCADConfig.cmake DESTINATION ${INSTALL_LIB_DIR}/cmake)
-install(TARGETS ${PROJECT_NAME} DESTINATION ${INSTALL_LIB_DIR}/cmake)
+install(FILES ${INSTALL_DIR}/McCADConfig.cmake DESTINATION ${INSTALL_LIB_DIR})
+#install(EXPORT McCADTargets DESTINATION ${INSTALL_LIB_DIR})
 
 # add the executable
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/src/main.cpp)
+#add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/src/main.cpp)
 #target_link_libraries(${PROJECT_NAME} PRIVATE
 #    BOOST
 #    OCC
