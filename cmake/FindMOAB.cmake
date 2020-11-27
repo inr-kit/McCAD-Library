@@ -1,9 +1,9 @@
 # Find MOAB cmake config file
 # Only used to determine the location of the HDF5 with which MOAB was built
 message("")
-message("-- =============")
-message("-- Locating HDF5")
-message("-- =============")
+message(STATUS "=============")
+message(STATUS "Locating HDF5")
+message(STATUS "=============")
 set(MOAB_SEARCH_DIRS)
 file(GLOB MOAB_SEARCH_DIRS ${MOAB_SEARCH_DIRS} "${MOAB_DIR}/lib/cmake/MOAB")
 find_path(MOAB_CMAKE_CONFIG
@@ -29,16 +29,25 @@ message(STATUS "HDF5_LIBRARIES_STATIC: ${HDF5_LIBRARIES_STATIC}")
 include_directories(${HDF5_INCLUDE_DIRS})
 
 message("")
-message("-- =============")
-message("-- Locating MOAB")
-message("-- =============")
+message(STATUS "=============")
+message(STATUS  "Locating MOAB")
+message(STATUS "=============")
 # Find MOAB
-set(CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_STATIC_LIBRARY_SUFFIX})
-find_library(MOAB_LIBRARIES_STATIC
-    NAMES MOAB
-    HINTS ${MOAB_LIBRARY_DIRS}
-    NO_DEFAULT_PATH)
-list(APPEND MOAB_LIBRARIES_STATIC)
+if (BUILD_SHARED)
+  set(CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_SHARED_LIBRARY_SUFFIX})
+  find_library(MOAB_LIBRARIES_SHARED
+      NAMES MOAB
+      HINTS ${MOAB_LIBRARY_DIRS}
+      NO_DEFAULT_PATH)
+  list(APPEND MOAB_LIBRARIES_SHARED)
+else()
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_STATIC_LIBRARY_SUFFIX})
+    find_library(MOAB_LIBRARIES_STATIC
+        NAMES MOAB
+        HINTS ${MOAB_LIBRARY_DIRS}
+        NO_DEFAULT_PATH)
+    list(APPEND MOAB_LIBRARIES_STATIC)
+endif()
 
 if(MOAB_FOUND AND NOT DEFINED MOAB_LIBRARY_DIRS)
     set(MOAB_LIBRARY_DIRS "${MOAB_DIR}/lib")
@@ -48,15 +57,18 @@ if(MOAB_FOUND AND NOT DEFINED MOAB_INCLUDE_DIRS)
     set(MOAB_INCLUDE_DIRS "${MOAB_DIR}/include")
 endif(MOAB_FOUND AND NOT DEFINED MOAB_INCLUDE_DIRS)
 
-if (MOAB_FOUND AND MOAB_INCLUDE_DIRS AND MOAB_LIBRARIES_STATIC)
+if (MOAB_FOUND AND DEFINED MOAB_INCLUDE_DIRS AND DEFINED MOAB_LIBRARY_DIRS)
   message(STATUS "Found MOAB")
 else ()
   message(FATAL_ERROR "Could not find MOAB")
 endif ()
 message(STATUS "MOAB_INCLUDE_DIRS: ${MOAB_INCLUDE_DIRS}")
 message(STATUS "MOAB_LIBRARY_DIRS: ${MOAB_LIBRARY_DIRS}")
-message(STATUS "MOAB_LIBRARIES_STATIC: ${MOAB_LIBRARIES_STATIC}")
-message(STATUS "MOAB_LIBRARIES: ${MOAB_LIBRARIES}")
+if (BUILD_SHARED)
+    message(STATUS "MOAB_LIBRARIES_SHARED: ${MOAB_LIBRARIES_SHARED}")
+else()
+    message(STATUS "MOAB_LIBRARIES_STATIC: ${MOAB_LIBRARIES_STATIC}")
+endif()
 include_directories(${MOAB_INCLUDE_DIRS})
 message("")
 
