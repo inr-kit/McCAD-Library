@@ -24,7 +24,6 @@ int main (int argc, char* argv[]){
                          "       <run>: executes McCAD" << std::endl;
         } else if (std::string(argv[1]) == "run") {
             std::cerr << "Usage: Running McCAD v1.0L!" << std::endl;
-            /*
             auto start = std::chrono::high_resolution_clock::now();
             inputConfig.readTemplate();
             bool decomposeCondition{inputConfig.decompose},
@@ -40,24 +39,24 @@ int main (int argc, char* argv[]){
                 std::cout << "****************************" << std::endl;
                 std::cout << "** Starting decomposition **" << std::endl;
                 std::cout << "****************************" << std::endl;
-                McCAD::Decomposition::Decompose decompose{inputData};
-                auto outputData_result = decompose.getResultSolids();
-                auto outputData_reject = decompose.getRejectedSolids();
+                //McCAD::Decomposition::Decompose decompose{inputData};
+                //auto outputData_result = decompose.getResultSolids();
+                //auto outputData_reject = decompose.getRejectedSolids();
                 // Write output STEP files.
                 std::cout << "*************************" << std::endl;
                 std::cout << "** Saving to STEP file **" << std::endl;
                 std::cout << "*************************" << std::endl;
-                McCAD::IO::STEPWriter{inputConfig.resultFileName, outputData_result};
-                McCAD::IO::STEPWriter{inputConfig.rejectFileName, outputData_reject};
+                //McCAD::IO::STEPWriter{inputConfig.resultFileName, outputData_result};
+                //McCAD::IO::STEPWriter{inputConfig.rejectFileName, outputData_reject};
 
-                bool rejectConversion = outputData_reject.getSize() == 0 ? false
-                                                                         : true;
+                bool rejectConversion = false; //outputData_reject.getSize() == 0 ? false
+                                               //                          : true;
                 if (convertCondition && !rejectConversion){
                     std::cout << "*************************" << std::endl;
                     std::cout << "** Starting conversion **" << std::endl;
                     std::cout << "*************************" << std::endl;
                     inputConfig.inputFileName = inputConfig.resultFileName;
-                    McCAD::Conversion::Convert{inputConfig};
+                    //McCAD::Conversion::Convert{inputConfig};
                 } else if (rejectConversion)
                     std::cout << "Decomposition resulted in rejected solids, please "
                                  "check the solids and then run conversion!"
@@ -66,11 +65,11 @@ int main (int argc, char* argv[]){
                 std::cout << "*************************" << std::endl;
                 std::cout << "** Starting conversion **" << std::endl;
                 std::cout << "*************************" << std::endl;
-                McCAD::Conversion::Convert{inputConfig};
+                //McCAD::Conversion::Convert{inputConfig};
             };
             auto end = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double, std::milli> elapsed = end - start;
-            std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;*/}
+            std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;}
     } else std::cerr << "Usage: only [] or [run] are acceptable arguments!"
                      << std::endl;
 }

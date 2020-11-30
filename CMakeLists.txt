@@ -36,7 +36,7 @@ message(STATUS "MOAB_DIR: " ${MOAB_DIR})
 # Dependencies
 find_package(OCC REQUIRED)
 find_package(MOAB REQUIRED)
-#add_subdirectory(dependencies)
+find_package(BOOST REQUIRED)
 
 # McCAD
 add_subdirectory(src)
