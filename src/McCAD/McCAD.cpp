@@ -4,18 +4,18 @@
 #include <chrono>
 #include <filesystem>
 // McCAD
-//#include "inputconfig.hpp"
-//#include "inputdata.hpp"
-//#include "stepreader.hpp"
-//#include "stepwriter.hpp"
+#include "inputconfig.hpp"
+#include "inputdata.hpp"
+#include "stepreader.hpp"
+#include "stepwriter.hpp"
 //#include "decomposition.hpp"
 //#include "conversion.hpp"
 
 int main (int argc, char* argv[]){
     std::string currentPath = std::filesystem::current_path();
-    //McCAD::IO::InputConfig inputConfig{currentPath};
+    McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
-        //inputConfig.writeTemplate();
+        inputConfig.writeTemplate();
         std::cerr << "Usage: A template file with run parameters has been "
                      "created!" << std::endl;
     } else if(argc == 2) {
