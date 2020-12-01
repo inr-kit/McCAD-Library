@@ -1,9 +1,9 @@
-add_library(CONVERSION_IFACE OBJECT
-  conversion.cpp)
-
-install(FILES
-  conversion.hpp
-  DESTINATION ${PROJECT_BINARY_DIR}/includes/interface/conversion)
-
-target_link_libraries(CONVERSION_IFACE
-    CONVERSION_IMPL)
+# Conversion implementation library
+message("")
+file(GLOB SRC_FILES "*.cpp")
+file(GLOB HEADER_FILES "*.hpp")
+set(LINK_LIBS_INT CONVERSION_IMPL INPUTDATA_IMPL)
+set(LINK_LIBS_DEP "")
+include_directories(${PROJECT_SOURCE_DIR}/src/conversion/Implementation
+    ${PROJECT_SOURCE_DIR}/src/conversion/Interface)
+McCAD_build_lib(CONVERSION_IFACE)

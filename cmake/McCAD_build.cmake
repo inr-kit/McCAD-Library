@@ -27,7 +27,6 @@ macro (McCAD_build_interface lib)
     McCAD_link_lib()
     add_library(${lib}-shared INTERFACE)
     install(FILES ${HEADER_FILES}
-        EXPORT McCADTargets
         DESTINATION ${INSTALL_LIB_DIR})
 endmacro ()
 

@@ -1,15 +1,9 @@
-add_library(CONVERSION_IMPL OBJECT
-    #BVHCreator.cpp
-    voidGenerator.cpp
-    conversion_impl.cpp)
-
-install(FILES
-    #BVHCreator.hpp
-    voidGenerator.hpp
-    conversion_impl.hpp
-    DESTINATION ${PROJECT_BINARY_DIR}/includes/implementation/conversion)
-
-target_link_libraries(CONVERSION_IMPL
-    #MOAB
-    OCC
-    TOOLS_IFACE)
+# Conversion implementation library
+message("")
+file(GLOB SRC_FILES "*.cpp")
+file(GLOB HEADER_FILES "*.hpp")
+set(LINK_LIBS_INT "")
+set(LINK_LIBS_DEP MOAB_LIBRARIES HDF5_LIBRARIES)
+include_directories(${PROJECT_SOURCE_DIR}/src/conversion/Implementation
+    ${PROJECT_SOURCE_DIR}/src/conversion/Interface)
+McCAD_build_lib(CONVERSION_IMPL)

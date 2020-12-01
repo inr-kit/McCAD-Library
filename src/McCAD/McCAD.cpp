@@ -8,7 +8,7 @@
 #include "inputdata.hpp"
 #include "stepreader.hpp"
 #include "stepwriter.hpp"
-//#include "decomposition.hpp"
+#include "decomposition.hpp"
 //#include "conversion.hpp"
 
 int main (int argc, char* argv[]){
@@ -39,18 +39,18 @@ int main (int argc, char* argv[]){
                 std::cout << "****************************" << std::endl;
                 std::cout << "** Starting decomposition **" << std::endl;
                 std::cout << "****************************" << std::endl;
-                //McCAD::Decomposition::Decompose decompose{inputData};
-                //auto outputData_result = decompose.getResultSolids();
-                //auto outputData_reject = decompose.getRejectedSolids();
+                McCAD::Decomposition::Decompose decompose{inputData};
+                auto outputData_result = decompose.getResultSolids();
+                auto outputData_reject = decompose.getRejectedSolids();
                 // Write output STEP files.
                 std::cout << "*************************" << std::endl;
                 std::cout << "** Saving to STEP file **" << std::endl;
                 std::cout << "*************************" << std::endl;
-                //McCAD::IO::STEPWriter{inputConfig.resultFileName, outputData_result};
-                //McCAD::IO::STEPWriter{inputConfig.rejectFileName, outputData_reject};
+                McCAD::IO::STEPWriter{inputConfig.resultFileName, outputData_result};
+                McCAD::IO::STEPWriter{inputConfig.rejectFileName, outputData_reject};
 
-                bool rejectConversion = false; //outputData_reject.getSize() == 0 ? false
-                                               //                          : true;
+                bool rejectConversion = outputData_reject.getSize() == 0 ? false
+                                                                         : true;
                 if (convertCondition && !rejectConversion){
                     std::cout << "*************************" << std::endl;
                     std::cout << "** Starting conversion **" << std::endl;
