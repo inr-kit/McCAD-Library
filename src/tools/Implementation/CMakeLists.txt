@@ -1,6 +1,6 @@
 # TOOLS implementation library
 message("")
-add_subdirectory(FloatingPoint)
+#add_subdirectory(FloatingPoint)
 
 file(GLOB SRC_FILES "*.cpp")
 file(GLOB HEADER_FILES "*.hpp")

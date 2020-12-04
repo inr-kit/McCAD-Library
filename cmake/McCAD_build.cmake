@@ -21,13 +21,67 @@ macro (McCAD_link_lib)
     endif ()
 endmacro ()
 
+# Build object libraries
+macro (McCAD_build_object lib)
+    message(STATUS "Building library: ${lib}")
+    McCAD_link_lib()
+    # Build shared libraries
+    if (BUILD_SHARED)
+        add_library(${lib}-shared OBJECT ${SRC_FILES})
+        target_link_libraries(${lib}-shared PUBLIC ${LINK_SHARED_LIBS})
+        install(FILES ${HEADER_FILES}
+            EXPORT McCADTargets
+            DESTINATION ${INSTALL_LIB_DIR})
+    endif ()
+    # Build static libraries
+    if (BUILD_STATIC)
+        add_library(${lib}-static OBJECT ${SRC_FILES})
+        target_link_libraries(${lib}-static ${LINK_STATIC_LIBS})
+        install(FILES ${HEADER_FILES}
+            EXPORT McCADTargets
+            DESTINATION ${INSTALL_LIB_DIR})
+    endif ()
+endmacro ()
+
+# Build object libraries
+macro (McCAD_build_object_top lib)
+    message(STATUS "Building library: ${lib}")
+    McCAD_link_lib()
+    # Build shared libraries
+    if (BUILD_SHARED)
+        add_library(${lib}-shared OBJECT)
+        target_link_libraries(${lib}-shared PUBLIC ${LINK_SHARED_LIBS})
+        install(FILES ${HEADER_FILES}
+            EXPORT McCADTargets
+            DESTINATION ${INSTALL_LIB_DIR})
+    endif ()
+    # Build static libraries
+    if (BUILD_STATIC)
+        add_library(${lib}-static OBJECT)
+        target_link_libraries(${lib}-static ${LINK_STATIC_LIBS})
+        install(FILES ${HEADER_FILES}
+            EXPORT McCADTargets
+            DESTINATION ${INSTALL_LIB_DIR})
+    endif ()
+endmacro ()
+
 # Build interface libraries
 macro (McCAD_build_interface lib)
     message(STATUS "Building library: ${lib}")
-    McCAD_link_lib()
-    add_library(${lib}-shared INTERFACE)
-    install(FILES ${HEADER_FILES}
-        DESTINATION ${INSTALL_LIB_DIR})
+    # Build shared libraries
+    if (BUILD_SHARED)
+        add_library(${lib}-shared INTERFACE)
+        install(FILES ${HEADER_FILES}
+            EXPORT McCADTargets
+            DESTINATION ${INSTALL_LIB_DIR})
+    endif()
+    # Build static libraries
+    if (BUILD_STATIC)
+        add_library(${lib}-static INTERFACE)
+        install(FILES ${HEADER_FILES}
+            EXPORT McCADTargets
+            DESTINATION ${INSTALL_LIB_DIR})
+    endif()
 endmacro ()
 
 # Build libraries
@@ -38,7 +92,7 @@ macro (McCAD_build_lib lib)
     if (BUILD_SHARED)
         add_library(${lib}-shared SHARED ${SRC_FILES})
         set_target_properties(${lib}-shared PROPERTIES OUTPUT_NAME ${lib} PUBLIC_HEADER "${HEADER_FILES}")
-        target_link_libraries(${lib}-shared PUBLIC ${LINK_SHARED_LIBS})
+        target_link_libraries(${lib}-shared  PUBLIC ${LINK_SHARED_LIBS})
         #target_include_directories(${lib}-shared INTERFACE $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>)
         install(TARGETS ${lib}-shared
             EXPORT McCADTargets

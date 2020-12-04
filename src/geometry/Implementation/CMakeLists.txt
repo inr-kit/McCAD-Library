@@ -4,7 +4,7 @@ add_subdirectory(Coordinates)
 
 file(GLOB SRC_FILES "*.cpp")
 file(GLOB HEADER_FILES "*.hpp")
-set(LINK_LIBS_INT TOOLS_IMPL)
+set(LINK_LIBS_INT TOOLS_IMPL CoordCommon_IMPL Coord1D_IMPL Coord2D_IMPL Coord3D_IMPL)
 set(LINK_LIBS_DEP OCC_LIBRARIES)
 include_directories(${PROJECT_SOURCE_DIR}/src/geometry/Implementation
     ${PROJECT_SOURCE_DIR}/src/tools/Interface

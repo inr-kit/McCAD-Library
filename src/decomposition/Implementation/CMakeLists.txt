@@ -2,7 +2,7 @@
 message("")
 file(GLOB SRC_FILES "*.cpp")
 file(GLOB HEADER_FILES "*.hpp" "*.tpp")
-set(LINK_LIBS_INT GEOMETRY_IMPL TOOLS_IMPL INPUTDATA_IMPL)
+set(LINK_LIBS_INT TOOLS_IFACE GEOMETRY_IFACE)
 set(LINK_LIBS_DEP OCC_LIBRARIES)
 include_directories(${PROJECT_SOURCE_DIR}/src/decomposition/Implementation
     ${PROJECT_SOURCE_DIR}/src/decomposition/Interface
