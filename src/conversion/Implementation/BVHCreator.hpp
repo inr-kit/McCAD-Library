@@ -5,7 +5,6 @@
 #include <memory>
 // MOAB
 #include "moab/Core.hpp"
-#include "moab/Interface.hpp"
 
 namespace McCAD::Conversion{
     class BVHCreator {

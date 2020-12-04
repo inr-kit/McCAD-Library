@@ -9,7 +9,7 @@
 #include "stepreader.hpp"
 #include "stepwriter.hpp"
 #include "decomposition.hpp"
-//#include "conversion.hpp"
+#include "conversion.hpp"
 
 int main (int argc, char* argv[]){
     std::string currentPath = std::filesystem::current_path();
@@ -56,7 +56,7 @@ int main (int argc, char* argv[]){
                     std::cout << "** Starting conversion **" << std::endl;
                     std::cout << "*************************" << std::endl;
                     inputConfig.inputFileName = inputConfig.resultFileName;
-                    //McCAD::Conversion::Convert{inputConfig};
+                    McCAD::Conversion::Convert{inputConfig};
                 } else if (rejectConversion)
                     std::cout << "Decomposition resulted in rejected solids, please "
                                  "check the solids and then run conversion!"
@@ -65,7 +65,7 @@ int main (int argc, char* argv[]){
                 std::cout << "*************************" << std::endl;
                 std::cout << "** Starting conversion **" << std::endl;
                 std::cout << "*************************" << std::endl;
-                //McCAD::Conversion::Convert{inputConfig};
+                McCAD::Conversion::Convert{inputConfig};
             };
             auto end = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double, std::milli> elapsed = end - start;

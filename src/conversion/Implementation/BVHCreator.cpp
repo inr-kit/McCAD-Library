@@ -9,8 +9,8 @@
 #include "moab/GeomTopoTool.hpp"
 #include "moab/GeomQueryTool.hpp"
 
-McCAD::Conversion::BVHCreator::BVHCreator(const std::string& inputFileName){
-    //: moabImpl{std::make_shared<moab::Core>()}{
+McCAD::Conversion::BVHCreator::BVHCreator(const std::string& inputFileName)
+    : moabImpl{std::make_shared<moab::Core>()}{
     moab::EntityHandle fileHandle, meshHandle;
     //moabImpl->create_meshset(moab::MESHSET_SET, meshHandle);
     //moabImpl->load_file(inputFileName.c_str(), fileHandle);
