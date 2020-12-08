@@ -2,17 +2,19 @@
 #include <iostream>
 // McCAD
 #include "conversion_impl.hpp"
+#include "stepreader.hpp"
+#include "inputdata_impl.hpp"
 #include "heirarchyFlatter.hpp"
 #include "preprocessor.hpp"
 #include "TaskQueue.hpp"
-//#include "BVHCreator.hpp"
-#include "voidGenerator.hpp"
+#include "BVHCreator.hpp"
+//#include "voidGenerator.hpp"
 
 McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig) :
     splitInputSolidsList{std::make_shared<TopTools_HSequenceOfShape>()} ,
     rejectedInputSolidsList{std::make_shared<TopTools_HSequenceOfShape>()}{
-    /*
-    // Get input solids list from the Input Data object.
+    /*IO::STEPReader reader{inputConfig.inputFileName};
+    auto inputData = reader.getInputData();
     auto& inputSolidsList = inputData.accessImpl()->inputSolidsList;
     if (!inputSolidsList->Length() > 0)
         throw std::runtime_error("Input solids list is empty!");
@@ -21,20 +23,17 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig) :
     auto product = Tools::HeirarchyFlatter{}.flattenSolidHierarchy(
                 inputSolidsList);
     splitInputSolidsList = std::move(product.first);
-    rejectedInputSolidsList = std::move(product.second);
-    */
-    //Conversion::BVHCreator{inputConfig.inputFileName};
+    rejectedInputSolidsList = std::move(product.second);*/
+    Conversion::BVHCreator{inputConfig, splitInputSolidsList};
     //getGeomData();
     //getMatData();
-    /*
     std::cout << " > Converting " << splitInputSolidsList->Length() <<
                  " solid(s)" << std::endl;
     if (inputConfig.voidGeneration){
         std::cout << "   - Generating void" << std::endl;
-        Conversion::Impl::VoidGenerator{splitInputSolidsList};
+        //Conversion::Impl::VoidGenerator{splitInputSolidsList};
     }
-    perform();
-    */
+    //perform();
 }
 
 McCAD::Conversion::Convert::Impl::~Impl(){
@@ -58,5 +57,4 @@ McCAD::Conversion::Convert::Impl::getMatData(){}
 
 void
 McCAD::Conversion::Convert::Impl::perform(){
-
 }

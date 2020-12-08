@@ -20,8 +20,8 @@ int main (int argc, char* argv[]){
                      "created!" << std::endl;
     } else if(argc == 2) {
         if (std::string(argv[1]) == "help") {
-            std::cout << "Usage:   < >: creates parameters file McCADInputConfig.txt\n"
-                         "       <run>: executes McCAD" << std::endl;
+            std::cout << "Usage:   [ ]: creates parameters file McCADInputConfig.txt\n"
+                         "       [run]: executes McCAD" << std::endl;
         } else if (std::string(argv[1]) == "run") {
             std::cerr << "Usage: Running McCAD v1.0L!" << std::endl;
             auto start = std::chrono::high_resolution_clock::now();
@@ -48,7 +48,6 @@ int main (int argc, char* argv[]){
                 std::cout << "*************************" << std::endl;
                 McCAD::IO::STEPWriter{inputConfig.resultFileName, outputData_result};
                 McCAD::IO::STEPWriter{inputConfig.rejectFileName, outputData_reject};
-
                 bool rejectConversion = outputData_reject.getSize() == 0 ? false
                                                                          : true;
                 if (convertCondition && !rejectConversion){
@@ -70,6 +69,6 @@ int main (int argc, char* argv[]){
             auto end = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double, std::milli> elapsed = end - start;
             std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;}
-    } else std::cerr << "Usage: only [] or [run] are acceptable arguments!"
+    } else std::cerr << "Usage: only [] or [help] or [run] are acceptable arguments!"
                      << std::endl;
 }

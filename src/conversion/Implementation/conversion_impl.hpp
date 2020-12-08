@@ -8,8 +8,8 @@
 // McCAD
 #include "inputconfig.hpp"
 #include "conversion.hpp"
-#include <Standard.hxx>
 // OCC
+#include <Standard.hxx>
 #include <TopTools_HSequenceOfShape.hxx>
 
 namespace McCAD::Conversion {
