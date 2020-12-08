@@ -1,34 +1,36 @@
 McCAD v1.0L
-----------------------
-McCAD is an interface library that aides in the conversion of CAD solid models "BRep" to MCNP "CSG".
+-----------
+McCAD is an interface library that aides in the conversion of CAD solid models, BRep, to MCNP, CSG.
 The library written in C++ and is decomposed into three main parts:
-- Decompostion:
-    - carries tasks related to simplification of complex solid models by means of decomposition
-    into primitive convex solids.
-- Void generation and Conversion (coming to this repo by end of year):
-    - the main responsibility is the generation of void and conversion of the resulting primitive
-    solids into MCNP input syntax.
-- Material (coming to this repo by end of year): 
-    - maps material definitions to resulting decomposed solids to be written to MCNP input format.
+* Decompostion:
+  -- carries tasks related to simplification of complex solid models by means of decomposition
+     into primitive convex solids.
+* Void generation and Conversion (coming to this repo by end of year):
+  -- the main responsibility is the generation of void and conversion of the resulting primitive
+     solids into MCNP input syntax.
+* Material (coming to this repo by end of year): 
+  -- maps material definitions to resulting decomposed solids to be written to MCNP input format.
 
 Decomposition
 -------------
-The last working version of McCAD is McCAD-SALOME (source: https://github.com/moatazharb/McCad-Salome-Source,
-exec.: https://github.com/moatazharb/McCad-Salome-Binaries). 
-The current library is an isolated and improved algorithm based on the latest updates/changes implemented in
-(https://github.com/McCadKIT/FreeCAD-McCad).
+* The last working version of McCAD is McCAD-SALOME:
+  -- source: https://github.com/moatazharb/McCad-Salome-Source
+  -- binary: https://github.com/moatazharb/McCad-Salome-Binaries
+ 
+* The current library is an isolated and improved algorithm based on the latest updates/changes implemented in
+  (https://github.com/McCadKIT/FreeCAD-McCad).
 
 Building the library:
 Prerequisites:
 --------------
-1- OpenCascade                  : https://www.opencascade.com/content/latest-release
-  - Geometry engine for manipulating and decomposing solids.
+1- OpenCascade: https://www.opencascade.com/content/latest-release
+  -- Geometry engine for manipulating and decomposing solids.
   
 2- CMake (version 3.14 or above): https://cmake.org/download/
-  - Standard build system for McCAD v1.0L library.
+  -- Standard build system for McCAD v1.0L library.
   
 3- Boost C++ Library: https://www.boost.org/
-  - Used for multiprocessing.
+  -- Used for multiprocessing.
 
 Installation (Linux):
 ------------
