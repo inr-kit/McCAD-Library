@@ -30,27 +30,26 @@ Prerequisites:
 3- Boost C++ Library: https://www.boost.org/
   - Used for multiprocessing.
 
-Installation:
+Installation (Linux):
 ------------
-A- Linux
-  -> Install CMake
-    - Download CMake tar file https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3.tar.gz
-    - tar -xzvf cmake-3.17.3.tar.gz
-    - cd cmake-3.17.3
-    - mkdir build
-    - cd build
-    - cmake .. -DCMAKE_USE_OPENSSL=OFF && make && make install
-  -> Install Boost C++ lirary
-    - Download boost_1_73_0.tar.gz from https://dl.bintray.com/boostorg/release/1.73.0/source/
-    - tar -xvzf boost_1_73_0.tar.gz
-    - cd /tools/build
-    - ./bootstrap.sh
-    - ./b2 install --prefix=<Dir to install in>
-  -> Install OpenCascade
-    - Download opencascade-7.4.0.tgz from https://www.opencascade.com/content/latest-release or from
-      https://www.opencascade.com/content/latest-release if new releases exist by the time of installation
-    - 
-    
+1- Install CMake
+  * Download CMake tar file https://github.com/Kitware/CMake/releases/download/v3.17.3/cmake-3.17.3.tar.gz
+  * tar -xzvf cmake-3.17.3.tar.gz
+  * cd cmake-3.17.3
+  * mkdir build
+  * cd build
+  * cmake .. -DCMAKE_USE_OPENSSL=OFF && make && make install
+
+2- Install Boost C++ lirary
+  * Download boost_1_73_0.tar.gz from https://dl.bintray.com/boostorg/release/1.73.0/source/
+  * tar -xvzf boost_1_73_0.tar.gz
+  * cd /tools/build
+  * ./bootstrap.sh
+  * ./b2 install --prefix=<Dir to install in>
+
+3- Install OpenCascade
+  * Download opencascade-7.4.0.tgz from https://www.opencascade.com/content/latest-release or from
+    https://www.opencascade.com/content/latest-release if new releases exist by the time of installation
 
 General notes on Usage:
 -------------
