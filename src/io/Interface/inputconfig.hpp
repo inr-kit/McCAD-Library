@@ -17,9 +17,10 @@ public:
     void readTemplate();
 
     //Define default values
-    std::string defaultInput = "input.stl";
-    std::string defaultReject = "reject.stl";
-    std::string defaultResult = "result.stl";
+    std::string defaultInput = "input.stp";
+    std::string defaultReject = "reject.stp";
+    std::string defaultResult = "result.stp";
+    std::string defaultConvert ="conversion.stl";
     std::string inputFileName, resultFileName, rejectFileName, materialFileName;
     std::string units = "cm";
     // Decomposition
@@ -29,6 +30,7 @@ public:
     double angleTolerance = 1.0e-3;
     double maxDecomposeLength = 20;
     // Conversion
+    std::string conversionFileName;
     bool convert = false;
     bool writeCollisionFile =false;
     bool voidGeneration = true;

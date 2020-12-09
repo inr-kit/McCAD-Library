@@ -8,6 +8,7 @@
 #include "inputdata.hpp"
 #include "stepreader.hpp"
 #include "stepwriter.hpp"
+#include "stlwriter.hpp"
 #include "decomposition.hpp"
 #include "conversion.hpp"
 
@@ -54,7 +55,8 @@ int main (int argc, char* argv[]){
                     std::cout << "*************************" << std::endl;
                     std::cout << "** Starting conversion **" << std::endl;
                     std::cout << "*************************" << std::endl;
-                    inputConfig.inputFileName = inputConfig.resultFileName;
+                    // Save solids to STL file
+                    McCAD::IO::STLWriter{inputConfig.conversionFileName, outputData_result};
                     McCAD::Conversion::Convert{inputConfig};
                 } else if (rejectConversion)
                     std::cout << "Decomposition resulted in rejected solids, please "

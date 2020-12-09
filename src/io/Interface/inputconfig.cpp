@@ -38,6 +38,7 @@ McCAD::IO::InputConfig::writeTemplate(){
     inputConfig << "# Conversion\n"
                    "# ==================\n"
                    "convert = false\n"
+                   "conversionFileName = conversion.stl\n"
                    "code = mcnp\n"
                    "writeCollisionFile = false\n"
                    "voidGeneration = true\n"
@@ -64,6 +65,7 @@ McCAD::IO::InputConfig::readTemplate(){
         inputFileName = currentPath + "/" + defaultInput;
         resultFileName = currentPath + "/" + defaultResult;
         rejectFileName = currentPath + "/" + defaultReject;
+        conversionFileName = currentPath + "/" + defaultConvert;
         std::cout << "McCADInputConfig.txt is missing!. Proceeding with default "
                      "parameters:\n"
                      "Input = " << inputFileName << std::endl;
@@ -83,6 +85,8 @@ McCAD::IO::InputConfig::readTemplate(){
                    resultFileName = lineSplit[2];
                else if (lineSplit[0] == "rejectFileName")
                    rejectFileName = lineSplit[2];
+               else if (lineSplit[0] == "conversionFileName")
+                   conversionFileName = lineSplit[2];
                else if (lineSplit[0] == "convert")
                    convert = lineSplit[2] == "false" ? false : true;
                else continue;

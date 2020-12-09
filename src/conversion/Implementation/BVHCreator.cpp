@@ -21,7 +21,7 @@ McCAD::Conversion::BVHCreator::BVHCreator(const IO::InputConfig& inputConfig,
         std::cout << "failed to create meshset!" << std::endl;
         return;
     } else{
-        rval = moabImpl->load_file(inputConfig.inputFileName.c_str(), &file_set,
+        rval = moabImpl->load_file(inputConfig.conversionFileName.c_str(), &file_set,
                                    options, NULL, 0, 0);
     }
 

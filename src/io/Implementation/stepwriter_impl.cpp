@@ -19,3 +19,4 @@ McCAD::IO::STEPWriter::Impl::operator()(const Handle_TopTools_HSequenceOfShape& 
     }
     writer.Write(outputfileName.c_str());
 }
+
