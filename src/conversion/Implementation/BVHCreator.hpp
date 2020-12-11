@@ -5,6 +5,8 @@
 #include <memory>
 // MOAB
 #include <moab/Core.hpp>
+#include <moab/GeomTopoTool.hpp>
+#include <moab/EntityHandle.hpp>
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>
 // McCAD
@@ -17,7 +19,13 @@ namespace McCAD::Conversion{
                    const std::shared_ptr<TopTools_HSequenceOfShape> inputSolidsList);
         ~BVHCreator();
 
-        std::shared_ptr<moab::Core::Interface> moabImpl;
+        void loadFile(const char* fileName);
+        void constructOBBTree();
+
+    private:
+        std::shared_ptr<moab::Interface> moabImpl;
+        std::shared_ptr<moab::GeomTopoTool> GTT;
+        moab::EntityHandle fileSet;
     };
 }
 #endif //BVHCREATOR_HPP

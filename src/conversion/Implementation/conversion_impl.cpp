@@ -25,6 +25,7 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig) :
     splitInputSolidsList = std::move(product.first);
     rejectedInputSolidsList = std::move(product.second);*/
     Conversion::BVHCreator{inputConfig, splitInputSolidsList};
+    /*
     //getGeomData();
     //getMatData();
     std::cout << " > Converting " << splitInputSolidsList->Length() <<
@@ -33,7 +34,7 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig) :
         std::cout << "   - Generating void" << std::endl;
         //Conversion::Impl::VoidGenerator{splitInputSolidsList};
     }
-    //perform();
+    //perform();*/
 }
 
 McCAD::Conversion::Convert::Impl::~Impl(){
