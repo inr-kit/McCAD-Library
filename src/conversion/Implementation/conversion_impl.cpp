@@ -13,7 +13,7 @@
 McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig) :
     splitInputSolidsList{std::make_shared<TopTools_HSequenceOfShape>()} ,
     rejectedInputSolidsList{std::make_shared<TopTools_HSequenceOfShape>()}{
-    /*IO::STEPReader reader{inputConfig.inputFileName};
+    IO::STEPReader reader{inputConfig.inputFileName};
     auto inputData = reader.getInputData();
     auto& inputSolidsList = inputData.accessImpl()->inputSolidsList;
     if (!inputSolidsList->Length() > 0)
@@ -23,7 +23,7 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig) :
     auto product = Tools::HeirarchyFlatter{}.flattenSolidHierarchy(
                 inputSolidsList);
     splitInputSolidsList = std::move(product.first);
-    rejectedInputSolidsList = std::move(product.second);*/
+    rejectedInputSolidsList = std::move(product.second);
     Conversion::BVHCreator{inputConfig, splitInputSolidsList};
     /*
     //getGeomData();
