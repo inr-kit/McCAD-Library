@@ -3,17 +3,22 @@
 #include <string>
 #include <chrono>
 #include <filesystem>
+#include <sstream>
 // McCAD
-#include "inputconfig.hpp"
+//#include "inputconfig.hpp"
 #include "inputdata.hpp"
-#include "stepreader.hpp"
-#include "stepwriter.hpp"
-#include "stlwriter.hpp"
-#include "decomposition.hpp"
-#include "conversion.hpp"
+//#include "stepreader.hpp"
+//#include "stepwriter.hpp"
+//#include "stlwriter.hpp"
+//#include "decomposition.hpp"
+//#include "conversion.hpp"
 
 int main (int argc, char* argv[]){
-    std::string currentPath = std::filesystem::current_path();
+    std::stringstream strStream;
+    strStream << std::filesystem::current_path();
+    std::string currentPath = strStream.str();
+    std::cout << "Hello!. The current path is: " << currentPath << std::endl;
+    /*
     McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
         inputConfig.writeTemplate();
@@ -72,5 +77,5 @@ int main (int argc, char* argv[]){
             std::chrono::duration<double, std::milli> elapsed = end - start;
             std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;}
     } else std::cerr << "Usage: only [] or [help] or [run] are acceptable arguments!"
-                     << std::endl;
+                     << std::endl;*/
 }

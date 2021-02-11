@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 // McCAD
 #include "inputconfig.hpp"
 

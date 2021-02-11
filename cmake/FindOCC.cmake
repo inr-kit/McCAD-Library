@@ -60,54 +60,14 @@ if(Linux_OS)
         include_directories(${OCC_INCLUDE_DIRS})
     endif(DEFINED OCC_INCLUDE_DIRS)
 else(Linux_OS)
-    if(DEFINED OCC_ROOT)
-        set(OCC_LIBRARY_DIRS "${OCC_ROOT}/win64/vc14/lib")
-        set(OCC_INCLUDE_DIRS "${OCC_ROOT}/inc")
-        set(OpenCASCADE_LIBRARIES   "${OCC_LIB_DIR}/TKBin.lib"
-                            "${OCC_LIB_DIR}/TKBinL.lib"
-                            "${OCC_LIB_DIR}/TKBinTObj.lib"
-                            "${OCC_LIB_DIR}/TKBinXCAF.lib"
-                            "${OCC_LIB_DIR}/TKBO.lib"
-                            "${OCC_LIB_DIR}/TKBool.lib"
-                            "${OCC_LIB_DIR}/TKBRep.lib"
-                            "${OCC_LIB_DIR}/TKCAF.lib"
-                            "${OCC_LIB_DIR}/TKCDF.lib"
-                            "${OCC_LIB_DIR}/TKLCAF.lib"
-                            "${OCC_LIB_DIR}/TKSTL.lib"
-                            "${OCC_LIB_DIR}/TKXMesh.lib"
-                            "${OCC_LIB_DIR}/TKernel.lib"
-                            "${OCC_LIB_DIR}/TKMath.lib"
-                            "${OCC_LIB_DIR}/TKService.lib"
-                            "${OCC_LIB_DIR}/TKTObj.lib"
-                            "${OCC_LIB_DIR}/TKXml.lib"
-                            "${OCC_LIB_DIR}/TKFeat.lib"
-                            "${OCC_LIB_DIR}/TKMesh.lib"
-                            "${OCC_LIB_DIR}/TKTopAlgo.lib"
-                            "${OCC_LIB_DIR}/TKXmlL.lib"
-                            "${OCC_LIB_DIR}/TKFillet.lib"
-                            "${OCC_LIB_DIR}/TKMeshVS.lib"
-                            "${OCC_LIB_DIR}/TKShHealing.lib"
-                            "${OCC_LIB_DIR}/TKV3d.lib"
-                            "${OCC_LIB_DIR}/TKXmlTObj.lib"
-                            "${OCC_LIB_DIR}/TKG2d.lib"
-                            "${OCC_LIB_DIR}/TKXmlXCAF.lib"
-                            "${OCC_LIB_DIR}/TKG3d.lib"
-                            "${OCC_LIB_DIR}/TKOffset.lib"
-                            "${OCC_LIB_DIR}/TKVRML.lib"
-                            "${OCC_LIB_DIR}/TKXSBase.lib"
-                            "${OCC_LIB_DIR}/TKGeomAlgo.lib"
-                            "${OCC_LIB_DIR}/TKOpenGl.lib"
-                            "${OCC_LIB_DIR}/TKSTEP.lib"
-                            "${OCC_LIB_DIR}/TKXCAF.lib"
-                            "${OCC_LIB_DIR}/TKGeomBase.lib"
-                            "${OCC_LIB_DIR}/TKSTEP209.lib"
-                            "${OCC_LIB_DIR}/TKHLR.lib"
-                            "${OCC_LIB_DIR}/TKSTEPAttr.lib"
-                            "${OCC_LIB_DIR}/TKXDEIGES.lib"
-                            "${OCC_LIB_DIR}/TKIGES.lib"
-                            "${OCC_LIB_DIR}/TKPrim.lib"
-                            "${OCC_LIB_DIR}/TKSTEPBase.lib"
-                            "${OCC_LIB_DIR}/TKXDESTEP.lib")
+    if(DEFINED OCC_Custom_ROOT)
+        set(OCC_LIBRARY_DIRS "${OCC_Custom_ROOT}/win64/vc14/lib")
+        set(OCC_INCLUDE_DIRS "${OCC_Custom_ROOT}/inc")
+        set(OpenCASCADE_LIBRARIES   TKBin.lib TKBinL.lib TKBinTObj.lib TKBinXCAF.lib TKBO.lib TKBool.lib TKBRep.lib TKCAF.lib TKCDF.lib TKLCAF.lib 
+                                    TKSTL.lib TKXMesh.lib TKernel.lib TKMath.lib TKService.lib TKTObj.lib TKXml.lib TKFeat.lib TKMesh.lib TKTopAlgo.lib 
+                                    TKXmlL.lib TKFillet.lib TKMeshVS.lib TKShHealing.lib TKV3d.lib TKXmlTObj.lib TKG2d.lib TKXmlXCAF.lib TKG3d.lib 
+                                    TKOffset.lib TKVRML.lib TKXSBase.lib TKGeomAlgo.lib TKOpenGl.lib TKSTEP.lib TKXCAF.lib TKGeomBase.lib TKSTEP209.lib 
+                                    TKHLR.lib TKSTEPAttr.lib TKXDEIGES.lib TKIGES.lib TKPrim.lib TKSTEPBase.lib TKXDESTEP.lib)
 
         if(BUILD_SHARED)
             set(OCC_LIBRARIES_SHARED)
@@ -133,7 +93,7 @@ else(Linux_OS)
         endif()
 
         include_directories(${OCC_INCLUDE_DIRS})
-    endif(DEFINED OCC_ROOT)
+    endif(DEFINED OCC_Custom_ROOT)
 endif(Linux_OS)
 
 message(STATUS "OCC_INCLUDE_DIRS: ${OCC_INCLUDE_DIRS}")
