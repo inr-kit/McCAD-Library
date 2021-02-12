@@ -6,13 +6,23 @@
       "configurationType": "Release",
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "buildRoot": "${projectDir}\\build\\${name}",
-      "installRoot": "${projectDir}\\out\\install\\${name}",
-      "cmakeCommandArgs": "-DBOOST_Custom_ROOT=\"D:/inst/boost_1_71_0\" -DOCC_Custom_ROOT=\"D:/inst/OpenCASCADE-7.3.0-vc14-64/opencascade-7.3.0\"",
+      "installRoot": "",
+      "cmakeCommandArgs": "-DLINUX_OS=false -DBUILD_STATIC=true -DBUILD_SHARED=false -DBOOST_Custom_ROOT=\"D:/inst/boost_1_71_0\" -DOCC_Custom_ROOT=\"D:/inst/OpenCASCADE-7.3.0-vc14-64/opencascade-7.3.0\"",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "variables": [
         {
           "name": "Linux_OS",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "BUILD_STATIC",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "BUILD_SHARED",
           "value": "False",
           "type": "BOOL"
         }

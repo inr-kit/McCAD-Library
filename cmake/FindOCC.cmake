@@ -63,11 +63,11 @@ else(Linux_OS)
     if(DEFINED OCC_Custom_ROOT)
         set(OCC_LIBRARY_DIRS "${OCC_Custom_ROOT}/win64/vc14/lib")
         set(OCC_INCLUDE_DIRS "${OCC_Custom_ROOT}/inc")
-        set(OpenCASCADE_LIBRARIES   TKBin.lib TKBinL.lib TKBinTObj.lib TKBinXCAF.lib TKBO.lib TKBool.lib TKBRep.lib TKCAF.lib TKCDF.lib TKLCAF.lib 
-                                    TKSTL.lib TKXMesh.lib TKernel.lib TKMath.lib TKService.lib TKTObj.lib TKXml.lib TKFeat.lib TKMesh.lib TKTopAlgo.lib 
-                                    TKXmlL.lib TKFillet.lib TKMeshVS.lib TKShHealing.lib TKV3d.lib TKXmlTObj.lib TKG2d.lib TKXmlXCAF.lib TKG3d.lib 
-                                    TKOffset.lib TKVRML.lib TKXSBase.lib TKGeomAlgo.lib TKOpenGl.lib TKSTEP.lib TKXCAF.lib TKGeomBase.lib TKSTEP209.lib 
-                                    TKHLR.lib TKSTEPAttr.lib TKXDEIGES.lib TKIGES.lib TKPrim.lib TKSTEPBase.lib TKXDESTEP.lib)
+        set(OpenCASCADE_LIBRARIES   TKBin TKBinL TKBinTObj TKBinXCAF TKBO TKBool TKBRep TKCAF TKCDF TKLCAF 
+                                    TKSTL TKXMesh TKernel TKMath TKService TKTObj TKXml TKFeat TKMesh TKTopAlgo 
+                                    TKXmlL TKFillet TKMeshVS TKShHealing TKV3d TKXmlTObj TKG2d TKXmlXCAF TKG3d 
+                                    TKOffset TKVRML TKXSBase TKGeomAlgo TKOpenGl TKSTEP TKXCAF TKGeomBase TKSTEP209 
+                                    TKHLR TKSTEPAttr TKXDEIGES TKIGES TKPrim TKSTEPBase TKXDESTEP)
 
         if(BUILD_SHARED)
             set(OCC_LIBRARIES_SHARED)
