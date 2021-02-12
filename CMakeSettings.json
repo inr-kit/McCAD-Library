@@ -1,11 +1,11 @@
 ﻿{
   "configurations": [
     {
-      "name": "x64-Debug (default)",
+      "name": "McCAD_T1",
       "generator": "Visual Studio 16 2019 Win64",
       "configurationType": "Release",
       "inheritEnvironments": [ "msvc_x64_x64" ],
-      "buildRoot": "${projectDir}\\build\\${name}",
+      "buildRoot": "${projectDir}\\build",
       "installRoot": "",
       "cmakeCommandArgs": "-DLINUX_OS=false -DBUILD_STATIC=true -DBUILD_SHARED=false -DBOOST_Custom_ROOT=\"D:/inst/boost_1_71_0\" -DOCC_Custom_ROOT=\"D:/inst/OpenCASCADE-7.3.0-vc14-64/opencascade-7.3.0\"",
       "buildCommandArgs": "",
