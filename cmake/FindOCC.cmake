@@ -90,7 +90,7 @@ else(Linux_OS)
             endforeach ()
         endif()
 
-        include_directories(${OCC_INCLUDE_DIRS})
+        include_directories("${OCC_INCLUDE_DIRS}")
     endif(DEFINED OCC_Custom_ROOT)
 endif(Linux_OS)
 
