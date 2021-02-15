@@ -6,28 +6,27 @@
       "configurationType": "Release",
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "buildRoot": "${projectDir}\\build",
-      "installRoot": "",
-      "cmakeCommandArgs": "-DBUILD_PIC=True -DLINUX_OS=false -DBUILD_STATIC=true -DBUILD_SHARED=false -DBOOST_Custom_ROOT=\"D:/inst/boost_1_71_0\" -DOCC_Custom_ROOT=\"D:/inst/OpenCASCADE-7.3.0-vc14-64/opencascade-7.3.0\"",
+      "installRoot": "${projectDir}\\build",
+      "cmakeCommandArgs": "-DLINUX_OS=OFF -DBUILD_SHARED=OFF -DBUILD_STATIC_EXE=ON-DBOOST_CUSTOM_ROOT=\"D:/inst/boost_1_71_0\" -DOCC_CUSTOM_ROOT=\"D:/inst/OpenCASCADE-7.3.0-vc14-64/opencascade-7.3.0\"",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "variables": [
         {
-          "name": "BUILD_STATIC",
-          "value": "False",
-          "type": "BOOL"
-        },
-        {
           "name": "BUILD_SHARED",
-          "value": "False",
+          "value": "True",
           "type": "BOOL"
         },
         {
-          "name": "Linux_OS",
+          "name": "BUILD_STATIC",
+          "value": "True",
+          "type": "BOOL"
+        },
+        {
+          "name": "BUILD_STATIC_EXE",
           "value": "False",
           "type": "BOOL"
         }
-      ],
-      "intelliSenseMode": "windows-msvc-x64"
+      ]
     }
   ]
 }

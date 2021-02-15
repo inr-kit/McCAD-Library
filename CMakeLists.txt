@@ -4,33 +4,11 @@ set (McCAD_VERSION_MAJOR 1)
 set (McCAD_VERSION_MINOR 0)
 set (McCAD_VERSION ${McCAD_VERSION_MAJOR}.${McCAD_VERSION_MINOR})
 
-# Set build options
 # CMake
 cmake_minimum_required(VERSION 3.14.4 FATAL_ERROR)
 enable_language(CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-# Build options
-message("")
-message(STATUS "=============")
-message(STATUS "Build options")
-message(STATUS "=============")
-option(Linux_OS "Linux OS is assumed by default. Change to False for Windows" False)
-message(STATUS  "Linux_OS: " ${Linux_OS})
-option(BUILD_STATIC "Build static McCAD library. Default: False" False)
-message(STATUS "BUILD_STATIC: " ${BUILD_STATIC})
-option(BUILD_SHARED "Build shared McCAD library. Default: False" False)
-message(STATUS "BUILD_SHARED: " ${BUILD_SHARED})
-option(BOOST_Custom_ROOT "Path to BOOST root directory where include and lib dirs can be found")
-message(STATUS "BOOST_Custom_ROOT: " ${BOOST_Custom_ROOT})
-option(OCC_Custom_ROOT "Path to OpenCascade root directory where include and lib dirs can be found")
-message(STATUS "OCC_Custom_ROOT: " ${OCC_Custom_ROOT})
-#option(MOAB_DIR "Path to MOAB build directory")
-#message(STATUS "MOAB_DIR: " ${MOAB_DIR})
-#set(MOAB_DIR "/home/mharb/opt/MOAB5.1.0/build")
-#set(BOOST_ROOT "D:/inst/boost_1_71_0/")
-
 List(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(McCAD_build)
 # Build options
@@ -43,7 +21,6 @@ McCAD_CMake_flags()
 # Dependencies
 find_package(BOOST REQUIRED)
 find_package(OCC REQUIRED)
-#find_package(MOAB REQUIRED)
 
 # McCAD
 add_subdirectory(src)
