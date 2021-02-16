@@ -26,11 +26,11 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "inputFileName = input.stp\n" << std::endl;
     inputConfig << "# Decomposition\n"
                    "# ===================\n"
-                   "decompose = false\n"
+                   "decompose = true\n"
                    "# > Desired name of the decomposed solids output STEP file;\n"
                    "resultFileName = result.stp\n"
                    "# > Desired name of the rejected solids output STEP file;\n"
-                   "rejectFileName = rejected.stp\n"
+                   "rejectFileName = reject.stp\n"
                    "# > Other parameters;\n"
                    "tolerance = 1.0e-7\n"
                    "minInputSolidVol = 1.0\n"
@@ -63,13 +63,11 @@ void
 McCAD::IO::InputConfig::readTemplate(){
     std::ifstream inputConfig("McCADInputConfig.txt");
     if (!inputConfig){
-        inputFileName = currentPath + "/" + defaultInput;
-        resultFileName = currentPath + "/" + defaultResult;
-        rejectFileName = currentPath + "/" + defaultReject;
-        conversionFileName = currentPath + "/" + defaultConvert;
         std::cout << "McCADInputConfig.txt is missing!. Proceeding with default "
                      "parameters:\n"
-                     "Input = " << inputFileName << std::endl;
+                     "Input = " << inputFileName <<
+                     "\nResult = " << resultFileName << 
+                     "\nReject = " << rejectFileName << std::endl;
     } else {
         // Read file and populate parameters
         while (!inputConfig.eof()){
