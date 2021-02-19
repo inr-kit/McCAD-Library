@@ -2,13 +2,12 @@ message("")
 message(STATUS "====================")
 message(STATUS "Locating OpenCascade")
 message(STATUS "====================")
-if(Linux_OS)
+if(LINUX_OS)
     find_package(OpenCASCADE 7.3.0 EXACT REQUIRED)
     if(OpenCASCADE_FOUND)
         message(STATUS "OpenCASCADE ${OpenCASCADE_VERSION} found")
         if(BUILD_SHARED)
             set(OCC_LIBRARIES_SHARED)
-            set(CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_SHARED_LIBRARY_SUFFIX})
             foreach (OCC_lib ${OpenCASCADE_LIBRARIES})
                 set(OCC_LIB "OCC_LIB-NOTFOUND")
                 find_library(OCC_LIB
@@ -20,7 +19,6 @@ if(Linux_OS)
         endif()
         if(BUILD_STATIC)
             set(OCC_LIBRARIES_STATIC)
-            set(CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_STATIC_LIBRARY_SUFFIX})
             foreach (OCC_lib ${OpenCASCADE_LIBRARIES})
                 set(OCC_LIB "OCC_LIB-NOTFOUND")
                 find_library(OCC_LIB
@@ -43,72 +41,31 @@ if(Linux_OS)
         if(DEFINED ENV{CASROOT})
             if(NOT DEFINED OpenCASCADE_INCLUDE_DIR)
                 set(OCC_INCLUDE_DIRS "$ENV{CASROOT}/include/opencascade")
-            endif(NOT DEFINED OpenCASCADE_INCLUDE_DIR)
+            endif()
             if(NOT DEFINED OpenCASCADE_LIBRARY_DIR)
                 set(OCC_LIBRARY_DIRS "$ENV{CASROOT}/lib")
-            endif(NOT DEFINED OpenCASCADE_LIBRARY_DIR)
-        else(DEFINED ENV{CASROOT})
+            endif()
+        else()
             if(NOT DEFINED OpenCASCADE_INCLUDE_DIR OR NOT DEFINED OpenCASCADE_LIBRARY_DIR)
                 message(WARNING "To specify paths of OpenCascade files, you may\n
                     either define the CASROOT environment variable, or set both\n
                     OCC_INCLUDE_DIRS and OCC_LIBRARY_DIRS variables.")
-            endif(NOT DEFINED OpenCASCADE_INCLUDE_DIR OR NOT DEFINED OpenCASCADE_LIB_DIR)
-        endif(DEFINED ENV{CASROOT})
-    endif(OpenCASCADE_FOUND)
+            endif()
+        endif()
+    endif()
 
     if(DEFINED OCC_INCLUDE_DIRS)
         include_directories(${OCC_INCLUDE_DIRS})
-    endif(DEFINED OCC_INCLUDE_DIRS)
-else(Linux_OS)
-    if(DEFINED OCC_ROOT)
-        set(OCC_LIBRARY_DIRS "${OCC_ROOT}/win64/vc14/lib")
-        set(OCC_INCLUDE_DIRS "${OCC_ROOT}/inc")
-        set(OpenCASCADE_LIBRARIES   "${OCC_LIB_DIR}/TKBin.lib"
-                            "${OCC_LIB_DIR}/TKBinL.lib"
-                            "${OCC_LIB_DIR}/TKBinTObj.lib"
-                            "${OCC_LIB_DIR}/TKBinXCAF.lib"
-                            "${OCC_LIB_DIR}/TKBO.lib"
-                            "${OCC_LIB_DIR}/TKBool.lib"
-                            "${OCC_LIB_DIR}/TKBRep.lib"
-                            "${OCC_LIB_DIR}/TKCAF.lib"
-                            "${OCC_LIB_DIR}/TKCDF.lib"
-                            "${OCC_LIB_DIR}/TKLCAF.lib"
-                            "${OCC_LIB_DIR}/TKSTL.lib"
-                            "${OCC_LIB_DIR}/TKXMesh.lib"
-                            "${OCC_LIB_DIR}/TKernel.lib"
-                            "${OCC_LIB_DIR}/TKMath.lib"
-                            "${OCC_LIB_DIR}/TKService.lib"
-                            "${OCC_LIB_DIR}/TKTObj.lib"
-                            "${OCC_LIB_DIR}/TKXml.lib"
-                            "${OCC_LIB_DIR}/TKFeat.lib"
-                            "${OCC_LIB_DIR}/TKMesh.lib"
-                            "${OCC_LIB_DIR}/TKTopAlgo.lib"
-                            "${OCC_LIB_DIR}/TKXmlL.lib"
-                            "${OCC_LIB_DIR}/TKFillet.lib"
-                            "${OCC_LIB_DIR}/TKMeshVS.lib"
-                            "${OCC_LIB_DIR}/TKShHealing.lib"
-                            "${OCC_LIB_DIR}/TKV3d.lib"
-                            "${OCC_LIB_DIR}/TKXmlTObj.lib"
-                            "${OCC_LIB_DIR}/TKG2d.lib"
-                            "${OCC_LIB_DIR}/TKXmlXCAF.lib"
-                            "${OCC_LIB_DIR}/TKG3d.lib"
-                            "${OCC_LIB_DIR}/TKOffset.lib"
-                            "${OCC_LIB_DIR}/TKVRML.lib"
-                            "${OCC_LIB_DIR}/TKXSBase.lib"
-                            "${OCC_LIB_DIR}/TKGeomAlgo.lib"
-                            "${OCC_LIB_DIR}/TKOpenGl.lib"
-                            "${OCC_LIB_DIR}/TKSTEP.lib"
-                            "${OCC_LIB_DIR}/TKXCAF.lib"
-                            "${OCC_LIB_DIR}/TKGeomBase.lib"
-                            "${OCC_LIB_DIR}/TKSTEP209.lib"
-                            "${OCC_LIB_DIR}/TKHLR.lib"
-                            "${OCC_LIB_DIR}/TKSTEPAttr.lib"
-                            "${OCC_LIB_DIR}/TKXDEIGES.lib"
-                            "${OCC_LIB_DIR}/TKIGES.lib"
-                            "${OCC_LIB_DIR}/TKPrim.lib"
-                            "${OCC_LIB_DIR}/TKSTEPBase.lib"
-                            "${OCC_LIB_DIR}/TKXDESTEP.lib")
-
+    endif()
+else(LINUX_OS)
+    if(DEFINED OCC_CUSTOM_ROOT)
+        set(OCC_LIBRARY_DIRS "${OCC_CUSTOM_ROOT}/win64/vc14/lib")
+        set(OCC_INCLUDE_DIRS "${OCC_CUSTOM_ROOT}/inc")
+        set(OpenCASCADE_LIBRARIES   TKBin TKBinL TKBinTObj TKBinXCAF TKBO TKBool TKBRep TKCAF TKCDF TKLCAF 
+                                    TKSTL TKXMesh TKernel TKMath TKService TKTObj TKXml TKFeat TKMesh TKTopAlgo 
+                                    TKXmlL TKFillet TKMeshVS TKShHealing TKV3d TKXmlTObj TKG2d TKXmlXCAF TKG3d 
+                                    TKOffset TKVRML TKXSBase TKGeomAlgo TKOpenGl TKSTEP TKXCAF TKGeomBase TKSTEP209 
+                                    TKHLR TKSTEPAttr TKXDEIGES TKIGES TKPrim TKSTEPBase TKXDESTEP)
         if(BUILD_SHARED)
             set(OCC_LIBRARIES_SHARED)
             foreach (OCC_lib ${OpenCASCADE_LIBRARIES})
@@ -131,16 +88,18 @@ else(Linux_OS)
                 list(APPEND OCC_LIBRARIES_STATIC ${OCC_LIB})
             endforeach ()
         endif()
-
         include_directories(${OCC_INCLUDE_DIRS})
-    endif(DEFINED OCC_ROOT)
-endif(Linux_OS)
+    else()
+        message(FATAL_ERROR "OCC_CUSTOM_PATH is not defined!")
+    endif()
+endif(LINUX_OS)
 
 message(STATUS "OCC_INCLUDE_DIRS: ${OCC_INCLUDE_DIRS}")
 message(STATUS "OCC_LIBRARY_DIRS: ${OCC_LIBRARY_DIRS}")
 if (BUILD_SHARED)
     message(STATUS "OCC_LIBRARIES_SHARED: ${OCC_LIBRARIES_SHARED}")
-else()
+endif()
+if (BUILD_STATIC)
     message(STATUS "OCC_LIBRARIES_STATIC: ${OCC_LIBRARIES_STATIC}")
 endif()
 
