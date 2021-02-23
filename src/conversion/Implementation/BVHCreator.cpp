@@ -9,6 +9,7 @@
 #include <BRepPrimAPI_MakeBox.hxx>
 #include <BRepMesh_IncrementalMesh.hxx>
 #include <STEPControl_Writer.hxx>
+#include <BVH_LinearBuilder.hxx>
 // MOAB
 //#include <MBEntityType.h>
 //#include <MBTagConventions.hpp>
