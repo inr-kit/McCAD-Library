@@ -20,14 +20,14 @@ int main (int argc, char* argv[]){
     McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
         inputConfig.writeTemplate();
-        std::cerr << "Usage: A template file with run parameters has been "
-                     "created!" << std::endl;
+        std::cerr << "A template file, McCADInputConfig.txt, with run parameters"
+                     "has been created!" << std::endl;
     } else if(argc == 2) {
         if (std::string(argv[1]) == "help") {
             std::cout << "Usage:   [ ]: creates parameters file McCADInputConfig.txt\n"
                          "       [run]: executes McCAD" << std::endl;
         } else if (std::string(argv[1]) == "run") {
-            std::cerr << "Usage: Running McCAD v1.0L!" << std::endl;
+            std::cerr << "Running McCAD v1.0L!" << std::endl;
             auto start = std::chrono::high_resolution_clock::now();
             inputConfig.readTemplate();
             bool decomposeCondition{inputConfig.decompose},
