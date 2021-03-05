@@ -3,9 +3,11 @@
 #include "ShapeView.hpp"
 //OCC
 #include <TDocStd_Document.hxx>
-#include <TDF_Label.hxx>
+#include <TNaming_NamedShape.hxx>
+#include <XCAFDoc_ShapeMapTool.hxx>
 #include <TDataStd_Name.hxx>
 #include <STEPCAFControl_Reader.hxx>
+#include <STEPControl_Writer.hxx>
 
 McCAD::IO::STEPReader::Impl::Impl(const std::string& fileName)
     : fileName{fileName}, sequenceOfShape{new TopTools_HSequenceOfShape}{
@@ -13,6 +15,72 @@ McCAD::IO::STEPReader::Impl::Impl(const std::string& fileName)
         throw std::runtime_error("The specified input STEP file couldn't be found!."
                                  "\nHINT: check inputFileName on McCADInputConfig.txt");
     }
+}
+
+bool
+McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
+                                                const TCollection_ExtendedString& aName){
+    bool foundShapes = Standard_False;
+    if(aLabel.HasChild()){
+        int numChildren = aLabel.NbChildren();
+        std::cout << "\nName: " << aName <<
+                     "\nNumber of children: " << numChildren <<
+                     "\nLabel: " << aLabel << std::endl;
+        for(int aTag = 1; aTag <= numChildren; ++aTag){
+            TDF_Label childLabel = aLabel.FindChild(aTag);
+            if (childLabel.HasAttribute()){
+                opencascade::handle<TDataStd_Name> name;
+                if (childLabel.FindAttribute(TDataStd_Name::GetID(), name)
+                        && childLabel.IsAttribute(TNaming_NamedShape::GetID())){
+                    foundShapes = iterateLabelChilds(childLabel, name->Get());
+                }
+            }
+        }
+        if(!foundShapes && aLabel.IsAttribute(XCAFDoc_ShapeMapTool::GetID()))
+            goto retrieve;
+    } else {
+        retrieve:
+        opencascade::handle<TNaming_NamedShape> aShape;
+        if (aLabel.FindAttribute(TNaming_NamedShape::GetID(), aShape)){
+        std::cout << "\nName: " << aName <<
+                     "\nLabel: " << aLabel  << std::endl;
+        STEPControl_Writer writer;
+        writer.Transfer(aShape->Get(), STEPControl_StepModelType::STEPControl_AsIs);
+        Standard_Integer kk = 0;
+        std::string filename = "test";
+        std::string suffix = ".stp";
+        while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
+            ++kk;
+        }
+        filename += std::to_string(kk);
+        filename += suffix;
+        writer.Write(filename.c_str());
+        }
+        foundShapes = Standard_True;
+    }
+    return foundShapes;
+}
+
+void
+McCAD::IO::STEPReader::Impl::getLabelInfo(const TDF_Label& aLabel){
+    bool foundShapes = Standard_False;
+    if(aLabel.HasChild()){
+        int numChildren = aLabel.NbChildren();
+        for(int aTag = 1; aTag <= numChildren; ++aTag){
+            TDF_Label childLabel = aLabel.FindChild(aTag);
+            if (childLabel.HasAttribute()){
+                opencascade::handle<TDataStd_Name> name;
+                if (childLabel.FindAttribute(TDataStd_Name::GetID(), name)
+                        && name->Get() == "Shapes"){
+                    // findattr XCAFDoc_ShapeTool
+                    foundShapes = iterateLabelChilds(childLabel, name->Get());
+                }
+            }
+        }
+        if(!foundShapes)
+            throw std::runtime_error("Error loading shapes from input file!");
+    } else
+        throw std::runtime_error("Error reading file, shapes could not be read!");
 }
 
 void
@@ -24,15 +92,11 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
     auto readStatus = reader.ReadFile(fileName.c_str());
     if(readStatus == IFSelect_RetDone){
         reader.Transfer(document);
-        auto TDFLabel = document->Main();
-        std::cout << "num children: " << TDFLabel.NbChildren() <<
-                     "\nnum attr: " << TDFLabel.NbAttributes() <<
-                     "\nDepth: " << TDFLabel.Depth() <<
-                     "\nRoot: " << TDFLabel.IsRoot() << std::endl;
-        opencascade::handle<TDataStd_Name> name;
-        if(TDFLabel.FindAttribute(TDataStd_Name::GetID(), name))
-            std::cout << ">>Name: " << name->Get() << "\n";
-        else std::cout << ">>Name: ---\n";
+        TDF_Label label = document->Main();
+        std::cout << "\nIs root: " << label.IsRoot() <<
+                     "\nDepth: " << label.Depth() << std::endl;
+        getLabelInfo(label);
+
         Standard_Integer numberOfRoots = STEPReader.NbRootsForTransfer();
         if (numberOfRoots != 0){
             for(Standard_Integer i = 1; i <= numberOfRoots; ++i){

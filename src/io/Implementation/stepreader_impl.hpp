@@ -19,6 +19,7 @@
 #include <TopoDS.hxx>
 #include <TopTools_HSequenceOfShape.hxx>
 #include <TopExp_Explorer.hxx>
+#include <TDF_Label.hxx>
 
 namespace McCAD::IO{
   class STEPReader::Impl{
@@ -26,6 +27,9 @@ namespace McCAD::IO{
     Impl(const std::string& fileName);
 
     void readSTEP();
+    void getLabelInfo(const TDF_Label& aLabel);
+    bool iterateLabelChilds(const TDF_Label& aLabel,
+                            const TCollection_ExtendedString& aName);
 
     std::string fileName;
     Handle_TopTools_HSequenceOfShape sequenceOfShape;
