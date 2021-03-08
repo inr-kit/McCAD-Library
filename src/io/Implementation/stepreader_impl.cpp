@@ -5,6 +5,7 @@
 #include <TDocStd_Document.hxx>
 #include <TNaming_NamedShape.hxx>
 #include <XCAFDoc_ShapeMapTool.hxx>
+#include <XCAFDoc_ShapeTool.hxx>
 #include <TDataStd_Name.hxx>
 #include <STEPCAFControl_Reader.hxx>
 #include <STEPControl_Writer.hxx>
@@ -23,16 +24,16 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
     bool foundShapes = Standard_False;
     if(aLabel.HasChild()){
         int numChildren = aLabel.NbChildren();
-        std::cout << "\nName: " << aName <<
-                     "\nNumber of children: " << numChildren <<
-                     "\nLabel: " << aLabel << std::endl;
+        //std::cout << "\nName: " << aName <<
+        //             "\nNumber of children: " << numChildren <<
+        //             "\nLabel: " << aLabel << std::endl;
         for(int aTag = 1; aTag <= numChildren; ++aTag){
             TDF_Label childLabel = aLabel.FindChild(aTag);
             if (childLabel.HasAttribute()){
-                opencascade::handle<TDataStd_Name> name;
-                if (childLabel.FindAttribute(TDataStd_Name::GetID(), name)
-                        && childLabel.IsAttribute(TNaming_NamedShape::GetID())){
-                    foundShapes = iterateLabelChilds(childLabel, name->Get());
+                opencascade::handle<TDataStd_Name> dataName;
+                if (childLabel.FindAttribute(TDataStd_Name::GetID(), dataName)
+                         && childLabel.IsAttribute(TNaming_NamedShape::GetID())){
+                    foundShapes = iterateLabelChilds(childLabel, dataName->Get());
                 }
             }
         }
@@ -42,21 +43,23 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
         retrieve:
         opencascade::handle<TNaming_NamedShape> aShape;
         if (aLabel.FindAttribute(TNaming_NamedShape::GetID(), aShape)){
-        std::cout << "\nName: " << aName <<
-                     "\nLabel: " << aLabel  << std::endl;
-        STEPControl_Writer writer;
-        writer.Transfer(aShape->Get(), STEPControl_StepModelType::STEPControl_AsIs);
-        Standard_Integer kk = 0;
-        std::string filename = "test";
-        std::string suffix = ".stp";
-        while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
-            ++kk;
+            //std::cout << "\nRetrieve\nName: " << aName <<
+            //             "\nLabel: " << aLabel  << std::endl;
+            sequenceOfShape->Append(aShape->Get());
+            /*
+            STEPControl_Writer writer;
+            writer.Transfer(aShape->Get(), STEPControl_StepModelType::STEPControl_AsIs);
+            Standard_Integer kk = 0;
+            std::string filename = "test";
+            std::string suffix = ".stp";
+            while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
+                ++kk;
+            }
+            filename += std::to_string(kk);
+            filename += suffix;
+            writer.Write(filename.c_str());*/
+            foundShapes = Standard_True;
         }
-        filename += std::to_string(kk);
-        filename += suffix;
-        writer.Write(filename.c_str());
-        }
-        foundShapes = Standard_True;
     }
     return foundShapes;
 }
@@ -69,11 +72,10 @@ McCAD::IO::STEPReader::Impl::getLabelInfo(const TDF_Label& aLabel){
         for(int aTag = 1; aTag <= numChildren; ++aTag){
             TDF_Label childLabel = aLabel.FindChild(aTag);
             if (childLabel.HasAttribute()){
-                opencascade::handle<TDataStd_Name> name;
-                if (childLabel.FindAttribute(TDataStd_Name::GetID(), name)
-                        && name->Get() == "Shapes"){
-                    // findattr XCAFDoc_ShapeTool
-                    foundShapes = iterateLabelChilds(childLabel, name->Get());
+                opencascade::handle<TDataStd_Name> dataName;
+                if (childLabel.FindAttribute(TDataStd_Name::GetID(), dataName)
+                    && childLabel.IsAttribute(XCAFDoc_ShapeTool::GetID())){
+                    foundShapes = iterateLabelChilds(childLabel, dataName->Get());
                 }
             }
         }
@@ -93,10 +95,10 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
     if(readStatus == IFSelect_RetDone){
         reader.Transfer(document);
         TDF_Label label = document->Main();
-        std::cout << "\nIs root: " << label.IsRoot() <<
-                     "\nDepth: " << label.Depth() << std::endl;
+        //std::cout << "\nIs root: " << label.IsRoot() <<
+        //             "\nDepth: " << label.Depth() << std::endl;
         getLabelInfo(label);
-
+        /*
         Standard_Integer numberOfRoots = STEPReader.NbRootsForTransfer();
         if (numberOfRoots != 0){
             for(Standard_Integer i = 1; i <= numberOfRoots; ++i){
@@ -115,7 +117,7 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
                     throw std::runtime_error("Error reading file, a shape could not be read!");
                 }
             }
-        }
+        }*/
     } else {
         Standard_Boolean failsOnly = Standard_False;
         STEPReader.PrintCheckLoad(failsOnly, IFSelect_ItemsByEntity);

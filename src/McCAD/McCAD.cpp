@@ -24,13 +24,17 @@ int main (int argc, char* argv[]){
                      "has been created!" << std::endl;
     } else if(argc == 2) {
         if (std::string(argv[1]) == "help") {
-            std::cout << "Usage:   [ ]: creates parameters file McCADInputConfig.txt\n"
-                         "       [run]: executes McCAD" << std::endl;
+            std::cout << "Usage:   [ ] : creates parameters file McCADInputConfig.txt\n"
+                         "       [read]: Test loading input STEP file\n"
+                         "       [run] : Executes McCAD" << std::endl;
         } else if (std::string(argv[1]) == "read") {
             std::cerr << "Running McCAD v1.0L!" << std::endl;
             auto start = std::chrono::high_resolution_clock::now();
             inputConfig.readTemplate();
             McCAD::IO::STEPReader reader{inputConfig.inputFileName};
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double, std::milli> elapsed = end - start;
+            std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;
         } else if (std::string(argv[1]) == "run") {
             std::cerr << "Running McCAD v1.0L!" << std::endl;
             auto start = std::chrono::high_resolution_clock::now();
