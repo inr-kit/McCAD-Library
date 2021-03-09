@@ -51,7 +51,7 @@ Installation (Linux):
 
 3- Install OpenCascade
    * Download opencascade-7.4.0.tgz from https://www.opencascade.com/content/latest-release or from
-    https://www.opencascade.com/content/latest-release if new releases exist by the time of installation
+     https://www.opencascade.com/content/latest-release if new releases exist by the time of installation
 
 4- Install McCAD
    * McCAD library and executable installation can proceed by providing the custom CMake flags.
@@ -60,7 +60,7 @@ Installation (Linux):
 Installation (Windows 10):
 --------------------------
    * Same steps 1 - 3 can be followed by downloading the install files that is suitable for Windows 10
-  4- Install McCAD
+4- Install McCAD
    * Building a static executable is recommended.
    * Path to OCC should be provided through -DOCC_CUSTOM_ROOT=<path to OCC> CMake flag.
    * Path to Boost should be provided though -DBOOST_CUSTOM_ROOT=<path to Boost> CMake flag.
