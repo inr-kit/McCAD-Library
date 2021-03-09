@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
+#include <vector>
 // McCAD
 #include "stepreader.hpp"
 // OCC
@@ -20,6 +21,7 @@
 #include <TopTools_HSequenceOfShape.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TDF_Label.hxx>
+#include <TCollection_ExtendedString.hxx>
 
 namespace McCAD::IO{
   class STEPReader::Impl{
@@ -33,6 +35,7 @@ namespace McCAD::IO{
 
     std::string fileName;
     Handle_TopTools_HSequenceOfShape sequenceOfShape;
+    std::vector<TCollection_ExtendedString> shapeNames = {};
   };
 }
 

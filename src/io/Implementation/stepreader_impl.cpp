@@ -9,6 +9,7 @@
 #include <TDataStd_Name.hxx>
 #include <STEPCAFControl_Reader.hxx>
 #include <STEPControl_Writer.hxx>
+#include <Standard_CString.hxx>
 
 McCAD::IO::STEPReader::Impl::Impl(const std::string& fileName)
     : fileName{fileName}, sequenceOfShape{new TopTools_HSequenceOfShape}{
@@ -46,6 +47,7 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
             //std::cout << "\nRetrieve\nName: " << aName <<
             //             "\nLabel: " << aLabel  << std::endl;
             sequenceOfShape->Append(aShape->Get());
+            shapeNames.push_back(aName);
             /*
             STEPControl_Writer writer;
             writer.Transfer(aShape->Get(), STEPControl_StepModelType::STEPControl_AsIs);
@@ -79,8 +81,9 @@ McCAD::IO::STEPReader::Impl::getLabelInfo(const TDF_Label& aLabel){
                 }
             }
         }
-        if(!foundShapes)
+        if(!foundShapes || (sequenceOfShape->Length() != shapeNames.size())){
             throw std::runtime_error("Error loading shapes from input file!");
+        }
     } else
         throw std::runtime_error("Error reading file, shapes could not be read!");
 }
