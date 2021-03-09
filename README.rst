@@ -67,14 +67,15 @@ Installation (Windows 10):
 
 General notes on Usage:
 -----------------------
-1- The library assumes a clean CAD model (one with no intersections or overlapping). While in theory the library
-   won't report an error with intersections/overlappings as solids are processed individually, it will cause problems
-   for void generation and conversion later on.
+1- The library assumes a clean CAD model (one with no intersections or overlapping).
+   While in theory the library won't report an error with intersections/overlappings as solids are processed individually,
+   it will cause problems for void generation and conversion later on.
 
-2- The heirarchy of solids (groups/subgroups in CAD) is not preserved in the current version. This means that the output
-   STEP file will have a flat heirarchy of sloids with all info about groups/subgroups lost.
-   - A good practice to circumvent this in the current version is to split the input CAD solid into several files by material.
+2- The heirarchy of solids (groups/subgroups in CAD) is not preserved in the current version.
+   This means that the output STEP file will have a flat heirarchy of sloids with all info about groups/subgroups lost.
+   A good practice to circumvent this in the current version is to split the input CAD solid into several files by material.
    This will result in output file of decomposed solids of a single material to be assigned later on when converting.
 
-3- Void generation and conversion is yet to be implemented in the current library. While the current library will provide
-   advanced and better decomposition compared to the McCAD-SALOME version, McCAD-SALOME is to be used for conversion, for now.
+3- Void generation and conversion is yet to be implemented in the current library.
+   While the current library will provide advanced and better decomposition compared to the McCAD-SALOME version, McCAD-SALOME
+   is to be used for conversion, for now.
