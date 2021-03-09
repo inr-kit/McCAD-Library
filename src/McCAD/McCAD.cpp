@@ -84,6 +84,6 @@ int main (int argc, char* argv[]){
             std::chrono::duration<double, std::milli> elapsed = end - start;
             std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;
         }
-    } else std::cerr << "Usage: only [] or [help] or [run] are acceptable arguments!"
+    } else std::cerr << "Usage: only [], [help], [read], or [run] are acceptable arguments!"
                      << std::endl;
 }

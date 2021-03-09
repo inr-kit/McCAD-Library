@@ -9,7 +9,6 @@
 #include <TDataStd_Name.hxx>
 #include <STEPCAFControl_Reader.hxx>
 #include <STEPControl_Writer.hxx>
-#include <Standard_CString.hxx>
 
 McCAD::IO::STEPReader::Impl::Impl(const std::string& fileName)
     : fileName{fileName}, sequenceOfShape{new TopTools_HSequenceOfShape}{
@@ -48,18 +47,6 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
             //             "\nLabel: " << aLabel  << std::endl;
             sequenceOfShape->Append(aShape->Get());
             shapeNames.push_back(aName);
-            /*
-            STEPControl_Writer writer;
-            writer.Transfer(aShape->Get(), STEPControl_StepModelType::STEPControl_AsIs);
-            Standard_Integer kk = 0;
-            std::string filename = "test";
-            std::string suffix = ".stp";
-            while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
-                ++kk;
-            }
-            filename += std::to_string(kk);
-            filename += suffix;
-            writer.Write(filename.c_str());*/
             foundShapes = Standard_True;
         }
     }
@@ -101,26 +88,6 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
         //std::cout << "\nIs root: " << label.IsRoot() <<
         //             "\nDepth: " << label.Depth() << std::endl;
         getLabelInfo(label);
-        /*
-        Standard_Integer numberOfRoots = STEPReader.NbRootsForTransfer();
-        if (numberOfRoots != 0){
-            for(Standard_Integer i = 1; i <= numberOfRoots; ++i){
-                if(STEPReader.TransferRoot(i)){
-                    TopoDS_Shape shape = STEPReader.Shape(i);
-                    TopoDS_CompSolid compSolid;
-                    TopoDS_Builder builder;
-                    for(const auto& solid : detail::ShapeView<TopAbs_SOLID>{shape}){
-                        TopoDS_Solid tempSolid = TopoDS::Solid(solid);
-                        builder.MakeCompSolid(compSolid);
-                        builder.Add(compSolid, tempSolid);
-                        sequenceOfShape->Append(compSolid);
-                    }
-                }
-                else{
-                    throw std::runtime_error("Error reading file, a shape could not be read!");
-                }
-            }
-        }*/
     } else {
         Standard_Boolean failsOnly = Standard_False;
         STEPReader.PrintCheckLoad(failsOnly, IFSelect_ItemsByEntity);

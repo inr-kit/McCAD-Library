@@ -9,18 +9,8 @@
 // McCAD
 #include "stepreader.hpp"
 // OCC
-#include <OSD_Path.hxx>
-#include <OSD_File.hxx>
-#include <TopoDS_Shape.hxx>
-#include <STEPControl_Reader.hxx>
-#include <TopoDS_Solid.hxx>
-#include <TopoDS_CompSolid.hxx>
-#include <TopoDS_Compound.hxx>
-#include <TopoDS_Builder.hxx>
-#include <TopoDS.hxx>
-#include <TopTools_HSequenceOfShape.hxx>
-#include <TopExp_Explorer.hxx>
 #include <TDF_Label.hxx>
+#include <TopTools_HSequenceOfShape.hxx>
 #include <TCollection_ExtendedString.hxx>
 
 namespace McCAD::IO{
