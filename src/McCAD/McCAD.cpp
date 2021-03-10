@@ -40,7 +40,7 @@ int main (int argc, char* argv[]){
             auto start = std::chrono::high_resolution_clock::now();
             inputConfig.readTemplate();
             bool decomposeCondition{inputConfig.decompose},
-            convertCondition{inputConfig.convert};
+                 convertCondition{inputConfig.convert};
             if (decomposeCondition){
                 // Load the input file.
                 std::cout << "***********************" << std::endl;
@@ -52,7 +52,7 @@ int main (int argc, char* argv[]){
                 std::cout << "****************************" << std::endl;
                 std::cout << "** Starting decomposition **" << std::endl;
                 std::cout << "****************************" << std::endl;
-                McCAD::Decomposition::Decompose decompose{inputData};
+                McCAD::Decomposition::Decompose decompose{inputData, inputConfig};
                 auto outputData_result = decompose.getResultSolids();
                 auto outputData_reject = decompose.getRejectedSolids();
                 // Write output STEP files.
@@ -64,17 +64,15 @@ int main (int argc, char* argv[]){
                 bool rejectConversion = outputData_reject.getSize() == 0 ? false
                                                                          : true;
                 if (convertCondition && !rejectConversion){
-                    std::cout << "*************************" << std::endl;
-                    std::cout << "** Starting conversion **" << std::endl;
-                    std::cout << "*************************" << std::endl;
                     // Save solids to STL file
                     McCAD::IO::STLWriter{inputConfig.conversionFileName, outputData_result};
-                    McCAD::Conversion::Convert{inputConfig};
+                    goto convert;
                 } else if (rejectConversion)
                     std::cout << "Decomposition resulted in rejected solids, please "
                                  "check the solids and then run conversion!"
                               << std::endl;
             } else if (convertCondition){
+                convert:;
                 std::cout << "*************************" << std::endl;
                 std::cout << "** Starting conversion **" << std::endl;
                 std::cout << "*************************" << std::endl;

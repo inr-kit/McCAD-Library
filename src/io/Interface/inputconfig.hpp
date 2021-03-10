@@ -23,6 +23,7 @@ public:
     std::string units = "cm";
     // Decomposition
     bool decompose = true;
+    int recurrenceDepth = 20;
     double tolerance = 1.0e-7;
     double minInputSolidVol = 1.0;
     double angleTolerance = 1.0e-3;

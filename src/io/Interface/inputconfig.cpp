@@ -32,6 +32,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "# > Desired name of the rejected solids output STEP file;\n"
                    "rejectFileName = reject.stp\n"
                    "# > Other parameters;\n"
+                   "recurrenceDepth = 20\n"
                    "tolerance = 1.0e-7\n"
                    "minInputSolidVol = 1.0\n"
                    "angleTolerance = 1.0e-3\n"

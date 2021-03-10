@@ -3,12 +3,13 @@
 #include "SurfaceUtilities.hpp"
 #include "AssistSurfaceGenerator.hpp"
 
-McCAD::Decomposition::DecomposeSolid::Impl::Impl()
-    : recurrenceDepth{0}{
+McCAD::Decomposition::DecomposeSolid::Impl::Impl(const IO::InputConfig& inputConfig)
+    : recurrenceDepth{0}, inputConfig{inputConfig}{
 }
 
-McCAD::Decomposition::DecomposeSolid::Impl::Impl(Standard_Integer recurrenceDepth)
-    : recurrenceDepth{recurrenceDepth}{
+McCAD::Decomposition::DecomposeSolid::Impl::Impl(const IO::InputConfig& inputConfig,
+                                                 Standard_Integer recurrenceDepth)
+    : recurrenceDepth{recurrenceDepth}, inputConfig{inputConfig}{
 }
 
 McCAD::Decomposition::DecomposeSolid::Impl::~Impl(){
@@ -19,15 +20,13 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         std::shared_ptr<Geometry::PLSolid>& solidObj){
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
-    //std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
-    if(recurrenceDepth >= 20){
+    if(recurrenceDepth >= inputConfig.recurrenceDepth){
         return Standard_False;
     }
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
     solidObj->accessPSImpl()->judgeDecomposeSurfaces(solidImpl);
     if(!throughNoBoundarySurfaces(solidImpl->splitFacesList)){
-        //std::cout << "no throughNoBoundarySurfaces" << std::endl;
         solidObj->accessPSImpl()->judgeThroughConcaveEdges(solidImpl);
     }
      return perform(*solidImpl);
@@ -80,21 +79,16 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
 Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solidImpl){
     if(solidImpl.splitSurface){
-        //std::cout << "Solid has a split surface" << std::endl;
         if (!selectSplitSurface(solidImpl)){
             return Standard_False;
         }
         if(!(SplitSolid::Impl{}(solidImpl.solid, solidImpl.obb,
                                 *solidImpl.selectedSplitFacesList[0],
                                 *solidImpl.splitSolidList))){
-            std::cout << "SplitSolid return false" << std::endl;
             return Standard_False;
         }
         // Loop over the resulting subsolids and split each one of them recursively.
         for (Standard_Integer i = 1; i <= solidImpl.splitSolidList->Length(); ++i){
-            //std::cout << "   - Decomposing subsolid # " << recurrenceDepth << "/"
-            //          << solidImpl.splitSolidList->Length() << "/" << i << std::endl;
-            //std::cout << splitSolidList->Length() << std::endl;
             auto subSolid = Preprocessor{}.perform(solidImpl.splitSolidList->Value(i));
             if (std::holds_alternative<std::monostate>(subSolid)){
                 solidImpl.rejectedsubSolidsList->Append(solidImpl.splitSolidList->Value(i));
@@ -106,19 +100,19 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
             case solidType.planar:{
                 auto& subSolidImpl = *std::get<solidType.planar>(subSolid)->accessSImpl();
                 // Mesh deflection is calculated for every solid in DecomposeSolid.
-                if (DecomposeSolid::Impl{recurrenceDepth}(std::get<solidType.planar>(subSolid))){
+                if (DecomposeSolid::Impl{inputConfig, recurrenceDepth}(std::get<solidType.planar>(subSolid))){
                     extractSolids(solidImpl, subSolidImpl, i);
                 } else solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
                 break;
             } case solidType.cylindrical:{
                 auto& subSolidImpl = *std::get<solidType.cylindrical>(subSolid)->accessSImpl();
-                if (DecomposeSolid::Impl{recurrenceDepth}(std::get<solidType.cylindrical>(subSolid))){
+                if (DecomposeSolid::Impl{inputConfig, recurrenceDepth}(std::get<solidType.cylindrical>(subSolid))){
                     extractSolids(solidImpl, subSolidImpl, i);
                 } else solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
                 break;
             } case solidType.toroidal:{
                 auto& subSolidImpl = *std::get<solidType.toroidal>(subSolid)->accessSImpl();
-                if (DecomposeSolid::Impl{recurrenceDepth}(std::get<solidType.toroidal>(subSolid))){
+                if (DecomposeSolid::Impl{inputConfig, recurrenceDepth}(std::get<solidType.toroidal>(subSolid))){
                     extractSolids(solidImpl, subSolidImpl, i);
                 } else solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
                 break;
@@ -165,7 +159,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::extractSolids(
         Geometry::Solid::Impl& solidImpl,
         const Geometry::Solid::Impl& subSolidImpl,
         Standard_Integer& i){
-    if (subSolidImpl.splitSolidList->Length() >= 2){
+    if (subSolidImpl.splitSolidList->Length() >= 1){
         for(const auto& resultsubSolid : *subSolidImpl.splitSolidList){
             solidImpl.splitSolidList->InsertAfter(i, resultsubSolid);
         }

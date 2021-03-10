@@ -2,8 +2,9 @@
 #include "decomposition.hpp"
 #include "decomposition_impl.hpp"
 
-McCAD::Decomposition::Decompose::Decompose(const General::InputData& inputData) :
-  pDImpl{std::make_unique<Impl>(inputData)}{
+McCAD::Decomposition::Decompose::Decompose(const General::InputData& inputData,
+                                           const IO::InputConfig& inputConfig) :
+  pDImpl{std::make_unique<Impl>(inputData, inputConfig)}{
 }
 
 McCAD::Decomposition::Decompose::~Decompose(){
