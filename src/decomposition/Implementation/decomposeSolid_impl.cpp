@@ -37,8 +37,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         std::shared_ptr<Geometry::CYLSolid>& solidObj){
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
-    //std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
-    if(recurrenceDepth >= 20){
+    if(recurrenceDepth >= inputConfig.recurrenceDepth){
         return Standard_False;
     }
     auto solidImpl = solidObj->accessSImpl();
@@ -60,8 +59,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         std::shared_ptr<Geometry::TORSolid>& solidObj){
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
-    //std::cout << "     - Recurrence Depth: " << recurrenceDepth << std::endl;
-    if(recurrenceDepth >= 20){
+    if(recurrenceDepth >= inputConfig.recurrenceDepth){
         return Standard_False;
     }
     auto solidImpl = solidObj->accessSImpl();
@@ -121,7 +119,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
             }
         }
     } else{
-        //std::cout	<< "Solid has no split surfaces" << std::endl;
         solidImpl.splitSolidList->Append(solidImpl.solid);
     }
     return Standard_True;
