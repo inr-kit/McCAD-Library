@@ -65,7 +65,8 @@ int main (int argc, char* argv[]){
                                                                          : true;
                 if (convertCondition && !rejectConversion){
                     // Save solids to STL file
-                    McCAD::IO::STLWriter{inputConfig.conversionFileName, outputData_result};
+                    //McCAD::IO::STLWriter{inputConfig.conversionFileName, outputData_result};
+                    inputConfig.conversionFileName = inputConfig.resultFileName;
                     goto convert;
                 } else if (rejectConversion)
                     std::cout << "Decomposition resulted in rejected solids, please "

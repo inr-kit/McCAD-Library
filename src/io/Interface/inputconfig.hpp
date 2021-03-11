@@ -29,7 +29,7 @@ public:
     double angleTolerance = 1.0e-3;
     double maxDecomposeLength = 20;
     // Conversion
-    std::string conversionFileName = "conversion.stl";
+    std::string conversionFileName = "conversion.stp";
     bool convert = false;
     bool writeCollisionFile =false;
     bool voidGeneration = true;

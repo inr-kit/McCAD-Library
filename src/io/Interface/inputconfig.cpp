@@ -40,7 +40,7 @@ McCAD::IO::InputConfig::writeTemplate(){
     inputConfig << "# Conversion\n"
                    "# ==================\n"
                    "convert = false\n"
-                   "conversionFileName = conversion.stl\n"
+                   "conversionFileName = conversion.stp\n"
                    "code = mcnp\n"
                    "writeCollisionFile = false\n"
                    "voidGeneration = true\n"
