@@ -21,7 +21,7 @@ namespace McCAD::Conversion {
       ~Impl();
 
       Tools::SolidType solidType;
-      std::shared_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;
+      std::shared_ptr<TopTools_HSequenceOfShape> acceptedInputSolidsList;
       std::shared_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;
       std::vector<std::shared_ptr<Geometry::Solid>> solidsList;
 

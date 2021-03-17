@@ -16,7 +16,7 @@ McCAD::Tools::HeirarchyFlatter::~HeirarchyFlatter(){
 std::pair<std::unique_ptr<TopTools_HSequenceOfShape>,
 std::unique_ptr<TopTools_HSequenceOfShape>>
 McCAD::Tools::HeirarchyFlatter::flattenSolidHierarchy(
-        const Handle_TopTools_HSequenceOfShape& inputSolidsList){
+        const std::shared_ptr<TopTools_HSequenceOfShape>& inputSolidsList){
     Standard_Integer compSolid{0}, solid{0}, invalidShape{0};
     for(const auto& shape : *inputSolidsList){
         switch(shape.ShapeType()){

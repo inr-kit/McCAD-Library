@@ -16,7 +16,7 @@ McCAD::IO::STLWriter::Impl::~Impl(){
 
 void
 McCAD::IO::STLWriter::Impl::operator()(
-        const Handle_TopTools_HSequenceOfShape& shapes){
+        const std::shared_ptr<TopTools_HSequenceOfShape>& shapes){
     // Create an empty file to write to
     std::ofstream outputFile(conversionfileName.c_str(), std::ios_base::app); // append instead of overwrite
     StlAPI_Writer writer;

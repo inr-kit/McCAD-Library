@@ -3,10 +3,15 @@
 
 // C++
 #include <string>
+#include <memory>
+#include <vector>
+#include <tuple>
 // McCAD
 #include "inputdata.hpp"
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>
+#include <TopoDS_Shape.hxx>
+#include <TCollection_ExtendedString.hxx>
 #include <Standard_Transient.hxx>
 
 namespace McCAD::General{
@@ -15,7 +20,8 @@ namespace McCAD::General{
     Impl();
     ~Impl();
 
-    Handle_TopTools_HSequenceOfShape inputSolidsList;
+    std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString>> zinputSolidsList;
+    std::shared_ptr<TopTools_HSequenceOfShape> inputSolidsList;
     int size{0};
 
     void updateSize();

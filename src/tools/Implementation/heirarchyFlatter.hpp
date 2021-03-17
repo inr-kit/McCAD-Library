@@ -20,7 +20,7 @@ namespace McCAD::Tools{
       std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;
       std::pair<std::unique_ptr<TopTools_HSequenceOfShape>,
       std::unique_ptr<TopTools_HSequenceOfShape>> flattenSolidHierarchy(
-              const Handle_TopTools_HSequenceOfShape& inputSolidsList);
+              const std::shared_ptr<TopTools_HSequenceOfShape>& inputSolidsList);
   };
 }
 

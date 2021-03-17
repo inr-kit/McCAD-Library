@@ -7,11 +7,10 @@
 #include "heirarchyFlatter.hpp"
 #include "preprocessor.hpp"
 #include "TaskQueue.hpp"
-//#include "BVHCreator.hpp"
-//#include "voidGenerator.hpp"
+//#include "voidCellManager.hpp"
 
 McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig)
-    : splitInputSolidsList{std::make_shared<TopTools_HSequenceOfShape>()},
+    : acceptedInputSolidsList{std::make_shared<TopTools_HSequenceOfShape>()},
       rejectedInputSolidsList{std::make_shared<TopTools_HSequenceOfShape>()}{
     IO::STEPReader reader{inputConfig.conversionFileName};
     auto inputData = reader.getInputData();
@@ -22,13 +21,12 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig)
                  " solid(s) in the input step file" << std::endl;
     auto product = Tools::HeirarchyFlatter{}.flattenSolidHierarchy(
                 inputSolidsList);
-    splitInputSolidsList = std::move(product.first);
+    acceptedInputSolidsList = std::move(product.first);
     rejectedInputSolidsList = std::move(product.second);
-    std::cout << " > Converting " << splitInputSolidsList->Length() <<
+    std::cout << " > Converting " << acceptedInputSolidsList->Length() <<
                  " solid(s)" << std::endl;
-    //Conversion::BVHCreator{inputConfig, splitInputSolidsList};
     getGeomData();
-    //getMatData();
+    getMatData();
     if (inputConfig.voidGeneration){
         std::cout << "   - Generating void" << std::endl;
         //Conversion::Impl::VoidGenerator{splitInputSolidsList};
@@ -42,7 +40,7 @@ McCAD::Conversion::Convert::Impl::~Impl(){
 void
 McCAD::Conversion::Convert::Impl::getGeomData(){
     TaskQueue<Policy::Parallel> taskQueue;
-    for(const auto& shape : *splitInputSolidsList){
+    for(const auto& shape : *acceptedInputSolidsList){
         taskQueue.submit([this, &shape](){
             auto solid = Decomposition::Preprocessor{}.perform(shape);
             if (std::holds_alternative<std::monostate>(solid)){

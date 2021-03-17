@@ -2,7 +2,7 @@
 #include "inputdata_impl.hpp"
 
 McCAD::General::InputData::Impl::Impl()
-  : inputSolidsList{new TopTools_HSequenceOfShape}{
+  : inputSolidsList{std::make_shared<TopTools_HSequenceOfShape>()}{
 }
 
 McCAD::General::InputData::Impl::~Impl(){
