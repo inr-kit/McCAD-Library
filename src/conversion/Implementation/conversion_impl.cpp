@@ -23,7 +23,6 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
     std::cout << " > Converting " << acceptedInputSolidsList.size() <<
                  " solid(s)" << std::endl;
     getGeomData();
-    getMatData();
     if (inputConfig.voidGeneration){
         std::cout << "   - Generating void" << std::endl;
         //Conversion::Impl::VoidGenerator{splitInputSolidsList};
@@ -36,9 +35,11 @@ McCAD::Conversion::Convert::Impl::~Impl(){
 
 void
 McCAD::Conversion::Convert::Impl::getGeomData(){
+    Standard_Integer counter = 0;
     TaskQueue<Policy::Parallel> taskQueue;
     for(const auto& shape : acceptedInputSolidsList){
-        taskQueue.submit([this, &shape](){
+        ++counter;
+        taskQueue.submit([this, &shape, counter](){
             auto solid = Decomposition::Preprocessor{}.perform(std::get<0>(shape));
             if (std::holds_alternative<std::monostate>(solid)){
                 rejectedInputSolidsList.push_back(shape);
@@ -46,16 +47,19 @@ McCAD::Conversion::Convert::Impl::getGeomData(){
                 switch (Standard_Integer(solid.index())){
                 case solidType.planar:{
                     auto solidObj = std::get<solidType.planar>(solid);
+                    solidObj->accessSImpl()->solidID = counter;
                     solidObj->accessSImpl()->solidName = std::get<1>(shape);
                     solidsList.push_back(solidObj);
                     break;
                 } case solidType.cylindrical:{
                     auto solidObj = std::get<solidType.cylindrical>(solid);
+                    solidObj->accessSImpl()->solidID = counter;
                     solidObj->accessSImpl()->solidName = std::get<1>(shape);
                     solidsList.push_back(solidObj);
                     break;
                 } case solidType.toroidal:{
                     auto solidObj = std::get<solidType.toroidal>(solid);
+                    solidObj->accessSImpl()->solidID = counter;
                     solidObj->accessSImpl()->solidName = std::get<1>(shape);
                     solidsList.push_back(solidObj);
                     break;
@@ -67,9 +71,6 @@ McCAD::Conversion::Convert::Impl::getGeomData(){
     }
     taskQueue.complete();
 }
-
-void
-McCAD::Conversion::Convert::Impl::getMatData(){}
 
 void
 McCAD::Conversion::Convert::Impl::perform(){

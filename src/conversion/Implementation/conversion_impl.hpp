@@ -28,7 +28,6 @@ namespace McCAD::Conversion {
       std::vector<std::shared_ptr<Geometry::Solid>> solidsList;
 
       void getGeomData();
-      void getMatData();
       void perform();
     };
 }
