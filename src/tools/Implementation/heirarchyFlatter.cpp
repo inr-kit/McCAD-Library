@@ -13,8 +13,7 @@ McCAD::Tools::HeirarchyFlatter::HeirarchyFlatter() :
 McCAD::Tools::HeirarchyFlatter::~HeirarchyFlatter(){
 }
 
-std::pair<std::unique_ptr<TopTools_HSequenceOfShape>,
-std::unique_ptr<TopTools_HSequenceOfShape>>
+McCAD::Tools::HeirarchyFlatter::output_pair
 McCAD::Tools::HeirarchyFlatter::flattenSolidHierarchy(
         const std::shared_ptr<TopTools_HSequenceOfShape>& inputSolidsList){
     Standard_Integer compSolid{0}, solid{0}, invalidShape{0};
@@ -42,4 +41,36 @@ McCAD::Tools::HeirarchyFlatter::flattenSolidHierarchy(
     std::cout << "   " << invalidShape << " invalid shape(s)" << std::endl;
     return std::make_pair(std::move(splitInputSolidsList),
                           std::move(rejectedInputSolidsList));
+}
+
+McCAD::Tools::HeirarchyFlatter::output_zpair
+McCAD::Tools::HeirarchyFlatter::operator()(
+        const McCAD::Tools::HeirarchyFlatter::zVector& inputSolidsList){
+    Standard_Integer compSolid{0}, solid{0}, invalidShape{0};
+    for(Standard_Integer i=0; i < inputSolidsList.size(); ++i){
+        auto name = std::get<1>(inputSolidsList[i]);
+        auto shape = std::get<0>(inputSolidsList[i]);
+        switch(shape.ShapeType()){
+        case TopAbs_COMPOUND:
+            [[fallthrough]];
+        case TopAbs_COMPSOLID:
+            ++compSolid;
+            for(const auto& solid : detail::ShapeView<TopAbs_SOLID>{shape}){
+                zsplitInputSolidsList.push_back(std::make_tuple(solid, name));
+            };
+            break;
+        case TopAbs_SOLID:
+            ++solid;
+            zsplitInputSolidsList.push_back(std::make_tuple(shape, name));
+            break;
+        default:
+            ++invalidShape;
+            zrejectedInputSolidsList.push_back(std::make_tuple(shape, name));
+        }
+    }
+    std::cout << "   " << compSolid << " compound solid(s)" << std::endl;
+    std::cout << "   " << solid << " solid(s)" << std::endl;
+    std::cout << "   " << invalidShape << " invalid shape(s)" << std::endl;
+    return std::make_pair(std::move(zsplitInputSolidsList),
+                          std::move(zrejectedInputSolidsList));
 }

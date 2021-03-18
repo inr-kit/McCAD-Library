@@ -9,21 +9,18 @@
 #include "TaskQueue.hpp"
 //#include "voidCellManager.hpp"
 
-McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig)
-    : acceptedInputSolidsList{std::make_shared<TopTools_HSequenceOfShape>()},
-      rejectedInputSolidsList{std::make_shared<TopTools_HSequenceOfShape>()}{
+McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
     IO::STEPReader reader{inputConfig.conversionFileName};
     auto inputData = reader.getInputData();
-    auto& inputSolidsList = inputData.accessImpl()->inputSolidsList;
-    if (inputSolidsList->IsEmpty())
+    auto& inputSolidsList = inputData.accessImpl()->zinputSolidsList;
+    if (inputSolidsList.size() == 0)
         throw std::runtime_error("Input solids list is empty!");
-    std::cout << "> Found " << inputSolidsList->Length() <<
-                 " solid(s) in the input step file" << std::endl;
-    auto product = Tools::HeirarchyFlatter{}.flattenSolidHierarchy(
-                inputSolidsList);
+    std::cout << "> Found " << inputSolidsList.size() <<
+                 " shapes(s) in the input STEP file" << std::endl;
+    auto product = Tools::HeirarchyFlatter{}(inputSolidsList);
     acceptedInputSolidsList = std::move(product.first);
     rejectedInputSolidsList = std::move(product.second);
-    std::cout << " > Converting " << acceptedInputSolidsList->Length() <<
+    std::cout << " > Converting " << acceptedInputSolidsList.size() <<
                  " solid(s)" << std::endl;
     getGeomData();
     getMatData();
@@ -40,24 +37,30 @@ McCAD::Conversion::Convert::Impl::~Impl(){
 void
 McCAD::Conversion::Convert::Impl::getGeomData(){
     TaskQueue<Policy::Parallel> taskQueue;
-    for(const auto& shape : *acceptedInputSolidsList){
+    for(const auto& shape : acceptedInputSolidsList){
         taskQueue.submit([this, &shape](){
-            auto solid = Decomposition::Preprocessor{}.perform(shape);
+            auto solid = Decomposition::Preprocessor{}.perform(std::get<0>(shape));
             if (std::holds_alternative<std::monostate>(solid)){
-                rejectedInputSolidsList->Append(shape);
+                rejectedInputSolidsList.push_back(shape);
             } else{
                 switch (Standard_Integer(solid.index())){
                 case solidType.planar:{
-                    solidsList.push_back(std::get<solidType.planar>(solid));
+                    auto solidObj = std::get<solidType.planar>(solid);
+                    solidObj->accessSImpl()->solidName = std::get<1>(shape);
+                    solidsList.push_back(solidObj);
                     break;
                 } case solidType.cylindrical:{
-                    solidsList.push_back(std::get<solidType.cylindrical>(solid));
+                    auto solidObj = std::get<solidType.cylindrical>(solid);
+                    solidObj->accessSImpl()->solidName = std::get<1>(shape);
+                    solidsList.push_back(solidObj);
                     break;
                 } case solidType.toroidal:{
-                    solidsList.push_back(std::get<solidType.toroidal>(solid));
+                    auto solidObj = std::get<solidType.toroidal>(solid);
+                    solidObj->accessSImpl()->solidName = std::get<1>(shape);
+                    solidsList.push_back(solidObj);
                     break;
                 } default:
-                    rejectedInputSolidsList->Append(shape);
+                    rejectedInputSolidsList.push_back(shape);
                 }
             };
         });

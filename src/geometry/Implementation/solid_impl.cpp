@@ -26,8 +26,12 @@ McCAD::Geometry::Solid::Impl::repairSolid(){
 
 void
 McCAD::Geometry::Solid::Impl::createOBB(Standard_Real bndBoxGap){
+    // Build OBB
     BRepBndLib::AddOBB(solid, obb);
     obb.Enlarge(bndBoxGap);
+    // Build AABB
+    BRepBndLib::Add(solid, aabb);
+    aabb.Enlarge(bndBoxGap);
 }
 
 void

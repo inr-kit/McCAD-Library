@@ -40,6 +40,7 @@
 #include <TopTools_HSequenceOfShape.hxx>
 #include <Bnd_OBB.hxx>
 #include <STEPControl_Writer.hxx>
+#include <TCollection_ExtendedString.hxx>
 
 namespace McCAD::Geometry{
   class Solid::Impl {
@@ -50,8 +51,10 @@ namespace McCAD::Geometry{
     std::unique_ptr<Tools::Preprocessor> preproc;
     
     Bnd_OBB obb;
+    Bnd_Box aabb;
     TopoDS_Solid solid;
     TopoDS_Shape solidShape;
+    TCollection_ExtendedString solidName;
     Standard_Real meshDeflection;
     Standard_Real boxDiagonalLength;
     Standard_Boolean splitSurface = Standard_False;
