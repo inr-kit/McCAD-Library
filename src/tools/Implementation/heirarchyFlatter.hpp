@@ -21,18 +21,20 @@ namespace McCAD::Tools{
       ~HeirarchyFlatter();
 
   private:
-      using zVector = std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString>>;
+      using shape_Name = std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString>>;
+      using shape_Name_ID = std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString,
+                                                   Standard_Integer>>;
       using output_pair = std::pair<std::unique_ptr<TopTools_HSequenceOfShape>,
                                     std::unique_ptr<TopTools_HSequenceOfShape>>;
-      using output_zpair = std::pair<zVector, zVector>;
+      using output_zpair = std::pair<shape_Name_ID, shape_Name_ID>;
 
   public:
       std::unique_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;
       std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;
-      zVector zsplitInputSolidsList;
-      zVector zrejectedInputSolidsList;
+      shape_Name_ID zsplitInputSolidsList;
+      shape_Name_ID zrejectedInputSolidsList;
 
-      output_zpair operator()(const zVector& inputSolidsList);
+      output_zpair operator()(const shape_Name& inputSolidsList);
       output_pair flattenSolidHierarchy(const std::shared_ptr<TopTools_HSequenceOfShape>& inputSolidsList);
   };
 }

@@ -45,27 +45,27 @@ McCAD::Tools::HeirarchyFlatter::flattenSolidHierarchy(
 
 McCAD::Tools::HeirarchyFlatter::output_zpair
 McCAD::Tools::HeirarchyFlatter::operator()(
-        const McCAD::Tools::HeirarchyFlatter::zVector& inputSolidsList){
+        const McCAD::Tools::HeirarchyFlatter::shape_Name& inputSolidsList){
     Standard_Integer compSolid{0}, solid{0}, invalidShape{0};
     for(Standard_Integer i=0; i < inputSolidsList.size(); ++i){
-        auto name = std::get<1>(inputSolidsList[i]);
         auto shape = std::get<0>(inputSolidsList[i]);
+        auto name = std::get<1>(inputSolidsList[i]);
         switch(shape.ShapeType()){
         case TopAbs_COMPOUND:
             [[fallthrough]];
         case TopAbs_COMPSOLID:
             ++compSolid;
             for(const auto& solid : detail::ShapeView<TopAbs_SOLID>{shape}){
-                zsplitInputSolidsList.push_back(std::make_tuple(solid, name));
+                zsplitInputSolidsList.push_back(std::make_tuple(solid, name, i));
             };
             break;
         case TopAbs_SOLID:
             ++solid;
-            zsplitInputSolidsList.push_back(std::make_tuple(shape, name));
+            zsplitInputSolidsList.push_back(std::make_tuple(shape, name, i));
             break;
         default:
             ++invalidShape;
-            zrejectedInputSolidsList.push_back(std::make_tuple(shape, name));
+            zrejectedInputSolidsList.push_back(std::make_tuple(shape, name, i));
         }
     }
     std::cout << "   " << compSolid << " compound solid(s)" << std::endl;

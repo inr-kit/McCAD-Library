@@ -55,6 +55,7 @@ namespace McCAD::Geometry{
     TopoDS_Solid solid;
     TopoDS_Shape solidShape;
     Standard_Integer solidID{0};
+    Standard_Integer originalID{0};
     TCollection_ExtendedString solidName;
     Standard_Real meshDeflection;
     Standard_Real boxDiagonalLength;

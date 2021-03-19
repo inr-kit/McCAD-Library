@@ -7,7 +7,7 @@
 #include "heirarchyFlatter.hpp"
 #include "preprocessor.hpp"
 #include "TaskQueue.hpp"
-//#include "voidCellManager.hpp"
+#include "voidCellManager.hpp"
 
 McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
     IO::STEPReader reader{inputConfig.conversionFileName};
@@ -20,12 +20,17 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
     auto product = Tools::HeirarchyFlatter{}(inputSolidsList);
     acceptedInputSolidsList = std::move(product.first);
     rejectedInputSolidsList = std::move(product.second);
+    if (rejectedInputSolidsList.size() != 0){
+        std::cout << "> Input STEP file contains " << rejectedInputSolidsList.size()
+                  << "shapes that are not yet supported!" << std::endl;
+        rejectCondition = Standard_True;
+    }
     std::cout << " > Converting " << acceptedInputSolidsList.size() <<
                  " solid(s)" << std::endl;
     getGeomData();
-    if (inputConfig.voidGeneration){
+    if (inputConfig.voidGeneration && !rejectCondition){
         std::cout << "   - Generating void" << std::endl;
-        //Conversion::Impl::VoidGenerator{splitInputSolidsList};
+        Conversion::VoidCellManager{acceptedInputSolidsList};
     }
     //perform();
 }
@@ -43,28 +48,33 @@ McCAD::Conversion::Convert::Impl::getGeomData(){
             auto solid = Decomposition::Preprocessor{}.perform(std::get<0>(shape));
             if (std::holds_alternative<std::monostate>(solid)){
                 rejectedInputSolidsList.push_back(shape);
+                rejectCondition = Standard_True;
             } else{
                 switch (Standard_Integer(solid.index())){
                 case solidType.planar:{
                     auto solidObj = std::get<solidType.planar>(solid);
                     solidObj->accessSImpl()->solidID = counter;
+                    solidObj->accessSImpl()->originalID = std::get<2>(shape);
                     solidObj->accessSImpl()->solidName = std::get<1>(shape);
                     solidsList.push_back(solidObj);
                     break;
                 } case solidType.cylindrical:{
                     auto solidObj = std::get<solidType.cylindrical>(solid);
                     solidObj->accessSImpl()->solidID = counter;
+                    solidObj->accessSImpl()->originalID = std::get<2>(shape);
                     solidObj->accessSImpl()->solidName = std::get<1>(shape);
                     solidsList.push_back(solidObj);
                     break;
                 } case solidType.toroidal:{
                     auto solidObj = std::get<solidType.toroidal>(solid);
                     solidObj->accessSImpl()->solidID = counter;
+                    solidObj->accessSImpl()->originalID = std::get<2>(shape);
                     solidObj->accessSImpl()->solidName = std::get<1>(shape);
                     solidsList.push_back(solidObj);
                     break;
                 } default:
                     rejectedInputSolidsList.push_back(shape);
+                    rejectCondition = Standard_True;
                 }
             };
         });

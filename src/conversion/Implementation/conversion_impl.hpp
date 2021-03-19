@@ -21,10 +21,12 @@ namespace McCAD::Conversion {
       ~Impl();
 
       Tools::SolidType solidType;
-      using zVector = std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString>>;
+      using shape_Name_ID = std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString,
+                                                   Standard_Integer>>;
 
-      zVector acceptedInputSolidsList;
-      zVector rejectedInputSolidsList;
+      Standard_Boolean rejectCondition = Standard_False;
+      shape_Name_ID acceptedInputSolidsList;
+      shape_Name_ID rejectedInputSolidsList;
       std::vector<std::shared_ptr<Geometry::Solid>> solidsList;
 
       void getGeomData();
