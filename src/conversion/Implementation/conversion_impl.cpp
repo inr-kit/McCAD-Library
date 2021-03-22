@@ -30,7 +30,7 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
     getGeomData();
     if (inputConfig.voidGeneration && !rejectCondition){
         std::cout << "   - Generating void" << std::endl;
-        Conversion::VoidCellManager{acceptedInputSolidsList};
+        Conversion::VoidCellManager{solidObjList};
     }
     //perform();
 }
@@ -56,21 +56,21 @@ McCAD::Conversion::Convert::Impl::getGeomData(){
                     solidObj->accessSImpl()->solidID = counter;
                     solidObj->accessSImpl()->originalID = std::get<2>(shape);
                     solidObj->accessSImpl()->solidName = std::get<1>(shape);
-                    solidsList.push_back(solidObj);
+                    solidObjList.push_back(solidObj);
                     break;
                 } case solidType.cylindrical:{
                     auto solidObj = std::get<solidType.cylindrical>(solid);
                     solidObj->accessSImpl()->solidID = counter;
                     solidObj->accessSImpl()->originalID = std::get<2>(shape);
                     solidObj->accessSImpl()->solidName = std::get<1>(shape);
-                    solidsList.push_back(solidObj);
+                    solidObjList.push_back(solidObj);
                     break;
                 } case solidType.toroidal:{
                     auto solidObj = std::get<solidType.toroidal>(solid);
                     solidObj->accessSImpl()->solidID = counter;
                     solidObj->accessSImpl()->originalID = std::get<2>(shape);
                     solidObj->accessSImpl()->solidName = std::get<1>(shape);
-                    solidsList.push_back(solidObj);
+                    solidObjList.push_back(solidObj);
                     break;
                 } default:
                     rejectedInputSolidsList.push_back(shape);
@@ -80,8 +80,4 @@ McCAD::Conversion::Convert::Impl::getGeomData(){
         });
     }
     taskQueue.complete();
-}
-
-void
-McCAD::Conversion::Convert::Impl::perform(){
 }
