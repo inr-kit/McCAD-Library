@@ -12,6 +12,7 @@ McCAD::Conversion::VoidCellManager::VoidCellManager(
         std::cout << std::get<0>(i) << ", " << std::get<1>(i) << ", " <<
                      std::get<2>(i) << ", " << std::get<3>(i) << std::endl;
     }
+    createVoidCells(solidObjList);
 }
 
 McCAD::Conversion::VoidCellManager::~VoidCellManager(){}
@@ -27,4 +28,10 @@ McCAD::Conversion::VoidCellManager::populateLists(
         yAxis.push_back(std::make_tuple(solidID, minY, minY + std::abs(maxY-minY)/2.0, maxY));
         zAxis.push_back(std::make_tuple(solidID, minZ, minZ + std::abs(maxZ-minZ)/2.0, maxZ));
     }
+}
+
+void
+McCAD::Conversion::VoidCellManager::createVoidCells(const std::vector<std::shared_ptr<
+                                                    Geometry::Solid>>& solidObjList){
+    VoidCell{}.addSolids(solidObjList);
 }
