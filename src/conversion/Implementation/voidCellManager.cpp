@@ -1,18 +1,20 @@
 // McCAD
 #include "voidCellManager.hpp"
 #include "TaskQueue.hpp"
-#include "solidsSorter.hpp"
+#include "splitSurfaceSelector.hpp"
 
 McCAD::Conversion::VoidCellManager::VoidCellManager(
-        const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList){
+        const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList,
+        const Standard_Integer& maxSolidsPerVoidCell){
+    voidCell = std::make_shared<VoidCell>();
     populateLists(solidObjList);
-    McCAD::Conversion::SolidsSorter{}.sortByElement(xAxis, 1);
-    std::cout << "x: " << xAxis.size() << std::endl;
-    for(const auto& i : xAxis){
-        std::cout << std::get<0>(i) << ", " << std::get<1>(i) << ", " <<
-                     std::get<2>(i) << ", " << std::get<3>(i) << std::endl;
+    Standard_Boolean splitCondition = solidObjList.size() > maxSolidsPerVoidCell
+            ? Standard_True : Standard_False;
+    if(splitCondition){
+        voidCell->split = splitVoidCell(maxSolidsPerVoidCell);
+        //addDaughters();
     }
-    createVoidCells(solidObjList);
+    else updateVoidCell(voidCell, solidObjList);
 }
 
 McCAD::Conversion::VoidCellManager::~VoidCellManager(){}
@@ -30,8 +32,15 @@ McCAD::Conversion::VoidCellManager::populateLists(
     }
 }
 
+Standard_Boolean
+McCAD::Conversion::VoidCellManager::splitVoidCell(const Standard_Integer& maxSolidsPerVoidCell){
+    SplitSurfaceSelector{}.process(xAxis, yAxis, zAxis);
+    return Standard_False;
+}
+
 void
-McCAD::Conversion::VoidCellManager::createVoidCells(const std::vector<std::shared_ptr<
-                                                    Geometry::Solid>>& solidObjList){
-    VoidCell{}.addSolids(solidObjList);
+McCAD::Conversion::VoidCellManager::updateVoidCell(
+        const std::shared_ptr<VoidCell>& voidCell,
+        const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList){
+    voidCell->addSolidIDs(solidObjList);
 }

@@ -30,7 +30,7 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
     getGeomData();
     if (inputConfig.voidGeneration && !rejectCondition){
         std::cout << "   - Generating void" << std::endl;
-        VoidCellManager{solidObjList};
+        VoidCellManager{solidObjList, inputConfig.maxSolidsPerVoidCell};
     }
     //perform();
 }

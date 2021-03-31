@@ -31,8 +31,9 @@ public:
     // Conversion
     std::string conversionFileName = "conversion.stp";
     bool convert = false;
-    bool writeCollisionFile =false;
     bool voidGeneration = true;
+    int maxSolidsPerVoidCell = 20;
+    bool writeCollisionFile =false;
     double maxCellExprLength = 200;
     double minDecomFaceArea = 50;
     double minVoidVol = 1.0;

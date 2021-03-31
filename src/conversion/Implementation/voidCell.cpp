@@ -18,10 +18,17 @@ McCAD::Conversion::VoidCell::VoidCell(Standard_Integer& depth,
 McCAD::Conversion::VoidCell::~VoidCell(){}
 
 void
+McCAD::Conversion::VoidCell::addSolidIDs(const std::vector<std::shared_ptr<
+                                         Geometry::Solid>>& solidObjList){
+    for(auto& solid : solidObjList){
+        solidIDList.push_back(solid->accessSImpl()->solidID);
+    }
+}
+
+void
 McCAD::Conversion::VoidCell::addSolids(const std::vector<std::shared_ptr<
                                        Geometry::Solid>>& solidObjList){
     for(auto& solid : solidObjList){
-        solidIDList.push_back(solid->accessSImpl()->solidID);
         BRepBndLib::AddOptimal(solid->accessSImpl()->solid, aabb);
     }
     aabb.SetGap(0);

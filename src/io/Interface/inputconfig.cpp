@@ -42,12 +42,13 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "convert = false\n"
                    "conversionFileName = conversion.stp\n"
                    "code = mcnp\n"
-                   "writeCollisionFile = false\n"
                    "voidGeneration = true\n"
+                   "maxSolidsPerVoidCell = 20\n"
+                   "writeCollisionFile = false\n"
+                   "voidSplitDepth = 10\n"
                    "maxCellExprLength = 200\n"
                    "minDecomFaceArea = 50\n"
                    "minVoidVol = 1.0\n"
-                   "voidDecomposeDepth = 10\n"
                    "startCellNum = 0\n"
                    "startSurfNum = 0\n"
                    "XResolution = 0.001\n"
@@ -85,10 +86,12 @@ McCAD::IO::InputConfig::readTemplate(){
                    resultFileName = lineSplit[2];
                else if (lineSplit[0] == "rejectFileName")
                    rejectFileName = lineSplit[2];
-               else if (lineSplit[0] == "conversionFileName")
-                   conversionFileName = lineSplit[2];
                else if (lineSplit[0] == "convert")
                    convert = lineSplit[2] == "false" ? false : true;
+               else if (lineSplit[0] == "conversionFileName")
+                   conversionFileName = lineSplit[2];
+               else if (lineSplit[0] == "maxSolidsPerVoidCell")
+                   maxSolidsPerVoidCell = std::stoi(lineSplit[2]);
                else continue;
            }
         }
