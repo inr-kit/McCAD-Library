@@ -31,7 +31,7 @@ McCAD::Conversion::VoidCell::addSolids(const std::vector<std::shared_ptr<
     for(auto& solid : solidObjList){
         BRepBndLib::AddOptimal(solid->accessSImpl()->solid, aabb);
     }
-    aabb.SetGap(0);
+    aabb.SetGap(1.0);
     aabb.Get(minX, minY, minZ, maxX, maxY, maxZ);
     gp_Pnt minPoint(minX, minY, minZ);
     gp_Pnt maxPoint(maxX, maxY, maxZ);

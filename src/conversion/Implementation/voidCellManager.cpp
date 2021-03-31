@@ -12,6 +12,7 @@ McCAD::Conversion::VoidCellManager::VoidCellManager(
             ? Standard_True : Standard_False;
     if(splitCondition){
         voidCell->split = splitVoidCell(maxSolidsPerVoidCell);
+        updateVoidCell(voidCell, solidObjList);
         //addDaughters();
     }
     else updateVoidCell(voidCell, solidObjList);
@@ -43,4 +44,5 @@ McCAD::Conversion::VoidCellManager::updateVoidCell(
         const std::shared_ptr<VoidCell>& voidCell,
         const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList){
     voidCell->addSolidIDs(solidObjList);
+    voidCell->addSolids(solidObjList);
 }
