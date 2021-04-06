@@ -26,8 +26,7 @@ namespace McCAD::Conversion{
     public:
         dimList xAxis, yAxis, zAxis;
         void populateLists(const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList);
-        void updateVoidCell(const std::shared_ptr<VoidCell>& voidCell,
-                            const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList);
+        void updateVoidCell(const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList);
         Standard_Boolean splitVoidCell(const Standard_Integer& maxSolidsPerVoidCell);
     };
 }
