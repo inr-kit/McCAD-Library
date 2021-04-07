@@ -25,10 +25,13 @@ namespace McCAD::Conversion{
                                           Standard_Integer, Standard_Integer,
                                           Standard_Integer>;
         using candidateVec = std::vector<candidateTuple>;
+        using surfaceTuple = std::tuple<std::string, Standard_Real, Standard_Integer,
+                                        Standard_Integer>;
+        using surfaceVec = std::vector<surfaceTuple>;
     public:
         Standard_Integer maxSolidsPerVoidCell;
-        void process(const dimList& xList, const dimList& yList, const dimList& zList,
-                     const std::shared_ptr<VoidCell>& voidCell);
+        surfaceTuple process(const dimList& xList, const dimList& yList, const dimList& zList,
+                             const std::shared_ptr<VoidCell>& voidCell);
         std::tuple<Standard_Real, Standard_Real> calcCentersParameters(const dimList& list);
         candidateTuple selectAxisSplitSurface(const dimList& list, const centerTuple& aabbList);
         candidateTuple checkSplitSurfacePriority(candidateVec& candidates,

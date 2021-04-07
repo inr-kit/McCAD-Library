@@ -54,7 +54,8 @@ McCAD::Conversion::VoidCellManager::populateLists(
 
 Standard_Boolean
 McCAD::Conversion::VoidCellManager::splitVoidCell(const Standard_Integer& maxSolidsPerVoidCell){
-    SplitSurfaceSelector{maxSolidsPerVoidCell}.process(xAxis, yAxis, zAxis, voidCell);
+    auto surface = SplitSurfaceSelector{maxSolidsPerVoidCell}.process(xAxis, yAxis, zAxis, voidCell);
+    std::cout << std::get<0>(surface) << ", Inter: " << std::get<2>(surface) << ", next: " << std::get<3>(surface) << std::endl;
     return Standard_False;
 }
 
