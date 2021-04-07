@@ -32,7 +32,7 @@ McCAD::Conversion::VoidCellManager::populateLists(
         xAxis.push_back(std::make_tuple(solidID, minX, minX + std::abs(maxX-minX)/2.0, maxX));
         yAxis.push_back(std::make_tuple(solidID, minY, minY + std::abs(maxY-minY)/2.0, maxY));
         zAxis.push_back(std::make_tuple(solidID, minZ, minZ + std::abs(maxZ-minZ)/2.0, maxZ));
-        ///*//debug
+        /*//debug
         gp_Pnt minPoint(minX, minY, minZ);
         gp_Pnt maxPoint(maxX, maxY, maxZ);
         //auto aabbSolid = BRepPrimAPI_MakeBox(minPoint, maxPoint).Solid();
@@ -48,13 +48,13 @@ McCAD::Conversion::VoidCellManager::populateLists(
         filename += std::to_string(kk);
         filename += suffix;
         writer0.Write(filename.c_str());
-        //*///debug
+        *///debug
     }
 }
 
 Standard_Boolean
 McCAD::Conversion::VoidCellManager::splitVoidCell(const Standard_Integer& maxSolidsPerVoidCell){
-    SplitSurfaceSelector{}.process(xAxis, yAxis, zAxis, voidCell);
+    SplitSurfaceSelector{maxSolidsPerVoidCell}.process(xAxis, yAxis, zAxis, voidCell);
     return Standard_False;
 }
 

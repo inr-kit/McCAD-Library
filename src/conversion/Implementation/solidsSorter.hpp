@@ -12,17 +12,20 @@ namespace McCAD::Conversion{
     public:
         SolidsSorter();
         ~SolidsSorter();
-
     private:
-        using dimTuple = std::tuple<Standard_Integer, Standard_Real, Standard_Real,
-                                    Standard_Real>;
-        using dimList = std::vector<dimTuple>;
-
+        using elementTuple = std::tuple<Standard_Integer, Standard_Real,
+                                          Standard_Integer, Standard_Integer,
+                                          Standard_Integer>;
+        using elementVec = std::vector<elementTuple>;
     public:
-        void sortByElement(dimList& aList, const Standard_Integer& elementIndex);
-        static Standard_Boolean byMin(const dimTuple& first, const dimTuple& second);
-        static Standard_Boolean byCenter(const dimTuple& first, const dimTuple& second);
-        static Standard_Boolean byMax(const dimTuple& first, const dimTuple& second);
+        template<typename listType>
+        listType sortByElement(listType& aList, const Standard_Integer& elementIndex);
+        static Standard_Boolean byLeft(const elementTuple& first,
+                                       const elementTuple& second);
+        static Standard_Boolean byRight(const elementTuple& first,
+                                        const elementTuple& second);
+        static Standard_Boolean byIntersection(const elementTuple& first,
+                                               const elementTuple& second);
     };
 }
 

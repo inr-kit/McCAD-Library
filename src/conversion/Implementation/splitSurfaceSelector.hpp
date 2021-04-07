@@ -13,7 +13,7 @@
 namespace McCAD::Conversion{
     class SplitSurfaceSelector{
     public:
-        SplitSurfaceSelector();
+        SplitSurfaceSelector(const Standard_Integer& maxSolidsPerVoidCell);
         ~SplitSurfaceSelector();
     private:
         using dimTuple = std::tuple<Standard_Integer, Standard_Real, Standard_Real,
@@ -21,12 +21,18 @@ namespace McCAD::Conversion{
         using dimList = std::vector<dimTuple>;
         using centersDist = std::vector<std::tuple<Standard_Real, Standard_Real>>;
         using centerTuple = std::tuple<Standard_Real, Standard_Real, Standard_Real>;
+        using candidateTuple = std::tuple<Standard_Integer, Standard_Real,
+                                          Standard_Integer, Standard_Integer,
+                                          Standard_Integer>;
+        using candidateVec = std::vector<candidateTuple>;
     public:
+        Standard_Integer maxSolidsPerVoidCell;
         void process(const dimList& xList, const dimList& yList, const dimList& zList,
                      const std::shared_ptr<VoidCell>& voidCell);
         std::tuple<Standard_Real, Standard_Real> calcCentersParameters(const dimList& list);
-        std::tuple<Standard_Real, Standard_Integer> selectAxisSplitSurface(
-                const dimList& list, const centerTuple& aabbList);
+        candidateTuple selectAxisSplitSurface(const dimList& list, const centerTuple& aabbList);
+        candidateTuple checkSplitSurfacePriority(candidateVec& candidates,
+                                                 const dimList& list);
     };
 }
 

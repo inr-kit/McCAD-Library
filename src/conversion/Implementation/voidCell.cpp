@@ -51,6 +51,7 @@ McCAD::Conversion::VoidCell::addSolids(const std::vector<std::shared_ptr<
     filename += suffix;
     writer0.Write(filename.c_str());
     //*///debug
+    // Create a lit of min, center, and max points of the AABB.
     xAxis = std::make_tuple(minX, minX + std::abs(maxX-minX)/2.0, maxX);
     yAxis = std::make_tuple(minY, minY + std::abs(maxY-minY)/2.0, maxY);
     zAxis = std::make_tuple(minZ, minZ + std::abs(maxZ-minZ)/2.0, maxZ);
