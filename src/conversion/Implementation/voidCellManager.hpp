@@ -12,8 +12,7 @@
 namespace McCAD::Conversion{
     class VoidCellManager {
     public:
-        VoidCellManager(const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList,
-                        const Standard_Integer& maxSolidsPerVoidCell);
+        VoidCellManager();
         ~VoidCellManager();
     private:
         std::shared_ptr<VoidCell> voidCell;
@@ -23,11 +22,21 @@ namespace McCAD::Conversion{
         using dimTuple = std::tuple<Standard_Integer, Standard_Real, Standard_Real,
                                     Standard_Real>;
         using dimList = std::vector<dimTuple>;
+        using surfaceTuple = std::tuple<std::string, Standard_Real, Standard_Integer,
+                                        Standard_Integer>;
     public:
         dimList xAxis, yAxis, zAxis;
+        void operator()(const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList,
+                        const Standard_Integer& maxSolidsPerVoidCell);
+        void operator()(const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList,
+                        const Standard_Integer& maxSolidsPerVoidCell,
+                        const Standard_Integer& depth, const Standard_Integer& width);
+        void perform(const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList,
+                     const Standard_Integer& maxSolidsPerVoidCell);
         void populateLists(const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList);
         void updateVoidCell(const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList);
-        Standard_Boolean splitVoidCell(const Standard_Integer& maxSolidsPerVoidCell);
+        void splitVoidCell(const surfaceTuple& surface);
+
     };
 }
 #endif //VOIDCELLMANAGER_HPP

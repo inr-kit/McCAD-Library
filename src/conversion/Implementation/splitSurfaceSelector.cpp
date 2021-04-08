@@ -34,8 +34,7 @@ McCAD::Conversion::SplitSurfaceSelector::process(
     auto bySplitting = SolidsSorter{}.sortByElement2(candidates, 3);
     if(std::get<0>(byIntersection[0]) != std::get<0>(bySplitting[0]) &&
             std::get<2>(byIntersection[0]) == std::get<2>(bySplitting[0])){
-        if (std::get<3>(byIntersection[0]) < std::get<3>(bySplitting[0])) return byIntersection[0];
-        else return bySplitting[0];
+        if (std::get<3>(bySplitting[0]) < std::get<3>(byIntersection[0])) return bySplitting[0];
     }
     std::cout << "X: " << std::get<1>(xSurface) << ", Inter: " << std::get<3>(xSurface) << ", next: " << std::get<4>(xSurface) <<
                  "\nY: " << std::get<1>(ySurface) << ", Inter: " << std::get<3>(ySurface) << ", next: " << std::get<4>(ySurface) <<

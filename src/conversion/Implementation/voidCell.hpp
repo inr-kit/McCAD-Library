@@ -15,14 +15,14 @@ namespace McCAD::Conversion{
   class VoidCell{
   public:
       VoidCell();
-      VoidCell(Standard_Integer& depth, Standard_Integer& width);
+      VoidCell(const Standard_Integer& depth, const Standard_Integer& width);
       ~VoidCell();
   private :
       using centerTuple = std::tuple<Standard_Real, Standard_Real, Standard_Real>;
   public:
       Bnd_Box aabb;
       TopoDS_Solid aabbSolid;
-      Standard_Boolean split;
+      Standard_Boolean split{Standard_False};
       Standard_Integer depth, width;
       std::vector<Standard_Integer> solidIDList;
       std::vector<std::shared_ptr<VoidCell>> daughterVoidCells;

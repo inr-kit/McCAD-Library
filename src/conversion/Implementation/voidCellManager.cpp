@@ -6,21 +6,41 @@
 #include "STEPControl_Writer.hxx"
 #include "BRepPrimAPI_MakeBox.hxx"
 
-McCAD::Conversion::VoidCellManager::VoidCellManager(
+McCAD::Conversion::VoidCellManager::VoidCellManager(){}
+
+McCAD::Conversion::VoidCellManager::~VoidCellManager(){}
+
+void
+McCAD::Conversion::VoidCellManager::operator()(
         const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList,
-        const Standard_Integer& maxSolidsPerVoidCell) :
-    voidCell{std::make_shared<VoidCell>()}{
+        const Standard_Integer& maxSolidsPerVoidCell){
+    voidCell = std::make_shared<VoidCell>();
+    perform(solidObjList, maxSolidsPerVoidCell);
+}
+
+void
+McCAD::Conversion::VoidCellManager::operator()(
+        const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList,
+        const Standard_Integer& maxSolidsPerVoidCell,
+        const Standard_Integer& depth, const Standard_Integer& width){
+    voidCell = std::make_shared<VoidCell>(depth, width);
+    perform(solidObjList, maxSolidsPerVoidCell);
+}
+
+void
+McCAD::Conversion::VoidCellManager::perform(
+        const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList,
+        const Standard_Integer& maxSolidsPerVoidCell){
     populateLists(solidObjList);
     Standard_Boolean splitCondition = solidObjList.size() > maxSolidsPerVoidCell
             ? Standard_True : Standard_False;
     updateVoidCell(solidObjList);
     if(splitCondition){
-        voidCell->split = splitVoidCell(maxSolidsPerVoidCell);
-        //addDaughters();
-    }
+        auto surface = SplitSurfaceSelector{maxSolidsPerVoidCell}.process(xAxis, yAxis, zAxis, voidCell);
+        voidCell->split = Standard_True;
+        splitVoidCell(surface);
+        }
 }
-
-McCAD::Conversion::VoidCellManager::~VoidCellManager(){}
 
 void
 McCAD::Conversion::VoidCellManager::populateLists(
@@ -32,31 +52,7 @@ McCAD::Conversion::VoidCellManager::populateLists(
         xAxis.push_back(std::make_tuple(solidID, minX, minX + std::abs(maxX-minX)/2.0, maxX));
         yAxis.push_back(std::make_tuple(solidID, minY, minY + std::abs(maxY-minY)/2.0, maxY));
         zAxis.push_back(std::make_tuple(solidID, minZ, minZ + std::abs(maxZ-minZ)/2.0, maxZ));
-        /*//debug
-        gp_Pnt minPoint(minX, minY, minZ);
-        gp_Pnt maxPoint(maxX, maxY, maxZ);
-        //auto aabbSolid = BRepPrimAPI_MakeBox(minPoint, maxPoint).Solid();
-        STEPControl_Writer writer0;
-        writer0.Transfer(BRepPrimAPI_MakeBox(minPoint, maxPoint).Solid(),
-                         STEPControl_StepModelType::STEPControl_AsIs);
-        Standard_Integer kk = 0;
-        std::string filename = "./aabb";
-        std::string suffix = ".stp";
-        while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
-            ++kk;
-        }
-        filename += std::to_string(kk);
-        filename += suffix;
-        writer0.Write(filename.c_str());
-        *///debug
     }
-}
-
-Standard_Boolean
-McCAD::Conversion::VoidCellManager::splitVoidCell(const Standard_Integer& maxSolidsPerVoidCell){
-    auto surface = SplitSurfaceSelector{maxSolidsPerVoidCell}.process(xAxis, yAxis, zAxis, voidCell);
-    std::cout << std::get<0>(surface) << ", Inter: " << std::get<2>(surface) << ", next: " << std::get<3>(surface) << std::endl;
-    return Standard_False;
 }
 
 void
@@ -64,4 +60,17 @@ McCAD::Conversion::VoidCellManager::updateVoidCell(
         const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList){
     voidCell->addSolidIDs(solidObjList);
     voidCell->addSolids(solidObjList);
+}
+
+void
+McCAD::Conversion::VoidCellManager::splitVoidCell(
+        const McCAD::Conversion::VoidCellManager::surfaceTuple& surface){
+    if (std::get<0>(surface) == "X"){
+        std::cout << "split by x" << std::endl;
+    } else if((std::get<0>(surface) == "Y")){
+        std::cout << "split by y" << std::endl;
+    } else{
+        std::cout << "split by z" << std::endl;
+    }
+    // call cell manager on split lists
 }

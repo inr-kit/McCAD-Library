@@ -21,18 +21,21 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
     acceptedInputSolidsList = std::move(product.first);
     rejectedInputSolidsList = std::move(product.second);
     if (rejectedInputSolidsList.size() != 0){
-        std::cout << "> Input STEP file contains " << rejectedInputSolidsList.size()
-                  << "shapes that are not yet supported!" << std::endl;
         rejectCondition = Standard_True;
     }
-    std::cout << " > Converting " << acceptedInputSolidsList.size() <<
-                 " solid(s)" << std::endl;
     getGeomData();
-    if (inputConfig.voidGeneration && !rejectCondition){
-        std::cout << "   - Generating void" << std::endl;
-        VoidCellManager{solidObjList, inputConfig.maxSolidsPerVoidCell};
+    if (rejectCondition){
+        std::cout << "> Input STEP file contains " << rejectedInputSolidsList.size() <<
+                     "shapes that are not yet supported!" << std::endl;
+        throw std::runtime_error("onversion terminated!");
     }
-    //perform();
+    std::cout << " > Converting " << acceptedInputSolidsList.size() << " solid(s)"
+              << std::endl;
+    if (inputConfig.voidGeneration){
+        std::cout << "   - Generating void" << std::endl;
+        VoidCellManager{}(solidObjList, inputConfig.maxSolidsPerVoidCell);
+    }
+    // call writer to write solids and void cells.
 }
 
 McCAD::Conversion::Convert::Impl::~Impl(){
