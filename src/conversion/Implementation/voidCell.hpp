@@ -4,6 +4,7 @@
 // C++
 #include <vector>
 #include <memory>
+#include <map>
 // McCAD
 #include "solid_impl.hpp"
 // OCC
@@ -19,6 +20,9 @@ namespace McCAD::Conversion{
       ~VoidCell();
   private :
       using centerTuple = std::tuple<Standard_Real, Standard_Real, Standard_Real>;
+      using membersMap = std::map<Standard_Integer, std::tuple<Bnd_Box,
+                                                               std::string,
+                                                               Standard_Real>>;
   public:
       Bnd_Box aabb;
       TopoDS_Solid aabbSolid;
@@ -29,8 +33,8 @@ namespace McCAD::Conversion{
       Standard_Real minX{0}, minY{0}, minZ{0}, maxX{0}, maxY{0}, maxZ{0};
       centerTuple xAxis, yAxis, zAxis;
 
-      void addSolidIDs(const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList);
-      void addSolids(const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList);
+      void addSolidIDs(const membersMap& members);
+      void addSolids(const membersMap& members);
   };
 }
 

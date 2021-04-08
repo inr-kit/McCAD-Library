@@ -5,6 +5,7 @@
 #include <tuple>
 #include <vector>
 #include <memory>
+#include <map>
 // McCAD
 #include <voidCell.hpp>
 // OCC
@@ -16,9 +17,9 @@ namespace McCAD::Conversion{
         SplitSurfaceSelector(const Standard_Integer& maxSolidsPerVoidCell);
         ~SplitSurfaceSelector();
     private:
-        using dimTuple = std::tuple<Standard_Integer, Standard_Real, Standard_Real,
-                                    Standard_Real>;
-        using dimList = std::vector<dimTuple>;
+        using dimMap = std::map<Standard_Integer, std::tuple<Standard_Real,
+                                                             Standard_Real,
+                                                             Standard_Real>>;
         using centersDist = std::vector<std::tuple<Standard_Real, Standard_Real>>;
         using centerTuple = std::tuple<Standard_Real, Standard_Real, Standard_Real>;
         using candidateTuple = std::tuple<Standard_Integer, Standard_Real,
@@ -30,12 +31,12 @@ namespace McCAD::Conversion{
         using surfaceVec = std::vector<surfaceTuple>;
     public:
         Standard_Integer maxSolidsPerVoidCell;
-        surfaceTuple process(const dimList& xList, const dimList& yList, const dimList& zList,
+        surfaceTuple process(const dimMap& xList, const dimMap& yList, const dimMap& zList,
                              const std::shared_ptr<VoidCell>& voidCell);
-        std::tuple<Standard_Real, Standard_Real> calcCentersParameters(const dimList& list);
-        candidateTuple selectAxisSplitSurface(const dimList& list, const centerTuple& aabbList);
+        std::tuple<Standard_Real, Standard_Real> calcCentersParameters(const dimMap& list);
+        candidateTuple selectAxisSplitSurface(const dimMap& list, const centerTuple& aabbList);
         candidateTuple checkSplitSurfacePriority(candidateVec& candidates,
-                                                 const dimList& list);
+                                                 const dimMap& list);
     };
 }
 

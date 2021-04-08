@@ -13,9 +13,9 @@ McCAD::Conversion::SplitSurfaceSelector::~SplitSurfaceSelector(){}
 
 McCAD::Conversion::SplitSurfaceSelector::surfaceTuple
 McCAD::Conversion::SplitSurfaceSelector::process(
-        const McCAD::Conversion::SplitSurfaceSelector::dimList& xList,
-        const McCAD::Conversion::SplitSurfaceSelector::dimList& yList,
-        const McCAD::Conversion::SplitSurfaceSelector::dimList& zList,
+        const McCAD::Conversion::SplitSurfaceSelector::dimMap& xList,
+        const McCAD::Conversion::SplitSurfaceSelector::dimMap& yList,
+        const McCAD::Conversion::SplitSurfaceSelector::dimMap& zList,
         const std::shared_ptr<VoidCell>& voidCell){
     // elements in candidates tuple <type of surface, candidate, intersections,
     //                               maxProspectiveSplittings>
@@ -45,12 +45,12 @@ McCAD::Conversion::SplitSurfaceSelector::process(
 
 std::tuple<Standard_Real, Standard_Real>
 McCAD::Conversion::SplitSurfaceSelector::calcCentersParameters(
-        const McCAD::Conversion::SplitSurfaceSelector::dimList& list){
+        const McCAD::Conversion::SplitSurfaceSelector::dimMap& list){
     Standard_Real sum{0.0}, sum_squares{0}, variance{0.0}, stdDeviation;
     Standard_Integer numElements = list.size();
     for(const auto& element : list){
-        sum += std::get<2>(element);
-        sum_squares += std::pow(std::get<2>(element), 2);
+        sum += std::get<1>(element.second);
+        sum_squares += std::pow(std::get<1>(element.second), 2);
     }
     Standard_Real mean = sum / numElements;
     Standard_Real mean_squares = sum_squares / numElements;
@@ -62,16 +62,16 @@ McCAD::Conversion::SplitSurfaceSelector::calcCentersParameters(
 McCAD::Conversion::SplitSurfaceSelector::candidateTuple
 McCAD::Conversion::SplitSurfaceSelector::checkSplitSurfacePriority(
         McCAD::Conversion::SplitSurfaceSelector::candidateVec& candidates,
-        const McCAD::Conversion::SplitSurfaceSelector::dimList& list){
-    // elements in list: <solidID, min, center, max>
+        const McCAD::Conversion::SplitSurfaceSelector::dimMap& list){
+    // elements in list: solidID, <min, center, max>
     // candidate in candidates: <solids on left, candidate, solids on right,
     //                           intersections, maxProspectiveSplittings>
     for(auto& candidate : candidates){
         for(auto& element : list){
-            if(std::get<1>(element) >= std::get<1>(candidate)){
+            if(std::get<0>(element.second) >= std::get<1>(candidate)){
                 // min of box on right of splitting candidate
                 std::get<2>(candidate) += 1;
-            } else if(std::get<3>(element) <= std::get<1>(candidate)){
+            } else if(std::get<2>(element.second) <= std::get<1>(candidate)){
                 // max of box on left of splitting candidate
                 std::get<0>(candidate) += 1;
             } else {
@@ -99,19 +99,23 @@ McCAD::Conversion::SplitSurfaceSelector::checkSplitSurfacePriority(
 
 McCAD::Conversion::SplitSurfaceSelector::candidateTuple
 McCAD::Conversion::SplitSurfaceSelector::selectAxisSplitSurface(
-        const McCAD::Conversion::SplitSurfaceSelector::dimList& list,
+        const McCAD::Conversion::SplitSurfaceSelector::dimMap& list,
         const McCAD::Conversion::SplitSurfaceSelector::centerTuple& aabbList){
     McCAD::Conversion::SplitSurfaceSelector::candidateVec candidates;
     // Calculate the mean and standard deviation of the AABB centers.
     auto dist = calcCentersParameters(list);
     if(std::get<1>(dist) <= (std::get<2>(aabbList) - std::get<0>(aabbList))/3.0){
+        // Narrow dist, sigma < extent of box / 3.
         if((std::get<0>(dist) - std::get<1>(dist)) > std::get<0>(aabbList)){
+            // if mu - sigma is inside aabb, add it to list.
             candidates.push_back(std::make_tuple(0, std::get<0>(dist) - std::get<1>(dist), 0, 0, 0));
         }
         if((std::get<0>(dist) + std::get<1>(dist)) < std::get<2>(aabbList)){
+            // if mu + sigma is inside aabb, add it to list.
             candidates.push_back(std::make_tuple(0, std::get<0>(dist) + std::get<1>(dist), 0, 0, 0));
         }
     } else {
+        // wide distribution, add mu to list.
         candidates.push_back(std::make_tuple(0, std::get<0>(dist), 0, 0, 0));
     }
     candidates.push_back(std::make_tuple(0, std::get<1>(aabbList), 0, 0, 0));
