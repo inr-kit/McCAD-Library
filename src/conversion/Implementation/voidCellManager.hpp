@@ -47,8 +47,9 @@ namespace McCAD::Conversion{
         std::pair<membersMap, membersMap> splitMembersList(const surfaceTuple& surface,
                                                            const membersMap& members,
                                                            const dimMap& axis);
-        void updateBoundaries(const std::string& surfaceType,
-                              const std::shared_ptr<VoidCell>& voidCellDaughter);
+        void updateBoundaries(const McCAD::Conversion::VoidCellManager::surfaceTuple& surface,
+                              const std::shared_ptr<McCAD::Conversion::VoidCell>& voidCellDaughter,
+                              const Standard_Integer& sense);
         Bnd_Box updateOverlapAABB(const Bnd_Box& aAABB,
                                   const McCAD::Conversion::VoidCellManager::surfaceTuple& surface,
                                   const Standard_Integer& sense);
