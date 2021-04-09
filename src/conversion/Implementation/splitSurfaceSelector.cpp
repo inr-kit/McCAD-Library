@@ -35,10 +35,6 @@ McCAD::Conversion::SplitSurfaceSelector::process(
         if((std::get<2>(byIntersection[i]) == std::get<2>(byIntersection[returnIndex])) &&
             (std::get<3>(byIntersection[i]) < std::get<3>(byIntersection[returnIndex]))) returnIndex = i;
     }
-    std::cout << "X: " << std::get<1>(xSurface) << ", Inter: " << std::get<3>(xSurface) << ", next: " << std::get<4>(xSurface) <<
-                 "\nY: " << std::get<1>(ySurface) << ", Inter: " << std::get<3>(ySurface) << ", next: " << std::get<4>(ySurface) <<
-                 "\nZ: " << std::get<1>(zSurface) << ", Inter: " << std::get<3>(zSurface) << ", next: " << std::get<4>(zSurface) <<
-                 std::endl;
     return byIntersection[returnIndex];
 }
 

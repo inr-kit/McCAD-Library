@@ -118,10 +118,10 @@ McCAD::Conversion::VoidCellManager::splitMembersList(
         } else {
             // Solid overlaps, add to both lists.
             // update aabb first by cutting then add to list.
-            membersRight[ID] = std::make_tuple(std::get<0>(member.second),
-                                               surfaceType, surfaceCoord);
-            membersLeft[ID] = std::make_tuple(std::get<0>(member.second),
-                                              surfaceType, surfaceCoord);
+            auto AABBLeft = updateOverlapAABB(std::get<0>(member.second), surface, 0);
+            membersLeft[ID] = std::make_tuple(AABBLeft, surfaceType, surfaceCoord);
+            auto AABBRight = updateOverlapAABB(std::get<0>(member.second), surface, 1);
+            membersRight[ID] = std::make_tuple(AABBRight, surfaceType, surfaceCoord);
         }
     }
     return std::make_pair(membersLeft, membersRight);
@@ -141,11 +141,36 @@ McCAD::Conversion::VoidCellManager::updateBoundaries(
         voidCellDaughter->maxX = voidCell->maxX;
         voidCellDaughter->minZ = voidCell->minZ;
         voidCellDaughter->maxZ = voidCell->maxZ;
-    } else{
+    } else if(surfaceType == "Z"){
         voidCellDaughter->minX = voidCell->minX;
         voidCellDaughter->maxX = voidCell->maxX;
         voidCellDaughter->minY = voidCell->minY;
         voidCellDaughter->maxY = voidCell->maxY;
-    }
+    } else throw std::runtime_error("Surface Unknown!");
      voidCellDaughter->updateAABB();
+}
+
+Bnd_Box
+McCAD::Conversion::VoidCellManager::updateOverlapAABB(
+        const Bnd_Box& aAABB,
+        const McCAD::Conversion::VoidCellManager::surfaceTuple& surface,
+        const Standard_Integer& sense){
+    Standard_Real minX{0}, minY{0}, minZ{0}, maxX{0}, maxY{0}, maxZ{0};
+    aAABB.Get(minX, minY, minZ, maxX, maxY, maxZ);
+    if (std::get<0>(surface) == "X"){
+        if(sense == 0) maxX = std::get<1>(surface);
+        else  minX = std::get<1>(surface);
+    } else if(std::get<0>(surface) == "Y"){
+        if(sense == 0) maxY = std::get<1>(surface);
+        else  minY = std::get<1>(surface);
+    } else{
+        if(sense == 0) maxZ = std::get<1>(surface);
+        else  minZ = std::get<1>(surface);
+    }
+    Bnd_Box newAABB;
+    gp_Pnt minPoint(minX, minY, minZ);
+    gp_Pnt maxPoint(maxX, maxY, maxZ);
+    newAABB.Add(minPoint);
+    newAABB.Add(maxPoint);
+    return newAABB;
 }

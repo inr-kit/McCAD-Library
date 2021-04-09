@@ -31,8 +31,7 @@ McCAD::Conversion::VoidCell::addSolids(
     for(const auto& member : members){
         aabb.Add(std::get<0>(member.second));
     }
-    if(depth == 0) aabb.SetGap(0.0); //aabb.SetGap(1.0);
-    else aabb.SetGap(0.0);
+    aabb.SetGap(0.0);
     aabb.Get(minX, minY, minZ, maxX, maxY, maxZ);
     // Create AABB solid
     gp_Pnt minPoint(minX, minY, minZ);
@@ -42,7 +41,7 @@ McCAD::Conversion::VoidCell::addSolids(
     xAxis = std::make_tuple(minX, minX + std::abs(maxX-minX)/2.0, maxX);
     yAxis = std::make_tuple(minY, minY + std::abs(maxY-minY)/2.0, maxY);
     zAxis = std::make_tuple(minZ, minZ + std::abs(maxZ-minZ)/2.0, maxZ);
-    //*//debug
+    /*//debug
     std::cout << "VoidCell contains: " << solidIDList.size() << std::endl;
     STEPControl_Writer writer0;
     writer0.Transfer(aabbSolid, STEPControl_StepModelType::STEPControl_AsIs);
@@ -55,7 +54,7 @@ McCAD::Conversion::VoidCell::addSolids(
     filename += std::to_string(kk);
     filename += suffix;
     writer0.Write(filename.c_str());
-    //*///debug
+    *///debug
 }
 
 void

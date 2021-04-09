@@ -49,6 +49,9 @@ namespace McCAD::Conversion{
                                                            const dimMap& axis);
         void updateBoundaries(const std::string& surfaceType,
                               const std::shared_ptr<VoidCell>& voidCellDaughter);
+        Bnd_Box updateOverlapAABB(const Bnd_Box& aAABB,
+                                  const McCAD::Conversion::VoidCellManager::surfaceTuple& surface,
+                                  const Standard_Integer& sense);
     };
 }
 #endif //VOIDCELLMANAGER_HPP
