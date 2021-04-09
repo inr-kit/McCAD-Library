@@ -7,28 +7,30 @@ McCAD::Conversion::VoidCellManager::VoidCellManager(){}
 
 McCAD::Conversion::VoidCellManager::~VoidCellManager(){}
 
-void
+std::shared_ptr<McCAD::Conversion::VoidCell>
 McCAD::Conversion::VoidCellManager::operator()(
         const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList,
         const Standard_Integer& maxSolidsPerVoidCell){
     voidCell = std::make_shared<VoidCell>();
     auto members = createLists(solidObjList);
     perform(members, maxSolidsPerVoidCell);
+    return voidCell;
 }
 
-void
+std::shared_ptr<McCAD::Conversion::VoidCell>
 McCAD::Conversion::VoidCellManager::operator()(
         const McCAD::Conversion::VoidCellManager::membersMap& members,
         const Standard_Integer& maxSolidsPerVoidCell, const Standard_Integer& depth,
         const Standard_Integer& width){
     voidCell = std::make_shared<VoidCell>(depth, width);
     perform(members, maxSolidsPerVoidCell);
+    return voidCell;
 }
 
 McCAD::Conversion::VoidCellManager::membersMap
 McCAD::Conversion::VoidCellManager::createLists(
         const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList){
-    McCAD::Conversion::VoidCellManager::membersMap members;
+    membersMap members;
     for(const auto& solidObj : solidObjList){
         members[solidObj->accessSImpl()->solidID] =
                 std::make_tuple(solidObj->accessSImpl()->aabb, "NA", 0.0);
@@ -41,15 +43,24 @@ McCAD::Conversion::VoidCellManager::perform(
         const McCAD::Conversion::VoidCellManager::membersMap& members,
         const Standard_Integer& maxSolidsPerVoidCell){
     populateLists(members);
-    Standard_Boolean splitCondition = members.size() > maxSolidsPerVoidCell
-            ? Standard_True : Standard_False;
     updateVoidCell(members);
+    Standard_Boolean splitCondition = members.size() > maxSolidsPerVoidCell
+                                      ? Standard_True : Standard_False;
     if(splitCondition){
-        voidCell->split = Standard_True;
-        auto surface = SplitSurfaceSelector{maxSolidsPerVoidCell}.process(xAxis, yAxis, zAxis, voidCell);
+        voidCell->splitted = Standard_True;
+        auto surface = SplitSurfaceSelector{maxSolidsPerVoidCell}.process(
+                    xAxis, yAxis, zAxis, voidCell);
+        std::cout << std::get<0>(surface) << ", " << std::get<1>(surface) << ", " <<
+                     std::get<2>(surface) << ", " << std::get<3>(surface) << std::endl;
         auto splitMembers = splitVoidCell(surface, members);
-        std::cout << "Left: " << (splitMembers.first).size() <<
-                     "\nRight:" << (splitMembers.second).size() << std::endl;
+        auto voidCellLeft = VoidCellManager{}(splitMembers.first, maxSolidsPerVoidCell,
+                                              voidCell->depth + 1, 0);
+        updateBoundaries(std::get<0>(surface), voidCellLeft);
+        voidCell->daughterVoidCells.push_back(voidCellLeft);
+        auto voidCellRight = VoidCellManager{}(splitMembers.second, maxSolidsPerVoidCell,
+                                               voidCell->depth + 1, 1);
+        updateBoundaries(std::get<0>(surface), voidCellRight);
+        voidCell->daughterVoidCells.push_back(voidCellRight);
     }
 }
 
@@ -92,20 +103,21 @@ McCAD::Conversion::VoidCellManager::splitMembersList(
         const McCAD::Conversion::VoidCellManager::surfaceTuple& surface,
         const McCAD::Conversion::VoidCellManager::membersMap& members,
         const McCAD::Conversion::VoidCellManager::dimMap& axis){
-    McCAD::Conversion::VoidCellManager::membersMap membersLeft, membersRight;
+    membersMap membersLeft, membersRight;
     std::string surfaceType = std::get<0>(surface);
     Standard_Real surfaceCoord = std::get<1>(surface);
     for(const auto& member : members){
         auto ID = member.first;
         auto dimensions = axis.at(ID);
         if(std::get<0>(dimensions) >= surfaceCoord){
-            // Add to solid on the right.
+            // Add to solids on the right.
             membersRight[ID] = std::make_tuple(std::get<0>(member.second), "NA", 0.0);
         } else if(std::get<2>(dimensions) <= surfaceCoord){
-            // Add to solid on the left.
-            membersLeft[member.first] = std::make_tuple(std::get<0>(member.second), "NA", 0.0);
+            // Add to solids on the left.
+            membersLeft[ID] = std::make_tuple(std::get<0>(member.second), "NA", 0.0);
         } else {
             // Solid overlaps, add to both lists.
+            // update aabb first by cutting then add to list.
             membersRight[ID] = std::make_tuple(std::get<0>(member.second),
                                                surfaceType, surfaceCoord);
             membersLeft[ID] = std::make_tuple(std::get<0>(member.second),
@@ -113,4 +125,27 @@ McCAD::Conversion::VoidCellManager::splitMembersList(
         }
     }
     return std::make_pair(membersLeft, membersRight);
+}
+
+void
+McCAD::Conversion::VoidCellManager::updateBoundaries(
+        const std::string& surfaceType,
+        const std::shared_ptr<McCAD::Conversion::VoidCell>& voidCellDaughter){
+    if (surfaceType == "X"){
+        voidCellDaughter->minY = voidCell->minY;
+        voidCellDaughter->maxY = voidCell->maxY;
+        voidCellDaughter->minZ = voidCell->minZ;
+        voidCellDaughter->maxZ = voidCell->maxZ;
+    } else if(surfaceType == "Y"){
+        voidCellDaughter->minX = voidCell->minX;
+        voidCellDaughter->maxX = voidCell->maxX;
+        voidCellDaughter->minZ = voidCell->minZ;
+        voidCellDaughter->maxZ = voidCell->maxZ;
+    } else{
+        voidCellDaughter->minX = voidCell->minX;
+        voidCellDaughter->maxX = voidCell->maxX;
+        voidCellDaughter->minY = voidCell->minY;
+        voidCellDaughter->maxY = voidCell->maxY;
+    }
+     voidCellDaughter->updateAABB();
 }

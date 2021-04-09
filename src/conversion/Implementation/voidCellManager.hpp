@@ -18,21 +18,26 @@ namespace McCAD::Conversion{
         VoidCellManager();
         ~VoidCellManager();
     private:
-        std::shared_ptr<VoidCell> voidCell;
+        // dimMap format: (SolidID, <AABB min, AABB center, AABB max>)
         using dimMap = std::map<Standard_Integer, std::tuple<Standard_Real,
                                                              Standard_Real,
                                                              Standard_Real>>;
+        // surfaceTuple format: <cutting plane axis tag, position along the axis
+        //                       number of intersections, number of expected splittings>
         using surfaceTuple = std::tuple<std::string, Standard_Real, Standard_Integer,
                                         Standard_Integer>;
+        // membersMap format: (SolidID, <AABB, cutting plane axis tag,
+        //                               position along the axis>)
         using membersMap = std::map<Standard_Integer, std::tuple<Bnd_Box,
                                                                  std::string,
                                                                  Standard_Real>>;
     public:
         dimMap xAxis, yAxis, zAxis;
-        void operator()(const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList,
-                        const Standard_Integer& maxSolidsPerVoidCell);
-        void operator()(const membersMap& members, const Standard_Integer& maxSolidsPerVoidCell,
-                        const Standard_Integer& depth, const Standard_Integer& width);
+        std::shared_ptr<VoidCell> voidCell;
+        std::shared_ptr<VoidCell> operator()(const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList,
+                                             const Standard_Integer& maxSolidsPerVoidCell);
+        std::shared_ptr<VoidCell> operator()(const membersMap& members, const Standard_Integer& maxSolidsPerVoidCell,
+                                             const Standard_Integer& depth, const Standard_Integer& width);
         membersMap createLists(const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList);
         void perform(const membersMap& members, const Standard_Integer& maxSolidsPerVoidCell);
         void populateLists(const membersMap& members);
@@ -42,6 +47,8 @@ namespace McCAD::Conversion{
         std::pair<membersMap, membersMap> splitMembersList(const surfaceTuple& surface,
                                                            const membersMap& members,
                                                            const dimMap& axis);
+        void updateBoundaries(const std::string& surfaceType,
+                              const std::shared_ptr<VoidCell>& voidCellDaughter);
     };
 }
 #endif //VOIDCELLMANAGER_HPP
