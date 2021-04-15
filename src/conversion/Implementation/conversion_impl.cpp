@@ -27,13 +27,13 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
     if (rejectCondition){
         std::cout << "> Input STEP file contains " << rejectedInputSolidsList.size() <<
                      "shapes that are not yet supported!" << std::endl;
-        throw std::runtime_error("onversion terminated!");
+        throw std::runtime_error("Conversion terminated!");
     }
     std::cout << " > Converting " << acceptedInputSolidsList.size() << " solid(s)"
               << std::endl;
     if (inputConfig.voidGeneration){
         std::cout << "   - Generating void" << std::endl;
-        auto voidCell = VoidCellManager{}(solidObjList, inputConfig.maxSolidsPerVoidCell);
+        auto voidCell = VoidCellManager{inputConfig.BVH, inputConfig.maxSolidsPerVoidCell}(solidObjList);
     }
     // call writer to write solids and void cells.
 }

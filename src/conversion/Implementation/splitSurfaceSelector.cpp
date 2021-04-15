@@ -33,7 +33,8 @@ McCAD::Conversion::SplitSurfaceSelector::process(
     for(Standard_Integer i=1; i < byIntersection.size(); ++i){
         if(i == returnIndex) continue;
         if((std::get<2>(byIntersection[i]) == std::get<2>(byIntersection[returnIndex])) &&
-            (std::get<3>(byIntersection[i]) < std::get<3>(byIntersection[returnIndex]))) returnIndex = i;
+            (std::get<3>(byIntersection[i]) < std::get<3>(byIntersection[returnIndex])))
+            returnIndex = i;
     }
     return byIntersection[returnIndex];
 }
@@ -61,7 +62,7 @@ McCAD::Conversion::SplitSurfaceSelector::selectAxisSplitSurface(
         // wide distribution, add mu to list.
         candidates.push_back(std::make_tuple(0, std::get<0>(dist), 0, 0, 0));
     }
-    // Add middle ob box as a candidate.
+    // Add middle of box as a candidate.
     candidates.push_back(std::make_tuple(0, std::get<1>(aabbList), 0, 0, 0));
     return checkSplitSurfacePriority(candidates, aMap);
 }
@@ -70,7 +71,7 @@ std::tuple<Standard_Real, Standard_Real>
 McCAD::Conversion::SplitSurfaceSelector::calcCentersParameters(
         const McCAD::Conversion::SplitSurfaceSelector::dimMap& aMap){
     Standard_Real sum{0.0}, sum_squares{0}, variance{0.0}, stdDeviation;
-    Standard_Integer numElements = aMap.size();
+    Standard_Real numElements = aMap.size();
     for(const auto& element : aMap){
         sum += std::get<1>(element.second);
         sum_squares += std::pow(std::get<1>(element.second), 2);
@@ -101,20 +102,23 @@ McCAD::Conversion::SplitSurfaceSelector::checkSplitSurfacePriority(
                 std::get<3>(candidate) += 1;
             }
         }
-        Standard_Real maxSolids{0};
-        if(std::get<0>(candidate) > std::get<2>(candidate)) maxSolids = std::get<0>(candidate);
-        else maxSolids = std::get<2>(candidate);
+        Standard_Real maxSolids = std::get<0>(candidate) >= std::get<2>(candidate) ?
+                    std::get<0>(candidate) : std::get<2>(candidate);
         std::get<4>(candidate) = std::ceil(maxSolids / maxSolidsPerVoidCell);
         }
-    // Choose the best candidate
+    // Order candidates per number of intersections.
     auto byIntersection = SolidsSorter{}.sortByElement(candidates, 3);
     // Check ordering by prospective subsequent splittings
     Standard_Integer returnIndex = 0;
     if(byIntersection.size() > 1){
         for(Standard_Integer i=1; i < byIntersection.size(); ++i){
             if(i == returnIndex) continue;
+            // A lower number of intersections takes precedence to the number of
+            // subsequent splittings!. In case of an equal number of intersections,
+            // choose the candidate with the lower number of subsequent splittings.
             if((std::get<3>(byIntersection[i]) == std::get<3>(byIntersection[returnIndex])) &&
-                (std::get<4>(byIntersection[i]) < std::get<4>(byIntersection[returnIndex]))) returnIndex = i;
+                (std::get<4>(byIntersection[i]) < std::get<4>(byIntersection[returnIndex])))
+                returnIndex = i;
         }
     }
     return byIntersection[returnIndex];

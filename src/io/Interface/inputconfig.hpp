@@ -27,19 +27,19 @@ public:
     double tolerance = 1.0e-7;
     double minInputSolidVol = 1.0;
     double angleTolerance = 1.0e-3;
-    double maxDecomposeLength = 20;
     // Conversion
     std::string conversionFileName = "conversion.stp";
     bool convert = false;
     bool voidGeneration = true;
     int maxSolidsPerVoidCell = 20;
+    bool BVH = true;
+    unsigned int startCellNum = 0;
+    unsigned int startSurfNum = 0;
     bool writeCollisionFile =false;
     double maxCellExprLength = 200;
     double minDecomFaceArea = 50;
     double minVoidVol = 1.0;
     unsigned int voidDecomposeDepth = 10;
-    unsigned int startCellNum = 0;
-    unsigned int startSurfNum = 0;
     double XResolution = 0.001;
     double YResolution = 0.001;
     double RResolution = 0.0314;

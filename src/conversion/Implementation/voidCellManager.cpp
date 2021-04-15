@@ -3,27 +3,41 @@
 #include "TaskQueue.hpp"
 #include "splitSurfaceSelector.hpp"
 
-McCAD::Conversion::VoidCellManager::VoidCellManager(){}
+McCAD::Conversion::VoidCellManager::VoidCellManager(
+        const Standard_Boolean& BVH, const Standard_Integer& maxSolidsPerVoidCell) :
+    BVH{BVH}, maxSolidsPerVoidCell{maxSolidsPerVoidCell}{
+}
 
 McCAD::Conversion::VoidCellManager::~VoidCellManager(){}
 
 std::shared_ptr<McCAD::Conversion::VoidCell>
 McCAD::Conversion::VoidCellManager::operator()(
-        const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList,
-        const Standard_Integer& maxSolidsPerVoidCell){
+        const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList){
     voidCell = std::make_shared<VoidCell>();
     auto members = createLists(solidObjList);
-    perform(members, maxSolidsPerVoidCell);
+    perform(members);
     return voidCell;
 }
 
 std::shared_ptr<McCAD::Conversion::VoidCell>
 McCAD::Conversion::VoidCellManager::operator()(
         const McCAD::Conversion::VoidCellManager::membersMap& members,
-        const Standard_Integer& maxSolidsPerVoidCell, const Standard_Integer& depth,
-        const Standard_Integer& width){
+        const Standard_Integer& depth, const Standard_Integer& width){
     voidCell = std::make_shared<VoidCell>(depth, width);
-    perform(members, maxSolidsPerVoidCell);
+    perform(members);
+    return voidCell;
+}
+
+std::shared_ptr<McCAD::Conversion::VoidCell>
+McCAD::Conversion::VoidCellManager::operator()(
+        const McCAD::Conversion::VoidCellManager::membersMap& members,
+        const Standard_Integer& depth, const Standard_Integer& width,
+        const aabbTuple& xAxis, const aabbTuple& yAxis, const aabbTuple& zAxis){
+    voidCell = std::make_shared<VoidCell>(depth, width);
+    voidCell->xAxisUpdate = xAxis;
+    voidCell->yAxisUpdate = yAxis;
+    voidCell->zAxisUpdate = zAxis;
+    perform(members);
     return voidCell;
 }
 
@@ -40,29 +54,41 @@ McCAD::Conversion::VoidCellManager::createLists(
 
 void
 McCAD::Conversion::VoidCellManager::perform(
-        const McCAD::Conversion::VoidCellManager::membersMap& members,
-        const Standard_Integer& maxSolidsPerVoidCell){
+        const McCAD::Conversion::VoidCellManager::membersMap& members){
     populateLists(members);
-    // for depths > 1 uoi have to carry the dims of the half parent downstream to
+    // for depths > 1 you have to carry the dims of the half parent downstream to
     // update the final resultant void cells.
     updateVoidCell(members);
+    if(!BVH) voidCell->updateAABB();
     Standard_Boolean splitCondition = members.size() > maxSolidsPerVoidCell
                                       ? Standard_True : Standard_False;
     if(splitCondition){
         voidCell->splitted = Standard_True;
         auto surface = SplitSurfaceSelector{maxSolidsPerVoidCell}.process(
                     xAxis, yAxis, zAxis, voidCell);
-        std::cout << std::get<0>(surface) << ", " << std::get<1>(surface) << ", " <<
-                     std::get<2>(surface) << ", " << std::get<3>(surface) << std::endl;
+        std::cout << "Chosen splitting surface: " << std::get<0>(surface) <<
+                     ", " << std::get<1>(surface) << ", " << std::get<2>(surface)
+                  << ", " << std::get<3>(surface) << std::endl;
         auto splitMembers = splitVoidCell(surface, members);
-        auto voidCellLeft = VoidCellManager{}(splitMembers.first, maxSolidsPerVoidCell,
-                                              voidCell->depth + 1, 0);
-        updateBoundaries(surface, voidCellLeft, 0);
-        voidCell->daughterVoidCells.push_back(voidCellLeft);
-        auto voidCellRight = VoidCellManager{}(splitMembers.second, maxSolidsPerVoidCell,
-                                               voidCell->depth + 1, 1);
-        updateBoundaries(surface, voidCellRight, 1);
-        voidCell->daughterVoidCells.push_back(voidCellRight);
+        if(BVH){
+            auto voidCellLeft = VoidCellManager{BVH, maxSolidsPerVoidCell}(
+                        splitMembers.first, voidCell->depth + 1, 0);
+            voidCell->daughterVoidCells.push_back(voidCellLeft);
+            auto voidCellRight = VoidCellManager{BVH, maxSolidsPerVoidCell}(
+                        splitMembers.second, voidCell->depth + 1, 1);
+            voidCell->daughterVoidCells.push_back(voidCellRight);
+        } else{
+            auto voidCellLeft = VoidCellManager{BVH, maxSolidsPerVoidCell}(
+                        splitMembers.first, voidCell->depth + 1, 0,
+                        voidCell->xAxis, voidCell->yAxis, voidCell->ZAxis);
+            //else updateBoundaries(surface, voidCellLeft, 0);
+            voidCell->daughterVoidCells.push_back(voidCellLeft);
+            auto voidCellRight = VoidCellManager{BVH, maxSolidsPerVoidCell}(
+                        splitMembers.second, voidCell->depth + 1, 1,
+                        voidCell->xAxis, voidCell->yAxis, voidCell->ZAxis);
+            //if(!BVH) updateBoundaries(surface, voidCellRight, 1);
+            voidCell->daughterVoidCells.push_back(voidCellRight);
+        }
     }
 }
 
@@ -94,9 +120,11 @@ McCAD::Conversion::VoidCellManager::splitVoidCell(
         return splitMembersList(surface, members, xAxis);
     } else if(std::get<0>(surface) == "Y"){
         return splitMembersList(surface, members, yAxis);
-    } else{
+    } else if(std::get<0>(surface) == "Z"){
         return splitMembersList(surface, members, zAxis);
-    }
+    } else
+        throw std::runtime_error("Chosen splitting surface is of an unknown type!.\n"
+                                 "This is possibly caused by a code error, please report!.");
 }
 
 std::pair<McCAD::Conversion::VoidCellManager::membersMap,
@@ -134,46 +162,47 @@ McCAD::Conversion::VoidCellManager::updateBoundaries(
         const McCAD::Conversion::VoidCellManager::surfaceTuple& surface,
         const std::shared_ptr<McCAD::Conversion::VoidCell>& voidCellDaughter,
         const Standard_Integer& sense){
-    if (std::get<0>(surface) == "X"){
-        //voidCellDaughter->minY = voidCell->minY;
-        //voidCellDaughter->maxY = voidCell->maxY;
-        //voidCellDaughter->minZ = voidCell->minZ;
-        //voidCellDaughter->maxZ = voidCell->maxZ;
+    std::string surfaceType = std::get<0>(surface);
+    Standard_Real surfaceCoord = std::get<1>(surface);
+    if (surfaceType == "X"){
+        voidCellDaughter->minY = voidCell->minY;
+        voidCellDaughter->maxY = voidCell->maxY;
+        voidCellDaughter->minZ = voidCell->minZ;
+        voidCellDaughter->maxZ = voidCell->maxZ;
         if(sense == 0) {
             voidCellDaughter->minX = voidCell->minX;
-            voidCellDaughter->maxX = std::get<1>(surface);
-        }
-        else  {
-            voidCellDaughter->minX = std::get<1>(surface);
+            voidCellDaughter->maxX = surfaceCoord;
+        } else{
+            voidCellDaughter->minX = surfaceCoord;
             voidCellDaughter->maxX = voidCell->maxX;
         }
-    } else if(std::get<0>(surface) == "Y"){
-        //voidCellDaughter->minX = voidCell->minX;
-        //voidCellDaughter->maxX = voidCell->maxX;
-        //voidCellDaughter->minZ = voidCell->minZ;
-        //voidCellDaughter->maxZ = voidCell->maxZ;
+    } else if(surfaceType == "Y"){
+        voidCellDaughter->minX = voidCell->minX;
+        voidCellDaughter->maxX = voidCell->maxX;
+        voidCellDaughter->minZ = voidCell->minZ;
+        voidCellDaughter->maxZ = voidCell->maxZ;
         if(sense == 0) {
             voidCellDaughter->minY = voidCell->minY;
-            voidCellDaughter->maxY = std::get<1>(surface);
-        }
-        else  {
-            voidCellDaughter->minY = std::get<1>(surface);
+            voidCellDaughter->maxY = surfaceCoord;
+        } else{
+            voidCellDaughter->minY = surfaceCoord;
             voidCellDaughter->maxY = voidCell->maxY;
         }
-    } else if(std::get<0>(surface) == "Z"){
-        //voidCellDaughter->minX = voidCell->minX;
-        //voidCellDaughter->maxX = voidCell->maxX;
-        //voidCellDaughter->minY = voidCell->minY;
-        //voidCellDaughter->maxY = voidCell->maxY;
+    } else if(surfaceType == "Z"){
+        voidCellDaughter->minX = voidCell->minX;
+        voidCellDaughter->maxX = voidCell->maxX;
+        voidCellDaughter->minY = voidCell->minY;
+        voidCellDaughter->maxY = voidCell->maxY;
         if(sense == 0) {
             voidCellDaughter->minZ = voidCell->minZ;
-            voidCellDaughter->maxZ = std::get<1>(surface);
-        }
-        else  {
-            voidCellDaughter->minZ = std::get<1>(surface);
+            voidCellDaughter->maxZ = surfaceCoord;
+        } else{
+            voidCellDaughter->minZ = surfaceCoord;
             voidCellDaughter->maxZ = voidCell->maxZ;
         }
-    } else throw std::runtime_error("Surface Unknown!");
+    } else
+        throw std::runtime_error("Chosen splitting surface is of an unknown type!.\n"
+                                 "This is possibly caused by a code error, please report!.");
      voidCellDaughter->updateAABB();
 }
 
@@ -182,17 +211,18 @@ McCAD::Conversion::VoidCellManager::updateOverlapAABB(
         const Bnd_Box& aAABB,
         const McCAD::Conversion::VoidCellManager::surfaceTuple& surface,
         const Standard_Integer& sense){
+    Standard_Real surfaceCoord = std::get<1>(surface);
     Standard_Real minX{0}, minY{0}, minZ{0}, maxX{0}, maxY{0}, maxZ{0};
     aAABB.Get(minX, minY, minZ, maxX, maxY, maxZ);
     if (std::get<0>(surface) == "X"){
-        if(sense == 0) maxX = std::get<1>(surface);
-        else  minX = std::get<1>(surface);
+        if(sense == 0) maxX = surfaceCoord;
+        else           minX = surfaceCoord;
     } else if(std::get<0>(surface) == "Y"){
-        if(sense == 0) maxY = std::get<1>(surface);
-        else  minY = std::get<1>(surface);
+        if(sense == 0) maxY = surfaceCoord;
+        else           minY = surfaceCoord;
     } else{
-        if(sense == 0) maxZ = std::get<1>(surface);
-        else  minZ = std::get<1>(surface);
+        if(sense == 0) maxZ = surfaceCoord;
+        else           minZ = surfaceCoord;
     }
     Bnd_Box newAABB;
     gp_Pnt minPoint(minX, minY, minZ);

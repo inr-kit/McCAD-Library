@@ -35,15 +35,15 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "recurrenceDepth = 20\n"
                    "tolerance = 1.0e-7\n"
                    "minInputSolidVol = 1.0\n"
-                   "angleTolerance = 1.0e-3\n"
-                   "maxDecomposeLength = 20\n" << std::endl;
+                   "angleTolerance = 1.0e-3\n" << std::endl;
     inputConfig << "# Conversion\n"
                    "# ==================\n"
                    "convert = false\n"
-                   "conversionFileName = conversion.stp\n"
-                   "code = mcnp\n"
                    "voidGeneration = true\n"
                    "maxSolidsPerVoidCell = 20\n"
+                   "BVH = true\n"
+                   "conversionFileName = conversion.stp\n"
+                   "code = mcnp\n"
                    "writeCollisionFile = false\n"
                    "voidSplitDepth = 10\n"
                    "maxCellExprLength = 200\n"
@@ -81,17 +81,23 @@ McCAD::IO::InputConfig::readTemplate(){
                if (lineSplit[0] == "inputFileName")
                    inputFileName = lineSplit[2];
                else if (lineSplit[0] == "decompose")
-                   decompose = lineSplit[2] == "false" ? false : true;
+                   decompose = lineSplit[2] == "true" ? true : false;
                else if (lineSplit[0] == "resultFileName")
                    resultFileName = lineSplit[2];
                else if (lineSplit[0] == "rejectFileName")
                    rejectFileName = lineSplit[2];
+               else if (lineSplit[0] == "recurrenceDepth")
+                   recurrenceDepth = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "convert")
                    convert = lineSplit[2] == "false" ? false : true;
-               else if (lineSplit[0] == "conversionFileName")
-                   conversionFileName = lineSplit[2];
+               else if (lineSplit[0] == "voidGeneration")
+                   voidGeneration = lineSplit[2] == "true" ? true : false;
                else if (lineSplit[0] == "maxSolidsPerVoidCell")
                    maxSolidsPerVoidCell = std::stoi(lineSplit[2]);
+               else if (lineSplit[0] == "BVH")
+                   BVH = lineSplit[2] == "true" ? true : false;
+               else if (lineSplit[0] == "conversionFileName")
+                   conversionFileName = lineSplit[2];
                else continue;
            }
         }

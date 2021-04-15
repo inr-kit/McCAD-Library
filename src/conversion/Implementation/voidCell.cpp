@@ -41,7 +41,7 @@ McCAD::Conversion::VoidCell::addSolids(
     xAxis = std::make_tuple(minX, minX + std::abs(maxX-minX)/2.0, maxX);
     yAxis = std::make_tuple(minY, minY + std::abs(maxY-minY)/2.0, maxY);
     zAxis = std::make_tuple(minZ, minZ + std::abs(maxZ-minZ)/2.0, maxZ);
-    /*//debug
+    //debug
     std::cout << "VoidCell contains: " << solidIDList.size() << std::endl;
     STEPControl_Writer writer0;
     writer0.Transfer(aabbSolid, STEPControl_StepModelType::STEPControl_AsIs);
@@ -54,15 +54,23 @@ McCAD::Conversion::VoidCell::addSolids(
     filename += std::to_string(kk);
     filename += suffix;
     writer0.Write(filename.c_str());
-    *///debug
+    //debug
 }
 
 void
 McCAD::Conversion::VoidCell::updateAABB(){
-    aabb.Update(minX, minY, minZ, maxX, maxY, maxZ);
-    // Create AABB solid
+    Bnd_Box newAABB;
+    minX = std::get<0>(xAxisUpdate);
+    maxX = std::get<2>(xAxisUpdate);
+    minY = std::get<0>(yAxisUpdate);
+    maxY = std::get<2>(yAxisUpdate);
+    minZ = std::get<0>(zAxisUpdate);
+    maxZ = std::get<2>(zAxisUpdate);
     gp_Pnt minPoint(minX, minY, minZ);
     gp_Pnt maxPoint(maxX, maxY, maxZ);
+    newAABB.Add(minPoint);
+    newAABB.Add(maxPoint);
+    aabb = newAABB;
     aabbSolid = BRepPrimAPI_MakeBox(minPoint, maxPoint).Solid();
     // Create a lit of min, center, and max points of the AABB.
     xAxis = std::make_tuple(minX, minX + std::abs(maxX-minX)/2.0, maxX);
@@ -74,10 +82,11 @@ McCAD::Conversion::VoidCell::updateAABB(){
     Standard_Integer kk = 0;
     std::string filename = "./aabb";
     std::string suffix = ".stp";
-    while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
-        ++kk;
-    }
-    filename += std::to_string(kk);
+    filename += std::to_string(depth) + "_" + std::to_string(width);
+    //while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
+    //    ++kk;
+    //}
+    //filename += std::to_string(kk);
     filename += suffix;
     writer0.Write(filename.c_str());
     //*///debug

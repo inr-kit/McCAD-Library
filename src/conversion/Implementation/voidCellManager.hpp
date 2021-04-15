@@ -15,7 +15,8 @@
 namespace McCAD::Conversion{
     class VoidCellManager {
     public:
-        VoidCellManager();
+        VoidCellManager(const Standard_Boolean& BVH,
+                        const Standard_Integer& maxSolidsPerVoidCell);
         ~VoidCellManager();
     private:
         // dimMap format: (SolidID, <AABB min, AABB center, AABB max>)
@@ -31,15 +32,20 @@ namespace McCAD::Conversion{
         using membersMap = std::map<Standard_Integer, std::tuple<Bnd_Box,
                                                                  std::string,
                                                                  Standard_Real>>;
+        // aabbTuple format: <AABB min, AABB center, AABB max>
+        using aabbTuple = std::tuple<Standard_Real, Standard_Real, Standard_Real>;
     public:
+        Standard_Boolean BVH = true;
+        Standard_Integer maxSolidsPerVoidCell;
         dimMap xAxis, yAxis, zAxis;
         std::shared_ptr<VoidCell> voidCell;
-        std::shared_ptr<VoidCell> operator()(const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList,
-                                             const Standard_Integer& maxSolidsPerVoidCell);
-        std::shared_ptr<VoidCell> operator()(const membersMap& members, const Standard_Integer& maxSolidsPerVoidCell,
-                                             const Standard_Integer& depth, const Standard_Integer& width);
+        std::shared_ptr<VoidCell> operator()(
+                const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList);
+        std::shared_ptr<VoidCell> operator()(const membersMap& members,
+                                             const Standard_Integer& depth,
+                                             const Standard_Integer& width);
         membersMap createLists(const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList);
-        void perform(const membersMap& members, const Standard_Integer& maxSolidsPerVoidCell);
+        void perform(const membersMap& members);
         void populateLists(const membersMap& members);
         void updateVoidCell(const membersMap& members);
         std::pair<membersMap, membersMap> splitVoidCell(const surfaceTuple& surface,
