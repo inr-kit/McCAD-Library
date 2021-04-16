@@ -26,6 +26,8 @@ namespace McCAD::Conversion{
       using membersMap = std::map<Standard_Integer, std::tuple<Bnd_Box,
                                                                std::string,
                                                                Standard_Real>>;
+      // updateTuple format: <AABB min, AABB max>
+      using updateTuple = std::tuple<Standard_Real, Standard_Real>;
   public:
       Bnd_Box aabb;
       TopoDS_Solid aabbSolid;
@@ -35,11 +37,12 @@ namespace McCAD::Conversion{
       std::vector<std::shared_ptr<VoidCell>> daughterVoidCells;
       Standard_Real minX{0}, minY{0}, minZ{0}, maxX{0}, maxY{0}, maxZ{0};
       centerTuple xAxis, yAxis, zAxis;
-      centerTuple xAxisUpdate, yAxisUpdate, zAxisUpdate;
+      updateTuple xAxisUpdate, yAxisUpdate, zAxisUpdate;
 
       void addSolidIDs(const membersMap& members);
       void addSolids(const membersMap& members);
       void updateAABB();
+      void outputAABB();
   };
 }
 

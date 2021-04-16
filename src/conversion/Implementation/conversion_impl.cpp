@@ -33,7 +33,8 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
               << std::endl;
     if (inputConfig.voidGeneration){
         std::cout << "   - Generating void" << std::endl;
-        auto voidCell = VoidCellManager{inputConfig.BVH, inputConfig.maxSolidsPerVoidCell}(solidObjList);
+        auto voidCell = VoidCellManager{inputConfig.BVHVoid,
+                inputConfig.maxSolidsPerVoidCell}(solidObjList);
     }
     // call writer to write solids and void cells.
 }

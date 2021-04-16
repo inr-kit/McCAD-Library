@@ -41,7 +41,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "convert = false\n"
                    "voidGeneration = true\n"
                    "maxSolidsPerVoidCell = 20\n"
-                   "BVH = true\n"
+                   "BVHVoid = true\n"
                    "conversionFileName = conversion.stp\n"
                    "code = mcnp\n"
                    "writeCollisionFile = false\n"
@@ -94,8 +94,8 @@ McCAD::IO::InputConfig::readTemplate(){
                    voidGeneration = lineSplit[2] == "true" ? true : false;
                else if (lineSplit[0] == "maxSolidsPerVoidCell")
                    maxSolidsPerVoidCell = std::stoi(lineSplit[2]);
-               else if (lineSplit[0] == "BVH")
-                   BVH = lineSplit[2] == "true" ? true : false;
+               else if (lineSplit[0] == "BVHVoid")
+                   BVHVoid = lineSplit[2] == "true" ? true : false;
                else if (lineSplit[0] == "conversionFileName")
                    conversionFileName = lineSplit[2];
                else continue;

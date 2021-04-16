@@ -32,7 +32,7 @@ public:
     bool convert = false;
     bool voidGeneration = true;
     int maxSolidsPerVoidCell = 20;
-    bool BVH = true;
+    bool BVHVoid = true;
     unsigned int startCellNum = 0;
     unsigned int startSurfNum = 0;
     bool writeCollisionFile =false;

@@ -4,8 +4,8 @@
 #include "splitSurfaceSelector.hpp"
 
 McCAD::Conversion::VoidCellManager::VoidCellManager(
-        const Standard_Boolean& BVH, const Standard_Integer& maxSolidsPerVoidCell) :
-    BVH{BVH}, maxSolidsPerVoidCell{maxSolidsPerVoidCell}{
+        const Standard_Boolean& BVHVoid, const Standard_Integer& maxSolidsPerVoidCell) :
+    BVHVoid{BVHVoid}, maxSolidsPerVoidCell{maxSolidsPerVoidCell}{
 }
 
 McCAD::Conversion::VoidCellManager::~VoidCellManager(){}
@@ -13,6 +13,7 @@ McCAD::Conversion::VoidCellManager::~VoidCellManager(){}
 std::shared_ptr<McCAD::Conversion::VoidCell>
 McCAD::Conversion::VoidCellManager::operator()(
         const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList){
+    // Create root void cell.
     voidCell = std::make_shared<VoidCell>();
     auto members = createLists(solidObjList);
     perform(members);
@@ -32,11 +33,12 @@ std::shared_ptr<McCAD::Conversion::VoidCell>
 McCAD::Conversion::VoidCellManager::operator()(
         const McCAD::Conversion::VoidCellManager::membersMap& members,
         const Standard_Integer& depth, const Standard_Integer& width,
-        const aabbTuple& xAxis, const aabbTuple& yAxis, const aabbTuple& zAxis){
+        const aabbTuple& xAxisAABB, const aabbTuple& yAxisAABB,
+        const aabbTuple& zAxisAABB){
     voidCell = std::make_shared<VoidCell>(depth, width);
-    voidCell->xAxisUpdate = xAxis;
-    voidCell->yAxisUpdate = yAxis;
-    voidCell->zAxisUpdate = zAxis;
+    voidCell->xAxisUpdate = xAxisAABB;
+    voidCell->yAxisUpdate = yAxisAABB;
+    voidCell->zAxisUpdate = zAxisAABB;
     perform(members);
     return voidCell;
 }
@@ -59,7 +61,8 @@ McCAD::Conversion::VoidCellManager::perform(
     // for depths > 1 you have to carry the dims of the half parent downstream to
     // update the final resultant void cells.
     updateVoidCell(members);
-    if(!BVH) voidCell->updateAABB();
+    if(!BVHVoid) voidCell->updateAABB();
+    voidCell->outputAABB();
     Standard_Boolean splitCondition = members.size() > maxSolidsPerVoidCell
                                       ? Standard_True : Standard_False;
     if(splitCondition){
@@ -70,23 +73,27 @@ McCAD::Conversion::VoidCellManager::perform(
                      ", " << std::get<1>(surface) << ", " << std::get<2>(surface)
                   << ", " << std::get<3>(surface) << std::endl;
         auto splitMembers = splitVoidCell(surface, members);
-        if(BVH){
-            auto voidCellLeft = VoidCellManager{BVH, maxSolidsPerVoidCell}(
+        if(BVHVoid){
+            // Create left void cell.
+            auto voidCellLeft = VoidCellManager{BVHVoid, maxSolidsPerVoidCell}(
                         splitMembers.first, voidCell->depth + 1, 0);
             voidCell->daughterVoidCells.push_back(voidCellLeft);
-            auto voidCellRight = VoidCellManager{BVH, maxSolidsPerVoidCell}(
+            // Create right void cell.
+            auto voidCellRight = VoidCellManager{BVHVoid, maxSolidsPerVoidCell}(
                         splitMembers.second, voidCell->depth + 1, 1);
             voidCell->daughterVoidCells.push_back(voidCellRight);
         } else{
-            auto voidCellLeft = VoidCellManager{BVH, maxSolidsPerVoidCell}(
+            // Create left void cell.
+            auto leftBoundaries = updateBoundaries(surface, 0);
+            auto voidCellLeft = VoidCellManager{BVHVoid, maxSolidsPerVoidCell}(
                         splitMembers.first, voidCell->depth + 1, 0,
-                        voidCell->xAxis, voidCell->yAxis, voidCell->ZAxis);
-            //else updateBoundaries(surface, voidCellLeft, 0);
+                        leftBoundaries[0], leftBoundaries[1], leftBoundaries[2]);
             voidCell->daughterVoidCells.push_back(voidCellLeft);
-            auto voidCellRight = VoidCellManager{BVH, maxSolidsPerVoidCell}(
+            // Create right void cell.
+            auto rightBoundaries = updateBoundaries(surface, 1);
+            auto voidCellRight = VoidCellManager{BVHVoid, maxSolidsPerVoidCell}(
                         splitMembers.second, voidCell->depth + 1, 1,
-                        voidCell->xAxis, voidCell->yAxis, voidCell->ZAxis);
-            //if(!BVH) updateBoundaries(surface, voidCellRight, 1);
+                        rightBoundaries[0], rightBoundaries[1], rightBoundaries[2]);
             voidCell->daughterVoidCells.push_back(voidCellRight);
         }
     }
@@ -157,53 +164,42 @@ McCAD::Conversion::VoidCellManager::splitMembersList(
     return std::make_pair(membersLeft, membersRight);
 }
 
-void
+McCAD::Conversion::VoidCellManager::aabbVec
 McCAD::Conversion::VoidCellManager::updateBoundaries(
         const McCAD::Conversion::VoidCellManager::surfaceTuple& surface,
-        const std::shared_ptr<McCAD::Conversion::VoidCell>& voidCellDaughter,
         const Standard_Integer& sense){
+    aabbTuple xAxisAABB, yAxisAABB, zAxisAABB;
     std::string surfaceType = std::get<0>(surface);
     Standard_Real surfaceCoord = std::get<1>(surface);
     if (surfaceType == "X"){
-        voidCellDaughter->minY = voidCell->minY;
-        voidCellDaughter->maxY = voidCell->maxY;
-        voidCellDaughter->minZ = voidCell->minZ;
-        voidCellDaughter->maxZ = voidCell->maxZ;
+        yAxisAABB = std::make_tuple(voidCell->minY, voidCell->maxY);
+        zAxisAABB = std::make_tuple(voidCell->minZ, voidCell->maxZ);
         if(sense == 0) {
-            voidCellDaughter->minX = voidCell->minX;
-            voidCellDaughter->maxX = surfaceCoord;
+            xAxisAABB = std::make_tuple(voidCell->minX, surfaceCoord);
         } else{
-            voidCellDaughter->minX = surfaceCoord;
-            voidCellDaughter->maxX = voidCell->maxX;
+            xAxisAABB = std::make_tuple(surfaceCoord, voidCell->maxX);
         }
     } else if(surfaceType == "Y"){
-        voidCellDaughter->minX = voidCell->minX;
-        voidCellDaughter->maxX = voidCell->maxX;
-        voidCellDaughter->minZ = voidCell->minZ;
-        voidCellDaughter->maxZ = voidCell->maxZ;
+        xAxisAABB = std::make_tuple(voidCell->minX, voidCell->maxX);
+        zAxisAABB = std::make_tuple(voidCell->minZ, voidCell->maxZ);
         if(sense == 0) {
-            voidCellDaughter->minY = voidCell->minY;
-            voidCellDaughter->maxY = surfaceCoord;
+            yAxisAABB = std::make_tuple(voidCell->minY, surfaceCoord);
         } else{
-            voidCellDaughter->minY = surfaceCoord;
-            voidCellDaughter->maxY = voidCell->maxY;
+            yAxisAABB = std::make_tuple(surfaceCoord, voidCell->maxY);
         }
     } else if(surfaceType == "Z"){
-        voidCellDaughter->minX = voidCell->minX;
-        voidCellDaughter->maxX = voidCell->maxX;
-        voidCellDaughter->minY = voidCell->minY;
-        voidCellDaughter->maxY = voidCell->maxY;
+        xAxisAABB = std::make_tuple(voidCell->minX, voidCell->maxX);
+        yAxisAABB = std::make_tuple(voidCell->minY, voidCell->maxY);
         if(sense == 0) {
-            voidCellDaughter->minZ = voidCell->minZ;
-            voidCellDaughter->maxZ = surfaceCoord;
+            zAxisAABB = std::make_tuple(voidCell->minZ, surfaceCoord);
         } else{
-            voidCellDaughter->minZ = surfaceCoord;
-            voidCellDaughter->maxZ = voidCell->maxZ;
+            zAxisAABB = std::make_tuple(surfaceCoord, voidCell->maxZ);
         }
     } else
         throw std::runtime_error("Chosen splitting surface is of an unknown type!.\n"
                                  "This is possibly caused by a code error, please report!.");
-     voidCellDaughter->updateAABB();
+     aabbVec xyzAABB{xAxisAABB, yAxisAABB, zAxisAABB};
+     return xyzAABB;
 }
 
 Bnd_Box
