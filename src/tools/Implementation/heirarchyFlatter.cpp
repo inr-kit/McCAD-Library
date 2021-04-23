@@ -43,34 +43,33 @@ McCAD::Tools::HeirarchyFlatter::flattenSolidHierarchy(
                           std::move(rejectedInputSolidsList));
 }
 
-McCAD::Tools::HeirarchyFlatter::output_zpair
+McCAD::Tools::HeirarchyFlatter::output_MapPair
 McCAD::Tools::HeirarchyFlatter::operator()(
-        const McCAD::Tools::HeirarchyFlatter::shape_Name& inputSolidsList){
+        const McCAD::Tools::HeirarchyFlatter::shape_Name& inputSolidsMap){
     Standard_Integer compSolid{0}, solid{0}, invalidShape{0};
-    for(Standard_Integer i=0; i < inputSolidsList.size(); ++i){
-        auto shape = std::get<0>(inputSolidsList[i]);
-        auto name = std::get<1>(inputSolidsList[i]);
+    for(Standard_Integer i=0; i < inputSolidsMap.size(); ++i){
+        TopoDS_Shape shape = std::get<0>(inputSolidsMap[i]);
+        auto name = std::get<1>(inputSolidsMap[i]);
         switch(shape.ShapeType()){
         case TopAbs_COMPOUND:
             [[fallthrough]];
         case TopAbs_COMPSOLID:
             ++compSolid;
             for(const auto& solid : detail::ShapeView<TopAbs_SOLID>{shape}){
-                zsplitInputSolidsList.push_back(std::make_tuple(solid, name, i));
+                splitInputSolidsMap.push_back(std::make_tuple(solid, name, i));
             };
             break;
         case TopAbs_SOLID:
             ++solid;
-            zsplitInputSolidsList.push_back(std::make_tuple(shape, name, i));
+            splitInputSolidsMap.push_back(std::make_tuple(shape, name, i));
             break;
         default:
             ++invalidShape;
-            zrejectedInputSolidsList.push_back(std::make_tuple(shape, name, i));
+            rejectedInputSolidsMap.push_back(std::make_tuple(shape, name, i));
         }
     }
     std::cout << "   " << compSolid << " compound solid(s)" << std::endl;
     std::cout << "   " << solid << " solid(s)" << std::endl;
     std::cout << "   " << invalidShape << " invalid shape(s)" << std::endl;
-    return std::make_pair(std::move(zsplitInputSolidsList),
-                          std::move(zrejectedInputSolidsList));
+    return std::make_pair(splitInputSolidsMap, rejectedInputSolidsMap);
 }

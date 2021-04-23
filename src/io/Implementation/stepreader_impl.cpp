@@ -51,7 +51,7 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
             //             "\nLabel: " << aLabel  << std::endl;
             sequenceOfShape->Append(aShape->Get());
             shapeNames.push_back(aName);
-            shapesInfoList.push_back(std::make_tuple(aShape->Get(), aName));
+            shapesInfoMap.push_back(std::make_tuple(aShape->Get(), aName));
             foundShapes = Standard_True;
         }
     }

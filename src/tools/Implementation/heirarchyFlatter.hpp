@@ -26,15 +26,14 @@ namespace McCAD::Tools{
                                                    Standard_Integer>>;
       using output_pair = std::pair<std::unique_ptr<TopTools_HSequenceOfShape>,
                                     std::unique_ptr<TopTools_HSequenceOfShape>>;
-      using output_zpair = std::pair<shape_Name_ID, shape_Name_ID>;
+      using output_MapPair = std::pair<shape_Name_ID, shape_Name_ID>;
 
   public:
       std::unique_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;
       std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;
-      shape_Name_ID zsplitInputSolidsList;
-      shape_Name_ID zrejectedInputSolidsList;
+      shape_Name_ID splitInputSolidsMap, rejectedInputSolidsMap;
 
-      output_zpair operator()(const shape_Name& inputSolidsList);
+      output_MapPair operator()(const shape_Name& inputSolidsMap);
       output_pair flattenSolidHierarchy(const std::shared_ptr<TopTools_HSequenceOfShape>& inputSolidsList);
   };
 }

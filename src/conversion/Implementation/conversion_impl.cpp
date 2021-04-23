@@ -12,14 +12,16 @@
 McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
     IO::STEPReader reader{inputConfig.conversionFileName};
     auto inputData = reader.getInputData();
-    auto& inputSolidsList = inputData.accessImpl()->zinputSolidsList;
-    if (inputSolidsList.size() == 0)
+    auto inputSolidsMap = inputData.accessImpl()->inputSolidsMap;
+    if (inputSolidsMap.size() == 0)
         throw std::runtime_error("Input solids list is empty!");
-    std::cout << "> Found " << inputSolidsList.size() <<
+    std::cout << "> Found " << inputSolidsMap.size() <<
                  " shapes(s) in the input STEP file" << std::endl;
-    auto product = Tools::HeirarchyFlatter{}(inputSolidsList);
-    acceptedInputSolidsList = std::move(product.first);
-    rejectedInputSolidsList = std::move(product.second);
+    auto product = Tools::HeirarchyFlatter{}(inputSolidsMap);
+    acceptedInputSolidsList = product.first;
+    rejectedInputSolidsList = product.second;
+    std::cout << "returned, " << acceptedInputSolidsList.size() << ", "
+              << rejectedInputSolidsList.size() << std::endl;
     if (rejectedInputSolidsList.size() != 0){
         rejectCondition = Standard_True;
     }

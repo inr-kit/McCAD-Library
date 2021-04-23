@@ -73,6 +73,7 @@ int main (int argc, char* argv[]){
                                  "check the solids and then run conversion!"
                               << std::endl;
             } else if (convertCondition){
+                inputConfig.conversionFileName = inputConfig.inputFileName;
                 convert:;
                 std::cout << "*************************" << std::endl;
                 std::cout << "** Starting conversion **" << std::endl;

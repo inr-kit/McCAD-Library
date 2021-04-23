@@ -40,7 +40,7 @@ McCAD::IO::STEPReader::getInputData() const{
   McCAD::General::InputData inputData;
   // keep squenceOfShapes till the decomposition is updated. Should eventually use only shapesInfoList.
   inputData.accessImpl()->inputSolidsList = pImpl->sequenceOfShape;
-  inputData.accessImpl()->zinputSolidsList = pImpl->shapesInfoList;
+  inputData.accessImpl()->inputSolidsMap = pImpl->shapesInfoMap;
   return inputData;
 }
 

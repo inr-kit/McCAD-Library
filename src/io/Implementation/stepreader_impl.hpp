@@ -23,8 +23,8 @@ namespace McCAD::IO{
 
     std::string fileName;
     std::shared_ptr<TopTools_HSequenceOfShape> sequenceOfShape;
-    std::vector<TCollection_ExtendedString> shapeNames = {};
-    std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString>> shapesInfoList;
+    std::vector<TCollection_ExtendedString> shapeNames;
+    std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString>> shapesInfoMap;
 
     void readSTEP();
     void getLabelInfo(const TDF_Label& aLabel);

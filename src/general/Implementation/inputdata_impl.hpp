@@ -20,7 +20,7 @@ namespace McCAD::General{
     Impl();
     ~Impl();
 
-    std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString>> zinputSolidsList;
+    std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString>> inputSolidsMap;
     std::shared_ptr<TopTools_HSequenceOfShape> inputSolidsList;
     int size{0};
 
