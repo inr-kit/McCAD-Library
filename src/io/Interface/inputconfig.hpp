@@ -15,6 +15,7 @@ public:
     void writeTemplate();
     std::vector<std::string> splitLine(const std::string& line, char delimiter);
     void readTemplate();
+    std::string stringToLowerCase(std::string& string);
 
     //Define default values
     std::string units = "cm";
@@ -35,6 +36,7 @@ public:
     std::string MCcode = "mcnp";
     int startCellNum = 0;
     int startSurfNum = 0;
+    std::string MCOutputFileName = "MCFile.txt";
 
     // Internal variables
     std::string conversionFileName = "conversion.stp";

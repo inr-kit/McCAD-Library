@@ -8,6 +8,7 @@
 #include "preprocessor.hpp"
 #include "TaskQueue.hpp"
 #include "voidCellManager.hpp"
+#include "conversionWriter.hpp"
 
 McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
     IO::STEPReader reader{inputConfig.conversionFileName};
@@ -37,8 +38,13 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
         std::cout << "   - Generating void" << std::endl;
         auto voidCell = VoidCellManager{inputConfig.BVHVoid,
                 inputConfig.maxSolidsPerVoidCell}(solidObjList);
+        // call writer to write solids and void cells.
+        Writer{inputConfig}(solidObjList, voidCell);
+        goto end;
     }
-    // call writer to write solids and void cells.
+    // call writer to write solids.
+    Writer{inputConfig}(solidObjList);
+    end:;
 }
 
 McCAD::Conversion::Convert::Impl::~Impl(){

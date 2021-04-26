@@ -62,9 +62,9 @@ namespace McCAD::Geometry{
     Standard_Boolean splitSurface = Standard_False;
     
     std::vector<std::shared_ptr<BoundSurface>> facesList;
-    std::vector<std::shared_ptr<Geometry::BoundSurface>> planesList;
-    std::vector<std::shared_ptr<Geometry::BoundSurface>> cylindersList;
-    std::vector<std::shared_ptr<Geometry::BoundSurface>> toriList;
+    std::vector<std::shared_ptr<BoundSurface>> planesList;
+    std::vector<std::shared_ptr<BoundSurface>> cylindersList;
+    std::vector<std::shared_ptr<BoundSurface>> toriList;
 
     std::vector<std::shared_ptr<BoundSurface>> splitFacesList;
     std::vector<std::shared_ptr<BoundSurface>> selectedSplitFacesList;

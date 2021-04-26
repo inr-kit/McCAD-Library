@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 // McCAD
 #include "inputconfig.hpp"
 
@@ -44,7 +45,8 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "BVHVoid = true\n"
                    "MCcode = mcnp\n"
                    "startCellNum = 0\n"
-                   "startSurfNum = 0\n" << std::endl;
+                   "startSurfNum = 0\n"
+                   "MCOutputFileName = MCFile.txt\n" << std::endl;
     inputConfig.close();
 }
 
@@ -68,7 +70,7 @@ McCAD::IO::InputConfig::readTemplate(){
                if (lineSplit[0] == "inputFileName")
                    inputFileName = lineSplit[2];
                else if (lineSplit[0] == "decompose")
-                   decompose = lineSplit[2] == "true" ? true : false;
+                   decompose = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
                else if (lineSplit[0] == "resultFileName")
                    resultFileName = lineSplit[2];
                else if (lineSplit[0] == "rejectFileName")
@@ -76,19 +78,21 @@ McCAD::IO::InputConfig::readTemplate(){
                else if (lineSplit[0] == "recurrenceDepth")
                    recurrenceDepth = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "convert")
-                   convert = lineSplit[2] == "false" ? false : true;
+                   convert = stringToLowerCase(lineSplit[2]) == "false" ? false : true;
                else if (lineSplit[0] == "voidGeneration")
-                   voidGeneration = lineSplit[2] == "true" ? true : false;
+                   voidGeneration = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
                else if (lineSplit[0] == "maxSolidsPerVoidCell")
                    maxSolidsPerVoidCell = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "BVHVoid")
-                   BVHVoid = lineSplit[2] == "true" ? true : false;
+                   BVHVoid = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
                else if (lineSplit[0] == "MCcode")
-                   MCcode = lineSplit[2];
+                   MCcode = stringToLowerCase(lineSplit[2]);
                else if (lineSplit[0] == "startCellNum")
                    startCellNum = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "startSurfNum")
                    startSurfNum = std::stoi(lineSplit[2]);
+               else if (lineSplit[0] == "MCOutputFileName")
+                   MCOutputFileName = lineSplit[2];
                else continue;
            }
         }
@@ -104,4 +108,11 @@ McCAD::IO::InputConfig::splitLine(const std::string& line, char delimiter){
         lineSplit.push_back(s);
     }
     return lineSplit;
+}
+
+std::string
+McCAD::IO::InputConfig::stringToLowerCase(std::string& string){
+    std::transform(string.begin(), string.end(), string.begin(),
+                   [](unsigned char c){ return std::tolower(c); });
+    return string;
 }
