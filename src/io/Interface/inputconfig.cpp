@@ -42,22 +42,9 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "voidGeneration = true\n"
                    "maxSolidsPerVoidCell = 20\n"
                    "BVHVoid = true\n"
-                   "conversionFileName = conversion.stp\n"
-                   "code = mcnp\n"
+                   "MCcode = mcnp\n"
                    "startCellNum = 0\n"
-                   "startSurfNum = 0\n"
-                   "minVoidVol = 1.0\n"
-                   "writeCollisionFile = false\n"
-                   "voidSplitDepth = 10\n"
-                   "maxCellExprLength = 200\n"
-                   "minDecomFaceArea = 50\n"
-                   "XResolution = 0.001\n"
-                   "YResolution = 0.001\n"
-                   "RResolution = 0.0314\n"
-                   "maxSamplPntNum = 50\n"
-                   "minSamplPntNum = 20\n"
-                   "initNumVoidBoxes = 1\n"
-                   "matFileName = ''\n" << std::endl;
+                   "startSurfNum = 0\n" << std::endl;
     inputConfig.close();
 }
 
@@ -96,8 +83,12 @@ McCAD::IO::InputConfig::readTemplate(){
                    maxSolidsPerVoidCell = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "BVHVoid")
                    BVHVoid = lineSplit[2] == "true" ? true : false;
-               else if (lineSplit[0] == "conversionFileName")
-                   conversionFileName = lineSplit[2];
+               else if (lineSplit[0] == "MCcode")
+                   MCcode = lineSplit[2];
+               else if (lineSplit[0] == "startCellNum")
+                   startCellNum = std::stoi(lineSplit[2]);
+               else if (lineSplit[0] == "startSurfNum")
+                   startSurfNum = std::stoi(lineSplit[2]);
                else continue;
            }
         }
