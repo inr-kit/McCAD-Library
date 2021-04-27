@@ -77,6 +77,8 @@ McCAD::IO::InputConfig::readTemplate(){
                    rejectFileName = lineSplit[2];
                else if (lineSplit[0] == "recurrenceDepth")
                    recurrenceDepth = std::stoi(lineSplit[2]);
+               else if (lineSplit[0] == "tolerance")
+                   tolerance = std::stof(lineSplit[2]);
                else if (lineSplit[0] == "convert")
                    convert = stringToLowerCase(lineSplit[2]) == "false" ? false : true;
                else if (lineSplit[0] == "voidGeneration")

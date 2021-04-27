@@ -25,7 +25,6 @@ namespace McCAD::Conversion{
         void operator()(const solidsList& solidObjList);
         void operator()(const solidsList& solidObjList,
                         const std::shared_ptr<VoidCell>& voidCell);
-
     };
 }
 

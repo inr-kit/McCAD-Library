@@ -14,3 +14,4 @@ McCAD::Geometry::BoundSurfaceTor::Impl::generateExtendedTor(
         const Standard_Real& boxDiagonalLength,
         Standard_Real degenerateEdgesTolerance){
 }
+

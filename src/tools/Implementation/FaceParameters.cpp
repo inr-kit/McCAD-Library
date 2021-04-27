@@ -1,5 +1,8 @@
 // McCAD
 #include "FaceParameters.hpp"
+// OCC
+#include <BRep_Tool.hxx>
+#include <Standard.hxx>
 
 gp_Dir
 McCAD::Tools::normalOnFace(const TopoDS_Face& face, const gp_Pnt& point){
@@ -49,4 +52,30 @@ McCAD::Tools::detail::getSurfFPtr(GeomAbs_SurfaceType surfaceType){
     default:
         return nullptr;
     }
+}
+
+void
+McCAD::Tools::genPlSurfParmts(const TopoDS_Face& face,
+                              const Standard_Real& parameterTolerance){
+    TopLoc_Location location;
+    std::array<Standard_Real, 4> planeParameters;
+    GeomAdaptor_Surface surface{BRep_Tool::Surface(face, location)};
+    //BRepAdaptor_Surface surface(face, Standard_True);
+    gp_Pln plane = surface.Plane();
+    //plane.Scale(gp_Pnt{0.0, 0.0, 0.0}, GetUnit());
+    plane.Coefficients(planeParameters[0], planeParameters[1], planeParameters[2],
+            planeParameters[3]);
+    for(auto& parameter : planeParameters){
+        if(parameter <= parameterTolerance) parameter = 0.0;
+    }
+}
+
+void
+McCAD::Tools::genCylSurfParmts(const TopoDS_Face& face,
+                               const Standard_Real& parameterTolerance){
+}
+
+void
+McCAD::Tools::genTorSurfParmts(const TopoDS_Face& face,
+                               const Standard_Real& parameterTolerance){
 }

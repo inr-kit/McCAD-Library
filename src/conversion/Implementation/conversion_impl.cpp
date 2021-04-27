@@ -21,11 +21,7 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
     auto product = Tools::HeirarchyFlatter{}(inputSolidsMap);
     acceptedInputSolidsList = product.first;
     rejectedInputSolidsList = product.second;
-    std::cout << "returned, " << acceptedInputSolidsList.size() << ", "
-              << rejectedInputSolidsList.size() << std::endl;
-    if (rejectedInputSolidsList.size() != 0){
-        rejectCondition = Standard_True;
-    }
+    if (rejectedInputSolidsList.size() != 0) rejectCondition = Standard_True;
     getGeomData();
     if (rejectCondition){
         std::cout << "> Input STEP file contains " << rejectedInputSolidsList.size() <<
@@ -38,7 +34,7 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
         std::cout << "   - Generating void" << std::endl;
         auto voidCell = VoidCellManager{inputConfig.BVHVoid,
                 inputConfig.maxSolidsPerVoidCell}(solidObjList);
-        // call writer to write solids and void cells.
+        // Call writer to write solids and void cells.
         Writer{inputConfig}(solidObjList, voidCell);
         goto end;
     }

@@ -2,6 +2,7 @@
 #include <filesystem>
 // McCAD
 #include "boundSurface_impl.hpp"
+#include "FaceParameters.hpp"
 //OCC
 #include <STEPControl_Writer.hxx>
 
@@ -179,4 +180,16 @@ McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Ed
             }
         }
     }
+}
+
+bool
+McCAD::Geometry::BoundSurface::Impl::generateParmts(){
+    if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane))
+        Tools::genPlSurfParmts(boundSurface->accessSImpl()->face);
+    else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder))
+        Tools::genCylSurfParmts(boundSurface->accessSImpl()->face);
+    else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Torus))
+        Tools::genTorSurfParmts(boundSurface->accessSImpl()->face);
+    else return Standard_False;
+    return Standard_True;
 }

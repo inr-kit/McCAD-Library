@@ -19,16 +19,15 @@ namespace McCAD::Conversion {
     public:
       Impl(const IO::InputConfig& inputConfig);
       ~Impl();
-
+    private:
       Tools::SolidType solidType;
       using shape_Name_ID = std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString,
                                                    Standard_Integer>>;
-
+    public:
       Standard_Boolean rejectCondition = Standard_False;
       shape_Name_ID acceptedInputSolidsList;
       shape_Name_ID rejectedInputSolidsList;
       std::vector<std::shared_ptr<Geometry::Solid>> solidObjList;
-
       void getGeomData();
     };
 }

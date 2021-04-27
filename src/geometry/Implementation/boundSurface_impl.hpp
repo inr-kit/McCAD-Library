@@ -49,6 +49,7 @@ namespace McCAD::Geometry{
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
     void generateEdges(Standard_Real uvTolerance = 1.0e-3);
     void combineEdges(std::vector<std::shared_ptr<Edge>>& aEdgesList);
+    bool generateParmts();
   };
 }
 #endif //BOUNDSURFACE_IMPL_HPP

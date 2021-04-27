@@ -1,6 +1,6 @@
 // McCAD
 #include "conversionWriter.hpp"
-#include "MCNPWriter.hpp"
+#include "mcnpWriter.hpp"
 
 McCAD::Conversion::Writer::Writer(const IO::InputConfig& inputConfig) :
     MCOutputFileName{inputConfig.MCOutputFileName}, MCcode{inputConfig.MCcode},
