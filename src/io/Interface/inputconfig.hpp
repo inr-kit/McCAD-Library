@@ -4,6 +4,7 @@
 //C++
 #include <string>
 #include <vector>
+#include <cmath>
 
 namespace McCAD::IO{
 class InputConfig{
@@ -25,9 +26,10 @@ public:
     // Decomposition
     bool decompose = true;
     int recurrenceDepth = 20;
-    double tolerance = 1.0e-7;
     double minInputSolidVol = 1.0;
-    double angleTolerance = 1.0e-3;
+    double parameterTolerance = 1.0e-7;
+    double angularTolerance = 1.0e-3 * M_PI;
+    double distanceTolerance = 1.0e-5;
     // Void generation and conversion
     bool convert = false;
     bool voidGeneration = true;

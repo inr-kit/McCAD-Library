@@ -3,6 +3,8 @@
 
 // C++
 #include <string>
+#include <map>
+#include <tuple>
 // McCAD
 #include "surface.hpp"
 #include "tools_impl.hpp"
@@ -25,7 +27,12 @@ namespace McCAD::Geometry{
     Standard_Integer numberCollidingSurfaces = 0;
     Standard_Integer numberCollidingCurvedSurfaces = 0;
     Standard_Integer throughConcaveEdges = 0;
-    
+
+    // Conversion variables.
+    std::array<Standard_Real, 4> surfParameters;
+    std::string surfSymb;
+    TCollection_AsciiString surfExpr;
+    signed int surfSense;
     void initiate(const TopoDS_Face& aFace);
   };
 }

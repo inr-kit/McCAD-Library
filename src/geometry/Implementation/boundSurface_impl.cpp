@@ -185,7 +185,8 @@ McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Ed
 bool
 McCAD::Geometry::BoundSurface::Impl::generateParmts(){
     if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane))
-        Tools::genPlSurfParmts(boundSurface->accessSImpl()->face);
+        boundSurface->accessSImpl()->surfParameters =
+                Tools::genPlSurfParmts(boundSurface->accessSImpl()->face);
     else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder))
         Tools::genCylSurfParmts(boundSurface->accessSImpl()->face);
     else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Torus))

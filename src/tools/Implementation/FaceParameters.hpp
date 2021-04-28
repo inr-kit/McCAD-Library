@@ -27,8 +27,9 @@ namespace McCAD::Tools{
     gp_Dir normalOnFace(const DerivativeUV& derivative);
     DerivativeUV calcDerivative(const BRepAdaptor_Surface& surface,
                                 const PositionUV& position);
-    void genPlSurfParmts(const TopoDS_Face& face,
-                         const Standard_Real& parameterTolerance = 1.0e-7);
+    std::array<Standard_Real, 4> genPlSurfParmts(
+            const TopoDS_Face& face,
+            const Standard_Real& parameterTolerance = 1.0e-7);
     void genCylSurfParmts(const TopoDS_Face& face,
                          const Standard_Real& parameterTolerance = 1.0e-7);
     void genTorSurfParmts(const TopoDS_Face& face,

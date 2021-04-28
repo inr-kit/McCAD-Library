@@ -31,7 +31,7 @@ McCAD::Tools::PlaneComparator::planeParameters(const gp_Pln& plane) const{
     plane.Coefficients(planeParameters[0], planeParameters[1],
             planeParameters[2], planeParameters[3]);
     for(auto& parameter : planeParameters){
-        if(parameter <= parameterTolerance) parameter = 0.0;
+        if(std::abs(parameter) < parameterTolerance) parameter = 0.0;
     }
     return planeParameters;
 }
@@ -54,10 +54,10 @@ McCAD::Tools::PlaneComparator::equivalentPlaneParameters(const gp_Pln& first,
         };
         return (firstPlaneDirection.IsEqual(secondPlaneDirection, angularTolerance)
                 && std::abs(firstPlaneParameters[3] - secondPlaneParameters[3])
-                <= distanceTolerance) ||
+                < distanceTolerance) ||
                (firstPlaneDirection.IsOpposite(secondPlaneDirection, angularTolerance)
                 && std::abs(firstPlaneParameters[3] + secondPlaneParameters[3])
-                <= distanceTolerance);
+                < distanceTolerance);
     } catch(const Standard_ConstructionError&){
         // Plane parameters cannot form a normed direction vector;
         // not distinguishable from zero vector

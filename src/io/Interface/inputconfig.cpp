@@ -34,9 +34,10 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "rejectFileName = reject.stp\n"
                    "# > Other parameters;\n"
                    "recurrenceDepth = 20\n"
-                   "tolerance = 1.0e-7\n"
                    "minInputSolidVol = 1.0\n"
-                   "angleTolerance = 1.0e-3\n" << std::endl;
+                   "parameterTolerance = 1.0e-7\n"
+                   "angularTolerance = 1.0e-3\n"
+                   "distanceTolerance = 1.0e-5\n" << std::endl;
     inputConfig << "# Conversion\n"
                    "# ==================\n"
                    "convert = false\n"
@@ -67,8 +68,10 @@ McCAD::IO::InputConfig::readTemplate(){
            std::vector<std::string> lineSplit = splitLine(line, ' ');
            if (lineSplit.size() == 0 || lineSplit[0] == "#") continue;
            else {
+               // General input.
                if (lineSplit[0] == "inputFileName")
                    inputFileName = lineSplit[2];
+               // Decompositions
                else if (lineSplit[0] == "decompose")
                    decompose = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
                else if (lineSplit[0] == "resultFileName")
@@ -77,8 +80,15 @@ McCAD::IO::InputConfig::readTemplate(){
                    rejectFileName = lineSplit[2];
                else if (lineSplit[0] == "recurrenceDepth")
                    recurrenceDepth = std::stoi(lineSplit[2]);
-               else if (lineSplit[0] == "tolerance")
-                   tolerance = std::stof(lineSplit[2]);
+               else if (lineSplit[0] == "minInputSolidVol")
+                   minInputSolidVol = std::stof(lineSplit[2]);
+               else if (lineSplit[0] == "parameterTolerance")
+                   parameterTolerance = std::stof(lineSplit[2]);
+               else if (lineSplit[0] == "angularTolerance")
+                   angularTolerance = std::stof(lineSplit[2]) * M_PI;
+               else if (lineSplit[0] == "distanceTolerance")
+                   distanceTolerance = std::stof(lineSplit[2]);
+               // Conversion
                else if (lineSplit[0] == "convert")
                    convert = stringToLowerCase(lineSplit[2]) == "false" ? false : true;
                else if (lineSplit[0] == "voidGeneration")

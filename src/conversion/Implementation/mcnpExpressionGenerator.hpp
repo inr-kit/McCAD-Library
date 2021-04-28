@@ -13,7 +13,8 @@ namespace McCAD::Conversion{
         MCNPExprGenerator(const std::shared_ptr<Geometry::Solid>& solidObj);
         ~MCNPExprGenerator();
 
-        void genPlSurfExpr();
+        void genPlSurfExpr(const std::shared_ptr<Geometry::BoundSurface>& plSurface,
+                           const gp_Pnt& solidCenter);
         void genCylSurfExpr();
         void genTorSurfExpr();
         void genCellExpr(const std::shared_ptr<Geometry::Solid>& solidObj);
