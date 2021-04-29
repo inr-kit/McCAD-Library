@@ -39,12 +39,16 @@ void
 McCAD::Conversion::MCNPExprGenerator::genPlSurfExpr(
         const std::shared_ptr<Geometry::BoundSurface>& plSurface,
         const gp_Pnt& solidCenter){
-    Standard_Character surfExpr[255];
+    char surfExpr[255];
     // Generate planar surface expression and store in surface object.
     TopLoc_Location location;
     GeomAdaptor_Surface surface{BRep_Tool::Surface(plSurface->accessSImpl()->face,
                                                    location)};
     gp_Pln plane = surface.Plane();
+    if (plSurface->accessSImpl()->face.Orientation() == TopAbs_REVERSED){
+        gp_Ax1 planeNormal = plane.Axis();
+        plane.SetAxis(planeNormal.Reversed());
+    }
     plSurface->accessSImpl()->surfSense =
             Tools::SenseEvaluator{}.senseRelativeToPlane(plane, solidCenter);
     Standard_Real parmtA{plSurface->accessSImpl()->surfParameters[0]},

@@ -3,6 +3,7 @@
 // OCC
 #include <BRep_Tool.hxx>
 #include <Standard.hxx>
+#include <gp_Ax1.hxx>
 
 gp_Dir
 McCAD::Tools::normalOnFace(const TopoDS_Face& face, const gp_Pnt& point){
@@ -61,6 +62,11 @@ McCAD::Tools::genPlSurfParmts(const TopoDS_Face& face,
     std::array<Standard_Real, 4> planeParameters;
     GeomAdaptor_Surface surface{BRep_Tool::Surface(face, location)};
     gp_Pln plane = surface.Plane();
+    if (face.Orientation() == TopAbs_REVERSED){
+        gp_Ax1 planeNormal = plane.Axis();
+        //planeNormal.Reverse();
+        plane.SetAxis(planeNormal.Reversed());
+    }
     plane.Coefficients(planeParameters[0], planeParameters[1], planeParameters[2],
             planeParameters[3]);
     for(auto& parameter : planeParameters){

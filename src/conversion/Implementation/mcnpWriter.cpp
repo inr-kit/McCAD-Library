@@ -33,6 +33,7 @@ McCAD::Conversion::MCNPWriter::processSolids(
     ofstream outputStream(MCOutputFileName.c_str());
     // Print header
     writeHeader(outputStream);
+    writeCellCard(outputStream, solidObjList);
     outputStream.close();
 }
 
@@ -50,4 +51,20 @@ McCAD::Conversion::MCNPWriter::writeHeader(ofstream& outputStream){
                     "\nc     * Surfaces    ---- " <<
                     "\nc     * Void cells  ---- " <<
                     "\nc =======================================";
+}
+
+void
+McCAD::Conversion::MCNPWriter::writeCellCard(
+        ofstream& outputStream,
+        const McCAD::Conversion::MCNPWriter::solidsList& solidObjList){
+    for(const auto& solidObj : solidObjList){
+        if(solidObj->accessSImpl()->planesList.size() > 0){
+            outputStream << "\nSolid:";
+            for (const auto& plSurface : solidObj->accessSImpl()->planesList){
+                outputStream << "\n" << plSurface->accessSImpl()->surfExpr
+                             << "\nsense: " << plSurface->accessSImpl()->surfSense
+                             << "\n";
+            }
+        }
+    }
 }

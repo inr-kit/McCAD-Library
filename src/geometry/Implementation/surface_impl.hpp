@@ -28,12 +28,13 @@ namespace McCAD::Geometry{
     Standard_Integer numberCollidingCurvedSurfaces = 0;
     Standard_Integer throughConcaveEdges = 0;
 
+    void initiate(const TopoDS_Face& aFace);
+
     // Conversion variables.
     std::array<Standard_Real, 4> surfParameters;
     std::string surfSymb;
     TCollection_AsciiString surfExpr;
     signed int surfSense;
-    void initiate(const TopoDS_Face& aFace);
   };
 }
 
