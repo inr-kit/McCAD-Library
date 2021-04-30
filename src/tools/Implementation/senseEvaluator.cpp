@@ -10,6 +10,10 @@ McCAD::Tools::SenseEvaluator::operator()(const TopoDS_Face& face,
     GeomAdaptor_Surface surfaceAdaptor{BRep_Tool::Surface(face)};
     if (surfaceAdaptor.GetType() == GeomAbs_Plane){
         gp_Pln plane = surfaceAdaptor.Plane();
+        if(face.Orientation() == TopAbs_REVERSED){
+            gp_Ax1 planeNormal = plane.Axis();
+            plane.SetAxis(planeNormal.Reversed());
+        }
         return senseRelativeToPlane(plane, point);
     } else if (surfaceAdaptor.GetType() == GeomAbs_Cylinder){
         gp_Cylinder cylinder = surfaceAdaptor.Cylinder();

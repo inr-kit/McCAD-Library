@@ -64,11 +64,10 @@ McCAD::Tools::genPlSurfParmts(const TopoDS_Face& face,
     gp_Pln plane = surface.Plane();
     if (face.Orientation() == TopAbs_REVERSED){
         gp_Ax1 planeNormal = plane.Axis();
-        //planeNormal.Reverse();
         plane.SetAxis(planeNormal.Reversed());
     }
     plane.Coefficients(planeParameters[0], planeParameters[1], planeParameters[2],
-            planeParameters[3]);
+                       planeParameters[3]);
     for(auto& parameter : planeParameters){
         if(std::abs(parameter) < parameterTolerance) parameter = 0.0;
     }

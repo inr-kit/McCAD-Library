@@ -12,7 +12,6 @@ McCAD::Geometry::Solid::Impl::~Impl(){
 
 void
 McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
-    //std::cout << "initiate" << std::endl;
     solidShape = aSolidShape;
     solid = TopoDS::Solid(solidShape);
 }
@@ -93,4 +92,13 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTol
             edge.Convex(0);
         }
     }
+}
+
+void
+McCAD::Geometry::Solid::Impl::calcAABBCenter(){
+    Standard_Real minX, minY, minZ, maxX, maxY, maxZ;
+    aabb.Get(minX, minY, minZ, maxX, maxY, maxZ);
+    aabbCenter = {(minX + std::abs(maxX-minX)/2.0),
+                  (minY + std::abs(maxY-minY)/2.0),
+                  (minZ + std::abs(maxZ-minZ)/2.0)};
 }

@@ -182,7 +182,7 @@ McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Ed
     }
 }
 
-bool
+Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::generateParmts(){
     if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane))
         boundSurface->accessSImpl()->surfParameters =

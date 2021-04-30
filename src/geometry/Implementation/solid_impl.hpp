@@ -54,9 +54,6 @@ namespace McCAD::Geometry{
     Bnd_Box aabb;
     TopoDS_Solid solid;
     TopoDS_Shape solidShape;
-    Standard_Integer solidID{0};
-    Standard_Integer originalID{0};
-    TCollection_ExtendedString solidName;
     Standard_Real meshDeflection;
     Standard_Real boxDiagonalLength;
     Standard_Boolean splitSurface = Standard_False;
@@ -71,6 +68,12 @@ namespace McCAD::Geometry{
     std::unique_ptr<TopTools_HSequenceOfShape> splitSolidList;
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
 
+    // Conversion variables
+    Standard_Integer solidID{0};
+    Standard_Integer originalID{0};
+    TCollection_ExtendedString solidName;
+    gp_Pnt aabbCenter;
+
     void initiate(const TopoDS_Shape& aSolidShape);
     void createOBB(Standard_Real bndBoxGap = 0);
     void calcMeshDeflection(Standard_Real scalingFactor = 100);
@@ -80,6 +83,7 @@ namespace McCAD::Geometry{
     std::unique_ptr<BoundSurface> generateSurface(const TopoDS_Face& face,
                                                   Standard_Integer mode = 0);
     void mergeSurfaces(std::vector<std::unique_ptr<BoundSurface>>& planesList);
+    void calcAABBCenter();
   };
 }
 

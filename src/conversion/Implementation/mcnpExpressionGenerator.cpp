@@ -1,18 +1,17 @@
 // McCAD
 #include "mcnpExpressionGenerator.hpp"
 #include "senseEvaluator.hpp"
+// OCC
+#include <Standard.hxx>
 
 McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(
         const std::shared_ptr<Geometry::Solid>& solidObj){
     // Generate surface expressions
-    double minX, minY, minZ, maxX, maxY, maxZ;
-    solidObj->accessSImpl()->aabb.Get(minX, minY, minZ, maxX, maxY, maxZ);
-    gp_Pnt solidCenter{(minX + std::abs(maxX-minX)/2.0),
-                       (minY + std::abs(maxY-minY)/2.0),
-                       (minZ + std::abs(maxZ-minZ)/2.0)};
+    solidObj->accessSImpl()->calcAABBCenter();
     if(solidObj->accessSImpl()->planesList.size() > 0){
         for (const auto& plSurface : solidObj->accessSImpl()->planesList){
-            if(plSurface->accessBSImpl()->generateParmts()) genPlSurfExpr(plSurface, solidCenter);
+            if(plSurface->accessBSImpl()->generateParmts()) genPlSurfExpr(
+                        plSurface, solidObj->accessSImpl()->aabbCenter);
             else throw(std::runtime_error("Error in generating surface expression!"));
         }
     }
@@ -41,16 +40,9 @@ McCAD::Conversion::MCNPExprGenerator::genPlSurfExpr(
         const gp_Pnt& solidCenter){
     char surfExpr[255];
     // Generate planar surface expression and store in surface object.
-    TopLoc_Location location;
-    GeomAdaptor_Surface surface{BRep_Tool::Surface(plSurface->accessSImpl()->face,
-                                                   location)};
-    gp_Pln plane = surface.Plane();
-    if (plSurface->accessSImpl()->face.Orientation() == TopAbs_REVERSED){
-        gp_Ax1 planeNormal = plane.Axis();
-        plane.SetAxis(planeNormal.Reversed());
-    }
-    plSurface->accessSImpl()->surfSense =
-            Tools::SenseEvaluator{}.senseRelativeToPlane(plane, solidCenter);
+    plSurface->accessSImpl()->surfSense = std::signbit(
+            Tools::SenseEvaluator{}(plSurface->accessSImpl()->face, solidCenter)) ?
+                -1 : 1;
     Standard_Real parmtA{plSurface->accessSImpl()->surfParameters[0]},
                   parmtB{plSurface->accessSImpl()->surfParameters[1]},
                   parmtC{plSurface->accessSImpl()->surfParameters[2]},
@@ -83,4 +75,24 @@ void
 McCAD::Conversion::MCNPExprGenerator::genCellExpr(
         const std::shared_ptr<Geometry::Solid>& solidObj){
     // Generate Cell Expression
+    auto aabbCenter = solidObj->accessSImpl()->aabbCenter;
+    auto boxDiagLength = solidObj->accessSImpl()->boxDiagonalLength;
+    gp_Pnt xPoint{aabbCenter}, yPoint{aabbCenter}, zPoint{aabbCenter};
+    xPoint.SetX(aabbCenter.X() + 1000.0*boxDiagLength);
+    yPoint.SetY(aabbCenter.Y() + 100.0*boxDiagLength);
+    zPoint.SetZ(aabbCenter.Z() + 100.0*boxDiagLength);
+    for (const auto& surface : solidObj->accessSImpl()->facesList){
+        Standard_Boolean xReversed{Standard_False}, yReversed{Standard_False},
+                         zReversed{Standard_False};
+        xReversed = std::signbit(Tools::SenseEvaluator{}(
+                                    surface->accessSImpl()->face, xPoint)) ?
+                    Standard_False : Standard_True;
+        yReversed = std::signbit(Tools::SenseEvaluator{}(
+                                    surface->accessSImpl()->face, yPoint)) ?
+                    Standard_False : Standard_True;
+        zReversed = std::signbit(Tools::SenseEvaluator{}(
+                                    surface->accessSImpl()->face, zPoint)) ?
+                    Standard_False : Standard_True;
+        surface->accessSImpl()->surfSense = (xReversed || yReversed || zReversed) ? -1 : 1;
+    }
 }

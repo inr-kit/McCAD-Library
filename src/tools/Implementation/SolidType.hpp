@@ -14,7 +14,8 @@ public:
         cylindrical,
         toroidal,
         spherical,
-        mixed
+        mixed,
+        unKnown
     };
 };
 }

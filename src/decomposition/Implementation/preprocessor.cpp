@@ -74,5 +74,6 @@ McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid
     else if (cylindrical) return solidType.cylindrical;
     else if (toroidal) return solidType.toroidal;
     else if (spherical) return solidType.spherical;
-    else return solidType.planar;
+    else if (planar) return solidType.planar;
+    else return solidType.unKnown;
 }

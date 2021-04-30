@@ -31,8 +31,8 @@ namespace McCAD::Decomposition{
 
     public:
       template <typename solidObjType>
-      std::vector<BS> operator()(
-             solidObjType& solidObj);
+      std::vector<BS> operator()(solidObjType& solidObj);
+
       template <typename solidObjType>
       void addListsToSolidObj(solidObjType& solidObj);
 
