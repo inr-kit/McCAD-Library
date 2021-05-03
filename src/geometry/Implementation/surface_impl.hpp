@@ -31,6 +31,10 @@ namespace McCAD::Geometry{
     void initiate(const TopoDS_Face& aFace);
 
     // Conversion variables.
+    Standard_Boolean updated{Standard_False};
+    gp_Pln plane;
+    gp_Pnt location;
+    gp_Dir normal;
     std::array<Standard_Real, 4> surfParameters;
     std::string surfSymb;
     TCollection_AsciiString surfExpr;

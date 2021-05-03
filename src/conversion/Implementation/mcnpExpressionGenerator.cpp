@@ -10,9 +10,10 @@ McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(
     solidObj->accessSImpl()->calcAABBCenter();
     if(solidObj->accessSImpl()->planesList.size() > 0){
         for (const auto& plSurface : solidObj->accessSImpl()->planesList){
-            if(plSurface->accessBSImpl()->generateParmts()) genPlSurfExpr(
-                        plSurface, solidObj->accessSImpl()->aabbCenter);
-            else throw(std::runtime_error("Error in generating surface expression!"));
+            if(plSurface->accessBSImpl()->generateParmts()){
+                updateSurfParmts(plSurface, solidObj->accessSImpl()->aabbCenter);
+                genPlSurfExpr(plSurface);
+            } else throw(std::runtime_error("Error in generating surface expression!"));
         }
     }
     if(solidObj->accessSImpl()->cylindersList.size() > 0){
@@ -28,21 +29,73 @@ McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(
         }
     }
     // Generate cell description
-    genCellExpr(solidObj);
+    //genCellExpr(solidObj);
 }
 
 McCAD::Conversion::MCNPExprGenerator::~MCNPExprGenerator(){
 }
 
 void
-McCAD::Conversion::MCNPExprGenerator::genPlSurfExpr(
+McCAD::Conversion::MCNPExprGenerator::updateSurfParmts(
         const std::shared_ptr<Geometry::BoundSurface>& plSurface,
         const gp_Pnt& solidCenter){
+    Standard_Real x, y, z;
+    plSurface->accessSImpl()->normal.Coord(x, y, z);
+    /* Debug
+    std::cout << "\nSolid center: x " <<  solidCenter.X() <<
+                 ", y " << solidCenter.Y() <<
+                 ", z " << solidCenter.Z() << std::endl;
+    // Reverse components if negative.
+    std::cout << "old: a " << plSurface->accessSImpl()->surfParameters[0] <<
+                 ", b " << plSurface->accessSImpl()->surfParameters[1] <<
+                 ", c " << plSurface->accessSImpl()->surfParameters[2] <<
+                 ", d " << plSurface->accessSImpl()->surfParameters[3] << std::endl;
+    std::cout << "old normal: x " << x << ", y " << y << ", z " << z << std::endl;
+    */
+    if (y < 0 && x == 0 && z == 0) {
+        // Plane perpendicular to Y axis.
+        plSurface->accessSImpl()->updated = Standard_True;
+    } else if (z < 0 && x == 0 && y == 0) {
+        // Plane perpendicular to Z axis.
+        plSurface->accessSImpl()->updated = Standard_True;
+    } else if (x < 0) {
+        if (y == 0 && z == 0){
+            // Plane perpendicular to X axis.
+            plSurface->accessSImpl()->updated = Standard_True;
+        } else {
+            // General plane.
+            plSurface->accessSImpl()->updated = Standard_True;
+        }
+    }
+    if(plSurface->accessSImpl()->updated){
+        // Reverse the normal direction according to MCNP convention to generate sense.
+        plSurface->accessSImpl()->normal.Reverse();
+        gp_Ax1 newNormal = gp_Ax1(plSurface->accessSImpl()->location, plSurface->accessSImpl()->normal);
+        plSurface->accessSImpl()->plane.SetAxis(newNormal);
+        plSurface->accessSImpl()->plane.Coefficients(
+                    plSurface->accessSImpl()->surfParameters[0],
+                    plSurface->accessSImpl()->surfParameters[1],
+                    plSurface->accessSImpl()->surfParameters[2],
+                    plSurface->accessSImpl()->surfParameters[3]);
+        /* Debug
+        std::cout << "new normal: x " << plSurface->accessSImpl()->normal.X() <<
+                     ", y " << plSurface->accessSImpl()->normal.Y() <<
+                     ", z " << plSurface->accessSImpl()->normal.Z() << std::endl;
+        std::cout << "new: a " << plSurface->accessSImpl()->surfParameters[0] <<
+                     ",b " << plSurface->accessSImpl()->surfParameters[1] <<
+                     ",c " << plSurface->accessSImpl()->surfParameters[2] <<
+                     ",d " << plSurface->accessSImpl()->surfParameters[3] << std::endl;
+        */
+    }
+    plSurface->accessSImpl()->surfSense = std::signbit(Tools::SenseEvaluator{}.senseRelativeToPlane(
+                     plSurface->accessSImpl()->plane, solidCenter)) ? -1 : 1;
+}
+
+void
+McCAD::Conversion::MCNPExprGenerator::genPlSurfExpr(
+        const std::shared_ptr<Geometry::BoundSurface>& plSurface){
     char surfExpr[255];
     // Generate planar surface expression and store in surface object.
-    plSurface->accessSImpl()->surfSense = std::signbit(
-            Tools::SenseEvaluator{}(plSurface->accessSImpl()->face, solidCenter)) ?
-                -1 : 1;
     Standard_Real parmtA{plSurface->accessSImpl()->surfParameters[0]},
                   parmtB{plSurface->accessSImpl()->surfParameters[1]},
                   parmtC{plSurface->accessSImpl()->surfParameters[2]},

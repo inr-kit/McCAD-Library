@@ -1,5 +1,6 @@
 //C++
 #include <filesystem>
+#include <tuple>
 // McCAD
 #include "boundSurface_impl.hpp"
 #include "FaceParameters.hpp"
@@ -184,10 +185,15 @@ McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Ed
 
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::generateParmts(){
-    if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane))
-        boundSurface->accessSImpl()->surfParameters =
-                Tools::genPlSurfParmts(boundSurface->accessSImpl()->face);
-    else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder))
+    if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
+        // std::vector<gp_Pln, gp_Pnt, gp_Dir, parameters>
+        auto generatedParmts = Tools::genPlSurfParmts(boundSurface->accessSImpl()->face);
+        boundSurface->accessSImpl()->plane = std::get<0>(generatedParmts);
+        boundSurface->accessSImpl()->location = std::get<1>(generatedParmts);
+        boundSurface->accessSImpl()->normal = std::get<2>(generatedParmts);
+        boundSurface->accessSImpl()->surfParameters = std::get<3>(generatedParmts);
+                //Tools::genPlSurfParmts(boundSurface->accessSImpl()->face);
+    } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder))
         Tools::genCylSurfParmts(boundSurface->accessSImpl()->face);
     else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Torus))
         Tools::genTorSurfParmts(boundSurface->accessSImpl()->face);
