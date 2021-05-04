@@ -10,6 +10,7 @@
 namespace McCAD::Conversion{
     class MCNPExprGenerator {
     public:
+        MCNPExprGenerator();
         MCNPExprGenerator(const std::shared_ptr<Geometry::Solid>& solidObj);
         ~MCNPExprGenerator();
 
@@ -18,7 +19,10 @@ namespace McCAD::Conversion{
         void genPlSurfExpr(const std::shared_ptr<Geometry::BoundSurface>& plSurface);
         void genCylSurfExpr();
         void genTorSurfExpr();
-        void genCellExpr(const std::shared_ptr<Geometry::Solid>& solidObj);
+        void createSurfacesMap(const std::shared_ptr<Geometry::Solid>& solidObj);
+        void genCellExpr(const std::shared_ptr<Geometry::Solid>& solidObj,
+                         const Standard_Integer& cellNumber,
+                         const Standard_Integer& startSurfNumber);
     };
 }
 

@@ -39,6 +39,7 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
         goto end;
     }
     // call writer to write solids.
+    std::cout << "   - Writing MC input file" << std::endl;
     Writer{inputConfig}(solidObjList);
     end:;
 }

@@ -22,7 +22,7 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& sol
         std::vector<std::shared_ptr<Geometry::Edge>> commonEdges;
         for(Standard_Integer i = 0; i < cylindersList.size(); ++i){
             for(Standard_Integer j = i+1; j < cylindersList.size(); ++j){
-                std::cout << "i: " << i << " j, " << j << std::endl;
+                //std::cout << "i: " << i << " j, " << j << std::endl;
                 if (*cylindersList[i] == *cylindersList[j]) continue;
                 auto temp = CommonEdgeFinder{}(cylindersList[i], cylindersList[j]);
                 commonEdges.insert(commonEdges.end(), temp.begin(), temp.end());

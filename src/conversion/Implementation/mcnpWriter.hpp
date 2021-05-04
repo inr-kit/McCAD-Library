@@ -24,9 +24,13 @@ namespace McCAD::Conversion{
         int startCellNum, startSurfNum;
         void processSolids(const solidsList& solidObjList);
         void processVoids(const std::shared_ptr<VoidCell>& voidCell);
-        void writeHeader(ofstream& outputStream);
+        void writeHeader(ofstream& outputStream,
+                         const McCAD::Conversion::MCNPWriter::solidsList& solidObjList);
         void writeCellCard(ofstream& outputStream,
                            const McCAD::Conversion::MCNPWriter::solidsList& solidObjList);
+        void writeSurfCard(ofstream& outputStream,
+                           const McCAD::Conversion::MCNPWriter::solidsList& solidObjList);
+        void writeDataCard(ofstream& outputStream);
     };
 }
 

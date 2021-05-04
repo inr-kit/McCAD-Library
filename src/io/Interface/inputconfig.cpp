@@ -45,8 +45,8 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "maxSolidsPerVoidCell = 20\n"
                    "BVHVoid = true\n"
                    "MCcode = mcnp\n"
-                   "startCellNum = 0\n"
-                   "startSurfNum = 0\n"
+                   "startCellNum = 1\n"
+                   "startSurfNum = 1\n"
                    "MCOutputFileName = MCFile.txt\n" << std::endl;
     inputConfig.close();
 }

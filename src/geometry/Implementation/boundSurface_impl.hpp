@@ -26,7 +26,7 @@
 #include <TopoDS_Face.hxx>
 #include <TColgp_Array1OfPnt.hxx>
 #include <TopoDS_Wire.hxx>
-#include <BRepBuilderAPI_MakePolygon.hxx>                                           
+#include <BRepBuilderAPI_MakePolygon.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <Extrema_ExtPS.hxx>
 

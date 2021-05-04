@@ -72,7 +72,13 @@ namespace McCAD::Geometry{
     Standard_Integer solidID{0};
     Standard_Integer originalID{0};
     TCollection_ExtendedString solidName;
+    Standard_Integer matID{0};
+    Standard_Integer matDensity;
     gp_Pnt aabbCenter;
+    std::map<Standard_Integer, std::shared_ptr<BoundSurface>> intersectionList;
+    std::map<Standard_Integer, std::shared_ptr<BoundSurface>> unionList;
+    std::map<Standard_Integer, std::shared_ptr<BoundSurface>> surfacesList;
+    std::string cellExpr;
 
     void initiate(const TopoDS_Shape& aSolidShape);
     void createOBB(Standard_Real bndBoxGap = 0);

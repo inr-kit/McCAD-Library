@@ -32,8 +32,10 @@ McCAD::Conversion::MCNPWriter::processSolids(
     }
     ofstream outputStream(MCOutputFileName.c_str());
     // Print header
-    writeHeader(outputStream);
+    writeHeader(outputStream, solidObjList);
     writeCellCard(outputStream, solidObjList);
+    writeSurfCard(outputStream, solidObjList);
+    writeDataCard(outputStream);
     outputStream.close();
 }
 
@@ -44,27 +46,45 @@ McCAD::Conversion::MCNPWriter::processVoids(
 }
 
 void
-McCAD::Conversion::MCNPWriter::writeHeader(ofstream& outputStream){
-    outputStream << "McCad v1.oL generated MC input files."
+McCAD::Conversion::MCNPWriter::writeHeader(
+        ofstream& outputStream,
+        const McCAD::Conversion::MCNPWriter::solidsList& solidObjList){
+    outputStream << "McCad v1.0L generated MC input files."
                     "\nc ======================================="
-                    "\nc     * Cells       ---- " <<
-                    "\nc     * Surfaces    ---- " <<
+                    "\nc     * Cells       ---- " << solidObjList.size() <<
                     "\nc     * Void cells  ---- " <<
-                    "\nc =======================================";
+                    "\nc =======================================" << std::endl;
 }
 
 void
 McCAD::Conversion::MCNPWriter::writeCellCard(
         ofstream& outputStream,
         const McCAD::Conversion::MCNPWriter::solidsList& solidObjList){
+    outputStream << "c ========== Cell Cards ==========" << std::endl;
+    Standard_Integer cellNumber = startCellNum;
+    Standard_Integer surfNumber = startSurfNum;
     for(const auto& solidObj : solidObjList){
-        if(solidObj->accessSImpl()->planesList.size() > 0){
-            outputStream << "\nSolid:";
-            for (const auto& plSurface : solidObj->accessSImpl()->planesList){
-                outputStream << "\n" << plSurface->accessSImpl()->surfExpr
-                             << "\nsense: " << plSurface->accessSImpl()->surfSense
-                             << "\n";
-            }
+        MCNPExprGenerator{}.genCellExpr(solidObj, cellNumber, surfNumber);
+        outputStream << solidObj->accessSImpl()->cellExpr << std::endl;
+        ++cellNumber;
+        surfNumber += solidObj->accessSImpl()->surfacesList.size();
+    }
+}
+
+void
+McCAD::Conversion::MCNPWriter::writeSurfCard(
+        ofstream& outputStream,
+        const McCAD::Conversion::MCNPWriter::solidsList& solidObjList){
+    outputStream << "\nc ========== Surface Cards ==========" << std::endl;
+    for(const auto& solidObj : solidObjList){
+        for (const auto& member : solidObj->accessSImpl()->surfacesList){
+            outputStream << std::to_string(member.first);
+            outputStream << " " << member.second->accessSImpl()->surfExpr << std::endl;
         }
     }
+}
+
+void
+McCAD::Conversion::MCNPWriter::writeDataCard(ofstream& outputStream){
+    outputStream << "\nc ========== Data Cards ==========" << std::endl;
 }

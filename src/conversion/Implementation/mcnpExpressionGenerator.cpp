@@ -1,8 +1,12 @@
+// C++
+#include <boost/format.hpp>
 // McCAD
 #include "mcnpExpressionGenerator.hpp"
 #include "senseEvaluator.hpp"
 // OCC
 #include <Standard.hxx>
+
+McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(){}
 
 McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(
         const std::shared_ptr<Geometry::Solid>& solidObj){
@@ -29,7 +33,7 @@ McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(
         }
     }
     // Generate cell description
-    //genCellExpr(solidObj);
+    createSurfacesMap(solidObj);
 }
 
 McCAD::Conversion::MCNPExprGenerator::~MCNPExprGenerator(){
@@ -103,15 +107,15 @@ McCAD::Conversion::MCNPExprGenerator::genPlSurfExpr(
     if(parmtD != 0.0) parmtD *= -1;
     if ((parmtA != 0.0) && (parmtB == 0.0) && (parmtC == 0.0)){
         plSurface->accessSImpl()->surfSymb = "PX";
-        std::sprintf(surfExpr, "PX%8s%15.7f\n", "", parmtD/parmtA);
+        std::sprintf(surfExpr, "PX%2s%15.5f\n", "", parmtD/parmtA);
     } else if ((parmtA == 0.0) && (parmtB != 0.0) && (parmtC == 0.0)){
         plSurface->accessSImpl()->surfSymb = "PY";
-        std::sprintf(surfExpr, "PY%8s%15.7f\n", "", parmtD/parmtB);
+        std::sprintf(surfExpr, "PY%2s%15.5f\n", "", parmtD/parmtB);
     } else if ((parmtA == 0.0) && (parmtB == 0.0) && (parmtC != 0.0)){
         plSurface->accessSImpl()->surfSymb = "PZ";
-        std::sprintf(surfExpr, "PZ%8s%15.7f\n", "", parmtD/parmtC);
+        std::sprintf(surfExpr, "PZ%2s%15.5f\n", "", parmtD/parmtC);
     } else
-        std::sprintf(surfExpr, "P %8s%15.7f%5s%15.7f%5s%15.7f%5s%15.7f\n", "",
+        std::sprintf(surfExpr, "P %2s%15.5f%2s%15.5f%2s%15.5f%2s%15.5f\n", "",
                      parmtA, "", parmtB, "", parmtC, "", parmtD);
     plSurface->accessSImpl()->surfExpr = surfExpr;
     plSurface->accessSImpl()->surfExpr.LeftAdjust();
@@ -125,27 +129,72 @@ void
 McCAD::Conversion::MCNPExprGenerator::genTorSurfExpr(){}
 
 void
-McCAD::Conversion::MCNPExprGenerator::genCellExpr(
+McCAD::Conversion::MCNPExprGenerator::createSurfacesMap(
         const std::shared_ptr<Geometry::Solid>& solidObj){
-    // Generate Cell Expression
-    auto aabbCenter = solidObj->accessSImpl()->aabbCenter;
-    auto boxDiagLength = solidObj->accessSImpl()->boxDiagonalLength;
-    gp_Pnt xPoint{aabbCenter}, yPoint{aabbCenter}, zPoint{aabbCenter};
-    xPoint.SetX(aabbCenter.X() + 1000.0*boxDiagLength);
-    yPoint.SetY(aabbCenter.Y() + 100.0*boxDiagLength);
-    zPoint.SetZ(aabbCenter.Z() + 100.0*boxDiagLength);
     for (const auto& surface : solidObj->accessSImpl()->facesList){
-        Standard_Boolean xReversed{Standard_False}, yReversed{Standard_False},
-                         zReversed{Standard_False};
-        xReversed = std::signbit(Tools::SenseEvaluator{}(
-                                    surface->accessSImpl()->face, xPoint)) ?
-                    Standard_False : Standard_True;
-        yReversed = std::signbit(Tools::SenseEvaluator{}(
-                                    surface->accessSImpl()->face, yPoint)) ?
-                    Standard_False : Standard_True;
-        zReversed = std::signbit(Tools::SenseEvaluator{}(
-                                    surface->accessSImpl()->face, zPoint)) ?
-                    Standard_False : Standard_True;
-        surface->accessSImpl()->surfSense = (xReversed || yReversed || zReversed) ? -1 : 1;
+        Standard_Integer surfNumber = surface->accessSImpl()->surfaceNumber;
+        if (solidObj->accessSImpl()->intersectionList.count(surfNumber) == 0)
+            solidObj->accessSImpl()->intersectionList[surfNumber] = surface;
+        else throw std::runtime_error("Error processing solid. Terminating!.");
+        /*
+        if (surface->hasAssistSurface){
+            for(auto& assistSurf : surface->assistSurfaceslist){
+                auto assistSurfNumber = assistSurf->accessSImpl->surfaceNumber;
+                if (assistSurf->splitSurface){
+                    if(!solidObj->accessSImpl()->unionList.containes(assistSurfNumber))
+                        solidObj->accessSImpl()->unionList[assistSurfNumbe] = assistSurf;
+                } else{
+                    if(!solidObj->accessSImpl()->intersectionList.containes(assistSurfNumber))
+                        solidObj->accessSImpl()->intersectionList[assistSurfNumbe] = assistSurf;
+                }
+            }
+        }*/
     }
+}
+
+void
+McCAD::Conversion::MCNPExprGenerator::genCellExpr(
+        const std::shared_ptr<Geometry::Solid>& solidObj,
+        const Standard_Integer& cellNumber,
+        const Standard_Integer& startSurfNumber){
+    std::string cellExpr{boost::str(boost::format("%d") % cellNumber)};
+    if (cellExpr.size() < 5) cellExpr.resize(5, *const_cast<char*>(" "));
+    // Add material
+    if(solidObj->accessSImpl()->matID == 0)
+        cellExpr += boost::str(boost::format(" %d")
+                               % solidObj->accessSImpl()->matID);
+    else
+        cellExpr += boost::str(boost::format(" %1$d %2$10.5f")
+                               % solidObj->accessSImpl()->matID
+                               % solidObj->accessSImpl()->matDensity);
+    // Loop over surfaces in intersection list and add them to epression.
+    for(const auto& member : solidObj->accessSImpl()->intersectionList){
+        // add surface number and expression to surfacesList.
+        Standard_Integer surfaceID = member.first + startSurfNumber;
+        auto surfaceIDSigned = member.second->accessSImpl()->surfSense * surfaceID;
+        solidObj->accessSImpl()->surfacesList[surfaceID] = member.second;
+        //the length of cell expression can not be larger than 80.
+        if (cellExpr.size() + 1 + std::to_string(surfaceIDSigned).size() >= 80){
+            cellExpr += "&";
+        }
+        cellExpr += boost::str(boost::format(" %d") % surfaceIDSigned);
+    }
+    cellExpr += " ";
+    if(solidObj->accessSImpl()->unionList.size() > 1){
+        cellExpr += "(";
+        for(const auto& member : solidObj->accessSImpl()->unionList){
+            // add surface number and expression to surfacesList.
+            Standard_Integer surfaceID = member.first + startSurfNumber;
+            auto surfaceIDSigned = member.second->accessSImpl()->surfSense * surfaceID;
+            solidObj->accessSImpl()->surfacesList[surfaceID] = member.second;
+            //the length of cell expression can not be larger than 80.
+            if (cellExpr.size() + 1 + std::to_string(surfaceIDSigned).size() >= 80) {
+                cellExpr += "&";
+            } else cellExpr += ":";
+            cellExpr += boost::str(boost::format(" %d") % surfaceIDSigned);
+        }
+        cellExpr.resize(cellExpr.size() - 1);     // Remove the last character
+        cellExpr += ")";
+    }
+    solidObj->accessSImpl()->cellExpr = cellExpr;
 }
