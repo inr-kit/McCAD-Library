@@ -21,6 +21,7 @@ namespace McCAD::Conversion{
     public:
         std::string MCcode;
         std::string MCOutputFileName;
+        Standard_Real precision;
         int startCellNum, startSurfNum;
         void operator()(const solidsList& solidObjList);
         void operator()(const solidsList& solidObjList,

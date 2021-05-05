@@ -27,6 +27,7 @@ public:
     bool decompose = true;
     int recurrenceDepth = 20;
     double minInputSolidVol = 1.0;
+    double precision = 1.0e-7;
     double parameterTolerance = 1.0e-7;
     double angularTolerance = 1.0e-3 * M_PI;
     double distanceTolerance = 1.0e-5;

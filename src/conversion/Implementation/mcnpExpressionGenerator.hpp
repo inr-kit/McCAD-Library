@@ -19,10 +19,9 @@ namespace McCAD::Conversion{
         void genPlSurfExpr(const std::shared_ptr<Geometry::BoundSurface>& plSurface);
         void genCylSurfExpr();
         void genTorSurfExpr();
-        void createSurfacesMap(const std::shared_ptr<Geometry::Solid>& solidObj);
+        void createSurfacesList(const std::shared_ptr<Geometry::Solid>& solidObj);
         void genCellExpr(const std::shared_ptr<Geometry::Solid>& solidObj,
-                         const Standard_Integer& cellNumber,
-                         const Standard_Integer& startSurfNumber);
+                         const Standard_Integer& cellNumber);
     };
 }
 

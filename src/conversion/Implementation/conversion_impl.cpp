@@ -34,11 +34,10 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
         std::cout << "   - Generating void" << std::endl;
         auto voidCell = VoidCellManager{inputConfig.BVHVoid,
                 inputConfig.maxSolidsPerVoidCell}(solidObjList);
-        // Call writer to write solids and void cells.
+        std::cout << "   - Writing MC input file" << std::endl;
         Writer{inputConfig}(solidObjList, voidCell);
         goto end;
     }
-    // call writer to write solids.
     std::cout << "   - Writing MC input file" << std::endl;
     Writer{inputConfig}(solidObjList);
     end:;

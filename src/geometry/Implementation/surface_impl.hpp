@@ -38,7 +38,8 @@ namespace McCAD::Geometry{
     gp_Dir normal;
     std::array<Standard_Real, 4> surfParameters;
     std::string surfSymb;
-    TCollection_AsciiString surfExpr;
+    Standard_Integer uniqueID;
+    std::string surfExpr;
     signed int surfSense;
   };
 }
