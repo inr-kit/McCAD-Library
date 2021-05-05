@@ -19,6 +19,40 @@ McCAD::Conversion::MCNPWriter::~MCNPWriter(){
 }
 
 void
+McCAD::Conversion::MCNPWriter::operator()(
+        const McCAD::Conversion::MCNPWriter::solidsList& solidObjList){
+    processSolids(solidObjList);
+    Standard_Integer totalSurfNumber = addUniqueSurfNumbers(solidObjList) - 1;
+    // Create output file stream and write cells, surfaces, and data cards.
+    if(std::filesystem::exists(MCOutputFileName)){
+        std::string oldFileName{"old_" + MCOutputFileName};
+        std::rename(MCOutputFileName.c_str(), oldFileName.c_str());
+    }
+    ofstream outputStream(MCOutputFileName.c_str());
+    writeHeader(outputStream, solidObjList.size(), totalSurfNumber);
+    writeCellCard(outputStream, solidObjList);
+    writeSurfCard(outputStream);
+    writeDataCard(outputStream);
+    outputStream.close();
+}
+
+void
+McCAD::Conversion::MCNPWriter::operator()(
+        const McCAD::Conversion::MCNPWriter::solidsList& solidObjList,
+        const std::shared_ptr<VoidCell>& voidCell){
+    processSolids(solidObjList);
+    processVoids(voidCell);
+    Standard_Integer totalSurfNumber = addUniqueSurfNumbers(solidObjList) - 1;
+    // Create output file stream and write cells, surfaces, and data cards.
+    ofstream outputStream(MCOutputFileName.c_str());
+    writeHeader(outputStream, solidObjList.size(), totalSurfNumber);
+    writeCellCard(outputStream, solidObjList);
+    writeSurfCard(outputStream);
+    writeDataCard(outputStream);
+    outputStream.close();
+}
+
+void
 McCAD::Conversion::MCNPWriter::processSolids(
         const McCAD::Conversion::MCNPWriter::solidsList& solidObjList){
     TaskQueue<Policy::Parallel> taskQueue;
@@ -28,18 +62,6 @@ McCAD::Conversion::MCNPWriter::processSolids(
         });
     }
     taskQueue.complete();
-    if(std::filesystem::exists(MCOutputFileName)){
-        std::string oldFileName{"old_" + MCOutputFileName};
-        std::rename(MCOutputFileName.c_str(), oldFileName.c_str());
-    }
-    Standard_Integer totalSurfNumber = addUniqueSurfNumbers(solidObjList);
-    // Create output file stream and write cells, surfaces, and data cards.
-    ofstream outputStream(MCOutputFileName.c_str());
-    writeHeader(outputStream, solidObjList.size(), totalSurfNumber);
-    writeCellCard(outputStream, solidObjList);
-    writeSurfCard(outputStream);
-    writeDataCard(outputStream);
-    outputStream.close();
 }
 
 void
@@ -63,6 +85,38 @@ McCAD::Conversion::MCNPWriter::addUniqueSurfNumbers(
                 } else{
                     surface->accessSImpl()->uniqueID = surfNumber;
                     uniquePlanes[surfNumber] = surface;
+                    ++surfNumber;
+                }
+            } else if(surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Cylinder)){
+                auto duplicateID = findDuplicate(surface, uniqueCylinders);
+                if(duplicateID){
+                    surface->accessSImpl()->uniqueID = *duplicateID;
+                } else{
+                    surface->accessSImpl()->uniqueID = surfNumber;
+                    uniqueCylinders[surfNumber] = surface;
+                    ++surfNumber;
+                }
+            }
+        }
+        for(const auto& surface : solidObj->accessSImpl()->unionList){
+            if(surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Plane)){
+                // Surface is plane. Compare to unique planes list and create a unique ID.
+                auto duplicateID = findDuplicate(surface, uniquePlanes);
+                if(duplicateID){
+                    // An ID of duplicate surfae is returned.
+                    surface->accessSImpl()->uniqueID = *duplicateID;
+                } else{
+                    surface->accessSImpl()->uniqueID = surfNumber;
+                    uniquePlanes[surfNumber] = surface;
+                    ++surfNumber;
+                }
+            }  else if(surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Cylinder)){
+                auto duplicateID = findDuplicate(surface, uniqueCylinders);
+                if(duplicateID){
+                    surface->accessSImpl()->uniqueID = *duplicateID;
+                } else{
+                    surface->accessSImpl()->uniqueID = surfNumber;
+                    uniqueCylinders[surfNumber] = surface;
                     ++surfNumber;
                 }
             }

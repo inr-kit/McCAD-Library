@@ -13,8 +13,7 @@ void
 McCAD::Conversion::Writer::operator()(
         const McCAD::Conversion::Writer::solidsList& solidObjList){
     if(MCcode == "mcnp"){
-        auto writer = MCNPWriter{MCOutputFileName, startCellNum, startSurfNum, precision};
-        writer.processSolids(solidObjList);
+        MCNPWriter{MCOutputFileName, startCellNum, startSurfNum, precision}(solidObjList);
     }
 }
 
@@ -23,9 +22,7 @@ McCAD::Conversion::Writer::operator()(
         const McCAD::Conversion::Writer::solidsList& solidObjList,
         const std::shared_ptr<VoidCell>& voidCell){
     if(MCcode == "mcnp"){
-        auto writer = MCNPWriter{MCOutputFileName, startCellNum, startSurfNum, precision};
-        writer.processSolids(solidObjList);
-        writer.processVoids(voidCell);
+        MCNPWriter{MCOutputFileName, startCellNum, startSurfNum, precision}(solidObjList, voidCell);
     }
 }
 

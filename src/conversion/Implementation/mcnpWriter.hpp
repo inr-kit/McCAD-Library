@@ -28,6 +28,10 @@ namespace McCAD::Conversion{
         int startCellNum, startSurfNum;
         surfacesMap uniquePlanes, uniqueCylinders, uniqueSpheres;
         finalMap uniqueSurfaces;
+
+        void operator()(const McCAD::Conversion::MCNPWriter::solidsList& solidObjList);
+        void operator()(const McCAD::Conversion::MCNPWriter::solidsList& solidObjList,
+                        const std::shared_ptr<VoidCell>& voidCell);
         void processSolids(const solidsList& solidObjList);
         void processVoids(const std::shared_ptr<VoidCell>& voidCell);
         Standard_Integer addUniqueSurfNumbers(
