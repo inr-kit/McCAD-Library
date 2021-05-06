@@ -14,9 +14,8 @@ McCAD::IO::STEPReader::Impl::Impl(const std::string& fileName) :
     fileName{fileName},
     sequenceOfShape{std::make_shared<TopTools_HSequenceOfShape>()}{
     if(!std::filesystem::exists(fileName)){
-        throw std::runtime_error("The specified input STEP file couldn't be"
-                                 "found!.\nHINT: check inputFileName on"
-                                 "McCADInputConfig.txt");
+        throw std::runtime_error("The specified input STEP file couldn't be found!"
+                                 "\nHINT: check inputFileName on McCADInputConfig.txt");
     }
 }
 

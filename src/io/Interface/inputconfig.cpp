@@ -34,7 +34,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "rejectFileName = reject.stp\n"
                    "# > Other parameters;\n"
                    "recurrenceDepth = 20\n"
-                   "minInputSolidVol = 1.0\n"
+                   "minSolidVolume = 1.0\n"
                    "precision = 1.0e-7\n"
                    "parameterTolerance = 1.0e-7\n"
                    "angularTolerance = 1.0e-3\n"
@@ -43,6 +43,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "# ==================\n"
                    "convert = false\n"
                    "voidGeneration = true\n"
+                   "minVoidVolume = 1.0\n"
                    "maxSolidsPerVoidCell = 20\n"
                    "BVHVoid = true\n"
                    "MCcode = mcnp\n"
@@ -81,8 +82,8 @@ McCAD::IO::InputConfig::readTemplate(){
                    rejectFileName = lineSplit[2];
                else if (lineSplit[0] == "recurrenceDepth")
                    recurrenceDepth = std::stoi(lineSplit[2]);
-               else if (lineSplit[0] == "minInputSolidVol")
-                   minInputSolidVol = std::stof(lineSplit[2]);
+               else if (lineSplit[0] == "minSolidVolume")
+                   minSolidVolume = std::stof(lineSplit[2]);
                else if (lineSplit[0] == "precision")
                    precision = std::stof(lineSplit[2]);
                else if (lineSplit[0] == "parameterTolerance")
@@ -96,6 +97,8 @@ McCAD::IO::InputConfig::readTemplate(){
                    convert = stringToLowerCase(lineSplit[2]) == "false" ? false : true;
                else if (lineSplit[0] == "voidGeneration")
                    voidGeneration = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
+               else if (lineSplit[0] == "minVoidVolume")
+                   minVoidVolume = std::stof(lineSplit[2]);
                else if (lineSplit[0] == "maxSolidsPerVoidCell")
                    maxSolidsPerVoidCell = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "BVHVoid")

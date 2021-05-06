@@ -26,7 +26,7 @@ public:
     // Decomposition
     bool decompose = true;
     int recurrenceDepth = 20;
-    double minInputSolidVol = 1.0;
+    double minSolidVolume = 1.0;
     double precision = 1.0e-7;
     double parameterTolerance = 1.0e-7;
     double angularTolerance = 1.0e-3 * M_PI;
@@ -34,11 +34,12 @@ public:
     // Void generation and conversion
     bool convert = false;
     bool voidGeneration = true;
+    double minVoidVolume = 1.0;
     int maxSolidsPerVoidCell = 20;
     bool BVHVoid = true;
     std::string MCcode = "mcnp";
-    int startCellNum = 0;
-    int startSurfNum = 0;
+    int startCellNum = 1;
+    int startSurfNum = 1;
     std::string MCOutputFileName = "MCFile.txt";
 
     // Internal variables

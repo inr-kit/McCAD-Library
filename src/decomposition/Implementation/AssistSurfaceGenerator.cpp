@@ -64,8 +64,8 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& sol
 }
 
 void
-McCAD::Decomposition::AssistSurfaceGenerator::operator()(
-        Geometry::TORSolid& solidObj, Standard_Real angleTolerance){
+McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& solidObj,
+                                                         Standard_Real angleTolerance){
     // Work on the case of partial torus; quarter for example.
     auto& planesList = solidObj.accessSImpl()->planesList;
     auto& toriList = solidObj.accessSImpl()->toriList;

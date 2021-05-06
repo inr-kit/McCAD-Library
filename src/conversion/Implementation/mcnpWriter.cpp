@@ -1,6 +1,8 @@
 //C++
 #include <filesystem>
 #include <iostream>
+#include <boost/format.hpp>
+#include <boost/algorithm/string.hpp>
 // McCAD
 #include "mcnpWriter.hpp"
 #include "TaskQueue.hpp"
@@ -23,14 +25,15 @@ McCAD::Conversion::MCNPWriter::operator()(
         const McCAD::Conversion::MCNPWriter::solidsList& solidObjList){
     processSolids(solidObjList);
     Standard_Integer totalSurfNumber = addUniqueSurfNumbers(solidObjList) - 1;
+    createComponentMap(solidObjList);
     // Create output file stream and write cells, surfaces, and data cards.
     if(std::filesystem::exists(MCOutputFileName)){
         std::string oldFileName{"old_" + MCOutputFileName};
         std::rename(MCOutputFileName.c_str(), oldFileName.c_str());
     }
     ofstream outputStream(MCOutputFileName.c_str());
-    writeHeader(outputStream, solidObjList.size(), totalSurfNumber);
-    writeCellCard(outputStream, solidObjList);
+    writeHeader(outputStream, componentsMap.size(), totalSurfNumber);
+    writeCellCard(outputStream);
     writeSurfCard(outputStream);
     writeDataCard(outputStream);
     outputStream.close();
@@ -45,8 +48,8 @@ McCAD::Conversion::MCNPWriter::operator()(
     Standard_Integer totalSurfNumber = addUniqueSurfNumbers(solidObjList) - 1;
     // Create output file stream and write cells, surfaces, and data cards.
     ofstream outputStream(MCOutputFileName.c_str());
-    writeHeader(outputStream, solidObjList.size(), totalSurfNumber);
-    writeCellCard(outputStream, solidObjList);
+    writeHeader(outputStream, componentsMap.size(), totalSurfNumber);
+    writeCellCard(outputStream);
     writeSurfCard(outputStream);
     writeDataCard(outputStream);
     outputStream.close();
@@ -147,6 +150,16 @@ McCAD::Conversion::MCNPWriter::findDuplicate(
 }
 
 void
+McCAD::Conversion::MCNPWriter::createComponentMap(
+        const McCAD::Conversion::MCNPWriter::solidsList& solidObjList){
+    // Create map of unique components. All solids has an "originalID", this is
+    // order of the parent components/solid in list of solids read from step file.
+    for(const auto& solidObj : solidObjList){
+        componentsMap[solidObj->accessSImpl()->originalID].push_back(solidObj);
+    }
+}
+
+void
 McCAD::Conversion::MCNPWriter::writeHeader(ofstream& outputStream,
                                            const Standard_Integer& numCells,
                                            const Standard_Integer& totalSurfNumber){
@@ -159,14 +172,46 @@ McCAD::Conversion::MCNPWriter::writeHeader(ofstream& outputStream,
 }
 
 void
-McCAD::Conversion::MCNPWriter::writeCellCard(
-        ofstream& outputStream,
-        const McCAD::Conversion::MCNPWriter::solidsList& solidObjList){
+McCAD::Conversion::MCNPWriter::writeCellCard(ofstream& outputStream){
     outputStream << "c ========== Cell Cards ==========" << std::endl;
     Standard_Integer cellNumber = startCellNum;
-    for(const auto& solidObj : solidObjList){
-        MCNPExprGenerator{}.genCellExpr(solidObj, cellNumber);
-        outputStream << solidObj->accessSImpl()->cellExpr << std::endl;
+    // Need to loop over all solids in a compSolid, write header with maerial,
+    // component name, cell range, etc. Adjust width of expression
+    for(const auto& member : componentsMap){
+        std::string cellExpr{boost::str(boost::format("%d") % cellNumber)};
+        if (cellExpr.size() < 5) cellExpr.resize(5, *const_cast<char*>(" "));
+        // Add material from first element in vector.
+        auto matID = member.second[0]->accessSImpl()->matID;
+        auto matDensity = member.second[0]->accessSImpl()->matDensity;
+        if(matID == 0)
+            cellExpr += boost::str(boost::format(" %d") % matID);
+        else
+            cellExpr += boost::str(boost::format(" %d $10.5f") % matID % matDensity);
+        Standard_Integer continueSpacing = cellExpr.size() + 2;
+        std::string cellSolidsExpr;
+        for(Standard_Integer i = 0; i < member.second.size(); ++i){
+            if(i == 0) cellSolidsExpr += " (";
+            else cellSolidsExpr += " : (";
+            MCNPExprGenerator{}.genCellExpr(member.second.at(i));
+            cellSolidsExpr += member.second.at(i)->accessSImpl()->cellExpr;
+            cellSolidsExpr += ")";
+        }
+        cellSolidsExpr += " Imp:N=1 Imp:P=1";
+        // Adjust cell solids expression to 80 columns max.
+        std::vector<std::string> splitExpr;
+        boost::split(splitExpr, cellSolidsExpr, [](char c) {return c == ' ';});
+        Standard_Integer lineIndex{1};
+        for(Standard_Integer i = 0; i < splitExpr.size(); ++i){
+            if((cellExpr.size() + splitExpr[i].size()) > 80*lineIndex){
+                auto newSize = cellExpr.size() + continueSpacing;
+                cellExpr += "\n";
+                cellExpr.resize(newSize, *const_cast<char*>(" "));
+                cellExpr += splitExpr[i];
+                ++lineIndex;
+            } else cellExpr += splitExpr[i];
+            cellExpr += " ";
+        }
+        outputStream << cellExpr << std::endl;
         ++cellNumber;
     }
 }
@@ -191,5 +236,6 @@ McCAD::Conversion::MCNPWriter::writeSurfCard(ofstream& outputStream){
 void
 McCAD::Conversion::MCNPWriter::writeDataCard(ofstream& outputStream){
     outputStream << "\nc ========== Data Cards ==========" << std::endl;
+    // add tallies and source to calculate volumes.
 }
 

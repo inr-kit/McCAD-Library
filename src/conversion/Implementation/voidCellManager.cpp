@@ -3,9 +3,15 @@
 #include "TaskQueue.hpp"
 #include "splitSurfaceSelector.hpp"
 
-McCAD::Conversion::VoidCellManager::VoidCellManager(
-        const Standard_Boolean& BVHVoid, const Standard_Integer& maxSolidsPerVoidCell) :
-    BVHVoid{BVHVoid}, maxSolidsPerVoidCell{maxSolidsPerVoidCell}{
+McCAD::Conversion::VoidCellManager::VoidCellManager(const IO::InputConfig& inputConfig) :
+    BVHVoid{inputConfig.BVHVoid}, minVoidVolume{inputConfig.minVoidVolume},
+    maxSolidsPerVoidCell{inputConfig.maxSolidsPerVoidCell}{
+}
+
+McCAD::Conversion::VoidCellManager::VoidCellManager(const Standard_Boolean& BVHVoid,
+                                                    const Standard_Real& minVoidVolume,
+                                                    const Standard_Integer& maxSolidsPerVoidCell) :
+    BVHVoid{BVHVoid}, minVoidVolume{minVoidVolume}, maxSolidsPerVoidCell{maxSolidsPerVoidCell}{
 }
 
 McCAD::Conversion::VoidCellManager::~VoidCellManager(){}
@@ -75,24 +81,24 @@ McCAD::Conversion::VoidCellManager::perform(
         auto splitMembers = splitVoidCell(surface, members);
         if(BVHVoid){
             // Create left void cell.
-            auto voidCellLeft = VoidCellManager{BVHVoid, maxSolidsPerVoidCell}(
-                        splitMembers.first, voidCell->depth + 1, 0);
+            auto voidCellLeft = VoidCellManager{BVHVoid, minVoidVolume,
+                    maxSolidsPerVoidCell}(splitMembers.first, voidCell->depth + 1, 0);
             voidCell->daughterVoidCells.push_back(voidCellLeft);
             // Create right void cell.
-            auto voidCellRight = VoidCellManager{BVHVoid, maxSolidsPerVoidCell}(
-                        splitMembers.second, voidCell->depth + 1, 1);
+            auto voidCellRight = VoidCellManager{BVHVoid, minVoidVolume,
+                    maxSolidsPerVoidCell}(splitMembers.second, voidCell->depth + 1, 1);
             voidCell->daughterVoidCells.push_back(voidCellRight);
         } else{
             // Create left void cell.
             auto leftBoundaries = updateBoundaries(surface, 0);
-            auto voidCellLeft = VoidCellManager{BVHVoid, maxSolidsPerVoidCell}(
-                        splitMembers.first, voidCell->depth + 1, 0,
+            auto voidCellLeft = VoidCellManager{BVHVoid, minVoidVolume,
+                    maxSolidsPerVoidCell}(splitMembers.first, voidCell->depth + 1, 0,
                         leftBoundaries[0], leftBoundaries[1], leftBoundaries[2]);
             voidCell->daughterVoidCells.push_back(voidCellLeft);
             // Create right void cell.
             auto rightBoundaries = updateBoundaries(surface, 1);
-            auto voidCellRight = VoidCellManager{BVHVoid, maxSolidsPerVoidCell}(
-                        splitMembers.second, voidCell->depth + 1, 1,
+            auto voidCellRight = VoidCellManager{BVHVoid, minVoidVolume,
+                    maxSolidsPerVoidCell}(splitMembers.second, voidCell->depth + 1, 1,
                         rightBoundaries[0], rightBoundaries[1], rightBoundaries[2]);
             voidCell->daughterVoidCells.push_back(voidCellRight);
         }

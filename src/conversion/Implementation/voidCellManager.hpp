@@ -7,6 +7,7 @@
 #include <map>
 // McCAD
 #include "solid_impl.hpp"
+#include "inputconfig.hpp"
 #include "voidCell.hpp"
 // OCC
 #include <Standard.hxx>
@@ -15,7 +16,8 @@
 namespace McCAD::Conversion{
     class VoidCellManager {
     public:
-        VoidCellManager(const Standard_Boolean& BVHVoid,
+        VoidCellManager(const IO::InputConfig& inputConfig);
+        VoidCellManager(const Standard_Boolean& BVHVoid, const Standard_Real& minVoidVolume,
                         const Standard_Integer& maxSolidsPerVoidCell);
         ~VoidCellManager();
     private:
@@ -38,6 +40,7 @@ namespace McCAD::Conversion{
     public:
         Standard_Boolean BVHVoid = true;
         Standard_Integer maxSolidsPerVoidCell;
+        Standard_Real minVoidVolume;
         dimMap xAxis, yAxis, zAxis;
         std::shared_ptr<VoidCell> voidCell;
         std::shared_ptr<VoidCell> operator()(
