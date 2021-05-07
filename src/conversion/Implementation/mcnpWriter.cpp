@@ -12,9 +12,10 @@
 McCAD::Conversion::MCNPWriter::MCNPWriter(const std::string& MCOutputFileName,
                                           const Standard_Integer& startCellNum,
                                           const Standard_Integer& startSurfNum,
-                                          const Standard_Real& precision) :
+                                          const Standard_Real& precision,
+                                          const Standard_Integer& maxLineWidth) :
     MCOutputFileName{MCOutputFileName}, startCellNum{startCellNum},
-    startSurfNum{startSurfNum}, precision{precision}{
+    startSurfNum{startSurfNum}, precision{precision}, maxLineWidth{maxLineWidth}{
 }
 
 McCAD::Conversion::MCNPWriter::~MCNPWriter(){
@@ -22,8 +23,10 @@ McCAD::Conversion::MCNPWriter::~MCNPWriter(){
 
 void
 McCAD::Conversion::MCNPWriter::operator()(
-        const McCAD::Conversion::MCNPWriter::solidsList& solidObjList){
+        const McCAD::Conversion::MCNPWriter::solidsList& solidObjList,
+        const std::shared_ptr<VoidCell>& voidCell){
     processSolids(solidObjList);
+    //processVoids(voidCell);
     Standard_Integer totalSurfNumber = addUniqueSurfNumbers(solidObjList) - 1;
     createComponentMap(solidObjList);
     // Create output file stream and write cells, surfaces, and data cards.
@@ -31,22 +34,6 @@ McCAD::Conversion::MCNPWriter::operator()(
         std::string oldFileName{"old_" + MCOutputFileName};
         std::rename(MCOutputFileName.c_str(), oldFileName.c_str());
     }
-    ofstream outputStream(MCOutputFileName.c_str());
-    writeHeader(outputStream, componentsMap.size(), totalSurfNumber);
-    writeCellCard(outputStream);
-    writeSurfCard(outputStream);
-    writeDataCard(outputStream);
-    outputStream.close();
-}
-
-void
-McCAD::Conversion::MCNPWriter::operator()(
-        const McCAD::Conversion::MCNPWriter::solidsList& solidObjList,
-        const std::shared_ptr<VoidCell>& voidCell){
-    processSolids(solidObjList);
-    processVoids(voidCell);
-    Standard_Integer totalSurfNumber = addUniqueSurfNumbers(solidObjList) - 1;
-    // Create output file stream and write cells, surfaces, and data cards.
     ofstream outputStream(MCOutputFileName.c_str());
     writeHeader(outputStream, componentsMap.size(), totalSurfNumber);
     writeCellCard(outputStream);
@@ -202,7 +189,7 @@ McCAD::Conversion::MCNPWriter::writeCellCard(ofstream& outputStream){
         boost::split(splitExpr, cellSolidsExpr, [](char c) {return c == ' ';});
         Standard_Integer lineIndex{1};
         for(Standard_Integer i = 0; i < splitExpr.size(); ++i){
-            if((cellExpr.size() + splitExpr[i].size()) > 80*lineIndex){
+            if((cellExpr.size() + splitExpr[i].size()) > maxLineWidth*lineIndex){
                 auto newSize = cellExpr.size() + continueSpacing;
                 cellExpr += "\n";
                 cellExpr.resize(newSize, *const_cast<char*>(" "));

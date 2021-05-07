@@ -10,6 +10,7 @@
 #include "voidCell.hpp"
 #include "inputconfig.hpp"
 // OCC
+#include <Standard.hxx>
 
 namespace McCAD::Conversion{
     class Writer {
@@ -22,8 +23,8 @@ namespace McCAD::Conversion{
         std::string MCcode;
         std::string MCOutputFileName;
         Standard_Real precision;
-        int startCellNum, startSurfNum;
-        void operator()(const solidsList& solidObjList);
+        Standard_Integer maxLineWidth;
+        Standard_Integer startCellNum, startSurfNum;
         void operator()(const solidsList& solidObjList,
                         const std::shared_ptr<VoidCell>& voidCell);
     };

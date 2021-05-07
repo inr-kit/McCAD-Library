@@ -5,23 +5,28 @@
 
 McCAD::Conversion::VoidCellManager::VoidCellManager(const IO::InputConfig& inputConfig) :
     BVHVoid{inputConfig.BVHVoid}, minVoidVolume{inputConfig.minVoidVolume},
-    maxSolidsPerVoidCell{inputConfig.maxSolidsPerVoidCell}{
+    maxSolidsPerVoidCell{inputConfig.maxSolidsPerVoidCell},
+    voidGeneration{inputConfig.voidGeneration}{
 }
 
 McCAD::Conversion::VoidCellManager::VoidCellManager(const Standard_Boolean& BVHVoid,
                                                     const Standard_Real& minVoidVolume,
-                                                    const Standard_Integer& maxSolidsPerVoidCell) :
-    BVHVoid{BVHVoid}, minVoidVolume{minVoidVolume}, maxSolidsPerVoidCell{maxSolidsPerVoidCell}{
+                                                    const Standard_Integer& maxSolidsPerVoidCell,
+                                                    const Standard_Boolean& voidGeneration) :
+    BVHVoid{BVHVoid}, minVoidVolume{minVoidVolume}, maxSolidsPerVoidCell{maxSolidsPerVoidCell},
+    voidGeneration{voidGeneration}{
 }
 
 McCAD::Conversion::VoidCellManager::~VoidCellManager(){}
 
 std::shared_ptr<McCAD::Conversion::VoidCell>
 McCAD::Conversion::VoidCellManager::operator()(
-        const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList){
-    // Create root void cell.
+        const McCAD::Conversion::VoidCellManager::solidsList& solidObjList){
+    if (voidGeneration) std::cout << "   - Generating void" << std::endl;
+    else std::cout << "   - Creating graveyard" << std::endl;
+    // Create root void cell, the outside of which is the graveyard.
     voidCell = std::make_shared<VoidCell>();
-    auto members = createLists(solidObjList);
+    membersMap members = createLists(solidObjList);
     perform(members);
     return voidCell;
 }
@@ -51,7 +56,7 @@ McCAD::Conversion::VoidCellManager::operator()(
 
 McCAD::Conversion::VoidCellManager::membersMap
 McCAD::Conversion::VoidCellManager::createLists(
-        const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList){
+        const McCAD::Conversion::VoidCellManager::solidsList& solidObjList){
     membersMap members;
     for(const auto& solidObj : solidObjList){
         members[solidObj->accessSImpl()->solidID] =
@@ -64,41 +69,51 @@ void
 McCAD::Conversion::VoidCellManager::perform(
         const McCAD::Conversion::VoidCellManager::membersMap& members){
     populateLists(members);
-    // for depths > 1 you have to carry the dims of the half parent downstream to
-    // update the final resultant void cells.
     updateVoidCell(members);
-    if(!BVHVoid) voidCell->updateAABB();
+    Standard_Boolean splitCondition = Standard_False;
+    if (voidGeneration){
+        // for depths > 1 you have to carry the dims of the half parent downstream to
+        // update the final resultant void cells.
+        if(!BVHVoid) voidCell->updateAABB();
+        Standard_Boolean splitConditionOnNumSolids = members.size() > maxSolidsPerVoidCell
+                ? Standard_True : Standard_False;
+        Standard_Boolean splitConditionOnCellVol = voidCell->getAABBVolume() >= 2 * minVoidVolume
+                ? Standard_True : Standard_False;
+        splitCondition = splitConditionOnNumSolids && splitConditionOnCellVol;
+    }
+    //debug
     voidCell->outputAABB();
-    Standard_Boolean splitCondition = members.size() > maxSolidsPerVoidCell
-                                      ? Standard_True : Standard_False;
+    //debug
     if(splitCondition){
+        auto surface = SplitSurfaceSelector{maxSolidsPerVoidCell, minVoidVolume
+                                           }.process(xAxis, yAxis, zAxis, voidCell);
+        if (!surface) return;
+        auto splitMembers = splitVoidCell(*surface, members);
         voidCell->splitted = Standard_True;
-        auto surface = SplitSurfaceSelector{maxSolidsPerVoidCell}.process(
-                    xAxis, yAxis, zAxis, voidCell);
-        std::cout << "Chosen splitting surface: " << std::get<0>(surface) <<
-                     ", " << std::get<1>(surface) << ", " << std::get<2>(surface)
-                  << ", " << std::get<3>(surface) << std::endl;
-        auto splitMembers = splitVoidCell(surface, members);
         if(BVHVoid){
             // Create left void cell.
             auto voidCellLeft = VoidCellManager{BVHVoid, minVoidVolume,
-                    maxSolidsPerVoidCell}(splitMembers.first, voidCell->depth + 1, 0);
+                    maxSolidsPerVoidCell, voidGeneration}(
+                        splitMembers.first, voidCell->depth + 1, 0);
             voidCell->daughterVoidCells.push_back(voidCellLeft);
             // Create right void cell.
             auto voidCellRight = VoidCellManager{BVHVoid, minVoidVolume,
-                    maxSolidsPerVoidCell}(splitMembers.second, voidCell->depth + 1, 1);
+                    maxSolidsPerVoidCell, voidGeneration}(
+                        splitMembers.second, voidCell->depth + 1, 1);
             voidCell->daughterVoidCells.push_back(voidCellRight);
         } else{
             // Create left void cell.
-            auto leftBoundaries = updateBoundaries(surface, 0);
+            auto leftBoundaries = updateBoundaries(*surface, 0);
             auto voidCellLeft = VoidCellManager{BVHVoid, minVoidVolume,
-                    maxSolidsPerVoidCell}(splitMembers.first, voidCell->depth + 1, 0,
+                    maxSolidsPerVoidCell, voidGeneration}(
+                        splitMembers.first, voidCell->depth + 1, 0,
                         leftBoundaries[0], leftBoundaries[1], leftBoundaries[2]);
             voidCell->daughterVoidCells.push_back(voidCellLeft);
             // Create right void cell.
-            auto rightBoundaries = updateBoundaries(surface, 1);
+            auto rightBoundaries = updateBoundaries(*surface, 1);
             auto voidCellRight = VoidCellManager{BVHVoid, minVoidVolume,
-                    maxSolidsPerVoidCell}(splitMembers.second, voidCell->depth + 1, 1,
+                    maxSolidsPerVoidCell, voidGeneration}(
+                        splitMembers.second, voidCell->depth + 1, 1,
                         rightBoundaries[0], rightBoundaries[1], rightBoundaries[2]);
             voidCell->daughterVoidCells.push_back(voidCellRight);
         }
@@ -172,7 +187,7 @@ McCAD::Conversion::VoidCellManager::splitMembersList(
 
 McCAD::Conversion::VoidCellManager::aabbVec
 McCAD::Conversion::VoidCellManager::updateBoundaries(
-        const McCAD::Conversion::VoidCellManager::surfaceTuple& surface,
+        McCAD::Conversion::VoidCellManager::surfaceTuple& surface,
         const Standard_Integer& sense){
     aabbTuple xAxisAABB, yAxisAABB, zAxisAABB;
     std::string surfaceType = std::get<0>(surface);

@@ -6,8 +6,7 @@
 #include <STEPControl_Writer.hxx>
 #include <gp_Pnt.hxx>
 
-McCAD::Conversion::VoidCell::VoidCell()
-    : depth{0}, width{0} {
+McCAD::Conversion::VoidCell::VoidCell() : depth{0}, width{0} {
 }
 
 McCAD::Conversion::VoidCell::VoidCell(const Standard_Integer& depth,
@@ -65,20 +64,20 @@ McCAD::Conversion::VoidCell::updateAABB(){
     zAxis = std::make_tuple(minZ, minZ + std::abs(maxZ-minZ)/2.0, maxZ);
 }
 
+Standard_Real
+McCAD::Conversion::VoidCell::getAABBVolume(){
+    Standard_Real volume = std::abs(maxX - minX) * std::abs(maxY - minY) *
+            std::abs(maxZ - minZ);
+    return volume;
+}
+
 void
 McCAD::Conversion::VoidCell::outputAABB(){
-    //*//debug
     STEPControl_Writer writer0;
     writer0.Transfer(aabbSolid, STEPControl_StepModelType::STEPControl_AsIs);
-    Standard_Integer kk = 0;
     std::string filename = "./aabb";
     std::string suffix = ".stp";
     filename += std::to_string(depth) + "_" + std::to_string(width);
-    //while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
-    //    ++kk;
-    //}
-    //filename += std::to_string(kk);
     filename += suffix;
     writer0.Write(filename.c_str());
-    //*///debug
 }

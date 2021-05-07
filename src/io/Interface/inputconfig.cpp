@@ -26,7 +26,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "# > Path to the input STEP file;\n"
                    "inputFileName = input.stp\n" << std::endl;
     inputConfig << "# Decomposition\n"
-                   "# ===================\n"
+                   "# =============\n"
                    "decompose = true\n"
                    "# > Desired name of the decomposed solids output STEP file;\n"
                    "resultFileName = result.stp\n"
@@ -40,7 +40,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "angularTolerance = 1.0e-3\n"
                    "distanceTolerance = 1.0e-5\n" << std::endl;
     inputConfig << "# Conversion\n"
-                   "# ==================\n"
+                   "# ==========\n"
                    "convert = false\n"
                    "voidGeneration = true\n"
                    "minVoidVolume = 1.0\n"
@@ -49,6 +49,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "MCcode = mcnp\n"
                    "startCellNum = 1\n"
                    "startSurfNum = 1\n"
+                   "maxLineWidth = 80\n"
                    "MCOutputFileName = MCFile.txt\n" << std::endl;
     inputConfig.close();
 }
@@ -58,8 +59,8 @@ McCAD::IO::InputConfig::readTemplate(){
     std::ifstream inputConfig("McCADInputConfig.txt");
     if (!inputConfig){
         std::cout << "McCADInputConfig.txt is missing!. Proceeding with default "
-                     "parameters:\n"
-                     "Input = " << inputFileName <<
+                     "parameters:"
+                     "\nInput  = " << inputFileName <<
                      "\nResult = " << resultFileName << 
                      "\nReject = " << rejectFileName << std::endl;
     } else {
@@ -109,6 +110,8 @@ McCAD::IO::InputConfig::readTemplate(){
                    startCellNum = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "startSurfNum")
                    startSurfNum = std::stoi(lineSplit[2]);
+               else if (lineSplit[0] == "maxLineWidth")
+                   maxLineWidth = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "MCOutputFileName")
                    MCOutputFileName = lineSplit[2];
                else continue;

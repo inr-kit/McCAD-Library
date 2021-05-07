@@ -6,65 +6,98 @@
 #include "solidsSorter.hpp"
 
 McCAD::Conversion::SplitSurfaceSelector::SplitSurfaceSelector(
-        const Standard_Integer& maxSolidsPerVoidCell) :
-    maxSolidsPerVoidCell{maxSolidsPerVoidCell} {}
+        const Standard_Integer& maxSolidsPerVoidCell,
+        const Standard_Real& minVoidVolume) :
+    maxSolidsPerVoidCell{maxSolidsPerVoidCell}, minVoidVolume{minVoidVolume} {}
 
 McCAD::Conversion::SplitSurfaceSelector::~SplitSurfaceSelector(){}
 
-McCAD::Conversion::SplitSurfaceSelector::surfaceTuple
+std::optional<McCAD::Conversion::SplitSurfaceSelector::surfaceTuple>
 McCAD::Conversion::SplitSurfaceSelector::process(
         const McCAD::Conversion::SplitSurfaceSelector::dimMap& xMap,
         const McCAD::Conversion::SplitSurfaceSelector::dimMap& yMap,
         const McCAD::Conversion::SplitSurfaceSelector::dimMap& zMap,
         const std::shared_ptr<VoidCell>& voidCell){
     surfaceVec candidates;
-    auto xSurface = selectAxisSplitSurface(xMap, voidCell->xAxis);
-    candidates.push_back(std::make_tuple("X", std::get<1>(xSurface), std::get<3>(xSurface),
-                                         std::get<4>(xSurface)));
-    auto ySurface = selectAxisSplitSurface(yMap, voidCell->yAxis);
-    candidates.push_back(std::make_tuple("Y", std::get<1>(ySurface), std::get<3>(ySurface),
-                                         std::get<4>(ySurface)));
-    auto zSurface = selectAxisSplitSurface(zMap, voidCell->zAxis);
-    candidates.push_back(std::make_tuple("Z", std::get<1>(zSurface), std::get<3>(zSurface),
-                                         std::get<4>(zSurface)));
+    calcDimTolerances(voidCell);
+    auto xSurface = selectAxisSplitSurface(xMap, voidCell->xAxis, xTolerance);
+    if(xSurface) candidates.push_back(std::make_tuple("X", std::get<1>(*xSurface),
+                                                      std::get<3>(*xSurface),
+                                                      std::get<4>(*xSurface)));
+    auto ySurface = selectAxisSplitSurface(yMap, voidCell->yAxis, yTolerance);
+    if(ySurface) candidates.push_back(std::make_tuple("Y", std::get<1>(*ySurface),
+                                                      std::get<3>(*ySurface),
+                                                      std::get<4>(*ySurface)));
+    auto zSurface = selectAxisSplitSurface(zMap, voidCell->zAxis, zTolerance);
+    if(zSurface) candidates.push_back(std::make_tuple("Z", std::get<1>(*zSurface),
+                                                      std::get<3>(*zSurface),
+                                                      std::get<4>(*zSurface)));
     // sort candidates by number of intersections
-    auto byIntersection = SolidsSorter{}.sortByElement2(candidates, 2);
-    Standard_Integer returnIndex = 0;
-    for(Standard_Integer i=1; i < byIntersection.size(); ++i){
-        if(i == returnIndex) continue;
-        if((std::get<2>(byIntersection[i]) == std::get<2>(byIntersection[returnIndex])) &&
-            (std::get<3>(byIntersection[i]) < std::get<3>(byIntersection[returnIndex])))
-            returnIndex = i;
+    if(candidates.size() > 0){
+        auto byIntersection = SolidsSorter{}.sortByElement2(candidates, 2);
+        Standard_Integer returnIndex = 0;
+        for(Standard_Integer i=1; i < byIntersection.size(); ++i){
+            if(i == returnIndex) continue;
+            if((std::get<2>(byIntersection[i]) == std::get<2>(byIntersection[returnIndex])) &&
+                    (std::get<3>(byIntersection[i]) < std::get<3>(byIntersection[returnIndex])))
+                returnIndex = i;
+        }
+        return byIntersection[returnIndex];
     }
-    return byIntersection[returnIndex];
+    return std::nullopt;
 }
 
-McCAD::Conversion::SplitSurfaceSelector::candidateTuple
+void
+McCAD::Conversion::SplitSurfaceSelector::calcDimTolerances(
+        const std::shared_ptr<VoidCell>& voidCell){
+    Standard_Real xExtent = voidCell->maxX - voidCell->minX;
+    Standard_Real yExtent = voidCell->maxY - voidCell->minY;
+    Standard_Real zExtent = voidCell->maxZ - voidCell->minZ;
+    xTolerance = minVoidVolume / (yExtent * zExtent);
+    yTolerance = minVoidVolume / (xExtent * zExtent);
+    zTolerance = minVoidVolume / (xExtent * yExtent);
+}
+
+std::optional<McCAD::Conversion::SplitSurfaceSelector::candidateTuple>
 McCAD::Conversion::SplitSurfaceSelector::selectAxisSplitSurface(
         const McCAD::Conversion::SplitSurfaceSelector::dimMap& aMap,
-        const McCAD::Conversion::SplitSurfaceSelector::centerTuple& aabbList){
+        const McCAD::Conversion::SplitSurfaceSelector::centerTuple& aabbList,
+        const Standard_Real& dimTolerance){
     candidateVec candidates;
     // Calculate the mean and standard deviation of the AABB centers.
     auto dist = calcCentersParameters(aMap);
+    Standard_Real minSplitDim;
     if(std::get<1>(dist) <= (std::get<2>(aabbList) - std::get<0>(aabbList))/3.0){
         // Narrow dist, sigma < extent of box / 3.
-        if((std::get<0>(dist) - std::get<1>(dist)) > std::get<0>(aabbList)){
-            // if mu - sigma is inside aabb, add it to list.
-            candidates.push_back(std::make_tuple(0, std::get<0>(dist) - std::get<1>(dist),
-                                                 0, 0, 0));
+        Standard_Real oneSigmeLeft = std::get<0>(dist) - std::get<1>(dist);
+        minSplitDim = std::min(std::abs(oneSigmeLeft - std::get<0>(aabbList)),
+                               std::abs(std::get<2>(aabbList) - oneSigmeLeft));
+        if(oneSigmeLeft > std::get<0>(aabbList) && minSplitDim >= dimTolerance){
+            // mu - sigma is inside aabb and within dimentional tolerance. Add to list.
+            candidates.push_back(std::make_tuple(0, oneSigmeLeft, 0, 0, 0));
         }
-        if((std::get<0>(dist) + std::get<1>(dist)) < std::get<2>(aabbList)){
-            // if mu + sigma is inside aabb, add it to list.
-            candidates.push_back(std::make_tuple(0, std::get<0>(dist) + std::get<1>(dist),
-                                                 0, 0, 0));
+        Standard_Real oneSigmeRight = std::get<0>(dist) + std::get<1>(dist);
+        minSplitDim = std::min(std::abs(oneSigmeRight - std::get<0>(aabbList)),
+                               std::abs(std::get<2>(aabbList) - oneSigmeRight));
+        if(oneSigmeRight < std::get<2>(aabbList) && minSplitDim >= dimTolerance){
+            // mu + sigma is inside aabb and within dimentional tolerance. Add to list.
+            candidates.push_back(std::make_tuple(0, oneSigmeRight, 0, 0, 0));
         }
-    } else {
-        // wide distribution, add mu to list.
+    } else{
+        // wide distribution and mu within dimentional tolerance. Add to list.
+        minSplitDim = std::min(std::abs(std::get<0>(dist) - std::get<0>(aabbList)),
+                               std::abs(std::get<2>(aabbList) - std::get<0>(dist)));
+        if(minSplitDim >= dimTolerance){
         candidates.push_back(std::make_tuple(0, std::get<0>(dist), 0, 0, 0));
+        }
     }
     // Add middle of box as a candidate.
-    candidates.push_back(std::make_tuple(0, std::get<1>(aabbList), 0, 0, 0));
-    return checkSplitSurfacePriority(candidates, aMap);
+    minSplitDim = std::abs(std::get<1>(aabbList) - std::get<0>(aabbList));
+    if(minSplitDim >= dimTolerance){
+        candidates.push_back(std::make_tuple(0, std::get<1>(aabbList), 0, 0, 0));
+    }
+    if (candidates.size() > 0) return checkSplitSurfacePriority(candidates, aMap);
+    return std::nullopt;
 }
 
 std::tuple<Standard_Real, Standard_Real>

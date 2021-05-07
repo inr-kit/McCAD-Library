@@ -3,6 +3,8 @@
 
 // C++
 #include <memory>
+#include <vector>
+#include <tuple>
 #include <deque>
 #include <variant>
 // McCAD
@@ -12,7 +14,8 @@
 #include "solid_impl.hpp"
 // OCC
 #include <Standard.hxx>
-#include <TopTools_HSequenceOfShape.hxx>
+#include <TopoDS_Shape.hxx>
+#include <TCollection_ExtendedString.hxx>
 
 namespace McCAD::Conversion {
     class Convert::Impl{
@@ -21,7 +24,8 @@ namespace McCAD::Conversion {
       ~Impl();
     private:
       Tools::SolidType solidType;
-      using shape_Name_ID = std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString,
+      using shape_Name_ID = std::vector<std::tuple<TopoDS_Shape,
+                                                   TCollection_ExtendedString,
                                                    Standard_Integer>>;
     public:
       Standard_Boolean rejectCondition = Standard_False;

@@ -4,6 +4,7 @@
 // C++
 #include <string>
 #include <vector>
+#include <tuple>
 #include <map>
 // McCAD
 #include "solid_impl.hpp"
@@ -17,10 +18,13 @@ namespace McCAD::Conversion{
     class VoidCellManager {
     public:
         VoidCellManager(const IO::InputConfig& inputConfig);
-        VoidCellManager(const Standard_Boolean& BVHVoid, const Standard_Real& minVoidVolume,
-                        const Standard_Integer& maxSolidsPerVoidCell);
+        VoidCellManager(const Standard_Boolean& BVHVoid,
+                        const Standard_Real& minVoidVolume,
+                        const Standard_Integer& maxSolidsPerVoidCell,
+                        const Standard_Boolean& voidGeneration);
         ~VoidCellManager();
     private:
+        using solidsList = std::vector<std::shared_ptr<Geometry::Solid>>;
         // dimMap format: (SolidID, <AABB min, AABB center, AABB max>)
         using dimMap = std::map<Standard_Integer, std::tuple<Standard_Real,
                                                              Standard_Real,
@@ -38,13 +42,13 @@ namespace McCAD::Conversion{
         using aabbTuple = std::tuple<Standard_Real, Standard_Real>;
         using aabbVec = std::vector<aabbTuple>;
     public:
-        Standard_Boolean BVHVoid = true;
+        Standard_Boolean voidGeneration;
+        Standard_Boolean BVHVoid;
         Standard_Integer maxSolidsPerVoidCell;
         Standard_Real minVoidVolume;
         dimMap xAxis, yAxis, zAxis;
         std::shared_ptr<VoidCell> voidCell;
-        std::shared_ptr<VoidCell> operator()(
-                const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList);
+        std::shared_ptr<VoidCell> operator()(const solidsList& solidObjList);
         std::shared_ptr<VoidCell> operator()(const membersMap& members,
                                              const Standard_Integer& depth,
                                              const Standard_Integer& width);
@@ -54,7 +58,7 @@ namespace McCAD::Conversion{
                                              const aabbTuple& xAxisAABB,
                                              const aabbTuple& yAxisAABB,
                                              const aabbTuple& zAxisAABB);
-        membersMap createLists(const std::vector<std::shared_ptr<Geometry::Solid>>& solidObjList);
+        membersMap createLists(const solidsList& solidObjList);
         void perform(const membersMap& members);
         void populateLists(const membersMap& members);
         void updateVoidCell(const membersMap& members);
@@ -63,10 +67,8 @@ namespace McCAD::Conversion{
         std::pair<membersMap, membersMap> splitMembersList(const surfaceTuple& surface,
                                                            const membersMap& members,
                                                            const dimMap& axis);
-        aabbVec updateBoundaries(const McCAD::Conversion::VoidCellManager::surfaceTuple& surface,
-                                 const Standard_Integer& sense);
-        Bnd_Box updateOverlapAABB(const Bnd_Box& aAABB,
-                                  const McCAD::Conversion::VoidCellManager::surfaceTuple& surface,
+        aabbVec updateBoundaries(surfaceTuple& surface, const Standard_Integer& sense);
+        Bnd_Box updateOverlapAABB(const Bnd_Box& aAABB, const surfaceTuple& surface,
                                   const Standard_Integer& sense);
     };
 }

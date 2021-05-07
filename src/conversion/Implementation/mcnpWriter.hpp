@@ -11,12 +11,14 @@
 #include "solid_impl.hpp"
 #include "voidCell.hpp"
 // OCC
+#include <Standard.hxx>
 
 namespace McCAD::Conversion{
     class MCNPWriter {
     public:
         MCNPWriter(const std::string& MCOutputFileName, const Standard_Integer& startCellNum,
-                   const Standard_Integer& startSurfNum, const Standard_Real& precision);
+                   const Standard_Integer& startSurfNum, const Standard_Real& precision,
+                   const Standard_Integer& maxLineWidth);
         ~MCNPWriter();
     private:
         using solidsList = std::vector<std::shared_ptr<Geometry::Solid>>;
@@ -24,14 +26,14 @@ namespace McCAD::Conversion{
         using finalMap = std::map<Standard_Integer, std::string>;
         using cellsMap = std::map<Standard_Integer, std::vector<std::shared_ptr<Geometry::Solid>>>;
     public:
+        Standard_Integer maxLineWidth;
         Standard_Real precision;
         std::string MCOutputFileName;
-        int startCellNum, startSurfNum;
+        Standard_Integer startCellNum, startSurfNum;
         surfacesMap uniquePlanes, uniqueCylinders, uniqueSpheres;
         finalMap uniqueSurfaces;
         cellsMap componentsMap;
 
-        void operator()(const solidsList& solidObjList);
         void operator()(const solidsList& solidObjList,
                         const std::shared_ptr<VoidCell>& voidCell);
         void processSolids(const solidsList& solidObjList);

@@ -15,7 +15,7 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
     auto inputData = reader.getInputData();
     auto inputSolidsMap = inputData.accessImpl()->inputSolidsMap;
     if (inputSolidsMap.size() == 0)
-        throw std::runtime_error("Input solids list is empty!");
+        throw std::runtime_error("Input solids map is empty!");
     std::cout << "> Found " << inputSolidsMap.size() <<
                  " shapes(s) in the input STEP file" << std::endl;
     auto product = Tools::HeirarchyFlatter{}(inputSolidsMap);
@@ -30,16 +30,9 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
     }
     std::cout << " > Converting " << acceptedInputSolidsList.size() << " solid(s)"
               << std::endl;
-    if (inputConfig.voidGeneration){
-        std::cout << "   - Generating void" << std::endl;
-        auto voidCell = VoidCellManager{inputConfig}(solidObjList);
-        std::cout << "   - Writing MC input file" << std::endl;
-        Writer{inputConfig}(solidObjList, voidCell);
-        goto end;
-    }
+    auto voidCell = VoidCellManager{inputConfig}(solidObjList);
     std::cout << "   - Writing MC input file" << std::endl;
-    Writer{inputConfig}(solidObjList);
-    end:;
+    Writer{inputConfig}(solidObjList, voidCell);
 }
 
 McCAD::Conversion::Convert::Impl::~Impl(){

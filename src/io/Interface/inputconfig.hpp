@@ -40,7 +40,8 @@ public:
     std::string MCcode = "mcnp";
     int startCellNum = 1;
     int startSurfNum = 1;
-    std::string MCOutputFileName = "MCFile.txt";
+    int maxLineWidth = 80;
+    std::string MCOutputFileName = "MCFile.inp";
 
     // Internal variables
     std::string conversionFileName = "conversion.stp";

@@ -42,6 +42,7 @@ namespace McCAD::Conversion{
       void addSolidIDs(const membersMap& members);
       void addSolids(const membersMap& members);
       void updateAABB();
+      Standard_Real getAABBVolume();
       void outputAABB();
   };
 }
