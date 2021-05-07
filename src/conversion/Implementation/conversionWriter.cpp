@@ -3,9 +3,7 @@
 #include "mcnpWriter.hpp"
 
 McCAD::Conversion::Writer::Writer(const IO::InputConfig& inputConfig) :
-    MCOutputFileName{inputConfig.MCOutputFileName}, MCcode{inputConfig.MCcode},
-    startCellNum{inputConfig.startCellNum}, startSurfNum{inputConfig.startSurfNum},
-    precision{inputConfig.precision}, maxLineWidth{inputConfig.maxLineWidth} {}
+    inputConfig{inputConfig}, MCcode{inputConfig.MCcode} {}
 
 McCAD::Conversion::Writer::~Writer(){}
 
@@ -14,8 +12,7 @@ McCAD::Conversion::Writer::operator()(
         const McCAD::Conversion::Writer::solidsList& solidObjList,
         const std::shared_ptr<VoidCell>& voidCell){
     if(MCcode == "mcnp"){
-        MCNPWriter{MCOutputFileName, startCellNum, startSurfNum, precision,
-                   maxLineWidth}(solidObjList, voidCell);
+        MCNPWriter{inputConfig}(solidObjList, voidCell);
     }
 }
 

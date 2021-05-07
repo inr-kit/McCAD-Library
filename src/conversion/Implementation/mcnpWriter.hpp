@@ -10,21 +10,21 @@
 // McCAD
 #include "solid_impl.hpp"
 #include "voidCell.hpp"
+#include "inputconfig.hpp"
 // OCC
 #include <Standard.hxx>
 
 namespace McCAD::Conversion{
     class MCNPWriter {
     public:
-        MCNPWriter(const std::string& MCOutputFileName, const Standard_Integer& startCellNum,
-                   const Standard_Integer& startSurfNum, const Standard_Real& precision,
-                   const Standard_Integer& maxLineWidth);
+        MCNPWriter(const IO::InputConfig& inputConfig);
         ~MCNPWriter();
     private:
         using solidsList = std::vector<std::shared_ptr<Geometry::Solid>>;
         using surfacesMap = std::map<Standard_Integer, std::shared_ptr<Geometry::BoundSurface>>;
         using finalMap = std::map<Standard_Integer, std::string>;
         using cellsMap = std::map<Standard_Integer, std::vector<std::shared_ptr<Geometry::Solid>>>;
+        using solidsMap = std::map<Standard_Integer, std::shared_ptr<Geometry::Solid>>;
     public:
         Standard_Integer maxLineWidth;
         Standard_Real precision;
@@ -33,6 +33,8 @@ namespace McCAD::Conversion{
         surfacesMap uniquePlanes, uniqueCylinders, uniqueSpheres;
         finalMap uniqueSurfaces;
         cellsMap componentsMap;
+        solidsMap solidObjMap;
+        Standard_Boolean voidGeneration, BVHVoid;
 
         void operator()(const solidsList& solidObjList,
                         const std::shared_ptr<VoidCell>& voidCell);
@@ -46,6 +48,7 @@ namespace McCAD::Conversion{
         void writeHeader(ofstream& outputStream, const Standard_Integer& numCells,
                          const Standard_Integer& totalSurfNumber);
         void writeCellCard(ofstream& outputStream);
+        void writeVoidCard(ofstream& outputStream, const std::shared_ptr<VoidCell>& voidCell);
         void writeSurfCard(ofstream& outputStream);
         void writeDataCard(ofstream& outputStream);
     };

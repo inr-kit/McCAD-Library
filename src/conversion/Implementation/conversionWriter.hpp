@@ -20,11 +20,8 @@ namespace McCAD::Conversion{
     private:
         using solidsList = std::vector<std::shared_ptr<Geometry::Solid>>;
     public:
+        IO::InputConfig inputConfig;
         std::string MCcode;
-        std::string MCOutputFileName;
-        Standard_Real precision;
-        Standard_Integer maxLineWidth;
-        Standard_Integer startCellNum, startSurfNum;
         void operator()(const solidsList& solidObjList,
                         const std::shared_ptr<VoidCell>& voidCell);
     };

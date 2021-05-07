@@ -107,15 +107,15 @@ McCAD::Conversion::MCNPExprGenerator::genPlSurfExpr(
     if(parmtD != 0.0) parmtD *= -1;
     if ((parmtA != 0.0) && (parmtB == 0.0) && (parmtC == 0.0)){
         plSurface->accessSImpl()->surfSymb = "PX";
-        surfExpr += boost::str(boost::format("PX  %11.5f") % (parmtD/parmtA));
+        surfExpr += boost::str(boost::format("PX %11.5f") % (parmtD/parmtA));
     } else if ((parmtA == 0.0) && (parmtB != 0.0) && (parmtC == 0.0)){
         plSurface->accessSImpl()->surfSymb = "PY";
-        surfExpr += boost::str(boost::format("PY  %11.5f") % (parmtD/parmtB));
+        surfExpr += boost::str(boost::format("PY %11.5f") % (parmtD/parmtB));
     } else if ((parmtA == 0.0) && (parmtB == 0.0) && (parmtC != 0.0)){
         plSurface->accessSImpl()->surfSymb = "PZ";
-        surfExpr += boost::str(boost::format("PZ  %11.5f") % (parmtD/parmtC));
+        surfExpr += boost::str(boost::format("PZ %11.5f") % (parmtD/parmtC));
     } else
-        surfExpr += boost::str(boost::format("P   %11.5f  %11.5f  %11.5f  %11.5f")
+        surfExpr += boost::str(boost::format("P %11.5f  %11.5f  %11.5f  %11.5f")
                            % parmtA % parmtB % parmtC % parmtD);
     plSurface->accessSImpl()->surfExpr = surfExpr;
 }
@@ -146,14 +146,18 @@ McCAD::Conversion::MCNPExprGenerator::createSurfacesList(
 void
 McCAD::Conversion::MCNPExprGenerator::genCellExpr(
         const std::shared_ptr<Geometry::Solid>& solidObj){
-    std::string cellExpr;
+    std::string cellExpr, complimentExpr;
+    complimentExpr += " (";
     for(const auto& surface : solidObj->accessSImpl()->intersectionList){
         // add surface number and expression to surfacesList.
         auto surfaceIDSigned = surface->accessSImpl()->surfSense *
                 surface->accessSImpl()->uniqueID;
         cellExpr += boost::str(boost::format("%d ") % surfaceIDSigned);
+        complimentExpr += boost::str(boost::format("%d : ") % (-1*surfaceIDSigned));
     }
     cellExpr.resize(cellExpr.size() - 1);
+    complimentExpr.resize(complimentExpr.size() - 3);
+    complimentExpr += ")";
     if(solidObj->accessSImpl()->unionList.size() > 1){
         cellExpr += " (";
         for(const auto& surface : solidObj->accessSImpl()->unionList){
@@ -161,9 +165,12 @@ McCAD::Conversion::MCNPExprGenerator::genCellExpr(
             auto surfaceIDSigned = surface->accessSImpl()->surfSense *
                     surface->accessSImpl()->uniqueID;
             cellExpr += boost::str(boost::format("%d : ") % surfaceIDSigned);
+            complimentExpr += boost::str(boost::format("%d ") % (-1*surfaceIDSigned));
         }
         cellExpr.resize(cellExpr.size() - 3);     // Remove the last character
         cellExpr += ")";
+        complimentExpr.resize(complimentExpr.size() - 1);
     }
     solidObj->accessSImpl()->cellExpr = cellExpr;
+    solidObj->accessSImpl()->complimentExpr = complimentExpr;
 }
