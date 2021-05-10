@@ -24,18 +24,18 @@ McCAD::Conversion::MCNPWriter::operator()(
         const McCAD::Conversion::MCNPWriter::solidsList& solidObjList,
         const std::shared_ptr<VoidCell>& voidCell){
     processSolids(solidObjList);
-    Standard_Integer totalSurfNumber = addUniqueSurfNumbers(solidObjList) - 1;
-    //processVoids(voidCell);
+    addUniqueSurfNumbers(solidObjList);
     createComponentMap(solidObjList);
+    createVoidMap(voidCell);
     // Create output file stream and write cells, surfaces, and data cards.
     if(std::filesystem::exists(MCOutputFileName)){
         std::string oldFileName{"old_" + MCOutputFileName};
         std::rename(MCOutputFileName.c_str(), oldFileName.c_str());
     }
     ofstream outputStream(MCOutputFileName.c_str());
-    writeHeader(outputStream, componentsMap.size(), totalSurfNumber);
+    writeHeader(outputStream);
     writeCellCard(outputStream);
-    writeVoidCard(outputStream, voidCell);
+    writeVoidCard(outputStream);
     writeSurfCard(outputStream);
     writeDataCard(outputStream);
     outputStream.close();
@@ -51,61 +51,6 @@ McCAD::Conversion::MCNPWriter::processSolids(
         });
     }
     taskQueue.complete();
-}
-
-Standard_Integer
-McCAD::Conversion::MCNPWriter::addUniqueSurfNumbers(
-        const McCAD::Conversion::MCNPWriter::solidsList& solidObjList){
-    Standard_Integer surfNumber = startSurfNum;
-    for(const auto& solidObj : solidObjList){
-        for(const auto& surface : solidObj->accessSImpl()->intersectionList){
-            if(surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Plane)){
-                // Surface is plane. Compare to unique planes list and create a unique ID.
-                auto duplicateID = findDuplicate(surface, uniquePlanes);
-                if(duplicateID){
-                    // An ID of duplicate surfae is returned.
-                    surface->accessSImpl()->uniqueID = *duplicateID;
-                } else{
-                    surface->accessSImpl()->uniqueID = surfNumber;
-                    uniquePlanes[surfNumber] = surface;
-                    ++surfNumber;
-                }
-            } else if(surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Cylinder)){
-                auto duplicateID = findDuplicate(surface, uniqueCylinders);
-                if(duplicateID){
-                    surface->accessSImpl()->uniqueID = *duplicateID;
-                } else{
-                    surface->accessSImpl()->uniqueID = surfNumber;
-                    uniqueCylinders[surfNumber] = surface;
-                    ++surfNumber;
-                }
-            }
-        }
-        for(const auto& surface : solidObj->accessSImpl()->unionList){
-            if(surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Plane)){
-                // Surface is plane. Compare to unique planes list and create a unique ID.
-                auto duplicateID = findDuplicate(surface, uniquePlanes);
-                if(duplicateID){
-                    // An ID of duplicate surfae is returned.
-                    surface->accessSImpl()->uniqueID = *duplicateID;
-                } else{
-                    surface->accessSImpl()->uniqueID = surfNumber;
-                    uniquePlanes[surfNumber] = surface;
-                    ++surfNumber;
-                }
-            }  else if(surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Cylinder)){
-                auto duplicateID = findDuplicate(surface, uniqueCylinders);
-                if(duplicateID){
-                    surface->accessSImpl()->uniqueID = *duplicateID;
-                } else{
-                    surface->accessSImpl()->uniqueID = surfNumber;
-                    uniqueCylinders[surfNumber] = surface;
-                    ++surfNumber;
-                }
-            }
-        }
-    }
-    return surfNumber;
 }
 
 std::optional<Standard_Integer>
@@ -130,6 +75,64 @@ McCAD::Conversion::MCNPWriter::findDuplicate(
 }
 
 void
+McCAD::Conversion::MCNPWriter::addUniqueSurfNumbers(
+        const McCAD::Conversion::MCNPWriter::solidsList& solidObjList){
+    Standard_Integer surfNumber = startSurfNum;
+    for(const auto& solidObj : solidObjList){
+        for(const auto& surface : solidObj->accessSImpl()->intersectionList){
+            if(surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Plane)){
+                // Surface is plane. Compare to unique planes list and create a unique ID.
+                auto duplicateID = findDuplicate(surface, uniquePlanes);
+                if(duplicateID){
+                    // An ID of duplicate surfae is returned.
+                    surface->accessSImpl()->uniqueID = *duplicateID;
+                } else{
+                    surface->accessSImpl()->uniqueID = surfNumber;
+                    uniquePlanes[surfNumber] = surface;
+                    uniqueSurfaces[surfNumber] = surface->accessSImpl()->surfExpr;
+                    ++surfNumber;
+                }
+            } else if(surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Cylinder)){
+                auto duplicateID = findDuplicate(surface, uniqueCylinders);
+                if(duplicateID){
+                    surface->accessSImpl()->uniqueID = *duplicateID;
+                } else{
+                    surface->accessSImpl()->uniqueID = surfNumber;
+                    uniqueCylinders[surfNumber] = surface;
+                    uniqueSurfaces[surfNumber] = surface->accessSImpl()->surfExpr;
+                    ++surfNumber;
+                }
+            }
+        }
+        for(const auto& surface : solidObj->accessSImpl()->unionList){
+            if(surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Plane)){
+                // Surface is plane. Compare to unique planes list and create a unique ID.
+                auto duplicateID = findDuplicate(surface, uniquePlanes);
+                if(duplicateID){
+                    // An ID of duplicate surfae is returned.
+                    surface->accessSImpl()->uniqueID = *duplicateID;
+                } else{
+                    surface->accessSImpl()->uniqueID = surfNumber;
+                    uniquePlanes[surfNumber] = surface;
+                    uniqueSurfaces[surfNumber] = surface->accessSImpl()->surfExpr;
+                    ++surfNumber;
+                }
+            }  else if(surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Cylinder)){
+                auto duplicateID = findDuplicate(surface, uniqueCylinders);
+                if(duplicateID){
+                    surface->accessSImpl()->uniqueID = *duplicateID;
+                } else{
+                    surface->accessSImpl()->uniqueID = surfNumber;
+                    uniqueCylinders[surfNumber] = surface;
+                    uniqueSurfaces[surfNumber] = surface->accessSImpl()->surfExpr;
+                    ++surfNumber;
+                }
+            }
+        }
+    }
+}
+
+void
 McCAD::Conversion::MCNPWriter::createComponentMap(
         const McCAD::Conversion::MCNPWriter::solidsList& solidObjList){
     // Create map of unique components. All solids has an "originalID", this is
@@ -141,13 +144,79 @@ McCAD::Conversion::MCNPWriter::createComponentMap(
 }
 
 void
-McCAD::Conversion::MCNPWriter::writeHeader(ofstream& outputStream,
-                                           const Standard_Integer& numCells,
-                                           const Standard_Integer& totalSurfNumber){
+McCAD::Conversion::MCNPWriter::addDaughterVoids(const std::shared_ptr<VoidCell>& voidCell){
+    if(BVHVoid){
+        // Add all inner and leaf nodes in the binary tree.
+        if(voidCell->daughterVoidCells.size() > 0){
+            // Add daughter void cells.
+            for(const auto& daughter : voidCell->daughterVoidCells){
+                std::tuple<Standard_Integer, Standard_Integer> voidDesignator =
+                        std::make_tuple(daughter->depth, daughter->width);
+                voidCellsMap[voidDesignator] = daughter;
+                addDaughterVoids(daughter);
+            }
+        } else return;
+    } else {
+        // Add only leaf nodes.
+        if(voidCell->daughterVoidCells.size() > 0){
+            // Add daughter void cells.
+            for(const auto& daughter : voidCell->daughterVoidCells){
+                addDaughterVoids(daughter);
+            }
+        } else {
+            // Reached a leaf node. Add void cell to map.
+            std::tuple<Standard_Integer, Standard_Integer> voidDesignator =
+                    std::make_tuple(voidCell->depth, voidCell->width);
+            voidCellsMap[voidDesignator] = voidCell;
+        }
+    }
+}
+
+void
+McCAD::Conversion::MCNPWriter::createVoidMap(
+        const std::shared_ptr<VoidCell>& voidCell){
+    // Add root void cell, also it is the graveyard.
+    std::tuple<Standard_Integer, Standard_Integer> voidDesignator =
+            std::make_tuple(voidCell->depth, voidCell->width);
+    voidCellsMap[voidDesignator] = voidCell;
+    if(voidGeneration) addDaughterVoids(voidCell);
+    Standard_Integer voidSurfNumber = startSurfNum + uniqueSurfaces.size();
+    for (const auto& member : voidCellsMap){
+        MCNPExprGenerator{}.genVoidExpr(member.second);
+        member.second->voidSurfNumber = voidSurfNumber;
+        uniqueSurfaces[voidSurfNumber] = member.second->voidSurfExpr;
+        ++voidSurfNumber;
+    }
+}
+
+std::string
+McCAD::Conversion::MCNPWriter::adjustLineWidth(const std::string& mainExpr,
+                                               const std::string& bodyExpr){
+    // Adjust cell solids expression to 80 columns max.
+    std::string finalExpr = mainExpr;
+    Standard_Integer continueSpacing = finalExpr.size() + 2;
+    std::vector<std::string> splitExpr;
+    boost::split(splitExpr, bodyExpr, [](char c) {return c == ' ';});
+    Standard_Integer lineIndex{1};
+    for(Standard_Integer i = 0; i < splitExpr.size(); ++i){
+        if((finalExpr.size() + splitExpr[i].size()) > maxLineWidth*lineIndex){
+            auto newSize = finalExpr.size() + continueSpacing;
+            finalExpr += "\n";
+            finalExpr.resize(newSize, *const_cast<char*>(" "));
+            finalExpr += splitExpr[i];
+            ++lineIndex;
+        } else finalExpr += splitExpr[i];
+        finalExpr += " ";
+    }
+    return finalExpr;
+}
+
+void
+McCAD::Conversion::MCNPWriter::writeHeader(ofstream& outputStream){
     outputStream << "McCad v1.0L generated MC input files." <<
-                    "\nc     * Cells       ---- " << numCells <<
-                    "\nc     * Surfaces    ---- " << totalSurfNumber <<
-                    "\nc     * Void cells  ---- " << std::endl;
+                    "\nc     * Material Cells ---- " << componentsMap.size() <<
+                    "\nc     * Surfaces       ---- " << uniqueSurfaces.size() <<
+                    "\nc     * Void cells     ---- " << voidCellsMap.size() << std::endl;
 }
 
 void
@@ -169,11 +238,10 @@ McCAD::Conversion::MCNPWriter::writeCellCard(ofstream& outputStream){
             cellExpr += boost::str(boost::format(" %d") % matID);
             outputStream << "\nc * Material : " << matID;
         } else{
-            cellExpr += boost::str(boost::format(" %d $10.5f") % matID % matDensity);
+            cellExpr += boost::str(boost::format(" %d %10.5f") % matID % matDensity);
             outputStream << "\nc * Density  : " << matDensity;
         }
         outputStream << "\nc ============" << std::endl;
-        Standard_Integer continueSpacing = cellExpr.size() + 2;
         std::string cellSolidsExpr;
         for(Standard_Integer i = 0; i < member.second.size(); ++i){
             if(i == 0) cellSolidsExpr += " (";
@@ -183,75 +251,64 @@ McCAD::Conversion::MCNPWriter::writeCellCard(ofstream& outputStream){
             cellSolidsExpr += ")";
         }
         cellSolidsExpr += " Imp:N=1 Imp:P=1";
-        // Adjust cell solids expression to 80 columns max.
-        std::vector<std::string> splitExpr;
-        boost::split(splitExpr, cellSolidsExpr, [](char c) {return c == ' ';});
-        Standard_Integer lineIndex{1};
-        for(Standard_Integer i = 0; i < splitExpr.size(); ++i){
-            if((cellExpr.size() + splitExpr[i].size()) > maxLineWidth*lineIndex){
-                auto newSize = cellExpr.size() + continueSpacing;
-                cellExpr += "\n";
-                cellExpr.resize(newSize, *const_cast<char*>(" "));
-                cellExpr += splitExpr[i];
-                ++lineIndex;
-            } else cellExpr += splitExpr[i];
-            cellExpr += " ";
-        }
-        outputStream << cellExpr << std::endl;
+        outputStream << adjustLineWidth(cellExpr, cellSolidsExpr) << std::endl;
         ++cellNumber;
     }
 }
 
 void
-McCAD::Conversion::MCNPWriter::writeVoidCard(ofstream& outputStream,
-                                             const std::shared_ptr<VoidCell>& voidCell){
+McCAD::Conversion::MCNPWriter::writeVoidCard(ofstream& outputStream){
     outputStream << "c ==================== Void Cells ====================" << std::endl;
     Standard_Integer voidNumber = startCellNum + componentsMap.size();
-    if(!voidGeneration){
-        std::string graveYardExpr{boost::str(boost::format("%d") % voidNumber)};
-        if (graveYardExpr.size() < 5) graveYardExpr.resize(5, *const_cast<char*>(" "));
-        graveYardExpr += boost::str(boost::format(" %d") % 0);
-        Standard_Integer continueSpacing = graveYardExpr.size() + 2;
+    if(!voidGeneration) goto writeGraveYard;
+    for(const auto& member : voidCellsMap){
+        std::string voidExpr{boost::str(boost::format("%d") % voidNumber)};
+        if (voidExpr.size() < 5) voidExpr.resize(5, *const_cast<char*>(" "));
+        voidExpr += boost::str(boost::format(" %d") % 0);
         std::string voidSolidsExpr;
-        for(const auto& solidID : voidCell->solidIDList){
-            voidSolidsExpr += " (";
-            voidSolidsExpr += solidObjMap[solidID]->accessSImpl()->complimentExpr;
-            voidSolidsExpr += ")";
+        voidSolidsExpr += boost::str(boost::format(" %d") % (-1 * member.second->voidSurfNumber));
+        if(BVHVoid){
+            if(member.second->daughterVoidCells.size() > 0){
+                // Write inner nodes.
+                for(const auto& daughterVoid : member.second->daughterVoidCells){
+                    voidSolidsExpr += boost::str(boost::format(" %d") % daughterVoid->voidSurfNumber);
+                }
+            } else{
+                // Write leaf node. Write complement of solids in the void cell.
+                for(const Standard_Integer& solidID : member.second->solidIDList){
+                    voidSolidsExpr += solidObjMap[solidID]->accessSImpl()->complimentExpr;
+                }
+            }
+        } else{
+            if(member.first == std::make_tuple(0,0)) continue;
+            // Write leaf nodes only.
+            for(const Standard_Integer& solidID : member.second->solidIDList){
+                voidSolidsExpr += solidObjMap[solidID]->accessSImpl()->complimentExpr;
+            }
         }
         voidSolidsExpr += " Imp:N=1 Imp:P=1";
-        // Adjust cell solids expression to 80 columns max.
-        std::vector<std::string> splitExpr;
-        boost::split(splitExpr, voidSolidsExpr, [](char c) {return c == ' ';});
-        Standard_Integer lineIndex{1};
-        for(Standard_Integer i = 0; i < splitExpr.size(); ++i){
-            if((graveYardExpr.size() + splitExpr[i].size()) > maxLineWidth*lineIndex){
-                auto newSize = graveYardExpr.size() + continueSpacing;
-                graveYardExpr += "\n";
-                graveYardExpr.resize(newSize, *const_cast<char*>(" "));
-                graveYardExpr += splitExpr[i];
-                ++lineIndex;
-            } else graveYardExpr += splitExpr[i];
-            graveYardExpr += " ";
-        }
-        outputStream << graveYardExpr << std::endl;
+        outputStream << adjustLineWidth(voidExpr, voidSolidsExpr) << std::endl;
+        ++voidNumber;
     }
+    writeGraveYard:;
+    Standard_Integer voidSurfNumber{voidCellsMap[std::make_tuple(0,0)]->voidSurfNumber};
+    std::string graveYardExpr{boost::str(boost::format("%d") % voidNumber)};
+    if (graveYardExpr.size() < 5) graveYardExpr.resize(5, *const_cast<char*>(" "));
+    graveYardExpr += boost::str(boost::format(" %d") % 0);
+    graveYardExpr += boost::str(boost::format(" %d") % voidSurfNumber);
+    graveYardExpr += " Imp:N=0 Imp:P=0 $Graveyard";
+    outputStream << graveYardExpr << std::endl;
+    uniqueSurfaces[voidSurfNumber] = voidCellsMap[std::make_tuple(0,0)]->voidSurfExpr;
 }
 
 void
 McCAD::Conversion::MCNPWriter::writeSurfCard(ofstream& outputStream){
     outputStream << "\nc ==================== Surface Cards ====================" << std::endl;
-    // create one big list of tuples <surfaceNum, surfExpr>, order by surfNum, write all
-    if (uniquePlanes.size() > 1){
-        for(const auto& member : uniquePlanes){
-            uniqueSurfaces[member.first] = member.second->accessSImpl()->surfExpr;
-        }
-    }
     // Write all surfaces.
     for(const auto& surface : uniqueSurfaces){
         std::string surfExpr{boost::str(boost::format("%d") % surface.first)};
         if (surfExpr.size() < 5) surfExpr.resize(5, *const_cast<char*>(" "));
-        surfExpr += surface.second;
-        outputStream << surfExpr << std::endl;
+        outputStream << adjustLineWidth(surfExpr, surface.second) << std::endl;
     }
 }
 
@@ -259,5 +316,10 @@ void
 McCAD::Conversion::MCNPWriter::writeDataCard(ofstream& outputStream){
     outputStream << "\nc ==================== Data Cards ====================" << std::endl;
     // add tallies and source to calculate volumes.
+    outputStream << "Mode N" << std::endl;
+    std::string sourceExpr{boost::str(boost::format("SDEF POS=%6.3f %6.3f %6.3f ERG=14.1")
+                                      % std::get<1>(voidCellsMap[std::make_tuple(0,0)]->xAxis)
+                                      % std::get<1>(voidCellsMap[std::make_tuple(0,0)]->yAxis)
+                                      % std::get<1>(voidCellsMap[std::make_tuple(0,0)]->zAxis))};
+    outputStream << sourceExpr << std::endl;
 }
-

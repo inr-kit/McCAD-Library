@@ -38,6 +38,8 @@ namespace McCAD::Conversion{
       Standard_Real minX{0}, minY{0}, minZ{0}, maxX{0}, maxY{0}, maxZ{0};
       centerTuple xAxis, yAxis, zAxis;
       updateTuple xAxisUpdate, yAxisUpdate, zAxisUpdate;
+      std::string voidExpr, voidSurfExpr;
+      Standard_Integer voidSurfNumber;
 
       void addSolidIDs(const membersMap& members);
       void addSolids(const membersMap& members);

@@ -25,6 +25,8 @@ namespace McCAD::Conversion{
         using finalMap = std::map<Standard_Integer, std::string>;
         using cellsMap = std::map<Standard_Integer, std::vector<std::shared_ptr<Geometry::Solid>>>;
         using solidsMap = std::map<Standard_Integer, std::shared_ptr<Geometry::Solid>>;
+        using voidsMap = std::map<std::tuple<Standard_Integer, Standard_Integer>,
+                                  std::shared_ptr<VoidCell>>;
     public:
         Standard_Integer maxLineWidth;
         Standard_Real precision;
@@ -34,21 +36,25 @@ namespace McCAD::Conversion{
         finalMap uniqueSurfaces;
         cellsMap componentsMap;
         solidsMap solidObjMap;
+        voidsMap voidCellsMap;
         Standard_Boolean voidGeneration, BVHVoid;
 
         void operator()(const solidsList& solidObjList,
                         const std::shared_ptr<VoidCell>& voidCell);
         void processSolids(const solidsList& solidObjList);
         void processVoids(const std::shared_ptr<VoidCell>& voidCell);
-        Standard_Integer addUniqueSurfNumbers(const solidsList& solidObjList);
+        void addUniqueSurfNumbers(const solidsList& solidObjList);
         std::optional<Standard_Integer> findDuplicate(
                 const std::shared_ptr<Geometry::BoundSurface>& surface,
                 surfacesMap& uniqueMap);
         void createComponentMap(const solidsList& solidObjList);
-        void writeHeader(ofstream& outputStream, const Standard_Integer& numCells,
-                         const Standard_Integer& totalSurfNumber);
+        void addDaughterVoids(const std::shared_ptr<VoidCell>& voidCell);
+        void createVoidMap(const std::shared_ptr<VoidCell>& voidCell);
+        std::string adjustLineWidth(const std::string& mainExpr,
+                                    const std::string& bodyExpr);
+        void writeHeader(ofstream& outputStream);
         void writeCellCard(ofstream& outputStream);
-        void writeVoidCard(ofstream& outputStream, const std::shared_ptr<VoidCell>& voidCell);
+        void writeVoidCard(ofstream& outputStream);
         void writeSurfCard(ofstream& outputStream);
         void writeDataCard(ofstream& outputStream);
     };

@@ -174,3 +174,13 @@ McCAD::Conversion::MCNPExprGenerator::genCellExpr(
     solidObj->accessSImpl()->cellExpr = cellExpr;
     solidObj->accessSImpl()->complimentExpr = complimentExpr;
 }
+
+void
+McCAD::Conversion::MCNPExprGenerator::genVoidExpr(const std::shared_ptr<VoidCell>& voidCell){
+    std::string voidSurfExpr;
+    voidSurfExpr = boost::str(boost::format("RPP %11.5f %11.5f %11.5f %11.5f %11.5f %11.5f")
+                          % voidCell->minX % voidCell->maxX
+                          % voidCell->minY % voidCell->maxY
+                          % voidCell->minZ % voidCell->maxZ);
+    voidCell->voidSurfExpr = voidSurfExpr;
+}

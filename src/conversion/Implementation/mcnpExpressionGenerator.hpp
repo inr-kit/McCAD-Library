@@ -5,6 +5,7 @@
 #include <memory>
 // McCAD
 #include "solid_impl.hpp"
+#include "voidCell.hpp"
 // OCC
 
 namespace McCAD::Conversion{
@@ -21,6 +22,7 @@ namespace McCAD::Conversion{
         void genTorSurfExpr();
         void createSurfacesList(const std::shared_ptr<Geometry::Solid>& solidObj);
         void genCellExpr(const std::shared_ptr<Geometry::Solid>& solidObj);
+        void genVoidExpr(const std::shared_ptr<VoidCell>& voidCell);
     };
 }
 
