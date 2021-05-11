@@ -369,9 +369,9 @@ McCAD::Conversion::MCNPWriter::writeDataCard(ofstream& outputStream){
     outputStream << sourceExpr << std::endl;
     std::string volTallyExpr{boost::str(boost::format("F4:N %d %di %d")
                                         % startCellNum
-                                        % (componentsMap.size() - 1)
+                                        % (componentsMap.size() - 2)
                                         % (startCellNum + componentsMap.size() - 1))};
-    volTallyExpr += boost::str(boost::format("\nc SD4 1 %dr") % componentsMap.size());
+    volTallyExpr += boost::str(boost::format("\nc SD4 1 %dr") % (componentsMap.size() - 1));
     outputStream << "c " << volTallyExpr << std::endl;
 }
 
