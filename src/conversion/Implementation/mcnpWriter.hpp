@@ -30,7 +30,7 @@ namespace McCAD::Conversion{
     public:
         Standard_Integer maxLineWidth;
         Standard_Real precision;
-        std::string MCOutputFileName;
+        std::string MCOutputFileName, volumesFileName;
         Standard_Integer startCellNum, startSurfNum;
         surfacesMap uniquePlanes, uniqueCylinders, uniqueSpheres;
         finalMap uniqueSurfaces;
@@ -38,6 +38,7 @@ namespace McCAD::Conversion{
         solidsMap solidObjMap;
         voidsMap voidCellsMap;
         Standard_Boolean voidGeneration, BVHVoid;
+        Standard_Real radius;
 
         void operator()(const solidsList& solidObjList,
                         const std::shared_ptr<VoidCell>& voidCell);
@@ -53,7 +54,7 @@ namespace McCAD::Conversion{
         std::string adjustLineWidth(const std::string& mainExpr,
                                     const std::string& bodyExpr);
         void writeHeader(ofstream& outputStream);
-        void writeCellCard(ofstream& outputStream);
+        void writeCellCard(ofstream& outputStream, ofstream& volumeStream);
         void writeVoidCard(ofstream& outputStream);
         void writeSurfCard(ofstream& outputStream);
         void writeDataCard(ofstream& outputStream);

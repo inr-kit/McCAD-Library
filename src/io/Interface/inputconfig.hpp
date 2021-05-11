@@ -27,6 +27,7 @@ public:
     bool decompose = true;
     int recurrenceDepth = 20;
     double minSolidVolume = 1.0;
+    double minFaceArea = 1.0e-4;
     double precision = 1.0e-7;
     double parameterTolerance = 1.0e-7;
     double angularTolerance = 1.0e-3 * M_PI;
@@ -42,6 +43,7 @@ public:
     int startSurfNum = 1;
     int maxLineWidth = 80;
     std::string MCOutputFileName = "MCFile.inp";
+    std::string volumesFileName = "volumes.txt";
 
     // Internal variables
     std::string conversionFileName = "conversion.stp";

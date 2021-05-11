@@ -1,5 +1,8 @@
 // McCAD
 #include "solid_impl.hpp"
+// OCC
+#include <GProp_GProps.hxx>
+#include <BRepGProp.hxx>
 
 McCAD::Geometry::Solid::Impl::Impl()
   : preproc{std::make_unique<Tools::Preprocessor>()},
@@ -101,4 +104,11 @@ McCAD::Geometry::Solid::Impl::calcAABBCenter(){
     aabbCenter = {(minX + std::abs(maxX-minX)/2.0),
                   (minY + std::abs(maxY-minY)/2.0),
                   (minZ + std::abs(maxZ-minZ)/2.0)};
+}
+
+void
+McCAD::Geometry::Solid::Impl::calcVolume(){
+    GProp_GProps geometryProperties;
+    BRepGProp::VolumeProperties(solid, geometryProperties);
+    solidVolume = geometryProperties.Mass();
 }

@@ -14,5 +14,6 @@ McCAD::Decomposition::SolidObjCreator::createObj(const TopoDS_Shape& shape){
     solidImpl.updateEdgesConvexity();
     solidImpl.facesList = FacesListGenerator{}(*solidObj);
     solidImpl.repairSolid();
+    solidImpl.calcVolume();
     return solidObj;
 }

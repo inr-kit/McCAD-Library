@@ -35,6 +35,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "# > Other parameters;\n"
                    "recurrenceDepth = 20\n"
                    "minSolidVolume = 1.0\n"
+                   "minFaceArea = 1.0e-4\n"
                    "precision = 1.0e-7\n"
                    "parameterTolerance = 1.0e-7\n"
                    "angularTolerance = 1.0e-3\n"
@@ -50,7 +51,8 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "startCellNum = 1\n"
                    "startSurfNum = 1\n"
                    "maxLineWidth = 80\n"
-                   "MCOutputFileName = MCFile.txt\n" << std::endl;
+                   "MCOutputFileName = MCFile.inp\n"
+                   "volumesFileName = volumes.txt" << std::endl;
     inputConfig.close();
 }
 
@@ -85,6 +87,8 @@ McCAD::IO::InputConfig::readTemplate(){
                    recurrenceDepth = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "minSolidVolume")
                    minSolidVolume = std::stof(lineSplit[2]);
+               else if (lineSplit[0] == "minFaceArea")
+                   minFaceArea = std::stof(lineSplit[2]);
                else if (lineSplit[0] == "precision")
                    precision = std::stof(lineSplit[2]);
                else if (lineSplit[0] == "parameterTolerance")
@@ -114,6 +118,8 @@ McCAD::IO::InputConfig::readTemplate(){
                    maxLineWidth = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "MCOutputFileName")
                    MCOutputFileName = lineSplit[2];
+               else if (lineSplit[0] == "volumesFileName")
+                   volumesFileName = lineSplit[2];
                else continue;
            }
         }

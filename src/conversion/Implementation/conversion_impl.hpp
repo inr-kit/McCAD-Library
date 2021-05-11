@@ -28,6 +28,7 @@ namespace McCAD::Conversion {
                                                    TCollection_ExtendedString,
                                                    Standard_Integer>>;
     public:
+      IO::InputConfig inputConfig;
       Standard_Boolean rejectCondition = Standard_False;
       shape_Name_ID acceptedInputSolidsList;
       shape_Name_ID rejectedInputSolidsList;

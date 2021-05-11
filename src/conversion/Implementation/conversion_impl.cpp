@@ -9,8 +9,12 @@
 #include "TaskQueue.hpp"
 #include "voidCellManager.hpp"
 #include "conversionWriter.hpp"
+// OCC
+#include <GProp_GProps.hxx>
+#include <BRepGProp.hxx>
 
-McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig){
+McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig) :
+    inputConfig{inputConfig}{
     IO::STEPReader reader{inputConfig.conversionFileName};
     auto inputData = reader.getInputData();
     auto inputSolidsMap = inputData.accessImpl()->inputSolidsMap;
@@ -45,6 +49,14 @@ McCAD::Conversion::Convert::Impl::getGeomData(){
     for(const auto& shape : acceptedInputSolidsList){
         ++counter;
         taskQueue.submit([this, &shape, counter](){
+            // Check that solid volumes is above the volume threshold.
+            GProp_GProps geometryProperties;
+            BRepGProp::VolumeProperties(std::get<0>(shape), geometryProperties);
+            if (geometryProperties.Mass() < inputConfig.minSolidVolume){
+                rejectedInputSolidsList.push_back(shape);
+                rejectCondition = Standard_True;
+                return;
+            }
             auto solid = Decomposition::Preprocessor{}.perform(std::get<0>(shape));
             if (std::holds_alternative<std::monostate>(solid)){
                 rejectedInputSolidsList.push_back(shape);

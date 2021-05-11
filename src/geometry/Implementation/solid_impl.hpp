@@ -54,8 +54,7 @@ namespace McCAD::Geometry{
     Bnd_Box aabb;
     TopoDS_Solid solid;
     TopoDS_Shape solidShape;
-    Standard_Real meshDeflection;
-    Standard_Real boxDiagonalLength;
+    Standard_Real meshDeflection, boxDiagonalLength, solidVolume;
     Standard_Boolean splitSurface = Standard_False;
     
     std::vector<std::shared_ptr<BoundSurface>> facesList;
@@ -69,11 +68,9 @@ namespace McCAD::Geometry{
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
 
     // Conversion variables
-    Standard_Integer solidID{0};
-    Standard_Integer originalID{0};
+    Standard_Integer solidID{0}, originalID{0};
     TCollection_ExtendedString solidName;
-    Standard_Integer matID{0};
-    Standard_Integer matDensity{0};
+    Standard_Integer matID{0}, matDensity{0};
     gp_Pnt aabbCenter;
     std::vector<std::shared_ptr<BoundSurface>> intersectionList;
     std::vector<std::shared_ptr<BoundSurface>> unionList;
@@ -89,6 +86,7 @@ namespace McCAD::Geometry{
                                                   Standard_Integer mode = 0);
     void mergeSurfaces(std::vector<std::unique_ptr<BoundSurface>>& planesList);
     void calcAABBCenter();
+    void calcVolume();
   };
 }
 
