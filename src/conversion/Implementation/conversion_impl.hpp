@@ -9,7 +9,6 @@
 #include <variant>
 // McCAD
 #include "conversion.hpp"
-#include "inputconfig.hpp"
 #include "SolidType.hpp"
 #include "solid_impl.hpp"
 // OCC

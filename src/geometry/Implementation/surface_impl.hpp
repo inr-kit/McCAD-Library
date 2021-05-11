@@ -5,6 +5,7 @@
 #include <string>
 #include <map>
 #include <tuple>
+#include <array>
 // McCAD
 #include "surface.hpp"
 #include "tools_impl.hpp"

@@ -94,7 +94,7 @@ McCAD::IO::InputConfig::readTemplate(){
                else if (lineSplit[0] == "parameterTolerance")
                    parameterTolerance = std::stof(lineSplit[2]);
                else if (lineSplit[0] == "angularTolerance")
-                   angularTolerance = std::stof(lineSplit[2]) * M_PI;
+                   angularTolerance = std::stof(lineSplit[2]) * PI;
                else if (lineSplit[0] == "distanceTolerance")
                    distanceTolerance = std::stof(lineSplit[2]);
                // Conversion

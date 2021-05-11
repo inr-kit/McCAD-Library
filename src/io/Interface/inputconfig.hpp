@@ -13,6 +13,7 @@ public:
     ~InputConfig();
 
     std::string currentPath;
+    const double PI = 3.141592653589793238463;
     void writeTemplate();
     std::vector<std::string> splitLine(const std::string& line, char delimiter);
     void readTemplate();
@@ -30,7 +31,7 @@ public:
     double minFaceArea = 1.0e-4;
     double precision = 1.0e-7;
     double parameterTolerance = 1.0e-7;
-    double angularTolerance = 1.0e-3 * M_PI;
+    double angularTolerance = 1.0e-3 * PI;
     double distanceTolerance = 1.0e-5;
     // Void generation and conversion
     bool convert = false;
