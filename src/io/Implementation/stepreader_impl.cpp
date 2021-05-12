@@ -24,9 +24,11 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
     bool foundShapes = Standard_False;
     if(aLabel.HasChild()){
         int numChildren = aLabel.NbChildren();
-        //std::cout << "\nName: " << aName <<
-        //             "\nNumber of children: " << numChildren <<
-        //             "\nLabel: " << aLabel << std::endl;
+        /*// Debug
+        std::cout << "\nName: " << aName <<
+                     "\nNumber of children: " << numChildren <<
+                     "\nLabel: " << aLabel << std::endl;
+        // Debug */
         for(int aTag = 1; aTag <= numChildren; ++aTag){
             TDF_Label childLabel = aLabel.FindChild(aTag);
             if (childLabel.HasAttribute()){
@@ -43,8 +45,6 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
         retrieve:
         opencascade::handle<TNaming_NamedShape> aShape;
         if (aLabel.FindAttribute(TNaming_NamedShape::GetID(), aShape)){
-            //std::cout << "\nRetrieve\nName: " << aName <<
-            //             "\nLabel: " << aLabel  << std::endl;
             sequenceOfShape->Append(aShape->Get());
             shapeNames.push_back(aName);
             foundShapes = Standard_True;
@@ -72,7 +72,7 @@ McCAD::IO::STEPReader::Impl::getLabelInfo(const TDF_Label& aLabel){
             throw std::runtime_error("Error loading shapes from input file!");
         }
     } else
-        throw std::runtime_error("Error reading file, shapes could not be read!");
+        throw std::runtime_error("Error loading shapes from input file!");
 }
 
 void
@@ -85,8 +85,6 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
     if(readStatus == IFSelect_RetDone){
         reader.Transfer(document);
         TDF_Label label = document->Main();
-        //std::cout << "\nIs root: " << label.IsRoot() <<
-        //             "\nDepth: " << label.Depth() << std::endl;
         getLabelInfo(label);
     } else {
         Standard_Boolean failsOnly = Standard_False;
