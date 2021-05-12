@@ -5,6 +5,7 @@
 #include <memory>
 // McCAD
 #include "inputdata.hpp"
+#include "inputconfig.hpp"
 #include <Standard.hxx>
 
 namespace McCAD::Decomposition {
@@ -13,7 +14,8 @@ namespace McCAD::Decomposition {
       class Impl;
       
     public:
-      Decompose(const General::InputData& inputData);
+      Decompose(const General::InputData& inputData,
+                const IO::InputConfig& inputConfig);
       ~Decompose();
       
       Impl* accessDImpl() const;

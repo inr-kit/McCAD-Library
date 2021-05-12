@@ -27,11 +27,12 @@ namespace McCAD::Decomposition{
     Preprocessor() = default;
 
   private:
+    // WARNING!!
     // The order of solid object types should be synched with Tools::SolidType;
     using VariantType = std::variant<std::monostate,
-    std::shared_ptr<McCAD::Geometry::PLSolid>,
-    std::shared_ptr<McCAD::Geometry::CYLSolid>,
-    std::shared_ptr<McCAD::Geometry::TORSolid>>;
+                                     std::shared_ptr<McCAD::Geometry::PLSolid>,
+                                     std::shared_ptr<McCAD::Geometry::CYLSolid>,
+                                     std::shared_ptr<McCAD::Geometry::TORSolid>>;
 
   public:
     Tools::SolidType solidType;

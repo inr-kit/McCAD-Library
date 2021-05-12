@@ -2,8 +2,8 @@
 #include "decomposeSolid.hpp"
 #include "decomposeSolid_impl.hpp"
 
-McCAD::Decomposition::DecomposeSolid::DecomposeSolid()
-  : pDSImpl{std::make_unique<Impl>()}{
+McCAD::Decomposition::DecomposeSolid::DecomposeSolid(const IO::InputConfig& inputConfig)
+  : pDSImpl{std::make_unique<Impl>(inputConfig)}{
 }
 
 McCAD::Decomposition::DecomposeSolid::~DecomposeSolid(){

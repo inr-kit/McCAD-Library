@@ -20,18 +20,27 @@ int main (int argc, char* argv[]){
     McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
         inputConfig.writeTemplate();
-        std::cerr << "Usage: A template file with run parameters has been "
-                     "created!" << std::endl;
+        std::cerr << "A template file, McCADInputConfig.txt, with run parameters"
+                     "has been created!" << std::endl;
     } else if(argc == 2) {
         if (std::string(argv[1]) == "help") {
-            std::cout << "Usage:   [ ]: creates parameters file McCADInputConfig.txt\n"
-                         "       [run]: executes McCAD" << std::endl;
+            std::cout << "Usage:   [ ] : creates parameters file McCADInputConfig.txt\n"
+                         "       [read]: Test loading input STEP file\n"
+                         "       [run] : Executes McCAD" << std::endl;
+        } else if (std::string(argv[1]) == "read") {
+            std::cerr << "Running McCAD v1.0L!" << std::endl;
+            auto start = std::chrono::high_resolution_clock::now();
+            inputConfig.readTemplate();
+            McCAD::IO::STEPReader reader{inputConfig.inputFileName};
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double, std::milli> elapsed = end - start;
+            std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;
         } else if (std::string(argv[1]) == "run") {
-            std::cerr << "Usage: Running McCAD v1.0L!" << std::endl;
+            std::cerr << "Running McCAD v1.0L!" << std::endl;
             auto start = std::chrono::high_resolution_clock::now();
             inputConfig.readTemplate();
             bool decomposeCondition{inputConfig.decompose},
-            convertCondition{inputConfig.convert};
+                 convertCondition{inputConfig.convert};
             if (decomposeCondition){
                 // Load the input file.
                 std::cout << "***********************" << std::endl;
@@ -43,7 +52,7 @@ int main (int argc, char* argv[]){
                 std::cout << "****************************" << std::endl;
                 std::cout << "** Starting decomposition **" << std::endl;
                 std::cout << "****************************" << std::endl;
-                McCAD::Decomposition::Decompose decompose{inputData};
+                McCAD::Decomposition::Decompose decompose{inputData, inputConfig};
                 auto outputData_result = decompose.getResultSolids();
                 auto outputData_reject = decompose.getRejectedSolids();
                 // Write output STEP files.
@@ -55,17 +64,15 @@ int main (int argc, char* argv[]){
                 bool rejectConversion = outputData_reject.getSize() == 0 ? false
                                                                          : true;
                 if (convertCondition && !rejectConversion){
-                    std::cout << "*************************" << std::endl;
-                    std::cout << "** Starting conversion **" << std::endl;
-                    std::cout << "*************************" << std::endl;
                     // Save solids to STL file
                     McCAD::IO::STLWriter{inputConfig.conversionFileName, outputData_result};
-                    McCAD::Conversion::Convert{inputConfig};
+                    goto convert;
                 } else if (rejectConversion)
                     std::cout << "Decomposition resulted in rejected solids, please "
                                  "check the solids and then run conversion!"
                               << std::endl;
             } else if (convertCondition){
+                convert:;
                 std::cout << "*************************" << std::endl;
                 std::cout << "** Starting conversion **" << std::endl;
                 std::cout << "*************************" << std::endl;
@@ -75,6 +82,6 @@ int main (int argc, char* argv[]){
             std::chrono::duration<double, std::milli> elapsed = end - start;
             std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;
         }
-    } else std::cerr << "Usage: only [] or [help] or [run] are acceptable arguments!"
+    } else std::cerr << "Usage: only [], [help], [read], or [run] are acceptable arguments!"
                      << std::endl;
 }

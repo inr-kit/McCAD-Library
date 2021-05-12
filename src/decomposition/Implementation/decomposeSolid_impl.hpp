@@ -10,6 +10,7 @@
 #include <variant>
 // McCAD
 #include "decomposeSolid.hpp"
+#include "inputconfig.hpp"
 #include "preprocessor.hpp"
 #include "tools_impl.hpp"
 #include "solid_impl.hpp"
@@ -48,10 +49,11 @@
 namespace McCAD::Decomposition{
   class DecomposeSolid::Impl{
   public:
-    Impl();
-    Impl(Standard_Integer recurrenceDepth);
+    Impl(const IO::InputConfig& inputConfig);
+    Impl(const IO::InputConfig& inputConfig, Standard_Integer recurrenceDepth);
     ~Impl();
     
+    const IO::InputConfig& inputConfig;
     Standard_Boolean operator()(std::shared_ptr<Geometry::PLSolid>& solidObj);
     Standard_Boolean operator()(std::shared_ptr<Geometry::CYLSolid>& solidObj);
     Standard_Boolean operator()(std::shared_ptr<Geometry::TORSolid>& solidObj);

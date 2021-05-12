@@ -4,8 +4,10 @@
 #include "TaskQueue.hpp"
 #include "torusConvertor.hpp"
 
-McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData)
-  : splitInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()},
+McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData,
+                                            const IO::InputConfig& inputConfig)
+  : inputConfig{inputConfig},
+    splitInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()},
     rejectedInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()},
     resultSolidsList{std::make_unique<TopTools_HSequenceOfShape>()},
     rejectedsubSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
@@ -14,7 +16,7 @@ McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inp
     if (!inputSolidsList->Length() > 0)
         throw std::runtime_error("Input solids list is empty!");
     std::cout << "> Found " << inputSolidsList->Length() <<
-                 " solid(s) in the input step file" << std::endl;
+                 " solid(s) in the input STEP file" << std::endl;
     auto product = Tools::HeirarchyFlatter{}.flattenSolidHierarchy(inputSolidsList);
     splitInputSolidsList = std::move(product.first);
     rejectedInputSolidsList = std::move(product.second);
@@ -30,7 +32,6 @@ void
 McCAD::Decomposition::Decompose::Impl::perform(const TopoDS_Shape& shape){
     auto solid = Preprocessor{}.perform(shape);
     if (std::holds_alternative<std::monostate>(solid)){
-        //std::cout << "empty variant" << std::endl;
         rejectedInputSolidsList->Append(shape);
         goto decompositionPass;
     }
@@ -39,21 +40,21 @@ McCAD::Decomposition::Decompose::Impl::perform(const TopoDS_Shape& shape){
     switch (Standard_Integer(solid.index())){
     case solidType.planar:{
         std::cout << "   - Decomposing planar solid" << std::endl;
-        if (DecomposeSolid{}.accessDSImpl()->operator()(
+        if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(
                     std::get<solidType.planar>(solid))){
             extractSolids(*std::get<solidType.planar>(solid)->accessSImpl());
         } else rejectedInputSolidsList->Append(shape);
         break;
     } case solidType.cylindrical:{
         std::cout << "   - Decomposing cylindrical solid" << std::endl;
-        if (DecomposeSolid{}.accessDSImpl()->operator()(
+        if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(
                     std::get<solidType.cylindrical>(solid))){
             extractSolids(*std::get<solidType.cylindrical>(solid)->accessSImpl());
         } else rejectedInputSolidsList->Append(shape);
         break;
     } case solidType.toroidal:{
         std::cout << "   - Decomposing toroidal solid" << std::endl;
-        if (DecomposeSolid{}.accessDSImpl()->operator()(
+        if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(
                     std::get<solidType.toroidal>(solid))){
             // Convert tori to cylinders.
             TorusConvertor{}(*std::get<solidType.toroidal>(solid)->accessSImpl());
@@ -74,9 +75,7 @@ void
 McCAD::Decomposition::Decompose::Impl::perform(){
     TaskQueue<Policy::Parallel> taskQueue;
     for(const auto& shape : *splitInputSolidsList){
-        taskQueue.submit([this, &shape](){
-            perform(shape);
-        });
+        taskQueue.submit([this, &shape](){perform(shape);});
     }
     taskQueue.complete();
     std::cout << " > Results:" << std::endl;

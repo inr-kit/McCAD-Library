@@ -51,7 +51,7 @@ Installation (Linux):
 
 3- Install OpenCascade
    * Download opencascade-7.4.0.tgz from https://www.opencascade.com/content/latest-release or from
-    https://www.opencascade.com/content/latest-release if new releases exist by the time of installation
+     https://www.opencascade.com/content/latest-release if new releases exist by the time of installation
 
 4- Install McCAD
    * McCAD library and executable installation can proceed by providing the custom CMake flags.
@@ -60,21 +60,22 @@ Installation (Linux):
 Installation (Windows 10):
 --------------------------
    * Same steps 1 - 3 can be followed by downloading the install files that is suitable for Windows 10
-  4- Install McCAD
+4- Install McCAD
    * Building a static executable is recommended.
    * Path to OCC should be provided through -DOCC_CUSTOM_ROOT=<path to OCC> CMake flag.
    * Path to Boost should be provided though -DBOOST_CUSTOM_ROOT=<path to Boost> CMake flag.
 
 General notes on Usage:
 -----------------------
-1- The library assumes a clean CAD model (one with no intersections or overlapping). While in theory the library
-   won't report an error with intersections/overlappings as solids are processed individually, it will cause problems
-   for void generation and conversion later on.
+1- The library assumes a clean CAD model (one with no intersections or overlapping).
+   While in theory the library won't report an error with intersections/overlappings as solids are processed individually,
+   it will cause problems for void generation and conversion later on.
 
-2- The heirarchy of solids (groups/subgroups in CAD) is not preserved in the current version. This means that the output
-   STEP file will have a flat heirarchy of sloids with all info about groups/subgroups lost.
-   - A good practice to circumvent this in the current version is to split the input CAD solid into several files by material.
+2- The heirarchy of solids (groups/subgroups in CAD) is not preserved in the current version.
+   This means that the output STEP file will have a flat heirarchy of sloids with all info about groups/subgroups lost.
+   A good practice to circumvent this in the current version is to split the input CAD solid into several files by material.
    This will result in output file of decomposed solids of a single material to be assigned later on when converting.
 
-3- Void generation and conversion is yet to be implemented in the current library. While the current library will provide
-   advanced and better decomposition compared to the McCAD-SALOME version, McCAD-SALOME is to be used for conversion, for now.
+3- Void generation and conversion is yet to be implemented in the current library.
+   While the current library will provide advanced and better decomposition compared to the McCAD-SALOME version, McCAD-SALOME
+   is to be used for conversion, for now.

@@ -8,6 +8,7 @@
 // McCAD
 #include "decomposition.hpp"
 #include "inputdata_impl.hpp"
+#include "inputconfig.hpp"
 #include "planarSolid_impl.hpp"
 #include "cylSolid_impl.hpp"
 #include "torSolid_impl.hpp"
@@ -27,11 +28,12 @@
 namespace McCAD::Decomposition{
   class Decompose::Impl{
   public:
-    Impl(const General::InputData& inputData);
+    Impl(const General::InputData& inputData,
+         const IO::InputConfig& inputConfig);
     ~Impl();
 
     Tools::SolidType solidType;
-
+    const IO::InputConfig& inputConfig;
     std::unique_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;
     std::unique_ptr<TopTools_HSequenceOfShape> resultSolidsList;
