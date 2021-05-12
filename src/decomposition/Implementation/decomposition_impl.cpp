@@ -4,7 +4,7 @@
 #include "TaskQueue.hpp"
 #include "torusConvertor.hpp"
 
-McCAD::Decomposition::Decompose::Impl::Impl(const McCAD::General::InputData& inputData,
+McCAD::Decomposition::Decompose::Impl::Impl(const General::InputData& inputData,
                                             const IO::InputConfig& inputConfig)
   : inputConfig{inputConfig},
     splitInputSolidsList{std::make_unique<TopTools_HSequenceOfShape>()},
@@ -75,7 +75,9 @@ void
 McCAD::Decomposition::Decompose::Impl::perform(){
     TaskQueue<Policy::Parallel> taskQueue;
     for(const auto& shape : *splitInputSolidsList){
-        taskQueue.submit([this, &shape](){perform(shape);});
+        taskQueue.submit([this, &shape](){
+            perform(shape);
+        });
     }
     taskQueue.complete();
     std::cout << " > Results:" << std::endl;

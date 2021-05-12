@@ -15,10 +15,10 @@
 #include "preprocessor.hpp"
 #include "decomposeSolid_impl.hpp"
 #include "ShapeView.hpp"
-#include <Standard.hxx>
 #include "SolidType.hpp"
 #include "tools_impl.hpp"
 // OCC
+#include <Standard.hxx>
 #include <TopTools_HSequenceOfShape.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
@@ -26,22 +26,21 @@
 #include <TopoDS_Compound.hxx>
 
 namespace McCAD::Decomposition{
-  class Decompose::Impl{
-  public:
-    Impl(const General::InputData& inputData,
-         const IO::InputConfig& inputConfig);
-    ~Impl();
+    class Decompose::Impl{
+    public:
+        Impl(const General::InputData& inputData, const IO::InputConfig& inputConfig);
+        ~Impl();
 
-    Tools::SolidType solidType;
-    const IO::InputConfig& inputConfig;
-    std::unique_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;
-    std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;
-    std::unique_ptr<TopTools_HSequenceOfShape> resultSolidsList;
-    std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
+        Tools::SolidType solidType;
+        const IO::InputConfig& inputConfig;
+        std::unique_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;
+        std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;
+        std::unique_ptr<TopTools_HSequenceOfShape> resultSolidsList;
+        std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
 
-    void perform(const TopoDS_Shape& shape);
-    void perform();
-    void extractSolids(const Geometry::Solid::Impl& solidImpl);
+        void perform(const TopoDS_Shape& shape);
+        void perform();
+        void extractSolids(const Geometry::Solid::Impl& solidImpl);
   };
 }
 
