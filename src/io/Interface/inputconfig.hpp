@@ -5,14 +5,16 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <filesystem>
 
 namespace McCAD::IO{
 class InputConfig{
 public:
-    InputConfig(std::string& currentPath);
+    InputConfig(const std::filesystem::path& currentPath);
     ~InputConfig();
 
-    std::string currentPath;
+    std::filesystem::path currentPath;
+    int conversion_factor{1};
     const double PI = 3.141592653589793238463;
     void writeTemplate();
     std::vector<std::string> splitLine(const std::string& line, char delimiter);
@@ -27,8 +29,8 @@ public:
     // Decomposition
     bool decompose = true;
     int recurrenceDepth = 20;
-    double minSolidVolume = 1.0;
-    double minFaceArea = 1.0e-4;
+    double minSolidVolume = 10.0; // in mm^3
+    double minFaceArea = 10.0;     // in mm^2
     double precision = 1.0e-7;
     double parameterTolerance = 1.0e-7;
     double angularTolerance = 1.0e-3 * PI;

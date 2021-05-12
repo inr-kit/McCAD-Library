@@ -7,7 +7,7 @@
 // McCAD
 #include "inputconfig.hpp"
 
-McCAD::IO::InputConfig::InputConfig(std::string& currentPath)
+McCAD::IO::InputConfig::InputConfig(const std::filesystem::path& currentPath)
     : currentPath{currentPath}{
 }
 
@@ -17,7 +17,8 @@ McCAD::IO::InputConfig::~InputConfig(){
 void
 McCAD::IO::InputConfig::writeTemplate(){
     std::ofstream inputConfig;
-    inputConfig.open("McCADInputConfig.txt");
+    std::string templateName = currentPath / "McCADInputConfig.txt";
+    inputConfig.open(templateName);
     inputConfig << "# McCAD Run Parameters\n"
                    "# ====================\n" << std::endl;
     inputConfig << "# Input\n"
@@ -35,7 +36,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "# > Other parameters;\n"
                    "recurrenceDepth = 20\n"
                    "minSolidVolume = 1.0\n"
-                   "minFaceArea = 1.0e-4\n"
+                   "minFaceArea = 1.0\n"
                    "precision = 1.0e-7\n"
                    "parameterTolerance = 1.0e-7\n"
                    "angularTolerance = 1.0e-3\n"
@@ -43,10 +44,15 @@ McCAD::IO::InputConfig::writeTemplate(){
     inputConfig << "# Conversion\n"
                    "# ==========\n"
                    "convert = false\n"
+                   "# > Choose whether or not to generate void cells;\n"
                    "voidGeneration = true\n"
+                   "# > Minimum acceptable void volume shouldn;t be less than minSolidVolume;\n"
                    "minVoidVolume = 1.0\n"
+                   "# > A larger number will result in fewer void cells but longer cell expressions;\n"
                    "maxSolidsPerVoidCell = 20\n"
+                   "# > Choose whether or not to generate Bound Volume Heirarchy void cells;\n"
                    "BVHVoid = true\n"
+                   "# > Choose the desired MC code for conversion;\n"
                    "MCcode = mcnp\n"
                    "startCellNum = 1\n"
                    "startSurfNum = 1\n"
@@ -60,8 +66,7 @@ void
 McCAD::IO::InputConfig::readTemplate(){
     std::ifstream inputConfig("McCADInputConfig.txt");
     if (!inputConfig){
-        std::cout << "McCADInputConfig.txt is missing!. Proceeding with default "
-                     "parameters:"
+        std::cout << "McCADInputConfig.txt is missing!. Proceeding with default parameters:"
                      "\nInput  = " << inputFileName <<
                      "\nResult = " << resultFileName << 
                      "\nReject = " << rejectFileName << std::endl;
@@ -74,7 +79,11 @@ McCAD::IO::InputConfig::readTemplate(){
            if (lineSplit.size() == 0 || lineSplit[0] == "#") continue;
            else {
                // General input.
-               if (lineSplit[0] == "inputFileName")
+               if (lineSplit[0] == "units"){
+                   units = stringToLowerCase(lineSplit[2]);
+                   if (units == "cm") conversion_factor = 10;
+                   else if (units == "m") conversion_factor = 1000;
+               } else if (lineSplit[0] == "inputFileName")
                    inputFileName = lineSplit[2];
                // Decompositions
                else if (lineSplit[0] == "decompose")
@@ -86,9 +95,9 @@ McCAD::IO::InputConfig::readTemplate(){
                else if (lineSplit[0] == "recurrenceDepth")
                    recurrenceDepth = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "minSolidVolume")
-                   minSolidVolume = std::stof(lineSplit[2]);
+                   minSolidVolume = std::stof(lineSplit[2]) * conversion_factor;
                else if (lineSplit[0] == "minFaceArea")
-                   minFaceArea = std::stof(lineSplit[2]);
+                   minFaceArea = std::stof(lineSplit[2]) * conversion_factor;
                else if (lineSplit[0] == "precision")
                    precision = std::stof(lineSplit[2]);
                else if (lineSplit[0] == "parameterTolerance")

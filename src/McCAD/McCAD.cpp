@@ -3,7 +3,6 @@
 #include <string>
 #include <chrono>
 #include <filesystem>
-#include <sstream>
 // McCAD
 #include "inputconfig.hpp"
 #include "inputdata.hpp"
@@ -14,14 +13,12 @@
 #include "conversion.hpp"
 
 int main (int argc, char* argv[]){
-    std::stringstream strStream;
-    strStream << std::filesystem::current_path();
-    std::string currentPath = strStream.str();
+    std::filesystem::path currentPath = std::filesystem::current_path();
     McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
         inputConfig.writeTemplate();
         std::cerr << "A template file, McCADInputConfig.txt, with run parameters"
-                     "has been created!" << std::endl;
+                     "has been created in\n" << std::string(currentPath) << std::endl;
     } else if(argc == 2) {
         if (std::string(argv[1]) == "help") {
             std::cout << "Usage:   [ ] : creates parameters file McCADInputConfig.txt\n"
@@ -83,7 +80,10 @@ int main (int argc, char* argv[]){
             auto end = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double, std::milli> elapsed = end - start;
             std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;
-        }
-    } else std::cerr << "Usage: only [], [help], [read], or [run] are acceptable arguments!"
-                     << std::endl;
+        } else goto usageError;
+    } else {
+        usageError:;
+        std::cerr << "Usage: only [], [help], [read], or [run] are acceptable arguments!"
+                  << std::endl;
+    }
 }
