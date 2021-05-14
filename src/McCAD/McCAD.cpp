@@ -8,33 +8,36 @@
 #include "inputdata.hpp"
 #include "stepreader.hpp"
 #include "stepwriter.hpp"
-#include "stlwriter.hpp"
 #include "decomposition.hpp"
 #include "conversion.hpp"
 
 int main (int argc, char* argv[]){
+    auto timeStart{std::chrono::high_resolution_clock::now()},
+         timeEnd{std::chrono::high_resolution_clock::now()};
+    std::cerr << "Running McCAD v1.0L" << std::endl;
     std::filesystem::path currentPath = std::filesystem::current_path();
     McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
         inputConfig.writeTemplate();
         std::cerr << "A template file, McCADInputConfig.txt, with run parameters"
                      "has been created in\n" << std::string(currentPath) << std::endl;
+        timeEnd = std::chrono::high_resolution_clock::now();
     } else if(argc == 2) {
         if (std::string(argv[1]) == "help") {
-            std::cout << "Usage:   [ ] : creates parameters file McCADInputConfig.txt\n"
-                         "       [read]: Test loading input STEP file\n"
-                         "       [run] : Executes McCAD" << std::endl;
+            std::cout << "Usage:\n"
+                         "   [ ] creates parameters file McCADInputConfig.txt\n"
+                         "[read] Test loading input STEP file\n"
+                         " [run] Executes McCAD" << std::endl;
+            timeEnd = std::chrono::high_resolution_clock::now();
         } else if (std::string(argv[1]) == "read") {
-            std::cerr << "Running McCAD v1.0L!" << std::endl;
-            auto start = std::chrono::high_resolution_clock::now();
             inputConfig.readTemplate();
+            // Load the input file.
+            std::cout << "***********************" << std::endl;
+            std::cout << "** Loading STEP file **" << std::endl;
+            std::cout << "***********************" << std::endl;
             McCAD::IO::STEPReader reader{inputConfig.inputFileName};
-            auto end = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::milli> elapsed = end - start;
-            std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;
+            timeEnd = std::chrono::high_resolution_clock::now();
         } else if (std::string(argv[1]) == "run") {
-            std::cerr << "Running McCAD v1.0L!" << std::endl;
-            auto start = std::chrono::high_resolution_clock::now();
             inputConfig.readTemplate();
             bool decomposeCondition{inputConfig.decompose},
                  convertCondition{inputConfig.convert};
@@ -61,8 +64,6 @@ int main (int argc, char* argv[]){
                 bool rejectConversion = outputData_reject.getSize() == 0 ? false
                                                                          : true;
                 if (convertCondition && !rejectConversion){
-                    // Save solids to STL file
-                    //McCAD::IO::STLWriter{inputConfig.conversionFileName, outputData_result};
                     inputConfig.conversionFileName = inputConfig.resultFileName;
                     goto convert;
                 } else if (rejectConversion)
@@ -77,13 +78,14 @@ int main (int argc, char* argv[]){
                 std::cout << "*************************" << std::endl;
                 McCAD::Conversion::Convert{inputConfig};
             };
-            auto end = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::milli> elapsed = end - start;
-            std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;
+            timeEnd = std::chrono::high_resolution_clock::now();
         } else goto usageError;
     } else {
         usageError:;
-        std::cerr << "Usage: only [], [help], [read], or [run] are acceptable arguments!"
-                  << std::endl;
+        std::cerr << "Usage Error!. Only [], [help], [read], or [run] are "
+                     "acceptable arguments!" << std::endl;
+        timeEnd = std::chrono::high_resolution_clock::now();
     }
+    std::chrono::duration<double, std::milli> elapsed = timeEnd - timeStart;
+    std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;
 }

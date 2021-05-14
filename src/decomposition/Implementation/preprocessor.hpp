@@ -8,6 +8,7 @@
 #include <Standard.hxx>
 #include "ShapeView.hpp"
 #include "SolidType.hpp"
+#include "compound.hpp"
 #include "planarSolid_impl.hpp"
 #include "cylSolid_impl.hpp"
 #include "torSolid_impl.hpp"
@@ -24,19 +25,18 @@
 namespace McCAD::Decomposition{
   class Preprocessor{
   public:
-    Preprocessor() = default;
-
+    Preprocessor();
+    Preprocessor(const std::unique_ptr<Geometry::Impl::Compound>& compound);
+    ~Preprocessor();
   private:
+    Tools::SolidType solidType;
     // WARNING!!
     // The order of solid object types should be synched with Tools::SolidType;
     using VariantType = std::variant<std::monostate,
                                      std::shared_ptr<McCAD::Geometry::PLSolid>,
                                      std::shared_ptr<McCAD::Geometry::CYLSolid>,
                                      std::shared_ptr<McCAD::Geometry::TORSolid>>;
-
   public:
-    Tools::SolidType solidType;
-
     VariantType perform(const TopoDS_Shape& shape);
     Standard_Boolean checkBndSurfaces(const TopoDS_Solid& solid);
     Standard_Integer determineSolidType(const TopoDS_Solid& solid);

@@ -1,32 +1,62 @@
 // McCAD
 #include "preprocessor.hpp"
+#include "heirarchyFlatter.hpp"
 #include "solidObjCreator.hpp"
+
+McCAD::Decomposition::Preprocessor::Preprocessor(){}
+
+McCAD::Decomposition::Preprocessor::~Preprocessor(){}
+
+McCAD::Decomposition::Preprocessor::Preprocessor(
+        const std::unique_ptr<Geometry::Impl::Compound>& compound){
+    auto product = Tools::HeirarchyFlatter{}(compound->compoundShape);
+    compound->acceptedInputShapesList = std::move(product.first);
+    compound->rejectedInputShapesList = std::move(product.second);
+    for(const auto& shape : *compound->acceptedInputShapesList){
+        auto solidObj = perform(shape);
+        if (std::holds_alternative<std::monostate>(solidObj)){
+            compound->rejectedInputShapesList->Append(shape);
+        } else {
+            // Using switch for now. Should be separated in a separate class an called
+            // for each specific type of solid object.
+            switch (Standard_Integer(solidObj.index())){
+            case solidType.planar:
+                compound->planarSolidsList.push_back(std::get<solidType.planar>(solidObj));
+                break;
+            case solidType.cylindrical:
+                compound->cylSolidsList.push_back(std::get<solidType.cylindrical>(solidObj));
+                break;
+            case solidType.toroidal:
+                compound->torSolidsList.push_back(std::get<solidType.toroidal>(solidObj));
+                break;
+            default:
+                std::cout << "   - Processing of solids with non-planar surfaces"
+                             " is not yet supported!.\n     Solid will be added"
+                             " to rejected solids file" << std::endl;
+                compound->rejectedInputShapesList->Append(shape);
+            }
+        }
+    }
+}
 
 McCAD::Decomposition::Preprocessor::VariantType
 McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
     VariantType solidVariant;
     if (auto& solid = TopoDS::Solid(shape); !checkBndSurfaces(solid)){
         switch (determineSolidType(solid)){
-        case solidType.planar:{
-            solidVariant = SolidObjCreator{}.createObj<
-                    McCAD::Geometry::PLSolid>(shape);
-            return solidVariant;
-        }
-        case solidType.cylindrical:{
-            solidVariant = SolidObjCreator{}.createObj<
-                    McCAD::Geometry::CYLSolid>(shape);
-            return solidVariant;
-        }
+        case solidType.planar:
+            solidVariant = SolidObjCreator{}.createObj<Geometry::PLSolid>(shape);
+            break;
+        case solidType.cylindrical:
+            solidVariant = SolidObjCreator{}.createObj<Geometry::CYLSolid>(shape);
+            break;
         case solidType.toroidal:
-            solidVariant = SolidObjCreator{}.createObj<
-                    McCAD::Geometry::TORSolid>(shape);
-            return solidVariant;
-        default: goto rejectSolid;
+            solidVariant = SolidObjCreator{}.createObj<Geometry::TORSolid>(shape);
+            break;
+        default:;
+            // Unknown Type
         }
     }
-    rejectSolid: std::cout << "   - Processing of solids with non-planar surfaces"
-                              " is not yet supported!.\n     Solid will be added"
-                              " to rejected solids file" << std::endl;
     return solidVariant;
 }
 

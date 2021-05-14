@@ -17,7 +17,7 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig) :
     inputConfig{inputConfig}{
     IO::STEPReader reader{inputConfig.conversionFileName};
     auto inputData = reader.getInputData();
-    auto inputSolidsMap = inputData.accessImpl()->inputSolidsMap;
+    auto inputSolidsMap = inputData.accessImpl()->inputShapesMap;
     if (inputSolidsMap.size() == 0)
         throw std::runtime_error("Input solids map is empty!");
     std::cout << "> Found " << inputSolidsMap.size() <<

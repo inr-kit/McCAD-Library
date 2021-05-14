@@ -2,8 +2,6 @@
 #define INPUTDATA_IMPL_HPP
 
 // C++
-#include <string>
-#include <memory>
 #include <vector>
 #include <tuple>
 // McCAD
@@ -15,16 +13,20 @@
 #include <Standard_Transient.hxx>
 
 namespace McCAD::General{
-  class InputData::Impl{
-  public:
-    Impl();
-    ~Impl();
-
-    std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString>> inputSolidsMap;
-    std::shared_ptr<TopTools_HSequenceOfShape> inputSolidsList;
-    int size{0};
-
-    void updateSize();
+    class InputData::Impl{
+    public:
+        Impl();
+        ~Impl();
+    private:
+        using shapeTuple = std::tuple<TopoDS_Shape, TCollection_ExtendedString>;
+        using shapesMap = std::vector<shapeTuple>;
+        using solidsMap = std::vector<std::tuple<TCollection_ExtendedString,
+                                                 TopTools_HSequenceOfShape>>;
+    public:
+        shapesMap inputShapesMap;
+        solidsMap outputShapesMap;
+        int size{0};
+        void updateSize();
   };
 }
 

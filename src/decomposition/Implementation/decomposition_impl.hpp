@@ -9,38 +9,39 @@
 #include "decomposition.hpp"
 #include "inputdata_impl.hpp"
 #include "inputconfig.hpp"
-#include "planarSolid_impl.hpp"
-#include "cylSolid_impl.hpp"
-#include "torSolid_impl.hpp"
-#include "preprocessor.hpp"
+#include "compound.hpp"
+#include "solid_impl.hpp"
 #include "decomposeSolid_impl.hpp"
 #include "ShapeView.hpp"
 #include "SolidType.hpp"
 #include "tools_impl.hpp"
 // OCC
 #include <Standard.hxx>
+#include <TopoDS_Shape.hxx>
 #include <TopTools_HSequenceOfShape.hxx>
-#include <TopoDS.hxx>
-#include <TopoDS_Solid.hxx>
-#include <TopoDS_CompSolid.hxx>
-#include <TopoDS_Compound.hxx>
+#include <TCollection_ExtendedString.hxx>
 
 namespace McCAD::Decomposition{
     class Decompose::Impl{
     public:
         Impl(const General::InputData& inputData, const IO::InputConfig& inputConfig);
         ~Impl();
-
+    private:
         Tools::SolidType solidType;
-        const IO::InputConfig& inputConfig;
-        std::unique_ptr<TopTools_HSequenceOfShape> splitInputSolidsList;
-        std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;
-        std::unique_ptr<TopTools_HSequenceOfShape> resultSolidsList;
-        std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
-
-        void perform(const TopoDS_Shape& shape);
+        using shapeTuple = std::tuple<TopoDS_Shape, TCollection_ExtendedString>;
+        using shapesMap = std::vector<shapeTuple>;
+        using solidsMap = std::vector<std::tuple<TCollection_ExtendedString,
+                                                 TopTools_HSequenceOfShape>>;
+    public:
+        shapesMap inputShapesMap;
+        IO::InputConfig inputConfig;
+        std::vector<std::unique_ptr<Geometry::Impl::Compound>> compoundList;
+        solidsMap successDecomposition, rejectDecomposition;
         void perform();
-        void extractSolids(const Geometry::Solid::Impl& solidImpl);
+        void perform(const shapeTuple& inputShape);
+        void extractSolids(
+                const std::unique_ptr<Geometry::Impl::Compound>& compound,
+                const std::shared_ptr<Geometry::Solid>& solid);
   };
 }
 

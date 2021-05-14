@@ -22,8 +22,8 @@
 #include <BRepBuilderAPI_Transform.hxx>
 
 void
-McCAD::Decomposition::TorusConvertor::operator()(Geometry::Solid::Impl& solidImpl){
-    auto& solidsList = *solidImpl.splitSolidList;
+McCAD::Decomposition::TorusConvertor::operator()(const std::shared_ptr<Geometry::Solid>& solid){
+    auto& solidsList = *solid->accessSImpl()->splitSolidList;
     for(Standard_Integer index = 1; index <= solidsList.Length(); ++index){
         //std::cout << "TorusConvertor" << std::endl;
         if (Preprocessor{}.determineSolidType(TopoDS::Solid(solidsList(index))) ==

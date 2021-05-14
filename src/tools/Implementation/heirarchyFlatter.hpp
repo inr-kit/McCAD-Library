@@ -33,8 +33,10 @@ namespace McCAD::Tools{
       std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputSolidsList;
       shape_Name_ID splitInputSolidsMap, rejectedInputSolidsMap;
 
+      void process(const TopoDS_Shape& shape);
       output_MapPair operator()(const shape_Name& inputSolidsMap);
-      output_pair flattenSolidHierarchy(const std::shared_ptr<TopTools_HSequenceOfShape>& inputSolidsList);
+      output_pair operator()(const TopoDS_Shape& shape);
+      output_pair operator()(const std::shared_ptr<TopTools_HSequenceOfShape>& inputShapesList);
   };
 }
 
