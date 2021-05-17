@@ -68,9 +68,7 @@ namespace McCAD::Geometry{
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
 
     // Conversion variables
-    Standard_Integer solidID{0}, originalID{0};
-    TCollection_ExtendedString solidName;
-    Standard_Integer matID{0}, matDensity{0};
+    Standard_Integer solidID{0}, compoundID{0};
     gp_Pnt aabbCenter;
     std::vector<std::shared_ptr<BoundSurface>> intersectionList;
     std::vector<std::shared_ptr<BoundSurface>> unionList;

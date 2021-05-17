@@ -15,7 +15,7 @@ McCAD::Decomposition::Decompose::Impl::Impl(const General::InputData& inputData,
     if (!inputShapesMap.size() > 0)
         throw std::runtime_error("Error reading input STEP file!");
     std::cout << " > Decomposing " << inputShapesMap.size() <<
-                 " shap(s) from the input STEP file" << std::endl;
+                 " shape(s) from the input STEP file" << std::endl;
     perform();
 }
 
@@ -28,7 +28,7 @@ McCAD::Decomposition::Decompose::Impl::perform(
     std::unique_ptr<Geometry::Impl::Compound> compoundObj =
             std::make_unique<Geometry::Impl::Compound>(
             std::get<0>(inputShape), std::get<1>(inputShape));
-    Preprocessor{compoundObj};
+    Preprocessor{inputConfig.minSolidVolume}(compoundObj);
     for(auto& plSolid : compoundObj->planarSolidsList){
         std::cout << "   - Decomposing planar solid" << std::endl;
         if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(plSolid)){
@@ -67,8 +67,10 @@ McCAD::Decomposition::Decompose::Impl::perform(){
     // Extract result solids into maps.
     for(const auto& compound : compoundList){
         // Add successful subolids
-        successDecomposition.push_back(std::make_tuple(compound->compoundName,
-                                                       *compound->subSolidsList));
+        if(compound->subSolidsList->Length() > 0){
+            successDecomposition.push_back(std::make_tuple(compound->compoundName,
+                                                           *compound->subSolidsList));
+        }
         // Add rejected input solids and failed subolids
         if(compound->rejectedInputShapesList->Length() > 0){
             TopTools_HSequenceOfShape rejected{*compound->rejectedInputShapesList};

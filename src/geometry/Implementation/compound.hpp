@@ -23,14 +23,14 @@ namespace McCAD::Geometry::Impl{
 
     TopoDS_Shape compoundShape;
     TCollection_ExtendedString compoundName;
-    Standard_Integer matID{0};
+    Standard_Integer matID{0}, compoundID{0};
     Standard_Real matDensity{0};
 
     std::vector<std::shared_ptr<Geometry::Solid>> solidsList;
     std::vector<std::shared_ptr<Geometry::PLSolid>> planarSolidsList;
     std::vector<std::shared_ptr<Geometry::CYLSolid>> cylSolidsList;
     std::vector<std::shared_ptr<Geometry::TORSolid>> torSolidsList;
-
+    // Decomposition variables
     std::unique_ptr<TopTools_HSequenceOfShape> acceptedInputShapesList;
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputShapesList;
     std::unique_ptr<TopTools_HSequenceOfShape> subSolidsList;
