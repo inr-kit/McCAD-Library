@@ -1,5 +1,8 @@
 // McCAD
 #include "solid_impl.hpp"
+// OCC
+#include <GProp_GProps.hxx>
+#include <BRepGProp.hxx>
 
 McCAD::Geometry::Solid::Impl::Impl()
   : preproc{std::make_unique<Tools::Preprocessor>()},
@@ -12,7 +15,6 @@ McCAD::Geometry::Solid::Impl::~Impl(){
 
 void
 McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
-    //std::cout << "initiate" << std::endl;
     solidShape = aSolidShape;
     solid = TopoDS::Solid(solidShape);
 }
@@ -26,8 +28,12 @@ McCAD::Geometry::Solid::Impl::repairSolid(){
 
 void
 McCAD::Geometry::Solid::Impl::createOBB(Standard_Real bndBoxGap){
+    // Build OBB
     BRepBndLib::AddOBB(solid, obb);
     obb.Enlarge(bndBoxGap);
+    // Build AABB
+    BRepBndLib::Add(solid, aabb);
+    aabb.Enlarge(bndBoxGap);
 }
 
 void
@@ -89,4 +95,20 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTol
             edge.Convex(0);
         }
     }
+}
+
+void
+McCAD::Geometry::Solid::Impl::calcAABBCenter(){
+    Standard_Real minX, minY, minZ, maxX, maxY, maxZ;
+    aabb.Get(minX, minY, minZ, maxX, maxY, maxZ);
+    aabbCenter = {(minX + std::abs(maxX-minX)/2.0),
+                  (minY + std::abs(maxY-minY)/2.0),
+                  (minZ + std::abs(maxZ-minZ)/2.0)};
+}
+
+void
+McCAD::Geometry::Solid::Impl::calcVolume(){
+    GProp_GProps geometryProperties;
+    BRepGProp::VolumeProperties(solid, geometryProperties);
+    solidVolume = geometryProperties.Mass();
 }

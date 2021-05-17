@@ -1,8 +1,7 @@
 #include "SurfaceUtilities.hpp"
 
 std::string
-McCAD::Tools::toTypeName(
-        GeomAbs_SurfaceType surfaceType){
+McCAD::Tools::toTypeName(GeomAbs_SurfaceType surfaceType){
     switch(surfaceType){
     case GeomAbs_Plane:
         return "Plane";
@@ -25,6 +24,6 @@ McCAD::Tools::toTypeName(
     case GeomAbs_OffsetSurface:
         return "Offset surface";
     default:
-        return "Other surface";
+        return "Unknown surface";
     }
 }

@@ -10,6 +10,10 @@ McCAD::Tools::SenseEvaluator::operator()(const TopoDS_Face& face,
     GeomAdaptor_Surface surfaceAdaptor{BRep_Tool::Surface(face)};
     if (surfaceAdaptor.GetType() == GeomAbs_Plane){
         gp_Pln plane = surfaceAdaptor.Plane();
+        if(face.Orientation() == TopAbs_REVERSED){
+            gp_Ax1 planeNormal = plane.Axis();
+            plane.SetAxis(planeNormal.Reversed());
+        }
         return senseRelativeToPlane(plane, point);
     } else if (surfaceAdaptor.GetType() == GeomAbs_Cylinder){
         gp_Cylinder cylinder = surfaceAdaptor.Cylinder();
@@ -20,7 +24,7 @@ McCAD::Tools::SenseEvaluator::operator()(const TopoDS_Face& face,
 
 Standard_Real
 McCAD::Tools::SenseEvaluator::senseRelativeToPlane(const gp_Pln& plane,
-                                                 const gp_Pnt& point){
+                                                   const gp_Pnt& point){
     std::array<Standard_Real, 4> parameters;
     //A * X + B * Y + C * Z + D = 0
     plane.Coefficients(parameters[0], parameters[1], parameters[2], parameters[3]);
@@ -30,7 +34,7 @@ McCAD::Tools::SenseEvaluator::senseRelativeToPlane(const gp_Pln& plane,
 
 Standard_Real
 McCAD::Tools::SenseEvaluator::senseRelativeToCyl(const gp_Cylinder& cylinder,
-                                               const gp_Pnt& point){
+                                                 const gp_Pnt& point){
     std::array<Standard_Real, 10> parameters;
     // A1.X**2 + A2.Y**2 + A3.Z**2 + 2.(B1.X.Y + B2.X.Z + B3.Y.Z) + 2.(C1.X + C2.Y + C3.Z) + D = 0.0
     cylinder.Coefficients(parameters[0], parameters[1], parameters[2],

@@ -10,13 +10,16 @@
 #include <STEPCAFControl_Reader.hxx>
 #include <STEPControl_Writer.hxx>
 
-McCAD::IO::STEPReader::Impl::Impl(const std::string& fileName)
-    : fileName{fileName}, sequenceOfShape{new TopTools_HSequenceOfShape}{
+McCAD::IO::STEPReader::Impl::Impl(const std::string& fileName) :
+    fileName{fileName},
+    sequenceOfShape{std::make_shared<TopTools_HSequenceOfShape>()}{
     if(!std::filesystem::exists(fileName)){
-        throw std::runtime_error("The specified input STEP file couldn't be found!."
+        throw std::runtime_error("The specified input STEP file couldn't be found!"
                                  "\nHINT: check inputFileName on McCADInputConfig.txt");
     }
 }
+
+McCAD::IO::STEPReader::Impl::~Impl(){}
 
 bool
 McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
@@ -47,6 +50,7 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
         if (aLabel.FindAttribute(TNaming_NamedShape::GetID(), aShape)){
             sequenceOfShape->Append(aShape->Get());
             shapeNames.push_back(aName);
+            shapesInfoMap.push_back(std::make_tuple(aShape->Get(), aName));
             foundShapes = Standard_True;
         }
     }
@@ -90,6 +94,6 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
         Standard_Boolean failsOnly = Standard_False;
         STEPReader.PrintCheckLoad(failsOnly, IFSelect_ItemsByEntity);
         STEPReader.PrintCheckTransfer(failsOnly, IFSelect_ItemsByEntity);
-        throw std::runtime_error("Error reading file!");
+        throw std::runtime_error("Error reading input STEP file!");
     }
 }

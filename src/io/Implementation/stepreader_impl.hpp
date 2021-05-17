@@ -6,10 +6,12 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <memory>
 // McCAD
 #include "stepreader.hpp"
 // OCC
 #include <TDF_Label.hxx>
+#include <TopoDS_Shape.hxx>
 #include <TopTools_HSequenceOfShape.hxx>
 #include <TCollection_ExtendedString.hxx>
 
@@ -17,15 +19,17 @@ namespace McCAD::IO{
   class STEPReader::Impl{
   public:
     Impl(const std::string& fileName);
+    ~Impl();
+
+    std::string fileName;
+    std::shared_ptr<TopTools_HSequenceOfShape> sequenceOfShape;
+    std::vector<TCollection_ExtendedString> shapeNames;
+    std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString>> shapesInfoMap;
 
     void readSTEP();
     void getLabelInfo(const TDF_Label& aLabel);
     bool iterateLabelChilds(const TDF_Label& aLabel,
                             const TCollection_ExtendedString& aName);
-
-    std::string fileName;
-    Handle_TopTools_HSequenceOfShape sequenceOfShape;
-    std::vector<TCollection_ExtendedString> shapeNames = {};
   };
 }
 

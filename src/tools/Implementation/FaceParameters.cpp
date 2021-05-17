@@ -1,5 +1,9 @@
 // McCAD
 #include "FaceParameters.hpp"
+// OCC
+#include <BRep_Tool.hxx>
+#include <Standard.hxx>
+#include <gp_Ax1.hxx>
 
 gp_Dir
 McCAD::Tools::normalOnFace(const TopoDS_Face& face, const gp_Pnt& point){
@@ -49,4 +53,41 @@ McCAD::Tools::detail::getSurfFPtr(GeomAbs_SurfaceType surfaceType){
     default:
         return nullptr;
     }
+}
+
+McCAD::Tools::surfPrmts
+McCAD::Tools::genPlSurfParmts(const TopoDS_Face& face,
+                              const Standard_Real& parameterTolerance){
+    // std::vector<gp_Pln, gp_Pnt, gp_Dir, parameters>
+    gp_Ax1 planeNormal;
+    TopLoc_Location location;
+    std::array<Standard_Real, 4> planeParameters;
+    GeomAdaptor_Surface surface{BRep_Tool::Surface(face, location)};
+    gp_Pln plane = surface.Plane();
+    if (face.Orientation() == TopAbs_REVERSED){
+        planeNormal = plane.Axis();
+        planeNormal.Reverse();
+        plane.SetAxis(planeNormal);
+    }
+    plane.Coefficients(planeParameters[0], planeParameters[1], planeParameters[2],
+                       planeParameters[3]);
+    for(auto& parameter : planeParameters){
+        if(std::abs(parameter) < parameterTolerance) parameter = 0.0;
+    }
+    plane = gp_Pln(planeParameters[0], planeParameters[1], planeParameters[2],
+                   planeParameters[3]);
+    planeNormal = plane.Axis();
+    surfPrmts generatedParmts;
+    generatedParmts = std::make_tuple(plane, plane.Location(), planeNormal.Direction(), planeParameters);
+    return generatedParmts;
+}
+
+void
+McCAD::Tools::genCylSurfParmts(const TopoDS_Face& face,
+                               const Standard_Real& parameterTolerance){
+}
+
+void
+McCAD::Tools::genTorSurfParmts(const TopoDS_Face& face,
+                               const Standard_Real& parameterTolerance){
 }

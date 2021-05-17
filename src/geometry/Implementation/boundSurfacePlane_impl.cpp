@@ -51,3 +51,4 @@ McCAD::Geometry::BoundSurfacePlane::Impl::generateExtendedPlane(
     writer5.Write(filename.c_str());
     *///debug
 }
+

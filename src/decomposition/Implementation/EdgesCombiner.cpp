@@ -4,7 +4,7 @@
 void
 McCAD::Decomposition::EdgesCombiner::operator()(
         std::vector<std::shared_ptr<McCAD::Geometry::Edge>>& edgesList){
-    std::cout << "size before: " << edgesList.size() << std::endl;
+    //std::cout << "size before: " << edgesList.size() << std::endl;
     for (Standard_Integer i = 0; i < edgesList.size(); ++i){
         for (Standard_Integer j = i+1; j < edgesList.size(); ++j){
             if (*(edgesList[i]) == *(edgesList[j])){
@@ -30,5 +30,5 @@ McCAD::Decomposition::EdgesCombiner::operator()(
             }
         }
     }
-    std::cout << "size after: " << edgesList.size() << std::endl;
+    //std::cout << "size after: " << edgesList.size() << std::endl;
 }

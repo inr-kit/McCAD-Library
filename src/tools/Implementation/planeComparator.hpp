@@ -4,6 +4,7 @@
 // C++
 #include <array>
 #include <optional>
+#include <cmath>
 // McCAD
 #include <Standard.hxx>
 // OCC

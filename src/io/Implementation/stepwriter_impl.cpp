@@ -11,12 +11,16 @@ McCAD::IO::STEPWriter::Impl::Impl(const std::string& fileName) :
     }
 }
 
+
 void
-McCAD::IO::STEPWriter::Impl::operator()(const Handle_TopTools_HSequenceOfShape& shapes){
+McCAD::IO::STEPWriter::Impl::operator()(
+        const McCAD::IO::STEPWriter::Impl::solidsMap& solidsMap){
     STEPControl_Writer writer;
-    for (Standard_Integer i = 1; i <= shapes->Length(); ++i){
-        writer.Transfer(shapes->Value(i),STEPControl_StepModelType::STEPControl_AsIs);
+    for (const auto& compound : solidsMap){
+        for(const auto& solid : std::get<1>(compound)){
+            writer.Transfer(solid, STEPControl_StepModelType::STEPControl_AsIs);
+        }
+        writer.Write(outputfileName.c_str());
     }
-    writer.Write(outputfileName.c_str());
 }
 

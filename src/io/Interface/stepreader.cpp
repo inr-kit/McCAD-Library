@@ -37,8 +37,8 @@ McCAD::IO::STEPReader::operator=(
 
 McCAD::General::InputData
 McCAD::IO::STEPReader::getInputData() const{
-  McCAD::General::InputData inputData;
-  inputData.accessImpl()->inputSolidsList = pImpl->sequenceOfShape;
+  General::InputData inputData;
+  inputData.accessImpl()->inputShapesMap = pImpl->shapesInfoMap;
   return inputData;
 }
 

@@ -13,7 +13,7 @@ namespace McCAD::IO{
     class Impl;
 
   public:
-    STEPWriter(const std::string& fileName, const General::InputData& inputData);
+    STEPWriter(const std::string& fileName, const General::InputData& outputData);
     STEPWriter(const STEPWriter& that);
     STEPWriter(STEPWriter&& that);
     ~STEPWriter();

@@ -4,48 +4,52 @@
 //C++
 #include <string>
 #include <vector>
+#include <cmath>
+#include <filesystem>
 
 namespace McCAD::IO{
 class InputConfig{
 public:
-    InputConfig(std::string& currentPath);
+    InputConfig(const std::filesystem::path& currentPath);
     ~InputConfig();
 
-    std::string currentPath;
+    std::filesystem::path currentPath;
+    int conversion_factor{1};
+    const double PI = 3.141592653589793238463;
     void writeTemplate();
     std::vector<std::string> splitLine(const std::string& line, char delimiter);
     void readTemplate();
+    std::string stringToLowerCase(std::string& string);
 
     //Define default values
+    std::string units = "cm";
     std::string inputFileName = "input.stp";
     std::string resultFileName = "result.stp";
     std::string rejectFileName = "reject.stp";
-    std::string units = "cm";
     // Decomposition
     bool decompose = true;
     int recurrenceDepth = 20;
-    double tolerance = 1.0e-7;
-    double minInputSolidVol = 1.0;
-    double angleTolerance = 1.0e-3;
-    double maxDecomposeLength = 20;
-    // Conversion
-    std::string conversionFileName = "conversion.stl";
+    double minSolidVolume = 10.0; // in mm^3
+    double minFaceArea = 10.0;     // in mm^2
+    double precision = 1.0e-7;
+    double parameterTolerance = 1.0e-7;
+    double angularTolerance = 1.0e-3 * PI;
+    double distanceTolerance = 1.0e-5;
+    // Void generation and conversion
     bool convert = false;
-    bool writeCollisionFile =false;
     bool voidGeneration = true;
-    double maxCellExprLength = 200;
-    double minDecomFaceArea = 50;
-    double minVoidVol = 1.0;
-    unsigned int voidDecomposeDepth = 10;
-    unsigned int startCellNum = 0;
-    unsigned int startSurfNum = 0;
-    double XResolution = 0.001;
-    double YResolution = 0.001;
-    double RResolution = 0.0314;
-    unsigned int maxSamplPntNum = 50;
-    unsigned int minSamplPntNum = 20;
-    unsigned int initNumVoidBoxes = 1;
-    std::string matFileName = "mat";
+    double minVoidVolume = 1.0;
+    int maxSolidsPerVoidCell = 20;
+    bool BVHVoid = true;
+    std::string MCcode = "mcnp";
+    int startCellNum = 1;
+    int startSurfNum = 1;
+    int maxLineWidth = 80;
+    std::string MCOutputFileName = "MCFile.inp";
+    std::string volumesFileName = "volumes.txt";
+
+    // Internal variables
+    std::string conversionFileName = "conversion.stp";
   };
 }
 
