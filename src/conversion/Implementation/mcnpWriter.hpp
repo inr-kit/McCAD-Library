@@ -9,6 +9,7 @@
 #include <optional>
 // McCAD
 #include "solid_impl.hpp"
+#include "compound.hpp"
 #include "voidCell.hpp"
 #include "inputconfig.hpp"
 // OCC
@@ -20,35 +21,36 @@ namespace McCAD::Conversion{
         MCNPWriter(const IO::InputConfig& inputConfig);
         ~MCNPWriter();
     private:
-        using solidsList = std::vector<std::shared_ptr<Geometry::Solid>>;
         using surfacesMap = std::map<Standard_Integer, std::shared_ptr<Geometry::BoundSurface>>;
         using finalMap = std::map<Standard_Integer, std::string>;
-        using cellsMap = std::map<Standard_Integer, std::vector<std::shared_ptr<Geometry::Solid>>>;
         using solidsMap = std::map<Standard_Integer, std::shared_ptr<Geometry::Solid>>;
+        using compoundsMap = std::map<Standard_Integer, std::shared_ptr<Geometry::Impl::Compound>>;
         using voidsMap = std::map<std::tuple<Standard_Integer, Standard_Integer>,
                                   std::shared_ptr<VoidCell>>;
     public:
+        Standard_Real PI;
         Standard_Integer maxLineWidth;
         Standard_Real precision;
         std::string MCOutputFileName, volumesFileName;
         Standard_Integer startCellNum, startSurfNum;
         surfacesMap uniquePlanes, uniqueCylinders, uniqueSpheres;
         finalMap uniqueSurfaces;
-        cellsMap componentsMap;
         solidsMap solidObjMap;
+        compoundsMap compoundObjMap;
         voidsMap voidCellsMap;
         Standard_Boolean voidGeneration, BVHVoid;
         Standard_Real radius;
 
-        void operator()(const solidsList& solidObjList,
-                        const std::shared_ptr<VoidCell>& voidCell);
-        void processSolids(const solidsList& solidObjList);
+        void operator()(
+                const std::vector<std::shared_ptr<Geometry::Impl::Compound>>& compoundList,
+                const std::shared_ptr<VoidCell>& voidCell);
+        void processSolids(const std::vector<std::shared_ptr<Geometry::Impl::Compound>>& compoundList);
         void processVoids(const std::shared_ptr<VoidCell>& voidCell);
-        void addUniqueSurfNumbers(const solidsList& solidObjList);
+        void addUniqueSurfNumbers(const std::vector<std::shared_ptr<Geometry::Impl::Compound>>& compoundList);
         std::optional<Standard_Integer> findDuplicate(
                 const std::shared_ptr<Geometry::BoundSurface>& surface,
                 surfacesMap& uniqueMap);
-        void createComponentMap(const solidsList& solidObjList);
+        void createSolidsMap(const std::vector<std::shared_ptr<Geometry::Impl::Compound>>& compoundList);
         void addDaughterVoids(const std::shared_ptr<VoidCell>& voidCell);
         void createVoidMap(const std::shared_ptr<VoidCell>& voidCell);
         std::string adjustLineWidth(const std::string& mainExpr,

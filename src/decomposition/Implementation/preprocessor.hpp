@@ -25,9 +25,9 @@
 namespace McCAD::Decomposition{
   class Preprocessor{
   public:
-    Preprocessor();
-    Preprocessor(const std::unique_ptr<Geometry::Impl::Compound>& compound);
-    ~Preprocessor();
+      Preprocessor();
+      Preprocessor(const Standard_Real& minSolidVolume);
+      ~Preprocessor();
   private:
     Tools::SolidType solidType;
     // WARNING!!
@@ -37,8 +37,11 @@ namespace McCAD::Decomposition{
                                      std::shared_ptr<McCAD::Geometry::CYLSolid>,
                                      std::shared_ptr<McCAD::Geometry::TORSolid>>;
   public:
+    Standard_Real minSolidVolume;
+    void operator()(const std::unique_ptr<Geometry::Impl::Compound>& compound);
     VariantType perform(const TopoDS_Shape& shape);
-    Standard_Boolean checkBndSurfaces(const TopoDS_Solid& solid);
+    Standard_Boolean checkBndSurfaces(const TopoDS_Shape& shape);
+    Standard_Boolean checkVolume(const TopoDS_Shape& shape);
     Standard_Integer determineSolidType(const TopoDS_Solid& solid);
   };
 }

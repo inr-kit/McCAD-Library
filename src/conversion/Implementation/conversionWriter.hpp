@@ -7,6 +7,7 @@
 #include <memory>
 // McCAD
 #include "solid_impl.hpp"
+#include "compound.hpp"
 #include "voidCell.hpp"
 #include "inputconfig.hpp"
 // OCC
@@ -17,13 +18,12 @@ namespace McCAD::Conversion{
     public:
         Writer(const IO::InputConfig& inputConfig);
         ~Writer();
-    private:
-        using solidsList = std::vector<std::shared_ptr<Geometry::Solid>>;
-    public:
+
         IO::InputConfig inputConfig;
         std::string MCcode;
-        void operator()(const solidsList& solidObjList,
-                        const std::shared_ptr<VoidCell>& voidCell);
+        void operator()(
+                const std::vector<std::shared_ptr<Geometry::Impl::Compound>> compoundList,
+                const std::shared_ptr<VoidCell>& voidCell);
     };
 }
 

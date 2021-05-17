@@ -3,40 +3,34 @@
 // McCAD
 #include "conversion_impl.hpp"
 #include "stepreader.hpp"
+#include "stepwriter.hpp"
 #include "inputdata_impl.hpp"
-#include "heirarchyFlatter.hpp"
 #include "preprocessor.hpp"
 #include "TaskQueue.hpp"
 #include "voidCellManager.hpp"
 #include "conversionWriter.hpp"
-// OCC
-#include <GProp_GProps.hxx>
-#include <BRepGProp.hxx>
 
 McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig) :
     inputConfig{inputConfig}{
     IO::STEPReader reader{inputConfig.conversionFileName};
-    auto inputData = reader.getInputData();
-    auto inputSolidsMap = inputData.accessImpl()->inputShapesMap;
-    if (inputSolidsMap.size() == 0)
-        throw std::runtime_error("Input solids map is empty!");
-    std::cout << "> Found " << inputSolidsMap.size() <<
+    inputShapesMap = reader.getInputData().accessImpl()->inputShapesMap;
+    if (!inputShapesMap.size() > 0)
+        throw std::runtime_error("Error loading STEP file, " + inputConfig.conversionFileName);
+    std::cout << "> Found " << inputShapesMap.size() <<
                  " shapes(s) in the input STEP file" << std::endl;
-    auto product = Tools::HeirarchyFlatter{}(inputSolidsMap);
-    acceptedInputSolidsList = product.first;
-    rejectedInputSolidsList = product.second;
-    if (rejectedInputSolidsList.size() != 0) rejectCondition = Standard_True;
     getGeomData();
     if (rejectCondition){
-        std::cout << "> Input STEP file contains " << rejectedInputSolidsList.size() <<
-                     "shapes that are not yet supported!" << std::endl;
-        throw std::runtime_error("Conversion terminated!");
+        // Write rejected solids to a STEP file.
+        General::InputData outputData;
+        outputData.accessImpl()->outputShapesMap = rejectConversion;
+        McCAD::IO::STEPWriter{"rejectedConversion", outputData};
+        throw std::runtime_error("Rejected solids have been written to "
+                                 "rejectedConversion.stp. Conversion terminated!");
     }
-    std::cout << " > Converting " << acceptedInputSolidsList.size() << " solid(s)"
-              << std::endl;
+    std::cout << " > Converting " << solidObjList.size() << " solid(s)" << std::endl;
     auto voidCell = VoidCellManager{inputConfig}(solidObjList);
     std::cout << "   - Writing MC input file" << std::endl;
-    Writer{inputConfig}(solidObjList, voidCell);
+    Writer{inputConfig}(compoundList, voidCell);
 }
 
 McCAD::Conversion::Convert::Impl::~Impl(){
@@ -44,52 +38,34 @@ McCAD::Conversion::Convert::Impl::~Impl(){
 
 void
 McCAD::Conversion::Convert::Impl::getGeomData(){
-    Standard_Integer counter = 0;
+    // Loop over inputhapesMap and create compound objects.
     TaskQueue<Policy::Parallel> taskQueue;
-    for(const auto& shape : acceptedInputSolidsList){
-        ++counter;
-        taskQueue.submit([this, &shape, counter](){
-            // Check that solid volumes is above the volume threshold.
-            GProp_GProps geometryProperties;
-            BRepGProp::VolumeProperties(std::get<0>(shape), geometryProperties);
-            if (geometryProperties.Mass() < inputConfig.minSolidVolume){
-                rejectedInputSolidsList.push_back(shape);
-                rejectCondition = Standard_True;
-                return;
-            }
-            auto solid = Decomposition::Preprocessor{}.perform(std::get<0>(shape));
-            if (std::holds_alternative<std::monostate>(solid)){
-                rejectedInputSolidsList.push_back(shape);
-                rejectCondition = Standard_True;
-            } else{
-                switch (Standard_Integer(solid.index())){
-                case solidType.planar:{
-                    auto solidObj = std::get<solidType.planar>(solid);
-                    solidObj->accessSImpl()->solidID = counter;
-                    solidObj->accessSImpl()->originalID = std::get<2>(shape);
-                    solidObj->accessSImpl()->solidName = std::get<1>(shape);
-                    solidObjList.push_back(solidObj);
-                    break;
-                } case solidType.cylindrical:{
-                    auto solidObj = std::get<solidType.cylindrical>(solid);
-                    solidObj->accessSImpl()->solidID = counter;
-                    solidObj->accessSImpl()->originalID = std::get<2>(shape);
-                    solidObj->accessSImpl()->solidName = std::get<1>(shape);
-                    solidObjList.push_back(solidObj);
-                    break;
-                } case solidType.toroidal:{
-                    auto solidObj = std::get<solidType.toroidal>(solid);
-                    solidObj->accessSImpl()->solidID = counter;
-                    solidObj->accessSImpl()->originalID = std::get<2>(shape);
-                    solidObj->accessSImpl()->solidName = std::get<1>(shape);
-                    solidObjList.push_back(solidObj);
-                    break;
-                } default:
-                    rejectedInputSolidsList.push_back(shape);
-                    rejectCondition = Standard_True;
-                }
-            };
+    Standard_Integer counter = 0;
+    for(const auto& member : inputShapesMap){
+        taskQueue.submit([this, counter, &member](){
+            std::unique_ptr<Geometry::Impl::Compound> compoundObj =
+                    std::make_unique<Geometry::Impl::Compound>(
+                    std::get<0>(member), std::get<1>(member));
+            Decomposition::Preprocessor{inputConfig.minSolidVolume}(compoundObj);
+            compoundObj->compoundID = counter;
+            compoundList.push_back(std::move(compoundObj));
         });
+        ++counter;
     }
     taskQueue.complete();
+    // Loop over list of compounds, add solid ID, compoundID, and add rejected solids to list.
+    counter = 0;
+    for(Standard_Integer i = 0; i < compoundList.size(); ++i){
+        for(const auto& solidObj : compoundList[i]->solidsList){
+            ++counter;
+            solidObj->accessSImpl()->solidID = counter;
+            solidObj->accessSImpl()->compoundID = compoundList[i]->compoundID;
+            solidObjList.push_back(solidObj);
+        }
+        if(compoundList[i]->rejectedInputShapesList->Length() > 0)
+            rejectCondition = Standard_True;
+            rejectConversion.push_back(std::make_tuple(
+                                           compoundList[i]->compoundName,
+                                           *compoundList[i]->rejectedInputShapesList));
+    }
 }

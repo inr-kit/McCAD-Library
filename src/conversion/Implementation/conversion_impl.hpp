@@ -11,6 +11,7 @@
 #include "conversion.hpp"
 #include "SolidType.hpp"
 #include "solid_impl.hpp"
+#include "compound.hpp"
 // OCC
 #include <Standard.hxx>
 #include <TopoDS_Shape.hxx>
@@ -23,14 +24,16 @@ namespace McCAD::Conversion {
       ~Impl();
     private:
       Tools::SolidType solidType;
-      using shape_Name_ID = std::vector<std::tuple<TopoDS_Shape,
-                                                   TCollection_ExtendedString,
-                                                   Standard_Integer>>;
+      using shapeTuple = std::tuple<TopoDS_Shape, TCollection_ExtendedString>;
+      using shapesMap = std::vector<shapeTuple>;
+      using solidsMap = std::vector<std::tuple<TCollection_ExtendedString,
+                                               TopTools_HSequenceOfShape>>;
     public:
       IO::InputConfig inputConfig;
+      shapesMap inputShapesMap;
+      std::vector<std::shared_ptr<Geometry::Impl::Compound>> compoundList;
       Standard_Boolean rejectCondition = Standard_False;
-      shape_Name_ID acceptedInputSolidsList;
-      shape_Name_ID rejectedInputSolidsList;
+      solidsMap rejectConversion;
       std::vector<std::shared_ptr<Geometry::Solid>> solidObjList;
       void getGeomData();
     };
