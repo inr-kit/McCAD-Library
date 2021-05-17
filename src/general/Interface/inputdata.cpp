@@ -40,6 +40,8 @@ McCAD::General::InputData::accessImpl() const{
 
 int
 McCAD::General::InputData::getSize(){
+    pImpl->updateSize();
     return pImpl->size;
 }
+
 

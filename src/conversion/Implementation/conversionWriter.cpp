@@ -9,10 +9,10 @@ McCAD::Conversion::Writer::~Writer(){}
 
 void
 McCAD::Conversion::Writer::operator()(
-        const McCAD::Conversion::Writer::solidsList& solidObjList,
+        const std::vector<std::shared_ptr<Geometry::Impl::Compound>> compoundList,
         const std::shared_ptr<VoidCell>& voidCell){
     if(MCcode == "mcnp"){
-        MCNPWriter{inputConfig}(solidObjList, voidCell);
+        MCNPWriter{inputConfig}(compoundList, voidCell);
     }
 }
 
