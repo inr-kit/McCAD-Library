@@ -37,6 +37,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "recurrenceDepth = 20\n"
                    "minSolidVolume = 1.0\n"
                    "minFaceArea = 1.0\n"
+                   "scalingFactor = 100.0\n"
                    "precision = 1.0e-7\n"
                    "parameterTolerance = 1.0e-7\n"
                    "angularTolerance = 1.0e-3\n"
@@ -98,6 +99,8 @@ McCAD::IO::InputConfig::readTemplate(){
                    minSolidVolume = std::stof(lineSplit[2]) * conversion_factor;
                else if (lineSplit[0] == "minFaceArea")
                    minFaceArea = std::stof(lineSplit[2]) * conversion_factor;
+               else if (lineSplit[0] == "scalingFactor")
+                   scalingFactor = std::stof(lineSplit[2]);
                else if (lineSplit[0] == "precision")
                    precision = std::stof(lineSplit[2]);
                else if (lineSplit[0] == "parameterTolerance")

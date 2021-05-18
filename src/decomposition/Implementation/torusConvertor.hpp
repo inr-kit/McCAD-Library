@@ -18,7 +18,9 @@ namespace McCAD::Decomposition{
   public:
     TorusConvertor() = default;
 
-    void operator()(const std::shared_ptr<Geometry::Solid>& solid);
+    Standard_Real scalingFactor;
+    void operator()(const std::shared_ptr<Geometry::Solid>& solid,
+                    const Standard_Real& scalingFactor);
     std::optional<TopoDS_Shape> convertTorusToCylinder(const TopoDS_Shape& shape,
                                                        Standard_Real scaleFactor = 1.6);
     void retrieveSolid(TopoDS_Solid& cylinder,

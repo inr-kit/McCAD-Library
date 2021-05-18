@@ -6,7 +6,6 @@
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>
 #include <TopoDS_Shape.hxx>
-#include <TCollection_ExtendedString.hxx>
 
 namespace McCAD::Tools{
   class HeirarchyFlatter{

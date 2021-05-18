@@ -24,7 +24,10 @@
 #include <BRepAdaptor_Surface.hxx>
 
 void
-McCAD::Decomposition::TorusConvertor::operator()(const std::shared_ptr<Geometry::Solid>& solid){
+McCAD::Decomposition::TorusConvertor::operator()(
+        const std::shared_ptr<Geometry::Solid>& solid,
+        const Standard_Real& aScalingFactor){
+    scalingFactor = aScalingFactor;
     auto& solidsList = *solid->accessSImpl()->splitSolidList;
     for(Standard_Integer index = 1; index <= solidsList.Length(); ++index){
         //std::cout << "TorusConvertor" << std::endl;
@@ -184,7 +187,7 @@ McCAD::Decomposition::TorusConvertor::splitSolid(TopoDS_Solid& solid,
     auto solidObj = Geometry::Solid::Impl{};
     solidObj.initiate(solid);
     solidObj.createOBB();
-    solidObj.calcMeshDeflection();
+    solidObj.calcMeshDeflection(scalingFactor);
     auto extFace = SurfaceObjCreator{}(splitFace, solidObj.boxDiagonalLength);
     auto resultSolids = SolidSplitter{}(solid, solidObj.obb,
                                         extFace->accessSImpl()->extendedFace);

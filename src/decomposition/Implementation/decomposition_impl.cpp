@@ -31,7 +31,8 @@ McCAD::Decomposition::Decompose::Impl::perform(
             std::make_unique<Geometry::Impl::Compound>(
             std::get<0>(inputShape), std::get<1>(inputShape));
     compoundObj->compoundID = compoundID;
-    Preprocessor{inputConfig.minSolidVolume}(compoundObj);
+    Preprocessor{inputConfig.minSolidVolume, inputConfig.scalingFactor,
+                 inputConfig.angularTolerance}(compoundObj);
     for(auto& plSolid : compoundObj->planarSolidsList){
         std::cout << "   - Decomposing planar solid" << std::endl;
         if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(plSolid)){
@@ -50,7 +51,7 @@ McCAD::Decomposition::Decompose::Impl::perform(
         std::cout << "   - Decomposing toroidal solid" << std::endl;
         if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(torSolid)){
             // Convert tori to cylinders.
-            TorusConvertor{}(torSolid);
+            TorusConvertor{}(torSolid, inputConfig.scalingFactor);
             extractSolids(compoundObj, torSolid);
         } else compoundObj->rejectedInputShapesList->Append(
                     torSolid->accessSImpl()->solid);

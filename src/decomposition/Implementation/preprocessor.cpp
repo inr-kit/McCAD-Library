@@ -14,8 +14,11 @@
 
 McCAD::Decomposition::Preprocessor::Preprocessor(){}
 
-McCAD::Decomposition::Preprocessor::Preprocessor(const Standard_Real& minSolidVolume) :
-    minSolidVolume{minSolidVolume}{}
+McCAD::Decomposition::Preprocessor::Preprocessor(const Standard_Real& minSolidVolume,
+                                                 const Standard_Real& scalingFactor,
+                                                 const Standard_Real& angularTolerance) :
+    minSolidVolume{minSolidVolume}, scalingFactor{scalingFactor},
+    angularTolerance{angularTolerance}{}
 
 McCAD::Decomposition::Preprocessor::~Preprocessor(){}
 
@@ -70,13 +73,19 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
     VariantType solidVariant;
     switch (determineSolidType(TopoDS::Solid(shape))){
     case solidType.planar:
-        solidVariant = SolidObjCreator{}.createObj<Geometry::PLSolid>(shape);
+        solidVariant = SolidObjCreator{}.createObj<Geometry::PLSolid>(shape,
+                                                                      scalingFactor,
+                                                                      angularTolerance);
         break;
     case solidType.cylindrical:
-        solidVariant = SolidObjCreator{}.createObj<Geometry::CYLSolid>(shape);
+        solidVariant = SolidObjCreator{}.createObj<Geometry::CYLSolid>(shape,
+                                                                       scalingFactor,
+                                                                       angularTolerance);
         break;
     case solidType.toroidal:
-        solidVariant = SolidObjCreator{}.createObj<Geometry::TORSolid>(shape);
+        solidVariant = SolidObjCreator{}.createObj<Geometry::TORSolid>(shape,
+                                                                       scalingFactor,
+                                                                       angularTolerance);
         break;
     default:;
         // Unknown Type

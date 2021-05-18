@@ -19,8 +19,7 @@
 #include <BRepGProp.hxx>
 #include <BRep_Tool.hxx>
 
-McCAD::Geometry::Solid::Impl::Impl()
-  : preproc{std::make_unique<Tools::Preprocessor>()},
+McCAD::Geometry::Solid::Impl::Impl() :
     splitSolidList{std::make_unique<TopTools_HSequenceOfShape>()},
     rejectedsubSolidsList{std::make_unique<TopTools_HSequenceOfShape>()}{
 }
@@ -36,9 +35,9 @@ McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
 
 void
 McCAD::Geometry::Solid::Impl::repairSolid(){
-    preproc->accessImpl()->removeSmallFaces(solidShape);
+    preproc.accessImpl()->removeSmallFaces(solidShape);
     solid = TopoDS::Solid(solidShape);
-    preproc->accessImpl()->repairSolid(solid);
+    preproc.accessImpl()->repairSolid(solid);
 }
 
 void
@@ -52,8 +51,7 @@ McCAD::Geometry::Solid::Impl::createOBB(Standard_Real bndBoxGap){
 }
 
 void
-McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real scalingFactor){
-    // Calculate the oriented bounding box of the solid.
+McCAD::Geometry::Solid::Impl::calcMeshDeflection(const Standard_Real& scalingFactor){
     meshDeflection = 2 * std::max({obb.XHSize(), obb.YHSize(), obb.ZHSize()}) /
             scalingFactor;
     // error in Bnd_OBB.hxx. calculate it till the method is fixed
@@ -64,7 +62,7 @@ McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real scalingFactor){
 }
 
 void
-McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTolerance){
+McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angularTolerance){
     TopTools_IndexedDataMapOfShapeListOfShape mapEdgeFace;
     TopExp::MapShapesAndAncestors(solid, TopAbs_EDGE, TopAbs_FACE, mapEdgeFace);
     TopTools_ListOfShape facesList;
@@ -94,7 +92,7 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angleTol
         gp_Dir secondNormal = Tools::normalOnFace(secondFace, startPoint);
         Standard_Real angle = firstNormal.AngleWithRef(secondNormal, direction);
 
-        if(std::abs(angle) < angleTolerance){
+        if(std::abs(angle) < angularTolerance){
             angle = Standard_Real(0);
         }
         // The edge is convex.
