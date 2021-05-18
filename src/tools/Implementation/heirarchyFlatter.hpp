@@ -3,14 +3,8 @@
 
 // C++
 #include <memory>
-#include <vector>
-#include <tuple>
 // OCC
 #include <TopTools_HSequenceOfShape.hxx>
-#include <TopoDS.hxx>
-#include <TopoDS_Solid.hxx>
-#include <TopoDS_CompSolid.hxx>
-#include <TopoDS_Compound.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TCollection_ExtendedString.hxx>
 

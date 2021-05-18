@@ -7,13 +7,12 @@ template<typename solidObjType>
 std::shared_ptr<solidObjType>
 McCAD::Decomposition::SolidObjCreator::createObj(const TopoDS_Shape& shape){
     std::shared_ptr<solidObjType> solidObj = std::make_shared<solidObjType>();
-    auto& solidImpl = *solidObj->accessSImpl();
-    solidImpl.initiate(shape);
-    solidImpl.createOBB();
-    solidImpl.calcMeshDeflection();
-    solidImpl.updateEdgesConvexity();
-    solidImpl.facesList = FacesListGenerator{}(*solidObj);
-    solidImpl.repairSolid();
-    solidImpl.calcVolume();
+    solidObj->accessSImpl()->initiate(shape);
+    solidObj->accessSImpl()->createOBB();
+    solidObj->accessSImpl()->calcMeshDeflection();
+    solidObj->accessSImpl()->updateEdgesConvexity();
+    solidObj->accessSImpl()->facesList = FacesListGenerator{}(*solidObj);
+    solidObj->accessSImpl()->repairSolid();
+    solidObj->accessSImpl()->calcVolume();
     return solidObj;
 }

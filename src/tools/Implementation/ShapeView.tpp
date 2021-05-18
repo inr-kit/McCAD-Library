@@ -1,6 +1,6 @@
+// McCAD
 #include "ShapeView.hpp"
-
-#include <iterator>
+#include "iterator"
 
 template<TopAbs_ShapeEnum shapeTag>
 McCAD::detail::ShapeView<shapeTag>::ShapeView(

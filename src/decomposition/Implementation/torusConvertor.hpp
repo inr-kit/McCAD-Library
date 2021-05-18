@@ -3,13 +3,15 @@
 
 // C++
 #include <memory>
+#include <optional>
+#include <vector>
 // McCAD
-#include <Standard.hxx>
 #include "solid_impl.hpp"
 // OCC
-#include <TopoDS_Face.hxx>
+#include <Standard.hxx>
 #include <TopoDS_Shape.hxx>
-#include <BRepAdaptor_Surface.hxx>
+#include <TopoDS_Solid.hxx>
+#include <TopoDS_Face.hxx>
 
 namespace McCAD::Decomposition{
   class TorusConvertor{

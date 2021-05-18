@@ -1,5 +1,6 @@
 // McCAD
 #include "decomposition_impl.hpp"
+#include "ShapeView.hpp"
 #include "TaskQueue.hpp"
 #include "preprocessor.hpp"
 #include "planarSolid_impl.hpp"
@@ -10,7 +11,7 @@
 McCAD::Decomposition::Decompose::Impl::Impl(const General::InputData& inputData,
                                             const IO::InputConfig& inputConfig)
   : inputConfig{inputConfig}{
-    // Get input solids list from the Input Data object.
+    // Get input solids map from the Input Data object.
     inputShapesMap = inputData.accessImpl()->inputShapesMap;
     if (!inputShapesMap.size() > 0)
         throw std::runtime_error("Error reading input STEP file!");
@@ -24,10 +25,12 @@ McCAD::Decomposition::Decompose::Impl::~Impl(){
 
 void
 McCAD::Decomposition::Decompose::Impl::perform(
-        const McCAD::Decomposition::Decompose::Impl::shapeTuple& inputShape){
-    std::unique_ptr<Geometry::Impl::Compound> compoundObj =
+        const McCAD::Decomposition::Decompose::Impl::shapeTuple& inputShape,
+        const Standard_Integer& compoundID){
+    std::shared_ptr<Geometry::Impl::Compound> compoundObj =
             std::make_unique<Geometry::Impl::Compound>(
             std::get<0>(inputShape), std::get<1>(inputShape));
+    compoundObj->compoundID = compoundID;
     Preprocessor{inputConfig.minSolidVolume}(compoundObj);
     for(auto& plSolid : compoundObj->planarSolidsList){
         std::cout << "   - Decomposing planar solid" << std::endl;
@@ -58,10 +61,12 @@ McCAD::Decomposition::Decompose::Impl::perform(
 void
 McCAD::Decomposition::Decompose::Impl::perform(){
     TaskQueue<Policy::Parallel> taskQueue;
+    Standard_Integer counter = 0;
     for(const auto& member : inputShapesMap){
-        taskQueue.submit([this, &member](){
-            perform(member);
+        taskQueue.submit([this, counter, &member](){
+            perform(member, counter);
         });
+        ++counter;
     }
     taskQueue.complete();
     // Extract result solids into maps.
@@ -89,7 +94,7 @@ McCAD::Decomposition::Decompose::Impl::perform(){
 
 void
 McCAD::Decomposition::Decompose::Impl::extractSolids(
-        const std::unique_ptr<Geometry::Impl::Compound>& compound,
+        const std::shared_ptr<Geometry::Impl::Compound>& compound,
         const std::shared_ptr<Geometry::Solid>& solid){
     for(const auto& resultSolid : *solid->accessSImpl()->splitSolidList){
         compound->subSolidsList->Append(resultSolid);

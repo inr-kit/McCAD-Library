@@ -5,22 +5,16 @@
 #include <variant>
 #include <memory>
 // McCAD
-#include <Standard.hxx>
-#include "ShapeView.hpp"
 #include "SolidType.hpp"
 #include "compound.hpp"
 #include "planarSolid_impl.hpp"
 #include "cylSolid_impl.hpp"
 #include "torSolid_impl.hpp"
 // OCC
+#include <Standard.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Solid.hxx>
 #include <TopoDS_Shape.hxx>
-#include <TopoDS_Face.hxx>
-#include <BRep_Tool.hxx>
-#include <BRepTools.hxx>
-#include <BRepAdaptor_Surface.hxx>
-#include <GeomAdaptor_Surface.hxx>
 
 namespace McCAD::Decomposition{
   class Preprocessor{
@@ -38,7 +32,7 @@ namespace McCAD::Decomposition{
                                      std::shared_ptr<McCAD::Geometry::TORSolid>>;
   public:
     Standard_Real minSolidVolume;
-    void operator()(const std::unique_ptr<Geometry::Impl::Compound>& compound);
+    void operator()(const std::shared_ptr<Geometry::Impl::Compound>& compound);
     VariantType perform(const TopoDS_Shape& shape);
     Standard_Boolean checkBndSurfaces(const TopoDS_Shape& shape);
     Standard_Boolean checkVolume(const TopoDS_Shape& shape);

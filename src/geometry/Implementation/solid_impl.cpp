@@ -1,8 +1,23 @@
+// C++
+#include <filesystem>
 // McCAD
 #include "solid_impl.hpp"
+#include "FaceParameters.hpp"
 // OCC
+#include <TopoDS.hxx>
+#include <BRepBndLib.hxx>
+#include <TopTools_IndexedDataMapOfShapeListOfShape.hxx>
+#include <TopExp.hxx>
+#include <TopTools_ListOfShape.hxx>
+#include <TopoDS_Edge.hxx>
+#include <BRepAdaptor_Curve.hxx>
+#include <Geom_Curve.hxx>
+#include <gp_Pnt.hxx>
+#include <gp_Vec.hxx>
+#include <gp_Dir.hxx>
 #include <GProp_GProps.hxx>
 #include <BRepGProp.hxx>
+#include <BRep_Tool.hxx>
 
 McCAD::Geometry::Solid::Impl::Impl()
   : preproc{std::make_unique<Tools::Preprocessor>()},

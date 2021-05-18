@@ -1,7 +1,11 @@
 #ifndef SHAPEVIEW_HPP
 #define SHAPEVIEW_HPP
 
+// McCAD
 #include "Iterator.hpp"
+// OCC
+#include <TopoDS_Shape.hxx>
+#include <TopAbs_ShapeEnum.hxx>
 
 namespace McCAD::detail{
 

@@ -1,13 +1,11 @@
 #ifndef TRIANGLECOLLISION_HPP
 #define TRIANGLECOLLISION_HPP
 
-//C++
-#include <memory>
 //McCAD
-#include <Standard.hxx>
 #include "meshtriangle_impl.hpp"
 #include "boundSurface_impl.hpp"
 //OCC
+#include <Standard.hxx>
 
 namespace McCAD::Decomposition{
     class TriangleCollision{
@@ -31,7 +29,6 @@ namespace McCAD::Decomposition{
               Standard_Integer& aSide,
               Standard_Real distanceTolerance = 1.0e-2,
               Standard_Real senseTolerance = 1.0e-3);
-
     };
 }
 

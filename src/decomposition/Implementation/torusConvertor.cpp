@@ -16,10 +16,12 @@
 #include <gp_Ax2.hxx>
 #include <gp_Vec.hxx>
 #include <gp_Dir.hxx>
+#include <gp_Torus.hxx>
 #include <BRepBndLib.hxx>
 #include <Bnd_OBB.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
+#include <BRepAdaptor_Surface.hxx>
 
 void
 McCAD::Decomposition::TorusConvertor::operator()(const std::shared_ptr<Geometry::Solid>& solid){

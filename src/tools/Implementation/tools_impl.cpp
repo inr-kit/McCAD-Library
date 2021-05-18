@@ -1,5 +1,36 @@
 // McCAD
 #include "tools_impl.hpp"
+#include "ShapeView.hpp"
+// OCC
+#include <ShapeFix_FixSmallFace.hxx>
+#include <ShapeFix_Solid.hxx>
+#include <ShapeFix_FixSmallFace.hxx>
+#include <ShapeFix_Solid.hxx>
+#include <ShapeFix_Shape.hxx>
+#include <TopoDS.hxx>
+#include <Bnd_Box.hxx>
+#include <BRepBndLib.hxx>
+#include <Geom_Surface.hxx>
+#include <GeomAdaptor_Surface.hxx>
+#include <BRep_Tool.hxx>
+#include <BRepGProp.hxx>
+#include <ShapeAnalysis_CheckSmallFace.hxx>
+#include <TopoDS_Edge.hxx>
+#include <gp_Dir.hxx>
+#include <gp_Pnt.hxx>
+#include <ElSLib.hxx>
+#include <CSLib_DerivativeStatus.hxx>
+#include <CSLib.hxx>
+#include <Precision.hxx>
+#include <BRepAdaptor_Surface.hxx>
+#include <TopAbs_Orientation.hxx>
+#include <TopLoc_Location.hxx>
+#include <gp_Pln.hxx>
+#include <gp_Ax3.hxx>
+#include <Geom_Curve.hxx>
+#include <GeomAdaptor_Curve.hxx>
+#include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepTools.hxx>
 
 void
 McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape,

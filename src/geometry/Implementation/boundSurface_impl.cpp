@@ -1,10 +1,30 @@
 //C++
 #include <filesystem>
 #include <tuple>
+#include <array>
 // McCAD
 #include "boundSurface_impl.hpp"
+#include "surfaceComparator.hpp"
+
+#include "ShapeView.hpp"
+#include "CurveUtilities.hpp"
+
+#include "SurfaceUtilities.hpp"
 #include "FaceParameters.hpp"
 //OCC
+#include <Poly_Triangulation.hxx>
+#include <TopoDS_Face.hxx>
+#include <TopLoc_Location.hxx>
+#include <BRepMesh_IncrementalMesh.hxx>
+#include <BRep_Tool.hxx>
+#include <BRepTools.hxx>
+#include <BRepAdaptor_Surface.hxx>
+#include <gp_Trsf.hxx>
+#include <TColgp_Array1OfPnt.hxx>
+#include <TopoDS_Wire.hxx>
+#include <BRepBuilderAPI_MakePolygon.hxx>
+#include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepAdaptor_Curve.hxx>
 #include <STEPControl_Writer.hxx>
 
 McCAD::Geometry::BoundSurface::Impl::Impl(BoundSurface* backReference)

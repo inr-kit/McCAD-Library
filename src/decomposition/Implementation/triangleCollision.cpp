@@ -1,20 +1,11 @@
-//C++
-#include <filesystem>
 //McCAD
 #include "triangleCollision.hpp"
-#include "pointOnSurface.hpp"
+#include "SurfaceUtilities.hpp"
 #include "senseEvaluator.hpp"
-#include "tools_impl.hpp"
-#include "SolidSplitter.hpp"
+#include "pointOnSurface.hpp"
 //OCC
-#include <TopoDS_Face.hxx>
-#include <BRepAdaptor_Surface.hxx>
-#include <GeomAdaptor_Surface.hxx>
-#include <GeomAbs_SurfaceType.hxx>
-#include <gp_Pln.hxx>
-#include <BRepBndLib.hxx>
 #include <Bnd_OBB.hxx>
-#include <STEPControl_Writer.hxx>
+#include <BRepBndLib.hxx>
 
 Standard_Boolean
 McCAD::Decomposition::TriangleCollision::operator()(

@@ -1,12 +1,9 @@
 #ifndef TORSOLID_IMPL_HPP
 #define TORSOLID_IMPL_HPP
 
-// C++
 // McCAD
 #include "torSolid.hpp"
 #include "solid_impl.hpp"
-// OCC
-
 
 namespace McCAD::Geometry{
   class TORSolid::Impl {

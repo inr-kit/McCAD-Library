@@ -2,7 +2,13 @@
 #include "preprocessor.hpp"
 #include "heirarchyFlatter.hpp"
 #include "solidObjCreator.hpp"
+#include "ShapeView.hpp"
 // OCC
+#include <TopoDS_Face.hxx>
+#include <BRep_Tool.hxx>
+#include <BRepTools.hxx>
+#include <BRepAdaptor_Surface.hxx>
+#include <GeomAdaptor_Surface.hxx>
 #include <GProp_GProps.hxx>
 #include <BRepGProp.hxx>
 
@@ -15,7 +21,7 @@ McCAD::Decomposition::Preprocessor::~Preprocessor(){}
 
 void
 McCAD::Decomposition::Preprocessor::operator()(
-        const std::unique_ptr<Geometry::Impl::Compound>& compound){
+        const std::shared_ptr<Geometry::Impl::Compound>& compound){
     auto product = Tools::HeirarchyFlatter{}(compound->compoundShape);
     compound->rejectedInputShapesList = std::move(product.second);
     for (const auto& shape : *product.first){

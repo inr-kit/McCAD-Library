@@ -2,33 +2,16 @@
 #define BOUNDSURFACE_IMPL_HPP
 
 // C++
-#include <array>
 #include <vector>
-#include <cmath>
+#include <memory>
 // McCAD
 #include "boundSurface.hpp"
 #include "surface_impl.hpp"
 #include "meshtriangle_impl.hpp"
 #include "edge_impl.hpp"
 #include "tools_impl.hpp"
-#include "ShapeView.hpp"
-#include "CurveUtilities.hpp"
-#include "surfaceComparator.hpp"
-#include "SurfaceUtilities.hpp"
 // OCC
-#include <Poly_Triangulation.hxx>
-#include <Poly_Triangulation.hxx>
-#include <GeomAdaptor_Surface.hxx>
-#include <BRepAdaptor_Surface.hxx>
-#include <BRepAdaptor_Curve.hxx>
-#include <BRepMesh_IncrementalMesh.hxx>
-#include <BRep_Tool.hxx>
-#include <TopoDS_Face.hxx>
-#include <TColgp_Array1OfPnt.hxx>
-#include <TopoDS_Wire.hxx>
-#include <BRepBuilderAPI_MakePolygon.hxx>
-#include <BRepBuilderAPI_MakeFace.hxx>
-#include <Extrema_ExtPS.hxx>
+#include <Standard.hxx>
 
 namespace McCAD::Geometry{
   class BoundSurface::Impl{

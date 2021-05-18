@@ -3,16 +3,16 @@
 
 // C++
 #include <string>
-#include <map>
-#include <tuple>
 #include <array>
 // McCAD
 #include "surface.hpp"
 #include "tools_impl.hpp"
 // OCC
+#include <Standard.hxx>
 #include <TopoDS_Face.hxx>
-#include <BRepAdaptor_Surface.hxx>
-#include <GeomAdaptor_Surface.hxx>
+#include <gp_Pln.hxx>
+#include <gp_Pnt.hxx>
+#include <gp_Dir.hxx>
 
 namespace McCAD::Geometry{
   class Surface::Impl {

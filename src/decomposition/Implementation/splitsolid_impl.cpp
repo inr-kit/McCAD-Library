@@ -1,12 +1,12 @@
-// C++
-#include <iterator>
 // McCAD
 #include "splitsolid_impl.hpp"
 #include "SolidSplitter.hpp"
-#include "SolidRepairer.hpp"
+#include "ShapeView.hpp"
 #include "SurfaceUtilities.hpp"
+#include "SolidRepairer.hpp"
 //OCC
-#include "GeomAbs_SurfaceType.hxx"
+#include <GProp_GProps.hxx>
+#include <BRepGProp.hxx>
 
 Standard_Boolean
 McCAD::Decomposition::SplitSolid::Impl::operator()(

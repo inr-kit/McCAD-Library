@@ -1,10 +1,8 @@
 #ifndef POINTONSURFACE_HPP
 #define POINTONSURFACE_HPP
 
-//C++
-//McCAD
-#include <Standard.hxx>
 //OCC
+#include <Standard.hxx>
 #include <TopoDS_Face.hxx>
 #include "gp_Pnt.hxx"
 

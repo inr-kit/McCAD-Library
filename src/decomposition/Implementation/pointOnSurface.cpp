@@ -1,10 +1,7 @@
-//C++
 //McCAD
 #include "pointOnSurface.hpp"
-#include "boundSurfacePlane_impl.hpp"
 //OCC
-#include <BRepTools.hxx>
-//#include "BRepAdaptor_Surface.hxx"
+#include "BRepAdaptor_Surface.hxx"
 #include "Extrema_ExtPS.hxx"
 
 Standard_Boolean

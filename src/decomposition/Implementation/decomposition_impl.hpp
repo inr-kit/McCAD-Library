@@ -12,7 +12,6 @@
 #include "compound.hpp"
 #include "solid_impl.hpp"
 #include "decomposeSolid_impl.hpp"
-#include "ShapeView.hpp"
 #include "SolidType.hpp"
 #include "tools_impl.hpp"
 // OCC
@@ -35,12 +34,12 @@ namespace McCAD::Decomposition{
     public:
         shapesMap inputShapesMap;
         IO::InputConfig inputConfig;
-        std::vector<std::unique_ptr<Geometry::Impl::Compound>> compoundList;
+        std::vector<std::shared_ptr<Geometry::Impl::Compound>> compoundList;
         solidsMap successDecomposition, rejectDecomposition;
         void perform();
-        void perform(const shapeTuple& inputShape);
+        void perform(const shapeTuple& inputShape, const Standard_Integer& compoundID);
         void extractSolids(
-                const std::unique_ptr<Geometry::Impl::Compound>& compound,
+                const std::shared_ptr<Geometry::Impl::Compound>& compound,
                 const std::shared_ptr<Geometry::Solid>& solid);
   };
 }

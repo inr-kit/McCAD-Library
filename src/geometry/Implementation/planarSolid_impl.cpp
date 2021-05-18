@@ -3,6 +3,7 @@
 #include "boundSurface_impl.hpp"
 #include "edgeOnSurface.hpp"
 #include "faceCollision.hpp"
+#include "SurfaceUtilities.hpp"
 
 void
 McCAD::Geometry::PLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl){

@@ -17,8 +17,8 @@ McCAD::IO::InputConfig::~InputConfig(){
 void
 McCAD::IO::InputConfig::writeTemplate(){
     std::ofstream inputConfig;
-    std::string templateName = currentPath / "McCADInputConfig.txt";
-    inputConfig.open(templateName);
+    std::filesystem::path templateName = currentPath / "McCADInputConfig.txt";
+    inputConfig.open(templateName.string());
     inputConfig << "# McCAD Run Parameters\n"
                    "# ====================\n" << std::endl;
     inputConfig << "# Input\n"
@@ -112,7 +112,7 @@ McCAD::IO::InputConfig::readTemplate(){
                else if (lineSplit[0] == "voidGeneration")
                    voidGeneration = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
                else if (lineSplit[0] == "minVoidVolume")
-                   minVoidVolume = std::stof(lineSplit[2]);
+                   minVoidVolume = std::stof(lineSplit[2]) * conversion_factor;
                else if (lineSplit[0] == "maxSolidsPerVoidCell")
                    maxSolidsPerVoidCell = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "BVHVoid")

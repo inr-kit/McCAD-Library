@@ -5,6 +5,8 @@
 #include <BRepPrimAPI_MakeBox.hxx>
 #include <STEPControl_Writer.hxx>
 #include <gp_Pnt.hxx>
+#include <GProp_GProps.hxx>
+#include <BRepGProp.hxx>
 
 McCAD::Conversion::VoidCell::VoidCell() : depth{0}, width{0} {
 }
@@ -66,9 +68,12 @@ McCAD::Conversion::VoidCell::updateAABB(){
 
 Standard_Real
 McCAD::Conversion::VoidCell::getAABBVolume(){
-    Standard_Real volume = std::abs(maxX - minX) * std::abs(maxY - minY) *
-            std::abs(maxZ - minZ);
-    return volume;
+    GProp_GProps geometryProperties;
+    BRepGProp::VolumeProperties(aabbSolid, geometryProperties);
+    return geometryProperties.Mass();
+    // Standard_Real volume = std::abs(maxX - minX) * std::abs(maxY - minY) *
+    //        std::abs(maxZ - minZ);
+    //return volume;
 }
 
 void

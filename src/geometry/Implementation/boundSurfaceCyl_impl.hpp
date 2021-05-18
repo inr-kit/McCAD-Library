@@ -7,6 +7,7 @@
 #include "boundSurfaceCyl.hpp"
 #include "surface_impl.hpp"
 // OCC
+#include <Standard.hxx>
 
 namespace McCAD::Geometry{
   class BoundSurfaceCyl::Impl {

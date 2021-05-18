@@ -20,7 +20,7 @@ int main (int argc, char* argv[]){
     if (argc == 1){
         inputConfig.writeTemplate();
         std::cerr << "A template file, McCADInputConfig.txt, with run parameters"
-                     "has been created in\n" << std::string(currentPath) << std::endl;
+                     "has been created in\n" << currentPath.string() << std::endl;
         timeEnd = std::chrono::high_resolution_clock::now();
     } else if(argc == 2) {
         if (std::string(argv[1]) == "help") {

@@ -3,6 +3,10 @@
 #include "boundSurfacePlane_impl.hpp"
 #include "boundSurfaceCyl_impl.hpp"
 #include "boundSurfaceTor_impl.hpp"
+#include "SurfaceUtilities.hpp"
+// OCC
+#include <BRepAdaptor_Surface.hxx>
+#include <GeomAdaptor_Surface.hxx>
 
 std::shared_ptr<McCAD::Geometry::BoundSurface>
 McCAD::Decomposition::SurfaceObjCreator::operator()(const TopoDS_Face& face,

@@ -3,6 +3,7 @@
 #include "edgeOnSurface.hpp"
 #include "faceCollision.hpp"
 #include "tools_impl.hpp"
+#include "SurfaceUtilities.hpp"
 //OCC
 #include <GeomAbs_SurfaceType.hxx>
 

@@ -38,7 +38,7 @@ public:
     // Void generation and conversion
     bool convert = false;
     bool voidGeneration = true;
-    double minVoidVolume = 1.0;
+    double minVoidVolume = 10.0; // in mm^3
     int maxSolidsPerVoidCell = 20;
     bool BVHVoid = true;
     std::string MCcode = "mcnp";

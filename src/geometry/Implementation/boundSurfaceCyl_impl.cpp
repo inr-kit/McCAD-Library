@@ -1,6 +1,12 @@
+// C++
+#include <array>
 // McCAD
 #include "boundSurfaceCyl_impl.hpp"
-#include <array>
+// OCC
+#include <Geom_Surface.hxx>
+#include <BRepTools.hxx>
+#include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRep_Tool.hxx>
 
 McCAD::Geometry::BoundSurfaceCyl::Impl::Impl(
         McCAD::Geometry::BoundSurfaceCyl* backReference)

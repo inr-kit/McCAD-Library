@@ -1,5 +1,6 @@
 // McCAD
 #include "cylSolid_impl.hpp"
+#include "SurfaceUtilities.hpp"
 //#include "boundSurface_impl.hpp"
 #include "edgeOnSurface.hpp"
 #include "faceCollision.hpp"

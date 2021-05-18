@@ -43,7 +43,7 @@ McCAD::Conversion::Convert::Impl::getGeomData(){
     Standard_Integer counter = 0;
     for(const auto& member : inputShapesMap){
         taskQueue.submit([this, counter, &member](){
-            std::unique_ptr<Geometry::Impl::Compound> compoundObj =
+            std::shared_ptr<Geometry::Impl::Compound> compoundObj =
                     std::make_unique<Geometry::Impl::Compound>(
                     std::get<0>(member), std::get<1>(member));
             Decomposition::Preprocessor{inputConfig.minSolidVolume}(compoundObj);
@@ -57,10 +57,10 @@ McCAD::Conversion::Convert::Impl::getGeomData(){
     counter = 0;
     for(Standard_Integer i = 0; i < compoundList.size(); ++i){
         for(const auto& solidObj : compoundList[i]->solidsList){
-            ++counter;
             solidObj->accessSImpl()->solidID = counter;
             solidObj->accessSImpl()->compoundID = compoundList[i]->compoundID;
             solidObjList.push_back(solidObj);
+            ++counter;
         }
         if(compoundList[i]->rejectedInputShapesList->Length() > 0)
             rejectCondition = Standard_True;
