@@ -13,7 +13,8 @@ namespace McCAD::Decomposition{
   public:
       void operator()(Geometry::CYLSolid& solidObj);
       void operator()(Geometry::TORSolid& solidObj,
-                      Standard_Real angleTolerance = 0.785); //45 degrees
+                      Standard_Real angleTolerance = 0.785,
+                      Standard_Real edgeTolerance = 1.0e-7); //45 degrees
   };
 }
 

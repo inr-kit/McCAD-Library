@@ -39,6 +39,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "minFaceArea = 1.0\n"
                    "scalingFactor = 100.0\n"
                    "precision = 1.0e-7\n"
+                   "edgeTolerance = 1.0e-7\n"
                    "parameterTolerance = 1.0e-7\n"
                    "angularTolerance = 1.0e-3\n"
                    "distanceTolerance = 1.0e-5\n" << std::endl;
@@ -103,6 +104,8 @@ McCAD::IO::InputConfig::readTemplate(){
                    scalingFactor = std::stof(lineSplit[2]);
                else if (lineSplit[0] == "precision")
                    precision = std::stof(lineSplit[2]);
+               else if (lineSplit[0] == "edgeTolerance")
+                   edgeTolerance = std::stof(lineSplit[2]);
                else if (lineSplit[0] == "parameterTolerance")
                    parameterTolerance = std::stof(lineSplit[2]);
                else if (lineSplit[0] == "angularTolerance")

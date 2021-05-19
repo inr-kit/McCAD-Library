@@ -72,7 +72,8 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& sol
 
 void
 McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& solidObj,
-                                                         Standard_Real angleTolerance){
+                                                         Standard_Real angleTolerance,
+                                                         Standard_Real edgeTolerance){
     // Work on the case of partial torus; quarter for example.
     auto& planesList = solidObj.accessSImpl()->planesList;
     auto& toriList = solidObj.accessSImpl()->toriList;
@@ -101,7 +102,8 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& sol
     auto assistShape = transform.ModifiedShape(planesList[0]->accessSImpl()->face);
     for(const auto& assistFace : detail::ShapeView<TopAbs_FACE>{assistShape}){
         auto assistSurfaceObj = SurfaceObjCreator{}(assistFace,
-                                                    solidObj.accessSImpl()->boxDiagonalLength);
+                                                    solidObj.accessSImpl()->boxDiagonalLength,
+                                                    edgeTolerance);
         solidObj.accessSImpl()->splitFacesList.push_back(std::move(assistSurfaceObj));
     }
     solidObj.accessSImpl()->splitSurface = Standard_True;

@@ -15,7 +15,7 @@ namespace McCAD::Decomposition{
         SurfacesMerger() = default;
 
         void operator()(std::vector<std::shared_ptr<Geometry::BoundSurface>>& surfacesList,
-                        Standard_Real& boxDiagonalLength);
+                        const Standard_Real& boxDiagonalLength);
     };
 }
 

@@ -32,7 +32,8 @@ McCAD::Decomposition::Decompose::Impl::perform(
             std::get<0>(inputShape), std::get<1>(inputShape));
     compoundObj->compoundID = compoundID;
     Preprocessor{inputConfig.minSolidVolume, inputConfig.scalingFactor,
-                 inputConfig.angularTolerance, inputConfig.precision}(compoundObj);
+                 inputConfig.angularTolerance, inputConfig.precision,
+                 inputConfig.edgeTolerance}(compoundObj);
     for(auto& plSolid : compoundObj->planarSolidsList){
         std::cout << "   - Decomposing planar solid" << std::endl;
         if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(plSolid)){

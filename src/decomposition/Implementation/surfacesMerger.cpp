@@ -6,7 +6,7 @@
 void
 McCAD::Decomposition::SurfacesMerger::operator()(
         std::vector<std::shared_ptr<Geometry::BoundSurface>>& surfacesList,
-        Standard_Real& boxDiagonalLength){
+        const Standard_Real& boxDiagonalLength){
     if (surfacesList.size() < 2) return;
     for (Standard_Integer i = 0; i <= surfacesList.size() - 2; ++i){
         for (Standard_Integer j = i+1; j <= surfacesList.size() - 1; ++j){
@@ -21,7 +21,7 @@ McCAD::Decomposition::SurfacesMerger::operator()(
                                 surfacesList[i]->accessSImpl()->face,
                                 surfacesList[j]->accessSImpl()->face).value();
                     std::shared_ptr<Geometry::BoundSurface> newboundSurface =
-                            SurfaceObjCreator{}(newFace, boxDiagonalLength);
+                            SurfaceObjCreator{}(newFace, boxDiagonalLength, 1.0e-7);
                     newboundSurface->accessSImpl()->surfaceNumber =
                             surfacesList[i]->accessSImpl()->surfaceNumber;
                     /* //debug

@@ -1,8 +1,15 @@
 //C++
+#include <array>
 #include <filesystem>
 //McCAD
 #include "boundSurfacePlane_impl.hpp"
+#include "surface_impl.hpp"
 //OCC
+#include <TopoDS_Face.hxx>
+#include <Geom_Surface.hxx>
+#include <BRepTools.hxx>
+#include <BRep_Tool.hxx>
+#include <BRepBuilderAPI_MakeFace.hxx>
 #include "STEPControl_Writer.hxx"
 
 McCAD::Geometry::BoundSurfacePlane::Impl::Impl(

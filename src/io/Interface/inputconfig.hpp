@@ -32,6 +32,7 @@ namespace McCAD::IO{
       double minFaceArea = 10.0;     // in mm^2
       double scalingFactor = 100.0;
       double precision = 1.0e-7;
+      double edgeTolerance = 1.0e-7;
       double parameterTolerance = 1.0e-7;
       double angularTolerance = 1.0e-3 * PI;
       double distanceTolerance = 1.0e-5;

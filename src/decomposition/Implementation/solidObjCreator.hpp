@@ -14,7 +14,8 @@ namespace McCAD::Decomposition{
       std::shared_ptr<solidObjType> createObj(const TopoDS_Shape& shape,
                                               const Standard_Real& scalingFactor,
                                               const Standard_Real& angularTolerance,
-                                              const Standard_Real& precision);
+                                              const Standard_Real& precision,
+                                              const Standard_Real& edgeTolerance);
     };
 }
 

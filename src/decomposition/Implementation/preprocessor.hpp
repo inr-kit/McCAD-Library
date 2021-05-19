@@ -20,12 +20,14 @@ namespace McCAD::Decomposition{
   public:
       Preprocessor();
       Preprocessor(const Standard_Real& minSolidVolume, const Standard_Real& scalingFactor,
-                   const Standard_Real& angularTolerance, const Standard_Real& precision);
+                   const Standard_Real& angularTolerance, const Standard_Real& precision,
+                   const Standard_Real& edgeTolerance);
       ~Preprocessor();
   private:
     Tools::SolidType solidType;
     Standard_Real minSolidVolume{10.0}, scalingFactor{100.0},
-                  angularTolerance{1.0e-4}, precision{1.0e-7};
+                  angularTolerance{1.0e-4}, precision{1.0e-7},
+                  edgeTolerance{1.0e-7};
     // WARNING!!
     // The order of solid object types should be synched with Tools::SolidType;
     using VariantType = std::variant<std::monostate,

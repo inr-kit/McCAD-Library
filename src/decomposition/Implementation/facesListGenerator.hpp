@@ -11,7 +11,10 @@
 
 namespace McCAD::Decomposition{
   class FacesListGenerator{
+  public:
+      FacesListGenerator() = default;
   private:
+      Standard_Real precision{precision};
       using BS = std::shared_ptr<Geometry::BoundSurface>;
       std::vector<BS> facesList;
       std::vector<BS> planesList;
@@ -19,16 +22,16 @@ namespace McCAD::Decomposition{
       std::vector<BS> toriList;
     public:
       template <typename solidObjType>
-      std::vector<BS> operator()(solidObjType& solidObj);
+      std::vector<BS> operator()(solidObjType& solidObj, const Standard_Real& precision,
+                                 const Standard_Real& edgeTolerance);
       template <typename solidObjType>
       void addListsToSolidObj(solidObjType& solidObj);
-      void mergePlanesList(Standard_Real& boxDiagonalLength);
-      void mergeCylindersList(Standard_Real& boxDiagonalLength);
-      void mergeToriList(Standard_Real& boxDiagonalLength);
+      void mergePlanesList(const Standard_Real& boxDiagonalLength);
+      void mergeCylindersList(const Standard_Real& boxDiagonalLength);
+      void mergeToriList(const Standard_Real& boxDiagonalLength);
     };
 }
 
-//McCAD
 #include "facesListGenerator.tpp"
 
 #endif //FACESLISTGENERATOR_HPP
