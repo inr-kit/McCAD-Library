@@ -1,8 +1,10 @@
 // C++
 #include <filesystem>
+#include <algorithm>
+#include <optional>
 // McCAD
 #include "solid_impl.hpp"
-#include "FaceParameters.hpp"
+#include "faceParameters.hpp"
 // OCC
 #include <TopoDS.hxx>
 #include <BRepBndLib.hxx>
@@ -34,7 +36,8 @@ McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
 }
 
 void
-McCAD::Geometry::Solid::Impl::repairSolid(){
+McCAD::Geometry::Solid::Impl::repairSolid(Standard_Real precision){
+    Tools::Preprocessor preproc{precision};
     preproc.accessImpl()->removeSmallFaces(solidShape);
     solid = TopoDS::Solid(solidShape);
     preproc.accessImpl()->repairSolid(solid);
@@ -51,8 +54,8 @@ McCAD::Geometry::Solid::Impl::createOBB(Standard_Real bndBoxGap){
 }
 
 void
-McCAD::Geometry::Solid::Impl::calcMeshDeflection(const Standard_Real& scalingFactor){
-    meshDeflection = 2 * std::max({obb.XHSize(), obb.YHSize(), obb.ZHSize()}) /
+McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real scalingFactor){
+    meshDeflection = 2 * std::min({obb.XHSize(), obb.YHSize(), obb.ZHSize()}) /
             scalingFactor;
     // error in Bnd_OBB.hxx. calculate it till the method is fixed
     // boxDiagonalLength = sqrt(obb.SquareExtent());
@@ -62,7 +65,8 @@ McCAD::Geometry::Solid::Impl::calcMeshDeflection(const Standard_Real& scalingFac
 }
 
 void
-McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angularTolerance){
+McCAD::Geometry::Solid::Impl::updateEdgesConvexity(Standard_Real angularTolerance,
+                                                   Standard_Real precision){
     TopTools_IndexedDataMapOfShapeListOfShape mapEdgeFace;
     TopExp::MapShapesAndAncestors(solid, TopAbs_EDGE, TopAbs_FACE, mapEdgeFace);
     TopTools_ListOfShape facesList;
@@ -73,6 +77,8 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angularT
         curveAdaptor.Initialize(edge);
         facesList = mapEdgeFace.FindFromKey(edge);
         if(facesList.Extent() != Standard_Integer(2)){
+            // Ignore edge
+            edge.Convex(3);
             continue;
         }
         TopTools_ListIteratorOfListOfShape iterFace(facesList);
@@ -88,10 +94,16 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(const Standard_Real& angularT
         gp_Dir direction(vector);
 
         // Get the normals of each surface
-        gp_Dir firstNormal = Tools::normalOnFace(firstFace, startPoint);
-        gp_Dir secondNormal = Tools::normalOnFace(secondFace, startPoint);
-        Standard_Real angle = firstNormal.AngleWithRef(secondNormal, direction);
-
+        std::optional<gp_Dir> firstNormal = Tools::FaceParameters{
+                precision}.normalOnFace(firstFace, startPoint);
+        std::optional<gp_Dir> secondNormal = Tools::FaceParameters{
+                precision}.normalOnFace(secondFace, startPoint);
+        if(!firstNormal || !secondNormal){
+            // Ignore edge
+            edge.Convex(3);
+            continue;
+        }
+        Standard_Real angle = (*firstNormal).AngleWithRef(*secondNormal, direction);
         if(std::abs(angle) < angularTolerance){
             angle = Standard_Real(0);
         }

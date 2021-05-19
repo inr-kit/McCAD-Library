@@ -24,9 +24,7 @@ namespace McCAD::Geometry{
   public:
       Impl();
       ~Impl();
-  private:
-      Tools::Preprocessor preproc;
-  public:
+
       Bnd_OBB obb;
       Bnd_Box aabb;
       TopoDS_Solid solid;
@@ -53,9 +51,10 @@ namespace McCAD::Geometry{
 
       void initiate(const TopoDS_Shape& aSolidShape);
       void createOBB(Standard_Real bndBoxGap = 0.0);
-      void calcMeshDeflection(const Standard_Real& scalingFactor);
-      void updateEdgesConvexity(const Standard_Real& angularTolerance); //1e-4
-      void repairSolid();
+      void calcMeshDeflection(Standard_Real scalingFactor = 100.0);
+      void updateEdgesConvexity(Standard_Real angularTolerance = 1.0e-4,
+                                Standard_Real precision = 1.0e-7);
+      void repairSolid(Standard_Real precision = 1.0e-7);
       void generateSurfacesList();
       std::unique_ptr<BoundSurface> generateSurface(const TopoDS_Face& face,
                                                     Standard_Integer mode = 0);

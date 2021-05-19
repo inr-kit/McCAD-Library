@@ -22,7 +22,7 @@
 #include "splitsolid_impl.hpp"
 #include <Standard.hxx>
 #include "CurveUtilities.hpp"
-#include "FaceParameters.hpp"
+#include "faceParameters.hpp"
 #include "ShapeView.hpp"
 #include "SolidType.hpp"
 // OCC

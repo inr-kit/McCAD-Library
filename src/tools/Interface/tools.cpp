@@ -6,6 +6,10 @@ McCAD::Tools::Preprocessor::Preprocessor()
   : pImpl{std::make_unique<Impl>()}{
 }
 
+McCAD::Tools::Preprocessor::Preprocessor(const double& precision)
+  : pImpl{std::make_unique<Impl>(precision)}{
+}
+
 McCAD::Tools::Preprocessor::~Preprocessor(){
 }
 

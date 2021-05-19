@@ -16,9 +16,10 @@ McCAD::Decomposition::Preprocessor::Preprocessor(){}
 
 McCAD::Decomposition::Preprocessor::Preprocessor(const Standard_Real& minSolidVolume,
                                                  const Standard_Real& scalingFactor,
-                                                 const Standard_Real& angularTolerance) :
+                                                 const Standard_Real& angularTolerance,
+                                                 const Standard_Real& precision) :
     minSolidVolume{minSolidVolume}, scalingFactor{scalingFactor},
-    angularTolerance{angularTolerance}{}
+    angularTolerance{angularTolerance}, precision{precision}{}
 
 McCAD::Decomposition::Preprocessor::~Preprocessor(){}
 
@@ -73,19 +74,16 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
     VariantType solidVariant;
     switch (determineSolidType(TopoDS::Solid(shape))){
     case solidType.planar:
-        solidVariant = SolidObjCreator{}.createObj<Geometry::PLSolid>(shape,
-                                                                      scalingFactor,
-                                                                      angularTolerance);
+        solidVariant = SolidObjCreator{}.createObj<Geometry::PLSolid>(
+                    shape, scalingFactor, angularTolerance, precision);
         break;
     case solidType.cylindrical:
-        solidVariant = SolidObjCreator{}.createObj<Geometry::CYLSolid>(shape,
-                                                                       scalingFactor,
-                                                                       angularTolerance);
+        solidVariant = SolidObjCreator{}.createObj<Geometry::CYLSolid>(
+                    shape, scalingFactor, angularTolerance, precision);
         break;
     case solidType.toroidal:
-        solidVariant = SolidObjCreator{}.createObj<Geometry::TORSolid>(shape,
-                                                                       scalingFactor,
-                                                                       angularTolerance);
+        solidVariant = SolidObjCreator{}.createObj<Geometry::TORSolid>(
+                    shape, scalingFactor, angularTolerance, precision);
         break;
     default:;
         // Unknown Type

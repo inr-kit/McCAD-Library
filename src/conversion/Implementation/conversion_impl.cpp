@@ -47,7 +47,7 @@ McCAD::Conversion::Convert::Impl::getGeomData(){
                     std::make_unique<Geometry::Impl::Compound>(
                     std::get<0>(member), std::get<1>(member));
             Decomposition::Preprocessor{inputConfig.minSolidVolume, inputConfig.scalingFactor,
-                        inputConfig.angularTolerance}(compoundObj);
+                        inputConfig.angularTolerance, inputConfig.precision}(compoundObj);
             compoundObj->compoundID = counter;
             compoundList.push_back(std::move(compoundObj));
         });

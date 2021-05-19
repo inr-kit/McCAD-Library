@@ -11,6 +11,7 @@ namespace McCAD::Tools {
     
   public:
     Preprocessor();
+    Preprocessor(const double& precision);
     ~Preprocessor();
 
     Impl* accessImpl() const;

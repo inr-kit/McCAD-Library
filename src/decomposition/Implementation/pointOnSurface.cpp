@@ -1,3 +1,5 @@
+// C++
+#include <array>
 //McCAD
 #include "pointOnSurface.hpp"
 //OCC

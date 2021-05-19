@@ -1,10 +1,17 @@
 //C++
 #include <typeinfo>
 //McCAD
-#include "generateFacesList.hpp"
+#include "facesListGenerator.hpp"
+#include "planarSolid_impl.hpp"
+#include "cylSolid_impl.hpp"
+#include "torSolid_impl.hpp"
+#include "ShapeView.hpp"
+#include "tools_impl.hpp"
 #include "surfaceObjCerator.hpp"
 #include "surfacesMerger.hpp"
+#include "SurfaceUtilities.hpp"
 //OCC
+#include <TopoDS_Face.hxx>
 #include <TopoDS_Solid.hxx>
 #include <BRepTools.hxx>
 
@@ -64,24 +71,18 @@ McCAD::Decomposition::FacesListGenerator::addListsToSolidObj(solidObjType& solid
 
 void
 McCAD::Decomposition::FacesListGenerator::mergePlanesList(Standard_Real& boxDiagonalLength){
-    //std::cout << "     - There are " << planesList.size() <<
-    //             " planes in the solid" << std::endl;
     SurfacesMerger{}(planesList, boxDiagonalLength);
     facesList.insert(facesList.end(), planesList.begin(), planesList.end());
 }
 
 void
 McCAD::Decomposition::FacesListGenerator::mergeCylindersList(Standard_Real& boxDiagonalLength){
-    //std::cout << "     - There are " << cylindersList.size() <<
-    //             " cylinders in the solid" << std::endl;
     SurfacesMerger{}(cylindersList, boxDiagonalLength);
     facesList.insert(facesList.end(), cylindersList.begin(), cylindersList.end());
 }
 
 void
 McCAD::Decomposition::FacesListGenerator::mergeToriList(Standard_Real& boxDiagonalLength){
-    //std::cout << "     - There are " << toriList.size() <<
-    //             " tori in the solid" << std::endl;
     SurfacesMerger{}(toriList, boxDiagonalLength);
     facesList.insert(facesList.end(), toriList.begin(), toriList.end());
 }

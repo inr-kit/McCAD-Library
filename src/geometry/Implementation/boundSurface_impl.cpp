@@ -10,7 +10,7 @@
 #include "CurveUtilities.hpp"
 
 #include "SurfaceUtilities.hpp"
-#include "FaceParameters.hpp"
+#include "faceParameters.hpp"
 //OCC
 #include <Poly_Triangulation.hxx>
 #include <TopoDS_Face.hxx>
@@ -207,16 +207,17 @@ Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::generateParmts(){
     if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
         // std::vector<gp_Pln, gp_Pnt, gp_Dir, parameters>
-        auto generatedParmts = Tools::genPlSurfParmts(boundSurface->accessSImpl()->face);
+        auto generatedParmts = Tools::FaceParameters{1.0e-7}.genPlSurfParmts(
+                    boundSurface->accessSImpl()->face);
         boundSurface->accessSImpl()->plane = std::get<0>(generatedParmts);
         boundSurface->accessSImpl()->location = std::get<1>(generatedParmts);
         boundSurface->accessSImpl()->normal = std::get<2>(generatedParmts);
         boundSurface->accessSImpl()->surfParameters = std::get<3>(generatedParmts);
                 //Tools::genPlSurfParmts(boundSurface->accessSImpl()->face);
     } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder))
-        Tools::genCylSurfParmts(boundSurface->accessSImpl()->face);
+        Tools::FaceParameters{1.0e-7}.genCylSurfParmts(boundSurface->accessSImpl()->face);
     else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Torus))
-        Tools::genTorSurfParmts(boundSurface->accessSImpl()->face);
+        Tools::FaceParameters{1.0e-7}.genTorSurfParmts(boundSurface->accessSImpl()->face);
     else return Standard_False;
     return Standard_True;
 }
