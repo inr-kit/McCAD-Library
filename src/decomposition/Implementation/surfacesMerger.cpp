@@ -2,6 +2,8 @@
 #include "surfacesMerger.hpp"
 #include "surfaceObjCerator.hpp"
 #include "surfacesFuser.hpp"
+//OCC
+#include <TopoDS_Face.hxx>
 
 void
 McCAD::Decomposition::SurfacesMerger::operator()(

@@ -1,5 +1,6 @@
 //C++
 #include <typeinfo>
+#include <memory>
 //McCAD
 #include "facesListGenerator.hpp"
 #include "planarSolid_impl.hpp"
@@ -19,10 +20,11 @@ template <typename solidObjType>
 std::vector<std::shared_ptr<McCAD::Geometry::BoundSurface>>
 McCAD::Decomposition::FacesListGenerator::operator()(solidObjType& solidObj,
                                                      const Standard_Real& precision,
-                                                     const Standard_Real& edgeTolerance){
-    Tools::Preprocessor preproc{precision};
+                                                     const Standard_Real& edgeTolerance,
+                                                     const Standard_Real& faceTolerance){
+    Tools::Preprocessor preproc{precision, faceTolerance};
     TopoDS_Face face;
-    TopoDS_Solid solid = solidObj.accessSImpl()->solid;
+    TopoDS_Solid solid = solidObj->accessSImpl()->solid;
     Standard_Integer faceNumber = 0;
     for(const auto& aFace : detail::ShapeView<TopAbs_FACE>{solid}){
         face = aFace;
@@ -32,11 +34,11 @@ McCAD::Decomposition::FacesListGenerator::operator()(solidObjType& solidObj,
             preproc.accessImpl()->fixFace(face);
             std::shared_ptr<Geometry::BoundSurface> boundSurface =
                     SurfaceObjCreator{}(face,
-                                        solidObj.accessSImpl()->boxDiagonalLength,
+                                        solidObj->accessSImpl()->boxDiagonalLength,
                                         edgeTolerance);
             boundSurface->accessSImpl()->surfaceNumber = faceNumber;
             if (boundSurface->accessBSImpl()->generateMesh(
-                        solidObj.accessSImpl()->meshDeflection)){
+                        solidObj->accessSImpl()->meshDeflection)){
                 boundSurface->accessBSImpl()->generateEdges();
                 if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
                     planesList.push_back(std::move(boundSurface));
@@ -55,19 +57,19 @@ McCAD::Decomposition::FacesListGenerator::operator()(solidObjType& solidObj,
 template <typename solidObjType>
 void
 McCAD::Decomposition::FacesListGenerator::addListsToSolidObj(solidObjType& solidObj){
-    if (typeid(solidObjType) == typeid(McCAD::Geometry::PLSolid)){
-        mergePlanesList(solidObj.accessSImpl()->boxDiagonalLength);
-        solidObj.accessSImpl()->planesList = planesList;
-    } else if (typeid(solidObjType) == typeid(McCAD::Geometry::CYLSolid)){
-        mergePlanesList(solidObj.accessSImpl()->boxDiagonalLength);
-        mergeCylindersList(solidObj.accessSImpl()->boxDiagonalLength);
-        solidObj.accessSImpl()->planesList = planesList;
-        solidObj.accessSImpl()->cylindersList = cylindersList;
-    } else if (typeid(solidObjType) == typeid(McCAD::Geometry::TORSolid)){
-        mergePlanesList(solidObj.accessSImpl()->boxDiagonalLength);
-        mergeToriList(solidObj.accessSImpl()->boxDiagonalLength);
-        solidObj.accessSImpl()->planesList = planesList;
-        solidObj.accessSImpl()->toriList = toriList;
+    if (typeid(solidObjType) == typeid(std::shared_ptr<McCAD::Geometry::PLSolid>)){
+        mergePlanesList(solidObj->accessSImpl()->boxDiagonalLength);
+        solidObj->accessSImpl()->planesList = planesList;
+    } else if (typeid(solidObjType) == typeid(std::shared_ptr<McCAD::Geometry::CYLSolid>)){
+        mergePlanesList(solidObj->accessSImpl()->boxDiagonalLength);
+        mergeCylindersList(solidObj->accessSImpl()->boxDiagonalLength);
+        solidObj->accessSImpl()->planesList = planesList;
+        solidObj->accessSImpl()->cylindersList = cylindersList;
+    } else if (typeid(solidObjType) == typeid(std::shared_ptr<McCAD::Geometry::TORSolid>)){
+        mergePlanesList(solidObj->accessSImpl()->boxDiagonalLength);
+        mergeToriList(solidObj->accessSImpl()->boxDiagonalLength);
+        solidObj->accessSImpl()->planesList = planesList;
+        solidObj->accessSImpl()->toriList = toriList;
     } else return;
 }
 

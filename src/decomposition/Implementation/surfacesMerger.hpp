@@ -3,11 +3,9 @@
 
 //C++
 #include <memory>
+#include <vector>
 //McCAD
-#include <Standard.hxx>
 #include "boundSurface_impl.hpp"
-//OCC
-#include <TopoDS_Face.hxx>
 
 namespace McCAD::Decomposition{
     class SurfacesMerger{

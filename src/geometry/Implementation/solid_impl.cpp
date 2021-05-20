@@ -36,15 +36,16 @@ McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
 }
 
 void
-McCAD::Geometry::Solid::Impl::repairSolid(Standard_Real precision){
-    Tools::Preprocessor preproc{precision};
+McCAD::Geometry::Solid::Impl::repairSolid(Standard_Real precision,
+                                          Standard_Real faceTolerance){
+    Tools::Preprocessor preproc{precision, faceTolerance};
     preproc.accessImpl()->removeSmallFaces(solidShape);
     solid = TopoDS::Solid(solidShape);
     preproc.accessImpl()->repairSolid(solid);
 }
 
 void
-McCAD::Geometry::Solid::Impl::createOBB(Standard_Real bndBoxGap){
+McCAD::Geometry::Solid::Impl::createBB(Standard_Real bndBoxGap){
     // Build OBB
     BRepBndLib::AddOBB(solid, obb);
     obb.Enlarge(bndBoxGap);

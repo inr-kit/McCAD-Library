@@ -14,14 +14,10 @@
 
 McCAD::Decomposition::Preprocessor::Preprocessor(){}
 
-McCAD::Decomposition::Preprocessor::Preprocessor(const Standard_Real& minSolidVolume,
-                                                 const Standard_Real& scalingFactor,
-                                                 const Standard_Real& angularTolerance,
-                                                 const Standard_Real& precision,
-                                                 const Standard_Real& edgeTolerance) :
-    minSolidVolume{minSolidVolume}, scalingFactor{scalingFactor},
-    angularTolerance{angularTolerance}, precision{precision},
-    edgeTolerance{edgeTolerance}{}
+McCAD::Decomposition::Preprocessor::Preprocessor(const IO::InputConfig& inputConfig) :
+    minSolidVolume{inputConfig.minSolidVolume}, scalingFactor{inputConfig.scalingFactor},
+    angularTolerance{inputConfig.angularTolerance}, precision{inputConfig.precision},
+    faceTolerance{inputConfig.faceTolerance}, edgeTolerance{inputConfig.edgeTolerance}{}
 
 McCAD::Decomposition::Preprocessor::~Preprocessor(){}
 
@@ -77,15 +73,18 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
     switch (determineSolidType(TopoDS::Solid(shape))){
     case solidType.planar:
         solidVariant = SolidObjCreator{}.createObj<Geometry::PLSolid>(
-                    shape, scalingFactor, angularTolerance, precision, edgeTolerance);
+                    shape, scalingFactor, angularTolerance, precision, edgeTolerance,
+                    faceTolerance);
         break;
     case solidType.cylindrical:
         solidVariant = SolidObjCreator{}.createObj<Geometry::CYLSolid>(
-                    shape, scalingFactor, angularTolerance, precision, edgeTolerance);
+                    shape, scalingFactor, angularTolerance, precision, edgeTolerance,
+                    faceTolerance);
         break;
     case solidType.toroidal:
         solidVariant = SolidObjCreator{}.createObj<Geometry::TORSolid>(
-                    shape, scalingFactor, angularTolerance, precision, edgeTolerance);
+                    shape, scalingFactor, angularTolerance, precision, edgeTolerance,
+                    faceTolerance);
         break;
     default:;
         // Unknown Type

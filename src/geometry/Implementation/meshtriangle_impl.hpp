@@ -2,14 +2,12 @@
 #define MESHTRIANGLE_IMPL_HPP
 
 // C++
-#include <string>
 #include <array>
 // McCAD
 #include "meshtriangle.hpp"
-#include <Standard.hxx>
 // OCC
+#include <Standard.hxx>
 #include <gp_Pnt.hxx>
-#include <BRepBndLib.hxx>
 #include <Bnd_OBB.hxx>
 #include <TopoDS_Face.hxx>
 
@@ -23,7 +21,7 @@ namespace McCAD::Geometry{
     std::array<gp_Pnt, 3> points;
 
     void initiate(const TopoDS_Face& aFace);
-    void createOBB(const TopoDS_Face& aFace, Standard_Real bndBoxGap = 0);
+    void createOBB(const TopoDS_Face& aFace, Standard_Real bndBoxGap = 0.0);
   };
 }
 

@@ -5,15 +5,14 @@
 #include <string>
 // McCAD
 #include "edge.hpp"
-#include "tools_impl.hpp"
 // OCC
+#include <Standard.hxx>
 #include <TopoDS_Edge.hxx>
+#include <gp_Pnt.hxx>
 
 namespace McCAD::Geometry{
   class Edge::Impl {
   public:
-    std::unique_ptr<Tools::Preprocessor> preproc;
-    
     TopoDS_Edge edge;
     gp_Pnt startPoint, endPoint, middlePoint, extraPoint;
     std::string edgeType;

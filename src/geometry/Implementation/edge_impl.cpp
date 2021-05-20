@@ -4,11 +4,9 @@
 // OCC
 #include <Geom_Curve.hxx>
 #include <BRep_Tool.hxx>
-#include <gp_Pnt.hxx>
 
 void
 McCAD::Geometry::Edge::Impl::initiate(const TopoDS_Edge& aEdge){
-  preproc = std::make_unique<McCAD::Tools::Preprocessor>();
   edge = aEdge;
   calculatePoints();
 }

@@ -5,25 +5,23 @@
 // McCAD
 #include "boundSurface_impl.hpp"
 #include "surfaceComparator.hpp"
-
 #include "ShapeView.hpp"
 #include "CurveUtilities.hpp"
-
 #include "SurfaceUtilities.hpp"
 #include "faceParameters.hpp"
 //OCC
-#include <Poly_Triangulation.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopLoc_Location.hxx>
+#include <Poly_Triangulation.hxx>
 #include <BRepMesh_IncrementalMesh.hxx>
-#include <BRep_Tool.hxx>
-#include <BRepTools.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <gp_Trsf.hxx>
+#include <BRep_Tool.hxx>
 #include <TColgp_Array1OfPnt.hxx>
 #include <TopoDS_Wire.hxx>
 #include <BRepBuilderAPI_MakePolygon.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepTools.hxx>
 #include <BRepAdaptor_Curve.hxx>
 #include <STEPControl_Writer.hxx>
 
@@ -115,21 +113,17 @@ McCAD::Geometry::BoundSurface::Impl::generateMesh(const Standard_Real& meshDefle
               meshTrianglesList.push_back(meshTriangle);
           }
           return Standard_True;
-      } else{
-          return Standard_False;
-      }
+      } else return Standard_False;
   } catch(...) {
-      //std::cout << "cannot mesh surface" << std::endl;
       return Standard_False;
   }
 }
 
 void
 McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
-    //std::cout << "generateEdges" << std::endl;
     TopoDS_Face face = boundSurface->accessSImpl()->face;
     for (const auto& tempEdge : detail::ShapeView<TopAbs_EDGE>{face}){
-        // more specific edge types as wihth surfaces and solids
+        // more specific edge types as with surfaces and solids
         std::shared_ptr<Edge> edge = std::make_shared<Edge>();
         edge->accessEImpl()->initiate(tempEdge);
         // Get type of Edge.

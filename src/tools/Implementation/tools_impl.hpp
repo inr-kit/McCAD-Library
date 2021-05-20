@@ -13,7 +13,7 @@ namespace McCAD::Tools{
   class Preprocessor::Impl{
   public:
       Impl();
-      Impl(const Standard_Real& precision);
+      Impl(const Standard_Real& precision, const Standard_Real& faceTolerance);
       ~Impl();
 
       Standard_Real precision{1.0e-7}, maxTolerance{1.0e-3};

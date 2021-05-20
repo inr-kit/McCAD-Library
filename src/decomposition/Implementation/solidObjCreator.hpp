@@ -15,7 +15,8 @@ namespace McCAD::Decomposition{
                                               const Standard_Real& scalingFactor,
                                               const Standard_Real& angularTolerance,
                                               const Standard_Real& precision,
-                                              const Standard_Real& edgeTolerance);
+                                              const Standard_Real& edgeTolerance,
+                                              const Standard_Real& faceTolerance);
     };
 }
 

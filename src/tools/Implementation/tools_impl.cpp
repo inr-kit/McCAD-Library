@@ -10,8 +10,9 @@
 
 McCAD::Tools::Preprocessor::Impl::Impl(){}
 
-McCAD::Tools::Preprocessor::Impl::Impl(const Standard_Real& precision) :
-    precision{precision}{}
+McCAD::Tools::Preprocessor::Impl::Impl(const Standard_Real& precision,
+                                       const Standard_Real& faceTolerance) :
+    precision{precision}, maxTolerance{faceTolerance}{}
 
 McCAD::Tools::Preprocessor::Impl::~Impl(){}
 

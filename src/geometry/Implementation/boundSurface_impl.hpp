@@ -9,7 +9,6 @@
 #include "surface_impl.hpp"
 #include "meshtriangle_impl.hpp"
 #include "edge_impl.hpp"
-#include "tools_impl.hpp"
 // OCC
 #include <Standard.hxx>
 
@@ -20,7 +19,6 @@ namespace McCAD::Geometry{
     ~Impl();
 
     BoundSurface* boundSurface;
-    Tools::Preprocessor preproc;
     
     std::vector<std::shared_ptr<Edge>> edgesList;
     std::vector<std::shared_ptr<MeshTriangle>> meshTrianglesList;

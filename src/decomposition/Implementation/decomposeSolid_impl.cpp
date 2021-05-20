@@ -89,9 +89,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
         }
         // Loop over the resulting subsolids and split each one of them recursively.
         for (Standard_Integer i = 1; i <= solidImpl.splitSolidList->Length(); ++i){
-            auto subSolid = Preprocessor{inputConfig.minSolidVolume, inputConfig.scalingFactor,
-                    inputConfig.angularTolerance, inputConfig.precision,
-                    inputConfig.edgeTolerance}.perform(
+            auto subSolid = Preprocessor{inputConfig}.perform(
                         solidImpl.splitSolidList->Value(i));
             if (std::holds_alternative<std::monostate>(subSolid)){
                 solidImpl.rejectedsubSolidsList->Append(solidImpl.splitSolidList->Value(i));
