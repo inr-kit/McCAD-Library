@@ -2,16 +2,15 @@
 #define STEPREADER_IMPL_HPP
 
 // C++
-#include <filesystem>
-#include <fstream>
 #include <string>
 #include <vector>
 #include <memory>
+#include <tuple>
 // McCAD
 #include "stepreader.hpp"
 // OCC
-#include <TDF_Label.hxx>
 #include <TopoDS_Shape.hxx>
+#include <TDF_Label.hxx>
 #include <TopTools_HSequenceOfShape.hxx>
 #include <TCollection_ExtendedString.hxx>
 

@@ -1,14 +1,16 @@
+// C++
+#include <filesystem>
+#include <fstream>
 // McCAD
 #include "stepreader_impl.hpp"
-#include "ShapeView.hpp"
 //OCC
-#include <TDocStd_Document.hxx>
-#include <TNaming_NamedShape.hxx>
-#include <XCAFDoc_ShapeMapTool.hxx>
-#include <XCAFDoc_ShapeTool.hxx>
-#include <TDataStd_Name.hxx>
 #include <STEPCAFControl_Reader.hxx>
-#include <STEPControl_Writer.hxx>
+#include <STEPControl_Reader.hxx>
+#include <TDocStd_Document.hxx>
+#include <TDataStd_Name.hxx>
+#include <XCAFDoc_ShapeTool.hxx>
+#include <XCAFDoc_ShapeMapTool.hxx>
+#include <TNaming_NamedShape.hxx>
 
 McCAD::IO::STEPReader::Impl::Impl(const std::string& fileName) :
     fileName{fileName},
