@@ -1,16 +1,52 @@
 // C++
+
+
 #include <algorithm>
+#include <assert.h>
+#include <sstream>
+#include <tuple>
+#include <variant>
 // McCAD
+
+
 #include "decomposeSolid_impl.hpp"
 #include "SurfaceUtilities.hpp"
 #include "AssistSurfaceGenerator.hpp"
+#include "preprocessor.hpp"
+#include "tools_impl.hpp"
+#include "CurveUtilities.hpp"
+#include "faceParameters.hpp"
+#include "ShapeView.hpp"
+
+//OCC
+
+
+#include <TopoDS.hxx>
+#include <TopoDS_Solid.hxx>
+#include <TopoDS_Shape.hxx>
+#include <TopoDS_Face.hxx>
+#include <BRep_Tool.hxx>
+#include <BRepTools.hxx>
+#include <Bnd_Box.hxx>
+#include <BRepBndLib.hxx>
+#include <BRepAdaptor_Surface.hxx>
+#include <GeomAdaptor_Surface.hxx>
+#include <TopExp.hxx>
+#include <TopTools_IndexedDataMapOfShapeListOfShape.hxx>
+#include <TopTools_ListIteratorOfListOfShape.hxx>
+#include <TopTools_ListOfShape.hxx>
+#include <gp_Pnt.hxx>
+#include <gp_Dir.hxx>
+#include <Geom_Curve.hxx>
+#include <TopTools_HSequenceOfShape.hxx>
+#include <STEPControl_Writer.hxx>
 
 McCAD::Decomposition::DecomposeSolid::Impl::Impl(const IO::InputConfig& inputConfig)
     : recurrenceDepth{0}, inputConfig{inputConfig}{
 }
 
 McCAD::Decomposition::DecomposeSolid::Impl::Impl(const IO::InputConfig& inputConfig,
-                                                 Standard_Integer recurrenceDepth)
+                                                 const Standard_Integer& recurrenceDepth)
     : recurrenceDepth{recurrenceDepth}, inputConfig{inputConfig}{
 }
 
@@ -22,7 +58,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         std::shared_ptr<Geometry::PLSolid>& solidObj){
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
-    if(recurrenceDepth >= inputConfig.recurrenceDepth){
+    if(recurrenceDepth > inputConfig.recurrenceDepth){
         return Standard_False;
     }
     auto solidImpl = solidObj->accessSImpl();

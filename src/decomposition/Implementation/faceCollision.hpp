@@ -3,6 +3,7 @@
 
 //C++
 #include <memory>
+#include <vector>
 //McCAD
 #include "boundSurface_impl.hpp"
 #include "meshtriangle_impl.hpp"
