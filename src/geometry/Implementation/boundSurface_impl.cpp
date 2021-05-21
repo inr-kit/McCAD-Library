@@ -40,10 +40,6 @@ McCAD::Geometry::BoundSurface::Impl::isEqual(const McCAD::Geometry::BoundSurface
 
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::canFuse(const McCAD::Geometry::BoundSurface& that){
-    if (!Tools::SurfaceComparator{}(boundSurface->accessSImpl()->face,
-                                    that.accessSImpl()->face)){
-      return Standard_False;
-    }
     // Check common edges of the two faces.
     for (Standard_Integer i = 0; i <= edgesList.size() - 2; ++i){
         for (Standard_Integer j = i+1; j <= that.accessBSImpl()->edgesList.size() - 1;

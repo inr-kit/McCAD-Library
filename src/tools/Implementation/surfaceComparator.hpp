@@ -1,21 +1,22 @@
 #ifndef SURFACECOMPARATOR_HPP
 #define SURFACECOMPARATOR_HPP
 
-// C++
-#include <cmath>
-#include <array>
-#include <optional>
-// McCAD
-#include <Standard.hxx>
 // OCC
+#include <Standard.hxx>
 #include <TopoDS_Face.hxx>
-#include <GeomAdaptor_Surface.hxx>
-#include <BRep_Tool.hxx>
 
 namespace McCAD::Tools{
   class SurfaceComparator{
   public:
-      SurfaceComparator() = default;
+      SurfaceComparator();
+      SurfaceComparator(const Standard_Real& precision, const Standard_Real& angularTolerance,
+                        const Standard_Real& distanceTolerance);
+      ~SurfaceComparator();
+  private:
+      Standard_Real precision{1.0e-7};
+      Standard_Real angularTolerance{1.0e-4};
+      Standard_Real distanceTolerance{1.0e-5};
+  public:
       Standard_Boolean operator()(const TopoDS_Face& firstFace,
                                   const TopoDS_Face& secondFace) const;
   };

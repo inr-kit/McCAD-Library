@@ -10,6 +10,7 @@
 namespace McCAD::IO{
   class InputConfig{
   public:
+      InputConfig();
       InputConfig(const std::filesystem::path& currentPath);
       ~InputConfig();
 

@@ -7,6 +7,8 @@
 // McCAD
 #include "inputconfig.hpp"
 
+McCAD::IO::InputConfig::InputConfig(){}
+
 McCAD::IO::InputConfig::InputConfig(const std::filesystem::path& currentPath)
     : currentPath{currentPath}{
 }

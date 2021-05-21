@@ -15,9 +15,7 @@
 McCAD::Decomposition::Preprocessor::Preprocessor(){}
 
 McCAD::Decomposition::Preprocessor::Preprocessor(const IO::InputConfig& inputConfig) :
-    minSolidVolume{inputConfig.minSolidVolume}, scalingFactor{inputConfig.scalingFactor},
-    angularTolerance{inputConfig.angularTolerance}, precision{inputConfig.precision},
-    faceTolerance{inputConfig.faceTolerance}, edgeTolerance{inputConfig.edgeTolerance}{}
+    inputConfig{inputConfig}{}
 
 McCAD::Decomposition::Preprocessor::~Preprocessor(){}
 
@@ -72,19 +70,13 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
     VariantType solidVariant;
     switch (determineSolidType(TopoDS::Solid(shape))){
     case solidType.planar:
-        solidVariant = SolidObjCreator{}.createObj<Geometry::PLSolid>(
-                    shape, scalingFactor, angularTolerance, precision, edgeTolerance,
-                    faceTolerance);
+        solidVariant = SolidObjCreator{inputConfig}.createObj<Geometry::PLSolid>(shape);
         break;
     case solidType.cylindrical:
-        solidVariant = SolidObjCreator{}.createObj<Geometry::CYLSolid>(
-                    shape, scalingFactor, angularTolerance, precision, edgeTolerance,
-                    faceTolerance);
+        solidVariant = SolidObjCreator{inputConfig}.createObj<Geometry::CYLSolid>(shape);
         break;
     case solidType.toroidal:
-        solidVariant = SolidObjCreator{}.createObj<Geometry::TORSolid>(
-                    shape, scalingFactor, angularTolerance, precision, edgeTolerance,
-                    faceTolerance);
+        solidVariant = SolidObjCreator{inputConfig}.createObj<Geometry::TORSolid>(shape);
         break;
     default:;
         // Unknown Type
@@ -109,7 +101,7 @@ Standard_Boolean
 McCAD::Decomposition::Preprocessor::checkVolume(const TopoDS_Shape& shape){
     GProp_GProps geometryProperties;
     BRepGProp::VolumeProperties(TopoDS::Solid(shape), geometryProperties);
-    if (geometryProperties.Mass() < minSolidVolume) return Standard_True;
+    if (geometryProperties.Mass() < inputConfig.minSolidVolume) return Standard_True;
     else return Standard_False;
 }
 

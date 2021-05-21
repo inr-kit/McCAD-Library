@@ -21,7 +21,9 @@ std::vector<std::shared_ptr<McCAD::Geometry::BoundSurface>>
 McCAD::Decomposition::FacesListGenerator::operator()(solidObjType& solidObj,
                                                      const Standard_Real& precision,
                                                      const Standard_Real& edgeTolerance,
-                                                     const Standard_Real& faceTolerance){
+                                                     const Standard_Real& faceTolerance,
+                                                     const Standard_Real& angularTolerance,
+                                                     const Standard_Real& distanceTolerance){
     Tools::Preprocessor preproc{precision, faceTolerance};
     TopoDS_Face face;
     TopoDS_Solid solid = solidObj->accessSImpl()->solid;
@@ -50,43 +52,67 @@ McCAD::Decomposition::FacesListGenerator::operator()(solidObjType& solidObj,
             } else continue;
         }
     }
-    addListsToSolidObj(solidObj);
+    addListsToSolidObj(solidObj, precision, edgeTolerance, angularTolerance, distanceTolerance);
     return facesList;
 }
 
 template <typename solidObjType>
 void
-McCAD::Decomposition::FacesListGenerator::addListsToSolidObj(solidObjType& solidObj){
+McCAD::Decomposition::FacesListGenerator::addListsToSolidObj(solidObjType& solidObj,
+                                                             const Standard_Real& precision,
+                                                             const Standard_Real& edgeTolerance,
+                                                             const Standard_Real& angularTolerance,
+                                                             const Standard_Real& distanceTolerance){
     if (typeid(solidObjType) == typeid(std::shared_ptr<McCAD::Geometry::PLSolid>)){
-        mergePlanesList(solidObj->accessSImpl()->boxDiagonalLength);
+        mergePlanesList(solidObj->accessSImpl()->boxDiagonalLength, precision,
+                        edgeTolerance, angularTolerance, distanceTolerance);
         solidObj->accessSImpl()->planesList = planesList;
     } else if (typeid(solidObjType) == typeid(std::shared_ptr<McCAD::Geometry::CYLSolid>)){
-        mergePlanesList(solidObj->accessSImpl()->boxDiagonalLength);
-        mergeCylindersList(solidObj->accessSImpl()->boxDiagonalLength);
+        mergePlanesList(solidObj->accessSImpl()->boxDiagonalLength, precision,
+                        edgeTolerance, angularTolerance, distanceTolerance);
+        mergeCylindersList(solidObj->accessSImpl()->boxDiagonalLength, precision,
+                           edgeTolerance, angularTolerance, distanceTolerance);
         solidObj->accessSImpl()->planesList = planesList;
         solidObj->accessSImpl()->cylindersList = cylindersList;
     } else if (typeid(solidObjType) == typeid(std::shared_ptr<McCAD::Geometry::TORSolid>)){
-        mergePlanesList(solidObj->accessSImpl()->boxDiagonalLength);
-        mergeToriList(solidObj->accessSImpl()->boxDiagonalLength);
+        mergePlanesList(solidObj->accessSImpl()->boxDiagonalLength, precision,
+                        edgeTolerance, angularTolerance, distanceTolerance);
+        mergeToriList(solidObj->accessSImpl()->boxDiagonalLength, precision,
+                      edgeTolerance, angularTolerance, distanceTolerance);
         solidObj->accessSImpl()->planesList = planesList;
         solidObj->accessSImpl()->toriList = toriList;
     } else return;
 }
 
 void
-McCAD::Decomposition::FacesListGenerator::mergePlanesList(const Standard_Real& boxDiagonalLength){
-    SurfacesMerger{}(planesList, boxDiagonalLength);
+McCAD::Decomposition::FacesListGenerator::mergePlanesList(const Standard_Real& boxDiagonalLength,
+                                                          const Standard_Real& precision,
+                                                          const Standard_Real& edgeTolerance,
+                                                          const Standard_Real& angularTolerance,
+                                                          const Standard_Real& distanceTolerance){
+    SurfacesMerger{}(planesList, boxDiagonalLength, precision, edgeTolerance,
+                     angularTolerance, distanceTolerance);
     facesList.insert(facesList.end(), planesList.begin(), planesList.end());
 }
 
 void
-McCAD::Decomposition::FacesListGenerator::mergeCylindersList(const Standard_Real& boxDiagonalLength){
-    SurfacesMerger{}(cylindersList, boxDiagonalLength);
+McCAD::Decomposition::FacesListGenerator::mergeCylindersList(const Standard_Real& boxDiagonalLength,
+                                                             const Standard_Real& precision,
+                                                             const Standard_Real& edgeTolerance,
+                                                             const Standard_Real& angularTolerance,
+                                                             const Standard_Real& distanceTolerance){
+    SurfacesMerger{}(cylindersList, boxDiagonalLength, precision, edgeTolerance,
+                     angularTolerance, distanceTolerance);
     facesList.insert(facesList.end(), cylindersList.begin(), cylindersList.end());
 }
 
 void
-McCAD::Decomposition::FacesListGenerator::mergeToriList(const Standard_Real& boxDiagonalLength){
-    SurfacesMerger{}(toriList, boxDiagonalLength);
+McCAD::Decomposition::FacesListGenerator::mergeToriList(const Standard_Real& boxDiagonalLength,
+                                                        const Standard_Real& precision,
+                                                        const Standard_Real& edgeTolerance,
+                                                        const Standard_Real& angularTolerance,
+                                                        const Standard_Real& distanceTolerance){
+    SurfacesMerger{}(toriList, boxDiagonalLength, precision, edgeTolerance,
+                     angularTolerance, distanceTolerance);
     facesList.insert(facesList.end(), toriList.begin(), toriList.end());
 }

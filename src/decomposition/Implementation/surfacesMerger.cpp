@@ -1,21 +1,28 @@
 // McCAD
 #include "surfacesMerger.hpp"
+#include "surfaceComparator.hpp"
 #include "surfaceObjCerator.hpp"
 #include "surfacesFuser.hpp"
+#include "EdgesComparator.hpp"
 //OCC
 #include <TopoDS_Face.hxx>
 
 void
 McCAD::Decomposition::SurfacesMerger::operator()(
         std::vector<std::shared_ptr<Geometry::BoundSurface>>& surfacesList,
-        const Standard_Real& boxDiagonalLength){
+        const Standard_Real& boxDiagonalLength,
+        const Standard_Real& precision,
+        const Standard_Real& edgeTolerance,
+        const Standard_Real& angularTolerance,
+        const Standard_Real& distanceTolerance){
     if (surfacesList.size() < 2) return;
     for (Standard_Integer i = 0; i <= surfacesList.size() - 2; ++i){
         for (Standard_Integer j = i+1; j <= surfacesList.size() - 1; ++j){
-            if (*surfacesList[i] == *surfacesList[j]){
+            if(Tools::SurfaceComparator{precision, angularTolerance, distanceTolerance}(
+                        surfacesList[i]->accessSImpl()->face,
+                        surfacesList[j]->accessSImpl()->face)){
                 surfacesList[j]->accessSImpl()->surfaceNumber =
                         surfacesList[i]->accessSImpl()->surfaceNumber;
-                 //std::cout << "*** equal" << std::endl;
                 // Test if the two surfaces can be fused.
                 if (*surfacesList[i] << *surfacesList[j]){
                     //std::cout << "*** equal, fuse" << std::endl;
@@ -23,7 +30,7 @@ McCAD::Decomposition::SurfacesMerger::operator()(
                                 surfacesList[i]->accessSImpl()->face,
                                 surfacesList[j]->accessSImpl()->face).value();
                     std::shared_ptr<Geometry::BoundSurface> newboundSurface =
-                            SurfaceObjCreator{}(newFace, boxDiagonalLength, 1.0e-7);
+                            SurfaceObjCreator{}(newFace, boxDiagonalLength, edgeTolerance);
                     newboundSurface->accessSImpl()->surfaceNumber =
                             surfacesList[i]->accessSImpl()->surfaceNumber;
                     /* //debug

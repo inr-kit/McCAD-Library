@@ -21,13 +21,33 @@ namespace McCAD::Decomposition{
       std::vector<BS> toriList;
     public:
       template <typename solidObjType>
-      std::vector<BS> operator()(solidObjType& solidObj, const Standard_Real& precision,
-                                 const Standard_Real& edgeTolerance, const Standard_Real& faceTolerance);
+      std::vector<BS> operator()(solidObjType& solidObj,
+                                 const Standard_Real& precision,
+                                 const Standard_Real& edgeTolerance,
+                                 const Standard_Real& faceTolerance,
+                                 const Standard_Real& angularTolerance,
+                                 const Standard_Real& distanceTolerance);
       template <typename solidObjType>
-      void addListsToSolidObj(solidObjType& solidObj);
-      void mergePlanesList(const Standard_Real& boxDiagonalLength);
-      void mergeCylindersList(const Standard_Real& boxDiagonalLength);
-      void mergeToriList(const Standard_Real& boxDiagonalLength);
+      void addListsToSolidObj(solidObjType& solidObj,
+                              const Standard_Real& precision,
+                              const Standard_Real& edgeTolerance,
+                              const Standard_Real& angularTolerance,
+                              const Standard_Real& distanceTolerance);
+      void mergePlanesList(const Standard_Real& boxDiagonalLength,
+                           const Standard_Real& precision,
+                           const Standard_Real& edgeTolerance,
+                           const Standard_Real& angularTolerance,
+                           const Standard_Real& distanceTolerance);
+      void mergeCylindersList(const Standard_Real& boxDiagonalLength,
+                              const Standard_Real& precision,
+                              const Standard_Real& edgeTolerance,
+                              const Standard_Real& angularTolerance,
+                              const Standard_Real& distanceTolerance);
+      void mergeToriList(const Standard_Real& boxDiagonalLength,
+                         const Standard_Real& precision,
+                         const Standard_Real& edgeTolerance,
+                         const Standard_Real& angularTolerance,
+                         const Standard_Real& distanceTolerance);
     };
 }
 

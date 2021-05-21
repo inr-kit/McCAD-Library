@@ -24,9 +24,7 @@ namespace McCAD::Decomposition{
       ~Preprocessor();
   private:
     Tools::SolidType solidType;
-    Standard_Real minSolidVolume{10.0}, scalingFactor{100.0},
-                  angularTolerance{1.0e-4}, precision{1.0e-7},
-                  faceTolerance{1.0e-7}, edgeTolerance{1.0e-7};
+    Standard_Real minSolidVolume{10.0};
     // WARNING!!
     // The order of solid object types should be synched with Tools::SolidType;
     using VariantType = std::variant<std::monostate,
@@ -34,6 +32,7 @@ namespace McCAD::Decomposition{
                                      std::shared_ptr<McCAD::Geometry::CYLSolid>,
                                      std::shared_ptr<McCAD::Geometry::TORSolid>>;
   public:
+    IO::InputConfig inputConfig;
     void operator()(const std::shared_ptr<Geometry::Impl::Compound>& compound);
     VariantType perform(const TopoDS_Shape& shape);
     Standard_Boolean checkBndSurfaces(const TopoDS_Shape& shape);
