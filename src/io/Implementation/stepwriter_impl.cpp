@@ -42,6 +42,7 @@ McCAD::IO::STEPWriter::Impl::operator()(
     STEPWriter.Write(outputfileName.c_str());
 }
 */
+
 void
 McCAD::IO::STEPWriter::Impl::operator()(
         const McCAD::IO::STEPWriter::Impl::solidsMap& solidsMap){
@@ -53,13 +54,16 @@ McCAD::IO::STEPWriter::Impl::operator()(
     TopoDS_Builder builder;
     TopoDS_Compound compoundToWrite;
     for (const auto& compound : solidsMap){
+        TDF_Label compoundLabel = shapeTool->NewShape();
+        compoundName->Set(compoundLabel, std::get<0>(compound));
         builder.MakeCompound(compoundToWrite);
         for(const auto& solid : std::get<1>(compound)){
             builder.Add(compoundToWrite, solid);
         }
-        TDF_Label compoundLabel = shapeTool->AddShape(compoundToWrite, Standard_True);
+        compoundLabel = shapeTool->AddComponent(compoundLabel, compoundToWrite, Standard_False);
         compoundName->Set(compoundLabel, std::get<0>(compound));
     }
+    shapeTool->UpdateAssemblies();
     writer.Transfer(document, STEPControl_StepModelType::STEPControl_AsIs);
     writer.Write(outputfileName.c_str());
 }
