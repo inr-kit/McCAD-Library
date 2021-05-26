@@ -1,5 +1,7 @@
 // McCAD
 #include "surfacesFuser.hpp"
+// OCC
+#include <Message_ProgressRange.hxx>
 
 McCAD::Tools::SurfacesFuser::SurfacesFuser(Standard_Real zeroTolerance,
                                            Standard_Real tolerance)

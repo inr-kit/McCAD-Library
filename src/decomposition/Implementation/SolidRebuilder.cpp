@@ -1,6 +1,7 @@
 #include "SolidRebuilder.hpp"
 
 // OCC
+#include <Message_ProgressRange.hxx>
 #include <ShapeFix_Solid.hxx>
 #include <BRepCheck_Analyzer.hxx>
 #include <BRepBuilderAPI_Sewing.hxx>

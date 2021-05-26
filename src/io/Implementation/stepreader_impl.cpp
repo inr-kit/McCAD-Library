@@ -88,6 +88,8 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
     STEPControl_Reader STEPReader = reader.Reader();
     opencascade::handle<TDocStd_Document> document = new TDocStd_Document("txt");
     auto readStatus = reader.ReadFile(fileName.c_str());
+    // Set read parameters per user config.
+    //Interface_Static::SetIVal("read.precision.mode",1);
     if(readStatus == IFSelect_RetDone){
         reader.Transfer(document);
         TDF_Label label = document->Main();

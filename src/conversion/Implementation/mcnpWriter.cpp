@@ -38,7 +38,7 @@ McCAD::Conversion::MCNPWriter::operator()(
         std::string oldFileName{"old_" + volumesFileName};
         std::rename(volumesFileName.c_str(), oldFileName.c_str());
     }
-    ofstream outputStream(MCOutputFileName.c_str()), volumeStream(volumesFileName.c_str());
+    std::ofstream outputStream(MCOutputFileName.c_str()), volumeStream(volumesFileName.c_str());
     writeHeader(outputStream);
     writeCellCard(outputStream, volumeStream);
     writeVoidCard(outputStream);
@@ -223,7 +223,7 @@ McCAD::Conversion::MCNPWriter::adjustLineWidth(const std::string& mainExpr,
 }
 
 void
-McCAD::Conversion::MCNPWriter::writeHeader(ofstream& outputStream){
+McCAD::Conversion::MCNPWriter::writeHeader(std::ofstream& outputStream){
     outputStream << "McCad v1.0L generated MC input files." <<
                     "\nc     * Material Cells ---- " << compoundObjMap.size() <<
                     "\nc     * Surfaces       ---- " << uniqueSurfaces.size() <<
@@ -231,8 +231,8 @@ McCAD::Conversion::MCNPWriter::writeHeader(ofstream& outputStream){
 }
 
 void
-McCAD::Conversion::MCNPWriter::writeCellCard(ofstream& outputStream,
-                                             ofstream& volumeStream){
+McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
+                                             std::ofstream& volumeStream){
     outputStream << "c ==================== Cell Cards ====================" << std::endl;
     Standard_Integer cellNumber = startCellNum;
     // Need to loop over all solids in a compSolid, write header with maerial,
@@ -276,7 +276,7 @@ McCAD::Conversion::MCNPWriter::writeCellCard(ofstream& outputStream,
 }
 
 void
-McCAD::Conversion::MCNPWriter::writeVoidCard(ofstream& outputStream){
+McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
     outputStream << "c ==================== Void Cells ====================" << std::endl;
     Standard_Integer voidNumber = startCellNum + compoundObjMap.size();
     if(!voidGeneration) goto writeGraveYard;
@@ -335,7 +335,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(ofstream& outputStream){
 }
 
 void
-McCAD::Conversion::MCNPWriter::writeSurfCard(ofstream& outputStream){
+McCAD::Conversion::MCNPWriter::writeSurfCard(std::ofstream& outputStream){
     outputStream << "\nc ==================== Surface Cards ====================" << std::endl;
     // Write all surfaces.
     for(const auto& surface : uniqueSurfaces){
@@ -361,7 +361,7 @@ McCAD::Conversion::MCNPWriter::writeSurfCard(ofstream& outputStream){
 }
 
 void
-McCAD::Conversion::MCNPWriter::writeDataCard(ofstream& outputStream){
+McCAD::Conversion::MCNPWriter::writeDataCard(std::ofstream& outputStream){
     outputStream << "\nc ==================== Data Cards ====================" << std::endl;
     // add tallies and source to calculate volumes.
     outputStream << "Mode N" << "\nVoid" << "\nNPS 1e9" << "\nPRDMP 1e8 1e8 j 1 j" << std::endl;

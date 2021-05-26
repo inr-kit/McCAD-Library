@@ -3,16 +3,29 @@ message(STATUS "====================")
 message(STATUS "Locating OpenCascade")
 message(STATUS "====================")
 if(LINUX_OS)
-    find_package(OpenCASCADE 7.3.0 EXACT REQUIRED)
+    if(OCC_CUSTOM_ROOT)
+        set(OCC_LIBRARY_DIRS "${OCC_CUSTOM_ROOT}/lib")
+        set(OCC_INCLUDE_DIRS "${OCC_CUSTOM_ROOT}/include/opencascade")
+        set(OpenCASCADE_LIBRARIES   TKBin TKBinL TKBinTObj TKBinXCAF TKBO TKBool TKBRep TKCAF TKCDF TKLCAF
+                                    TKSTL TKXMesh TKernel TKMath TKService TKTObj TKXml TKFeat TKMesh TKTopAlgo
+                                    TKXmlL TKFillet TKMeshVS TKShHealing TKV3d TKXmlTObj TKG2d TKXmlXCAF TKG3d
+                                    TKOffset TKVRML TKXSBase TKGeomAlgo TKOpenGl TKSTEP TKXCAF TKGeomBase TKSTEP209
+                                    TKHLR TKSTEPAttr TKXDEIGES TKIGES TKPrim TKSTEPBase TKXDESTEP)
+        set(OpenCASCADE_FOUND True)
+    else(OCC_CUSTOM_ROOT)
+        find_package(OpenCASCADE 7.5.0 EXACT REQUIRED)
+        set(OCC_INCLUDE_DIRS ${OpenCASCADE_INCLUDE_DIR})
+        set(OCC_LIBRARY_DIRS ${OpenCASCADE_LIBRARY_DIR})
+    endif(OCC_CUSTOM_ROOT)
+
     if(OpenCASCADE_FOUND)
-        message(STATUS "OpenCASCADE ${OpenCASCADE_VERSION} found")
         if(BUILD_SHARED)
             set(OCC_LIBRARIES_SHARED)
             foreach (OCC_lib ${OpenCASCADE_LIBRARIES})
                 set(OCC_LIB "OCC_LIB-NOTFOUND")
                 find_library(OCC_LIB
                     NAMES ${OCC_lib}
-                    HINTS ${OpenCASCADE_LIBRARY_DIR}
+                    HINTS ${OCC_LIBRARY_DIRS}
                     NO_DEFAULT_PATH)
                 list(APPEND OCC_LIBRARIES_SHARED ${OCC_LIB})
             endforeach ()
@@ -23,13 +36,11 @@ if(LINUX_OS)
                 set(OCC_LIB "OCC_LIB-NOTFOUND")
                 find_library(OCC_LIB
                     NAMES ${OCC_lib}
-                    HINTS ${OpenCASCADE_LIBRARY_DIR}
+                    HINTS ${OCC_LIBRARY_DIRS}
                     NO_DEFAULT_PATH)
                 list(APPEND OCC_LIBRARIES_STATIC ${OCC_LIB})
             endforeach ()
         endif()
-        set(OCC_INCLUDE_DIRS ${OpenCASCADE_INCLUDE_DIR})
-        set(OCC_LIBRARY_DIRS ${OpenCASCADE_LIBRARY_DIR})
     else(OpenCASCADE_FOUND)
         set(OCC_LIBRARIES TKernel TKMath TKG2d TKG3d TKGeomBase TKBRep TKGeomAlgo
             TKTopAlgo TKPrim TKBO TKShHealing TKBool TKHLR TKFillet TKOffset TKFeat
