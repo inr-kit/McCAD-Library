@@ -6,19 +6,27 @@ if(LINUX_OS)
     if(OCC_CUSTOM_ROOT)
         set(OCC_LIBRARY_DIRS "${OCC_CUSTOM_ROOT}/lib")
         set(OCC_INCLUDE_DIRS "${OCC_CUSTOM_ROOT}/include/opencascade")
-        set(OpenCASCADE_LIBRARIES   TKBin TKBinL TKBinTObj TKBinXCAF TKBO TKBool TKBRep TKCAF TKCDF TKLCAF
-                                    TKSTL TKXMesh TKernel TKMath TKService TKTObj TKXml TKFeat TKMesh TKTopAlgo
-                                    TKXmlL TKFillet TKMeshVS TKShHealing TKV3d TKXmlTObj TKG2d TKXmlXCAF TKG3d
-                                    TKOffset TKVRML TKXSBase TKGeomAlgo TKOpenGl TKSTEP TKXCAF TKGeomBase TKSTEP209
-                                    TKHLR TKSTEPAttr TKXDEIGES TKIGES TKPrim TKSTEPBase TKXDESTEP)
         set(OpenCASCADE_FOUND True)
     else(OCC_CUSTOM_ROOT)
-        find_package(OpenCASCADE 7.5.0 EXACT REQUIRED)
-        set(OCC_INCLUDE_DIRS ${OpenCASCADE_INCLUDE_DIR})
-        set(OCC_LIBRARY_DIRS ${OpenCASCADE_LIBRARY_DIR})
+        if(DEFINED ENV{CASROOT})
+            set(OCC_LIBRARY_DIRS "$ENV{CASROOT}/lib")
+            set(OCC_INCLUDE_DIRS "$ENV{CASROOT}/include/opencascade")
+            set(OpenCASCADE_FOUND True)
+        endif()
+        #find_package(OpenCASCADE 7.5.0 EXACT REQUIRED)
+        #set(OCC_INCLUDE_DIRS ${OpenCASCADE_INCLUDE_DIR})
+        #set(OCC_LIBRARY_DIRS ${OpenCASCADE_LIBRARY_DIR})
     endif(OCC_CUSTOM_ROOT)
 
     if(OpenCASCADE_FOUND)
+        set(OpenCASCADE_LIBRARIES  TKBin TKBinL TKBinTObj TKBinXCAF TKBO TKBool
+                                   TKBRep TKCAF TKCDF TKLCAF TKSTL TKXMesh TKernel
+                                   TKMath TKService TKTObj TKXml TKFeat TKMesh
+                                   TKTopAlgo TKXmlL TKFillet TKMeshVS TKShHealing
+                                   TKV3d TKXmlTObj TKG2d TKXmlXCAF TKG3d TKOffset
+                                   TKVRML TKXSBase TKGeomAlgo TKOpenGl TKSTEP
+                                   TKXCAF TKGeomBase TKSTEP209 TKHLR TKSTEPAttr
+                                   TKXDEIGES TKIGES TKPrim TKSTEPBase TKXDESTEP)
         if(BUILD_SHARED)
             set(OCC_LIBRARIES_SHARED)
             foreach (OCC_lib ${OpenCASCADE_LIBRARIES})
@@ -42,27 +50,9 @@ if(LINUX_OS)
             endforeach ()
         endif()
     else(OpenCASCADE_FOUND)
-        set(OCC_LIBRARIES TKernel TKMath TKG2d TKG3d TKGeomBase TKBRep TKGeomAlgo
-            TKTopAlgo TKPrim TKBO TKShHealing TKBool TKHLR TKFillet TKOffset TKFeat
-            TKMesh TKXMesh TKService TKV3d TKOpenGl TKMeshVS TKCDF TKLCAF TKCAF TKBinL
-            TKXmlL TKBin TKXml TKStdL TKStd TKTObj TKBinTObj TKXmlTObj TKVCAF TKXSBase
-            TKSTEPBase TKSTEPAttr TKSTEP209 TKSTEP TKIGES TKXCAF TKXDEIGES TKXDESTEP
-            TKSTL TKVRML TKXmlXCAF TKBinXCAF TKDraw TKTopTest TKViewerTest TKXSDRAW
-            TKDCAF TKXDEDRAW TKTObjDRAW TKQADraw)
-        if(DEFINED ENV{CASROOT})
-            if(NOT DEFINED OpenCASCADE_INCLUDE_DIR)
-                set(OCC_INCLUDE_DIRS "$ENV{CASROOT}/include/opencascade")
-            endif()
-            if(NOT DEFINED OpenCASCADE_LIBRARY_DIR)
-                set(OCC_LIBRARY_DIRS "$ENV{CASROOT}/lib")
-            endif()
-        else()
-            if(NOT DEFINED OpenCASCADE_INCLUDE_DIR OR NOT DEFINED OpenCASCADE_LIBRARY_DIR)
-                message(WARNING "To specify paths of OpenCascade files, you may\n
-                    either define the CASROOT environment variable, or set both\n
-                    OCC_INCLUDE_DIRS and OCC_LIBRARY_DIRS variables.")
-            endif()
-        endif()
+        message(WARNING "To specify paths of OpenCascade files, you may\n
+                         either define the CASROOT environment variable, or set\n
+                         OCC_CUSTOM_ROOT CMake variables.")
     endif()
 
     if(DEFINED OCC_INCLUDE_DIRS)
@@ -101,7 +91,7 @@ else(LINUX_OS)
         endif()
         include_directories(${OCC_INCLUDE_DIRS})
     else()
-        message(FATAL_ERROR "OCC_CUSTOM_PATH is not defined!")
+        message(FATAL_ERROR "OCC_CUSTOM_ROOT is not defined!")
     endif()
 endif(LINUX_OS)
 
