@@ -107,16 +107,17 @@ McCAD::Conversion::MCNPExprGenerator::genPlSurfExpr(
     if(parmtD != 0.0) parmtD *= -1;
     if ((parmtA != 0.0) && (parmtB == 0.0) && (parmtC == 0.0)){
         plSurface->accessSImpl()->surfSymb = "PX";
-        surfExpr += boost::str(boost::format("PX %11.5f") % (parmtD/parmtA));
+        surfExpr += boost::str(boost::format("PX %11.5f") % ((parmtD/parmtA)/10.0));
     } else if ((parmtA == 0.0) && (parmtB != 0.0) && (parmtC == 0.0)){
         plSurface->accessSImpl()->surfSymb = "PY";
-        surfExpr += boost::str(boost::format("PY %11.5f") % (parmtD/parmtB));
+        surfExpr += boost::str(boost::format("PY %11.5f") % ((parmtD/parmtB)/10.0));
     } else if ((parmtA == 0.0) && (parmtB == 0.0) && (parmtC != 0.0)){
         plSurface->accessSImpl()->surfSymb = "PZ";
-        surfExpr += boost::str(boost::format("PZ %11.5f") % (parmtD/parmtC));
+        surfExpr += boost::str(boost::format("PZ %11.5f") % ((parmtD/parmtC)/10.0));
     } else
         surfExpr += boost::str(boost::format("P %11.5f  %11.5f  %11.5f  %11.5f")
-                           % parmtA % parmtB % parmtC % parmtD);
+                           % (parmtA/10.0) % (parmtB/10.0) % (parmtC/10.0)
+                           % (parmtD/10.0));
     plSurface->accessSImpl()->surfExpr = surfExpr;
 }
 
@@ -179,8 +180,8 @@ void
 McCAD::Conversion::MCNPExprGenerator::genVoidExpr(const std::shared_ptr<VoidCell>& voidCell){
     std::string voidSurfExpr;
     voidSurfExpr = boost::str(boost::format("RPP %11.5f %11.5f %11.5f %11.5f %11.5f %11.5f")
-                          % voidCell->minX % voidCell->maxX
-                          % voidCell->minY % voidCell->maxY
-                          % voidCell->minZ % voidCell->maxZ);
+                          % (voidCell->minX / 10.0) % (voidCell->maxX / 10.0)
+                          % (voidCell->minY / 10.0) % (voidCell->maxY / 10.0)
+                          % (voidCell->minZ / 10.0) % (voidCell->maxZ / 10.0));
     voidCell->voidSurfExpr = voidSurfExpr;
 }

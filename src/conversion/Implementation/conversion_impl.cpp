@@ -10,9 +10,10 @@
 #include "voidCellManager.hpp"
 #include "conversionWriter.hpp"
 
-McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig) :
+McCAD::Conversion::Convert::Impl::Impl(IO::InputConfig& inputConfig) :
     inputConfig{inputConfig}{
-    IO::STEPReader reader{inputConfig.conversionFileName};
+    inputConfig.readConversion = Standard_True;
+    IO::STEPReader reader{inputConfig}; //inputConfig.conversionFileName
     inputShapesMap = reader.getInputData().accessImpl()->inputShapesMap;
     if (!inputShapesMap.size() > 0)
         throw std::runtime_error("Error loading STEP file, " + inputConfig.conversionFileName);
@@ -23,7 +24,8 @@ McCAD::Conversion::Convert::Impl::Impl(const IO::InputConfig& inputConfig) :
         // Write rejected solids to a STEP file.
         General::InputData outputData;
         outputData.accessImpl()->outputShapesMap = rejectConversion;
-        McCAD::IO::STEPWriter{"rejectedConversion", outputData};
+        inputConfig.outputFileName = inputConfig.rejectConvFileName;
+        McCAD::IO::STEPWriter{inputConfig, outputData};
         throw std::runtime_error("Rejected solids have been written to "
                                  "rejectedConversion.stp. Conversion terminated!");
     }

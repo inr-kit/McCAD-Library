@@ -6,6 +6,7 @@
 #include <memory>
 // McCAD
 #include "inputdata.hpp"
+#include "inputconfig.hpp"
 
 namespace McCAD::IO{
   class STEPReader{
@@ -13,7 +14,7 @@ namespace McCAD::IO{
     class Impl;
     
   public:
-    STEPReader(const std::string& fileName);
+    STEPReader(const IO::InputConfig& inputConfig);
     STEPReader(const STEPReader& that);
     STEPReader(STEPReader&& that);
     ~STEPReader();
@@ -22,7 +23,6 @@ namespace McCAD::IO{
     STEPReader& operator=(STEPReader&& that);
 
     General::InputData getInputData() const;
-    const std::string& getFileName() const;
 
   private:
     std::unique_ptr<Impl> pImpl;

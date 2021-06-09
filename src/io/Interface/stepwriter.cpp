@@ -3,9 +3,9 @@
 #include "stepwriter_impl.hpp"
 #include "inputdata_impl.hpp"
 
-McCAD::IO::STEPWriter::STEPWriter(const std::string& fileName,
+McCAD::IO::STEPWriter::STEPWriter(const IO::InputConfig& inputConfig,
                                   const General::InputData& outputData)
-    : pImpl{std::make_unique<Impl>(fileName)}{
+    : pImpl{std::make_unique<Impl>(inputConfig)}{
   (*pImpl)(outputData.accessImpl()->outputShapesMap);
 }
 
@@ -28,9 +28,4 @@ McCAD::IO::STEPWriter&
 McCAD::IO::STEPWriter::operator=(STEPWriter&& that){
   this->pImpl = std::move(that.pImpl);
   return *this;
-}
-
-const std::string&
-McCAD::IO::STEPWriter::getFileName() const{
-  return pImpl->outputfileName;
 }

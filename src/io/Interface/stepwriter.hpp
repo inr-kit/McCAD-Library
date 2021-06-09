@@ -6,6 +6,7 @@
 #include <memory>
 // McCAD
 #include "inputdata.hpp"
+#include "inputconfig.hpp"
 
 namespace McCAD::IO{
   class STEPWriter {
@@ -13,15 +14,13 @@ namespace McCAD::IO{
     class Impl;
 
   public:
-    STEPWriter(const std::string& fileName, const General::InputData& outputData);
+    STEPWriter(const IO::InputConfig& inputConfig, const General::InputData& outputData);
     STEPWriter(const STEPWriter& that);
     STEPWriter(STEPWriter&& that);
     ~STEPWriter();
 
     STEPWriter& operator=(const STEPWriter& that);
     STEPWriter& operator=(STEPWriter&& that);
-
-    const std::string& getFileName() const;
 
   private:
     std::unique_ptr<Impl> pImpl;

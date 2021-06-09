@@ -35,7 +35,7 @@ int main (int argc, char* argv[]){
             std::cout << "***********************" << std::endl;
             std::cout << "** Loading STEP file **" << std::endl;
             std::cout << "***********************" << std::endl;
-            McCAD::IO::STEPReader reader{inputConfig.inputFileName};
+            McCAD::IO::STEPReader reader{inputConfig};
             timeEnd = std::chrono::high_resolution_clock::now();
         } else if (std::string(argv[1]) == "run") {
             inputConfig.readTemplate();
@@ -46,7 +46,7 @@ int main (int argc, char* argv[]){
                 std::cout << "***********************" << std::endl;
                 std::cout << "** Loading STEP file **" << std::endl;
                 std::cout << "***********************" << std::endl;
-                McCAD::IO::STEPReader reader{inputConfig.inputFileName};
+                McCAD::IO::STEPReader reader{inputConfig};
                 auto inputData = reader.getInputData();
                 // Start decomposition.
                 std::cout << "****************************" << std::endl;
@@ -59,8 +59,10 @@ int main (int argc, char* argv[]){
                 std::cout << "*************************" << std::endl;
                 std::cout << "** Saving to STEP file **" << std::endl;
                 std::cout << "*************************" << std::endl;
-                McCAD::IO::STEPWriter{inputConfig.resultFileName, outputData_result};
-                McCAD::IO::STEPWriter{inputConfig.rejectFileName, outputData_reject};
+                inputConfig.outputFileName = inputConfig.resultFileName;
+                McCAD::IO::STEPWriter{inputConfig, outputData_result};
+                inputConfig.outputFileName = inputConfig.rejectFileName;
+                McCAD::IO::STEPWriter{inputConfig, outputData_reject};
                 bool rejectConversion = outputData_reject.getSize() == 0 ? false
                                                                          : true;
                 if (convertCondition && !rejectConversion){

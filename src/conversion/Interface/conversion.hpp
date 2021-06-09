@@ -11,7 +11,7 @@ namespace McCAD::Conversion{
     private:
         class Impl;
     public:
-        Convert(const IO::InputConfig& inputConfig);
+        Convert(IO::InputConfig& inputConfig);
         ~Convert();
 
         Impl* accessCImpl() const;

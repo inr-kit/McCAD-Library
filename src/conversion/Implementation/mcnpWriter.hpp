@@ -55,11 +55,11 @@ namespace McCAD::Conversion{
         void createVoidMap(const std::shared_ptr<VoidCell>& voidCell);
         std::string adjustLineWidth(const std::string& mainExpr,
                                     const std::string& bodyExpr);
-        void writeHeader(ofstream& outputStream);
-        void writeCellCard(ofstream& outputStream, ofstream& volumeStream);
-        void writeVoidCard(ofstream& outputStream);
-        void writeSurfCard(ofstream& outputStream);
-        void writeDataCard(ofstream& outputStream);
+        void writeHeader(std::ofstream& outputStream);
+        void writeCellCard(std::ofstream& outputStream, std::ofstream& volumeStream);
+        void writeVoidCard(std::ofstream& outputStream);
+        void writeSurfCard(std::ofstream& outputStream);
+        void writeDataCard(std::ofstream& outputStream);
     };
 }
 
