@@ -268,7 +268,7 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
         outputStream << adjustLineWidth(cellExpr, cellSolidsExpr) << std::endl;
         std::string compoundData{boost::str(boost::format("%d %11.5f %s")
                                              % cellNumber
-                                             % compoundVolume
+                                             % (compoundVolume*1.0e-3)
                                              % compound.second->compoundName)};
         volumeStream << compoundData << std::endl;
         ++cellNumber;
@@ -349,13 +349,13 @@ McCAD::Conversion::MCNPWriter::writeSurfCard(std::ofstream& outputStream){
     xExt = std::get<2>(graveyard->xAxis) - std::get<0>(graveyard->xAxis);
     yExt = std::get<2>(graveyard->yAxis) - std::get<0>(graveyard->yAxis);
     zExt = std::get<2>(graveyard->zAxis) - std::get<0>(graveyard->zAxis);
-    radius = std::max(std::max(xExt, yExt), zExt);
+    radius = std::max(std::max(xExt, yExt), zExt)/10.0;
     std::string surfExpr{boost::str(boost::format("%d") % (startSurfNum + uniqueSurfaces.size()))};
     if (surfExpr.size() < 5) surfExpr.resize(5, *const_cast<char*>(" "));
     std::string surfCoord{boost::str(boost::format("S %6.3f %6.3f %6.3f %6.3f")
-                            % std::get<1>(graveyard->xAxis)
-                            % std::get<1>(graveyard->yAxis)
-                            % std::get<1>(graveyard->zAxis)
+                            % (std::get<1>(graveyard->xAxis)/10.0)
+                            % (std::get<1>(graveyard->yAxis)/10.0)
+                            % (std::get<1>(graveyard->zAxis)/10.0)
                             % radius)};
     outputStream << "c " << adjustLineWidth(surfExpr, surfCoord) << std::endl;
 }
