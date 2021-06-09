@@ -3,8 +3,8 @@
 #include "inputdata_impl.hpp"
 
 McCAD::IO::STEPReader::STEPReader(
-        const std::string& fileName)
-    : pImpl{std::make_unique<Impl>(fileName)}{
+        const IO::InputConfig& inputConfig)
+    : pImpl{std::make_unique<Impl>(inputConfig)}{
   pImpl->readSTEP();
 }
 
@@ -40,9 +40,4 @@ McCAD::IO::STEPReader::getInputData() const{
   General::InputData inputData;
   inputData.accessImpl()->inputShapesMap = pImpl->shapesInfoMap;
   return inputData;
-}
-
-const std::string&
-McCAD::IO::STEPReader::getFileName() const{
-  return pImpl->fileName;
 }

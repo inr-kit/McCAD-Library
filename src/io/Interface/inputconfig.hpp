@@ -40,6 +40,7 @@ namespace McCAD::IO{
       double distanceTolerance = 1.0e-5;
       // Void generation and conversion
       bool convert = false;
+      std::string rejectConvFileName = "rejectConv.stp";
       bool voidGeneration = true;
       double minVoidVolume = 10.0; // in mm^3
       int maxSolidsPerVoidCell = 20;
@@ -52,6 +53,8 @@ namespace McCAD::IO{
       std::string volumesFileName = "volumes.txt";
       // Internal variables
       std::string conversionFileName = "conversion.stp";
+      std::string outputFileName;
+      bool readConversion = false;
   };
 }
 

@@ -20,7 +20,7 @@
 namespace McCAD::Conversion {
     class Convert::Impl{
     public:
-        Impl(const IO::InputConfig& inputConfig);
+        Impl(IO::InputConfig& inputConfig);
         ~Impl();
     private:
         Tools::SolidType solidType;

@@ -8,6 +8,7 @@
 #include <tuple>
 // McCAD
 #include "stepreader.hpp"
+#include "inputconfig.hpp"
 // OCC
 #include <TopoDS_Shape.hxx>
 #include <TDF_Label.hxx>
@@ -17,10 +18,10 @@
 namespace McCAD::IO{
   class STEPReader::Impl{
   public:
-    Impl(const std::string& fileName);
+    Impl(const IO::InputConfig& inputConfig);
     ~Impl();
 
-    std::string fileName;
+    IO::InputConfig inputConfig;
     std::shared_ptr<TopTools_HSequenceOfShape> sequenceOfShape;
     std::vector<TCollection_ExtendedString> shapeNames;
     std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString>> shapesInfoMap;
@@ -28,7 +29,8 @@ namespace McCAD::IO{
     void readSTEP();
     void getLabelInfo(const TDF_Label& aLabel);
     bool iterateLabelChilds(const TDF_Label& aLabel,
-                            const TCollection_ExtendedString& aName);
+                            const TCollection_ExtendedString& aName,
+                            const TCollection_ExtendedString& parentName);
   };
 }
 

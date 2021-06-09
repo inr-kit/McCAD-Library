@@ -13,12 +13,13 @@ if(LINUX_OS)
             set(OCC_INCLUDE_DIRS "$ENV{CASROOT}/include/opencascade")
             set(OpenCASCADE_FOUND True)
         endif()
-        #find_package(OpenCASCADE 7.5.0 EXACT REQUIRED)
+        #find_package(OpenCASCADE 7.3.0 EXACT REQUIRED)
         #set(OCC_INCLUDE_DIRS ${OpenCASCADE_INCLUDE_DIR})
         #set(OCC_LIBRARY_DIRS ${OpenCASCADE_LIBRARY_DIR})
     endif(OCC_CUSTOM_ROOT)
 
     if(OpenCASCADE_FOUND)
+        include_directories(${OCC_INCLUDE_DIRS})
         set(OpenCASCADE_LIBRARIES  TKBin TKBinL TKBinTObj TKBinXCAF TKBO TKBool
                                    TKBRep TKCAF TKCDF TKLCAF TKSTL TKXMesh TKernel
                                    TKMath TKService TKTObj TKXml TKFeat TKMesh
@@ -55,9 +56,6 @@ if(LINUX_OS)
                          OCC_CUSTOM_ROOT CMake variables.")
     endif()
 
-    if(DEFINED OCC_INCLUDE_DIRS)
-        include_directories(${OCC_INCLUDE_DIRS})
-    endif()
 else(LINUX_OS)
     if(DEFINED OCC_CUSTOM_ROOT)
         set(OCC_LIBRARY_DIRS "${OCC_CUSTOM_ROOT}/win64/vc14/lib")

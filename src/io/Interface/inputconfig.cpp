@@ -37,8 +37,8 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "rejectFileName = reject.stp\n"
                    "# > Other parameters;\n"
                    "recurrenceDepth = 20\n"
-                   "minSolidVolume = 1.0\n"
-                   "minFaceArea = 1.0\n"
+                   "minSolidVolume = 1.0e-4\n"
+                   "minFaceArea = 1.0e-4\n"
                    "scalingFactor = 100.0\n"
                    "precision = 1.0e-7\n"
                    "faceTolerance = 1.0e-7\n"
@@ -49,6 +49,8 @@ McCAD::IO::InputConfig::writeTemplate(){
     inputConfig << "# Conversion\n"
                    "# ==========\n"
                    "convert = false\n"
+                   "# > Desired name of the rejected conversion output STEP file;\n"
+                   "rejectConvFileName = rejectConv.stp\n"
                    "# > Choose whether or not to generate void cells;\n"
                    "voidGeneration = true\n"
                    "# > Minimum acceptable void volume shouldn;t be less than minSolidVolume;\n"
@@ -63,7 +65,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "startSurfNum = 1\n"
                    "maxLineWidth = 80\n"
                    "MCOutputFileName = MCFile.inp\n"
-                   "volumesFileName = volumes.txt" << std::endl;
+                   "volumesFileName = volumes.vols" << std::endl;
     inputConfig.close();
 }
 
@@ -106,20 +108,22 @@ McCAD::IO::InputConfig::readTemplate(){
                else if (lineSplit[0] == "scalingFactor")
                    scalingFactor = std::stof(lineSplit[2]);
                else if (lineSplit[0] == "precision")
-                   precision = std::stof(lineSplit[2]);
+                   precision = std::stof(lineSplit[2]) * conversion_factor;
                else if (lineSplit[0] == "faceTolerance")
-                   faceTolerance = std::stof(lineSplit[2]);
+                   faceTolerance = std::stof(lineSplit[2]) * conversion_factor;
                else if (lineSplit[0] == "edgeTolerance")
-                   edgeTolerance = std::stof(lineSplit[2]);
+                   edgeTolerance = std::stof(lineSplit[2]) * conversion_factor;
                else if (lineSplit[0] == "parameterTolerance")
-                   parameterTolerance = std::stof(lineSplit[2]);
+                   parameterTolerance = std::stof(lineSplit[2]) * conversion_factor;
                else if (lineSplit[0] == "angularTolerance")
                    angularTolerance = std::stof(lineSplit[2]) * PI;
                else if (lineSplit[0] == "distanceTolerance")
-                   distanceTolerance = std::stof(lineSplit[2]);
+                   distanceTolerance = std::stof(lineSplit[2]) * conversion_factor;
                // Conversion
                else if (lineSplit[0] == "convert")
                    convert = stringToLowerCase(lineSplit[2]) == "false" ? false : true;
+               else if (lineSplit[0] == "rejectConvFileName")
+                   rejectConvFileName = lineSplit[2];
                else if (lineSplit[0] == "voidGeneration")
                    voidGeneration = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
                else if (lineSplit[0] == "minVoidVolume")
