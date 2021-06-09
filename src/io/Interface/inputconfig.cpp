@@ -40,12 +40,12 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "minSolidVolume = 1.0e-4\n"
                    "minFaceArea = 1.0e-4\n"
                    "scalingFactor = 100.0\n"
-                   "precision = 1.0e-7\n"
-                   "faceTolerance = 1.0e-7\n"
-                   "edgeTolerance = 1.0e-7\n"
-                   "parameterTolerance = 1.0e-7\n"
+                   "precision = 1.0e-6\n"
+                   "faceTolerance = 1.0e-8\n"
+                   "edgeTolerance = 1.0e-8\n"
+                   "parameterTolerance = 1.0e-8\n"
                    "angularTolerance = 1.0e-4\n"
-                   "distanceTolerance = 1.0e-5\n" << std::endl;
+                   "distanceTolerance = 1.0e-6\n" << std::endl;
     inputConfig << "# Conversion\n"
                    "# ==========\n"
                    "convert = false\n"
