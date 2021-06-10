@@ -1,5 +1,5 @@
 // McCAD
-#include "splitsolid_impl.hpp"
+#include "solidDecomposer.hpp"
 #include "SolidSplitter.hpp"
 #include "ShapeView.hpp"
 #include "SurfaceUtilities.hpp"
@@ -8,8 +8,14 @@
 #include <GProp_GProps.hxx>
 #include <BRepGProp.hxx>
 
+McCAD::Decomposition::SolidDecomposer::SolidDecomposer(){
+}
+
+McCAD::Decomposition::SolidDecomposer::~SolidDecomposer(){
+}
+
 Standard_Boolean
-McCAD::Decomposition::SplitSolid::Impl::operator()(
+McCAD::Decomposition::SolidDecomposer::operator()(
         const TopoDS_Solid& solid,
         const Bnd_OBB& obb,
         const Geometry::BoundSurface& surface,
@@ -24,7 +30,7 @@ McCAD::Decomposition::SplitSolid::Impl::operator()(
 }
 
 Standard_Boolean
-McCAD::Decomposition::SplitSolid::Impl::filterAndRepair(
+McCAD::Decomposition::SolidDecomposer::filterAndRepair(
         TopTools_HSequenceOfShape& subSolidsList,
         Standard_Real tolerance) const{
     auto filteredSubSolids = gatherSubSolids(subSolidsList, tolerance);
@@ -34,7 +40,7 @@ McCAD::Decomposition::SplitSolid::Impl::filterAndRepair(
 }
 
 TopTools_HSequenceOfShape
-McCAD::Decomposition::SplitSolid::Impl::gatherSubSolids(
+McCAD::Decomposition::SolidDecomposer::gatherSubSolids(
         TopTools_HSequenceOfShape& solids,
         Standard_Real tolerance) const{
     TopTools_HSequenceOfShape subSolids;

@@ -7,14 +7,12 @@
 // McCAD
 #include "decomposeSolid.hpp"
 #include "inputconfig.hpp"
+#include "SolidType.hpp"
 #include "planarSolid_impl.hpp"
 #include "cylSolid_impl.hpp"
 #include "torSolid_impl.hpp"
 #include "boundSurface_impl.hpp"
 #include "solid_impl.hpp"
-#include "splitsurfaces_impl.hpp"
-#include "splitsolid_impl.hpp"
-#include "SolidType.hpp"
 // OCC
 #include <Standard.hxx>
 
@@ -28,8 +26,6 @@ namespace McCAD::Decomposition{
       IO::InputConfig inputConfig;
       Tools::SolidType solidType;
       Standard_Integer recurrenceDepth;
-      SplitSurfaces splitSurfaces;
-      SplitSolid splitSolid;
 
       Standard_Boolean operator()(std::shared_ptr<Geometry::PLSolid>& solidObj);
       Standard_Boolean operator()(std::shared_ptr<Geometry::CYLSolid>& solidObj);

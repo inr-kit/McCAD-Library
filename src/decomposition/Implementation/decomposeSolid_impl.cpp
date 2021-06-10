@@ -1,45 +1,14 @@
 // C++
-
-
-#include <algorithm>
-#include <assert.h>
-#include <sstream>
-#include <tuple>
 #include <variant>
+#include <tuple>
+#include <algorithm>
 // McCAD
-
-
 #include "decomposeSolid_impl.hpp"
-#include "SurfaceUtilities.hpp"
+#include "splitSurfacesGenerator.hpp"
+#include "solidDecomposer.hpp"
 #include "AssistSurfaceGenerator.hpp"
 #include "preprocessor.hpp"
-#include "tools_impl.hpp"
-#include "CurveUtilities.hpp"
-#include "faceParameters.hpp"
-#include "ShapeView.hpp"
-
-//OCC
-
-
-#include <TopoDS.hxx>
-#include <TopoDS_Solid.hxx>
-#include <TopoDS_Shape.hxx>
-#include <TopoDS_Face.hxx>
-#include <BRep_Tool.hxx>
-#include <BRepTools.hxx>
-#include <Bnd_Box.hxx>
-#include <BRepBndLib.hxx>
-#include <BRepAdaptor_Surface.hxx>
-#include <GeomAdaptor_Surface.hxx>
-#include <TopExp.hxx>
-#include <TopTools_IndexedDataMapOfShapeListOfShape.hxx>
-#include <TopTools_ListIteratorOfListOfShape.hxx>
-#include <TopTools_ListOfShape.hxx>
-#include <gp_Pnt.hxx>
-#include <gp_Dir.hxx>
-#include <Geom_Curve.hxx>
-#include <TopTools_HSequenceOfShape.hxx>
-#include <STEPControl_Writer.hxx>
+#include "SurfaceUtilities.hpp"
 
 McCAD::Decomposition::DecomposeSolid::Impl::Impl(const IO::InputConfig& inputConfig)
     : recurrenceDepth{0}, inputConfig{inputConfig}{
@@ -64,6 +33,8 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
     solidObj->accessPSImpl()->judgeDecomposeSurfaces(solidImpl);
+    // Check if any of the boundary surfaces does split the solid. This is judged
+    // based on the numberCollidingSurfaces
     if(!throughNoBoundarySurfaces(solidImpl->splitFacesList)){
         solidObj->accessPSImpl()->judgeThroughConcaveEdges(solidImpl);
     }
@@ -81,6 +52,8 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
     solidObj->accessCSImpl()->judgeDecomposeSurfaces(solidImpl);
+    // Check if any of the boundary surfaces does split the solid. This is judged
+    // based on the numberCollidingSurfaces
     if(!throughNoBoundarySurfaces(solidImpl->splitFacesList)){
         solidObj->accessCSImpl()->judgeThroughConcaveEdges(solidImpl);
          if (!planeSplitOnlyPlane(solidImpl->splitFacesList)){
@@ -118,9 +91,9 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
         if (!selectSplitSurface(solidImpl)){
             return Standard_False;
         }
-        if(!(SplitSolid::Impl{}(solidImpl.solid, solidImpl.obb,
-                                *solidImpl.selectedSplitFacesList[0],
-                                *solidImpl.splitSolidList))){
+        if(!(SolidDecomposer{}(solidImpl.solid, solidImpl.obb,
+                               *solidImpl.selectedSplitFacesList[0],
+                               *solidImpl.splitSolidList))){
             return Standard_False;
         }
         // Loop over the resulting subsolids and split each one of them recursively.
@@ -166,8 +139,8 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
 Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(
         Geometry::Solid::Impl& solidImpl){
-    SplitSurfaces::Impl::generateSplitFacesList(solidImpl.splitFacesList,
-                                                solidImpl.selectedSplitFacesList);
+    SplitSurfacesGenerator::generateSplitFacesList(solidImpl.splitFacesList,
+                                                   solidImpl.selectedSplitFacesList);
     return !solidImpl.selectedSplitFacesList.empty();
 }
 
