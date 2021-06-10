@@ -11,6 +11,7 @@
 #include <TDataStd_Name.hxx>
 #include <XCAFDoc_ShapeTool.hxx>
 #include <XCAFDoc_ShapeMapTool.hxx>
+#include <TDF_Attribute.hxx>
 #include <TNaming_NamedShape.hxx>
 
 McCAD::IO::STEPReader::Impl::Impl(const IO::InputConfig& inputConfig) :
@@ -26,8 +27,7 @@ McCAD::IO::STEPReader::Impl::~Impl(){}
 
 bool
 McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
-                                                const TCollection_ExtendedString& aName,
-                                                const TCollection_ExtendedString& parentName){
+                                                const TCollection_ExtendedString& aName){
     bool foundShapes = Standard_False;
     if(aLabel.HasChild()){
         int numChildren = aLabel.NbChildren();
@@ -37,7 +37,7 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
                 opencascade::handle<TDataStd_Name> dataName;
                 if (childLabel.FindAttribute(TDataStd_Name::GetID(), dataName)
                          && childLabel.IsAttribute(TNaming_NamedShape::GetID())){
-                    foundShapes = iterateLabelChilds(childLabel, dataName->Get(), aName);
+                    foundShapes = iterateLabelChilds(childLabel, dataName->Get());
                 }
             }
         }
@@ -54,7 +54,6 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
         if (aLabel.FindAttribute(TNaming_NamedShape::GetID(), aShape)){
             sequenceOfShape->Append(aShape->Get());
             TCollection_ExtendedString shapeName{aName};
-            //if (inputConfig.readConversion == Standard_True) shapeName = parentName;
             shapeNames.push_back(shapeName);
             shapesInfoMap.push_back(std::make_tuple(aShape->Get(), shapeName));
             foundShapes = Standard_True;
@@ -66,8 +65,6 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
 void
 McCAD::IO::STEPReader::Impl::getLabelInfo(const TDF_Label& aLabel){
     bool foundShapes = Standard_False;
-    opencascade::handle<TDataStd_Name> parentName;
-    aLabel.FindAttribute(TDataStd_Name::GetID(), parentName);
     if(aLabel.HasChild()){
         int numChildren = aLabel.NbChildren();
         for(int aTag = 1; aTag <= numChildren; ++aTag){
@@ -76,8 +73,7 @@ McCAD::IO::STEPReader::Impl::getLabelInfo(const TDF_Label& aLabel){
                 opencascade::handle<TDataStd_Name> dataName;
                 if (childLabel.FindAttribute(TDataStd_Name::GetID(), dataName)
                     && childLabel.IsAttribute(XCAFDoc_ShapeTool::GetID())){
-                    foundShapes = iterateLabelChilds(childLabel, dataName->Get(),
-                                                     parentName->Get());
+                    foundShapes = iterateLabelChilds(childLabel, dataName->Get());
                 }
             }
         }
@@ -94,12 +90,12 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
     STEPCAFControl_Reader reader;
     STEPControl_Reader STEPReader = reader.Reader();
     opencascade::handle<TDocStd_Document> document = new TDocStd_Document("txt");
-    auto readStatus = reader.ReadFile(inputConfig.inputFileName.c_str());
-    // Set read parameters per user config.
-    if(Interface_Static::RVal("read.precision.val") > inputConfig.precision*10){
+    // Set reader parameters per user config.
+    if(Interface_Static::RVal("read.precision.val") > inputConfig.precision){
         Interface_Static::SetIVal("read.precision.mode", 1);
-        Interface_Static::SetRVal("read.precision.val", inputConfig.precision*10);
+        Interface_Static::SetRVal("read.precision.val", inputConfig.precision);
     }
+    auto readStatus = reader.ReadFile(inputConfig.inputFileName.c_str());
     if(readStatus == IFSelect_RetDone){
         reader.Transfer(document);
         TDF_Label label = document->Main();

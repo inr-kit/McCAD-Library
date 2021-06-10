@@ -1,7 +1,7 @@
 // McCAD
 #include "tools_impl.hpp"
 // OCC
-//#include <Message_ProgressRange.hxx>
+#include <Message_ProgressRange.hxx>
 #include <ShapeFix_FixSmallFace.hxx>
 #include <ShapeFix_Solid.hxx>
 #include <ShapeAnalysis_CheckSmallFace.hxx>

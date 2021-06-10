@@ -29,8 +29,7 @@ namespace McCAD::IO{
     void readSTEP();
     void getLabelInfo(const TDF_Label& aLabel);
     bool iterateLabelChilds(const TDF_Label& aLabel,
-                            const TCollection_ExtendedString& aName,
-                            const TCollection_ExtendedString& parentName);
+                            const TCollection_ExtendedString& aName);
   };
 }
 
