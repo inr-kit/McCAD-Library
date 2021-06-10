@@ -1,0 +1,17 @@
+# Config file for McCAD
+# Defines:
+#  McCAD_INCLUDE_DIRS - include directories for installed McCAD headers
+#  McCAD_LIBRARY_DIRS - location of installed McCAD libraries
+#  McCAD_LIBRARIES    - set of libraries installed with McCAD, dependencies
+
+# Declares the DAGMC package as found by CMake
+set(McCAD_FOUND 1)
+
+set(McCAD_VERSION_MAJOR @McCAD_VERSION_MAJOR@)
+set(McCAD_VERSION_MINOR @McCAD_VERSION_MINOR@)
+set(McCAD_VERSION @McCAD_VERSION@)
+
+message(STATUS "Configuring McCAD${McCAD_VERSION}L")
+
+set(McCAD_INCLUDE_DIRS ${INSTALL_INCLUDE_DIR})
+set(McCAD_LIBRARY_DIRS ${INSTALL_LIB_DIR})

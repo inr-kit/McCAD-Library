@@ -1,3 +1,12 @@
 ./~
 
 CMakeLists.txt.user*
+# exclude html folder
+/html/*
+# exclude examples folder "for now"
+/examples/*
+# exclude develop specific files
+input_file
+/latex/*
+2
+runLog.txt
