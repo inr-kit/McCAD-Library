@@ -38,6 +38,7 @@ namespace McCAD::IO{
       double parameterTolerance = 1.0e-7;
       double angularTolerance = 1.0e-4 * PI;
       double distanceTolerance = 1.0e-5;
+      double torusSplitAngle = 45.0 * PI / 180.0;
       // Void generation and conversion
       bool convert = false;
       std::string rejectConvFileName = "rejectConv.stp";

@@ -4,6 +4,7 @@
 #include <vector>
 // McCAD
 #include "AssistSurfaceGenerator.hpp"
+#include "AssistCylCylSurfaceGenerator.hpp"
 #include "edge_impl.hpp"
 #include "CommonEdgeFinder.hpp"
 #include "EdgesCombiner.hpp"
@@ -21,59 +22,25 @@
 #include <BRepBuilderAPI_Transform.hxx>
 //#include <STEPControl_Writer.hxx>
 
-void
-McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& solidObj){
-    auto& planesList = solidObj.accessSImpl()->planesList;
-    auto& cylindersList = solidObj.accessSImpl()->cylindersList;
-    if (cylindersList.size() >= 2){
-        std::vector<std::shared_ptr<Geometry::Edge>> commonEdges;
-        for(Standard_Integer i = 0; i < cylindersList.size(); ++i){
-            for(Standard_Integer j = i+1; j < cylindersList.size(); ++j){
-                //std::cout << "i: " << i << " j, " << j << std::endl;
-                if (*cylindersList[i] == *cylindersList[j]) continue;
-                auto temp = CommonEdgeFinder{}(cylindersList[i], cylindersList[j]);
-                commonEdges.insert(commonEdges.end(), temp.begin(), temp.end());
-                /*//debug
-                STEPControl_Writer writer10;
-                writer10.Transfer(cylindersList[i]->accessSImpl()->face, STEPControl_StepModelType::STEPControl_AsIs);
-                writer10.Transfer(cylindersList[j]->accessSImpl()->face, STEPControl_StepModelType::STEPControl_AsIs);
-                Standard_Integer kk = 0;
-                std::string filename = "/home/mharb/opt//McCAD_refactor/examples/bbox/cylcyl";
-                std::string suffix = ".stp";
-                while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
-                    ++kk;
-                }
-                filename += std::to_string(kk);
-                filename += suffix;
-                writer10.Write(filename.c_str());
-                *///debug
-            }
-        }
-        EdgesCombiner{}(commonEdges);
-        // sort edges into respective types lists
-        /*//debug
-        STEPControl_Writer writer11;
-        for (Standard_Integer i = 0; i < commonCurvedEdges.size(); ++i){
-            writer11.Transfer(commonCurvedEdges[i]->accessEImpl()->edge,
-                              STEPControl_StepModelType::STEPControl_AsIs);
-        }
-        Standard_Integer kk = 0;
-        std::string filename = "/home/mharb/opt/McCAD_refactor/examples/bbox/commonedges";
-        std::string suffix = ".stp";
-        while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
-            ++kk;
-        }
-        filename += std::to_string(kk);
-        filename += suffix;
-        writer11.Write(filename.c_str());
-        *///debug
-    }
+McCAD::Decomposition::AssistSurfaceGenerator::AssistSurfaceGenerator(
+        const IO::InputConfig& inputConfig) : inputConfig{inputConfig}{
+}
+
+McCAD::Decomposition::AssistSurfaceGenerator::~AssistSurfaceGenerator(){
 }
 
 void
-McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& solidObj,
-                                                         Standard_Real angleTolerance,
-                                                         Standard_Real edgeTolerance){
+McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& solidObj){
+    // Generate assistant surface that splits cylinders first.
+    if (solidObj.accessSImpl()->cylindersList.size() >= 2){
+        AssistCylCylSurfaceGenerator{inputConfig}(solidObj);
+    }
+    if (solidObj.accessSImpl()->cylindersList.size() >= 1 &&
+            solidObj.accessSImpl()->planesList.size() >= 1){}
+}
+
+void
+McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& solidObj){
     // Work on the case of partial torus; quarter for example.
     auto& planesList = solidObj.accessSImpl()->planesList;
     auto& toriList = solidObj.accessSImpl()->toriList;
@@ -82,7 +49,7 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& sol
     AIS_AngleDimension angleDimension{planesList[0]->accessSImpl()->extendedFace,
                 planesList[1]->accessSImpl()->extendedFace};
     auto radianAngle = angleDimension.GetValue();
-    if (radianAngle <= angleTolerance) return;
+    if (radianAngle <= inputConfig.torusSplitAngle) return;
     // Get axis of symmetry of torus and set rotation angle.
     gp_Ax1 axis = BRepAdaptor_Surface(toriList[0]->accessSImpl()->face).Torus().Axis();
     // Calculate the sense of the surfaces relative to the axis of rotation.
@@ -103,7 +70,7 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& sol
     for(const auto& assistFace : detail::ShapeView<TopAbs_FACE>{assistShape}){
         auto assistSurfaceObj = SurfaceObjCreator{}(assistFace,
                                                     solidObj.accessSImpl()->boxDiagonalLength,
-                                                    edgeTolerance);
+                                                    inputConfig.edgeTolerance);
         solidObj.accessSImpl()->splitFacesList.push_back(std::move(assistSurfaceObj));
     }
     solidObj.accessSImpl()->splitSurface = Standard_True;

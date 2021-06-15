@@ -45,7 +45,8 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "edgeTolerance = 1.0e-8\n"
                    "parameterTolerance = 1.0e-8\n"
                    "angularTolerance = 1.0e-4\n"
-                   "distanceTolerance = 1.0e-6\n" << std::endl;
+                   "distanceTolerance = 1.0e-6\n"
+                   "torusSplitAngle = 45.0\n" << std::endl;
     inputConfig << "# Conversion\n"
                    "# ==========\n"
                    "convert = false\n"
@@ -65,7 +66,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "startSurfNum = 1\n"
                    "maxLineWidth = 80\n"
                    "MCOutputFileName = MCFile.inp\n"
-                   "volumesFileName = volumes.vols" << std::endl;
+                   "volumesFileName = volumes.vols\n" << std::endl;
     inputConfig.close();
 }
 
@@ -119,6 +120,8 @@ McCAD::IO::InputConfig::readTemplate(){
                    angularTolerance = std::stof(lineSplit[2]) * PI;
                else if (lineSplit[0] == "distanceTolerance")
                    distanceTolerance = std::stof(lineSplit[2]) * conversion_factor;
+               else if (lineSplit[0] == "torusSplitAngle")
+                   torusSplitAngle = std::stof(lineSplit[2]) * PI / 180.0;
                // Conversion
                else if (lineSplit[0] == "convert")
                    convert = stringToLowerCase(lineSplit[2]) == "false" ? false : true;
