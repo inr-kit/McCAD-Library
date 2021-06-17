@@ -1,23 +1,24 @@
-#ifndef SPLITSURFACESGENERATOR_HPP
-#define SPLITSURFACESGENERATOR_HPP
+#ifndef SPLITSURFACEGENERATOR_HPP
+#define SPLITSURFACEGENERATOR_HPP
 
 // C++
-#include <vector>
 #include <memory>
 // McCAD
+#include "edge_impl.hpp"
 #include "boundSurface_impl.hpp"
+// OCC
+#include <TopoDS_Face.hxx>
 
 namespace McCAD::Decomposition{
-  class SplitSurfacesGenerator{
+  class SplitSurfaceGenerator{
   public:
-    SplitSurfacesGenerator();
-    ~SplitSurfacesGenerator();
-    static void generateSplitFacesList(
-            std::vector<std::shared_ptr<Geometry::BoundSurface>>& splitFacesList,
-            std::vector<std::shared_ptr<Geometry::BoundSurface>>& selectedSplitFacesList);
-    static void sortSplitFaces(
-            std::vector<std::shared_ptr<Geometry::BoundSurface>>& splitFacesList);
+    SplitSurfaceGenerator();
+    ~SplitSurfaceGenerator();
+
+    void generatePlaneOnEdge(const TopoDS_Face& firstFace,
+                             const TopoDS_Face& secondFace,
+                             std::shared_ptr<Geometry::Edge> edge);
   };
 }
 
-#endif //SPLITSURFACESGENERATOR_HPP
+#endif //SPLITSURFACEGENERATOR_HPP

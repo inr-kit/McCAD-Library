@@ -23,6 +23,7 @@
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepTools.hxx>
 #include <BRepAdaptor_Curve.hxx>
+#include <GeomAbs_CurveType.hxx>
 #include <STEPControl_Writer.hxx>
 
 McCAD::Geometry::BoundSurface::Impl::Impl(BoundSurface* backReference)

@@ -6,8 +6,11 @@
 #include "AssistCylCylSurfaceGenerator.hpp"
 #include "CommonEdgeFinder.hpp"
 #include "EdgesCombiner.hpp"
+#include "CurveUtilities.hpp"
+#include "splitSurfacesGenerator.hpp"
 //OCC
 #include <Standard.hxx>
+#include <GeomAbs_CurveType.hxx>
 
 McCAD::Decomposition::AssistCylCylSurfaceGenerator::AssistCylCylSurfaceGenerator(
         const IO::InputConfig& inputConfig) : inputConfig{inputConfig}{
@@ -24,30 +27,23 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
     for(Standard_Integer i = 0; i < cylindersList.size(); ++i){
         for(Standard_Integer j = i+1; j < cylindersList.size(); ++j){
             if (*cylindersList[i] == *cylindersList[j]) continue;
-            auto temp = CommonEdgeFinder{}(cylindersList[i], cylindersList[j]);
-            if(temp.size() == 1){
-                //planeOnEdgeGenerator{}(cylindersList[i]->accessSImpl()->face,
-                //        cylindersList[j]->accessSImpl()->face, temp[0]);
+            commonEdges = CommonEdgeFinder{}(cylindersList[i], cylindersList[j]);
+            if(commonEdges.size() == 1){
+                if(commonEdges[0]->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Line)){
+                    std::cout << "single linear common edge" << std::endl;
+                    SplitSurfaceGenerator{}.generatePlaneOnEdge(
+                                cylindersList[i]->accessSImpl()->face,
+                                cylindersList[j]->accessSImpl()->face,
+                                commonEdges[0]);
+                } else{
+                    std::cout << "single curved common edge" << std::endl;
+                }
             }
-            else{}
-            //commonEdges.insert(commonEdges.end(), temp.begin(), temp.end());
-            /*//debug
-            STEPControl_Writer writer10;
-            writer10.Transfer(cylindersList[i]->accessSImpl()->face, STEPControl_StepModelType::STEPControl_AsIs);
-            writer10.Transfer(cylindersList[j]->accessSImpl()->face, STEPControl_StepModelType::STEPControl_AsIs);
-            Standard_Integer kk = 0;
-            std::string filename = "/home/mharb/opt//McCAD_refactor/examples/bbox/cylcyl";
-            std::string suffix = ".stp";
-            while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
-                ++kk;
+            else{
+                std::cout << "more common edge" << std::endl;
             }
-            filename += std::to_string(kk);
-            filename += suffix;
-            writer10.Write(filename.c_str());
-            *///debug
         }
     }
-    EdgesCombiner{}(commonEdges);
     // sort edges into respective types lists
     /*//debug
     STEPControl_Writer writer11;

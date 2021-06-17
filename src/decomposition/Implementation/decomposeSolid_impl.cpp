@@ -4,7 +4,7 @@
 #include <algorithm>
 // McCAD
 #include "decomposeSolid_impl.hpp"
-#include "splitSurfacesGenerator.hpp"
+#include "splitSurfacesSelector.hpp"
 #include "solidDecomposer.hpp"
 #include "AssistSurfaceGenerator.hpp"
 #include "preprocessor.hpp"
@@ -146,7 +146,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
 Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(
         Geometry::Solid::Impl& solidImpl){
-    SplitSurfacesGenerator::generateSplitFacesList(solidImpl.splitFacesList,
+    SplitSurfacesSelector{}.generateSplitFacesList(solidImpl.splitFacesList,
                                                    solidImpl.selectedSplitFacesList);
     return !solidImpl.selectedSplitFacesList.empty();
 }
