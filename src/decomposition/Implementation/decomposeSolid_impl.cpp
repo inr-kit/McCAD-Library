@@ -46,7 +46,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         std::shared_ptr<Geometry::CYLSolid>& solidObj){
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
-    if(recurrenceDepth >= inputConfig.recurrenceDepth){
+    if(recurrenceDepth > inputConfig.recurrenceDepth){
         return Standard_False;
     }
     auto solidImpl = solidObj->accessSImpl();

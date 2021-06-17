@@ -10,11 +10,11 @@ McCAD::Geometry::PLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl){
     // Judge whether boundary surfaces of the solid can be used for decomposition.
     auto& facesList = solidImpl->facesList;
     if (facesList.size() < 2) return;
-    for (Standard_Integer i = 0; i <= facesList.size() - 1; ++i){
+    for (Standard_Integer i = 0; i < facesList.size(); ++i){
         auto iFace = facesList[i]->accessSImpl();
         Standard_Integer positiveFaces{0}, negativeFaces{0},
                          numberCollidingSurfaces{0};
-        for (Standard_Integer j = 0; j <= facesList.size() - 1; ++j){
+        for (Standard_Integer j = 0; j < facesList.size(); ++j){
             auto jFace = facesList[j]->accessSImpl();
             if (i != j && iFace->surfaceNumber != jFace->surfaceNumber){
                 Standard_Integer side = 0;

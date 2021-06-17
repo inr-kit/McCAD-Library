@@ -31,6 +31,7 @@ McCAD::Decomposition::SurfaceObjCreator::operator()(const TopoDS_Face& face,
             boundSurfaceCyl->accessSImpl()->initiate(face);
             boundSurfaceCyl->accessBSCImpl()->generateExtendedCyl(boxDiagonalLength,
                                                                   edgeTolerance);
+            // judege Assisted splitting surface
             return boundSurfaceCyl;
         } else if (AdaptorSurface.GetType() == GeomAbs_Torus){
             std::shared_ptr<Geometry::BoundSurfaceTor> boundSurfaceTor =

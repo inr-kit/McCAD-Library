@@ -2,6 +2,9 @@
 #include <algorithm>
 // McCAD
 #include "splitSurfacesGenerator.hpp"
+#include "SurfaceUtilities.hpp"
+// OCC
+#include <GeomAbs_SurfaceType.hxx>
 
 McCAD::Decomposition::SplitSurfacesGenerator::SplitSurfacesGenerator(){
 }
@@ -18,32 +21,31 @@ McCAD::Decomposition::SplitSurfacesGenerator::generateSplitFacesList(
         if(face->accessSImpl()->numberCollidingSurfaces == 0)
             selectedSplitFacesList.push_back(face);
     }
-    if(!selectedSplitFacesList.empty()){
-        sortSplitFaces(selectedSplitFacesList);
-        return;
-    }
+    if(!selectedSplitFacesList.empty()) goto sort;
 
-    // 2nd step: select surfaces that go through 0 curved surfaces.
+    // 2nd step: select planar surfaces that go through 0 curved surfaces.
     for(const auto& face : splitFacesList){
         if(face->accessSImpl()->numberCollidingCurvedSurfaces == 0
-            && face->accessSImpl()->surfaceType == "Plane")
+            && face->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Plane))
             selectedSplitFacesList.push_back(face);
     }
-    if(!selectedSplitFacesList.empty()){
-        sortSplitFaces(selectedSplitFacesList);
-        return;
-    }
+    if(!selectedSplitFacesList.empty()) goto sort;
 
-    // 3th step: for cylinders
+    // 3th step: select cylindrical surfaces.
+    for(const auto& face : splitFacesList){
+        if(face->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Cylinder) &&
+                !face->accessSImpl()->hasAssistSurface)
+            selectedSplitFacesList.push_back(face);
+    }
+    if(!selectedSplitFacesList.empty()) goto sort;
 
     // 4th step: select the other surfaces
     for(const auto& face : splitFacesList){
-        if(face->accessSImpl()->surfaceType == "Plane")
+        if(face->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Plane))
             selectedSplitFacesList.push_back(face);
     }
-    if (!selectedSplitFacesList.empty()){
-        sortSplitFaces(selectedSplitFacesList);
-    }
+    sort:;
+    sortSplitFaces(selectedSplitFacesList);
 }
 
 void
@@ -59,7 +61,9 @@ McCAD::Decomposition::SplitSurfacesGenerator::sortSplitFaces(
         const auto& snd = *second->accessSImpl();
         return fst.throughConcaveEdges > snd.throughConcaveEdges ||
                 (fst.throughConcaveEdges == snd.throughConcaveEdges &&
-                 fst.numberCollidingSurfaces < snd.numberCollidingSurfaces);
+                 fst.numberCollidingSurfaces < snd.numberCollidingSurfaces) ||
+                (fst.throughConcaveEdges == snd.throughConcaveEdges &&
+                 fst.numberCollidingCurvedSurfaces < snd.numberCollidingCurvedSurfaces);
     };
     std::sort(splitFacesList.begin(), splitFacesList.end(), comparator);
 }
