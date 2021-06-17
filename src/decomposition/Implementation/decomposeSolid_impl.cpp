@@ -91,11 +91,18 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
         if (!selectSplitSurface(solidImpl)){
             return Standard_False;
         }
-        if(!(SolidDecomposer{}(solidImpl.solid, solidImpl.obb,
-                               *solidImpl.selectedSplitFacesList[0],
-                               *solidImpl.splitSolidList))){
-            return Standard_False;
+        // Try more than one splitting surface before prompting a fail decomposition.
+        Standard_Boolean decompositionSuccess{Standard_False};
+        for(Standard_Integer surfIndex = 0; surfIndex < solidImpl.selectedSplitFacesList.size();
+            ++surfIndex){
+            if(SolidDecomposer{}(solidImpl.solid, solidImpl.obb,
+                                 *solidImpl.selectedSplitFacesList[surfIndex],
+                                 *solidImpl.splitSolidList)){
+                decompositionSuccess = Standard_True;
+                break;
+            }
         }
+        if(!decompositionSuccess) return Standard_False;
         // Loop over the resulting subsolids and split each one of them recursively.
         for (Standard_Integer i = 1; i <= solidImpl.splitSolidList->Length(); ++i){
             auto subSolid = Preprocessor{inputConfig}.perform(

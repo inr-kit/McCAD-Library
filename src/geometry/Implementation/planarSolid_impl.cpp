@@ -8,7 +8,6 @@
 void
 McCAD::Geometry::PLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl){
     // Judge whether boundary surfaces of the solid can be used for decomposition.
-    //std::cout << "judgeDecomposeSurfaces, PLSolid" << std::endl;
     auto& facesList = solidImpl->facesList;
     if (facesList.size() < 2) return;
     for (Standard_Integer i = 0; i <= facesList.size() - 1; ++i){
