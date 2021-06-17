@@ -29,8 +29,10 @@ namespace McCAD::Geometry{
     Standard_Integer numberCollidingSurfaces = 0;
     Standard_Integer numberCollidingCurvedSurfaces = 0;
     Standard_Integer throughConcaveEdges = 0;
+    Standard_Integer internalLoops = 0;
 
     void initiate(const TopoDS_Face& aFace);
+    void countInternalLoops();
 
     // Conversion variables.
     Standard_Boolean updated{Standard_False};

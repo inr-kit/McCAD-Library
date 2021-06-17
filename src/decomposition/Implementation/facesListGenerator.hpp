@@ -26,7 +26,8 @@ namespace McCAD::Decomposition{
                                  const Standard_Real& edgeTolerance,
                                  const Standard_Real& faceTolerance,
                                  const Standard_Real& angularTolerance,
-                                 const Standard_Real& distanceTolerance);
+                                 const Standard_Real& distanceTolerance,
+                                 const Standard_Real& parameterTolerance);
       template <typename solidObjType>
       void addListsToSolidObj(solidObjType& solidObj,
                               const Standard_Real& precision,

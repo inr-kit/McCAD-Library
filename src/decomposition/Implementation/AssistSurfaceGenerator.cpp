@@ -11,7 +11,8 @@
 #include "surfaceObjCerator.hpp"
 #include "ShapeView.hpp"
 //OCC
-#include <AIS_AngleDimension.hxx>
+#include <Standard.hxx>
+#include <PrsDim_AngleDimension.hxx>
 #include <gp_Ax1.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <gp_XYZ.hxx>
@@ -46,7 +47,7 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& sol
     auto& toriList = solidObj.accessSImpl()->toriList;
     if (planesList.size() != 2) return;
     // Measure angle between extended surfaces
-    AIS_AngleDimension angleDimension{planesList[0]->accessSImpl()->extendedFace,
+    PrsDim_AngleDimension angleDimension{planesList[0]->accessSImpl()->extendedFace,
                 planesList[1]->accessSImpl()->extendedFace};
     auto radianAngle = angleDimension.GetValue();
     if (radianAngle <= inputConfig.torusSplitAngle) return;

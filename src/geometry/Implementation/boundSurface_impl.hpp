@@ -28,7 +28,7 @@ namespace McCAD::Geometry{
     Standard_Boolean faceCollision(const BoundSurface& aFace,
                                    Standard_Integer& aSide);
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
-    void generateEdges(Standard_Real uvTolerance = 1.0e-3);
+    void generateEdges(const Standard_Real& parameterTolerance);
     void combineEdges(std::vector<std::shared_ptr<Edge>>& aEdgesList);
     bool generateParmts();
   };

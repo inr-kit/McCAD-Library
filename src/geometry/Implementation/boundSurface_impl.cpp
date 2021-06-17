@@ -116,7 +116,7 @@ McCAD::Geometry::BoundSurface::Impl::generateMesh(const Standard_Real& meshDefle
 }
 
 void
-McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
+McCAD::Geometry::BoundSurface::Impl::generateEdges(const Standard_Real& parameterTolerance){
     TopoDS_Face face = boundSurface->accessSImpl()->face;
     for (const auto& tempEdge : detail::ShapeView<TopAbs_EDGE>{face}){
         // more specific edge types as with surfaces and solids
@@ -137,8 +137,8 @@ McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
                     edgeUV[3]);
             BRepTools::UVBounds(face, surfaceUV[0], surfaceUV[1], surfaceUV[2],
                     surfaceUV[3]);
-            if (std::abs(edgeUV[0] - surfaceUV[0]) < uvTolerance ||
-                    std::abs(edgeUV[1] - surfaceUV[1]) < uvTolerance){
+            if (std::abs(edgeUV[0] - surfaceUV[0]) < parameterTolerance ||
+                    std::abs(edgeUV[1] - surfaceUV[1]) < parameterTolerance){
                 edge->accessEImpl()->useForSplitSurface = Standard_True;
             }
         }

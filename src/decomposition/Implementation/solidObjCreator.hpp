@@ -20,7 +20,8 @@ namespace McCAD::Decomposition{
                       precision{1.0e-7},
                       edgeTolerance{1.0e-7},
                       faceTolerance{1.0e-7},
-                      distanceTolerance{1.0e-5};
+                      distanceTolerance{1.0e-5},
+                      parameterTolerance{1.0e-7};
     public:
         template<typename solidObjType>
         std::shared_ptr<solidObjType> createObj(const TopoDS_Shape& shape);

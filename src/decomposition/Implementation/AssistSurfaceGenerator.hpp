@@ -5,9 +5,6 @@
 #include "inputconfig.hpp"
 #include "cylSolid_impl.hpp"
 #include "torSolid_impl.hpp"
-#include "cylSolid_impl.hpp"
-// OCC
-#include <Standard.hxx>
 
 namespace McCAD::Decomposition{
   class AssistSurfaceGenerator{

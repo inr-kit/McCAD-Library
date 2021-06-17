@@ -6,7 +6,8 @@
 McCAD::Decomposition::SolidObjCreator::SolidObjCreator(const IO::InputConfig& inputConfig) :
     scalingFactor{inputConfig.scalingFactor}, angularTolerance{inputConfig.angularTolerance},
     precision{inputConfig.precision}, edgeTolerance{inputConfig.edgeTolerance},
-    faceTolerance{inputConfig.faceTolerance}, distanceTolerance{inputConfig.distanceTolerance}{}
+    faceTolerance{inputConfig.faceTolerance}, parameterTolerance{inputConfig.parameterTolerance},
+    distanceTolerance{inputConfig.distanceTolerance}{}
 
 McCAD::Decomposition::SolidObjCreator::~SolidObjCreator(){}
 
@@ -24,7 +25,8 @@ McCAD::Decomposition::SolidObjCreator::createObj(const TopoDS_Shape& shape){
                                                               edgeTolerance,
                                                               faceTolerance,
                                                               angularTolerance,
-                                                              distanceTolerance);
+                                                              distanceTolerance,
+                                                              parameterTolerance);
     solidObj->accessSImpl()->calcVolume();
     return solidObj;
 }
