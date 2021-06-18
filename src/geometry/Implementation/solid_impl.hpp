@@ -39,6 +39,7 @@ namespace McCAD::Geometry{
       std::vector<std::shared_ptr<BoundSurface>> planesList;
       std::vector<std::shared_ptr<BoundSurface>> cylindersList;
       std::vector<std::shared_ptr<BoundSurface>> toriList;
+      std::vector<std::shared_ptr<BoundSurface>> assistFacesList;
 
       std::vector<std::shared_ptr<BoundSurface>> splitFacesList;
       std::vector<std::shared_ptr<BoundSurface>> splitAssistFacesList;

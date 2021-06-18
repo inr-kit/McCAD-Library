@@ -47,12 +47,49 @@ McCAD::Geometry::CYLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl* solidImpl){
 }
 
 void
-McCAD::Geometry::CYLSolid::Impl::judgeThroughConcaveEdges(Solid::Impl* solidImpl){
+McCAD::Geometry::CYLSolid::Impl::judgeAssistDecomposeSurfaces(Solid::Impl* solidImpl){
+    // Judge whether boundary surfaces of the solid can be used for decomposition.
+    auto& firstfacesList = solidImpl->assistFacesList;
+    auto& secondfacesList = solidImpl->facesList;
+    if (firstfacesList.size() < 1 || secondfacesList.size() < 1) return;
+    for (Standard_Integer i = 0; i < firstfacesList.size(); ++i){
+        auto iFace = firstfacesList[i]->accessSImpl();
+        Standard_Integer positiveFaces{0}, negativeFaces{0},
+                         numberCollidingSurfaces{0},
+                         numberCollidingCurvedSurfaces{0};
+        for (Standard_Integer j = 0; j < secondfacesList.size(); ++j){
+            Standard_Integer side = 0;
+            if (Decomposition::FaceCollision{}.operator()(
+                        *firstfacesList[i], *secondfacesList[j], side)){
+                ++numberCollidingSurfaces;
+                iFace->splitSurface = Standard_True;
+                if (secondfacesList[j]->getSurfaceType() != Tools::toTypeName(GeomAbs_Plane)){
+                    ++numberCollidingCurvedSurfaces;
+                }
+            } else{
+                if (side == 1) ++positiveFaces;
+                else if (side == -1) ++negativeFaces;
+            }
+        }
+        if (positiveFaces > 0 && negativeFaces > 0){
+            iFace->splitSurface = Standard_True;
+        }
+        if (iFace->splitSurface){
+            iFace->numberCollidingSurfaces = numberCollidingSurfaces;
+            iFace->numberCollidingCurvedSurfaces = numberCollidingCurvedSurfaces;
+            solidImpl->splitAssistFacesList.push_back(firstfacesList[i]);
+            solidImpl->splitFacesList.push_back(firstfacesList[i]);
+            solidImpl->splitSurface = Standard_True;
+        }
+    }
+}
+
+void
+McCAD::Geometry::CYLSolid::Impl::judgeThroughConcaveEdges(
+        Solid::Impl* solidImpl){
     // Judge how many concave edges each boundary face of solid goes through.
     auto& facesList = solidImpl->splitFacesList;
-    if (facesList.size() == 0){
-        return;
-    }
+    if (facesList.size() == 0) return;
     for (Standard_Integer i = 0; i <= facesList.size() - 1; ++i){
         // Don't update throughConcaveEdges if it already has a value.
         // Only update surfaces that result from fusing others.

@@ -13,6 +13,7 @@
 //OCC
 #include <Standard.hxx>
 #include <GeomAbs_CurveType.hxx>
+#include <STEPControl_Writer.hxx>
 
 McCAD::Decomposition::AssistCylCylSurfaceGenerator::AssistCylCylSurfaceGenerator(
         const IO::InputConfig& inputConfig) : inputConfig{inputConfig}{
@@ -31,13 +32,12 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
             if (*cylindersList[i] == *cylindersList[j]) continue;
             commonEdges = CommonEdgeFinder{}(cylindersList[i], cylindersList[j]);
             if(commonEdges.size() == 1){
-                std::cout << "1 common edge(s)" << std::endl;
                 if(commonEdges[0]->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Line)){
                     auto assistSurface = generateThroughLine(
                                 cylindersList[i], cylindersList[j], commonEdges[0],
                                 solidObj.accessSImpl()->boxDiagonalLength);
                     if(assistSurface){
-                        solidObj.accessSImpl()->splitAssistFacesList.push_back(assistSurface.value());
+                        solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[i]]= assistSurface.value();
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[j]]= assistSurface.value();
                     }
@@ -49,13 +49,11 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
                                 cylindersList[i], cylindersList[j], commonEdges[0],
                                 commonEdges[1], solidObj.accessSImpl()->boxDiagonalLength);
                     if(assistSurface){
-                        solidObj.accessSImpl()->splitAssistFacesList.push_back(assistSurface.value());
+                        solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[i]]= assistSurface.value();
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[j]]= assistSurface.value();
                     }
                 }
-            } else{
-                std::cout << "more common edges" << std::endl;
             }
         }
     }

@@ -55,12 +55,11 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     // Check if any of the boundary surfaces does split the solid. This is judged
     // based on the numberCollidingSurfaces
     if(!throughNoBoundarySurfaces(solidImpl->splitFacesList)){
-        solidObj->accessCSImpl()->judgeThroughConcaveEdges(solidImpl);
-         if (!planeSplitOnlyPlane(solidImpl->splitFacesList)){
-             AssistSurfaceGenerator{inputConfig}(*solidObj);
-             //judgeAssistingDecomposeSurfaces();
-             //judgeThroughConcaveEdges(assistingFacesList);
+        if (!planeSplitOnlyPlane(solidImpl->splitFacesList)){
+            AssistSurfaceGenerator{inputConfig}(*solidObj);
+            solidObj->accessCSImpl()->judgeAssistDecomposeSurfaces(solidImpl);
          }
+        solidObj->accessCSImpl()->judgeThroughConcaveEdges(solidImpl);
     }
     return perform(*solidImpl);
 }
