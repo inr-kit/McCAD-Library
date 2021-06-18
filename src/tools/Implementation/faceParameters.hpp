@@ -19,6 +19,7 @@
 namespace McCAD::Tools{
   class FaceParameters{
   public:
+      FaceParameters();
       FaceParameters(const Standard_Real& precision);
       ~FaceParameters();
   private:

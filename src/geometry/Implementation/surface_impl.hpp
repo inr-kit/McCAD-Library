@@ -21,7 +21,6 @@ namespace McCAD::Geometry{
 
     TopoDS_Face face;
     TopoDS_Face extendedFace;
-    TopoDS_Face AssistFace;
     std::string surfaceType;
     Standard_Integer surfaceNumber;
     Standard_Boolean splitSurface = Standard_False;

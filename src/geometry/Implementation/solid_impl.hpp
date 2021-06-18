@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include <map>
 // McCAD
 #include "solid.hpp"
 #include "tools_impl.hpp"
@@ -24,7 +25,9 @@ namespace McCAD::Geometry{
   public:
       Impl();
       ~Impl();
-
+  private:
+      using facesMap = std::map<std::shared_ptr<BoundSurface>, std::shared_ptr<BoundSurface>>;
+  public:
       Bnd_OBB obb;
       Bnd_Box aabb;
       TopoDS_Solid solid;
@@ -38,6 +41,8 @@ namespace McCAD::Geometry{
       std::vector<std::shared_ptr<BoundSurface>> toriList;
 
       std::vector<std::shared_ptr<BoundSurface>> splitFacesList;
+      std::vector<std::shared_ptr<BoundSurface>> splitAssistFacesList;
+      facesMap assistFacesMap;
       std::vector<std::shared_ptr<BoundSurface>> selectedSplitFacesList;
       std::unique_ptr<TopTools_HSequenceOfShape> splitSolidList;
       std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;

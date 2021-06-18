@@ -7,6 +7,9 @@
 #include <CSLib.hxx>
 #include <ElSLib.hxx>
 
+McCAD::Tools::FaceParameters::FaceParameters(){
+}
+
 McCAD::Tools::FaceParameters::FaceParameters(const Standard_Real& precision) :
     precision{precision}{}
 
