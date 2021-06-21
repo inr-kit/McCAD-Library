@@ -5,6 +5,7 @@
 // McCAD
 #include "AssistSurfaceGenerator.hpp"
 #include "AssistCylCylSurfaceGenerator.hpp"
+#include "AssistPlnCylSurfaceGenerator.hpp"
 #include "edge_impl.hpp"
 #include "CommonEdgeFinder.hpp"
 #include "EdgesCombiner.hpp"
@@ -37,7 +38,9 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& sol
         AssistCylCylSurfaceGenerator{inputConfig}(solidObj);
     }
     if (solidObj.accessSImpl()->cylindersList.size() >= 1 &&
-            solidObj.accessSImpl()->planesList.size() >= 1){}
+            solidObj.accessSImpl()->planesList.size() >= 1){
+        AssistPlnCylSurfaceGenerator{inputConfig}(solidObj);
+    }
 }
 
 void

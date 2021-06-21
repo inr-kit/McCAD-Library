@@ -21,6 +21,7 @@ namespace McCAD::Geometry{
     BoundSurface* boundSurface;
     
     std::vector<std::shared_ptr<Edge>> edgesList;
+    std::vector<std::shared_ptr<Edge>> assistEdgesList;
     std::vector<std::shared_ptr<MeshTriangle>> meshTrianglesList;
 
     Standard_Boolean isEqual(const BoundSurface& that);

@@ -5,18 +5,25 @@
 #include "SurfaceUtilities.hpp"
 #include "faceParameters.hpp"
 #include "extendedFaceCreator.hpp"
+#include "CurveUtilities.hpp"
 // OCC
 #include <GeomAbs_SurfaceType.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Pln.hxx>
 #include <TopoDS_Face.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepAdaptor_Curve.hxx>
+#include <gp_Circ.hxx>
+#include <gp_Elips.hxx>
+#include <gp_Hypr.hxx>
+#include <gp_Parab.hxx>
 
 McCAD::Decomposition::SplitSurfaceGenerator::SplitSurfaceGenerator(){
 }
 
 McCAD::Decomposition::SplitSurfaceGenerator::SplitSurfaceGenerator(
-        const Standard_Real& edgeTolerance) : edgeTolerance{edgeTolerance}{
+        const Standard_Real& edgeTolerance, const Standard_Real& precision) :
+    edgeTolerance{edgeTolerance}, precision{precision}{
 }
 
 McCAD::Decomposition::SplitSurfaceGenerator::~SplitSurfaceGenerator(){
@@ -49,6 +56,53 @@ McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOnLine(
 }
 
 std::optional<TopoDS_Face>
+McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOnCurve(
+        const std::shared_ptr<Geometry::Edge>& edge){
+    gp_Dir splitSurfNormal;
+    gp_Pnt splitSurfPoint{edge->accessEImpl()->startPoint};
+    try{
+        if(edge->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Circle)){
+            gp_Circ circle = BRepAdaptor_Curve(edge->accessEImpl()->edge).Circle();
+            splitSurfNormal = circle.Axis().Direction();
+            splitSurfPoint = circle.Location();
+        } else if (edge->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Ellipse)){
+            gp_Elips ellipse = BRepAdaptor_Curve(edge->accessEImpl()->edge).Ellipse();
+            splitSurfNormal = ellipse.Axis().Direction();
+            splitSurfPoint = ellipse.Location();
+        } else if (edge->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Hyperbola)){
+            gp_Hypr hyperbola = BRepAdaptor_Curve(edge->accessEImpl()->edge).Hyperbola();
+            splitSurfNormal = hyperbola.Axis().Direction();
+            splitSurfPoint = hyperbola.Location();
+        } else if (edge->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Parabola)){
+            gp_Parab parabola = BRepAdaptor_Curve(edge->accessEImpl()->edge).Parabola();
+            splitSurfNormal = parabola.Axis().Direction();
+            splitSurfPoint = parabola.Location();
+    }
+    } catch(...){
+        gp_Pnt edgeStart{edge->accessEImpl()->startPoint}, edgeEnd{edge->accessEImpl()->endPoint},
+               edgeMid{edge->accessEImpl()->middlePoint}, edgeExtra{edge->accessEImpl()->extraPoint};
+        gp_Dir firstDir, secondDir;
+        if(edgeStart.IsEqual(edgeEnd, precision)){
+            // Circle is closed.
+            gp_Vec firstVec(edgeStart, edgeMid), secondVec(edgeExtra, edgeMid);
+            gp_Dir dir1(firstVec);
+            firstDir = dir1;
+            gp_Dir dir2(secondVec);
+            secondDir = dir2;
+        } else {
+            gp_Vec firstVec(edgeStart, edgeMid), secondVec(edgeEnd, edgeMid);
+            gp_Dir dir1(firstVec);
+            firstDir = dir1;
+            gp_Dir dir2(secondVec);
+            secondDir = dir2;
+        }
+        splitSurfNormal = firstDir.Crossed(secondDir);
+    }
+    gp_Pln splitSurf(splitSurfPoint, splitSurfNormal);
+    return BRepBuilderAPI_MakeFace(splitSurf);
+}
+
+std::optional<TopoDS_Face>
 McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOn2Lines(
         const std::shared_ptr<Geometry::Edge>& firstEedge,
         const std::shared_ptr<Geometry::Edge>& secondEdge){
@@ -62,11 +116,3 @@ McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOn2Lines(
     gp_Pln splitSurf(secondEdgeMid, splitSurfNormal);
     return BRepBuilderAPI_MakeFace(splitSurf);
 }
-
-std::optional<TopoDS_Face>
-McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOnCurve(
-        const TopoDS_Face& firstFace, const TopoDS_Face& secondFace,
-        std::shared_ptr<Geometry::Edge> edge){
-    return std::nullopt;
-}
-

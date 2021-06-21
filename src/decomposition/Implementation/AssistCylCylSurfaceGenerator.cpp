@@ -35,11 +35,23 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
                 if(commonEdges[0]->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Line)){
                     auto assistSurface = generateThroughLine(
                                 cylindersList[i], cylindersList[j], commonEdges[0],
-                                solidObj.accessSImpl()->boxDiagonalLength);
+                                solidObj.accessSImpl()->boxDiagonalLength,
+                                solidObj.accessSImpl()->meshDeflection);
                     if(assistSurface){
                         solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
-                        solidObj.accessSImpl()->assistFacesMap[cylindersList[i]]= assistSurface.value();
-                        solidObj.accessSImpl()->assistFacesMap[cylindersList[j]]= assistSurface.value();
+                        solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
+                        solidObj.accessSImpl()->assistFacesMap[cylindersList[j]] = assistSurface.value();
+                    }
+                } else{
+                    // Generate surface through curved edge; circle, ellipse, parabola, hyperabola.
+                    auto assistSurface = generateThroughCurve(
+                                cylindersList[i], cylindersList[j], commonEdges[0],
+                                solidObj.accessSImpl()->boxDiagonalLength,
+                                solidObj.accessSImpl()->meshDeflection);
+                    if(assistSurface){
+                        solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
+                        solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
+                        solidObj.accessSImpl()->assistFacesMap[cylindersList[j]] = assistSurface.value();
                     }
                 }
             } else if (commonEdges.size() == 2){
@@ -47,7 +59,8 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
                    && commonEdges[1]->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Line)){
                     auto assistSurface = generateThroughTwoLines(
                                 cylindersList[i], cylindersList[j], commonEdges[0],
-                                commonEdges[1], solidObj.accessSImpl()->boxDiagonalLength);
+                                commonEdges[1], solidObj.accessSImpl()->boxDiagonalLength,
+                                solidObj.accessSImpl()->meshDeflection);
                     if(assistSurface){
                         solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[i]]= assistSurface.value();
@@ -64,8 +77,9 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughLine(
         const std::shared_ptr<Geometry::BoundSurface>& firstFace,
         const std::shared_ptr<Geometry::BoundSurface>& secondFace,
         const std::shared_ptr<Geometry::Edge>& commonEdge,
-        const Standard_Real& boxDiagonalLength){
-    auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance}.generatePlaneOnLine(
+        const Standard_Real& boxDiagonalLength, const Standard_Real& meshDeflection){
+    auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
+            inputConfig.precision}.generatePlaneOnLine(
                 firstFace->accessSImpl()->face, secondFace->accessSImpl()->face,
                 commonEdge);
     if(splitFace){
@@ -74,6 +88,39 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughLine(
                                     inputConfig.edgeTolerance);
         assistSurface->accessSImpl()->surfaceNumber =
                 firstFace->accessSImpl()->surfaceNumber * 1000;
+        if (assistSurface->accessBSImpl()->generateMesh(meshDeflection)){
+            assistSurface->accessBSImpl()->generateEdges(inputConfig.parameterTolerance);
+        }
+        assistSurface->accessBSImpl()->assistEdgesList.push_back(commonEdge);
+        assistSurface->accessSImpl()->throughConcaveEdges += 1;
+        // Set the assist surface reference to the original surfaces.
+        firstFace->accessSImpl()->hasAssistSurface = Standard_True;
+        secondFace->accessSImpl()->hasAssistSurface = Standard_True;
+        commonEdge->accessEImpl()->useForSplitSurface = Standard_True;
+        return assistSurface;
+    }
+    return std::nullopt;
+}
+
+std::optional<std::shared_ptr<McCAD::Geometry::BoundSurface>>
+McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughCurve(
+        const std::shared_ptr<Geometry::BoundSurface>& firstFace,
+        const std::shared_ptr<Geometry::BoundSurface>& secondFace,
+        const std::shared_ptr<Geometry::Edge>& commonEdge,
+        const Standard_Real& boxDiagonalLength, const Standard_Real& meshDeflection){
+    auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
+            inputConfig.precision}.generatePlaneOnCurve(commonEdge);
+    if(splitFace){
+        std::shared_ptr<Geometry::BoundSurface> assistSurface =
+                SurfaceObjCreator{}(splitFace.value(), boxDiagonalLength,
+                                    inputConfig.edgeTolerance);
+        assistSurface->accessSImpl()->surfaceNumber =
+                firstFace->accessSImpl()->surfaceNumber * 1000;
+        if (assistSurface->accessBSImpl()->generateMesh(meshDeflection)){
+            assistSurface->accessBSImpl()->generateEdges(inputConfig.parameterTolerance);
+        }
+        assistSurface->accessBSImpl()->assistEdgesList.push_back(commonEdge);
+        assistSurface->accessSImpl()->throughConcaveEdges += 1;
         // Set the assist surface reference to the original surfaces.
         firstFace->accessSImpl()->hasAssistSurface = Standard_True;
         secondFace->accessSImpl()->hasAssistSurface = Standard_True;
@@ -89,7 +136,7 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughTwoLines(
         const std::shared_ptr<Geometry::BoundSurface>& secondFace,
         const std::shared_ptr<Geometry::Edge>& firstEdge,
         const std::shared_ptr<Geometry::Edge>& secondEdge,
-        const Standard_Real& boxDiagonalLength){
+        const Standard_Real& boxDiagonalLength, const Standard_Real& meshDeflection){
     // Need first to assert that the edges are planar.
     gp_Vec firstVec(firstEdge->accessEImpl()->startPoint,
                     firstEdge->accessEImpl()->endPoint),
@@ -106,14 +153,20 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughTwoLines(
             return std::nullopt;
         }
     }
-    auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance}.generatePlaneOn2Lines(
-                firstEdge, secondEdge);
+    auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
+            inputConfig.precision}.generatePlaneOn2Lines(firstEdge, secondEdge);
     if(splitFace){
         std::shared_ptr<Geometry::BoundSurface> assistSurface =
                 SurfaceObjCreator{}(splitFace.value(), boxDiagonalLength,
                                     inputConfig.edgeTolerance);
         assistSurface->accessSImpl()->surfaceNumber =
                 firstFace->accessSImpl()->surfaceNumber * 1000;
+        if (assistSurface->accessBSImpl()->generateMesh(meshDeflection)){
+            assistSurface->accessBSImpl()->generateEdges(inputConfig.parameterTolerance);
+        }
+        assistSurface->accessBSImpl()->assistEdgesList.push_back(firstEdge);
+        assistSurface->accessBSImpl()->assistEdgesList.push_back(secondEdge);
+        assistSurface->accessSImpl()->throughConcaveEdges += 2;
         // Set the assist surface reference to the original surfaces.
         firstFace->accessSImpl()->hasAssistSurface = Standard_True;
         secondFace->accessSImpl()->hasAssistSurface = Standard_True;

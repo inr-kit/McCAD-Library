@@ -92,10 +92,6 @@ McCAD::Geometry::BoundSurface::Impl::generateMesh(const Standard_Real& meshDefle
           std::array<Standard_Integer, 3> triangleNodes;
           for (const auto& Triangle : Triangles){
               Triangle.Get(triangleNodes[0], triangleNodes[1], triangleNodes[2]);
-              //std::cout << triangleNodes[0] << std::endl;
-              //std::cout	<< triangleNodes[1] << std::endl;
-              //std::cout	<< triangleNodes[2] << std::endl;
-              //std::cout << "=====" << std::endl;
               std::array<gp_Pnt, 3> points = {
                   meshNodes(triangleNodes[0]).Transformed(Transformation),
                   meshNodes(triangleNodes[1]).Transformed(Transformation),
@@ -149,20 +145,16 @@ McCAD::Geometry::BoundSurface::Impl::generateEdges(const Standard_Real& paramete
 
 void
 McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Edge>>& aEdgesList){
-    //std::cout << "combineEdges" << std::endl;
     if (edgesList.size() == 0){
         // If the current list is empty, append to it the new one.
         for (Standard_Integer i = 0; i <= aEdgesList.size() - 1; ++i){
-            //std::cout << "combineEdges, add all" << std::endl;
             edgesList.push_back(aEdgesList[i]);
         }
     } else{
         // Compare and add only if different.
-        //std::cout << "combineEdges, add different" << std::endl;
         for (Standard_Integer i = 0; i <= aEdgesList.size() - 1; ++i){
             Standard_Integer sameEdge = 0;
             for (Standard_Integer j = 0; j <= edgesList.size() - 1; ++j){
-                //std::cout << "i: " << i << ", j: " << j << std::endl;
                 if (*(edgesList[j]) == *(aEdgesList[i])){
                     /* //debug
                     STEPControl_Writer writer1;
@@ -184,7 +176,6 @@ McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Ed
                     edgesList.erase(edgesList.begin() + j);
                     ++sameEdge;
                     --j;
-                    //std::cout << edgesList.size() << ", j: " << j << std::endl;
                 }
             }
             if (sameEdge == 0){
