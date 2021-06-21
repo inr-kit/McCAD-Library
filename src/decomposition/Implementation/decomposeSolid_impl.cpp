@@ -85,6 +85,29 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
 }
 
 Standard_Boolean
+McCAD::Decomposition::DecomposeSolid::Impl::operator()(
+        std::shared_ptr<Geometry::MXDSolid>& solidObj){
+    // Increment the recurrence depth by 1.
+    ++recurrenceDepth;
+    if(recurrenceDepth > inputConfig.recurrenceDepth){
+        return Standard_False;
+    }
+    auto solidImpl = solidObj->accessSImpl();
+    // Judge which surfaces are decompose surfaces from the generated list.
+    solidObj->accessXSImpl()->judgeDecomposeSurfaces(solidImpl);
+    // Check if any of the boundary surfaces does split the solid. This is judged
+    // based on the numberCollidingSurfaces.
+    if(!throughNoBoundarySurfaces(solidImpl->splitFacesList)){
+        if (!planeSplitOnlyPlane(solidImpl->splitFacesList)){
+            AssistSurfaceGenerator{inputConfig}(*solidObj);
+            solidObj->accessXSImpl()->judgeAssistDecomposeSurfaces(solidImpl);
+        }
+        solidObj->accessXSImpl()->judgeThroughConcaveEdges(solidImpl);
+    }
+    return perform(*solidImpl);
+}
+
+Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solidImpl){
     if(solidImpl.splitSurface){
         if (!selectSplitSurface(solidImpl)){

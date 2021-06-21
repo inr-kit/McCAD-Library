@@ -9,10 +9,15 @@
 namespace McCAD::Tools{
   class EdgesComparator{
   public:
+      EdgesComparator();
+      EdgesComparator(const Standard_Real& angularTolerance,
+                      const Standard_Real& distanceTolerance);
+      ~EdgesComparator();
+  private:
+      Standard_Real angularTolerance{1.0e-4 * M_PI}, distanceTolerance{1.0e-5};
+  public:
       Standard_Boolean operator()(const TopoDS_Edge& firstEdge,
-                                  const TopoDS_Edge& secondEdge,
-                                  Standard_Real angularTolerance = 1.0e-3 * M_PI,
-                                  Standard_Real distanceTolerance = 1.0e-5);
+                                  const TopoDS_Edge& secondEdge);
   };
 }
 

@@ -82,6 +82,16 @@ McCAD::Decomposition::FacesListGenerator::addListsToSolidObj(solidObjType& solid
                       edgeTolerance, angularTolerance, distanceTolerance);
         solidObj->accessSImpl()->planesList = planesList;
         solidObj->accessSImpl()->toriList = toriList;
+    } else if (typeid(solidObjType) == typeid(std::shared_ptr<McCAD::Geometry::MXDSolid>)){
+        mergePlanesList(solidObj->accessSImpl()->boxDiagonalLength, precision,
+                        edgeTolerance, angularTolerance, distanceTolerance);
+        mergeCylindersList(solidObj->accessSImpl()->boxDiagonalLength, precision,
+                           edgeTolerance, angularTolerance, distanceTolerance);
+        mergeToriList(solidObj->accessSImpl()->boxDiagonalLength, precision,
+                      edgeTolerance, angularTolerance, distanceTolerance);
+        solidObj->accessSImpl()->planesList = planesList;
+        solidObj->accessSImpl()->cylindersList = cylindersList;
+        solidObj->accessSImpl()->toriList = toriList;
     } else return;
 }
 

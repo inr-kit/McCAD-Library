@@ -77,13 +77,13 @@ McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOnCurve(
             gp_Parab parabola = BRepAdaptor_Curve(edge->accessEImpl()->edge).Parabola();
             splitSurfNormal = parabola.Axis().Direction();
             splitSurfPoint = parabola.Location();
-    }
+        }
     } catch(...){
         gp_Pnt edgeStart{edge->accessEImpl()->startPoint}, edgeEnd{edge->accessEImpl()->endPoint},
                edgeMid{edge->accessEImpl()->middlePoint}, edgeExtra{edge->accessEImpl()->extraPoint};
         gp_Dir firstDir, secondDir;
         if(edgeStart.IsEqual(edgeEnd, precision)){
-            // Circle is closed.
+            // Curve is closed.
             gp_Vec firstVec(edgeStart, edgeMid), secondVec(edgeExtra, edgeMid);
             gp_Dir dir1(firstVec);
             firstDir = dir1;

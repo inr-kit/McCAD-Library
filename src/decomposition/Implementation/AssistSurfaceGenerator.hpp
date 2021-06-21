@@ -5,6 +5,7 @@
 #include "inputconfig.hpp"
 #include "cylSolid_impl.hpp"
 #include "torSolid_impl.hpp"
+#include "mixedSolid_impl.hpp"
 
 namespace McCAD::Decomposition{
   class AssistSurfaceGenerator{
@@ -15,6 +16,7 @@ namespace McCAD::Decomposition{
       IO::InputConfig inputConfig;
       void operator()(Geometry::CYLSolid& solidObj);
       void operator()(Geometry::TORSolid& solidObj);
+      void operator()(Geometry::MXDSolid& solidObj);
   };
 }
 

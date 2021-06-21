@@ -55,6 +55,13 @@ McCAD::Decomposition::Decompose::Impl::perform(
         } else compoundObj->rejectedInputShapesList->Append(
                     torSolid->accessSImpl()->solid);
     }
+    for(auto& mxdSolid : compoundObj->mixedSolidsList){
+        std::cout << "   - Decomposing mixed solid" << std::endl;
+        if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(mxdSolid)){
+            extractSolids(compoundObj, mxdSolid);
+        } else compoundObj->rejectedInputShapesList->Append(
+                    mxdSolid->accessSImpl()->solid);
+    }
     compoundList.push_back(std::move(compoundObj));
 }
 

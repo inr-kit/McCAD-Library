@@ -6,11 +6,20 @@
 #include <BRep_Tool.hxx>
 #include <GeomAdaptor_Curve.hxx>
 
+McCAD::Tools::EdgesComparator::EdgesComparator(){
+}
+
+McCAD::Tools::EdgesComparator::EdgesComparator(const Standard_Real& angularTolerance,
+                                               const Standard_Real& distanceTolerance)
+    : angularTolerance{angularTolerance}, distanceTolerance{distanceTolerance}{
+}
+
+McCAD::Tools::EdgesComparator::~EdgesComparator(){
+}
+
 Standard_Boolean
 McCAD::Tools::EdgesComparator::operator()(const TopoDS_Edge& firstEdge,
-                                          const TopoDS_Edge& secondEdge,
-                                          Standard_Real angularTolerance,
-                                          Standard_Real distanceTolerance){
+                                          const TopoDS_Edge& secondEdge){
     // Compare first the start and end points of the curves.
     Standard_Real firstEdgeStart, firstEdgeEnd;
     TopLoc_Location firstLocation;
@@ -24,28 +33,20 @@ McCAD::Tools::EdgesComparator::operator()(const TopoDS_Edge& firstEdge,
                                                      secondEdgeStart, secondEdgeEnd);
     GeomAdaptor_Curve secondCurveAdaptor(secondCurve);
     // Compare types
-    if (firstCurveAdaptor.GetType() != secondCurveAdaptor.GetType()){
-        //std::cout << "Edges type different" << std::endl;
+    if (firstCurveAdaptor.GetType() != secondCurveAdaptor.GetType())
         return Standard_False;
-    }
     // Compare locations
-    if (firstLocation != secondLocation){
-        //std::cout << "Location different" << std::endl;
+    if (firstLocation != secondLocation)
         return Standard_False;
-    }
-    if ((firstEdgeStart != secondEdgeStart) || (firstEdgeEnd != secondEdgeEnd)){
-        //std::cout << "Edges start or end different" << std::endl;
+    // Compare start and end
+    if ((firstEdgeStart != secondEdgeStart || firstEdgeEnd != secondEdgeEnd))
         return Standard_False;
-    }
+    // Compare distance and angle
     if (firstCurveAdaptor.GetType() == GeomAbs_Line){
         if (firstCurveAdaptor.Line().Distance(secondCurveAdaptor.Line()) >
-                distanceTolerance){
-            return Standard_False;
-        }
+                distanceTolerance) return Standard_False;
         if (firstCurveAdaptor.Line().Angle(secondCurveAdaptor.Line()) >
-                angularTolerance){
-            return Standard_False;
-        }
+                angularTolerance) return Standard_False;
     }
     /* //debug
     std::cout << "Edges equal" << std::endl;

@@ -5,6 +5,7 @@
 // McCAD
 #include "AssistSurfaceGenerator.hpp"
 #include "AssistCylCylSurfaceGenerator.hpp"
+#include "AssistCylTorSurfaceGenerator.hpp"
 #include "AssistPlnCylSurfaceGenerator.hpp"
 #include "edge_impl.hpp"
 #include "CommonEdgeFinder.hpp"
@@ -44,6 +45,15 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& sol
 }
 
 void
+McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::MXDSolid& solidObj){
+    // Generate assistant surface that splits cylinders first.
+    if (solidObj.accessSImpl()->cylindersList.size() >= 1 &&
+            solidObj.accessSImpl()->toriList.size() >= 1){
+        AssistCylTorSurfaceGenerator{inputConfig}(solidObj);
+    }
+}
+
+void
 McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& solidObj){
     // Work on the case of partial torus; quarter for example.
     auto& planesList = solidObj.accessSImpl()->planesList;
@@ -78,9 +88,6 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& sol
         solidObj.accessSImpl()->splitFacesList.push_back(std::move(assistSurfaceObj));
     }
     solidObj.accessSImpl()->splitSurface = Standard_True;
-    //for(const auto& edge : detail::ShapeView<TopAbs_EDGE>{assistShape}){
-    //    std::cout << Tools::toTypeName(BRepAdaptor_Curve(edge).GetType()) << std::endl;
-    //}
     /*//debug
     std::cout << "angle: " << radianAngle << std::endl;
     auto plane0 = BRepAdaptor_Surface(planesList[0]->accessSImpl()->face).Plane().Location();

@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 // McCAD
-#include "AssistCylCylSurfaceGenerator.hpp"
+#include "AssistCylTorSurfaceGenerator.hpp"
 #include "CommonEdgeFinder.hpp"
 #include "EdgesCombiner.hpp"
 #include "CurveUtilities.hpp"
@@ -15,57 +15,58 @@
 #include <GeomAbs_CurveType.hxx>
 #include <STEPControl_Writer.hxx>
 
-McCAD::Decomposition::AssistCylCylSurfaceGenerator::AssistCylCylSurfaceGenerator(
+McCAD::Decomposition::AssistCylTorSurfaceGenerator::AssistCylTorSurfaceGenerator(
         const IO::InputConfig& inputConfig) : inputConfig{inputConfig}{
 }
 
-McCAD::Decomposition::AssistCylCylSurfaceGenerator::~AssistCylCylSurfaceGenerator(){
+McCAD::Decomposition::AssistCylTorSurfaceGenerator::~AssistCylTorSurfaceGenerator(){
 }
 
 void
-McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
-        Geometry::CYLSolid& solidObj){
+McCAD::Decomposition::AssistCylTorSurfaceGenerator::operator()(
+        Geometry::MXDSolid& solidObj){
     auto& cylindersList = solidObj.accessSImpl()->cylindersList;
+    auto& toriList = solidObj.accessSImpl()->toriList;
     std::vector<std::shared_ptr<Geometry::Edge>> commonEdges;
+    std::cout << cylindersList.size() << ", " << toriList.size() << std::endl;
     for(Standard_Integer i = 0; i < cylindersList.size(); ++i){
-        for(Standard_Integer j = i+1; j < cylindersList.size(); ++j){
-            if (*cylindersList[i] == *cylindersList[j]) continue;
+        for(Standard_Integer j = 0; j < toriList.size(); ++j){
             commonEdges = CommonEdgeFinder{inputConfig.angularTolerance,
-                    inputConfig.distanceTolerance}(cylindersList[i], cylindersList[j]);
+                    inputConfig.distanceTolerance}(cylindersList[i], toriList[j]);
             if(commonEdges.size() == 1){
                 if(commonEdges[0]->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Line)){
                     auto assistSurface = generateThroughLine(
-                                cylindersList[i], cylindersList[j], commonEdges[0],
+                                cylindersList[i], toriList[j], commonEdges[0],
                                 solidObj.accessSImpl()->boxDiagonalLength,
                                 solidObj.accessSImpl()->meshDeflection);
                     if(assistSurface){
                         solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
-                        solidObj.accessSImpl()->assistFacesMap[cylindersList[j]] = assistSurface.value();
+                        solidObj.accessSImpl()->assistFacesMap[toriList[j]] = assistSurface.value();
                     }
                 } else{
                     // Generate surface through curved edge; circle, ellipse, parabola, hyperabola.
                     auto assistSurface = generateThroughCurve(
-                                cylindersList[i], cylindersList[j], commonEdges[0],
+                                cylindersList[i], toriList[j], commonEdges[0],
                                 solidObj.accessSImpl()->boxDiagonalLength,
                                 solidObj.accessSImpl()->meshDeflection);
                     if(assistSurface){
                         solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
-                        solidObj.accessSImpl()->assistFacesMap[cylindersList[j]] = assistSurface.value();
+                        solidObj.accessSImpl()->assistFacesMap[toriList[j]] = assistSurface.value();
                     }
                 }
             } else if (commonEdges.size() == 2){
                 if(commonEdges[0]->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Line)
                    && commonEdges[1]->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Line)){
                     auto assistSurface = generateThroughTwoLines(
-                                cylindersList[i], cylindersList[j], commonEdges[0],
+                                cylindersList[i], toriList[j], commonEdges[0],
                                 commonEdges[1], solidObj.accessSImpl()->boxDiagonalLength,
                                 solidObj.accessSImpl()->meshDeflection);
                     if(assistSurface){
                         solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[i]]= assistSurface.value();
-                        solidObj.accessSImpl()->assistFacesMap[cylindersList[j]]= assistSurface.value();
+                        solidObj.accessSImpl()->assistFacesMap[toriList[j]]= assistSurface.value();
                     }
                 }
             }
@@ -74,7 +75,7 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
 }
 
 std::optional<std::shared_ptr<McCAD::Geometry::BoundSurface>>
-McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughLine(
+McCAD::Decomposition::AssistCylTorSurfaceGenerator::generateThroughLine(
         const std::shared_ptr<Geometry::BoundSurface>& firstFace,
         const std::shared_ptr<Geometry::BoundSurface>& secondFace,
         const std::shared_ptr<Geometry::Edge>& commonEdge,
@@ -104,7 +105,7 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughLine(
 }
 
 std::optional<std::shared_ptr<McCAD::Geometry::BoundSurface>>
-McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughCurve(
+McCAD::Decomposition::AssistCylTorSurfaceGenerator::generateThroughCurve(
         const std::shared_ptr<Geometry::BoundSurface>& firstFace,
         const std::shared_ptr<Geometry::BoundSurface>& secondFace,
         const std::shared_ptr<Geometry::Edge>& commonEdge,
@@ -132,7 +133,7 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughCurve(
 }
 
 std::optional<std::shared_ptr<McCAD::Geometry::BoundSurface>>
-McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughTwoLines(
+McCAD::Decomposition::AssistCylTorSurfaceGenerator::generateThroughTwoLines(
         const std::shared_ptr<Geometry::BoundSurface>& firstFace,
         const std::shared_ptr<Geometry::BoundSurface>& secondFace,
         const std::shared_ptr<Geometry::Edge>& firstEdge,
