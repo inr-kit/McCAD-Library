@@ -1,9 +1,15 @@
 #ifndef ASSISTCYLTORSURFACEGERAOR_HPP
 #define ASSISTCYLTORSURFACEGERAOR_HPP
 
+// C++
+#include <optional>
+#include <memory>
 // McCAD
 #include "inputconfig.hpp"
 #include "mixedSolid_impl.hpp"
+#include "boundSurface_impl.hpp"
+// OCC
+#include <Standard.hxx>
 
 namespace McCAD::Decomposition{
   class AssistCylTorSurfaceGenerator{

@@ -1,6 +1,5 @@
 //C++
 #include <math.h>
-#include <memory>
 #include <vector>
 // McCAD
 #include "AssistCylTorSurfaceGenerator.hpp"
@@ -9,9 +8,7 @@
 #include "CurveUtilities.hpp"
 #include "splitSurfacesGenerator.hpp"
 #include "surfaceObjCerator.hpp"
-#include "boundSurface_impl.hpp"
 //OCC
-#include <Standard.hxx>
 #include <GeomAbs_CurveType.hxx>
 #include <STEPControl_Writer.hxx>
 
