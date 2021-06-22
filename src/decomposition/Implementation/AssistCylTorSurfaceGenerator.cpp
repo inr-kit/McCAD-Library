@@ -28,11 +28,11 @@ McCAD::Decomposition::AssistCylTorSurfaceGenerator::operator()(
     auto& cylindersList = solidObj.accessSImpl()->cylindersList;
     auto& toriList = solidObj.accessSImpl()->toriList;
     std::vector<std::shared_ptr<Geometry::Edge>> commonEdges;
-    std::cout << cylindersList.size() << ", " << toriList.size() << std::endl;
     for(Standard_Integer i = 0; i < cylindersList.size(); ++i){
         for(Standard_Integer j = 0; j < toriList.size(); ++j){
             commonEdges = CommonEdgeFinder{inputConfig.angularTolerance,
-                    inputConfig.distanceTolerance}(cylindersList[i], toriList[j]);
+                    inputConfig.distanceTolerance, inputConfig.precision}(
+                        cylindersList[i], toriList[j]);
             if(commonEdges.size() == 1){
                 if(commonEdges[0]->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Line)){
                     auto assistSurface = generateThroughLine(

@@ -31,7 +31,8 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
         for(Standard_Integer j = i+1; j < cylindersList.size(); ++j){
             if (*cylindersList[i] == *cylindersList[j]) continue;
             commonEdges = CommonEdgeFinder{inputConfig.angularTolerance,
-                    inputConfig.distanceTolerance}(cylindersList[i], cylindersList[j]);
+                    inputConfig.distanceTolerance, inputConfig.precision}(
+                        cylindersList[i], cylindersList[j]);
             if(commonEdges.size() == 1){
                 if(commonEdges[0]->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Line)){
                     auto assistSurface = generateThroughLine(
