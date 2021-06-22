@@ -12,6 +12,7 @@
 #include "EdgesCombiner.hpp"
 #include "surfaceObjCerator.hpp"
 #include "ShapeView.hpp"
+#include "surfacesMerger.hpp"
 //OCC
 #include <Standard.hxx>
 #include <PrsDim_AngleDimension.hxx>
@@ -42,6 +43,10 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& sol
             solidObj.accessSImpl()->planesList.size() >= 1){
         AssistPlnCylSurfaceGenerator{inputConfig}(solidObj);
     }
+    SurfacesMerger{}(solidObj.accessSImpl()->assistFacesList,
+            solidObj.accessSImpl()->boxDiagonalLength, inputConfig.precision,
+            inputConfig.edgeTolerance, inputConfig.angularTolerance,
+            inputConfig.distanceTolerance);
 }
 
 void
@@ -51,6 +56,10 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::MXDSolid& sol
             solidObj.accessSImpl()->toriList.size() >= 1){
         AssistCylTorSurfaceGenerator{inputConfig}(solidObj);
     }
+    //SurfacesMerger{}(solidObj.accessSImpl()->assistFacesList,
+    //        solidObj.accessSImpl()->boxDiagonalLength, inputConfig.precision,
+    //        inputConfig.edgeTolerance, inputConfig.angularTolerance,
+    //        inputConfig.distanceTolerance);
 }
 
 void

@@ -64,21 +64,10 @@ McCAD::Decomposition::SurfacesMerger::operator()(
                                     std::move(surfacesList[j]->accessBSImpl()->meshTrianglesList[k]));
                     }
                     // Combine edges.
-                    //std::cout << "combin edges" << std::endl;
-                    //std::cout << "edges list of surface i: " <<
-                    //             surfacesList[i]->accessBSImpl()->edgesList.size()
-                    //          << std::endl;
                     newboundSurface->accessBSImpl()->combineEdges(
                                 surfacesList[i]->accessBSImpl()->edgesList);
-                    //std::cout << "combined edges of surface i" << std::endl;
-                    //std::cout << "edges list of surface j: " <<
-                    //             surfacesList[j]->accessBSImpl()->edgesList.size()
-                    //          << std::endl;
                     newboundSurface->accessBSImpl()->combineEdges(
                                 surfacesList[j]->accessBSImpl()->edgesList);
-                    //std::cout << "combined edges of surface j" << std::endl;
-                    // Erase pointer surfacesList[j] & [i] from surfacesList.
-                    //std::cout << "erase pointers to surfaces i and j" << std::endl;
                     surfacesList.erase(surfacesList.begin() + j);
                     --j;
                     surfacesList.erase(surfacesList.begin() + i);

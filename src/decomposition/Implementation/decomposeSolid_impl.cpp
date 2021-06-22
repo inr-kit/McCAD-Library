@@ -155,6 +155,12 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
                     extractSolids(solidImpl, subSolidImpl, i);
                 } else solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
                 break;
+            } case solidType.mixed:{
+                auto& subSolidImpl = *std::get<solidType.mixed>(subSolid)->accessSImpl();
+                if (DecomposeSolid::Impl{inputConfig, recurrenceDepth}(std::get<solidType.mixed>(subSolid))){
+                    extractSolids(solidImpl, subSolidImpl, i);
+                } else solidImpl.rejectedsubSolidsList->Append(subSolidImpl.solid);
+                break;
             } default:
                 solidImpl.rejectedsubSolidsList->Append(solidImpl.splitSolidList->Value(i));
             }
