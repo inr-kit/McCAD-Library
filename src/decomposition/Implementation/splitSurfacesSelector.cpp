@@ -59,10 +59,13 @@ McCAD::Decomposition::SplitSurfacesSelector::sortSplitFaces(
             const std::shared_ptr<Geometry::BoundSurface>& second){
         const auto& fst = *first->accessSImpl();
         const auto& snd = *second->accessSImpl();
-        return fst.throughConcaveEdges > snd.throughConcaveEdges ||
+        return fst.throughConcaveEdges > snd.throughConcaveEdges
+                ||
                 (fst.throughConcaveEdges == snd.throughConcaveEdges &&
-                 fst.numberCollidingSurfaces < snd.numberCollidingSurfaces) ||
+                 fst.numberCollidingSurfaces < snd.numberCollidingSurfaces)
+                ||
                 (fst.throughConcaveEdges == snd.throughConcaveEdges &&
+                 fst.numberCollidingSurfaces == snd.numberCollidingSurfaces &&
                  fst.numberCollidingCurvedSurfaces < snd.numberCollidingCurvedSurfaces);
     };
     std::sort(splitFacesList.begin(), splitFacesList.end(), comparator);

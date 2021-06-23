@@ -46,7 +46,8 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "parameterTolerance = 1.0e-8\n"
                    "angularTolerance = 1.0e-4\n"
                    "distanceTolerance = 1.0e-6\n"
-                   "torusSplitAngle = 45.0\n" << std::endl;
+                   "torusSplitAngle = 45.0\n"
+                   "simplifyTori = false\n" << std::endl;
     inputConfig << "# Conversion\n"
                    "# ==========\n"
                    "convert = false\n"
@@ -122,6 +123,8 @@ McCAD::IO::InputConfig::readTemplate(){
                    distanceTolerance = std::stof(lineSplit[2]) * conversion_factor;
                else if (lineSplit[0] == "torusSplitAngle")
                    torusSplitAngle = std::stof(lineSplit[2]) * PI / 180.0;
+               else if (lineSplit[0] == "simplifyTori")
+                   simplifyTori = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
                // Conversion
                else if (lineSplit[0] == "convert")
                    convert = stringToLowerCase(lineSplit[2]) == "false" ? false : true;

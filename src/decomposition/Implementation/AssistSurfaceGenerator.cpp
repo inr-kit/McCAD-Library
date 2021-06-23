@@ -94,7 +94,7 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& sol
         auto assistSurfaceObj = SurfaceObjCreator{}(assistFace,
                                                     solidObj.accessSImpl()->boxDiagonalLength,
                                                     inputConfig.edgeTolerance);
-        solidObj.accessSImpl()->splitFacesList.push_back(std::move(assistSurfaceObj));
+        solidObj.accessSImpl()->assistFacesList.push_back(std::move(assistSurfaceObj));
     }
     solidObj.accessSImpl()->splitSurface = Standard_True;
     /*//debug

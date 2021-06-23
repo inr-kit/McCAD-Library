@@ -76,10 +76,11 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     // Judge which surfaces are decompose surfaces from the generated list.
     solidObj->accessTSImpl()->judgeDecomposeSurfaces(solidImpl);
     if(!throughNoBoundarySurfaces(solidImpl->splitFacesList)){
-        solidObj->accessTSImpl()->judgeThroughConcaveEdges(solidImpl);
         // If the toroidal solid has split surface then use it.
         // If not, then judge if part torus or full torus and generate assisting surfces
         AssistSurfaceGenerator{inputConfig}(*solidObj);
+        solidObj->accessTSImpl()->judgeAssistDecomposeSurfaces(solidImpl);
+        solidObj->accessTSImpl()->judgeThroughConcaveEdges(solidImpl);
     }
     return perform(*solidImpl);
 }

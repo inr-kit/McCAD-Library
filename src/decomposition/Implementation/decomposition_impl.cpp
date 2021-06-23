@@ -50,7 +50,7 @@ McCAD::Decomposition::Decompose::Impl::perform(
         std::cout << "   - Decomposing toroidal solid" << std::endl;
         if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(torSolid)){
             // Convert tori to cylinders.
-            TorusConvertor{}(torSolid, inputConfig.scalingFactor);
+            if(inputConfig.simplifyTori) TorusConvertor{}(torSolid, inputConfig.scalingFactor);
             extractSolids(compoundObj, torSolid);
         } else compoundObj->rejectedInputShapesList->Append(
                     torSolid->accessSImpl()->solid);
