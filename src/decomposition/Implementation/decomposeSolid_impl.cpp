@@ -60,7 +60,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     // based on the numberCollidingSurfaces
     if(!throughNoBoundarySurfaces(solidImpl->splitFacesList)){
         if (!planeSplitOnlyPlane(solidImpl->splitFacesList)){
-            std::cout << "generate assist" << std::endl;
             AssistSurfaceGenerator{inputConfig}(*solidObj);
             solidObj->accessCSImpl()->judgeAssistDecomposeSurfaces(solidImpl,
                                                                    inputConfig.precision,

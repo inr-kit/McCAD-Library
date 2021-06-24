@@ -56,10 +56,6 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::MXDSolid& sol
             solidObj.accessSImpl()->toriList.size() >= 1){
         AssistCylTorSurfaceGenerator{inputConfig}(solidObj);
     }
-    //SurfacesMerger{}(solidObj.accessSImpl()->assistFacesList,
-    //        solidObj.accessSImpl()->boxDiagonalLength, inputConfig.precision,
-    //        inputConfig.edgeTolerance, inputConfig.angularTolerance,
-    //        inputConfig.distanceTolerance);
 }
 
 void

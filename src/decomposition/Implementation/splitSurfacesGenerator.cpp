@@ -103,6 +103,14 @@ McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOnCurve(
 }
 
 std::optional<TopoDS_Face>
+McCAD::Decomposition::SplitSurfaceGenerator::generateSurfOnBSpline(
+        const TopoDS_Face& firstFace, const TopoDS_Face& secondFace,
+        const std::shared_ptr<Geometry::Edge>& edge){
+    return std::nullopt;
+}
+
+
+std::optional<TopoDS_Face>
 McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOn2Lines(
         const std::shared_ptr<Geometry::Edge>& firstEedge,
         const std::shared_ptr<Geometry::Edge>& secondEdge){
