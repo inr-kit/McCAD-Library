@@ -8,7 +8,9 @@
 #include <GeomAbs_SurfaceType.hxx>
 
 void
-McCAD::Geometry::TORSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl){
+McCAD::Geometry::TORSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl,
+                                                        Standard_Real precision,
+                                                        Standard_Real distanceTolerance){
     // Judge whether boundary surfaces of the solid can be used for decomposition.
     auto& facesList = solidImpl->facesList;
     if (facesList.size() < 2) return;
@@ -20,12 +22,12 @@ McCAD::Geometry::TORSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl)
         for (Standard_Integer j = 0; j < facesList.size(); ++j){
             auto jFace = facesList[j]->accessSImpl();
             if (i != j && iFace->surfaceNumber != jFace->surfaceNumber){
-                Standard_Integer side = 0;
-                if (Decomposition::FaceCollision{}.operator()(
+                Standard_Integer side{0};
+                if (Decomposition::FaceCollision{precision, distanceTolerance}.operator()(
                             *facesList[i], *facesList[j], side)){
                     ++numberCollidingSurfaces;
                     iFace->splitSurface = Standard_True;
-                    if (facesList[j]->getSurfaceType() != Tools::toTypeName(GeomAbs_Plane)){
+                    if (jFace->surfaceType != Tools::toTypeName(GeomAbs_Plane)){
                         ++numberCollidingCurvedSurfaces;
                     }
                 } else{
@@ -47,7 +49,9 @@ McCAD::Geometry::TORSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl)
 }
 
 void
-McCAD::Geometry::TORSolid::Impl::judgeAssistDecomposeSurfaces(Solid::Impl* solidImpl){
+McCAD::Geometry::TORSolid::Impl::judgeAssistDecomposeSurfaces(Solid::Impl* solidImpl,
+                                                              Standard_Real precision,
+                                                              Standard_Real distanceTolerance){
     // Judge whether boundary surfaces of the solid can be used for decomposition.
     auto& firstfacesList = solidImpl->assistFacesList;
     auto& secondfacesList = solidImpl->facesList;
@@ -59,11 +63,11 @@ McCAD::Geometry::TORSolid::Impl::judgeAssistDecomposeSurfaces(Solid::Impl* solid
                          numberCollidingCurvedSurfaces{0};
         for (Standard_Integer j = 0; j < secondfacesList.size(); ++j){
             Standard_Integer side{0};
-            if (Decomposition::FaceCollision{}.operator()(
+            if (Decomposition::FaceCollision{precision, distanceTolerance}.operator()(
                         *firstfacesList[i], *secondfacesList[j], side)){
                 ++numberCollidingSurfaces;
                 iFace->splitSurface = Standard_True;
-                if (secondfacesList[j]->getSurfaceType() != Tools::toTypeName(GeomAbs_Plane)){
+                if (secondfacesList[j]->accessSImpl()->surfaceType != Tools::toTypeName(GeomAbs_Plane)){
                     ++numberCollidingCurvedSurfaces;
                 }
             } else{

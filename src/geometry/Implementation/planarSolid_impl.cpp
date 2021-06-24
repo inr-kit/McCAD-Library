@@ -6,7 +6,9 @@
 #include "SurfaceUtilities.hpp"
 
 void
-McCAD::Geometry::PLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl){
+McCAD::Geometry::PLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl,
+                                                       Standard_Real precision,
+                                                       Standard_Real distanceTolerance){
     // Judge whether boundary surfaces of the solid can be used for decomposition.
     auto& facesList = solidImpl->facesList;
     if (facesList.size() < 2) return;
@@ -18,7 +20,7 @@ McCAD::Geometry::PLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl*& solidImpl){
             auto jFace = facesList[j]->accessSImpl();
             if (i != j && iFace->surfaceNumber != jFace->surfaceNumber){
                 Standard_Integer side = 0;
-                if (Decomposition::FaceCollision{}.operator()(
+                if (Decomposition::FaceCollision{precision, distanceTolerance}.operator()(
                             *facesList[i], *facesList[j], side)){
                     ++numberCollidingSurfaces;
                     iFace->splitSurface = Standard_True;

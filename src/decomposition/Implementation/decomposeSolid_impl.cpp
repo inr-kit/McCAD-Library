@@ -32,7 +32,9 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     }
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
-    solidObj->accessPSImpl()->judgeDecomposeSurfaces(solidImpl);
+    solidObj->accessPSImpl()->judgeDecomposeSurfaces(solidImpl,
+                                                     inputConfig.precision,
+                                                     inputConfig.distanceTolerance);
     // Check if any of the boundary surfaces does split the solid. This is judged
     // based on the numberCollidingSurfaces
     if(!throughNoBoundarySurfaces(solidImpl->splitFacesList)){
@@ -51,13 +53,18 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     }
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
-    solidObj->accessCSImpl()->judgeDecomposeSurfaces(solidImpl);
+    solidObj->accessCSImpl()->judgeDecomposeSurfaces(solidImpl,
+                                                     inputConfig.precision,
+                                                     inputConfig.distanceTolerance);
     // Check if any of the boundary surfaces does split the solid. This is judged
     // based on the numberCollidingSurfaces
     if(!throughNoBoundarySurfaces(solidImpl->splitFacesList)){
         if (!planeSplitOnlyPlane(solidImpl->splitFacesList)){
+            std::cout << "generate assist" << std::endl;
             AssistSurfaceGenerator{inputConfig}(*solidObj);
-            solidObj->accessCSImpl()->judgeAssistDecomposeSurfaces(solidImpl);
+            solidObj->accessCSImpl()->judgeAssistDecomposeSurfaces(solidImpl,
+                                                                   inputConfig.precision,
+                                                                   inputConfig.distanceTolerance);
          }
         solidObj->accessCSImpl()->judgeThroughConcaveEdges(solidImpl);
     }
@@ -74,12 +81,16 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     }
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
-    solidObj->accessTSImpl()->judgeDecomposeSurfaces(solidImpl);
+    solidObj->accessTSImpl()->judgeDecomposeSurfaces(solidImpl,
+                                                     inputConfig.precision,
+                                                     inputConfig.distanceTolerance);
     if(!throughNoBoundarySurfaces(solidImpl->splitFacesList)){
         // If the toroidal solid has split surface then use it.
         // If not, then judge if part torus or full torus and generate assisting surfces
         AssistSurfaceGenerator{inputConfig}(*solidObj);
-        solidObj->accessTSImpl()->judgeAssistDecomposeSurfaces(solidImpl);
+        solidObj->accessTSImpl()->judgeAssistDecomposeSurfaces(solidImpl,
+                                                               inputConfig.precision,
+                                                               inputConfig.distanceTolerance);
         solidObj->accessTSImpl()->judgeThroughConcaveEdges(solidImpl);
     }
     return perform(*solidImpl);
@@ -95,13 +106,17 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     }
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
-    solidObj->accessXSImpl()->judgeDecomposeSurfaces(solidImpl);
+    solidObj->accessXSImpl()->judgeDecomposeSurfaces(solidImpl,
+                                                     inputConfig.precision,
+                                                     inputConfig.distanceTolerance);
     // Check if any of the boundary surfaces does split the solid. This is judged
     // based on the numberCollidingSurfaces.
     if(!throughNoBoundarySurfaces(solidImpl->splitFacesList)){
         if (!planeSplitOnlyPlane(solidImpl->splitFacesList)){
             AssistSurfaceGenerator{inputConfig}(*solidObj);
-            solidObj->accessXSImpl()->judgeAssistDecomposeSurfaces(solidImpl);
+            solidObj->accessXSImpl()->judgeAssistDecomposeSurfaces(solidImpl,
+                                                                   inputConfig.precision,
+                                                                   inputConfig.distanceTolerance);
         }
         solidObj->accessXSImpl()->judgeThroughConcaveEdges(solidImpl);
     }
