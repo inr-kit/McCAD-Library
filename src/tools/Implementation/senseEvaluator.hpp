@@ -2,10 +2,9 @@
 #define SENSEEVALUATOR_HPP
 
 // C++
-#include <array>
-// McCAD
-#include <Standard.hxx>
+#include <optional>
 // OCC
+#include <Standard.hxx>
 #include <TopoDS_Face.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Pln.hxx>
@@ -16,7 +15,8 @@ namespace McCAD::Tools{
   public:
       SenseEvaluator() = default;
 
-      Standard_Real operator()(const TopoDS_Face& face, const gp_Pnt& point);
+      std::optional<Standard_Real> operator()(const TopoDS_Face& face,
+                                              const gp_Pnt& point);
       Standard_Real senseRelativeToPlane(const gp_Pln& plane, const gp_Pnt& point);
       Standard_Real senseRelativeToCyl(const gp_Cylinder& cylinder, const gp_Pnt& point);
   };

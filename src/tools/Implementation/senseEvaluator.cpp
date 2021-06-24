@@ -1,13 +1,17 @@
+// C++
+#include <array>
 // McCAD
 #include "senseEvaluator.hpp"
 //OCC
-#include <GeomAdaptor_Surface.hxx>
-#include <BRep_Tool.hxx>
+#include <BRepAdaptor_Surface.hxx>
+#include <GeomAbs_SurfaceType.hxx>
+#include <TopAbs_Orientation.hxx>
+#include <gp_Ax1.hxx>
 
-Standard_Real
+std::optional<Standard_Real>
 McCAD::Tools::SenseEvaluator::operator()(const TopoDS_Face& face,
                                          const gp_Pnt& point){
-    GeomAdaptor_Surface surfaceAdaptor{BRep_Tool::Surface(face)};
+    BRepAdaptor_Surface surfaceAdaptor(face);
     if (surfaceAdaptor.GetType() == GeomAbs_Plane){
         gp_Pln plane = surfaceAdaptor.Plane();
         if(face.Orientation() == TopAbs_REVERSED){
@@ -19,7 +23,7 @@ McCAD::Tools::SenseEvaluator::operator()(const TopoDS_Face& face,
         gp_Cylinder cylinder = surfaceAdaptor.Cylinder();
         return senseRelativeToCyl(cylinder, point);
     }
-    else return 0;
+    else return std::nullopt;
 }
 
 Standard_Real
