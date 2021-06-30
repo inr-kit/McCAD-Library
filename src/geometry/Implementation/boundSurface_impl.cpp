@@ -116,6 +116,8 @@ void
 McCAD::Geometry::BoundSurface::Impl::generateEdges(const Standard_Real& parameterTolerance){
     TopoDS_Face face = boundSurface->accessSImpl()->face;
     for (const auto& tempEdge : detail::ShapeView<TopAbs_EDGE>{face}){
+        // Ignore degenerated edges.
+        if(BRep_Tool::Degenerated(tempEdge)) continue;
         // more specific edge types as with surfaces and solids
         std::shared_ptr<Edge> edge = std::make_shared<Edge>();
         edge->accessEImpl()->initiate(tempEdge);

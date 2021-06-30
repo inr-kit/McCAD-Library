@@ -42,6 +42,10 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
                         solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[j]] = assistSurface.value();
+                    } else{
+                        // If there exists a common edge between cylindrical surfaces,
+                        // but failed to generate a split surface then reject solid.
+                        solidObj.accessSImpl()->rejectSolid = Standard_True;
                     }
                 } else{
                     // Generate surface through curved edge; circle, ellipse, parabola, hyperabola.
@@ -53,6 +57,10 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
                         solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[j]] = assistSurface.value();
+                    } else{
+                        // If there exists a common edge between cylindrical surfaces,
+                        // but failed to generate a split surface then reject solid.
+                        solidObj.accessSImpl()->rejectSolid = Standard_True;
                     }
                 }
             } else if (commonEdges.size() == 2){
@@ -66,6 +74,10 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
                         solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[i]]= assistSurface.value();
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[j]]= assistSurface.value();
+                    } else{
+                        // If there exists a common edge between cylindrical surfaces,
+                        // but failed to generate a split surface then reject solid.
+                        solidObj.accessSImpl()->rejectSolid = Standard_True;
                     }
                 }
             }
