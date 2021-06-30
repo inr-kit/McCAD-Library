@@ -1,3 +1,5 @@
+// C++
+#include <memory>
 // McCAD
 #include "EdgesComparator.hpp"
 // OCC
@@ -5,6 +7,7 @@
 #include <gp_Lin.hxx>
 #include <gp_Circ.hxx>
 #include <gp_Elips.hxx>
+#include <Geom_BSplineCurve.hxx>
 
 McCAD::Tools::EdgesComparator::EdgesComparator(){
 }
@@ -33,6 +36,8 @@ McCAD::Tools::EdgesComparator::operator()(const TopoDS_Edge& firstEdge,
             return compareCircles(firstAdaptor, secondAdaptor);
         else if(firstAdaptor.GetType() == GeomAbs_Ellipse)
             return compareEllipses(firstAdaptor, secondAdaptor);
+        else if(firstAdaptor.GetType() == GeomAbs_BSplineCurve)
+            return compareBSplines(firstAdaptor, secondAdaptor);
     }
     return Standard_False;
 }
@@ -105,4 +110,14 @@ McCAD::Tools::EdgesComparator::compareEllipses(const BRepAdaptor_Curve& firstEdg
     if(std::abs(firstEllipse.Area() - secondEllipse.Area()) > precision)
         return Standard_False;
     return Standard_True;
+}
+
+Standard_Boolean
+McCAD::Tools::EdgesComparator::compareBSplines(const BRepAdaptor_Curve& firstEdge,
+                                               const BRepAdaptor_Curve& secondEdge){
+    opencascade::handle<Geom_BSplineCurve> firstBSpline = firstEdge.BSpline();
+    opencascade::handle<Geom_BSplineCurve> secondBSpline = secondEdge.BSpline();
+    // Use OCC tools to compare the B-Spline curves
+    if(firstBSpline->IsEqual(secondBSpline, precision)) return Standard_True;
+    else return Standard_False;
 }

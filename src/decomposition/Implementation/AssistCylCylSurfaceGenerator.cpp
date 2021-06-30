@@ -11,6 +11,8 @@
 //OCC
 #include <GeomAbs_CurveType.hxx>
 #include <STEPControl_Writer.hxx>
+#include <TopoDS_Face.hxx>
+#include <BRepAdaptor_Curve.hxx>
 
 McCAD::Decomposition::AssistCylCylSurfaceGenerator::AssistCylCylSurfaceGenerator(
         const IO::InputConfig& inputConfig) : inputConfig{inputConfig}{
@@ -24,7 +26,7 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
         Geometry::CYLSolid& solidObj){
     auto& cylindersList = solidObj.accessSImpl()->cylindersList;
     std::vector<std::shared_ptr<Geometry::Edge>> commonEdges;
-    for(Standard_Integer i = 0; i < cylindersList.size(); ++i){
+    for(Standard_Integer i = 0; i < cylindersList.size() - 1; ++i){
         for(Standard_Integer j = i+1; j < cylindersList.size(); ++j){
             if (*cylindersList[i] == *cylindersList[j]) continue;
             commonEdges = CommonEdgeFinder{inputConfig.angularTolerance,
@@ -40,6 +42,10 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
                         solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[j]] = assistSurface.value();
+                    } else{
+                        // If there exists a common edge between cylindrical surfaces,
+                        // but failed to generate a split surface then reject solid.
+                        solidObj.accessSImpl()->rejectSolid = Standard_True;
                     }
                 } else{
                     // Generate surface through curved edge; circle, ellipse, parabola, hyperabola.
@@ -51,6 +57,10 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
                         solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[j]] = assistSurface.value();
+                    } else{
+                        // If there exists a common edge between cylindrical surfaces,
+                        // but failed to generate a split surface then reject solid.
+                        solidObj.accessSImpl()->rejectSolid = Standard_True;
                     }
                 }
             } else if (commonEdges.size() == 2){
@@ -64,6 +74,10 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
                         solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[i]]= assistSurface.value();
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[j]]= assistSurface.value();
+                    } else{
+                        // If there exists a common edge between cylindrical surfaces,
+                        // but failed to generate a split surface then reject solid.
+                        solidObj.accessSImpl()->rejectSolid = Standard_True;
                     }
                 }
             }
@@ -107,8 +121,20 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughCurve(
         const std::shared_ptr<Geometry::BoundSurface>& secondFace,
         const std::shared_ptr<Geometry::Edge>& commonEdge,
         const Standard_Real& boxDiagonalLength, const Standard_Real& meshDeflection){
-    auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
-            inputConfig.precision}.generatePlaneOnCurve(commonEdge);
+    std::optional<TopoDS_Face> splitFace;
+    BRepAdaptor_Curve curveAdaptor(commonEdge->accessEImpl()->edge);
+    if (curveAdaptor.GetType() == GeomAbs_BSplineCurve){
+        splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
+                inputConfig.precision}.generateSurfOnBSpline(
+                    firstFace->accessSImpl()->face, secondFace->accessSImpl()->face,
+                    commonEdge);
+    } else if (curveAdaptor.GetType() == GeomAbs_Circle ||
+               curveAdaptor.GetType() == GeomAbs_Ellipse ||
+               curveAdaptor.GetType() == GeomAbs_Parabola ||
+               curveAdaptor.GetType() == GeomAbs_Hyperbola){
+        splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
+                inputConfig.precision}.generatePlaneOnCurve(commonEdge);
+    } else splitFace = std::nullopt;
     if(splitFace){
         std::shared_ptr<Geometry::BoundSurface> assistSurface =
                 SurfaceObjCreator{}(splitFace.value(), boxDiagonalLength,

@@ -18,9 +18,9 @@ McCAD::Tools::toTypeName(
         return "Bezier curve";
     case GeomAbs_BSplineCurve:
         return "B-spline curve";
-	//case GeomAbs_OffsetCurve:
-        //return "Offset curve";
+    case GeomAbs_OffsetCurve:
+        return "Offset curve";
     default:
-        return "Other curve";
+        return "unknown curve";
     }
 }

@@ -1,5 +1,6 @@
 // C++
 #include <optional>
+#include <filesystem>
 // McCAD
 #include "splitSurfacesGenerator.hpp"
 #include "SurfaceUtilities.hpp"
@@ -17,6 +18,9 @@
 #include <gp_Elips.hxx>
 #include <gp_Hypr.hxx>
 #include <gp_Parab.hxx>
+#include <BRepFill.hxx>
+#include <BRepAdaptor_Curve.hxx>
+#include <STEPControl_Writer.hxx>
 
 McCAD::Decomposition::SplitSurfaceGenerator::SplitSurfaceGenerator(){
 }
@@ -101,6 +105,36 @@ McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOnCurve(
     gp_Pln splitSurf(splitSurfPoint, splitSurfNormal);
     return BRepBuilderAPI_MakeFace(splitSurf);
 }
+
+std::optional<TopoDS_Face>
+McCAD::Decomposition::SplitSurfaceGenerator::generateSurfOnBSpline(
+        const TopoDS_Face& firstFace, const TopoDS_Face& secondFace,
+        const std::shared_ptr<Geometry::Edge>& edge){
+    BRepAdaptor_Curve firstAdaptor(edge->accessEImpl()->edge, firstFace),
+                      secondAdaptor(edge->accessEImpl()->edge, secondFace);
+    if(firstAdaptor.IsCurveOnSurface() && !firstAdaptor.IsClosed()){
+        // The B-Spline curve is not on the extremities of the cylinder.
+    } else if(secondAdaptor.IsCurveOnSurface() && !secondAdaptor.IsClosed()){
+        // The B-Spline curve is not on the extremities of the cylinder.
+    }
+    //TopoDS_Face splitFace = BRepFill::Face(edge->accessEImpl()->edge, edge->accessEImpl()->edge);
+    /*//debug
+    STEPControl_Writer writer;
+    writer.Transfer(face, STEPControl_StepModelType::STEPControl_AsIs);
+    writer.Transfer(splitFace, STEPControl_StepModelType::STEPControl_AsIs);
+    Standard_Integer kk = 0;
+    std::string filename = "BSpline";
+    std::string suffix = ".stp";
+    while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
+        ++kk;
+    }
+    filename += std::to_string(kk);
+    filename += suffix;
+    writer.Write(filename.c_str());
+    *///debug
+    return std::nullopt;
+}
+
 
 std::optional<TopoDS_Face>
 McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOn2Lines(

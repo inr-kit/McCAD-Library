@@ -26,6 +26,9 @@ namespace McCAD::Decomposition{
               const std::shared_ptr<Geometry::Edge>& edge);
       std::optional<TopoDS_Face> generatePlaneOnCurve(
               const std::shared_ptr<Geometry::Edge>& edge);
+      std::optional<TopoDS_Face> generateSurfOnBSpline(
+              const TopoDS_Face& firstFace, const TopoDS_Face& secondFace,
+              const std::shared_ptr<Geometry::Edge>& edge);
       std::optional<TopoDS_Face> generatePlaneOn2Lines(
               const std::shared_ptr<Geometry::Edge>& firstEedge,
               const std::shared_ptr<Geometry::Edge>& secondEdge);

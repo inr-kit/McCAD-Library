@@ -24,7 +24,6 @@ McCAD::Decomposition::CommonEdgeFinder::operator()(
             if(Tools::EdgesComparator{angularTolerance, distanceTolerance,
                     precision}(firstEdgesList[i]->accessEImpl()->edge,
                                secondEdgesList[j]->accessEImpl()->edge)){
-            //if (*(firstEdgesList[i]) == *(secondEdgesList[j])){
                 commonEdges.push_back(firstEdgesList[i]);
             }
         }

@@ -29,6 +29,8 @@ namespace McCAD::Tools{
                                       const BRepAdaptor_Curve& secondEdge);
       Standard_Boolean compareEllipses(const BRepAdaptor_Curve& firstEdge,
                                        const BRepAdaptor_Curve& secondEdge);
+      Standard_Boolean compareBSplines(const BRepAdaptor_Curve& firstEdge,
+                                        const BRepAdaptor_Curve& secondEdge);
   };
 }
 
