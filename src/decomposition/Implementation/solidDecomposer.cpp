@@ -1,3 +1,6 @@
+// C++
+#include <array>
+#include <filesystem>
 // McCAD
 #include "solidDecomposer.hpp"
 #include "SolidSplitter.hpp"
@@ -7,6 +10,7 @@
 //OCC
 #include <GProp_GProps.hxx>
 #include <BRepGProp.hxx>
+#include <STEPControl_Writer.hxx>
 
 McCAD::Decomposition::SolidDecomposer::SolidDecomposer(){
 }
@@ -26,6 +30,20 @@ McCAD::Decomposition::SolidDecomposer::operator()(
     if(!halfSolids) return Standard_False;
     subSolidsList.Append(halfSolids->first);
     subSolidsList.Append(halfSolids->second);
+    //debug
+    STEPControl_Writer writer0;
+    writer0.Transfer(halfSolids->first, STEPControl_StepModelType::STEPControl_AsIs);
+    writer0.Transfer(halfSolids->second, STEPControl_StepModelType::STEPControl_AsIs);
+    Standard_Integer kk = 0;
+    std::string filename = "solidSplitting";
+    std::string suffix = ".stp";
+    while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
+        ++kk;
+    }
+    filename += std::to_string(kk);
+    filename += suffix;
+    writer0.Write(filename.c_str());
+    //debug
     return filterAndRepair(subSolidsList);
 }
 

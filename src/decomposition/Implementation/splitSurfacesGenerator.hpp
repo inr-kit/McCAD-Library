@@ -10,6 +10,7 @@
 // OCC
 #include <Standard.hxx>
 #include <TopoDS_Face.hxx>
+#include <gp_Cylinder.hxx>
 
 namespace McCAD::Decomposition{
   class SplitSurfaceGenerator{
@@ -30,8 +31,11 @@ namespace McCAD::Decomposition{
               const TopoDS_Face& firstFace, const TopoDS_Face& secondFace,
               const std::shared_ptr<Geometry::Edge>& edge);
       std::optional<TopoDS_Face> generatePlaneOn2Lines(
-              const std::shared_ptr<Geometry::Edge>& firstEedge,
+              const std::shared_ptr<Geometry::Edge>& firstEdge,
               const std::shared_ptr<Geometry::Edge>& secondEdge);
+      std::optional<TopoDS_Face> generatePlaneOnLineAxis(
+              const gp_Cylinder& cylinder,
+              const std::shared_ptr<Geometry::Edge>& edge);
   };
 }
 

@@ -117,36 +117,36 @@ McCAD::Decomposition::SplitSurfaceGenerator::generateSurfOnBSpline(
     } else if(secondAdaptor.IsCurveOnSurface() && !secondAdaptor.IsClosed()){
         // The B-Spline curve is not on the extremities of the cylinder.
     }
-    //TopoDS_Face splitFace = BRepFill::Face(edge->accessEImpl()->edge, edge->accessEImpl()->edge);
-    /*//debug
-    STEPControl_Writer writer;
-    writer.Transfer(face, STEPControl_StepModelType::STEPControl_AsIs);
-    writer.Transfer(splitFace, STEPControl_StepModelType::STEPControl_AsIs);
-    Standard_Integer kk = 0;
-    std::string filename = "BSpline";
-    std::string suffix = ".stp";
-    while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
-        ++kk;
-    }
-    filename += std::to_string(kk);
-    filename += suffix;
-    writer.Write(filename.c_str());
-    *///debug
     return std::nullopt;
 }
 
 
 std::optional<TopoDS_Face>
 McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOn2Lines(
-        const std::shared_ptr<Geometry::Edge>& firstEedge,
+        const std::shared_ptr<Geometry::Edge>& firstEdge,
         const std::shared_ptr<Geometry::Edge>& secondEdge){
-    gp_Pnt firstEdgeStart{firstEedge->accessEImpl()->startPoint},
-           firstEdgeEnd{firstEedge->accessEImpl()->endPoint},
+    gp_Pnt firstEdgeStart{firstEdge->accessEImpl()->startPoint},
+           firstEdgeEnd{firstEdge->accessEImpl()->endPoint},
            secondEdgeMid{secondEdge->accessEImpl()->middlePoint};
     gp_Vec firstVec(firstEdgeStart, secondEdgeMid),
            secondVec(firstEdgeEnd, secondEdgeMid);
     gp_Dir firstDir(firstVec), secondDir(secondVec);
     gp_Dir splitSurfNormal = firstDir.Crossed(secondDir);
     gp_Pln splitSurf(secondEdgeMid, splitSurfNormal);
+    return BRepBuilderAPI_MakeFace(splitSurf);
+}
+
+std::optional<TopoDS_Face>
+McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOnLineAxis(
+        const gp_Cylinder& cylinder,
+        const std::shared_ptr<Geometry::Edge>& edge){
+    gp_Pnt edgeStart{edge->accessEImpl()->startPoint},
+           edgeMid{edge->accessEImpl()->middlePoint},
+           edgeEnd{edge->accessEImpl()->endPoint};
+    gp_Vec firstVec(edgeStart, cylinder.Location()),
+           secondVec(edgeEnd, cylinder.Location());
+    gp_Dir firstDir(firstVec), secondDir(secondVec);
+    gp_Dir splitSurfNormal = firstDir.Crossed(secondDir);
+    gp_Pln splitSurf(edgeMid, splitSurfNormal);
     return BRepBuilderAPI_MakeFace(splitSurf);
 }
