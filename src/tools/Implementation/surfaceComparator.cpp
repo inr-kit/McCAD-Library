@@ -38,7 +38,7 @@ McCAD::Tools::SurfaceComparator::operator()(const TopoDS_Face& firstFace,
     if (firstAdaptor.GetType() == GeomAbs_Plane){
         auto condition = PlaneComparator{precision, angularTolerance,
                 distanceTolerance}(firstAdaptor, secondAdaptor);
-        if (condition.value()) return condition.value();
+        if (condition) return condition.value();
         else return Standard_False;
     }
     else if (firstAdaptor.GetType() == GeomAbs_Cylinder)

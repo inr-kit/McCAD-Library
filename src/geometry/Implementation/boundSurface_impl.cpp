@@ -9,6 +9,7 @@
 #include "CurveUtilities.hpp"
 #include "SurfaceUtilities.hpp"
 #include "faceParameters.hpp"
+#include "EdgesComparator.hpp"
 //OCC
 #include <TopoDS_Face.hxx>
 #include <TopLoc_Location.hxx>
@@ -42,26 +43,10 @@ McCAD::Geometry::BoundSurface::Impl::isEqual(const McCAD::Geometry::BoundSurface
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::canFuse(const McCAD::Geometry::BoundSurface& that){
     // Check common edges of the two faces.
-    for (Standard_Integer i = 0; i <= edgesList.size() - 2; ++i){
-        for (Standard_Integer j = i+1; j <= that.accessBSImpl()->edgesList.size() - 1;
-             ++j){
-            if (*edgesList[i] == *that.accessBSImpl()->edgesList[j]){
-                /* //debug
-                STEPControl_Writer writer3;
-                writer3.Transfer(edgesList[i]->accessEImpl()->edge,
-                                 STEPControl_StepModelType::STEPControl_AsIs);
-                writer3.Transfer(that.accessBSImpl()->edgesList[j]->accessEImpl()->edge,
-                                 STEPControl_StepModelType::STEPControl_AsIs);
-                Standard_Integer kk = 0;
-                std::string filename = "/home/mharb/Documents/McCAD_refactor/examples/bbox/edge";
-                std::string suffix = ".stp";
-                while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
-                    ++kk;
-                }
-                filename += std::to_string(kk);
-                filename += suffix;
-                writer3.Write(filename.c_str());
-                */ //debug
+    for (Standard_Integer i = 0; i < edgesList.size(); ++i){
+        for (Standard_Integer j = 0; j < that.accessBSImpl()->edgesList.size(); ++j){
+            if(Tools::EdgesComparator{}(edgesList[i]->accessEImpl()->edge,
+                                        that.accessBSImpl()->edgesList[j]->accessEImpl()->edge)){
                 return Standard_True;
             }
         }

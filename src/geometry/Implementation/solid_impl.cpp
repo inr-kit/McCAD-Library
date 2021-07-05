@@ -114,7 +114,7 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(Standard_Real angularToleranc
         } else if(angle > Standard_Real(0) && edge.Orientation() == TopAbs_FORWARD){
             edge.Convex(1);
         } else if (angle == Standard_Real(0)){
-            // edge if flat
+            // edge is flat
             edge.Convex(2);
         } else{
             // edge is concave

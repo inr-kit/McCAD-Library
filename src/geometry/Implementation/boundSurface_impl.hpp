@@ -19,7 +19,6 @@ namespace McCAD::Geometry{
     ~Impl();
 
     BoundSurface* boundSurface;
-    
     std::vector<std::shared_ptr<Edge>> edgesList;
     std::vector<std::shared_ptr<Edge>> assistEdgesList;
     std::vector<std::shared_ptr<MeshTriangle>> meshTrianglesList;

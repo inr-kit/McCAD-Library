@@ -24,8 +24,8 @@ namespace McCAD::Tools{
       std::optional<Standard_Boolean> operator()(const GeomAdaptor_Surface& firstAdaptor,
                                                  const GeomAdaptor_Surface& secondAdaptor);
       std::array<Standard_Real, 4> planeParameters(const gp_Pln& plane) const;
-      Standard_Boolean equivalentPlaneParameters(const gp_Pln& first,
-                                                 const gp_Pln& second) const;
+      std::optional<Standard_Boolean> equivalentPlaneParameters(const gp_Pln& first,
+                                                                const gp_Pln& second) const;
     };
 }
 

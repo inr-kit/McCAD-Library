@@ -1,10 +1,12 @@
 // C++
 #include <algorithm>
+#include <filesystem>
 // McCAD
 #include "splitSurfacesSelector.hpp"
 #include "SurfaceUtilities.hpp"
 // OCC
 #include <GeomAbs_SurfaceType.hxx>
+#include <STEPControl_Writer.hxx>
 
 McCAD::Decomposition::SplitSurfacesSelector::SplitSurfacesSelector(){
 }
@@ -66,7 +68,12 @@ McCAD::Decomposition::SplitSurfacesSelector::sortSplitFaces(
                 ||
                 (fst.throughConcaveEdges == snd.throughConcaveEdges &&
                  fst.numberCollidingSurfaces == snd.numberCollidingSurfaces &&
-                 fst.numberCollidingCurvedSurfaces < snd.numberCollidingCurvedSurfaces);
+                 fst.numberCollidingCurvedSurfaces < snd.numberCollidingCurvedSurfaces)
+                ||
+                (fst.throughConcaveEdges == snd.throughConcaveEdges &&
+                 fst.numberCollidingSurfaces == snd.numberCollidingSurfaces &&
+                 fst.numberCollidingCurvedSurfaces == snd.numberCollidingCurvedSurfaces &&
+                 fst.repeatedSurface > snd.repeatedSurface);
     };
     std::sort(splitFacesList.begin(), splitFacesList.end(), comparator);
 }

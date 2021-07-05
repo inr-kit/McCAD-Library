@@ -103,7 +103,7 @@ McCAD::Geometry::CYLSolid::Impl::judgeThroughConcaveEdges(
             if (i != j && facesList[i]->accessSImpl()->surfaceNumber !=
                     facesList[j]->accessSImpl()->surfaceNumber){
                 auto& edgesList = facesList[j]->accessBSImpl()->edgesList;
-                for (Standard_Integer k = 0; k <= edgesList.size() - 1; ++k){
+                for (Standard_Integer k = 0; k < edgesList.size(); ++k){
                     if (edgesList[k]->accessEImpl()->convexity == 0 &&
                             Decomposition::EdgeOnSurface{}(
                                 facesList[i]->accessSImpl()->face, *(edgesList[k]))){

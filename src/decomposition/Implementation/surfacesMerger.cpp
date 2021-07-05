@@ -25,7 +25,6 @@ McCAD::Decomposition::SurfacesMerger::operator()(
                         surfacesList[i]->accessSImpl()->surfaceNumber;
                 // Test if the two surfaces can be fused.
                 if (*surfacesList[i] << *surfacesList[j]){
-                    //std::cout << "*** equal, fuse" << std::endl;
                     TopoDS_Face newFace = Tools::SurfacesFuser{}(
                                 surfacesList[i]->accessSImpl()->face,
                                 surfacesList[j]->accessSImpl()->face).value();
@@ -75,7 +74,7 @@ McCAD::Decomposition::SurfacesMerger::operator()(
                     surfacesList.push_back(std::move(newboundSurface));
                     break;
                 } else{
-                    //std::cout << "*** equal, erase one" << std::endl;
+                    surfacesList[i]->accessSImpl()->repeatedSurface += 1;
                     surfacesList.erase(surfacesList.begin() + j);
                     --j;
                 }

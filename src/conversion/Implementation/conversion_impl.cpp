@@ -29,7 +29,7 @@ McCAD::Conversion::Convert::Impl::Impl(IO::InputConfig& inputConfig) :
         throw std::runtime_error("Rejected solids have been written to "
                                  "rejectedConversion.stp. Conversion terminated!");
     }
-    std::cout << " > Converting " << solidObjList.size() << " solid(s)" << std::endl;
+    std::cout << " > Converting " << compoundList.size() << " solid(s)" << std::endl;
     auto voidCell = VoidCellManager{inputConfig}(solidObjList);
     std::cout << "   - Writing MC input file" << std::endl;
     Writer{inputConfig}(compoundList, voidCell);
