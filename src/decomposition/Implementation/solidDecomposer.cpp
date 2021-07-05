@@ -30,7 +30,7 @@ McCAD::Decomposition::SolidDecomposer::operator()(
     if(!halfSolids) return Standard_False;
     subSolidsList.Append(halfSolids->first);
     subSolidsList.Append(halfSolids->second);
-    //debug
+    /*//debug
     STEPControl_Writer writer0;
     writer0.Transfer(halfSolids->first, STEPControl_StepModelType::STEPControl_AsIs);
     writer0.Transfer(halfSolids->second, STEPControl_StepModelType::STEPControl_AsIs);
@@ -43,7 +43,7 @@ McCAD::Decomposition::SolidDecomposer::operator()(
     filename += std::to_string(kk);
     filename += suffix;
     writer0.Write(filename.c_str());
-    //debug
+    *///debug
     return filterAndRepair(subSolidsList);
 }
 

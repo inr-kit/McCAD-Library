@@ -51,7 +51,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     if(recurrenceDepth > inputConfig.recurrenceDepth){
         return Standard_False;
     }
-    std::cout << "recurrenceDepth: " << recurrenceDepth << std::endl;
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
     solidObj->accessCSImpl()->judgeDecomposeSurfaces(solidImpl,

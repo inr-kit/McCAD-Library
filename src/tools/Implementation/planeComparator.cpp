@@ -41,31 +41,25 @@ McCAD::Tools::PlaneComparator::planeParameters(const gp_Pln& plane) const{
     return planeParameters;
 }
 
-Standard_Boolean
+std::optional<Standard_Boolean>
 McCAD::Tools::PlaneComparator::equivalentPlaneParameters(const gp_Pln& first,
                                                          const gp_Pln& second) const{
-    try{
-        auto firstPlaneParameters = planeParameters(first);
-        gp_Dir firstPlaneDirection{
-            firstPlaneParameters[0],
-            firstPlaneParameters[1],
-            firstPlaneParameters[2]
-        };
-        auto secondPlaneParameters = planeParameters(second);
-        gp_Dir secondPlaneDirection{
-            secondPlaneParameters[0],
-            secondPlaneParameters[1],
-            secondPlaneParameters[2]
-        };
-        return (firstPlaneDirection.IsEqual(secondPlaneDirection, angularTolerance)
-                && std::abs(firstPlaneParameters[3] - secondPlaneParameters[3])
-                < distanceTolerance) ||
-               (firstPlaneDirection.IsOpposite(secondPlaneDirection, angularTolerance)
-                && std::abs(firstPlaneParameters[3] + secondPlaneParameters[3])
-                < distanceTolerance);
-    } catch(const Standard_ConstructionError&){
-        // Plane parameters cannot form a normed direction vector;
-        // not distinguishable from zero vector
-        return Standard_False;
-      }
+    auto firstPlaneParameters = planeParameters(first);
+    gp_Dir firstPlaneDirection{
+        firstPlaneParameters[0],
+        firstPlaneParameters[1],
+        firstPlaneParameters[2]
+    };
+    auto secondPlaneParameters = planeParameters(second);
+    gp_Dir secondPlaneDirection{
+        secondPlaneParameters[0],
+        secondPlaneParameters[1],
+        secondPlaneParameters[2]
+    };
+    return (firstPlaneDirection.IsEqual(secondPlaneDirection, angularTolerance)
+            && std::abs(firstPlaneParameters[3] - secondPlaneParameters[3])
+            < distanceTolerance) ||
+           (firstPlaneDirection.IsOpposite(secondPlaneDirection, angularTolerance)
+            && std::abs(firstPlaneParameters[3] + secondPlaneParameters[3])
+            < distanceTolerance);
 }

@@ -45,26 +45,24 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
         }
         if(!commonLineEdgesMap.empty()){
             // Cylinder has common line edges with planes.
-            if(commonLineEdgesMap.size() == 1) {
-                // Cylinder has common edges with a single surface.
-                for(const auto& member : commonLineEdgesMap){
-                    if(member.second.size() == 1){
-                        auto assistSurface = generateThroughLineAxis(
-                                    cylindersList[i], member.second[0],
-                                solidObj.accessSImpl()->boxDiagonalLength,
-                                solidObj.accessSImpl()->meshDeflection);
-                        if(assistSurface){
-                            solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
-                            solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
-                            solidObj.accessSImpl()->assistFacesMap[planesList[member.first]] = assistSurface.value();
-                        }
+            for(const auto& member : commonLineEdgesMap){
+                if(!planesList[member.first]->accessSImpl()->splitSurface) continue;
+                if(member.second.size() == 1){
+                    auto assistSurface = generateThroughLineAxis(
+                                cylindersList[i], member.second[0],
+                            solidObj.accessSImpl()->boxDiagonalLength,
+                            solidObj.accessSImpl()->meshDeflection);
+                    if(assistSurface){
+                        solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
+                        solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
+                        solidObj.accessSImpl()->assistFacesMap[planesList[member.first]] = assistSurface.value();
                     }
-                }
-            } else if (commonLineEdgesMap.size() == 2){
-                if(cylindersList[i]->accessSImpl()->face.Orientation() == TopAbs_REVERSED){
-                    // Cylinder is concave.
-                } else {
-                    // Cylinder is convex.
+                } else if (commonLineEdgesMap.size() == 2){
+                    if(cylindersList[i]->accessSImpl()->face.Orientation() == TopAbs_REVERSED){
+                        // Cylinder is concave.
+                    } else {
+                        // Cylinder is convex.
+                    }
                 }
             }
         }
