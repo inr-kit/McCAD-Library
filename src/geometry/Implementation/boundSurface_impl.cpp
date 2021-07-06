@@ -173,20 +173,33 @@ McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Ed
 }
 
 Standard_Boolean
-McCAD::Geometry::BoundSurface::Impl::generateParmts(){
+McCAD::Geometry::BoundSurface::Impl::generateParmts(Standard_Real precision){
     if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
         // std::vector<gp_Pln, gp_Pnt, gp_Dir, parameters>
-        auto generatedParmts = Tools::FaceParameters{1.0e-7}.genPlSurfParmts(
+        auto generatedParmts = Tools::FaceParameters{precision}.genPlSurfParmts(
                     boundSurface->accessSImpl()->face);
         boundSurface->accessSImpl()->plane = std::get<0>(generatedParmts);
         boundSurface->accessSImpl()->location = std::get<1>(generatedParmts);
         boundSurface->accessSImpl()->normal = std::get<2>(generatedParmts);
-        boundSurface->accessSImpl()->surfParameters = std::get<3>(generatedParmts);
-                //Tools::genPlSurfParmts(boundSurface->accessSImpl()->face);
-    } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder))
-        Tools::FaceParameters{1.0e-7}.genCylSurfParmts(boundSurface->accessSImpl()->face);
-    else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Torus))
-        Tools::FaceParameters{1.0e-7}.genTorSurfParmts(boundSurface->accessSImpl()->face);
+        boundSurface->accessSImpl()->surfParameters.insert(
+                    boundSurface->accessSImpl()->surfParameters.end(),
+                    std::get<3>(generatedParmts).begin(),
+                    std::get<3>(generatedParmts).end());
+    } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder)){
+        // std::vector<gp_Cylinder, gp_Pnt, gp_Dir, parameters, radius, sense>
+        auto generatedParmts = Tools::FaceParameters{}.genCylSurfParmts(
+                    boundSurface->accessSImpl()->face);
+        boundSurface->accessSImpl()->cylinder = std::get<0>(generatedParmts);
+        boundSurface->accessSImpl()->location = std::get<1>(generatedParmts);
+        boundSurface->accessSImpl()->symmetryAxis = std::get<2>(generatedParmts);
+        boundSurface->accessSImpl()->surfParameters.insert(
+                    boundSurface->accessSImpl()->surfParameters.end(),
+                    std::get<3>(generatedParmts).begin(),
+                    std::get<3>(generatedParmts).end());
+        boundSurface->accessSImpl()->radius = std::get<4>(generatedParmts);
+        boundSurface->accessSImpl()->surfSense = std::get<5>(generatedParmts);
+    } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Torus))
+        Tools::FaceParameters{}.genTorSurfParmts(boundSurface->accessSImpl()->face);
     else return Standard_False;
     return Standard_True;
 }

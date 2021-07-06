@@ -20,7 +20,6 @@ namespace McCAD::Conversion{
         ~Writer();
 
         IO::InputConfig inputConfig;
-        std::string MCcode;
         void operator()(
                 const std::vector<std::shared_ptr<Geometry::Impl::Compound>> compoundList,
                 const std::shared_ptr<VoidCell>& voidCell);

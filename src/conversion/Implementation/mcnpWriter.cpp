@@ -55,7 +55,7 @@ McCAD::Conversion::MCNPWriter::processSolids(
     for(const auto& compound : compoundList){
         taskQueue.submit([this, compound](){
             for(const auto& solidObj : compound->solidsList){
-                MCNPExprGenerator{solidObj};
+                MCNPExprGenerator{solidObj, precision};
             }
         });
     }

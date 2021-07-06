@@ -12,7 +12,8 @@ namespace McCAD::Conversion{
     class MCNPExprGenerator {
     public:
         MCNPExprGenerator();
-        MCNPExprGenerator(const std::shared_ptr<Geometry::Solid>& solidObj);
+        MCNPExprGenerator(const std::shared_ptr<Geometry::Solid>& solidObj,
+                          const Standard_Real& precision);
         ~MCNPExprGenerator();
 
         void  updateSurfParmts(const std::shared_ptr<Geometry::BoundSurface>& plSurface,

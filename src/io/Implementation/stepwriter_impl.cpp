@@ -84,7 +84,6 @@ McCAD::IO::STEPWriter::Impl::operator()(
             builder.Add(compoundToWrite, solid);
         }
         compoundLabel = shapeTool->AddComponent(compoundLabel, compoundToWrite, Standard_False);
-        compoundName->Set(compoundLabel, std::get<0>(compound));
     }
     shapeTool->UpdateAssemblies();
     writer.Transfer(document, STEPControl_StepModelType::STEPControl_AsIs);

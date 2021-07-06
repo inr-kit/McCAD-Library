@@ -30,7 +30,7 @@ namespace McCAD::Geometry{
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
     void generateEdges(const Standard_Real& parameterTolerance);
     void combineEdges(std::vector<std::shared_ptr<Edge>>& aEdgesList);
-    bool generateParmts();
+    Standard_Boolean generateParmts(Standard_Real precision = 1.0e-7);
   };
 }
 #endif //BOUNDSURFACE_IMPL_HPP

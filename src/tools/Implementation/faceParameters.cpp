@@ -2,7 +2,6 @@
 #include "faceParameters.hpp"
 // OCC
 #include <BRep_Tool.hxx>
-#include <Standard.hxx>
 #include <gp_Ax1.hxx>
 #include <CSLib.hxx>
 #include <ElSLib.hxx>
@@ -70,13 +69,12 @@ McCAD::Tools::FaceParameters::calcDerivative(const BRepAdaptor_Surface& surface,
     return deriv;
 }
 
-McCAD::Tools::FaceParameters::surfPrmts
+McCAD::Tools::FaceParameters::planePrmts
 McCAD::Tools::FaceParameters::genPlSurfParmts(const TopoDS_Face& face){
-    // std::vector<gp_Pln, gp_Pnt, gp_Dir, parameters>
+    // std::tuple<gp_Pln, gp_Pnt, gp_Dir, parameters>
     gp_Ax1 planeNormal;
-    TopLoc_Location location;
     std::array<Standard_Real, 4> planeParameters;
-    GeomAdaptor_Surface surface{BRep_Tool::Surface(face, location)};
+    BRepAdaptor_Surface surface{face, Standard_True};
     gp_Pln plane = surface.Plane();
     if (face.Orientation() == TopAbs_REVERSED){
         planeNormal = plane.Axis();
@@ -91,13 +89,30 @@ McCAD::Tools::FaceParameters::genPlSurfParmts(const TopoDS_Face& face){
     plane = gp_Pln(planeParameters[0], planeParameters[1], planeParameters[2],
                    planeParameters[3]);
     planeNormal = plane.Axis();
-    surfPrmts generatedParmts;
+    planePrmts generatedParmts;
     generatedParmts = std::make_tuple(plane, plane.Location(), planeNormal.Direction(), planeParameters);
     return generatedParmts;
 }
 
-void
+McCAD::Tools::FaceParameters::cylinderPrmts
 McCAD::Tools::FaceParameters::genCylSurfParmts(const TopoDS_Face& face){
+    // std::tuple<gp_Cylinder, gp_Pnt, gp_Dir, parameters, radius, sense>
+    std::array<Standard_Real, 10> cylinderParameters;
+    BRepAdaptor_Surface surface{face, Standard_True};
+    gp_Cylinder cylinder = surface.Cylinder();
+    gp_Ax1 symmetryAxis = cylinder.Axis();
+    Standard_Real radius = cylinder.Radius();
+    Standard_Integer sense = face.Orientation() == TopAbs_FORWARD ? -1 : +1;
+    cylinder.Coefficients(cylinderParameters[0], cylinderParameters[1],
+                          cylinderParameters[2], cylinderParameters[3],
+                          cylinderParameters[4], cylinderParameters[5],
+                          cylinderParameters[6], cylinderParameters[7],
+                          cylinderParameters[8], cylinderParameters[9]);
+    cylinderPrmts generatedParmts;
+    generatedParmts = std::make_tuple(cylinder, cylinder.Location(),
+                                      symmetryAxis.Direction(), cylinderParameters,
+                                      radius, sense);
+    return generatedParmts;
 }
 
 void

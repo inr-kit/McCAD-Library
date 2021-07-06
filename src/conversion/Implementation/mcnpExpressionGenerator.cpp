@@ -9,12 +9,12 @@
 McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(){}
 
 McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(
-        const std::shared_ptr<Geometry::Solid>& solidObj){
+        const std::shared_ptr<Geometry::Solid>& solidObj, const Standard_Real& precision){
     // Generate surface expressions
     solidObj->accessSImpl()->calcAABBCenter();
     if(solidObj->accessSImpl()->planesList.size() > 0){
         for (const auto& plSurface : solidObj->accessSImpl()->planesList){
-            if(plSurface->accessBSImpl()->generateParmts()){
+            if(plSurface->accessBSImpl()->generateParmts(precision)){
                 updateSurfParmts(plSurface, solidObj->accessSImpl()->aabbCenter);
                 genPlSurfExpr(plSurface);
             } else throw(std::runtime_error("Error in generating surface expression!"));
@@ -22,13 +22,13 @@ McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(
     }
     if(solidObj->accessSImpl()->cylindersList.size() > 0){
         for (const auto& cylSurface : solidObj->accessSImpl()->cylindersList){
-            if(cylSurface->accessBSImpl()->generateParmts()) genCylSurfExpr();
+            if(cylSurface->accessBSImpl()->generateParmts(precision)) genCylSurfExpr();
             else throw(std::runtime_error("Error in generating surface expression!"));
         }
     }
     if(solidObj->accessSImpl()->toriList.size() > 0){
         for (const auto& torSurface : solidObj->accessSImpl()->toriList){
-            if(torSurface->accessBSImpl()->generateParmts()) genTorSurfExpr();
+            if(torSurface->accessBSImpl()->generateParmts(precision)) genTorSurfExpr();
             else throw(std::runtime_error("Error in generating surface expression!"));
         }
     }

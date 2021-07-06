@@ -95,7 +95,10 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
         Interface_Static::SetIVal("read.precision.mode", 1);
         Interface_Static::SetRVal("read.precision.val", inputConfig.precision);
     }
-    auto readStatus = reader.ReadFile(inputConfig.inputFileName.c_str());
+    std::string fileName;
+    if(inputConfig.readConversion) fileName = inputConfig.conversionFileName;
+    else fileName = inputConfig.inputFileName;
+    auto readStatus = reader.ReadFile(fileName.c_str());
     if(readStatus == IFSelect_RetDone){
         reader.Transfer(document);
         TDF_Label label = document->Main();

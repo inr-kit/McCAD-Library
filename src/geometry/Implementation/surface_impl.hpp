@@ -3,7 +3,7 @@
 
 // C++
 #include <string>
-#include <array>
+#include <vector>
 // McCAD
 #include "surface.hpp"
 #include "tools_impl.hpp"
@@ -11,6 +11,7 @@
 #include <Standard.hxx>
 #include <TopoDS_Face.hxx>
 #include <gp_Pln.hxx>
+#include <gp_Cylinder.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Dir.hxx>
 
@@ -36,14 +37,21 @@ namespace McCAD::Geometry{
 
     // Conversion variables.
     Standard_Boolean updated{Standard_False};
-    gp_Pln plane;
-    gp_Pnt location;
-    gp_Dir normal;
-    std::array<Standard_Real, 4> surfParameters;
+    // General
     std::string surfSymb;
     Standard_Integer uniqueID;
     std::string surfExpr;
     signed int surfSense;
+    gp_Pnt location;
+    std::vector<Standard_Real> surfParameters;
+    // Plane
+    gp_Pln plane;
+    gp_Dir normal;
+    // Cylinder
+    gp_Cylinder cylinder;
+    gp_Dir symmetryAxis;
+    Standard_Real radius;
+
   };
 }
 
