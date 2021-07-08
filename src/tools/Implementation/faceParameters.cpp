@@ -108,6 +108,9 @@ McCAD::Tools::FaceParameters::genCylSurfParmts(const TopoDS_Face& face){
                           cylinderParameters[4], cylinderParameters[5],
                           cylinderParameters[6], cylinderParameters[7],
                           cylinderParameters[8], cylinderParameters[9]);
+    for(auto& parameter : cylinderParameters){
+        if(std::abs(parameter) < precision) parameter = 0.0;
+    }
     cylinderPrmts generatedParmts;
     generatedParmts = std::make_tuple(cylinder, cylinder.Location(),
                                       symmetryAxis.Direction(), cylinderParameters,
