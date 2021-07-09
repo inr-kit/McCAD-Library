@@ -30,7 +30,7 @@ namespace McCAD::Conversion{
     public:
         Standard_Real PI;
         Standard_Integer maxLineWidth;
-        Standard_Real precision;
+        Standard_Real precision, conversionFactor;
         std::string MCOutputFileName, volumesFileName;
         Standard_Integer startCellNum, startSurfNum;
         surfacesMap uniquePlanes, uniqueCylinders, uniqueSpheres;

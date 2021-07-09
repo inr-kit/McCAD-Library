@@ -15,7 +15,7 @@ namespace McCAD::IO{
       ~InputConfig();
 
       std::filesystem::path currentPath;
-      int conversion_factor{1};
+      double conversion_factor{1.0};
       const double PI = 3.141592653589793238463;
       void writeTemplate();
       std::vector<std::string> splitLine(const std::string& line, char delimiter);

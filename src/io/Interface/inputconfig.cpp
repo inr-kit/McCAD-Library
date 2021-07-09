@@ -90,8 +90,8 @@ McCAD::IO::InputConfig::readTemplate(){
                // General input.
                if (lineSplit[0] == "units"){
                    units = stringToLowerCase(lineSplit[2]);
-                   if (units == "cm") conversion_factor = 10;
-                   else if (units == "m") conversion_factor = 1000;
+                   if (units == "cm") conversion_factor = 10.0;
+                   else if (units == "m") conversion_factor = 1000.0;
                } else if (lineSplit[0] == "inputFileName")
                    inputFileName = lineSplit[2];
                // Decompositions

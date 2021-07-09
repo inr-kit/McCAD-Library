@@ -7,25 +7,37 @@
 #include <Standard.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Dir.hxx>
+#include <GProp_GProps.hxx>
+#include <BRepGProp.hxx>
 
 McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(){}
 
 McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(
-        const std::shared_ptr<Geometry::Solid>& solidObj, const Standard_Real& precision){
+        const std::shared_ptr<Geometry::Solid>& solidObj,
+        const Standard_Real& precision, const Standard_Real& conversionFactor){
     // Generate surface expressions
-    solidObj->accessSImpl()->calcAABBCenter();
+    // Calculate point to get sense of surfaces of the solid.
+    GProp_GProps geoProps;
+    BRepGProp::VolumeProperties(solidObj->accessSImpl()->solidShape, geoProps);
+    gp_Pnt solidCenter = geoProps.CentreOfMass();
+    if(solidObj->accessSImpl()->aabb.IsOut(solidCenter)){
+        // Consider the center of the AABB instead.
+        solidObj->accessSImpl()->calcAABBCenter();
+        solidCenter = solidObj->accessSImpl()->aabbCenter;
+    }
+    //solidObj->accessSImpl()->calcAABBCenter();
     if(solidObj->accessSImpl()->planesList.size() > 0){
         for (const auto& plSurface : solidObj->accessSImpl()->planesList){
             if(plSurface->accessBSImpl()->generateParmts(precision)){
-                updateSurfParmts(plSurface, solidObj->accessSImpl()->aabbCenter, precision);
-                genPlSurfExpr(plSurface);
+                updateSurfParmts(plSurface, precision);
+                genPlSurfExpr(plSurface, solidCenter, precision, conversionFactor);
             } else throw(std::runtime_error("Error in generating surface expression!"));
         }
     }
     if(solidObj->accessSImpl()->cylindersList.size() > 0){
         for (const auto& cylSurface : solidObj->accessSImpl()->cylindersList){
             if(cylSurface->accessBSImpl()->generateParmts(precision))
-                genCylSurfExpr(cylSurface, precision);
+                genCylSurfExpr(cylSurface, solidCenter, precision, conversionFactor);
             else throw(std::runtime_error("Error in generating surface expression!"));
         }
     }
@@ -45,22 +57,11 @@ McCAD::Conversion::MCNPExprGenerator::~MCNPExprGenerator(){
 void
 McCAD::Conversion::MCNPExprGenerator::updateSurfParmts(
         const std::shared_ptr<Geometry::BoundSurface>& plSurface,
-        const gp_Pnt& solidCenter, const Standard_Real& precision){
+        const Standard_Real& precision){
     // This function aims to adjust the normals to the planes so that they are
     // pointing in the direction of increase of all axes, MCNP style.
     Standard_Real x, y, z;
     plSurface->accessSImpl()->normal.Coord(x, y, z);
-    /* Debug
-    std::cout << "\nSolid center: x " <<  solidCenter.X() <<
-                 ", y " << solidCenter.Y() <<
-                 ", z " << solidCenter.Z() << std::endl;
-    // Reverse components if negative.
-    std::cout << "old: a " << plSurface->accessSImpl()->surfParameters[0] <<
-                 ", b " << plSurface->accessSImpl()->surfParameters[1] <<
-                 ", c " << plSurface->accessSImpl()->surfParameters[2] <<
-                 ", d " << plSurface->accessSImpl()->surfParameters[3] << std::endl;
-    std::cout << "old normal: x " << x << ", y " << y << ", z " << z << std::endl;
-    */
     if (std::signbit(y) && std::abs(x) < precision && std::abs(z) < precision) {
         // Plane perpendicular to Y axis.
         plSurface->accessSImpl()->updated = Standard_True;
@@ -86,50 +87,53 @@ McCAD::Conversion::MCNPExprGenerator::updateSurfParmts(
                     plSurface->accessSImpl()->surfParameters[1],
                     plSurface->accessSImpl()->surfParameters[2],
                     plSurface->accessSImpl()->surfParameters[3]);
-        /* Debug
-        std::cout << "new normal: x " << plSurface->accessSImpl()->normal.X() <<
-                     ", y " << plSurface->accessSImpl()->normal.Y() <<
-                     ", z " << plSurface->accessSImpl()->normal.Z() << std::endl;
-        std::cout << "new: a " << plSurface->accessSImpl()->surfParameters[0] <<
-                     ",b " << plSurface->accessSImpl()->surfParameters[1] <<
-                     ",c " << plSurface->accessSImpl()->surfParameters[2] <<
-                     ",d " << plSurface->accessSImpl()->surfParameters[3] << std::endl;
-        */
     }
-    plSurface->accessSImpl()->surfSense = std::signbit(Tools::SenseEvaluator{}.senseRelativeToPlane(
-                     plSurface->accessSImpl()->plane, solidCenter)) ? -1 : 1;
 }
 
 void
 McCAD::Conversion::MCNPExprGenerator::genPlSurfExpr(
-        const std::shared_ptr<Geometry::BoundSurface>& plSurface){
+        const std::shared_ptr<Geometry::BoundSurface>& plSurface,
+        const gp_Pnt& solidCenter, const Standard_Real& precision,
+        const Standard_Real& conversionFactor){
+    // Calculate plane sense.
+    plSurface->accessSImpl()->surfSense = std::signbit(Tools::SenseEvaluator{}.senseRelativeToPlane(
+                     plSurface->accessSImpl()->plane, solidCenter)) ? -1 : 1;
     std::string surfExpr;
     // Generate planar surface expression and store in surface object.
     Standard_Real parmtA{plSurface->accessSImpl()->surfParameters[0]},
                   parmtB{plSurface->accessSImpl()->surfParameters[1]},
                   parmtC{plSurface->accessSImpl()->surfParameters[2]},
                   parmtD{plSurface->accessSImpl()->surfParameters[3]};
-    if(parmtD != 0.0) parmtD *= -1;
-    if ((parmtA != 0.0) && (parmtB == 0.0) && (parmtC == 0.0)){
+    if(std::abs(parmtD) >= precision) parmtD *= -1;
+    if ((std::abs(parmtA) >= precision) && (std::abs(parmtB) < precision) &&
+            (std::abs(parmtC) < precision)){
         plSurface->accessSImpl()->surfSymb = "PX";
-        surfExpr += boost::str(boost::format("PX %11.5f") % ((parmtD/parmtA)/10.0));
-    } else if ((parmtA == 0.0) && (parmtB != 0.0) && (parmtC == 0.0)){
+        surfExpr += boost::str(boost::format("PX %11.5f") % ((parmtD/parmtA)/conversionFactor));
+    } else if ((std::abs(parmtA) < precision) && (std::abs(parmtB) >= precision) &&
+               (std::abs(parmtC) < precision)){
         plSurface->accessSImpl()->surfSymb = "PY";
-        surfExpr += boost::str(boost::format("PY %11.5f") % ((parmtD/parmtB)/10.0));
-    } else if ((parmtA == 0.0) && (parmtB == 0.0) && (parmtC != 0.0)){
+        surfExpr += boost::str(boost::format("PY %11.5f") % ((parmtD/parmtB)/conversionFactor));
+    } else if ((std::abs(parmtA) < precision) && (std::abs(parmtB) < precision) &&
+               (std::abs(parmtC) >= precision)){
         plSurface->accessSImpl()->surfSymb = "PZ";
-        surfExpr += boost::str(boost::format("PZ %11.5f") % ((parmtD/parmtC)/10.0));
+        surfExpr += boost::str(boost::format("PZ %11.5f") % ((parmtD/parmtC)/conversionFactor));
     } else
         surfExpr += boost::str(boost::format("P %11.5f  %11.5f  %11.5f  %11.5f")
-                           % (parmtA/10.0) % (parmtB/10.0) % (parmtC/10.0)
-                           % (parmtD/10.0));
+                           % (parmtA/conversionFactor) % (parmtB/conversionFactor) % (parmtC/conversionFactor)
+                           % (parmtD/conversionFactor));
     plSurface->accessSImpl()->surfExpr = surfExpr;
 }
 
 void
 McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
         const std::shared_ptr<Geometry::BoundSurface>& cylSurface,
-        const Standard_Real& precision){
+        const gp_Pnt& solidCenter, const Standard_Real& precision,
+        const Standard_Real& conversionFactor){
+    // Calculate cylinder sense.
+    //cylSurface->accessSImpl()->surfSense =
+    std::cout << "calc: " << std::signbit(Tools::SenseEvaluator{}.senseRelativeToCyl(
+                     cylSurface->accessSImpl()->cylinder, solidCenter)) <<
+                 ", from face orient: " << cylSurface->accessSImpl()->surfSense;
     std::string surfExpr;
     // Generate planar surface expression and store in surface object.
     // Get the diretion of the symmetry axis of the cylinder.
@@ -142,14 +146,15 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
         if(std::abs(cylLocation.Y()) < precision && std::abs(cylLocation.Z()) < precision){
             // Cylinder on X-axis.
             cylSurface->accessSImpl()->surfSymb = "CX";
-            surfExpr += boost::str(boost::format("CX %11.5f") % (cylSurface->accessSImpl()->radius));
+            surfExpr += boost::str(boost::format("CX %11.5f")
+                                   % (cylSurface->accessSImpl()->radius/conversionFactor));
         } else {
             // Cylinder parallel to X-axis.
             cylSurface->accessSImpl()->surfSymb = "C/X";
             surfExpr += boost::str(boost::format("C/X %11.5f  %11.5f  %11.5f")
-                                   % cylLocation.Y()
-                                   % cylLocation.Z()
-                                   % (cylSurface->accessSImpl()->radius));
+                                   % (cylLocation.Y()/conversionFactor)
+                                   % (cylLocation.Z()/conversionFactor)
+                                   % (cylSurface->accessSImpl()->radius/conversionFactor));
         }
     } else if (std::abs(cylAxisDir.X()) < precision && std::abs(cylAxisDir.Z()) < precision) {
         // Cylinder parallel to Y-axis.
@@ -157,14 +162,15 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
         if(std::abs(cylLocation.X()) < precision && std::abs(cylLocation.Z()) < precision){
             // Cylinder on Y-axis.
             cylSurface->accessSImpl()->surfSymb = "CY";
-            surfExpr += boost::str(boost::format("CY %11.5f") % (cylSurface->accessSImpl()->radius));
+            surfExpr += boost::str(boost::format("CY %11.5f")
+                                   % (cylSurface->accessSImpl()->radius/conversionFactor));
         } else {
             // Cylinder parallel to Y-axis.
             cylSurface->accessSImpl()->surfSymb = "C/Y";
             surfExpr += boost::str(boost::format("C/Y %11.5f  %11.5f  %11.5f")
-                                   % cylLocation.X()
-                                   % cylLocation.Z()
-                                   % (cylSurface->accessSImpl()->radius));
+                                   % (cylLocation.X()/conversionFactor)
+                                   % (cylLocation.Z()/conversionFactor)
+                                   % (cylSurface->accessSImpl()->radius/conversionFactor));
         }
     } else if (std::abs(cylAxisDir.X()) < precision && std::abs(cylAxisDir.Y()) < precision) {
         // Cylinder parallel to Z-axis.
@@ -172,14 +178,15 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
         if(std::abs(cylLocation.X()) < precision && std::abs(cylLocation.Y()) < precision){
             // Cylinder on Z-axis.
             cylSurface->accessSImpl()->surfSymb = "CZ";
-            surfExpr += boost::str(boost::format("CZ %11.5f") % (cylSurface->accessSImpl()->radius));
+            surfExpr += boost::str(boost::format("CZ %11.5f")
+                                   % (cylSurface->accessSImpl()->radius/conversionFactor));
         } else {
             // Cylinder parallel to Z-axis.
             cylSurface->accessSImpl()->surfSymb = "C/Z";
             surfExpr += boost::str(boost::format("C/Z %11.5f  %11.5f  %11.5f")
-                                   % cylLocation.X()
-                                   % cylLocation.Y()
-                                   % (cylSurface->accessSImpl()->radius));
+                                   % (cylLocation.X()/conversionFactor)
+                                   % (cylLocation.Y()/conversionFactor)
+                                   % (cylSurface->accessSImpl()->radius/conversionFactor));
         }
     } else {
         // General cylinder.
@@ -187,15 +194,15 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
         surfExpr += boost::str(boost::format("GQ %11.5f  %11.5f  %11.5f %11.5f  %11.5f  "
                                              "%11.5f %11.5f  %11.5f  %11.5f  %11.5f")
                                % cylSurface->accessSImpl()->surfParameters[0]
-                % cylSurface->accessSImpl()->surfParameters[1]
-                % cylSurface->accessSImpl()->surfParameters[2]
-                % cylSurface->accessSImpl()->surfParameters[3]
-                % cylSurface->accessSImpl()->surfParameters[4]
-                % cylSurface->accessSImpl()->surfParameters[5]
-                % cylSurface->accessSImpl()->surfParameters[6]
-                % cylSurface->accessSImpl()->surfParameters[7]
-                % cylSurface->accessSImpl()->surfParameters[8]
-                % cylSurface->accessSImpl()->surfParameters[9]);
+                % (cylSurface->accessSImpl()->surfParameters[1]/conversionFactor)
+                % (cylSurface->accessSImpl()->surfParameters[2]/conversionFactor)
+                % (cylSurface->accessSImpl()->surfParameters[3]/conversionFactor)
+                % (cylSurface->accessSImpl()->surfParameters[4]/conversionFactor)
+                % (cylSurface->accessSImpl()->surfParameters[5]/conversionFactor)
+                % (cylSurface->accessSImpl()->surfParameters[6]/conversionFactor)
+                % (cylSurface->accessSImpl()->surfParameters[7]/conversionFactor)
+                % (cylSurface->accessSImpl()->surfParameters[8]/conversionFactor)
+                % (cylSurface->accessSImpl()->surfParameters[9]/conversionFactor));
     }
     cylSurface->accessSImpl()->surfExpr = surfExpr;
 }

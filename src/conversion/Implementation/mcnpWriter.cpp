@@ -15,7 +15,7 @@ McCAD::Conversion::MCNPWriter::MCNPWriter(const IO::InputConfig& inputConfig) :
     startCellNum{inputConfig.startCellNum}, startSurfNum{inputConfig.startSurfNum},
     precision{inputConfig.precision}, maxLineWidth{inputConfig.maxLineWidth},
     voidGeneration{inputConfig.voidGeneration}, BVHVoid{inputConfig.BVHVoid},
-    PI{inputConfig.PI}{
+    PI{inputConfig.PI}, conversionFactor{inputConfig.conversion_factor}{
 }
 
 McCAD::Conversion::MCNPWriter::~MCNPWriter(){
@@ -55,7 +55,7 @@ McCAD::Conversion::MCNPWriter::processSolids(
     for(const auto& compound : compoundList){
         taskQueue.submit([this, compound](){
             for(const auto& solidObj : compound->solidsList){
-                MCNPExprGenerator{solidObj, precision};
+                MCNPExprGenerator{solidObj, precision, conversionFactor};
             }
         });
     }
