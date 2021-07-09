@@ -45,24 +45,44 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
         }
         if(!commonLineEdgesMap.empty()){
             // Cylinder has common line edges with planes.
-            for(const auto& member : commonLineEdgesMap){
-                if(!planesList[member.first]->accessSImpl()->splitSurface) continue;
-                if(member.second.size() == 1){
-                    auto assistSurface = generateThroughLineAxis(
-                                cylindersList[i], member.second[0],
-                            solidObj.accessSImpl()->boxDiagonalLength,
-                            solidObj.accessSImpl()->meshDeflection);
-                    if(assistSurface){
-                        solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
-                        solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
-                        solidObj.accessSImpl()->assistFacesMap[planesList[member.first]] = assistSurface.value();
+            if (commonLineEdgesMap.size() == 1){
+                for(const auto& member : commonLineEdgesMap){
+                    if(!planesList[member.first]->accessSImpl()->splitSurface) continue;
+                    if(member.second.size() == 1){
+                        auto assistSurface = generateThroughLineAxis(
+                                    cylindersList[i], member.second[0],
+                                solidObj.accessSImpl()->boxDiagonalLength,
+                                solidObj.accessSImpl()->meshDeflection);
+                        if(assistSurface){
+                            solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
+                            solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
+                            solidObj.accessSImpl()->assistFacesMap[planesList[member.first]] = assistSurface.value();
+                        }
                     }
-                } else if (commonLineEdgesMap.size() == 2){
-                    if(cylindersList[i]->accessSImpl()->face.Orientation() == TopAbs_REVERSED){
-                        // Cylinder is concave.
-                    } else {
-                        // Cylinder is convex.
+                }
+            } else if (commonLineEdgesMap.size() == 2){
+                if(cylindersList[i]->accessSImpl()->face.Orientation() == TopAbs_REVERSED){
+                    // Cylinder is concave. Check that the edges are convex.
+                    std::vector<std::shared_ptr<Geometry::Edge>> commonEdgesToUse;
+                    for(const auto& member : commonLineEdgesMap){
+                        if(member.second.size() == 1 &&
+                                !planesList[member.first]->accessSImpl()->splitSurface &&
+                                member.second[0]->accessEImpl()->edge.Convex() == 1){
+                            commonEdgesToUse.push_back(member.second[0]);
+                        }
                     }
+                    if(commonEdgesToUse.size() == 2){
+                        auto assistSurface = generateThroughTwoLines(
+                                    cylindersList[i], commonEdgesToUse[0], commonEdgesToUse[1],
+                                solidObj.accessSImpl()->boxDiagonalLength,
+                                solidObj.accessSImpl()->meshDeflection);
+                        if(assistSurface){
+                            solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
+                            solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
+                        }
+                    }
+                } else {
+                    // Cylinder is convex.
                 }
             }
         }
@@ -107,6 +127,48 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::generateThroughLineAxis(
         // Set the assist surface reference to the original surfaces.
         cylinderFace->accessSImpl()->hasAssistSurface = Standard_True;
         commonEdge->accessEImpl()->useForSplitSurface = Standard_True;
+        return assistSurface;
+    }
+    return std::nullopt;
+}
+
+std::optional<std::shared_ptr<McCAD::Geometry::BoundSurface>>
+McCAD::Decomposition::AssistPlnCylSurfaceGenerator::generateThroughTwoLines(
+        const std::shared_ptr<Geometry::BoundSurface>& cylinderFace,
+        const std::shared_ptr<Geometry::Edge>& firstEdge,
+        const std::shared_ptr<Geometry::Edge>& secondEdge,
+        const Standard_Real& boxDiagonalLength, const Standard_Real& meshDeflection){
+    // Need first to assert that the edges are planar.
+    gp_Vec firstVec(firstEdge->accessEImpl()->startPoint,
+                    firstEdge->accessEImpl()->endPoint),
+           secondVec(secondEdge->accessEImpl()->startPoint,
+                     secondEdge->accessEImpl()->endPoint);
+    gp_Dir firstDir(firstVec), secondDir(secondVec);
+    if(!firstDir.IsParallel(secondDir, inputConfig.angularTolerance) &&
+            !firstDir.IsOpposite(secondDir, inputConfig.angularTolerance)){
+        // There is an angle between the two directions, Check if planar.
+        gp_Dir normalDir{firstDir.Crossed(secondDir)};
+        if(!normalDir.IsNormal(firstDir, inputConfig.angularTolerance) &&
+           !normalDir.IsNormal(secondDir, inputConfig.angularTolerance)){
+            // Edges are not planar!. Cannot be used to vreate surface.
+            return std::nullopt;
+        }
+    }
+    auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
+            inputConfig.precision}.generatePlaneOn2Lines(firstEdge, secondEdge);
+    if(splitFace){
+        std::shared_ptr<Geometry::BoundSurface> assistSurface =
+                SurfaceObjCreator{}(splitFace.value(), boxDiagonalLength,
+                                    inputConfig.edgeTolerance);
+        assistSurface->accessSImpl()->surfaceNumber =
+                cylinderFace->accessSImpl()->surfaceNumber * 1000;
+        if (assistSurface->accessBSImpl()->generateMesh(meshDeflection)){
+            assistSurface->accessBSImpl()->generateEdges(inputConfig.parameterTolerance);
+        }
+        assistSurface->accessBSImpl()->assistEdgesList.push_back(firstEdge);
+        assistSurface->accessBSImpl()->assistEdgesList.push_back(secondEdge);
+        // Set the assist surface reference to the original surfaces.
+        cylinderFace->accessSImpl()->hasAssistSurface = Standard_True;
         return assistSurface;
     }
     return std::nullopt;

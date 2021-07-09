@@ -47,6 +47,15 @@ McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(
             else throw(std::runtime_error("Error in generating surface expression!"));
         }
     }
+    // Process assisting split surfaces.
+    if(solidObj->accessSImpl()->assistFacesList.size() > 0){
+        for (const auto& assistPlnSurface : solidObj->accessSImpl()->assistFacesList){
+            if(assistPlnSurface->accessBSImpl()->generateParmts(precision)){
+                updateSurfParmts(assistPlnSurface, precision);
+                genPlSurfExpr(assistPlnSurface, solidCenter, precision, conversionFactor);
+            } else throw(std::runtime_error("Error in generating surface expression!"));
+        }
+    }
     // Generate cell description
     createSurfacesList(solidObj);
 }
@@ -215,14 +224,12 @@ McCAD::Conversion::MCNPExprGenerator::createSurfacesList(
         const std::shared_ptr<Geometry::Solid>& solidObj){
     for (const auto& surface : solidObj->accessSImpl()->facesList){
         solidObj->accessSImpl()->intersectionList.push_back(surface);
-        if (surface->accessSImpl()->hasAssistSurface){
-            /*for(const auto& assistSurf : surface->accessSImpl()->assistSurfaceslist){
-                if (assistSurf->accessSImpl()->splitSurface){
-                    solidObj->accessSImpl()->unionList.push_back(assistSurf);
-                } else{
-                    solidObj->accessSImpl()->intersectionList.push_back(assistSurf);;
-                }
-            }*/
+    }
+    for (const auto& assistSurface : solidObj->accessSImpl()->assistFacesList){
+        if (assistSurface->accessSImpl()->splitSurface){
+            solidObj->accessSImpl()->unionList.push_back(assistSurface);
+        } else{
+            solidObj->accessSImpl()->intersectionList.push_back(assistSurface);
         }
     }
 }
