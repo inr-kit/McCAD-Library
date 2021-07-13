@@ -5,8 +5,11 @@
 #include <memory>
 // McCAD
 #include "solid_impl.hpp"
+#include "boundSurface_impl.hpp"
 #include "voidCell.hpp"
 // OCC
+#include <Standard.hxx>
+#include <gp_Pnt.hxx>
 
 namespace McCAD::Conversion{
     class MCNPExprGenerator {

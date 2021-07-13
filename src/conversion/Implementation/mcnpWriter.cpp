@@ -9,9 +9,10 @@
 #include "TaskQueue.hpp"
 #include "mcnpExpressionGenerator.hpp"
 #include "SurfaceUtilities.hpp"
+#include "AssistSurfaceGenerator.hpp"
 
 McCAD::Conversion::MCNPWriter::MCNPWriter(const IO::InputConfig& inputConfig) :
-    MCOutputFileName{inputConfig.MCOutputFileName}, volumesFileName{inputConfig.volumesFileName},
+    inputConfig{inputConfig}, MCOutputFileName{inputConfig.MCOutputFileName}, volumesFileName{inputConfig.volumesFileName},
     startCellNum{inputConfig.startCellNum}, startSurfNum{inputConfig.startSurfNum},
     precision{inputConfig.precision}, maxLineWidth{inputConfig.maxLineWidth},
     voidGeneration{inputConfig.voidGeneration}, BVHVoid{inputConfig.BVHVoid},
@@ -54,6 +55,12 @@ McCAD::Conversion::MCNPWriter::processSolids(
     TaskQueue<Policy::Parallel> taskQueue;
     for(const auto& compound : compoundList){
         taskQueue.submit([this, compound](){
+            if(compound->cylSolidsList.size() > 0){
+                // Generate assist conversion surfaces.
+                for(const auto& cylSolidObj : compound->cylSolidsList){
+                    Decomposition::AssistSurfaceGenerator{inputConfig}(*cylSolidObj);
+                }
+            }
             for(const auto& solidObj : compound->solidsList){
                 MCNPExprGenerator{solidObj, precision, conversionFactor};
             }

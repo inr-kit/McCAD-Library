@@ -28,6 +28,7 @@ namespace McCAD::Conversion{
         using voidsMap = std::map<std::tuple<Standard_Integer, Standard_Integer>,
                                   std::shared_ptr<VoidCell>>;
     public:
+        IO::InputConfig inputConfig;
         Standard_Real PI;
         Standard_Integer maxLineWidth;
         Standard_Real precision, conversionFactor;

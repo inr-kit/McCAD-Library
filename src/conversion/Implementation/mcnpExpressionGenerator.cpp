@@ -4,8 +4,6 @@
 #include "mcnpExpressionGenerator.hpp"
 #include "senseEvaluator.hpp"
 // OCC
-#include <Standard.hxx>
-#include <gp_Pnt.hxx>
 #include <gp_Dir.hxx>
 #include <GProp_GProps.hxx>
 #include <BRepGProp.hxx>
@@ -47,7 +45,7 @@ McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(
             else throw(std::runtime_error("Error in generating surface expression!"));
         }
     }
-    // Process assisting split surfaces.
+    // Process assisting surfaces.
     if(solidObj->accessSImpl()->assistFacesList.size() > 0){
         for (const auto& assistPlnSurface : solidObj->accessSImpl()->assistFacesList){
             if(assistPlnSurface->accessBSImpl()->generateParmts(precision)){
