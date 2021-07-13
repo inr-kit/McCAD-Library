@@ -110,24 +110,23 @@ McCAD::Conversion::MCNPExprGenerator::genPlSurfExpr(
     Standard_Real parmtA{plSurface->accessSImpl()->surfParameters[0]},
                   parmtB{plSurface->accessSImpl()->surfParameters[1]},
                   parmtC{plSurface->accessSImpl()->surfParameters[2]},
-                  parmtD{plSurface->accessSImpl()->surfParameters[3]};
+                  parmtD{plSurface->accessSImpl()->surfParameters[3]/conversionFactor};
     if(std::abs(parmtD) >= precision) parmtD *= -1;
     if ((std::abs(parmtA) >= precision) && (std::abs(parmtB) < precision) &&
             (std::abs(parmtC) < precision)){
         plSurface->accessSImpl()->surfSymb = "PX";
-        surfExpr += boost::str(boost::format("PX %11.5f") % ((parmtD/parmtA)/conversionFactor));
+        surfExpr += boost::str(boost::format("PX %11.5f") % (parmtD/parmtA));
     } else if ((std::abs(parmtA) < precision) && (std::abs(parmtB) >= precision) &&
                (std::abs(parmtC) < precision)){
         plSurface->accessSImpl()->surfSymb = "PY";
-        surfExpr += boost::str(boost::format("PY %11.5f") % ((parmtD/parmtB)/conversionFactor));
+        surfExpr += boost::str(boost::format("PY %11.5f") % (parmtD/parmtB));
     } else if ((std::abs(parmtA) < precision) && (std::abs(parmtB) < precision) &&
                (std::abs(parmtC) >= precision)){
         plSurface->accessSImpl()->surfSymb = "PZ";
-        surfExpr += boost::str(boost::format("PZ %11.5f") % ((parmtD/parmtC)/conversionFactor));
+        surfExpr += boost::str(boost::format("PZ %11.5f") % (parmtD/parmtC));
     } else
         surfExpr += boost::str(boost::format("P %11.5f  %11.5f  %11.5f  %11.5f")
-                           % (parmtA/conversionFactor) % (parmtB/conversionFactor) % (parmtC/conversionFactor)
-                           % (parmtD/conversionFactor));
+                           % (parmtA) % (parmtB) % (parmtC) % (parmtD));
     plSurface->accessSImpl()->surfExpr = surfExpr;
 }
 
@@ -201,14 +200,14 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
         surfExpr += boost::str(boost::format("GQ %11.5f  %11.5f  %11.5f %11.5f  %11.5f  "
                                              "%11.5f %11.5f  %11.5f  %11.5f  %11.5f")
                                % cylSurface->accessSImpl()->surfParameters[0]
-                % (cylSurface->accessSImpl()->surfParameters[1]/conversionFactor)
-                % (cylSurface->accessSImpl()->surfParameters[2]/conversionFactor)
-                % (cylSurface->accessSImpl()->surfParameters[3]/conversionFactor)
-                % (cylSurface->accessSImpl()->surfParameters[4]/conversionFactor)
-                % (cylSurface->accessSImpl()->surfParameters[5]/conversionFactor)
-                % (cylSurface->accessSImpl()->surfParameters[6]/conversionFactor)
-                % (cylSurface->accessSImpl()->surfParameters[7]/conversionFactor)
-                % (cylSurface->accessSImpl()->surfParameters[8]/conversionFactor)
+                % (cylSurface->accessSImpl()->surfParameters[1])
+                % (cylSurface->accessSImpl()->surfParameters[2])
+                % (cylSurface->accessSImpl()->surfParameters[3])
+                % (cylSurface->accessSImpl()->surfParameters[4])
+                % (cylSurface->accessSImpl()->surfParameters[5])
+                % (cylSurface->accessSImpl()->surfParameters[6])
+                % (cylSurface->accessSImpl()->surfParameters[7])
+                % (cylSurface->accessSImpl()->surfParameters[8])
                 % (cylSurface->accessSImpl()->surfParameters[9]/conversionFactor));
     }
     cylSurface->accessSImpl()->surfExpr = surfExpr;
