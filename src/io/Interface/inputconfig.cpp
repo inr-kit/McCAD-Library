@@ -37,16 +37,16 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "rejectFileName = decompositionReject.stp\n"
                    "# > Other parameters;\n"
                    "recurrenceDepth = 20\n"
-                   "minSolidVolume = 1.0e-4\n"
-                   "minFaceArea = 1.0e-4\n"
+                   "minSolidVolume = 1.0e-4 $[cm3]\n"
+                   "minFaceArea = 1.0e-4 $[cm2]\n"
                    "scalingFactor = 100.0\n"
-                   "precision = 1.0e-6\n"
-                   "faceTolerance = 1.0e-8\n"
-                   "edgeTolerance = 1.0e-8\n"
-                   "parameterTolerance = 1.0e-8\n"
-                   "angularTolerance = 1.0e-4\n"
-                   "distanceTolerance = 1.0e-6\n"
-                   "torusSplitAngle = 45.0\n"
+                   "precision = 1.0e-6 $[]\n"
+                   "faceTolerance = 1.0e-8 $[cm]\n"
+                   "edgeTolerance = 1.0e-8 $[cm]\n"
+                   "parameterTolerance = 1.0e-8 $[cm]\n"
+                   "angularTolerance = 1.0e-4 $[]\n"
+                   "distanceTolerance = 1.0e-6 $[cm]\n"
+                   "torusSplitAngle = 360.0\n"
                    "simplifyTori = false\n" << std::endl;
     inputConfig << "# Conversion\n"
                    "# ==========\n"
@@ -56,11 +56,11 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "# > Choose whether or not to generate void cells;\n"
                    "voidGeneration = true\n"
                    "# > Minimum acceptable void volume shouldn;t be less than minSolidVolume;\n"
-                   "minVoidVolume = 1.0\n"
+                   "minVoidVolume = 1.0 $[cm3]\n"
                    "# > A larger number will result in fewer void cells but longer cell expressions;\n"
                    "maxSolidsPerVoidCell = 20\n"
                    "# > Choose whether or not to generate Bound Volume Heirarchy void cells;\n"
-                   "BVHVoid = true\n"
+                   "BVHVoid = false\n"
                    "# > Choose the desired MC code for conversion;\n"
                    "MCcode = mcnp\n"
                    "startCellNum = 1\n"
@@ -90,8 +90,8 @@ McCAD::IO::InputConfig::readTemplate(){
                // General input.
                if (lineSplit[0] == "units"){
                    units = stringToLowerCase(lineSplit[2]);
-                   if (units == "cm") conversion_factor = 10.0;
-                   else if (units == "m") conversion_factor = 1000.0;
+                   if (units == "cm") conversionFactor = 10.0;
+                   else if (units == "m") conversionFactor = 1000.0;
                } else if (lineSplit[0] == "inputFileName")
                    inputFileName = lineSplit[2];
                // Decompositions
@@ -104,23 +104,23 @@ McCAD::IO::InputConfig::readTemplate(){
                else if (lineSplit[0] == "recurrenceDepth")
                    recurrenceDepth = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "minSolidVolume")
-                   minSolidVolume = std::stof(lineSplit[2]) * conversion_factor;
+                   minSolidVolume = std::stof(lineSplit[2]) * std::pow(conversionFactor, 3);
                else if (lineSplit[0] == "minFaceArea")
-                   minFaceArea = std::stof(lineSplit[2]) * conversion_factor;
+                   minFaceArea = std::stof(lineSplit[2]) * std::pow(conversionFactor, 2);
                else if (lineSplit[0] == "scalingFactor")
                    scalingFactor = std::stof(lineSplit[2]);
                else if (lineSplit[0] == "precision")
-                   precision = std::stof(lineSplit[2]) * conversion_factor;
+                   precision = std::stof(lineSplit[2]);
                else if (lineSplit[0] == "faceTolerance")
-                   faceTolerance = std::stof(lineSplit[2]) * conversion_factor;
+                   faceTolerance = std::stof(lineSplit[2]) * conversionFactor;
                else if (lineSplit[0] == "edgeTolerance")
-                   edgeTolerance = std::stof(lineSplit[2]) * conversion_factor;
+                   edgeTolerance = std::stof(lineSplit[2]) * conversionFactor;
                else if (lineSplit[0] == "parameterTolerance")
-                   parameterTolerance = std::stof(lineSplit[2]) * conversion_factor;
+                   parameterTolerance = std::stof(lineSplit[2]) * conversionFactor;
                else if (lineSplit[0] == "angularTolerance")
                    angularTolerance = std::stof(lineSplit[2]) * PI;
                else if (lineSplit[0] == "distanceTolerance")
-                   distanceTolerance = std::stof(lineSplit[2]) * conversion_factor;
+                   distanceTolerance = std::stof(lineSplit[2]) * conversionFactor;
                else if (lineSplit[0] == "torusSplitAngle")
                    torusSplitAngle = std::stof(lineSplit[2]) * PI / 180.0;
                else if (lineSplit[0] == "simplifyTori")
@@ -133,7 +133,7 @@ McCAD::IO::InputConfig::readTemplate(){
                else if (lineSplit[0] == "voidGeneration")
                    voidGeneration = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
                else if (lineSplit[0] == "minVoidVolume")
-                   minVoidVolume = std::stof(lineSplit[2]) * conversion_factor;
+                   minVoidVolume = std::stof(lineSplit[2]) * std::pow(conversionFactor, 3);
                else if (lineSplit[0] == "maxSolidsPerVoidCell")
                    maxSolidsPerVoidCell = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "BVHVoid")

@@ -12,6 +12,10 @@ McCAD::Tools::FaceParameters::FaceParameters(){
 McCAD::Tools::FaceParameters::FaceParameters(const Standard_Real& precision) :
     precision{precision}{}
 
+McCAD::Tools::FaceParameters::FaceParameters(const Standard_Real& precision,
+                                             const Standard_Real& scalingFactor) :
+    precision{precision}, scalingFactor{scalingFactor}{}
+
 McCAD::Tools::FaceParameters::~FaceParameters(){}
 
 std::optional<gp_Dir>
@@ -71,6 +75,8 @@ McCAD::Tools::FaceParameters::calcDerivative(const BRepAdaptor_Surface& surface,
 
 McCAD::Tools::FaceParameters::planePrmts
 McCAD::Tools::FaceParameters::genPlSurfParmts(const TopoDS_Face& face){
+    // This function is currently only used for conversion. It implements scaling
+    // of the face per the user desired units as specified in the config file.
     // std::tuple<gp_Pln, gp_Pnt, gp_Dir, parameters>
     gp_Ax1 planeNormal;
     std::array<Standard_Real, 4> planeParameters;
@@ -81,6 +87,12 @@ McCAD::Tools::FaceParameters::genPlSurfParmts(const TopoDS_Face& face){
         planeNormal.Reverse();
         plane.SetAxis(planeNormal);
     }
+    if(scalingFactor != 1.0){
+        // Scale the plane before generating parameters.
+        plane.Scale(gp_Pnt{0.0, 0.0, 0.0}, scalingFactor);
+    }
+    // Coefficients
+    // A * X + B * Y + C * Z + D = 0.0
     plane.Coefficients(planeParameters[0], planeParameters[1], planeParameters[2],
                        planeParameters[3]);
     for(auto& parameter : planeParameters){
@@ -96,13 +108,21 @@ McCAD::Tools::FaceParameters::genPlSurfParmts(const TopoDS_Face& face){
 
 McCAD::Tools::FaceParameters::cylinderPrmts
 McCAD::Tools::FaceParameters::genCylSurfParmts(const TopoDS_Face& face){
+    // This function is currently only used for conversion. It implements scaling
+    // of the face per the user desired units as specified in the config file.
     // std::tuple<gp_Cylinder, gp_Pnt, gp_Dir, parameters, radius, sense>
     std::array<Standard_Real, 10> cylinderParameters;
     BRepAdaptor_Surface surface{face, Standard_True};
     gp_Cylinder cylinder = surface.Cylinder();
+    if(scalingFactor != 1.0){
+        // Scale the cylinder before generating parameters.
+        cylinder.Scale(gp_Pnt{0.0, 0.0, 0.0}, scalingFactor);
+    }
     gp_Ax1 symmetryAxis = cylinder.Axis();
     Standard_Real radius = cylinder.Radius();
     Standard_Integer sense = face.Orientation() == TopAbs_FORWARD ? -1 : +1;
+    // Coefficients
+    // A1.X**2 + A2.Y**2 + A3.Z**2 + 2.(B1.X.Y + B2.X.Z + B3.Y.Z) + 2.(C1.X + C2.Y + C3.Z) + D = 0.0
     cylinder.Coefficients(cylinderParameters[0], cylinderParameters[1],
                           cylinderParameters[2], cylinderParameters[3],
                           cylinderParameters[4], cylinderParameters[5],

@@ -12,11 +12,7 @@
 #include "AssistSurfaceGenerator.hpp"
 
 McCAD::Conversion::MCNPWriter::MCNPWriter(const IO::InputConfig& inputConfig) :
-    inputConfig{inputConfig}, MCOutputFileName{inputConfig.MCOutputFileName}, volumesFileName{inputConfig.volumesFileName},
-    startCellNum{inputConfig.startCellNum}, startSurfNum{inputConfig.startSurfNum},
-    precision{inputConfig.precision}, maxLineWidth{inputConfig.maxLineWidth},
-    voidGeneration{inputConfig.voidGeneration}, BVHVoid{inputConfig.BVHVoid},
-    PI{inputConfig.PI}, conversionFactor{inputConfig.conversion_factor}{
+    inputConfig{inputConfig}, scalingFactor{1.0/inputConfig.conversionFactor}{
 }
 
 McCAD::Conversion::MCNPWriter::~MCNPWriter(){
@@ -31,15 +27,16 @@ McCAD::Conversion::MCNPWriter::operator()(
     createSolidsMap(compoundList);
     createVoidMap(voidCell);
     // Create output file stream and write cells, surfaces, and data cards.
-    if(std::filesystem::exists(MCOutputFileName)){
-        std::string oldFileName{"old_" + MCOutputFileName};
-        std::rename(MCOutputFileName.c_str(), oldFileName.c_str());
+    if(std::filesystem::exists(inputConfig.MCOutputFileName)){
+        std::string oldFileName{"old_" + inputConfig.MCOutputFileName};
+        std::rename(inputConfig.MCOutputFileName.c_str(), oldFileName.c_str());
     }
-    if(std::filesystem::exists(volumesFileName)){
-        std::string oldFileName{"old_" + volumesFileName};
-        std::rename(volumesFileName.c_str(), oldFileName.c_str());
+    if(std::filesystem::exists(inputConfig.volumesFileName)){
+        std::string oldFileName{"old_" + inputConfig.volumesFileName};
+        std::rename(inputConfig.volumesFileName.c_str(), oldFileName.c_str());
     }
-    std::ofstream outputStream(MCOutputFileName.c_str()), volumeStream(volumesFileName.c_str());
+    std::ofstream outputStream(inputConfig.MCOutputFileName.c_str()),
+                  volumeStream(inputConfig.volumesFileName.c_str());
     writeHeader(outputStream);
     writeCellCard(outputStream, volumeStream);
     writeVoidCard(outputStream);
@@ -62,7 +59,7 @@ McCAD::Conversion::MCNPWriter::processSolids(
                 }
             }
             for(const auto& solidObj : compound->solidsList){
-                MCNPExprGenerator{solidObj, precision, conversionFactor};
+                MCNPExprGenerator{inputConfig.precision, scalingFactor}(solidObj);
             }
         });
     }
@@ -81,7 +78,7 @@ McCAD::Conversion::MCNPWriter::findDuplicate(
             Standard_Boolean equalParmts{Standard_True};
             for (Standard_Integer i = 0; i < surface->accessSImpl()->surfParameters.size(); ++i){
                 if (std::abs(surface->accessSImpl()->surfParameters[i] -
-                             member.second->accessSImpl()->surfParameters[i]) > precision)
+                             member.second->accessSImpl()->surfParameters[i]) > inputConfig.precision)
                     equalParmts = Standard_False;
             }
             if (equalParmts) return member.first;
@@ -93,7 +90,7 @@ McCAD::Conversion::MCNPWriter::findDuplicate(
 void
 McCAD::Conversion::MCNPWriter::addUniqueSurfNumbers(
         const std::vector<std::shared_ptr<Geometry::Impl::Compound>>& compoundList){
-    Standard_Integer surfNumber = startSurfNum;
+    Standard_Integer surfNumber = inputConfig.startSurfNum;
     for(const auto& compound: compoundList){
         for(const auto& solidObj : compound->solidsList){
             for(const auto& surface : solidObj->accessSImpl()->intersectionList){
@@ -163,7 +160,7 @@ McCAD::Conversion::MCNPWriter::createSolidsMap(
 
 void
 McCAD::Conversion::MCNPWriter::addDaughterVoids(const std::shared_ptr<VoidCell>& voidCell){
-    if(BVHVoid){
+    if(inputConfig.BVHVoid){
         // Add all inner and leaf nodes in the binary tree.
         if(voidCell->daughterVoidCells.size() > 0){
             // Add daughter void cells.
@@ -197,10 +194,10 @@ McCAD::Conversion::MCNPWriter::createVoidMap(
     std::tuple<Standard_Integer, Standard_Integer> voidDesignator =
             std::make_tuple(voidCell->depth, voidCell->width);
     voidCellsMap[voidDesignator] = voidCell;
-    if(voidGeneration) addDaughterVoids(voidCell);
-    Standard_Integer voidSurfNumber = startSurfNum + uniqueSurfaces.size();
+    if(inputConfig.voidGeneration) addDaughterVoids(voidCell);
+    Standard_Integer voidSurfNumber = inputConfig.startSurfNum + uniqueSurfaces.size();
     for (const auto& member : voidCellsMap){
-        MCNPExprGenerator{}.genVoidExpr(member.second);
+        MCNPExprGenerator{inputConfig.precision, scalingFactor}(member.second);
         member.second->voidSurfNumber = voidSurfNumber;
         uniqueSurfaces[voidSurfNumber] = member.second->voidSurfExpr;
         ++voidSurfNumber;
@@ -217,7 +214,7 @@ McCAD::Conversion::MCNPWriter::adjustLineWidth(const std::string& mainExpr,
     boost::split(splitExpr, bodyExpr, [](char c) {return c == ' ';});
     Standard_Integer lineIndex{1};
     for(Standard_Integer i = 0; i < splitExpr.size(); ++i){
-        if((finalExpr.size() + splitExpr[i].size()) > maxLineWidth*lineIndex){
+        if((finalExpr.size() + splitExpr[i].size()) > inputConfig.maxLineWidth*lineIndex){
             auto newSize = finalExpr.size() + continueSpacing;
             finalExpr += "\n";
             finalExpr.resize(newSize, *const_cast<char*>(" "));
@@ -241,7 +238,7 @@ void
 McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
                                              std::ofstream& volumeStream){
     outputStream << "c ==================== Cell Cards ====================" << std::endl;
-    Standard_Integer cellNumber = startCellNum;
+    Standard_Integer cellNumber = inputConfig.startCellNum;
     // Need to loop over all solids in a compSolid, write header with maerial,
     // component name, cell range, etc. Adjust width of expression
     for(const auto& compound : compoundObjMap){
@@ -275,7 +272,7 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
         outputStream << adjustLineWidth(cellExpr, cellSolidsExpr) << std::endl;
         std::string compoundData{boost::str(boost::format("%d %11.5f %s")
                                              % cellNumber
-                                             % (compoundVolume*1.0e-3)
+                                             % (compoundVolume*std::pow(scalingFactor, 3))
                                              % compound.second->compoundName)};
         volumeStream << compoundData << std::endl;
         ++cellNumber;
@@ -285,15 +282,15 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
 void
 McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
     outputStream << "c ==================== Void Cells ====================" << std::endl;
-    Standard_Integer voidNumber = startCellNum + compoundObjMap.size();
-    if(!voidGeneration) goto writeGraveYard;
+    Standard_Integer voidNumber = inputConfig.startCellNum + compoundObjMap.size();
+    if(!inputConfig.voidGeneration) goto writeGraveYard;
     for(const auto& member : voidCellsMap){
         std::string voidExpr{boost::str(boost::format("%d") % voidNumber)};
         if (voidExpr.size() < 5) voidExpr.resize(5, *const_cast<char*>(" "));
         voidExpr += boost::str(boost::format(" %d") % 0);
         std::string voidSolidsExpr;
         voidSolidsExpr += boost::str(boost::format(" %d") % (-1 * member.second->voidSurfNumber));
-        if(BVHVoid){
+        if(inputConfig.BVHVoid){
             if(member.second->daughterVoidCells.size() > 0){
                 // Write inner nodes.
                 for(const auto& daughterVoid : member.second->daughterVoidCells){
@@ -330,14 +327,14 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
     if (volumeCellExpr.size() < 5) volumeCellExpr.resize(5, *const_cast<char*>(" "));
     volumeCellExpr += boost::str(boost::format(" %d") % 0);
     volumeCellExpr += boost::str(boost::format(" -%d %d Imp:N=1 Imp:P=1")
-                                 % (uniqueSurfaces.size() + startSurfNum)
+                                 % (uniqueSurfaces.size() + inputConfig.startSurfNum)
                                  % voidSurfNumber);
     outputStream << "c " << volumeCellExpr << std::endl;
     std::string volumeCellGYExpr{boost::str(boost::format("%d") % (voidNumber + 2))};
     if (volumeCellGYExpr.size() < 5) volumeCellGYExpr.resize(5, *const_cast<char*>(" "));
     volumeCellGYExpr += boost::str(boost::format(" %d") % 0);
     volumeCellGYExpr += boost::str(boost::format(" %d Imp:N=0 Imp:P=0")
-                                 % (uniqueSurfaces.size() + startSurfNum));
+                                 % (uniqueSurfaces.size() + inputConfig.startSurfNum));
     outputStream << "c " << volumeCellGYExpr << std::endl;
 }
 
@@ -356,14 +353,15 @@ McCAD::Conversion::MCNPWriter::writeSurfCard(std::ofstream& outputStream){
     xExt = std::get<2>(graveyard->xAxis) - std::get<0>(graveyard->xAxis);
     yExt = std::get<2>(graveyard->yAxis) - std::get<0>(graveyard->yAxis);
     zExt = std::get<2>(graveyard->zAxis) - std::get<0>(graveyard->zAxis);
-    radius = std::max(std::max(xExt, yExt), zExt)/10.0;
-    std::string surfExpr{boost::str(boost::format("%d") % (startSurfNum + uniqueSurfaces.size()))};
+    radius = std::max(std::max(xExt, yExt), zExt)*scalingFactor;
+    std::string surfExpr{boost::str(boost::format("%d")
+                                    % (inputConfig.startSurfNum + uniqueSurfaces.size()))};
     if (surfExpr.size() < 5) surfExpr.resize(5, *const_cast<char*>(" "));
     std::string surfCoord{boost::str(boost::format("S %6.3f %6.3f %6.3f %6.3f")
-                            % (std::get<1>(graveyard->xAxis)/10.0)
-                            % (std::get<1>(graveyard->yAxis)/10.0)
-                            % (std::get<1>(graveyard->zAxis)/10.0)
-                            % radius)};
+                            % (std::get<1>(graveyard->xAxis)*scalingFactor)
+                            % (std::get<1>(graveyard->yAxis)*scalingFactor)
+                            % (std::get<1>(graveyard->zAxis)*scalingFactor)
+                            % (radius))};
     outputStream << "c " << adjustLineWidth(surfExpr, surfCoord) << std::endl;
 }
 
@@ -374,12 +372,13 @@ McCAD::Conversion::MCNPWriter::writeDataCard(std::ofstream& outputStream){
     outputStream << "Mode N" << "\nVoid" << "\nNPS 1e9" << "\nPRDMP 1e8 1e8 j 1 j" << std::endl;
     std::string sourceExpr{boost::str(
                     boost::format("SDEF ERG=14.1 $ SUR=%d PAR=1 NRM=-1 WGT=%6.3f $Pi*r^2")
-                    % (startSurfNum + uniqueSurfaces.size()) % (PI * std::pow(radius, 2)))};
+                    % (inputConfig.startSurfNum + uniqueSurfaces.size())
+                    % (inputConfig.PI * std::pow(radius, 2)))};
     outputStream << sourceExpr << std::endl;
     std::string volTallyExpr{boost::str(boost::format("F4:N %d %di %d")
-                                        % startCellNum
+                                        % inputConfig.startCellNum
                                         % (compoundObjMap.size() - 2)
-                                        % (startCellNum + compoundObjMap.size() - 1))};
+                                        % (inputConfig.startCellNum + compoundObjMap.size() - 1))};
     volTallyExpr += boost::str(boost::format("\nc SD4 1 %dr") % (compoundObjMap.size() - 1));
     outputStream << "c " << volTallyExpr << std::endl;
 }

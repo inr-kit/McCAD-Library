@@ -29,18 +29,12 @@ namespace McCAD::Conversion{
                                   std::shared_ptr<VoidCell>>;
     public:
         IO::InputConfig inputConfig;
-        Standard_Real PI;
-        Standard_Integer maxLineWidth;
-        Standard_Real precision, conversionFactor;
-        std::string MCOutputFileName, volumesFileName;
-        Standard_Integer startCellNum, startSurfNum;
+        Standard_Real scalingFactor{1.0}, radius;
         surfacesMap uniquePlanes, uniqueCylinders, uniqueSpheres;
         finalMap uniqueSurfaces;
         solidsMap solidObjMap;
         compoundsMap compoundObjMap;
         voidsMap voidCellsMap;
-        Standard_Boolean voidGeneration, BVHVoid;
-        Standard_Real radius;
 
         void operator()(
                 const std::vector<std::shared_ptr<Geometry::Impl::Compound>>& compoundList,

@@ -173,10 +173,11 @@ McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Ed
 }
 
 Standard_Boolean
-McCAD::Geometry::BoundSurface::Impl::generateParmts(Standard_Real precision){
+McCAD::Geometry::BoundSurface::Impl::generateParmts(Standard_Real precision,
+                                                    Standard_Real scalingFactor){
     if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
         // std::vector<gp_Pln, gp_Pnt, gp_Dir, parameters>
-        auto generatedParmts = Tools::FaceParameters{precision}.genPlSurfParmts(
+        auto generatedParmts = Tools::FaceParameters{precision, scalingFactor}.genPlSurfParmts(
                     boundSurface->accessSImpl()->face);
         boundSurface->accessSImpl()->plane = std::get<0>(generatedParmts);
         boundSurface->accessSImpl()->location = std::get<1>(generatedParmts);
@@ -187,7 +188,7 @@ McCAD::Geometry::BoundSurface::Impl::generateParmts(Standard_Real precision){
                     std::get<3>(generatedParmts).end());
     } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder)){
         // std::vector<gp_Cylinder, gp_Pnt, gp_Dir, parameters, radius, sense>
-        auto generatedParmts = Tools::FaceParameters{}.genCylSurfParmts(
+        auto generatedParmts = Tools::FaceParameters{precision, scalingFactor}.genCylSurfParmts(
                     boundSurface->accessSImpl()->face);
         boundSurface->accessSImpl()->cylinder = std::get<0>(generatedParmts);
         boundSurface->accessSImpl()->location = std::get<1>(generatedParmts);
@@ -199,7 +200,7 @@ McCAD::Geometry::BoundSurface::Impl::generateParmts(Standard_Real precision){
         boundSurface->accessSImpl()->radius = std::get<4>(generatedParmts);
         boundSurface->accessSImpl()->surfSense = std::get<5>(generatedParmts);
     } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Torus))
-        Tools::FaceParameters{}.genTorSurfParmts(boundSurface->accessSImpl()->face);
+        Tools::FaceParameters{precision, scalingFactor}.genTorSurfParmts(boundSurface->accessSImpl()->face);
     else return Standard_False;
     return Standard_True;
 }

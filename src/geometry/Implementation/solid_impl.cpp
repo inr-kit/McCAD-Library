@@ -134,6 +134,7 @@ McCAD::Geometry::Solid::Impl::calcAABBCenter(){
 
 void
 McCAD::Geometry::Solid::Impl::calcVolume(){
+    // Volume in mm3
     GProp_GProps geometryProperties;
     BRepGProp::VolumeProperties(solid, geometryProperties);
     solidVolume = geometryProperties.Mass();

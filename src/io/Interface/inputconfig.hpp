@@ -14,13 +14,17 @@ namespace McCAD::IO{
       InputConfig(const std::filesystem::path& currentPath);
       ~InputConfig();
 
+      // Internal variables
       std::filesystem::path currentPath;
-      double conversion_factor{1.0};
+      double conversionFactor{1.0};
       const double PI = 3.141592653589793238463;
+      std::string conversionFileName = "conversion.stp";
+      std::string outputFileName;
+      bool readConversion = false;
       void writeTemplate();
+      std::string stringToLowerCase(std::string& string);
       std::vector<std::string> splitLine(const std::string& line, char delimiter);
       void readTemplate();
-      std::string stringToLowerCase(std::string& string);
       //Define default values
       std::string units = "cm";
       std::string inputFileName = "input.stp";
@@ -38,25 +42,21 @@ namespace McCAD::IO{
       double parameterTolerance = 1.0e-7;
       double angularTolerance = 1.0e-4 * PI;
       double distanceTolerance = 1.0e-5;
-      double torusSplitAngle = 45.0 * PI / 180.0;
+      double torusSplitAngle = 360.0 * PI / 180.0;
       bool simplifyTori = false;
       // Void generation and conversion
       bool convert = false;
       std::string rejectConvFileName = "rejectConv.stp";
       bool voidGeneration = true;
-      double minVoidVolume = 10.0; // in mm^3
+      double minVoidVolume = 100.0; // in mm^3
       int maxSolidsPerVoidCell = 20;
-      bool BVHVoid = true;
+      bool BVHVoid = false;
       std::string MCcode = "mcnp";
       int startCellNum = 1;
       int startSurfNum = 1;
       int maxLineWidth = 80;
       std::string MCOutputFileName = "MCFile.inp";
       std::string volumesFileName = "volumes.txt";
-      // Internal variables
-      std::string conversionFileName = "conversion.stp";
-      std::string outputFileName;
-      bool readConversion = false;
   };
 }
 
