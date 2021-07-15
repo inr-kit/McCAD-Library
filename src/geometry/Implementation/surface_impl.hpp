@@ -12,6 +12,7 @@
 #include <TopoDS_Face.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Cylinder.hxx>
+#include <gp_Torus.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Dir.hxx>
 
@@ -37,21 +38,23 @@ namespace McCAD::Geometry{
 
     // Conversion variables.
     Standard_Boolean updated{Standard_False};
-    // General
     std::string surfSymb;
     Standard_Integer uniqueID;
     std::string surfExpr;
+    // Shared between surfaces.
     signed int surfSense;
     gp_Pnt location;
+    gp_Dir symmetryAxis;
     std::vector<Standard_Real> surfParameters;
     // Plane
     gp_Pln plane;
     gp_Dir normal;
     // Cylinder
     gp_Cylinder cylinder;
-    gp_Dir symmetryAxis;
     Standard_Real radius;
-
+    // Torus
+    gp_Torus torus;
+    Standard_Real minorRadius, majorRadius;
   };
 }
 

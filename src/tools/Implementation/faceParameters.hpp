@@ -3,6 +3,7 @@
 
 // C++
 #include <array>
+#include <vector>
 #include <tuple>
 #include <optional>
 // McCAD
@@ -11,6 +12,7 @@
 #include <Standard.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Cylinder.hxx>
+#include <gp_Torus.hxx>
 #include <gp_Vec.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Dir.hxx>
@@ -35,6 +37,8 @@ namespace McCAD::Tools{
       using planePrmts = std::tuple<gp_Pln, gp_Pnt, gp_Dir, std::array<Standard_Real, 4>>;
       using cylinderPrmts = std::tuple<gp_Cylinder, gp_Pnt, gp_Dir, std::array<Standard_Real, 10>,
                                        Standard_Real, Standard_Integer>;
+      using torusPrmts = std::tuple<gp_Torus, gp_Pnt, gp_Dir, std::vector<Standard_Real>,
+                                    Standard_Real, Standard_Real, Standard_Integer>;
   public:
       std::optional<PositionUV> getSurfPositionUV(
               const BRepAdaptor_Surface& surfaceAdaptor, const gp_Pnt& point);
@@ -44,7 +48,7 @@ namespace McCAD::Tools{
                                   const PositionUV& position);
       planePrmts genPlSurfParmts(const TopoDS_Face& face);
       cylinderPrmts genCylSurfParmts(const TopoDS_Face& face);
-      void genTorSurfParmts(const TopoDS_Face& face);
+      torusPrmts genTorSurfParmts(const TopoDS_Face& face);
   };
 }
 

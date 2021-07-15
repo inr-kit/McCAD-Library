@@ -30,7 +30,7 @@ namespace McCAD::Conversion{
     public:
         IO::InputConfig inputConfig;
         Standard_Real scalingFactor{1.0}, radius;
-        surfacesMap uniquePlanes, uniqueCylinders, uniqueSpheres;
+        surfacesMap uniquePlanes, uniqueCylinders, uniqueTori;
         finalMap uniqueSurfaces;
         solidsMap solidObjMap;
         compoundsMap compoundObjMap;

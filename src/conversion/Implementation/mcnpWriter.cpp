@@ -116,6 +116,16 @@ McCAD::Conversion::MCNPWriter::addUniqueSurfNumbers(
                         uniqueSurfaces[surfNumber] = surface->accessSImpl()->surfExpr;
                         ++surfNumber;
                     }
+                } else if(surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Torus)){
+                    auto duplicateID = findDuplicate(surface, uniqueTori);
+                    if(duplicateID){
+                        surface->accessSImpl()->uniqueID = *duplicateID;
+                    } else{
+                        surface->accessSImpl()->uniqueID = surfNumber;
+                        uniqueTori[surfNumber] = surface;
+                        uniqueSurfaces[surfNumber] = surface->accessSImpl()->surfExpr;
+                        ++surfNumber;
+                    }
                 }
             }
             for(const auto& surface : solidObj->accessSImpl()->unionList){
@@ -138,6 +148,16 @@ McCAD::Conversion::MCNPWriter::addUniqueSurfNumbers(
                     } else{
                         surface->accessSImpl()->uniqueID = surfNumber;
                         uniqueCylinders[surfNumber] = surface;
+                        uniqueSurfaces[surfNumber] = surface->accessSImpl()->surfExpr;
+                        ++surfNumber;
+                    }
+                } else if(surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Torus)){
+                    auto duplicateID = findDuplicate(surface, uniqueTori);
+                    if(duplicateID){
+                        surface->accessSImpl()->uniqueID = *duplicateID;
+                    } else{
+                        surface->accessSImpl()->uniqueID = surfNumber;
+                        uniqueTori[surfNumber] = surface;
                         uniqueSurfaces[surfNumber] = surface->accessSImpl()->surfExpr;
                         ++surfNumber;
                     }

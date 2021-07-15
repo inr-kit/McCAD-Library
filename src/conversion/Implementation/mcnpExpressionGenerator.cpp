@@ -48,14 +48,14 @@ McCAD::Conversion::MCNPExprGenerator::operator()(
     if(solidObj->accessSImpl()->cylindersList.size() > 0){
         for (const auto& cylSurface : solidObj->accessSImpl()->cylindersList){
             if(cylSurface->accessBSImpl()->generateParmts(precision, scalingFactor))
-                genCylSurfExpr(cylSurface, solidCenter, precision);
+                genCylSurfExpr(cylSurface, precision);
             else throw(std::runtime_error("Error in generating surface expression!"));
         }
     }
     if(solidObj->accessSImpl()->toriList.size() > 0){
         for (const auto& torSurface : solidObj->accessSImpl()->toriList){
             if(torSurface->accessBSImpl()->generateParmts(precision, scalingFactor))
-                genTorSurfExpr();
+                genTorSurfExpr(torSurface, precision);
             else throw(std::runtime_error("Error in generating surface expression!"));
         }
     }
@@ -154,13 +154,13 @@ McCAD::Conversion::MCNPExprGenerator::genPlSurfExpr(
 void
 McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
         const std::shared_ptr<Geometry::BoundSurface>& cylSurface,
-        const gp_Pnt& solidCenter, const Standard_Real& precision){
+        const Standard_Real& precision){
     // Parameters calculated in OpenCascade:
     // A1.X**2 + A2.Y**2 + A3.Z**2 + 2.(B1.X.Y + B2.X.Z + B3.Y.Z) + 2.(C1.X + C2.Y + C3.Z) + D = 0.0
     // Parameters used by MCNP.
     // A.X**2 + B.Y**2 + C.Z**2 + D.XY + E.YZ + F.ZX + G.X + H.Y + J.Z + K = 0.0
     std::string surfExpr;
-    // Generate planar surface expression and store in surface object.
+    // Generate cylindrical surface expression and store in surface object.
     // Get the diretion of the symmetry axis of the cylinder.
     gp_Dir cylAxisDir = cylSurface->accessSImpl()->symmetryAxis;
     gp_Pnt cylLocation = cylSurface->accessSImpl()->location;
@@ -234,7 +234,47 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
 }
 
 void
-McCAD::Conversion::MCNPExprGenerator::genTorSurfExpr(){}
+McCAD::Conversion::MCNPExprGenerator::genTorSurfExpr(
+        const std::shared_ptr<Geometry::BoundSurface>& torSurface,
+        const Standard_Real& precision){
+    std::string surfExpr;
+    // Generate toroidal surface expression and store in surface object.
+    // Get the diretion of the symmetry axis of the torus.
+    gp_Dir torAxisDir = torSurface->accessSImpl()->symmetryAxis;
+    gp_Pnt torLocation = torSurface->accessSImpl()->location;
+    // Check if parallet to X-axis
+    if (std::abs(torAxisDir.Y()) < precision && std::abs(torAxisDir.Z()) < precision) {
+        // Torus is parallel to X-axis.
+        torSurface->accessSImpl()->surfSymb = "TX";
+        surfExpr += boost::str(boost::format("TX %11.5f  %11.5f  %11.5f  %11.5f  "
+                                             "%11.5f  %11.5f")
+                               % torLocation.X() % torLocation.Y() % torLocation.Z()
+                               % torSurface->accessSImpl()->majorRadius
+                               % torSurface->accessSImpl()->minorRadius
+                               % torSurface->accessSImpl()->minorRadius);
+    } else if (std::abs(torAxisDir.X()) < precision && std::abs(torAxisDir.Z()) < precision) {
+        // Torus is parallel to Y-axis.
+        torSurface->accessSImpl()->surfSymb = "TY";
+        surfExpr += boost::str(boost::format("TY %11.5f  %11.5f  %11.5f  %11.5f  "
+                                             "%11.5f  %11.5f")
+                               % torLocation.X() % torLocation.Y() % torLocation.Z()
+                               % torSurface->accessSImpl()->majorRadius
+                               % torSurface->accessSImpl()->minorRadius
+                               % torSurface->accessSImpl()->minorRadius);
+    } else if (std::abs(torAxisDir.X()) < precision && std::abs(torAxisDir.Y()) < precision) {
+        // Torus is parallel to Z-axis.
+        torSurface->accessSImpl()->surfSymb = "TZ";
+        surfExpr += boost::str(boost::format("TZ %11.5f  %11.5f  %11.5f  %11.5f  "
+                                             "%11.5f  %11.5f")
+                               % torLocation.X() % torLocation.Y() % torLocation.Z()
+                               % torSurface->accessSImpl()->majorRadius
+                               % torSurface->accessSImpl()->minorRadius
+                               % torSurface->accessSImpl()->minorRadius);
+    } else throw std::runtime_error("Tori with symmetry axis not parallel to X/Y/Z "
+                                    "isnot yet supported. Please, turn on simplifyTori"
+                                    "option on the input config. Conversion terminated!");
+    torSurface->accessSImpl()->surfExpr = surfExpr;
+}
 
 void
 McCAD::Conversion::MCNPExprGenerator::createSurfacesList(

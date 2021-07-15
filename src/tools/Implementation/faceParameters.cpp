@@ -5,6 +5,7 @@
 #include <gp_Ax1.hxx>
 #include <CSLib.hxx>
 #include <ElSLib.hxx>
+#include <TColStd_Array1OfReal.hxx>
 
 McCAD::Tools::FaceParameters::FaceParameters(){
 }
@@ -138,6 +139,33 @@ McCAD::Tools::FaceParameters::genCylSurfParmts(const TopoDS_Face& face){
     return generatedParmts;
 }
 
-void
+McCAD::Tools::FaceParameters::torusPrmts
 McCAD::Tools::FaceParameters::genTorSurfParmts(const TopoDS_Face& face){
+    // This function is currently only used for conversion. It implements scaling
+    // of the face per the user desired units as specified in the config file.
+    // std::tuple<gp_Torus, gp_Pnt, gp_Dir, parameters, minorRadius, majorRadius, sense>
+    BRepAdaptor_Surface surface{face, Standard_True};
+    gp_Torus torus = surface.Torus();
+    if(scalingFactor != 1.0){
+        // Scale the torus before generating parameters.
+        torus.Scale(gp_Pnt{0.0, 0.0, 0.0}, scalingFactor);
+    }
+    gp_Ax1 symmetryAxis = torus.Axis();
+    Standard_Real minorRadius{torus.MinorRadius()},
+                  majorRadius{torus.MajorRadius()};
+    Standard_Integer sense = face.Orientation() == TopAbs_FORWARD ? -1 : +1;
+    // Coefficients
+    TColStd_Array1OfReal torusCoeffs{1, 35};
+    torus.Coefficients(torusCoeffs);
+    std::vector<Standard_Real> torusParameters;
+    for(const auto& coeff : torusCoeffs){
+        torusParameters.push_back(coeff);
+    }
+    for(auto& parameter : torusParameters){
+        if(std::abs(parameter) < precision) parameter = 0.0;
+    }
+    torusPrmts generatedParmts;
+    generatedParmts = std::make_tuple(torus, torus.Location(), symmetryAxis.Direction(),
+                                      torusParameters, minorRadius, majorRadius, sense);
+    return generatedParmts;
 }

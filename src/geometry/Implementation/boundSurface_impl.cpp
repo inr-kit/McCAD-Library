@@ -199,8 +199,21 @@ McCAD::Geometry::BoundSurface::Impl::generateParmts(Standard_Real precision,
                     std::get<3>(generatedParmts).end());
         boundSurface->accessSImpl()->radius = std::get<4>(generatedParmts);
         boundSurface->accessSImpl()->surfSense = std::get<5>(generatedParmts);
-    } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Torus))
-        Tools::FaceParameters{precision, scalingFactor}.genTorSurfParmts(boundSurface->accessSImpl()->face);
+    } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Torus)){
+        // std::tuple<gp_Torus, gp_Pnt, gp_Dir, parameters, minorRadius, majorRadius, sense>
+        auto generatedParmts = Tools::FaceParameters{precision, scalingFactor}.genTorSurfParmts(
+                    boundSurface->accessSImpl()->face);
+        boundSurface->accessSImpl()->torus = std::get<0>(generatedParmts);
+        boundSurface->accessSImpl()->location = std::get<1>(generatedParmts);
+        boundSurface->accessSImpl()->symmetryAxis = std::get<2>(generatedParmts);
+        boundSurface->accessSImpl()->surfParameters.insert(
+                    boundSurface->accessSImpl()->surfParameters.end(),
+                    std::get<3>(generatedParmts).begin(),
+                    std::get<3>(generatedParmts).end());
+        boundSurface->accessSImpl()->minorRadius = std::get<4>(generatedParmts);
+        boundSurface->accessSImpl()->majorRadius = std::get<5>(generatedParmts);
+        boundSurface->accessSImpl()->surfSense = std::get<6>(generatedParmts);
+    }
     else return Standard_False;
     return Standard_True;
 }
