@@ -18,7 +18,13 @@ void
 McCAD::Decomposition::SplitSurfacesSelector::generateSplitFacesList(
         std::vector<std::shared_ptr<Geometry::BoundSurface>>& splitFacesList,
         std::vector<std::shared_ptr<Geometry::BoundSurface>>& selectedSplitFacesList){
+    for(const auto& face : splitFacesList){
+        if(face->accessSImpl()->repeatedSurface > 0)
+            selectedSplitFacesList.push_back(face);
+    }
+    if(!selectedSplitFacesList.empty()) goto sort;
     // 1st step: Select surfaces that go through 0 boundary surfaces.
+    /*
     for(const auto& face : splitFacesList){
         if(face->accessSImpl()->numberCollidingSurfaces == 0)
             selectedSplitFacesList.push_back(face);
@@ -39,7 +45,7 @@ McCAD::Decomposition::SplitSurfacesSelector::generateSplitFacesList(
                 !face->accessSImpl()->hasAssistSurface)
             selectedSplitFacesList.push_back(face);
     }
-    if(!selectedSplitFacesList.empty()) goto sort;
+    if(!selectedSplitFacesList.empty()) goto sort;*/
 
     // 4th step: select the other surfaces
     for(const auto& face : splitFacesList){

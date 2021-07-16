@@ -16,8 +16,8 @@ McCAD::Decomposition::SurfacesMerger::operator()(
         const Standard_Real& angularTolerance,
         const Standard_Real& distanceTolerance){
     if (surfacesList.size() < 2) return;
-    for (Standard_Integer i = 0; i <= surfacesList.size() - 2; ++i){
-        for (Standard_Integer j = i+1; j <= surfacesList.size() - 1; ++j){
+    for (Standard_Integer i = 0; i < surfacesList.size() - 1; ++i){
+        for (Standard_Integer j = i+1; j < surfacesList.size(); ++j){
             if(Tools::SurfaceComparator{precision, angularTolerance, distanceTolerance}(
                         surfacesList[i]->accessSImpl()->face,
                         surfacesList[j]->accessSImpl()->face)){
@@ -75,6 +75,8 @@ McCAD::Decomposition::SurfacesMerger::operator()(
                     break;
                 } else{
                     surfacesList[i]->accessSImpl()->repeatedSurface += 1;
+                    surfacesList[i]->accessSImpl()->throughConcaveEdges +=
+                            surfacesList[j]->accessSImpl()->throughConcaveEdges;
                     surfacesList.erase(surfacesList.begin() + j);
                     --j;
                 }

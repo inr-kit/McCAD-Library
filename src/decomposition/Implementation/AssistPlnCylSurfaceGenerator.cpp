@@ -167,8 +167,11 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::generateThroughTwoLines(
         }
         assistSurface->accessBSImpl()->assistEdgesList.push_back(firstEdge);
         assistSurface->accessBSImpl()->assistEdgesList.push_back(secondEdge);
+        assistSurface->accessSImpl()->throughConcaveEdges += 2;
         // Set the assist surface reference to the original surfaces.
         cylinderFace->accessSImpl()->hasAssistSurface = Standard_True;
+        firstEdge->accessEImpl()->useForSplitSurface = Standard_True;
+        secondEdge->accessEImpl()->useForSplitSurface = Standard_True;
         return assistSurface;
     }
     return std::nullopt;
