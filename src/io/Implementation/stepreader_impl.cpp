@@ -13,6 +13,10 @@
 #include <XCAFDoc_ShapeMapTool.hxx>
 #include <TDF_Attribute.hxx>
 #include <TNaming_NamedShape.hxx>
+#include <TopExp_Explorer.hxx>
+#include <TopoDS.hxx>
+#include <TopoDS_Compound.hxx>
+#include <TopoDS_Builder.hxx>
 
 McCAD::IO::STEPReader::Impl::Impl(const IO::InputConfig& inputConfig) :
     inputConfig{inputConfig},
@@ -49,9 +53,20 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
             if (numberOfRoots != 0){
                 for(Standard_Integer i = 1; i <= numberOfRoots; ++i){
                     if(STEPReader.TransferRoot(i)){
-                        TCollection_ExtendedString shapeName{std::to_string(i).c_str()};
                         TopoDS_Shape solidShape = STEPReader.Shape(i);
-                        shapesInfoMap.push_back(std::make_tuple(solidShape, shapeName));
+                        TopExp_Explorer explorer;
+                        TopoDS_Compound compSolid;
+                        TopoDS_Builder builder;
+                        Standard_Integer counter{0};
+                        for(explorer.Init(solidShape, TopAbs_SOLID);
+                            explorer.More(); explorer.Next()){
+                            std::string tempName = "solid_" + std::to_string(++counter);
+                            TCollection_ExtendedString shapeName{tempName.c_str()};
+                            TopoDS_Solid tempSolid = TopoDS::Solid(explorer.Current());
+                            builder.MakeCompound(compSolid);
+                            builder.Add(compSolid, tempSolid);
+                            shapesInfoMap.push_back(std::make_tuple(compSolid, shapeName));
+                        }
                     } else throw std::runtime_error("Error loading shapes from input file!");
                 }
             }
