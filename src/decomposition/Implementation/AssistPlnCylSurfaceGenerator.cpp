@@ -57,6 +57,10 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
                             solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
                             solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
                             solidObj.accessSImpl()->assistFacesMap[planesList[member.first]] = assistSurface.value();
+                        } else{
+                            // If there exists a common edge between cylindrical surfaces,
+                            // but failed to generate a split surface then reject solid.
+                            solidObj.accessSImpl()->rejectSolid = Standard_True;
                         }
                     }
                 }
@@ -79,6 +83,10 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
                         if(assistSurface){
                             solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
                             solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
+                        } else{
+                            // If there exists a common edge between cylindrical surfaces,
+                            // but failed to generate a split surface then reject solid.
+                            solidObj.accessSImpl()->rejectSolid = Standard_True;
                         }
                     }
                 } else {

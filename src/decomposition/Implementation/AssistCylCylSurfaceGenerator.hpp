@@ -2,10 +2,13 @@
 #define ASSISTCYLCYLSURFACEGERAOR_HPP
 
 // C++
-#include <optional>
+#include <map>
+#include <vector>
 #include <memory>
+#include <optional>
 // McCAD
 #include "inputconfig.hpp"
+#include "edge_impl.hpp"
 #include "cylSolid_impl.hpp"
 #include "boundSurface_impl.hpp"
 // OCC
@@ -16,7 +19,9 @@ namespace McCAD::Decomposition{
   public:
       AssistCylCylSurfaceGenerator(const IO::InputConfig& inputConfig);
       ~AssistCylCylSurfaceGenerator();
-
+  private:
+      using edgesMap = std::map<Standard_Integer, std::vector<std::shared_ptr<Geometry::Edge>>>;
+  public:
       IO::InputConfig inputConfig;
       void operator()(Geometry::CYLSolid& solidObj);
       std::optional<std::shared_ptr<Geometry::BoundSurface>>
@@ -33,7 +38,6 @@ namespace McCAD::Decomposition{
                             const Standard_Real& meshDeflection);
       std::optional<std::shared_ptr<McCAD::Geometry::BoundSurface>>
       generateThroughTwoLines(const std::shared_ptr<Geometry::BoundSurface>& firstFace,
-                              const std::shared_ptr<Geometry::BoundSurface>& secondFace,
                               const std::shared_ptr<Geometry::Edge>& firstEdge,
                               const std::shared_ptr<Geometry::Edge>& secondEdge,
                               const Standard_Real& boxDiagonalLength,

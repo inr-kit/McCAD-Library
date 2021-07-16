@@ -35,23 +35,18 @@ McCAD::Decomposition::AssistSurfaceGenerator::~AssistSurfaceGenerator(){
 
 void
 McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& solidObj){
-    std::cout << "AssistSurfaceGenerator" << std::endl;
     // Generate assistant surface that splits cylinders first.
     if (solidObj.accessSImpl()->cylindersList.size() >= 2){
         AssistCylCylSurfaceGenerator{inputConfig}(solidObj);
-        std::cout << "CylCyl: " << solidObj.accessSImpl()->assistFacesList.size() << std::endl;
     }
     if (solidObj.accessSImpl()->cylindersList.size() >= 1 &&
             solidObj.accessSImpl()->planesList.size() >= 1){
         AssistPlnCylSurfaceGenerator{inputConfig}(solidObj);
-        std::cout << "PlnCyl: " << solidObj.accessSImpl()->assistFacesList.size() << std::endl;
     }
-    std::cout << "before: " << solidObj.accessSImpl()->assistFacesList.size() << std::endl;
     SurfacesMerger{}(solidObj.accessSImpl()->assistFacesList,
             solidObj.accessSImpl()->boxDiagonalLength, inputConfig.precision,
             inputConfig.edgeTolerance, inputConfig.angularTolerance,
             inputConfig.distanceTolerance);
-    std::cout << "after: " << solidObj.accessSImpl()->assistFacesList.size() << std::endl;
 }
 
 void

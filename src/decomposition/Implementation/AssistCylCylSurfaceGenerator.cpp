@@ -1,6 +1,5 @@
 //C++
 #include <math.h>
-#include <vector>
 // McCAD
 #include "AssistCylCylSurfaceGenerator.hpp"
 #include "CommonEdgeFinder.hpp"
@@ -26,62 +25,103 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
         Geometry::CYLSolid& solidObj){
     auto& cylindersList = solidObj.accessSImpl()->cylindersList;
     std::vector<std::shared_ptr<Geometry::Edge>> commonEdges;
+    edgesMap commonLineEdgesMap, commonCurveEdgesMap;
     for(Standard_Integer i = 0; i < cylindersList.size() - 1; ++i){
         for(Standard_Integer j = i+1; j < cylindersList.size(); ++j){
             if (*cylindersList[i] == *cylindersList[j]) continue;
             commonEdges = CommonEdgeFinder{inputConfig.angularTolerance,
                     inputConfig.distanceTolerance, inputConfig.precision}(
                         cylindersList[i], cylindersList[j]);
-            if(commonEdges.size() == 1){
-                if(commonEdges[0]->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Line)){
-                    auto assistSurface = generateThroughLine(
-                                cylindersList[i], cylindersList[j], commonEdges[0],
-                                solidObj.accessSImpl()->boxDiagonalLength,
-                                solidObj.accessSImpl()->meshDeflection);
-                    if(assistSurface){
-                        solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
-                        solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
-                        solidObj.accessSImpl()->assistFacesMap[cylindersList[j]] = assistSurface.value();
-                    } else{
-                        // If there exists a common edge between cylindrical surfaces,
-                        // but failed to generate a split surface then reject solid.
-                        solidObj.accessSImpl()->rejectSolid = Standard_True;
-                    }
-                } else{
-                    // Generate surface through curved edge; circle, ellipse, parabola, hyperabola.
-                    auto assistSurface = generateThroughCurve(
-                                cylindersList[i], cylindersList[j], commonEdges[0],
-                                solidObj.accessSImpl()->boxDiagonalLength,
-                                solidObj.accessSImpl()->meshDeflection);
-                    if(assistSurface){
-                        solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
-                        solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
-                        solidObj.accessSImpl()->assistFacesMap[cylindersList[j]] = assistSurface.value();
-                    } else{
-                        // If there exists a common edge between cylindrical surfaces,
-                        // but failed to generate a split surface then reject solid.
-                        solidObj.accessSImpl()->rejectSolid = Standard_True;
+            if(!commonEdges.empty()){
+                for(Standard_Integer k = 0; k < commonEdges.size(); ++k){
+                    if(commonEdges[k]->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Line))
+                        commonLineEdgesMap[j].push_back(commonEdges[k]);
+                    else commonCurveEdgesMap[j].push_back(commonEdges[k]);
+                }
+            }
+        }
+        if(!commonLineEdgesMap.empty()){
+            // Cylinder has common line edges with other cylinders.
+            if (commonLineEdgesMap.size() == 1){
+                // Cylinder has common edges with a single cylinder.
+                for(const auto& member : commonLineEdgesMap){
+                    if(member.second.size() == 1){
+                        auto assistSurface = generateThroughLine(
+                                    cylindersList[i], cylindersList[member.first],
+                                    member.second[0], solidObj.accessSImpl()->boxDiagonalLength,
+                                    solidObj.accessSImpl()->meshDeflection);
+                        if(assistSurface){
+                            solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
+                            solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
+                            solidObj.accessSImpl()->assistFacesMap[cylindersList[member.first]] = assistSurface.value();
+                        } else{
+                            // If there exists a common edge between cylindrical surfaces,
+                            // but failed to generate a split surface then reject solid.
+                            solidObj.accessSImpl()->rejectSolid = Standard_True;
+                        }
+                    } else if (member.second.size() == 2){
+                        auto assistSurface = generateThroughTwoLines(
+                                    cylindersList[i], member.second[0], member.second[1],
+                                    solidObj.accessSImpl()->boxDiagonalLength,
+                                    solidObj.accessSImpl()->meshDeflection);
+                        if(assistSurface){
+                            // Set solid flags.
+                            solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
+                            solidObj.accessSImpl()->assistFacesMap[cylindersList[i]]= assistSurface.value();
+                            solidObj.accessSImpl()->assistFacesMap[cylindersList[member.first]]= assistSurface.value();
+                        } else{
+                            // If there exists a common edge between cylindrical surfaces,
+                            // but failed to generate a split surface then reject solid.
+                            solidObj.accessSImpl()->rejectSolid = Standard_True;
+                        }
                     }
                 }
-            } else if (commonEdges.size() == 2){
-                if(commonEdges[0]->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Line)
-                   && commonEdges[1]->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Line)){
+            } else if (commonLineEdgesMap.size() == 2){
+                // // Cylinder has common edges with more than one cylinder.
+                std::vector<std::shared_ptr<Geometry::Edge>> commonEdgesToUse;
+                for(const auto& member : commonLineEdgesMap){
+                    if(member.second.size() == 1) commonEdgesToUse.push_back(member.second[0]);
+                }
+                if(commonEdgesToUse.size() == 2){
                     auto assistSurface = generateThroughTwoLines(
-                                cylindersList[i], cylindersList[j], commonEdges[0],
-                                commonEdges[1], solidObj.accessSImpl()->boxDiagonalLength,
-                                solidObj.accessSImpl()->meshDeflection);
+                                cylindersList[i], commonEdgesToUse[0], commonEdgesToUse[1],
+                            solidObj.accessSImpl()->boxDiagonalLength,
+                            solidObj.accessSImpl()->meshDeflection);
                     if(assistSurface){
                         solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
-                        solidObj.accessSImpl()->assistFacesMap[cylindersList[i]]= assistSurface.value();
-                        solidObj.accessSImpl()->assistFacesMap[cylindersList[j]]= assistSurface.value();
+                        solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
                     } else{
-                        // If there exists a common edge between cylindrical surfaces,
-                        // but failed to generate a split surface then reject solid.
-                        solidObj.accessSImpl()->rejectSolid = Standard_True;
+                    // If there exists a common edge between cylindrical surfaces,
+                    // but failed to generate a split surface then reject solid.
+                    solidObj.accessSImpl()->rejectSolid = Standard_True;
                     }
                 }
             }
         }
+        if(!commonCurveEdgesMap.empty()){
+            // Generate surface through curved edge; circle, ellipse, parabola, hyperabola.
+            if (commonCurveEdgesMap.size() == 1){
+                for(const auto& member : commonCurveEdgesMap){
+                    if(member.second.size() == 1){
+                        auto assistSurface = generateThroughCurve(
+                                    cylindersList[i], cylindersList[member.first],
+                                member.second[0], solidObj.accessSImpl()->boxDiagonalLength,
+                                solidObj.accessSImpl()->meshDeflection);
+                        if(assistSurface){
+                            solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
+                            solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
+                            solidObj.accessSImpl()->assistFacesMap[cylindersList[member.first]] = assistSurface.value();
+                        } else{
+                            // If there exists a common edge between cylindrical surfaces,
+                            // but failed to generate a split surface then reject solid.
+                            solidObj.accessSImpl()->rejectSolid = Standard_True;
+                        }
+                    }
+                }
+            }
+        }
+        commonLineEdgesMap.clear();
+        commonCurveEdgesMap.clear();
     }
 }
 
@@ -158,7 +198,6 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughCurve(
 std::optional<std::shared_ptr<McCAD::Geometry::BoundSurface>>
 McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughTwoLines(
         const std::shared_ptr<Geometry::BoundSurface>& firstFace,
-        const std::shared_ptr<Geometry::BoundSurface>& secondFace,
         const std::shared_ptr<Geometry::Edge>& firstEdge,
         const std::shared_ptr<Geometry::Edge>& secondEdge,
         const Standard_Real& boxDiagonalLength, const Standard_Real& meshDeflection){
@@ -185,7 +224,7 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughTwoLines(
                 SurfaceObjCreator{}(splitFace.value(), boxDiagonalLength,
                                     inputConfig.edgeTolerance);
         assistSurface->accessSImpl()->surfaceNumber =
-                firstFace->accessSImpl()->surfaceNumber * 1000;
+                firstFace->accessSImpl()->surfaceNumber * 2000;
         if (assistSurface->accessBSImpl()->generateMesh(meshDeflection)){
             assistSurface->accessBSImpl()->generateEdges(inputConfig.parameterTolerance);
         }
@@ -194,7 +233,6 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughTwoLines(
         assistSurface->accessSImpl()->throughConcaveEdges += 2;
         // Set the assist surface reference to the original surfaces.
         firstFace->accessSImpl()->hasAssistSurface = Standard_True;
-        secondFace->accessSImpl()->hasAssistSurface = Standard_True;
         firstEdge->accessEImpl()->useForSplitSurface = Standard_True;
         secondEdge->accessEImpl()->useForSplitSurface = Standard_True;
         return assistSurface;

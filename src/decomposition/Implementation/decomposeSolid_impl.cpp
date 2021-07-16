@@ -124,7 +124,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
 
 Standard_Boolean
 McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solidImpl){
-    if(solidImpl.rejectSolid) return Standard_False;
     if(solidImpl.splitSurface){
         if (!selectSplitSurface(solidImpl)){
             return Standard_False;
@@ -182,7 +181,8 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
             }
         }
     } else{
-        solidImpl.splitSolidList->Append(solidImpl.solid);
+        if(solidImpl.rejectSolid) return Standard_False;
+        else solidImpl.splitSolidList->Append(solidImpl.solid);
     }
     return Standard_True;
 }
