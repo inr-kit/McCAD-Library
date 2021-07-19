@@ -33,22 +33,22 @@ namespace McCAD::IO{
       // Decomposition
       bool decompose = true;
       int recurrenceDepth = 20;
-      double minSolidVolume = 10.0; // in mm^3
-      double minFaceArea = 10.0;     // in mm^2
+      double minSolidVolume = 0.1; // in mm^3
+      double minFaceArea = 0.01;     // in mm^2
       double scalingFactor = 100.0;
-      double precision = 1.0e-7;
+      double precision = 1.0e-6;
       double faceTolerance = 1.0e-7;
       double edgeTolerance = 1.0e-7;
       double parameterTolerance = 1.0e-7;
       double angularTolerance = 1.0e-4 * PI;
-      double distanceTolerance = 1.0e-5;
-      double torusSplitAngle = 360.0 * PI / 180.0;
+      double distanceTolerance = 1.0e-6;
+      double torusSplitAngle = 2.0 * PI;
       bool simplifyTori = false;
       // Void generation and conversion
       bool convert = false;
       std::string rejectConvFileName = "rejectConv.stp";
       bool voidGeneration = true;
-      double minVoidVolume = 100.0; // in mm^3
+      double minVoidVolume = 1000.0; // in mm^3
       int maxSolidsPerVoidCell = 20;
       bool BVHVoid = false;
       std::string MCcode = "mcnp";
