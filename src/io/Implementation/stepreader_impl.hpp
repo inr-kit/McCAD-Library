@@ -27,11 +27,14 @@ namespace McCAD::IO{
     std::shared_ptr<TopTools_HSequenceOfShape> sequenceOfShape;
     std::vector<TCollection_ExtendedString> shapeNames;
     std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString>> shapesInfoMap;
+    //std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString,
+    //                       TCollection_ExtendedString>> shapesInfoMap;
 
     void readSTEP();
     Standard_Boolean getLabelInfo(const TDF_Label& aLabel);
     Standard_Boolean iterateLabelChilds(const TDF_Label& aLabel,
                                         const TCollection_ExtendedString& aName);
+    Standard_Boolean basicReader(const std::string& fileName);
   };
 }
 

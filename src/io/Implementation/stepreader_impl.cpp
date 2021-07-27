@@ -17,6 +17,9 @@
 #include <TopoDS.hxx>
 #include <TopoDS_Compound.hxx>
 #include <TopoDS_Builder.hxx>
+#include <TDF_ChildIterator.hxx>
+#include <TDF_Tool.hxx>
+#include <TDocStd_Application.hxx>
 
 McCAD::IO::STEPReader::Impl::Impl(const IO::InputConfig& inputConfig) :
     inputConfig{inputConfig},
@@ -34,7 +37,10 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
     std::cout << " > Populating the input solids list: " << std::endl;
     STEPCAFControl_Reader reader;
     STEPControl_Reader STEPReader = reader.Reader();
-    opencascade::handle<TDocStd_Document> document = new TDocStd_Document("txt");
+    // Create an application
+    opencascade::handle<TDocStd_Document> document;
+    Handle(TDocStd_Application) app = new TDocStd_Application();
+    app->NewDocument("XmlOcaf", document);
     // Set reader parameters per user config.
     if(Interface_Static::RVal("read.precision.val") > inputConfig.precision){
         Interface_Static::SetIVal("read.precision.mode", 1);
@@ -48,30 +54,10 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
         reader.Transfer(document);
         TDF_Label label = document->Main();
         if(!getLabelInfo(label)){
-            // Try a different reading mode.
-            Standard_Integer numberOfRoots = reader.NbRootsForTransfer();
-            if (numberOfRoots != 0){
-                for(Standard_Integer i = 1; i <= numberOfRoots; ++i){
-                    if(STEPReader.TransferRoot(i)){
-                        TopoDS_Shape solidShape = STEPReader.Shape(i);
-                        TopExp_Explorer explorer;
-                        TopoDS_Compound compSolid;
-                        TopoDS_Builder builder;
-                        Standard_Integer counter{0};
-                        for(explorer.Init(solidShape, TopAbs_SOLID);
-                            explorer.More(); explorer.Next()){
-                            std::string tempName = "solid_" + std::to_string(++counter);
-                            TCollection_ExtendedString shapeName{tempName.c_str()};
-                            TopoDS_Solid tempSolid = TopoDS::Solid(explorer.Current());
-                            builder.MakeCompound(compSolid);
-                            builder.Add(compSolid, tempSolid);
-                            shapesInfoMap.push_back(std::make_tuple(compSolid, shapeName));
-                        }
-                    } else throw std::runtime_error("Error loading shapes from input file!");
-                }
-            }
+            if(!basicReader(fileName)) goto failed;
         }
     } else {
+        failed:
         Standard_Boolean failsOnly = Standard_False;
         STEPReader.PrintCheckLoad(failsOnly, IFSelect_ItemsByEntity);
         STEPReader.PrintCheckTransfer(failsOnly, IFSelect_ItemsByEntity);
@@ -80,12 +66,11 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
 }
 
 Standard_Boolean
-McCAD::IO::STEPReader::Impl::getLabelInfo(const TDF_Label& aLabel){
+McCAD::IO::STEPReader::Impl::getLabelInfo(const TDF_Label& rootLabel){
     Standard_Boolean foundShapes = Standard_False;
-    if(aLabel.HasChild()){
-        int numChildren = aLabel.NbChildren();
-        for(int aTag = 1; aTag <= numChildren; ++aTag){
-            TDF_Label childLabel = aLabel.FindChild(aTag);
+    if(rootLabel.HasChild()){
+        for(TDF_ChildIterator it1 (rootLabel, Standard_False); it1.More(); it1.Next()) {
+            TDF_Label childLabel = it1.Value();
             if (childLabel.HasAttribute()){
                 opencascade::handle<TDataStd_Name> dataName;
                 if (childLabel.FindAttribute(TDataStd_Name::GetID(), dataName)
@@ -98,7 +83,7 @@ McCAD::IO::STEPReader::Impl::getLabelInfo(const TDF_Label& aLabel){
             return Standard_False;
         }
     } else return Standard_False;
-    return Standard_True;
+    return foundShapes;
 }
 
 
@@ -107,9 +92,8 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
                                                 const TCollection_ExtendedString& aName){
     Standard_Boolean foundShapes = Standard_False;
     if(aLabel.HasChild()){
-        int numChildren = aLabel.NbChildren();
-        for(int aTag = 1; aTag <= numChildren; ++aTag){
-            TDF_Label childLabel = aLabel.FindChild(aTag);
+        for(TDF_ChildIterator it1 (aLabel, Standard_False); it1.More(); it1.Next()) {
+            TDF_Label childLabel = it1.Value();
             if (childLabel.HasAttribute()){
                 opencascade::handle<TDataStd_Name> dataName;
                 if (childLabel.FindAttribute(TDataStd_Name::GetID(), dataName)
@@ -122,19 +106,54 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
             goto retrieve;
     } else {
         retrieve:
-        /* // Debug
+        // Debug
         std::cout << "\nName: " << aName <<
-                     "\nparentName: " << parentName <<
                      "\nLabel: " << aLabel << std::endl;
-        // Debug */
+        // Debug
         opencascade::handle<TNaming_NamedShape> aShape;
         if (aLabel.FindAttribute(TNaming_NamedShape::GetID(), aShape)){
+            TCollection_AsciiString aLabelEntry;
+            TDF_Tool::Entry(aLabel, aLabelEntry);
             sequenceOfShape->Append(aShape->Get());
             TCollection_ExtendedString shapeName{aName};
             shapeNames.push_back(shapeName);
+            //shapesInfoMap.push_back(std::make_tuple(aShape->Get(), shapeName, aLabelEntry));
             shapesInfoMap.push_back(std::make_tuple(aShape->Get(), shapeName));
             foundShapes = Standard_True;
         }
     }
     return foundShapes;
+}
+
+Standard_Boolean
+McCAD::IO::STEPReader::Impl::basicReader(const std::string& fileName){
+    STEPControl_Reader STEPReader;
+    // Set reader parameters per user config.
+    if(Interface_Static::RVal("read.precision.val") > inputConfig.precision){
+        Interface_Static::SetIVal("read.precision.mode", 1);
+        Interface_Static::SetRVal("read.precision.val", inputConfig.precision);
+    }
+    STEPReader.ReadFile(fileName.c_str());
+    Standard_Integer numberOfRoots = STEPReader.NbRootsForTransfer();
+    if (numberOfRoots != 0){
+        for(Standard_Integer i = 1; i <= numberOfRoots; ++i){
+            if(STEPReader.TransferRoot(i)){
+                TopoDS_Shape solidShape = STEPReader.Shape(i);
+                TopExp_Explorer explorer;
+                TopoDS_Compound compSolid;
+                TopoDS_Builder builder;
+                Standard_Integer counter{0};
+                for(explorer.Init(solidShape, TopAbs_SOLID); explorer.More(); explorer.Next()){
+                    std::string tempName = "solid_" + std::to_string(++counter);
+                    TCollection_ExtendedString shapeName{tempName.c_str()};
+                    TopoDS_Solid tempSolid = TopoDS::Solid(explorer.Current());
+                    builder.MakeCompound(compSolid);
+                    builder.Add(compSolid, tempSolid);
+                    shapesInfoMap.push_back(std::make_tuple(compSolid, shapeName));
+                }
+            }
+        }
+        return Standard_True;
+    }
+    return Standard_False;
 }

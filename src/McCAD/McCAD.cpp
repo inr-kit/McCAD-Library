@@ -14,7 +14,7 @@
 int main (int argc, char* argv[]){
     auto timeStart{std::chrono::high_resolution_clock::now()},
          timeEnd{std::chrono::high_resolution_clock::now()};
-    std::cerr << "Running McCAD v1.0L" << std::endl;
+    std::cerr << "Running McCAD v1.0" << std::endl;
     std::filesystem::path currentPath = std::filesystem::current_path();
     McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
