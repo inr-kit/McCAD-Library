@@ -19,7 +19,6 @@
 #include <TopoDS_Builder.hxx>
 #include <TDF_ChildIterator.hxx>
 #include <TDF_Tool.hxx>
-#include <TDocStd_Application.hxx>
 
 McCAD::IO::STEPReader::Impl::Impl(const IO::InputConfig& inputConfig) :
     inputConfig{inputConfig},
@@ -38,9 +37,7 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
     STEPCAFControl_Reader reader;
     STEPControl_Reader STEPReader = reader.Reader();
     // Create an application
-    opencascade::handle<TDocStd_Document> document;
-    Handle(TDocStd_Application) app = new TDocStd_Application();
-    app->NewDocument("XmlOcaf", document);
+    opencascade::handle<TDocStd_Document> document = new TDocStd_Document("txt");
     // Set reader parameters per user config.
     if(Interface_Static::RVal("read.precision.val") > inputConfig.precision){
         Interface_Static::SetIVal("read.precision.mode", 1);
@@ -106,12 +103,13 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
             goto retrieve;
     } else {
         retrieve:
-        // Debug
+        /*// Debug
         std::cout << "\nName: " << aName <<
                      "\nLabel: " << aLabel << std::endl;
-        // Debug
+        */// Debug
         opencascade::handle<TNaming_NamedShape> aShape;
         if (aLabel.FindAttribute(TNaming_NamedShape::GetID(), aShape)){
+            //std::cout << "type: " << aShape->Get().ShapeType() << std::endl;
             TCollection_AsciiString aLabelEntry;
             TDF_Tool::Entry(aLabel, aLabelEntry);
             sequenceOfShape->Append(aShape->Get());
@@ -133,27 +131,30 @@ McCAD::IO::STEPReader::Impl::basicReader(const std::string& fileName){
         Interface_Static::SetIVal("read.precision.mode", 1);
         Interface_Static::SetRVal("read.precision.val", inputConfig.precision);
     }
-    STEPReader.ReadFile(fileName.c_str());
-    Standard_Integer numberOfRoots = STEPReader.NbRootsForTransfer();
-    if (numberOfRoots != 0){
-        for(Standard_Integer i = 1; i <= numberOfRoots; ++i){
-            if(STEPReader.TransferRoot(i)){
-                TopoDS_Shape solidShape = STEPReader.Shape(i);
-                TopExp_Explorer explorer;
-                TopoDS_Compound compSolid;
-                TopoDS_Builder builder;
-                Standard_Integer counter{0};
-                for(explorer.Init(solidShape, TopAbs_SOLID); explorer.More(); explorer.Next()){
-                    std::string tempName = "solid_" + std::to_string(++counter);
-                    TCollection_ExtendedString shapeName{tempName.c_str()};
-                    TopoDS_Solid tempSolid = TopoDS::Solid(explorer.Current());
-                    builder.MakeCompound(compSolid);
-                    builder.Add(compSolid, tempSolid);
-                    shapesInfoMap.push_back(std::make_tuple(compSolid, shapeName));
-                }
+    auto readStatus = STEPReader.ReadFile(fileName.c_str());
+    if(readStatus == IFSelect_RetDone){
+        Standard_Integer numberOfRoots = STEPReader.NbRootsForTransfer();
+        if (numberOfRoots != 0){
+            for(Standard_Integer i = 1; i <= numberOfRoots; ++i){
+                if(STEPReader.TransferRoot(i)){
+                    TopoDS_Shape solidShape = STEPReader.Shape(i);
+                    TopExp_Explorer explorer;
+                    TopoDS_CompSolid compSolid;
+                    TopoDS_Builder builder;
+                    Standard_Integer counter{0};
+                    for(explorer.Init(solidShape, TopAbs_SOLID); explorer.More(); explorer.Next()){
+                        std::string tempName = "solid_" + std::to_string(++counter);
+                        TCollection_ExtendedString shapeName{tempName.c_str()};
+                        TopoDS_Solid tempSolid = TopoDS::Solid(explorer.Current());
+                        builder.MakeCompSolid(compSolid);
+                        builder.Add(compSolid, tempSolid);
+                        shapesInfoMap.push_back(std::make_tuple(compSolid, shapeName));
+                    }
+                } else goto returnBack;
             }
-        }
-        return Standard_True;
+            return Standard_True;
+        } else goto returnBack;
     }
+    returnBack:;
     return Standard_False;
 }
