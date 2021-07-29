@@ -42,12 +42,10 @@ McCAD::IO::STEPWriter::Impl::operator()(
     }
     Interface_Static::SetIVal("write.step.assembly", 2); // Auto
     Interface_Static::SetIVal("write.step.schema", 4); // AP2014 IS (2002)
-    opencascade::handle<TDocStd_Document> document;
-    Handle(TDocStd_Application) app = new TDocStd_Application();
-    app->NewDocument("XmlXCAF", document);
+    opencascade::handle<TDocStd_Document> document = new TDocStd_Document("txt");
     opencascade::handle<XCAFDoc_ShapeTool> shapeTool = XCAFDoc_DocumentTool::ShapeTool(document->Main());
     opencascade::handle<TDataStd_Name> compoundName = new TDataStd_Name();
-    shapeTool->SetAutoNaming(Standard_True); // Add auto names; COMPOUND, SOLID, etc.
+    //shapeTool->SetAutoNaming(Standard_True); // Add auto names; COMPOUND, SOLID, etc.
     TopoDS_Builder builder;
     TopoDS_Compound compoundToWrite;
     for (const auto& compound : solidsMap){
