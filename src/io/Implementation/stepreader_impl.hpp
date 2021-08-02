@@ -32,8 +32,7 @@ namespace McCAD::IO{
 
     void readSTEP();
     Standard_Boolean getLabelInfo(const TDF_Label& aLabel);
-    Standard_Boolean iterateLabelChilds(const TDF_Label& aLabel,
-                                        const TCollection_ExtendedString& aName);
+    Standard_Boolean iterateLabelChilds(const TDF_Label& aLabel);
     Standard_Boolean basicReader(const std::string& fileName);
   };
 }

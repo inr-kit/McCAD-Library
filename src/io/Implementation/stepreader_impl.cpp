@@ -46,6 +46,7 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
     std::string fileName;
     if(inputConfig.readConversion) fileName = inputConfig.conversionFileName;
     else fileName = inputConfig.inputFileName;
+    // Start reading contents of STEP file.
     auto readStatus = reader.ReadFile(fileName.c_str());
     if(readStatus == IFSelect_RetDone){
         reader.Transfer(document);
@@ -69,11 +70,8 @@ McCAD::IO::STEPReader::Impl::getLabelInfo(const TDF_Label& rootLabel){
         for(TDF_ChildIterator it1 (rootLabel, Standard_False); it1.More(); it1.Next()) {
             TDF_Label childLabel = it1.Value();
             if (childLabel.HasAttribute()){
-                opencascade::handle<TDataStd_Name> dataName;
-                if (childLabel.FindAttribute(TDataStd_Name::GetID(), dataName)
-                    && childLabel.IsAttribute(XCAFDoc_ShapeTool::GetID())){
-                    foundShapes = iterateLabelChilds(childLabel, dataName->Get());
-                }
+                if (childLabel.IsAttribute(XCAFDoc_ShapeTool::GetID()))
+                    foundShapes = iterateLabelChilds(childLabel);
             }
         }
         if(!foundShapes || (sequenceOfShape->Length() != shapeNames.size())){
@@ -83,41 +81,36 @@ McCAD::IO::STEPReader::Impl::getLabelInfo(const TDF_Label& rootLabel){
     return foundShapes;
 }
 
-
 Standard_Boolean
-McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel,
-                                                const TCollection_ExtendedString& aName){
+McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel){
     Standard_Boolean foundShapes = Standard_False;
     if(aLabel.HasChild()){
         for(TDF_ChildIterator it1 (aLabel, Standard_False); it1.More(); it1.Next()) {
             TDF_Label childLabel = it1.Value();
             if (childLabel.HasAttribute()){
-                opencascade::handle<TDataStd_Name> dataName;
-                if (childLabel.FindAttribute(TDataStd_Name::GetID(), dataName)
-                         && childLabel.IsAttribute(TNaming_NamedShape::GetID())){
-                    foundShapes = iterateLabelChilds(childLabel, dataName->Get());
-                }
+                if (childLabel.IsAttribute(TNaming_NamedShape::GetID()))
+                    foundShapes = iterateLabelChilds(childLabel);
             }
         }
-        if(!foundShapes && aLabel.IsAttribute(XCAFDoc_ShapeMapTool::GetID()))
+        if(!foundShapes && aLabel.IsAttribute(XCAFDoc_ShapeMapTool::GetID())){
             goto retrieve;
+        }
     } else {
         retrieve:
-        /*// Debug
-        std::cout << "\nName: " << aName <<
-                     "\nLabel: " << aLabel << std::endl;
-        */// Debug
-        opencascade::handle<TNaming_NamedShape> aShape;
-        if (aLabel.FindAttribute(TNaming_NamedShape::GetID(), aShape)){
-            //std::cout << "type: " << aShape->Get().ShapeType() << std::endl;
+        opencascade::handle<TDataStd_Name> shapeName;
+        opencascade::handle<TNaming_NamedShape> shape;
+        if (aLabel.FindAttribute(TDataStd_Name::GetID(), shapeName) &&
+                aLabel.FindAttribute(TNaming_NamedShape::GetID(), shape)){
             TCollection_AsciiString aLabelEntry;
             TDF_Tool::Entry(aLabel, aLabelEntry);
-            sequenceOfShape->Append(aShape->Get());
-            TCollection_ExtendedString shapeName{aName};
-            shapeNames.push_back(shapeName);
-            //shapesInfoMap.push_back(std::make_tuple(aShape->Get(), shapeName, aLabelEntry));
-            shapesInfoMap.push_back(std::make_tuple(aShape->Get(), shapeName));
+            sequenceOfShape->Append(shape->Get());
+            shapeNames.push_back(shapeName->Get());
+            shapesInfoMap.push_back(std::make_tuple(shape->Get(), shapeName->Get()));
             foundShapes = Standard_True;
+            /*
+            std::cout << "\nName: " << shapeName->Get() <<
+                         "\nLabel: " << aLabel << std::endl;
+            */
         }
     }
     return foundShapes;
