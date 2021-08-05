@@ -132,7 +132,7 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughLine(
         const std::shared_ptr<Geometry::Edge>& commonEdge,
         const Standard_Real& boxDiagonalLength, const Standard_Real& meshDeflection){
     auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
-            inputConfig.precision}.generatePlaneOnLine(
+            inputConfig.precision, inputConfig.angularTolerance}.generatePlaneOnLine(
                 firstFace->accessSImpl()->face, secondFace->accessSImpl()->face,
                 commonEdge);
     if(splitFace){
@@ -165,7 +165,7 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughCurve(
     BRepAdaptor_Curve curveAdaptor(commonEdge->accessEImpl()->edge);
     if (curveAdaptor.GetType() == GeomAbs_BSplineCurve){
         splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
-                inputConfig.precision}.generateSurfOnBSpline(
+                inputConfig.precision, inputConfig.angularTolerance}.generateSurfOnBSpline(
                     firstFace->accessSImpl()->face, secondFace->accessSImpl()->face,
                     commonEdge);
     } else if (curveAdaptor.GetType() == GeomAbs_Circle ||
@@ -173,7 +173,7 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughCurve(
                curveAdaptor.GetType() == GeomAbs_Parabola ||
                curveAdaptor.GetType() == GeomAbs_Hyperbola){
         splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
-                inputConfig.precision}.generatePlaneOnCurve(commonEdge);
+                inputConfig.precision, inputConfig.angularTolerance}.generatePlaneOnCurve(commonEdge);
     } else splitFace = std::nullopt;
     if(splitFace){
         std::shared_ptr<Geometry::BoundSurface> assistSurface =
@@ -218,7 +218,7 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughTwoLines(
         }
     }
     auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
-            inputConfig.precision}.generatePlaneOn2Lines(firstEdge, secondEdge);
+            inputConfig.precision, inputConfig.angularTolerance}.generatePlaneOn2Lines(firstEdge, secondEdge);
     if(splitFace){
         std::shared_ptr<Geometry::BoundSurface> assistSurface =
                 SurfaceObjCreator{}(splitFace.value(), boxDiagonalLength,

@@ -119,7 +119,7 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::generateThroughLineAxis(
         const Standard_Real& boxDiagonalLength, const Standard_Real& meshDeflection){
     BRepAdaptor_Surface surfaceAdaptor(cylinderFace->accessSImpl()->face);
     auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
-            inputConfig.precision}.generatePlaneOnLineAxis(
+            inputConfig.precision, inputConfig.angularTolerance}.generatePlaneOnLineAxis(
                 surfaceAdaptor.Cylinder(), commonEdge);
     if(splitFace){
         std::shared_ptr<Geometry::BoundSurface> assistSurface =
@@ -163,7 +163,7 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::generateThroughTwoLines(
         }
     }
     auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
-            inputConfig.precision}.generatePlaneOn2Lines(firstEdge, secondEdge);
+            inputConfig.precision, inputConfig.angularTolerance}.generatePlaneOn2Lines(firstEdge, secondEdge);
     if(splitFace){
         std::shared_ptr<Geometry::BoundSurface> assistSurface =
                 SurfaceObjCreator{}(splitFace.value(), boxDiagonalLength,

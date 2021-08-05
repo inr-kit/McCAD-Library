@@ -16,11 +16,13 @@ namespace McCAD::Decomposition{
   class SplitSurfaceGenerator{
   public:
       SplitSurfaceGenerator();
-      SplitSurfaceGenerator(const Standard_Real& edgeTolerance, const Standard_Real& precision);
+      SplitSurfaceGenerator(const Standard_Real& edgeTolerance,
+                            const Standard_Real& precision,
+                            const Standard_Real& angularTolerance);
       ~SplitSurfaceGenerator();
   private:
-      Standard_Real edgeTolerance{1.0e-7};
-      Standard_Real precision{1.0e-7};
+      Standard_Real edgeTolerance{1.0e-7}, precision{1.0e-7},
+                    angularTolerance{1.0e-4 * M_PI};
   public:
       std::optional<TopoDS_Face> generatePlaneOnLine(
               const TopoDS_Face& firstFace, const TopoDS_Face& secondFace,

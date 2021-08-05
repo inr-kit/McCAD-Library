@@ -90,7 +90,7 @@ McCAD::Decomposition::AssistCylTorSurfaceGenerator::generateThroughLine(
         const std::shared_ptr<Geometry::Edge>& commonEdge,
         const Standard_Real& boxDiagonalLength, const Standard_Real& meshDeflection){
     auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
-            inputConfig.precision}.generatePlaneOnLine(
+            inputConfig.precision, inputConfig.angularTolerance}.generatePlaneOnLine(
                 firstFace->accessSImpl()->face, secondFace->accessSImpl()->face,
                 commonEdge);
     if(splitFace){
@@ -120,7 +120,7 @@ McCAD::Decomposition::AssistCylTorSurfaceGenerator::generateThroughCurve(
         const std::shared_ptr<Geometry::Edge>& commonEdge,
         const Standard_Real& boxDiagonalLength, const Standard_Real& meshDeflection){
     auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
-            inputConfig.precision}.generatePlaneOnCurve(commonEdge);
+            inputConfig.precision, inputConfig.angularTolerance}.generatePlaneOnCurve(commonEdge);
     if(splitFace){
         std::shared_ptr<Geometry::BoundSurface> assistSurface =
                 SurfaceObjCreator{}(splitFace.value(), boxDiagonalLength,
@@ -165,7 +165,7 @@ McCAD::Decomposition::AssistCylTorSurfaceGenerator::generateThroughTwoLines(
         }
     }
     auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
-            inputConfig.precision}.generatePlaneOn2Lines(firstEdge, secondEdge);
+            inputConfig.precision, inputConfig.angularTolerance}.generatePlaneOn2Lines(firstEdge, secondEdge);
     if(splitFace){
         std::shared_ptr<Geometry::BoundSurface> assistSurface =
                 SurfaceObjCreator{}(splitFace.value(), boxDiagonalLength,

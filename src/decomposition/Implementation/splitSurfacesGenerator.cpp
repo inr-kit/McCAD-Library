@@ -26,8 +26,9 @@ McCAD::Decomposition::SplitSurfaceGenerator::SplitSurfaceGenerator(){
 }
 
 McCAD::Decomposition::SplitSurfaceGenerator::SplitSurfaceGenerator(
-        const Standard_Real& edgeTolerance, const Standard_Real& precision) :
-    edgeTolerance{edgeTolerance}, precision{precision}{
+        const Standard_Real& edgeTolerance, const Standard_Real& precision,
+        const Standard_Real& angularTolerance) :
+    edgeTolerance{edgeTolerance}, precision{precision}, angularTolerance{angularTolerance}{
 }
 
 McCAD::Decomposition::SplitSurfaceGenerator::~SplitSurfaceGenerator(){
@@ -49,12 +50,20 @@ McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOnLine(
         if (!first || !second) return std::nullopt;
     }
     gp_Dir firstNormal{first.value()}, secondNormal{second.value()};
-    // Directions are normalized. Create a direction at half the angle between the directions.
-    gp_Dir midwayNormal;
-    midwayNormal.SetCoord((firstNormal.X() + secondNormal.X())/2.0,
-                          (firstNormal.Y() + secondNormal.Y())/2.0,
-                          (firstNormal.Z() + secondNormal.Z())/2.0);
-    gp_Dir splitSurfNormal = midwayNormal.Crossed(firstNormal.Crossed(secondNormal));
+    gp_Dir splitSurfNormal;
+    if(firstNormal.Angle(secondNormal) < angularTolerance){
+        // Use edge and one of the normals to get surface normal.
+        gp_Vec edgeVector{edgeStart, edgeEnd};
+        gp_Dir edgeDir{edgeVector};
+        splitSurfNormal = edgeDir.Crossed(firstNormal);
+    } else{
+        // Directions are normalized. Create a direction at half the angle between the directions.
+        gp_Dir midwayNormal;
+        midwayNormal.SetCoord((firstNormal.X() + secondNormal.X())/2.0,
+                              (firstNormal.Y() + secondNormal.Y())/2.0,
+                              (firstNormal.Z() + secondNormal.Z())/2.0);
+        splitSurfNormal = midwayNormal.Crossed(firstNormal.Crossed(secondNormal));
+    }
     gp_Pln splitSurf(splitSurfPoint, splitSurfNormal);
     return BRepBuilderAPI_MakeFace(splitSurf);
 }
