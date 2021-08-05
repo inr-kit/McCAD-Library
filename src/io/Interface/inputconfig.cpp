@@ -31,11 +31,6 @@ McCAD::IO::InputConfig::writeTemplate(){
     inputConfig << "# Decomposition\n"
                    "# =============\n"
                    "decompose = true\n"
-                   "# > Desired name of the decomposed solids output STEP file;\n"
-                   "resultFileName = decompositionResult.stp\n"
-                   "# > Desired name of the rejected solids output STEP file;\n"
-                   "rejectFileName = decompositionReject.stp\n"
-                   "# > Other parameters;\n"
                    "recurrenceDepth = 20\n"
                    "minSolidVolume = 1.0e-3 [cm3]\n"
                    "minFaceArea = 1.0e-4 [cm2]\n"
@@ -51,8 +46,6 @@ McCAD::IO::InputConfig::writeTemplate(){
     inputConfig << "# Conversion\n"
                    "# ==========\n"
                    "convert = false\n"
-                   "# > Desired name of the rejected conversion output STEP file;\n"
-                   "rejectConvFileName = conversionReject.stp\n"
                    "# > Choose whether or not to generate void cells;\n"
                    "voidGeneration = true\n"
                    "# > Minimum acceptable void volume shouldn;t be less than minSolidVolume;\n"
@@ -67,7 +60,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "startSurfNum = 1\n"
                    "maxLineWidth = 80\n"
                    "MCOutputFileName = MCFile.inp\n"
-                   "volumesFileName = volumes.vols\n" << std::endl;
+                   "volumesFileName = volumes.txt\n" << std::endl;
     inputConfig.close();
 }
 
@@ -75,10 +68,11 @@ void
 McCAD::IO::InputConfig::readTemplate(){
     std::ifstream inputConfig("McCADInputConfig.txt");
     if (!inputConfig){
-        std::cout << "McCADInputConfig.txt is missing!. Proceeding with default parameters:"
-                     "\nInput  = " << inputFileName <<
-                     "\nResult = " << resultFileName << 
-                     "\nReject = " << rejectFileName << std::endl;
+        inputFileNames.push_back("input.stp");
+        std::cout << "[WARNING] McCADInputConfig.txt is missing!, proceeding with default parameters:"
+                     "\nInput  = input.stp" <<
+                     "\nResult = input_decomposed.stp" <<
+                     "\nReject = input_rejected.stp" << std::endl;
     } else {
         // Read file and populate parameters
         while (!inputConfig.eof()){
@@ -92,15 +86,13 @@ McCAD::IO::InputConfig::readTemplate(){
                    units = stringToLowerCase(lineSplit[2]);
                    if (units == "cm") conversionFactor = 10.0;
                    else if (units == "m") conversionFactor = 1000.0;
-               } else if (lineSplit[0] == "inputFileName")
-                   inputFileName = lineSplit[2];
+               } else if (lineSplit[0] == "inputFileName"){
+                   for(int i = 2; i < lineSplit.size(); ++i){
+                       inputFileNames.push_back(lineSplit[i]);
+                   }
                // Decompositions
-               else if (lineSplit[0] == "decompose")
+               } else if (lineSplit[0] == "decompose")
                    decompose = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
-               else if (lineSplit[0] == "resultFileName")
-                   resultFileName = lineSplit[2];
-               else if (lineSplit[0] == "rejectFileName")
-                   rejectFileName = lineSplit[2];
                else if (lineSplit[0] == "recurrenceDepth")
                    recurrenceDepth = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "minSolidVolume")
@@ -128,8 +120,6 @@ McCAD::IO::InputConfig::readTemplate(){
                // Conversion
                else if (lineSplit[0] == "convert")
                    convert = stringToLowerCase(lineSplit[2]) == "false" ? false : true;
-               else if (lineSplit[0] == "rejectConvFileName")
-                   rejectConvFileName = lineSplit[2];
                else if (lineSplit[0] == "voidGeneration")
                    voidGeneration = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
                else if (lineSplit[0] == "minVoidVolume")
@@ -154,6 +144,7 @@ McCAD::IO::InputConfig::readTemplate(){
            }
         }
     }
+    populateNamesLists();
 }
 
 std::vector<std::string>
@@ -172,4 +163,13 @@ McCAD::IO::InputConfig::stringToLowerCase(std::string& string){
     std::transform(string.begin(), string.end(), string.begin(),
                    [](unsigned char c){ return std::tolower(c); });
     return string;
+}
+
+void
+McCAD::IO::InputConfig::populateNamesLists(){
+    for(int i = 0; i < inputFileNames.size(); ++i){
+        std::string splitName = splitLine(inputFileNames[i], '.')[0];
+        decomposedFileNames.push_back(splitName + std::string("_decomposed.stp"));
+        rejectedFileNames.push_back(splitName + std::string("_rejected.stp"));
+    }
 }

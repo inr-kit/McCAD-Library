@@ -32,48 +32,55 @@ int main (int argc, char* argv[]){
         } else if (std::string(argv[1]) == "read") {
             inputConfig.readTemplate();
             // Load the input file.
-            std::cout << "***********************" << std::endl;
-            std::cout << "** Loading STEP file **" << std::endl;
-            std::cout << "***********************" << std::endl;
-            McCAD::IO::STEPReader reader{inputConfig};
+            std::cout << "**************************" << std::endl;
+            std::cout << "** Loading STEP file(s) **" << std::endl;
+            std::cout << "**************************" << std::endl;
+            for(int i = 0; i < inputConfig.inputFileNames.size(); ++i){
+                inputConfig.inputFileName = inputConfig.inputFileNames[i];
+                McCAD::IO::STEPReader reader{inputConfig};
+            }
             timeEnd = std::chrono::high_resolution_clock::now();
         } else if (std::string(argv[1]) == "run") {
             inputConfig.readTemplate();
             bool decomposeCondition{inputConfig.decompose},
                  convertCondition{inputConfig.convert};
             if (decomposeCondition){
-                // Load the input file.
-                std::cout << "***********************" << std::endl;
-                std::cout << "** Loading STEP file **" << std::endl;
-                std::cout << "***********************" << std::endl;
-                McCAD::IO::STEPReader reader{inputConfig};
-                auto inputData = reader.getInputData();
-                // Start decomposition.
-                std::cout << "****************************" << std::endl;
-                std::cout << "** Starting decomposition **" << std::endl;
-                std::cout << "****************************" << std::endl;
-                McCAD::Decomposition::Decompose decompose{inputData, inputConfig};
-                auto outputData_result = decompose.getResultSolids();
-                auto outputData_reject = decompose.getRejectedSolids();
-                // Write output STEP files.
-                std::cout << "*************************" << std::endl;
-                std::cout << "** Saving to STEP file **" << std::endl;
-                std::cout << "*************************" << std::endl;
-                inputConfig.outputFileName = inputConfig.resultFileName;
-                McCAD::IO::STEPWriter{inputConfig, outputData_result};
-                inputConfig.outputFileName = inputConfig.rejectFileName;
-                McCAD::IO::STEPWriter{inputConfig, outputData_reject};
-                bool rejectConversion = outputData_reject.getSize() == 0 ? false
-                                                                         : true;
+                bool rejectConversion;
+                for(int i = 0; i < inputConfig.inputFileNames.size(); ++i){
+                    inputConfig.inputFileName = inputConfig.inputFileNames[i];
+                    std::cout << "> Processing " << inputConfig.inputFileName << std::endl;
+                    // Load the input file.
+                    std::cout << "***********************" << std::endl;
+                    std::cout << "** Loading STEP file **" << std::endl;
+                    std::cout << "***********************" << std::endl;
+                    McCAD::IO::STEPReader reader{inputConfig};
+                    auto inputData = reader.getInputData();
+                    // Start decomposition.
+                    std::cout << "****************************" << std::endl;
+                    std::cout << "** Starting decomposition **" << std::endl;
+                    std::cout << "****************************" << std::endl;
+                    McCAD::Decomposition::Decompose decompose{inputData, inputConfig};
+                    auto outputData_result = decompose.getResultSolids();
+                    auto outputData_reject = decompose.getRejectedSolids();
+                    // Write output STEP files.
+                    std::cout << "*************************" << std::endl;
+                    std::cout << "** Saving to STEP file **" << std::endl;
+                    std::cout << "*************************" << std::endl;
+                    inputConfig.outputFileName = inputConfig.decomposedFileNames[i];
+                    McCAD::IO::STEPWriter{inputConfig, outputData_result};
+                    inputConfig.outputFileName = inputConfig.rejectedFileNames[i];
+                    McCAD::IO::STEPWriter{inputConfig, outputData_reject};
+                    rejectConversion = outputData_reject.getSize() == 0 ? false : true;
+                }
                 if (convertCondition && !rejectConversion){
-                    inputConfig.conversionFileName = inputConfig.resultFileName;
+                    inputConfig.conversionFileNames = inputConfig.decomposedFileNames;
                     goto convert;
                 } else if (rejectConversion)
                     std::cout << "Decomposition resulted in rejected solids, please "
                                  "check the solids and then run conversion!"
                               << std::endl;
             } else if (convertCondition){
-                inputConfig.conversionFileName = inputConfig.inputFileName;
+                inputConfig.conversionFileNames = inputConfig.inputFileNames;
                 convert:;
                 std::cout << "*************************" << std::endl;
                 std::cout << "** Starting conversion **" << std::endl;

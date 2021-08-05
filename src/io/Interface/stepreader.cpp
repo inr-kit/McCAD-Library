@@ -2,8 +2,7 @@
 #include "stepreader_impl.hpp"
 #include "inputdata_impl.hpp"
 
-McCAD::IO::STEPReader::STEPReader(
-        const IO::InputConfig& inputConfig)
+McCAD::IO::STEPReader::STEPReader(const IO::InputConfig& inputConfig)
     : pImpl{std::make_unique<Impl>(inputConfig)}{
   pImpl->readSTEP();
 }

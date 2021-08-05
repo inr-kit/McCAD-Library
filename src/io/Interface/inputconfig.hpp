@@ -18,18 +18,19 @@ namespace McCAD::IO{
       std::filesystem::path currentPath;
       double conversionFactor{1.0};
       const double PI = 3.141592653589793238463;
-      std::string conversionFileName = "conversion.stp";
-      std::string outputFileName;
+      std::string inputFileName, resultFileName, rejectFileName, outputFileName,
+                  conversionFileName;
+      std::vector<std::string> conversionFileNames;
       bool readConversion = false;
       void writeTemplate();
       std::string stringToLowerCase(std::string& string);
       std::vector<std::string> splitLine(const std::string& line, char delimiter);
       void readTemplate();
-      //Define default values
+      void populateNamesLists();
+
+      // General input
       std::string units = "cm";
-      std::string inputFileName = "input.stp";
-      std::string resultFileName = "result.stp";
-      std::string rejectFileName = "reject.stp";
+      std::vector<std::string> inputFileNames, decomposedFileNames, rejectedFileNames;
       // Decomposition
       bool decompose = true;
       int recurrenceDepth = 20;
@@ -60,4 +61,4 @@ namespace McCAD::IO{
   };
 }
 
-#endif // INPUTCONFIG_H
+#endif // INPUTCONFIG_HPP
