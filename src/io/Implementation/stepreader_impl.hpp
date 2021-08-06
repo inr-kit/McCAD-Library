@@ -27,8 +27,8 @@ namespace McCAD::IO{
     std::shared_ptr<TopTools_HSequenceOfShape> sequenceOfShape;
     std::vector<TCollection_ExtendedString> shapeNames;
     std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString>> shapesInfoMap;
-    //std::vector<std::tuple<TopoDS_Shape, TCollection_ExtendedString,
-    //                       TCollection_ExtendedString>> shapesInfoMap;
+    std::string materialName{""};
+    Standard_Real materialDensity{0.0};
 
     void readSTEP();
     Standard_Boolean getLabelInfo(const TDF_Label& aLabel);

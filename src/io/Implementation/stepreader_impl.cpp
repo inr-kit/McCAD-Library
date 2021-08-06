@@ -19,6 +19,7 @@
 #include <TopoDS_Builder.hxx>
 #include <TDF_ChildIterator.hxx>
 #include <TDF_Tool.hxx>
+#include <TopLoc_Datum3D.hxx>
 
 McCAD::IO::STEPReader::Impl::Impl(const IO::InputConfig& inputConfig) :
     inputConfig{inputConfig},
@@ -44,8 +45,9 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
         Interface_Static::SetRVal("read.precision.val", inputConfig.precision);
     }
     std::string fileName;
-    if(inputConfig.readConversion) fileName = inputConfig.conversionFileName;
-    else fileName = inputConfig.inputFileName;
+    if(inputConfig.readConversion){
+        fileName = inputConfig.conversionFileName;
+    } else fileName = inputConfig.inputFileName;
     // Start reading contents of STEP file.
     auto readStatus = reader.ReadFile(fileName.c_str());
     if(readStatus == IFSelect_RetDone){
@@ -107,7 +109,23 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel){
             shapeNames.push_back(shapeName->Get());
             shapesInfoMap.push_back(std::make_tuple(shape->Get(), shapeName->Get()));
             foundShapes = Standard_True;
-            /*
+            /*//
+            TopLoc_Location labelLocation = XCAFDoc_ShapeTool::GetLocation(aLabel);
+            std::cout << "shape vs label: " << shape->Get().Location().IsEqual(labelLocation) << std::endl;
+            std::cout << "Trnasformation: " << "\n" <<
+                         labelLocation.Transformation().Value(1,1) << " " <<
+                         labelLocation.Transformation().Value(1,2) << " " <<
+                         labelLocation.Transformation().Value(1,3) << " " <<
+                         labelLocation.Transformation().Value(1,4) << " " << "\n" <<
+                         labelLocation.Transformation().Value(2,1) << " " <<
+                         labelLocation.Transformation().Value(2,2) << " " <<
+                         labelLocation.Transformation().Value(2,3) << " " <<
+                         labelLocation.Transformation().Value(2,4) << " " << "\n" <<
+                         labelLocation.Transformation().Value(3,1) << " " <<
+                         labelLocation.Transformation().Value(3,2) << " " <<
+                         labelLocation.Transformation().Value(3,3) << " " <<
+                         labelLocation.Transformation().Value(3,4) << std::endl;
+
             std::cout << "\nName: " << shapeName->Get() <<
                          "\nLabel: " << aLabel << std::endl;
             */

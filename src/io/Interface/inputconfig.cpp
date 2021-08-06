@@ -144,7 +144,8 @@ McCAD::IO::InputConfig::readTemplate(){
            }
         }
     }
-    populateNamesLists();
+    if (decompose) populateNamesLists();
+    if(convert) populateMatList();
 }
 
 std::vector<std::string>
@@ -171,5 +172,18 @@ McCAD::IO::InputConfig::populateNamesLists(){
         std::string splitName = splitLine(inputFileNames[i], '.')[0];
         decomposedFileNames.push_back(splitName + std::string("_decomposed.stp"));
         rejectedFileNames.push_back(splitName + std::string("_rejected.stp"));
+    }
+}
+
+void
+McCAD::IO::InputConfig::populateMatList(){
+    for(int i = 0; i < inputFileNames.size(); ++i){
+        std::string splitName = splitLine(inputFileNames[i], '.')[0];
+        rejectedConvFileNames.push_back(splitName + std::string("_rejectedConv.stp"));
+        std::string matName = splitLine(splitName, '_')[0];
+        double matDensity{0.0};
+        if(stringToLowerCase(matName) != "void")
+            matDensity = std::stof(splitLine(splitName, '_')[1]);
+        materialsInfo.push_back(std::make_tuple(matName, matDensity));
     }
 }

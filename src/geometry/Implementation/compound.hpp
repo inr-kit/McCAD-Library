@@ -25,7 +25,8 @@ namespace McCAD::Geometry::Impl{
     TopoDS_Shape compoundShape;
     TCollection_ExtendedString compoundName;
     Standard_Integer matID{0}, compoundID{0};
-    Standard_Real matDensity{0};
+    std::string matName{"void"};
+    Standard_Real matDensity{0.0};
 
     std::vector<std::shared_ptr<Geometry::Solid>> solidsList;
     std::vector<std::shared_ptr<Geometry::PLSolid>> planarSolidsList;

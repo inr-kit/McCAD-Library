@@ -18,19 +18,23 @@ namespace McCAD::IO{
       std::filesystem::path currentPath;
       double conversionFactor{1.0};
       const double PI = 3.141592653589793238463;
-      std::string inputFileName, resultFileName, rejectFileName, outputFileName,
+      std::string inputFileName{"input.stp"}, resultFileName{"input_decomposed.stp"},
+                  rejectFileName{"input_rejected.stp"}, outputFileName,
                   conversionFileName;
       std::vector<std::string> conversionFileNames;
+      std::vector<std::tuple<std::string, double>> materialsInfo;
       bool readConversion = false;
       void writeTemplate();
       std::string stringToLowerCase(std::string& string);
       std::vector<std::string> splitLine(const std::string& line, char delimiter);
       void readTemplate();
       void populateNamesLists();
+      void populateMatList();
 
       // General input
       std::string units = "cm";
-      std::vector<std::string> inputFileNames, decomposedFileNames, rejectedFileNames;
+      std::vector<std::string> inputFileNames, decomposedFileNames, rejectedFileNames,
+                               rejectedConvFileNames;
       // Decomposition
       bool decompose = true;
       int recurrenceDepth = 20;
@@ -47,7 +51,6 @@ namespace McCAD::IO{
       bool simplifyTori = false;
       // Void generation and conversion
       bool convert = false;
-      std::string rejectConvFileName = "rejectConv.stp";
       bool voidGeneration = true;
       double minVoidVolume = 1000.0; // in mm^3
       int maxSolidsPerVoidCell = 20;

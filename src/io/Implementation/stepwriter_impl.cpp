@@ -17,6 +17,7 @@
 #include <Interface_Static.hxx>
 #include <TopoDS.hxx>
 #include <TDocStd_Application.hxx>
+#include <TopLoc_Location.hxx>
 
 McCAD::IO::STEPWriter::Impl::Impl(const IO::InputConfig& inputConfig) :
     outputFileName{inputConfig.outputFileName}, inputConfig{inputConfig}{
