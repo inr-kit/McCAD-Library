@@ -58,6 +58,7 @@ namespace McCAD::IO{
       std::string MCcode = "mcnp";
       int startCellNum = 1;
       int startSurfNum = 1;
+      int startMatNum = 1;
       int maxLineWidth = 80;
       std::string MCOutputFileName = "MCFile.inp";
       std::string volumesFileName = "volumes.txt";

@@ -24,6 +24,7 @@ McCAD::Conversion::MCNPWriter::operator()(
         const std::shared_ptr<VoidCell>& voidCell){
     processSolids(compoundList);
     addUniqueSurfNumbers(compoundList);
+    createMaterialsMap(inputConfig.materialsInfo);
     createSolidsMap(compoundList);
     createVoidMap(voidCell);
     // Create output file stream and write cells, surfaces, and data cards.
@@ -171,9 +172,22 @@ void
 McCAD::Conversion::MCNPWriter::createSolidsMap(
         const std::vector<std::shared_ptr<Geometry::Impl::Compound>>& compoundList){
     for(const auto& compound : compoundList){
+        compound->matID = materialsMap[compound->matInfo];
         compoundObjMap[compound->compoundID] = compound;
         for(const auto& solidObj : compound->solidsList){
             solidObjMap[solidObj->accessSImpl()->solidID] = solidObj;
+        }
+    }
+}
+
+void
+McCAD::Conversion::MCNPWriter::createMaterialsMap(
+        const std::vector<std::tuple<std::string, double>>& materialsInfo){
+    Standard_Integer counter = inputConfig.startMatNum;
+    for(const auto& mat : materialsInfo){
+        if(materialsMap.find(mat) == materialsMap.end()){
+            materialsMap[mat] = counter;
+            ++counter;
         }
     }
 }
@@ -248,7 +262,7 @@ McCAD::Conversion::MCNPWriter::adjustLineWidth(const std::string& mainExpr,
 
 void
 McCAD::Conversion::MCNPWriter::writeHeader(std::ofstream& outputStream){
-    outputStream << "McCad v1.0L generated MC input files." <<
+    outputStream << "McCad v1.0 generated MC input files." <<
                     "\nc     * Material Cells ---- " << compoundObjMap.size() <<
                     "\nc     * Surfaces       ---- " << uniqueSurfaces.size() <<
                     "\nc     * Void cells     ---- " << voidCellsMap.size() << std::endl;
@@ -267,16 +281,16 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
                         "\nc * Subsolids: " << compound.second->solidsList.size();
         std::string cellExpr{boost::str(boost::format("%d") % cellNumber)};
         if (cellExpr.size() < 5) cellExpr.resize(5, *const_cast<char*>(" "));
-        // Add material from first element in vector.
-        if(compound.second->matID == 0){
-            cellExpr += boost::str(boost::format(" %d") % compound.second->matID);
-            outputStream << "\nc * Material : " << compound.second->matID;
+        // Add materials.
+        if(std::get<0>(compound.second->matInfo) == "void"){
+            cellExpr += boost::str(boost::format(" %d") % 0);
         } else{
             cellExpr += boost::str(boost::format(" %d %10.5f")
                                    % compound.second->matID
-                                   % compound.second->matDensity);
-            outputStream << "\nc * Density  : " << compound.second->matDensity;
+                                   % std::get<1>(compound.second->matInfo));
         }
+        outputStream << "\nc * Material : " << std::get<0>(compound.second->matInfo);
+        outputStream << "\nc * Density  : " << std::get<1>(compound.second->matInfo);
         outputStream << "\nc ============" << std::endl;
         std::string cellSolidsExpr;
         Standard_Real compoundVolume{0};
@@ -387,7 +401,16 @@ McCAD::Conversion::MCNPWriter::writeSurfCard(std::ofstream& outputStream){
 
 void
 McCAD::Conversion::MCNPWriter::writeDataCard(std::ofstream& outputStream){
-    outputStream << "\nc ==================== Data Cards ====================" << std::endl;
+    outputStream << "\nc ==================== Data Cards ====================";
+    // Write Materials:
+    for(const auto& mat : materialsMap){
+        if(std::get<0>(mat.first) == "void") continue;
+        outputStream << "\nc ============" <<
+                        "\nc * Material : " << std::get<0>(mat.first) <<
+                        "\nc * Density  : " << std::get<1>(mat.first) <<
+                        "\nc ============" <<
+                        "\nM" << mat.second << std::endl;
+    }
     // add tallies and source to calculate volumes.
     outputStream << "Mode N" << "\nVoid" << "\nNPS 1e9" << "\nPRDMP 1e8 1e8 j 1 j" << std::endl;
     std::string sourceExpr{boost::str(

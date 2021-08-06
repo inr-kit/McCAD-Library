@@ -53,8 +53,7 @@ McCAD::Conversion::Convert::Impl::getGeomData(const std::tuple<std::string, Stan
                     std::get<0>(member), std::get<1>(member));
             Decomposition::Preprocessor{inputConfig}(compoundObj);
             compoundObj->compoundID = counter;
-            compoundObj->matName = std::get<0>(matInfo);
-            compoundObj->matDensity = std::get<1>(matInfo);
+            compoundObj->matInfo = matInfo;
             compoundList.push_back(std::move(compoundObj));
         });
         ++counter;

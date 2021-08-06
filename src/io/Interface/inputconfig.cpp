@@ -58,6 +58,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "MCcode = mcnp\n"
                    "startCellNum = 1\n"
                    "startSurfNum = 1\n"
+                   "startMatNum = 1\n"
                    "maxLineWidth = 80\n"
                    "MCOutputFileName = MCFile.inp\n"
                    "volumesFileName = volumes.txt\n" << std::endl;
@@ -134,6 +135,8 @@ McCAD::IO::InputConfig::readTemplate(){
                    startCellNum = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "startSurfNum")
                    startSurfNum = std::stoi(lineSplit[2]);
+               else if (lineSplit[0] == "startMatNum")
+                   startMatNum = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "maxLineWidth")
                    maxLineWidth = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "MCOutputFileName")
@@ -180,9 +183,9 @@ McCAD::IO::InputConfig::populateMatList(){
     for(int i = 0; i < inputFileNames.size(); ++i){
         std::string splitName = splitLine(inputFileNames[i], '.')[0];
         rejectedConvFileNames.push_back(splitName + std::string("_rejectedConv.stp"));
-        std::string matName = splitLine(splitName, '_')[0];
+        std::string matName = stringToLowerCase(splitLine(splitName, '_')[0]);
         double matDensity{0.0};
-        if(stringToLowerCase(matName) != "void")
+        if(matName != "void")
             matDensity = std::stof(splitLine(splitName, '_')[1]);
         materialsInfo.push_back(std::make_tuple(matName, matDensity));
     }
