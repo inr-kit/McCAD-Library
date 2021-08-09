@@ -43,6 +43,10 @@ McCAD::Tools::HeirarchyFlatter::process(const TopoDS_Shape& shape){
         for(const auto& solid : detail::ShapeView<TopAbs_SOLID>{shape}){
             splitInputSolidsList->Append(solid);
         };
+        if(splitInputSolidsList->Length() == 0){
+            splitInputSolidsList->Clear();
+            rejectedInputSolidsList->Append(shape);
+        }
         break;
     case TopAbs_SOLID:
         splitInputSolidsList->Append(shape);

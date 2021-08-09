@@ -185,7 +185,7 @@ McCAD::IO::InputConfig::populateMatList(){
         rejectedConvFileNames.push_back(splitName + std::string("_rejectedConv.stp"));
         std::string matName = stringToLowerCase(splitLine(splitName, '_')[0]);
         double matDensity{0.0};
-        if(matName != "void")
+        if(matName != "void" && splitLine(splitName, '_').size() > 1)
             matDensity = std::stof(splitLine(splitName, '_')[1]);
         materialsInfo.push_back(std::make_tuple(matName, matDensity));
     }
