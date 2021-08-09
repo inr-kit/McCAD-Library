@@ -37,9 +37,13 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
                         cylindersList[i], planesList[j]);
             if(!commonEdges.empty()){
                 for(Standard_Integer k = 0; k < commonEdges.size(); ++k){
-                    if(commonEdges[k]->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Line))
-                        commonLineEdgesMap[j].push_back(commonEdges[k]);
-                    else commonCurveEdgesMap[j].push_back(commonEdges[k]);
+                    if(!BRep_Tool::IsClosed(commonEdges[k]->accessEImpl()->edge,
+                                            cylindersList[i]->accessSImpl()->face) &&
+                       !BRep_Tool::Degenerated(commonEdges[k]->accessEImpl()->edge)){
+                        if(commonEdges[k]->accessEImpl()->edgeType == Tools::toTypeName(GeomAbs_Line))
+                            commonLineEdgesMap[j].push_back(commonEdges[k]);
+                        else commonCurveEdgesMap[j].push_back(commonEdges[k]);
+                    }
                 }
             }
         }

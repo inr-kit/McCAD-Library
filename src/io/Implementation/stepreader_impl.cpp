@@ -69,7 +69,7 @@ Standard_Boolean
 McCAD::IO::STEPReader::Impl::getLabelInfo(const TDF_Label& rootLabel){
     Standard_Boolean foundShapes = Standard_False;
     if(rootLabel.HasChild()){
-        for(TDF_ChildIterator it1 (rootLabel, Standard_True); it1.More(); it1.Next()) {
+        for(TDF_ChildIterator it1 (rootLabel, Standard_False); it1.More(); it1.Next()) {
             TDF_Label childLabel = it1.Value();
             if (childLabel.HasAttribute()){
                 if (childLabel.IsAttribute(XCAFDoc_ShapeTool::GetID()))
@@ -87,7 +87,7 @@ Standard_Boolean
 McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel){
     Standard_Boolean foundShapes = Standard_False;
     if(aLabel.HasChild()){
-        for(TDF_ChildIterator it2 (aLabel, Standard_True); it2.More(); it2.Next()) {
+        for(TDF_ChildIterator it2 (aLabel, Standard_False); it2.More(); it2.Next()) {
             TDF_Label childLabel = it2.Value();
             if (childLabel.HasAttribute()){
                 if (childLabel.IsAttribute(TNaming_NamedShape::GetID()))
@@ -124,9 +124,10 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel){
                          labelLocation.Transformation().Value(3,1) << " " <<
                          labelLocation.Transformation().Value(3,2) << " " <<
                          labelLocation.Transformation().Value(3,3) << " " <<
-                         labelLocation.Transformation().Value(3,4) << std::endl;*/
+                         labelLocation.Transformation().Value(3,4) << std::endl;
             std::cout << "\nName: " << shapeName->Get() <<
                          "\nLabel: " << aLabel << std::endl;
+            */
         }
     }
     return foundShapes;
