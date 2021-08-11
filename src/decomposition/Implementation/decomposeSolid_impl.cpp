@@ -9,6 +9,8 @@
 #include "AssistSurfaceGenerator.hpp"
 #include "preprocessor.hpp"
 #include "SurfaceUtilities.hpp"
+// OCC
+#include <STEPControl_Writer.hxx>
 
 McCAD::Decomposition::DecomposeSolid::Impl::Impl(const IO::InputConfig& inputConfig)
     : recurrenceDepth{0}, inputConfig{inputConfig}{
@@ -75,7 +77,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         std::shared_ptr<Geometry::TORSolid>& solidObj){
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
-    if(recurrenceDepth >= inputConfig.recurrenceDepth){
+    if(recurrenceDepth > inputConfig.recurrenceDepth){
         return Standard_False;
     }
     auto solidImpl = solidObj->accessSImpl();

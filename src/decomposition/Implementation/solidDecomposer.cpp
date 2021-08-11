@@ -53,7 +53,10 @@ McCAD::Decomposition::SolidDecomposer::filterAndRepair(
         Standard_Real tolerance) const{
     auto filteredSubSolids = gatherSubSolids(subSolidsList, tolerance);
     auto success = SolidRepairer{}(filteredSubSolids);
-    if(success) subSolidsList = filteredSubSolids;
+    if(success){
+        if(filteredSubSolids.Length() > 1) subSolidsList = filteredSubSolids;
+        else success = Standard_False;
+    }
     return success;
 }
 

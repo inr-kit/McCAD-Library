@@ -38,7 +38,6 @@ McCAD::Decomposition::Preprocessor::operator()(
             // for each specific type of solid object.
             switch (Standard_Integer(solidObj.index())){
             case solidType.planar:
-                std::cout << "solidType.planar, " << compound->planarSolidsList.size() << std::endl;
                 compound->planarSolidsList.push_back(std::get<solidType.planar>(solidObj));
                 break;
             case solidType.cylindrical:
