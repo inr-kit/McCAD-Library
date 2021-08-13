@@ -58,6 +58,7 @@ McCAD::Decomposition::Decompose::Impl::perform(
     for(auto& mxdSolid : compoundObj->mixedSolidsList){
         std::cout << "   - Decomposing mixed solid" << std::endl;
         if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(mxdSolid)){
+            if(inputConfig.simplifyTori) TorusConvertor{}(mxdSolid, inputConfig.scalingFactor);
             extractSolids(compoundObj, mxdSolid);
         } else compoundObj->rejectedInputShapesList->Append(
                     mxdSolid->accessSImpl()->solid);
