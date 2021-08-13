@@ -24,7 +24,10 @@
 McCAD::IO::STEPReader::Impl::Impl(const IO::InputConfig& inputConfig) :
     inputConfig{inputConfig},
     sequenceOfShape{std::make_shared<TopTools_HSequenceOfShape>()}{
-    if(!std::filesystem::exists(inputConfig.inputFileName)){
+    if(inputConfig.readConversion){
+        fileName = inputConfig.conversionFileName;
+    } else fileName = inputConfig.inputFileName;
+    if(!std::filesystem::exists(fileName)){
         throw std::runtime_error("The specified input STEP file couldn't be found!"
                                  "\nHINT: check inputFileName on McCADInputConfig.txt");
     }
@@ -44,10 +47,6 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
         Interface_Static::SetIVal("read.precision.mode", 1);
         Interface_Static::SetRVal("read.precision.val", inputConfig.precision);
     }
-    std::string fileName;
-    if(inputConfig.readConversion){
-        fileName = inputConfig.conversionFileName;
-    } else fileName = inputConfig.inputFileName;
     // Start reading contents of STEP file.
     auto readStatus = reader.ReadFile(fileName.c_str());
     if(readStatus == IFSelect_RetDone){

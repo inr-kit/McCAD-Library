@@ -30,6 +30,7 @@ namespace McCAD::IO{
     std::string materialName{""};
     Standard_Real materialDensity{0.0};
 
+    std::string fileName;
     void readSTEP();
     Standard_Boolean getLabelInfo(const TDF_Label& aLabel);
     Standard_Boolean iterateLabelChilds(const TDF_Label& aLabel);
