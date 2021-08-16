@@ -22,7 +22,6 @@ void
 McCAD::Conversion::MCNPWriter::operator()(
         const std::vector<std::shared_ptr<Geometry::Impl::Compound>>& compoundList,
         const std::shared_ptr<VoidCell>& voidCell){
-    std::cout << "list size: " << compoundList.size() << std::endl;
     processSolids(compoundList);
     addUniqueSurfNumbers(compoundList);
     createMaterialsMap(inputConfig.materialsInfo);
@@ -317,9 +316,26 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
 
 void
 McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
-    outputStream << "c ==================== Void Cells ====================" << std::endl;
     Standard_Integer voidNumber = inputConfig.startCellNum + compoundObjMap.size();
-    if(!inputConfig.voidGeneration) goto writeGraveYard;
+    outputStream << "c ==================== Void Cells ====================" << std::endl;
+    if(!inputConfig.voidGeneration) {
+        // Generate a single void cell.
+        std::string voidExpr{boost::str(boost::format("%d") % voidNumber)};
+        if (voidExpr.size() < 5) voidExpr.resize(5, *const_cast<char*>(" "));
+        voidExpr += boost::str(boost::format(" %d") % 0);
+        std::string voidSolidsExpr;
+        Standard_Integer voidSurfNumber{voidCellsMap[std::make_tuple(0,0)]->voidSurfNumber};
+        voidSolidsExpr += boost::str(boost::format(" %d") % (-1 * voidSurfNumber));
+        Standard_Integer index = inputConfig.startCellNum;
+        for(Standard_Integer i = 0; i < compoundObjMap.size(); ++i){
+            voidSolidsExpr += boost::str(boost::format(" #%d") %index);
+            ++index;
+        }
+        voidSolidsExpr += " Imp:N=1 Imp:P=1";
+        outputStream << adjustLineWidth(voidExpr, voidSolidsExpr) << std::endl;
+        ++voidNumber;
+        goto writeGraveYard;
+    }
     for(const auto& member : voidCellsMap){
         std::string voidExpr{boost::str(boost::format("%d") % voidNumber)};
         if (voidExpr.size() < 5) voidExpr.resize(5, *const_cast<char*>(" "));
@@ -330,7 +346,9 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
             if(member.second->daughterVoidCells.size() > 0){
                 // Write inner nodes.
                 for(const auto& daughterVoid : member.second->daughterVoidCells){
-                    voidSolidsExpr += boost::str(boost::format(" %d") % daughterVoid->voidSurfNumber);
+                    voidSolidsExpr += boost::str(boost::format(" %d")
+                                                 % voidCellsMap[std::make_tuple(
+                                daughterVoid->depth, daughterVoid->width)]->voidSurfNumber);
                 }
             } else{
                 // Write leaf node. Write complement of solids in the void cell.
@@ -350,6 +368,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
         ++voidNumber;
     }
     writeGraveYard:;
+    outputStream << "c ==================== Graveyard ====================" << std::endl;
     Standard_Integer voidSurfNumber{voidCellsMap[std::make_tuple(0,0)]->voidSurfNumber};
     std::string graveYardExpr{boost::str(boost::format("%d") % voidNumber)};
     if (graveYardExpr.size() < 5) graveYardExpr.resize(5, *const_cast<char*>(" "));

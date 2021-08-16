@@ -35,8 +35,9 @@ namespace McCAD::Conversion {
         Standard_Boolean rejectCondition = Standard_False;
         solidsMap rejectConversion;
         std::vector<std::shared_ptr<Geometry::Solid>> solidObjList;
-        void getGeomData(const std::tuple<std::string, Standard_Real>& matInfo,
-                         const Standard_Integer& index);
+        Standard_Integer getGeomData(const std::tuple<std::string, Standard_Real>& matInfo,
+                                     const Standard_Integer& componentIndex,
+                                     const Standard_Integer& solidIndex);
     };
 }
 

@@ -81,9 +81,9 @@ McCAD::Conversion::VoidCellManager::perform(
                 ? Standard_True : Standard_False;
         splitCondition = splitConditionOnNumSolids && splitConditionOnCellVol;
     }
-    /*//debug
-    voidCell->outputAABB();
-    *///debug
+    //debug
+    //voidCell->outputAABB();
+    //debug
     if(splitCondition){
         auto surface = SplitSurfaceSelector{maxSolidsPerVoidCell, minVoidVolume
                                            }.process(xAxis, yAxis, zAxis, voidCell);
