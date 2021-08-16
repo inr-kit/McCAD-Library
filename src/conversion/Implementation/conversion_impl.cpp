@@ -13,6 +13,7 @@
 McCAD::Conversion::Convert::Impl::Impl(IO::InputConfig& inputConfig) :
     inputConfig{inputConfig}{
     inputConfig.readConversion = Standard_True;
+    Standard_Integer counter{0};
     for(Standard_Integer i = 0; i < inputConfig.conversionFileNames.size(); ++i){
         inputConfig.conversionFileName = inputConfig.conversionFileNames[i];
         IO::STEPReader reader{inputConfig}; //inputConfig.conversionFileName
@@ -21,7 +22,8 @@ McCAD::Conversion::Convert::Impl::Impl(IO::InputConfig& inputConfig) :
             throw std::runtime_error("Error loading STEP file, " + inputConfig.conversionFileName);
             std::cout << "> Found " << inputShapesMap.size() <<
                          " shapes(s) in the input STEP file" << std::endl;
-        getGeomData(inputConfig.materialsInfo[i]);
+        counter += inputShapesMap.size();
+        getGeomData(inputConfig.materialsInfo[i], counter);
         if (rejectCondition){
             // Write rejected solids to a STEP file.
             General::InputData outputData;
@@ -42,10 +44,11 @@ McCAD::Conversion::Convert::Impl::~Impl(){
 }
 
 void
-McCAD::Conversion::Convert::Impl::getGeomData(const std::tuple<std::string, Standard_Real>& matInfo){
+McCAD::Conversion::Convert::Impl::getGeomData(const std::tuple<std::string, Standard_Real>& matInfo,
+                                              const Standard_Integer& index){
     // Loop over inputhapesMap and create compound objects.
     TaskQueue<Policy::Parallel> taskQueue;
-    Standard_Integer counter = 0;
+    Standard_Integer counter = index;
     for(const auto& member : inputShapesMap){
         taskQueue.submit([this, counter, matInfo, &member](){
             std::shared_ptr<Geometry::Impl::Compound> compoundObj =

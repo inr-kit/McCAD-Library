@@ -22,6 +22,7 @@ void
 McCAD::Conversion::MCNPWriter::operator()(
         const std::vector<std::shared_ptr<Geometry::Impl::Compound>>& compoundList,
         const std::shared_ptr<VoidCell>& voidCell){
+    std::cout << "list size: " << compoundList.size() << std::endl;
     processSolids(compoundList);
     addUniqueSurfNumbers(compoundList);
     createMaterialsMap(inputConfig.materialsInfo);
@@ -243,12 +244,13 @@ McCAD::Conversion::MCNPWriter::adjustLineWidth(const std::string& mainExpr,
                                                const std::string& bodyExpr){
     // Adjust cell solids expression to 80 columns max.
     std::string finalExpr = mainExpr;
-    Standard_Integer continueSpacing = finalExpr.size() + 2;
+    Standard_Integer continueSpacing = 6; //finalExpr.size() + 1;
     std::vector<std::string> splitExpr;
     boost::split(splitExpr, bodyExpr, [](char c) {return c == ' ';});
     Standard_Integer lineIndex{1};
     for(Standard_Integer i = 0; i < splitExpr.size(); ++i){
-        if((finalExpr.size() + splitExpr[i].size()) > inputConfig.maxLineWidth*lineIndex){
+        if((finalExpr.size() + splitExpr[i].size() + 1) > inputConfig.maxLineWidth*lineIndex){
+            finalExpr.resize(inputConfig.maxLineWidth*lineIndex, *const_cast<char*>(" "));
             auto newSize = finalExpr.size() + continueSpacing;
             finalExpr += "\n";
             finalExpr.resize(newSize, *const_cast<char*>(" "));
@@ -285,7 +287,7 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
         if(std::get<0>(compound.second->matInfo) == "void"){
             cellExpr += boost::str(boost::format(" %d") % 0);
         } else{
-            cellExpr += boost::str(boost::format(" %d %10.5f")
+            cellExpr += boost::str(boost::format(" %d %9.4f")
                                    % compound.second->matID
                                    % std::get<1>(compound.second->matInfo));
         }
@@ -401,11 +403,11 @@ McCAD::Conversion::MCNPWriter::writeSurfCard(std::ofstream& outputStream){
 
 void
 McCAD::Conversion::MCNPWriter::writeDataCard(std::ofstream& outputStream){
-    outputStream << "\nc ==================== Data Cards ====================";
+    outputStream << "\nc ==================== Data Cards ====================\n";
     // Write Materials:
     for(const auto& mat : materialsMap){
         if(std::get<0>(mat.first) == "void") continue;
-        outputStream << "\nc ============" <<
+        outputStream << "c ============" <<
                         "\nc * Material : " << std::get<0>(mat.first) <<
                         "\nc * Density  : " << std::get<1>(mat.first) <<
                         "\nc ============" <<
