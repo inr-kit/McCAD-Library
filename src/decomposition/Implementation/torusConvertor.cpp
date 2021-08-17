@@ -65,7 +65,6 @@ McCAD::Decomposition::TorusConvertor::convertTorusToCylinder(
             BRepAdaptor_Surface(planesList[1]).Plane().Location());
     if (!PointInSolid{}(shape, BRepAdaptor_Surface(planesList[0]).Plane().Location()) ||
             !PointInSolid{}(shape, BRepAdaptor_Surface(planesList[1]).Plane().Location())){
-        std::cout << "***** outside *******" << std::endl;
         return shape;
     }
     //if (gp_Dir(vector).Angle(torDir) != 1.5708) return shape;

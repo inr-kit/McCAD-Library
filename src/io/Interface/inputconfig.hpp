@@ -18,8 +18,8 @@ namespace McCAD::IO{
       std::filesystem::path currentPath;
       double conversionFactor{1.0};
       const double PI = 3.141592653589793238463;
-      std::string inputFileName{"input.stp"}, resultFileName{"input_decomposed.stp"},
-                  rejectFileName{"input_rejected.stp"}, outputFileName,
+      std::string inputFileName{"input.stp"}, resultFileName{"inputDecomposed.stp"},
+                  rejectFileName{"inputRejected.stp"}, outputFileName,
                   conversionFileName;
       std::vector<std::string> conversionFileNames;
       std::vector<std::tuple<std::string, double>> materialsInfo;
@@ -47,8 +47,8 @@ namespace McCAD::IO{
       double parameterTolerance = 1.0e-7;
       double angularTolerance = 1.0e-4 * PI;
       double distanceTolerance = 1.0e-5;
-      double torusSplitAngle = 2.0 * PI;
-      bool simplifyTori = false;
+      double torusSplitAngle = 0.25 * PI;
+      bool simplifyTori = true;
       // Void generation and conversion
       bool convert = false;
       bool voidGeneration = true;

@@ -41,8 +41,8 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "parameterTolerance = 1.0e-8 [cm]\n"
                    "angularTolerance = 1.0e-4\n"
                    "distanceTolerance = 1.0e-6 [cm]\n"
-                   "torusSplitAngle = 360.0\n"
-                   "simplifyTori = false\n" << std::endl;
+                   "torusSplitAngle = 45.0\n"
+                   "simplifyTori = true\n" << std::endl;
     inputConfig << "# Conversion\n"
                    "# ==========\n"
                    "convert = false\n"
@@ -72,8 +72,8 @@ McCAD::IO::InputConfig::readTemplate(){
         inputFileNames.push_back("input.stp");
         std::cout << "[WARNING] McCADInputConfig.txt is missing!, proceeding with default parameters:"
                      "\nInput  = input.stp" <<
-                     "\nResult = input_decomposed.stp" <<
-                     "\nReject = input_rejected.stp" << std::endl;
+                     "\nResult = inputDecomposed.stp" <<
+                     "\nReject = inputRejected.stp" << std::endl;
     } else {
         // Read file and populate parameters
         while (!inputConfig.eof()){
@@ -173,8 +173,8 @@ void
 McCAD::IO::InputConfig::populateNamesLists(){
     for(int i = 0; i < inputFileNames.size(); ++i){
         std::string splitName = splitLine(inputFileNames[i], '.')[0];
-        decomposedFileNames.push_back(splitName + std::string("_decomposed.stp"));
-        rejectedFileNames.push_back(splitName + std::string("_rejected.stp"));
+        decomposedFileNames.push_back(splitName + std::string("Decomposed.stp"));
+        rejectedFileNames.push_back(splitName + std::string("Rejected.stp"));
     }
 }
 
@@ -182,7 +182,7 @@ void
 McCAD::IO::InputConfig::populateMatList(){
     for(int i = 0; i < inputFileNames.size(); ++i){
         std::string splitName = splitLine(inputFileNames[i], '.')[0];
-        rejectedConvFileNames.push_back(splitName + std::string("_rejectedConv.stp"));
+        rejectedConvFileNames.push_back(splitName + std::string("RejectedConv.stp"));
         std::string matName = stringToLowerCase(splitLine(splitName, '_')[0]);
         double matDensity{0.0};
         if(matName != "void" && splitLine(splitName, '_').size() > 1)
