@@ -134,14 +134,13 @@ void
 McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Edge>>& aEdgesList){
     if (edgesList.size() == 0){
         // If the current list is empty, append to it the new one.
-        for (Standard_Integer i = 0; i <= aEdgesList.size() - 1; ++i){
+        for (Standard_Integer i = 0; i < aEdgesList.size(); ++i){
             edgesList.push_back(aEdgesList[i]);
         }
     } else{
         // Compare and add only if different.
-        for (Standard_Integer i = 0; i <= aEdgesList.size() - 1; ++i){
-            Standard_Integer sameEdge = 0;
-            for (Standard_Integer j = 0; j <= edgesList.size() - 1; ++j){
+        for (Standard_Integer i = 0; i < aEdgesList.size(); ++i){
+            for (Standard_Integer j = 0; j < edgesList.size(); ++j){
                 if (*(edgesList[j]) == *(aEdgesList[i])){
                     /* //debug
                     STEPControl_Writer writer1;
@@ -159,15 +158,11 @@ McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Ed
                     filename += suffix;
                     writer1.Write(filename.c_str());
                     */ //debug
-                    //std::cout << "combineEdges, equal, erase" << std::endl;
                     edgesList.erase(edgesList.begin() + j);
-                    ++sameEdge;
                     --j;
                 }
             }
-            if (sameEdge == 0){
-                edgesList.push_back(aEdgesList[i]);
-            }
+            edgesList.push_back(aEdgesList[i]);
         }
     }
 }

@@ -433,9 +433,9 @@ McCAD::Conversion::MCNPWriter::writeDataCard(std::ofstream& outputStream){
                         "\nM" << mat.second << std::endl;
     }
     // add tallies and source to calculate volumes.
-    outputStream << "Mode N" << "\nVoid" << "\nNPS 1e9" << "\nPRDMP 1e8 1e8 j 1 j" << std::endl;
+    outputStream << "Mode N" << "\nNPS 1e9" << "\nPRDMP 1e8 1e8 j 1 j" << std::endl;
     std::string sourceExpr{boost::str(
-                    boost::format("SDEF ERG=14.1 $ SUR=%d PAR=1 NRM=-1 WGT=%6.3f $Pi*r^2")
+                    boost::format("c Void \nSDEF ERG=14.1 $ SUR=%d PAR=1 NRM=-1 WGT=%6.3f $Pi*r^2")
                     % (inputConfig.startSurfNum + uniqueSurfaces.size())
                     % (inputConfig.PI * std::pow(radius, 2)))};
     outputStream << sourceExpr << std::endl;
