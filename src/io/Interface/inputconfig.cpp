@@ -47,7 +47,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "# ==========\n"
                    "convert = false\n"
                    "# > Choose whether or not to generate void cells;\n"
-                   "voidGeneration = true\n"
+                   "voidGeneration = false\n"
                    "# > Minimum acceptable void volume shouldn;t be less than minSolidVolume;\n"
                    "minVoidVolume = 1.0 [cm3]\n"
                    "# > A larger number will result in fewer void cells but longer cell expressions;\n"

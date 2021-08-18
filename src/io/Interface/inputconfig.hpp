@@ -51,7 +51,7 @@ namespace McCAD::IO{
       bool simplifyTori = true;
       // Void generation and conversion
       bool convert = false;
-      bool voidGeneration = true;
+      bool voidGeneration = false;
       double minVoidVolume = 1000.0; // in mm^3
       int maxSolidsPerVoidCell = 20;
       bool BVHVoid = false;
