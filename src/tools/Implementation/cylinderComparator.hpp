@@ -1,5 +1,5 @@
-#ifndef CYLCOMPARATOR_HPP
-#define CYLCOMPARATOR_HPP
+#ifndef CYLINDERCOMPARATOR_HPP
+#define CYLINDERCOMPARATOR_HPP
 
 // C++
 #include <array>
@@ -10,12 +10,12 @@
 #include <GeomAdaptor_Surface.hxx>
 
 namespace McCAD::Tools{
-  class CylComparator{
+  class CylinderComparator{
   public:
-      CylComparator();
-      CylComparator(const Standard_Real& precision, const Standard_Real& angularTolerance,
-                      const Standard_Real& distanceTolerance);
-      ~CylComparator();
+      CylinderComparator();
+      CylinderComparator(const Standard_Real& precision, const Standard_Real& angularTolerance,
+                         const Standard_Real& distanceTolerance);
+      ~CylinderComparator();
   private:
       Standard_Real precision{1.0e-7};
       Standard_Real angularTolerance{1.0e-4};
@@ -29,4 +29,4 @@ namespace McCAD::Tools{
     };
 }
 
-#endif //CYLCOMPARATOR_HPP
+#endif //CYLINDERCOMPARATOR_HPP
