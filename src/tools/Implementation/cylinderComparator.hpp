@@ -6,8 +6,8 @@
 #include <optional>
 // OCC
 #include <Standard.hxx>
-#include <gp_Cylinder.hxx>
 #include <GeomAdaptor_Surface.hxx>
+#include <gp_Cylinder.hxx>
 
 namespace McCAD::Tools{
   class CylinderComparator{
