@@ -136,17 +136,17 @@ McCAD::Conversion::MCNPExprGenerator::genPlSurfExpr(
     if ((std::abs(parmtA) >= precision) && (std::abs(parmtB) < precision) &&
             (std::abs(parmtC) < precision)){
         plSurface->accessSImpl()->surfSymb = "PX";
-        surfExpr += boost::str(boost::format("PX %11.5f") % (parmtD/parmtA));
+        surfExpr += boost::str(boost::format("PX %13.7f") % (parmtD/parmtA));
     } else if ((std::abs(parmtA) < precision) && (std::abs(parmtB) >= precision) &&
                (std::abs(parmtC) < precision)){
         plSurface->accessSImpl()->surfSymb = "PY";
-        surfExpr += boost::str(boost::format("PY %11.5f") % (parmtD/parmtB));
+        surfExpr += boost::str(boost::format("PY %13.7f") % (parmtD/parmtB));
     } else if ((std::abs(parmtA) < precision) && (std::abs(parmtB) < precision) &&
                (std::abs(parmtC) >= precision)){
         plSurface->accessSImpl()->surfSymb = "PZ";
-        surfExpr += boost::str(boost::format("PZ %11.5f") % (parmtD/parmtC));
+        surfExpr += boost::str(boost::format("PZ %13.7f") % (parmtD/parmtC));
     } else
-        surfExpr += boost::str(boost::format("P %11.5f  %11.5f  %11.5f  %11.5f")
+        surfExpr += boost::str(boost::format("P %13.7f  %13.7f  %13.7f  %13.7f")
                            % parmtA % parmtB % parmtC % parmtD);
     plSurface->accessSImpl()->surfExpr = surfExpr;
 }
@@ -171,12 +171,12 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
         if(std::abs(cylLocation.Y()) < precision && std::abs(cylLocation.Z()) < precision){
             // Cylinder on X-axis.
             cylSurface->accessSImpl()->surfSymb = "CX";
-            surfExpr += boost::str(boost::format("CX %11.5f")
+            surfExpr += boost::str(boost::format("CX %13.7f")
                                    % cylSurface->accessSImpl()->radius);
         } else {
             // Cylinder parallel to X-axis.
             cylSurface->accessSImpl()->surfSymb = "C/X";
-            surfExpr += boost::str(boost::format("C/X %11.5f  %11.5f  %11.5f")
+            surfExpr += boost::str(boost::format("C/X %13.7f  %13.7f  %13.7f")
                                    % cylLocation.Y() % cylLocation.Z()
                                    % cylSurface->accessSImpl()->radius);
         }
@@ -186,12 +186,12 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
         if(std::abs(cylLocation.X()) < precision && std::abs(cylLocation.Z()) < precision){
             // Cylinder on Y-axis.
             cylSurface->accessSImpl()->surfSymb = "CY";
-            surfExpr += boost::str(boost::format("CY %11.5f")
+            surfExpr += boost::str(boost::format("CY %13.7f")
                                    % cylSurface->accessSImpl()->radius);
         } else {
             // Cylinder parallel to Y-axis.
             cylSurface->accessSImpl()->surfSymb = "C/Y";
-            surfExpr += boost::str(boost::format("C/Y %11.5f  %11.5f  %11.5f")
+            surfExpr += boost::str(boost::format("C/Y %13.7f  %13.7f  %13.7f")
                                    % cylLocation.X()
                                    % cylLocation.Z()
                                    % cylSurface->accessSImpl()->radius);
@@ -202,12 +202,12 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
         if(std::abs(cylLocation.X()) < precision && std::abs(cylLocation.Y()) < precision){
             // Cylinder on Z-axis.
             cylSurface->accessSImpl()->surfSymb = "CZ";
-            surfExpr += boost::str(boost::format("CZ %11.5f")
+            surfExpr += boost::str(boost::format("CZ %13.7f")
                                    % cylSurface->accessSImpl()->radius);
         } else {
             // Cylinder parallel to Z-axis.
             cylSurface->accessSImpl()->surfSymb = "C/Z";
-            surfExpr += boost::str(boost::format("C/Z %11.5f  %11.5f  %11.5f")
+            surfExpr += boost::str(boost::format("C/Z %13.7f  %13.7f  %13.7f")
                                    % cylLocation.X()
                                    % cylLocation.Y()
                                    % cylSurface->accessSImpl()->radius);
@@ -225,8 +225,8 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
                       parmtJ{2*cylSurface->accessSImpl()->surfParameters[8]},
                       parmtK{cylSurface->accessSImpl()->surfParameters[9]};
         cylSurface->accessSImpl()->surfSymb = "GQ";
-        surfExpr += boost::str(boost::format("GQ %11.5f  %11.5f  %11.5f %11.5f  %11.5f  "
-                                             "%11.5f %11.5f  %11.5f  %11.5f  %11.5f")
+        surfExpr += boost::str(boost::format("GQ %13.7f  %13.7f  %13.7f %13.7f  %13.7f  "
+                                             "%13.7f %13.7f  %13.7f  %13.7f  %13.7f")
                                % parmtA % parmtB % parmtC % parmtD % parmtE
                                % parmtF % parmtG % parmtH % parmtJ % parmtK);
     }
@@ -246,8 +246,8 @@ McCAD::Conversion::MCNPExprGenerator::genTorSurfExpr(
     if (std::abs(torAxisDir.Y()) < precision && std::abs(torAxisDir.Z()) < precision) {
         // Torus is parallel to X-axis.
         torSurface->accessSImpl()->surfSymb = "TX";
-        surfExpr += boost::str(boost::format("TX %11.5f  %11.5f  %11.5f  %11.5f  "
-                                             "%11.5f  %11.5f")
+        surfExpr += boost::str(boost::format("TX %13.7f  %13.7f  %13.7f  %13.7f  "
+                                             "%13.7f  %13.7f")
                                % torLocation.X() % torLocation.Y() % torLocation.Z()
                                % torSurface->accessSImpl()->majorRadius
                                % torSurface->accessSImpl()->minorRadius
@@ -255,8 +255,8 @@ McCAD::Conversion::MCNPExprGenerator::genTorSurfExpr(
     } else if (std::abs(torAxisDir.X()) < precision && std::abs(torAxisDir.Z()) < precision) {
         // Torus is parallel to Y-axis.
         torSurface->accessSImpl()->surfSymb = "TY";
-        surfExpr += boost::str(boost::format("TY %11.5f  %11.5f  %11.5f  %11.5f  "
-                                             "%11.5f  %11.5f")
+        surfExpr += boost::str(boost::format("TY %13.7f  %13.7f  %13.7f  %13.7f  "
+                                             "%13.7f  %13.7f")
                                % torLocation.X() % torLocation.Y() % torLocation.Z()
                                % torSurface->accessSImpl()->majorRadius
                                % torSurface->accessSImpl()->minorRadius
@@ -264,8 +264,8 @@ McCAD::Conversion::MCNPExprGenerator::genTorSurfExpr(
     } else if (std::abs(torAxisDir.X()) < precision && std::abs(torAxisDir.Y()) < precision) {
         // Torus is parallel to Z-axis.
         torSurface->accessSImpl()->surfSymb = "TZ";
-        surfExpr += boost::str(boost::format("TZ %11.5f  %11.5f  %11.5f  %11.5f  "
-                                             "%11.5f  %11.5f")
+        surfExpr += boost::str(boost::format("TZ %13.7f  %13.7f  %13.7f  %13.7f  "
+                                             "%13.7f  %13.7f")
                                % torLocation.X() % torLocation.Y() % torLocation.Z()
                                % torSurface->accessSImpl()->majorRadius
                                % torSurface->accessSImpl()->minorRadius
@@ -326,7 +326,7 @@ McCAD::Conversion::MCNPExprGenerator::genCellExpr(
 void
 McCAD::Conversion::MCNPExprGenerator::genVoidExpr(const std::shared_ptr<VoidCell>& voidCell){
     std::string voidSurfExpr;
-    voidSurfExpr = boost::str(boost::format("RPP %11.5f %11.5f %11.5f %11.5f %11.5f %11.5f")
+    voidSurfExpr = boost::str(boost::format("RPP %13.7f %13.7f %13.7f %13.7f %13.7f %13.7f")
                           % (voidCell->minX * scalingFactor) % (voidCell->maxX * scalingFactor)
                           % (voidCell->minY * scalingFactor) % (voidCell->maxY * scalingFactor)
                           % (voidCell->minZ * scalingFactor) % (voidCell->maxZ * scalingFactor));
