@@ -19,7 +19,7 @@ int main (int argc, char* argv[]){
     McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
         inputConfig.writeTemplate();
-        std::cerr << "A template file, McCADInputConfig.txt, with run parameters"
+        std::cerr << "A template file, McCADInputConfig.txt, with run parameters "
                      "has been created in\n" << currentPath.string() << std::endl;
         timeEnd = std::chrono::high_resolution_clock::now();
     } else if(argc == 2) {
@@ -76,8 +76,7 @@ int main (int argc, char* argv[]){
                     inputConfig.conversionFileNames = inputConfig.decomposedFileNames;
                     goto convert;
                 } else if (rejectConversion)
-                    std::cout << "Decomposition resulted in rejected solids, please "
-                                 "check the solids and then run conversion!"
+                    std::cout << "Decomposition resulted in rejected solids."
                               << std::endl;
             } else if (convertCondition){
                 inputConfig.conversionFileNames = inputConfig.inputFileNames;

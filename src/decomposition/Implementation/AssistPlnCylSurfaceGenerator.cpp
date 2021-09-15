@@ -48,8 +48,9 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
             }
         }
         if(!commonLineEdgesMap.empty()){
-            // Cylinder has common line edges with planes.
+            // The Cylinder has common line edges with planes.
             if (commonLineEdgesMap.size() == 1){
+                // The Cylinder has common line edges with a single plane.
                 for(const auto& member : commonLineEdgesMap){
                     if(!planesList[member.first]->accessSImpl()->splitSurface) continue;
                     if(member.second.size() == 1){
@@ -69,7 +70,11 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
                     }
                 }
             } else if (commonLineEdgesMap.size() == 2){
-                if(cylindersList[i]->accessSImpl()->face.Orientation() == TopAbs_REVERSED){
+                if(cylindersList[i]->accessSImpl()->face.Orientation() == TopAbs_FORWARD){
+                    // Cylinder is convex.
+                    goto treatAsConcave;
+                } else if(cylindersList[i]->accessSImpl()->face.Orientation() == TopAbs_REVERSED){
+                    treatAsConcave:;
                     // Cylinder is concave. Check that the edges are convex.
                     std::vector<std::shared_ptr<Geometry::Edge>> commonEdgesToUse;
                     for(const auto& member : commonLineEdgesMap){
@@ -93,8 +98,6 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
                             solidObj.accessSImpl()->rejectSolid = Standard_True;
                         }
                     }
-                } else {
-                    // Cylinder is convex.
                 }
             }
         }
@@ -108,6 +111,8 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
 
 Standard_Boolean
 McCAD::Decomposition::AssistPlnCylSurfaceGenerator::checkRadian(const TopoDS_Face& cylinder){
+    // Radian check for now returns True always!. This is to be modified later on
+    // for a more specialized assist. surface generations.
     std::array<Standard_Real, 4> uvParameters;
     // UV parameters in class grom_Cylindrical_Surface: U1 = 0 and U2 = 2*PI.
     BRepTools::UVBounds(cylinder, uvParameters[0], uvParameters[1], uvParameters[2],
