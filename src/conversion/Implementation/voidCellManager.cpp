@@ -68,6 +68,7 @@ McCAD::Conversion::VoidCellManager::createLists(
 void
 McCAD::Conversion::VoidCellManager::perform(
         const McCAD::Conversion::VoidCellManager::membersMap& members){
+    if(members.size() == 0) return;
     populateLists(members);
     updateVoidCell(members);
     Standard_Boolean splitCondition = Standard_False;

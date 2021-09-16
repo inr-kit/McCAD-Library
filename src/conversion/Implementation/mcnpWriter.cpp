@@ -378,6 +378,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
     outputStream << graveYardExpr << std::endl;
     uniqueSurfaces[voidSurfNumber] = voidCellsMap[std::make_tuple(0,0)]->voidSurfExpr;
     // Add cell to calculate volumes.
+    outputStream << "c ========== Start of volume calculation parameters ==========" << std::endl;
     std::string volumeCellExpr{boost::str(boost::format("%d") % (voidNumber + 1))};
     if (volumeCellExpr.size() < 5) volumeCellExpr.resize(5, *const_cast<char*>(" "));
     volumeCellExpr += boost::str(boost::format(" %d") % 0);
@@ -391,6 +392,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
     volumeCellGYExpr += boost::str(boost::format(" %d Imp:N=0 Imp:P=0")
                                  % (uniqueSurfaces.size() + inputConfig.startSurfNum));
     outputStream << "c " << volumeCellGYExpr << std::endl;
+    outputStream << "c ========== End of volume calculation parameters ==========" << std::endl;
 }
 
 void
@@ -403,6 +405,7 @@ McCAD::Conversion::MCNPWriter::writeSurfCard(std::ofstream& outputStream){
         outputStream << adjustLineWidth(surfExpr, surface.second) << std::endl;
     }
     // Add spherical surface to calculate the volumes.
+    outputStream << "c ========== Start of volume calculation parameters ==========" << std::endl;
     Standard_Real xExt, yExt, zExt;
     auto& graveyard = voidCellsMap[std::make_tuple(0,0)];
     xExt = std::get<2>(graveyard->xAxis) - std::get<0>(graveyard->xAxis);
@@ -418,6 +421,7 @@ McCAD::Conversion::MCNPWriter::writeSurfCard(std::ofstream& outputStream){
                             % (std::get<1>(graveyard->zAxis)*scalingFactor)
                             % (radius))};
     outputStream << "c " << adjustLineWidth(surfExpr, surfCoord) << std::endl;
+    outputStream << "c ========== End of volume calculation parameters ==========" << std::endl;
 }
 
 void
@@ -433,17 +437,25 @@ McCAD::Conversion::MCNPWriter::writeDataCard(std::ofstream& outputStream){
                         "\nM" << mat.second << std::endl;
     }
     // add tallies and source to calculate volumes.
-    outputStream << "Mode N" << "\nNPS 1e9" << "\nPRDMP 1e8 1e8 j 1 j" << std::endl;
+    outputStream << "Mode N" << "\nNPS 1e8" << "\nPRDMP 1e7 1e7 j 1 j" << std::endl;
+    outputStream << "c ========== Start of volume calculation parameters ==========" << std::endl;
     std::string sourceExpr{boost::str(
-                    boost::format("c Void \nSDEF ERG=14.1 $ SUR=%d PAR=1 NRM=-1 WGT=%6.3f $Pi*r^2")
+                    boost::format("c Void \nc SDEF ERG=14.1 SUR=%d PAR=1 NRM=-1 WGT=%6.3f $Pi*r^2")
                     % (inputConfig.startSurfNum + uniqueSurfaces.size())
                     % (inputConfig.PI * std::pow(radius, 2)))};
     outputStream << sourceExpr << std::endl;
-    std::string volTallyExpr{boost::str(boost::format("F4:N %d %di %d")
-                                        % inputConfig.startCellNum
-                                        % (compoundObjMap.size() - 2)
-                                        % (inputConfig.startCellNum + compoundObjMap.size() - 1))};
-    volTallyExpr += boost::str(boost::format("\nc SD4 1 %dr") % (compoundObjMap.size() - 1));
-    outputStream << "c " << volTallyExpr << std::endl;
+    if(compoundObjMap.size() > 1){
+        std::string volTallyExpr{boost::str(boost::format("F4:N %d %di %d")
+                        % inputConfig.startCellNum % (compoundObjMap.size() - 2)
+                        % (inputConfig.startCellNum + compoundObjMap.size() - 1))};
+        volTallyExpr += boost::str(boost::format("\nc SD4 1 %dr") % (compoundObjMap.size() - 1));
+        outputStream << "c " << volTallyExpr << std::endl;
+    } else {
+        std::string volTallyExpr{boost::str(boost::format("F4:N %d")
+                                            % inputConfig.startCellNum)};
+        volTallyExpr += boost::str(boost::format("\nc SD4 1"));
+        outputStream << "c " << volTallyExpr << std::endl;
+    }
+    outputStream << "c ========== End of volume calculation parameters ==========" << std::endl;
 }
 
