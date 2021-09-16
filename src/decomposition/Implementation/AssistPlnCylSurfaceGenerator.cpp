@@ -30,7 +30,8 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
     std::vector<std::shared_ptr<Geometry::Edge>> commonEdges;
     edgesMap commonLineEdgesMap, commonCurveEdgesMap;
     for(Standard_Integer i = 0; i < cylindersList.size(); ++i){
-        if(!checkRadian(cylindersList[i]->accessSImpl()->face)) continue;
+        // If cylinder is closed, then ignore the cylindrical surface.
+        if(getRadian(cylindersList[i]->accessSImpl()->face) >= 2*inputConfig.PI) continue;
         for(Standard_Integer j = 0; j < planesList.size(); ++j){
             commonEdges = CommonEdgeFinder{inputConfig.angularTolerance,
                     inputConfig.distanceTolerance, inputConfig.precision}(
@@ -54,6 +55,7 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
                 for(const auto& member : commonLineEdgesMap){
                     if(!planesList[member.first]->accessSImpl()->splitSurface) continue;
                     if(member.second.size() == 1){
+                        // The cylinder has a single common line edge with a single plane.
                         auto assistSurface = generateThroughLineAxis(
                                     cylindersList[i], member.second[0],
                                 solidObj.accessSImpl()->boxDiagonalLength,
@@ -70,32 +72,54 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
                     }
                 }
             } else if (commonLineEdgesMap.size() == 2){
-                if(cylindersList[i]->accessSImpl()->face.Orientation() == TopAbs_FORWARD){
-                    // Cylinder is convex.
-                    goto treatAsConcave;
-                } else if(cylindersList[i]->accessSImpl()->face.Orientation() == TopAbs_REVERSED){
-                    treatAsConcave:;
-                    // Cylinder is concave. Check that the edges are convex.
-                    std::vector<std::shared_ptr<Geometry::Edge>> commonEdgesToUse;
-                    for(const auto& member : commonLineEdgesMap){
-                        if(member.second.size() == 1 &&
-                                !planesList[member.first]->accessSImpl()->splitSurface &&
-                                member.second[0]->accessEImpl()->edge.Convex() == 1){
-                            commonEdgesToUse.push_back(member.second[0]);
-                        }
+                std::vector<std::shared_ptr<Geometry::Edge>> commonEdgesToUse;
+                for(const auto& member : commonLineEdgesMap){
+                    if(member.second.size() == 1 &&
+                            !planesList[member.first]->accessSImpl()->splitSurface &&
+                            member.second[0]->accessEImpl()->edge.Convex() == 1){
+                        commonEdgesToUse.push_back(member.second[0]);
                     }
-                    if(commonEdgesToUse.size() == 2){
-                        auto assistSurface = generateThroughTwoLines(
-                                    cylindersList[i], commonEdgesToUse[0], commonEdgesToUse[1],
-                                solidObj.accessSImpl()->boxDiagonalLength,
-                                solidObj.accessSImpl()->meshDeflection);
-                        if(assistSurface){
-                            solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
-                            solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
-                        } else{
-                            // If there exists a common edge between cylindrical surfaces,
-                            // but failed to generate a split surface then reject solid.
-                            solidObj.accessSImpl()->rejectSolid = Standard_True;
+                }
+                if(cylindersList[i]->accessSImpl()->face.Orientation() == TopAbs_REVERSED){
+                    // Cylinder is concave.
+                    goto useBothEdges;
+                } else if(cylindersList[i]->accessSImpl()->face.Orientation() == TopAbs_FORWARD){
+                    // Cylinder is convex.
+                    if(getRadian(cylindersList[i]->accessSImpl()->face) > inputConfig.PI/2.0){
+                        useBothEdges:;
+                        // Generate split surface through the two edges.
+                        if(commonEdgesToUse.size() == 2){
+                            auto assistSurface = generateThroughTwoLines(
+                                        cylindersList[i], commonEdgesToUse[0], commonEdgesToUse[1],
+                                    solidObj.accessSImpl()->boxDiagonalLength,
+                                    solidObj.accessSImpl()->meshDeflection);
+                            if(assistSurface){
+                                solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
+                                solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
+                            } else{
+                                // If there exists a common edge between cylindrical surfaces,
+                                // but failed to generate a split surface then reject solid.
+                                solidObj.accessSImpl()->rejectSolid = Standard_True;
+                            }
+                        }
+                    } else{
+                        // Generate split surfaces through the axis and the edges.
+                        if(commonEdgesToUse.size() >= 1){
+                            for(const auto& edge : commonEdgesToUse){
+                                auto assistSurface = generateThroughLineAxis(
+                                            cylindersList[i], edge,
+                                            solidObj.accessSImpl()->boxDiagonalLength,
+                                            solidObj.accessSImpl()->meshDeflection);
+                                if(assistSurface){
+                                    solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
+                                    solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
+                                }
+                            }
+                            if(!solidObj.accessSImpl()->assistFacesMap[cylindersList[i]]){
+                                // If there exists a common edge between cylindrical surfaces,
+                                // but failed to generate a split surface then reject solid.
+                                solidObj.accessSImpl()->rejectSolid = Standard_True;
+                            }
                         }
                     }
                 }
@@ -109,16 +133,13 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
     }
 }
 
-Standard_Boolean
-McCAD::Decomposition::AssistPlnCylSurfaceGenerator::checkRadian(const TopoDS_Face& cylinder){
-    // Radian check for now returns True always!. This is to be modified later on
-    // for a more specialized assist. surface generations.
+Standard_Real
+McCAD::Decomposition::AssistPlnCylSurfaceGenerator::getRadian(const TopoDS_Face& cylinder){
     std::array<Standard_Real, 4> uvParameters;
     // UV parameters in class grom_Cylindrical_Surface: U1 = 0 and U2 = 2*PI.
     BRepTools::UVBounds(cylinder, uvParameters[0], uvParameters[1], uvParameters[2],
             uvParameters[3]);
-    return std::abs(uvParameters[1] - uvParameters[0]) <= 2*inputConfig.PI ?
-            Standard_True : Standard_False;
+    return std::abs(uvParameters[1] - uvParameters[0]);
 }
 
 std::optional<std::shared_ptr<McCAD::Geometry::BoundSurface>>

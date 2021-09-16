@@ -25,7 +25,7 @@ namespace McCAD::Decomposition{
   public:
       IO::InputConfig inputConfig;
       void operator()(Geometry::CYLSolid& solidObj);
-      Standard_Boolean checkRadian(const TopoDS_Face& cylinder);
+      Standard_Real getRadian(const TopoDS_Face& cylinder);
       std::optional<std::shared_ptr<Geometry::BoundSurface>>
       generateThroughLineAxis(const std::shared_ptr<Geometry::BoundSurface>& cylinderFace,
                               const std::shared_ptr<Geometry::Edge>& commonEdge,

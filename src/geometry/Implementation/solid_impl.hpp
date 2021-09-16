@@ -59,8 +59,8 @@ namespace McCAD::Geometry{
       void createBB(Standard_Real bndBoxGap = 0.0);
       void calcMeshDeflection(Standard_Real scalingFactor = 100.0);
       void updateEdgesConvexity(Standard_Real angularTolerance = 1.0e-4,
-                                Standard_Real precision = 1.0e-7);
-      void repairSolid(Standard_Real precision = 1.0e-7, Standard_Real faceTolerance = 1.0e-7);
+                                Standard_Real precision = 1.0e-6);
+      void repairSolid(Standard_Real precision = 1.0e-6, Standard_Real faceTolerance = 1.0e-8);
       void generateSurfacesList();
       std::unique_ptr<BoundSurface> generateSurface(const TopoDS_Face& face,
                                                     Standard_Integer mode = 0);
