@@ -34,9 +34,11 @@ McCAD::Conversion::VoidCellManager::operator()(
 std::shared_ptr<McCAD::Conversion::VoidCell>
 McCAD::Conversion::VoidCellManager::operator()(
         const McCAD::Conversion::VoidCellManager::membersMap& members,
-        const Standard_Integer& depth, const Standard_Integer& width){
-    voidCell = std::make_shared<VoidCell>(depth, width);
-    perform(members);
+        const Standard_Integer& depth, const Standard_Integer& width,
+        const std::string& key){
+    // Operator used for BVH void cells.
+    voidCell = std::make_shared<VoidCell>(depth, width, key);
+    if (members.size() > 0) perform(members);
     return voidCell;
 }
 
@@ -44,13 +46,13 @@ std::shared_ptr<McCAD::Conversion::VoidCell>
 McCAD::Conversion::VoidCellManager::operator()(
         const McCAD::Conversion::VoidCellManager::membersMap& members,
         const Standard_Integer& depth, const Standard_Integer& width,
-        const aabbTuple& xAxisAABB, const aabbTuple& yAxisAABB,
-        const aabbTuple& zAxisAABB){
-    voidCell = std::make_shared<VoidCell>(depth, width);
+        const std::string& key, const aabbTuple& xAxisAABB,
+        const aabbTuple& yAxisAABB, const aabbTuple& zAxisAABB){
+    voidCell = std::make_shared<VoidCell>(depth, width, key);
     voidCell->xAxisUpdate = xAxisAABB;
     voidCell->yAxisUpdate = yAxisAABB;
     voidCell->zAxisUpdate = zAxisAABB;
-    perform(members);
+    if (members.size() > 0) perform(members);
     return voidCell;
 }
 
@@ -68,7 +70,6 @@ McCAD::Conversion::VoidCellManager::createLists(
 void
 McCAD::Conversion::VoidCellManager::perform(
         const McCAD::Conversion::VoidCellManager::membersMap& members){
-    if(members.size() == 0) return;
     populateLists(members);
     updateVoidCell(members);
     Standard_Boolean splitCondition = Standard_False;
@@ -95,26 +96,26 @@ McCAD::Conversion::VoidCellManager::perform(
             // Create left void cell.
             auto voidCellLeft = VoidCellManager{BVHVoid, minVoidVolume,
                     maxSolidsPerVoidCell, voidGeneration}(
-                        splitMembers.first, voidCell->depth + 1, 0);
+                        splitMembers.first, voidCell->depth + 1, 0, voidCell->key + "L");
             voidCell->daughterVoidCells.push_back(voidCellLeft);
             // Create right void cell.
             auto voidCellRight = VoidCellManager{BVHVoid, minVoidVolume,
                     maxSolidsPerVoidCell, voidGeneration}(
-                        splitMembers.second, voidCell->depth + 1, 1);
+                        splitMembers.second, voidCell->depth + 1, 1, voidCell->key + "R");
             voidCell->daughterVoidCells.push_back(voidCellRight);
         } else{
             // Create left void cell.
             auto leftBoundaries = updateBoundaries(*surface, 0);
             auto voidCellLeft = VoidCellManager{BVHVoid, minVoidVolume,
                     maxSolidsPerVoidCell, voidGeneration}(
-                        splitMembers.first, voidCell->depth + 1, 0,
+                        splitMembers.first, voidCell->depth + 1, 0, voidCell->key + "L",
                         leftBoundaries[0], leftBoundaries[1], leftBoundaries[2]);
             voidCell->daughterVoidCells.push_back(voidCellLeft);
             // Create right void cell.
             auto rightBoundaries = updateBoundaries(*surface, 1);
             auto voidCellRight = VoidCellManager{BVHVoid, minVoidVolume,
                     maxSolidsPerVoidCell, voidGeneration}(
-                        splitMembers.second, voidCell->depth + 1, 1,
+                        splitMembers.second, voidCell->depth + 1, 1, voidCell->key + "R",
                         rightBoundaries[0], rightBoundaries[1], rightBoundaries[2]);
             voidCell->daughterVoidCells.push_back(voidCellRight);
         }

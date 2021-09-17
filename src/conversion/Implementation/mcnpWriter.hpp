@@ -26,7 +26,7 @@ namespace McCAD::Conversion{
         using matMap = std::map<std::tuple<std::string, Standard_Real>, Standard_Integer>;
         using solidsMap = std::map<Standard_Integer, std::shared_ptr<Geometry::Solid>>;
         using compoundsMap = std::map<Standard_Integer, std::shared_ptr<Geometry::Impl::Compound>>;
-        using voidsMap = std::map<std::tuple<Standard_Integer, Standard_Integer>,
+        using voidsMap = std::map<std::tuple<Standard_Integer, Standard_Integer, std::string>,
                                   std::shared_ptr<VoidCell>>;
     public:
         IO::InputConfig inputConfig;

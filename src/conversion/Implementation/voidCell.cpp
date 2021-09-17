@@ -8,12 +8,13 @@
 #include <GProp_GProps.hxx>
 #include <BRepGProp.hxx>
 
-McCAD::Conversion::VoidCell::VoidCell() : depth{0}, width{0} {
+McCAD::Conversion::VoidCell::VoidCell() : depth{0}, width{0}, key{"r"} {
 }
 
 McCAD::Conversion::VoidCell::VoidCell(const Standard_Integer& depth,
-                                      const Standard_Integer& width) :
-    depth{depth}, width{width}{
+                                      const Standard_Integer& width,
+                                      const std::string& key) :
+    depth{depth}, width{width}, key{key}{
 }
 
 McCAD::Conversion::VoidCell::~VoidCell(){}
@@ -32,7 +33,8 @@ McCAD::Conversion::VoidCell::addSolids(
     for(const auto& member : members){
         aabb.Add(std::get<0>(member.second));
     }
-    aabb.SetGap(0.0);
+    if(depth == 0) aabb.SetGap(100.0);
+    else aabb.SetGap(0.0);
     aabb.Get(minX, minY, minZ, maxX, maxY, maxZ);
     // Create AABB solid
     gp_Pnt minPoint(minX, minY, minZ);
@@ -82,7 +84,7 @@ McCAD::Conversion::VoidCell::outputAABB(){
     writer0.Transfer(aabbSolid, STEPControl_StepModelType::STEPControl_AsIs);
     std::string filename = "./aabb";
     std::string suffix = ".stp";
-    filename += std::to_string(depth) + "_" + std::to_string(width);
+    filename += "_" + key + std::to_string(depth) + std::to_string(width);
     filename += suffix;
     writer0.Write(filename.c_str());
 }

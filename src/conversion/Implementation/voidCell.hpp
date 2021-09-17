@@ -16,7 +16,8 @@ namespace McCAD::Conversion{
   class VoidCell{
   public:
       VoidCell();
-      VoidCell(const Standard_Integer& depth, const Standard_Integer& width);
+      VoidCell(const Standard_Integer& depth, const Standard_Integer& width,
+               const std::string& key);
       ~VoidCell();
   private :
       // centerTuple format: <AABB min, AABB center, AABB max>
@@ -33,6 +34,7 @@ namespace McCAD::Conversion{
       TopoDS_Solid aabbSolid;
       Standard_Boolean splitted{Standard_False};
       Standard_Integer depth, width;
+      std::string key;
       std::vector<Standard_Integer> solidIDList;
       std::vector<std::shared_ptr<VoidCell>> daughterVoidCells;
       Standard_Real minX{0}, minY{0}, minZ{0}, maxX{0}, maxY{0}, maxZ{0};

@@ -51,10 +51,12 @@ namespace McCAD::Conversion{
         std::shared_ptr<VoidCell> operator()(const solidsList& solidObjList);
         std::shared_ptr<VoidCell> operator()(const membersMap& members,
                                              const Standard_Integer& depth,
-                                             const Standard_Integer& width);
+                                             const Standard_Integer& width,
+                                             const std::string& key);
         std::shared_ptr<VoidCell> operator()(const membersMap& members,
                                              const Standard_Integer& depth,
                                              const Standard_Integer& width,
+                                             const std::string& key,
                                              const aabbTuple& xAxisAABB,
                                              const aabbTuple& yAxisAABB,
                                              const aabbTuple& zAxisAABB);
