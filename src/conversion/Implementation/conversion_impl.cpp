@@ -23,7 +23,7 @@ McCAD::Conversion::Convert::Impl::Impl(IO::InputConfig& inputConfig) :
             throw std::runtime_error("Error loading STEP file, " + inputConfig.conversionFileName);
         std::cout << "> Found " << inputShapesMap.size() <<
                      " shapes(s) in the input STEP file" << std::endl;
-        solidCounter += getGeomData(inputConfig.materialsInfo[i], componentCounter, solidCounter);
+        solidCounter = getGeomData(inputConfig.materialsInfo[i], componentCounter, solidCounter);
         if (rejectCondition){
             // Write rejected solids to a STEP file.
             General::InputData outputData;
@@ -65,7 +65,7 @@ McCAD::Conversion::Convert::Impl::getGeomData(const std::tuple<std::string, Stan
         ++index;
     }
     taskQueue.complete();
-    // Loop over list of compounds, add solid ID, compoundID, and add rejected solids to list.
+    // Loop over list of compounds; add solid ID, compoundID, and rejected solids to list.
     index = solidIndex;
     for(const auto& member : tempCompoundMap){
         for(const auto& solidObj : member.second->solidsList){
@@ -83,5 +83,5 @@ McCAD::Conversion::Convert::Impl::getGeomData(const std::tuple<std::string, Stan
         // Add compound to compound list.
         compoundList.push_back(member.second);
     }
-    return solidIndex;
+    return index + 1;
 }
