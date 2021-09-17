@@ -38,7 +38,7 @@ McCAD::Conversion::VoidCellManager::operator()(
         const std::string& key){
     // Operator used for BVH void cells.
     voidCell = std::make_shared<VoidCell>(depth, width, key);
-    if (members.size() > 0) perform(members);
+    perform(members);
     return voidCell;
 }
 
@@ -52,7 +52,7 @@ McCAD::Conversion::VoidCellManager::operator()(
     voidCell->xAxisUpdate = xAxisAABB;
     voidCell->yAxisUpdate = yAxisAABB;
     voidCell->zAxisUpdate = zAxisAABB;
-    if (members.size() > 0) perform(members);
+    perform(members);
     return voidCell;
 }
 
@@ -70,8 +70,10 @@ McCAD::Conversion::VoidCellManager::createLists(
 void
 McCAD::Conversion::VoidCellManager::perform(
         const McCAD::Conversion::VoidCellManager::membersMap& members){
-    populateLists(members);
-    updateVoidCell(members);
+    if (members.size() > 0){
+        populateLists(members);
+        updateVoidCell(members);
+    }
     Standard_Boolean splitCondition = Standard_False;
     if (voidGeneration){
         // for depths > 1 you have to carry the dims of the half parent downstream to
