@@ -76,6 +76,7 @@ McCAD::Conversion::Convert::Impl::getGeomData(const std::tuple<std::string, Stan
         }
         if(member.second->rejectedInputShapesList->Length() > 0){
             rejectCondition = Standard_True;
+            std::cout << member.second->compoundName << std::endl;
             rejectConversion.push_back(std::make_tuple(
                                            member.second->compoundName,
                                            *member.second->rejectedInputShapesList));

@@ -60,8 +60,8 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "startSurfNum = 1\n"
                    "startMatNum = 1\n"
                    "maxLineWidth = 80\n"
-                   "MCOutputFileName = MCFile.inp\n"
-                   "volumesFileName = volumes.txt\n" << std::endl;
+                   "MCOutputFileName = MCFile.i\n"
+                   "volumesFileName = volumes.i\n" << std::endl;
     inputConfig.close();
 }
 

@@ -30,6 +30,7 @@ namespace McCAD::Conversion{
                                   std::shared_ptr<VoidCell>>;
     public:
         IO::InputConfig inputConfig;
+        Standard_Integer continueSpacing{6};
         Standard_Real scalingFactor{1.0}, radius;
         surfacesMap uniquePlanes, uniqueCylinders, uniqueTori;
         finalMap uniqueSurfaces;
@@ -52,7 +53,8 @@ namespace McCAD::Conversion{
         void addDaughterVoids(const std::shared_ptr<VoidCell>& voidCell);
         void createVoidMap(const std::shared_ptr<VoidCell>& voidCell);
         std::string adjustLineWidth(const std::string& mainExpr,
-                                    const std::string& bodyExpr);
+                                    const std::string& bodyExpr,
+                                    Standard_Integer& continueSpacing);
         void writeHeader(std::ofstream& outputStream);
         void writeCellCard(std::ofstream& outputStream, std::ofstream& volumeStream);
         void writeVoidCard(std::ofstream& outputStream);
