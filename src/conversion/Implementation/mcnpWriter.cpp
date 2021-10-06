@@ -263,6 +263,9 @@ McCAD::Conversion::MCNPWriter::adjustLineWidth(const std::string& mainExpr,
 
 void
 McCAD::Conversion::MCNPWriter::writeHeader(std::ofstream& outputStream){
+    Standard_Integer materialCells{0};
+    if(inputConfig.componentIsSingleCell) materialCells = compoundObjMap.size();
+    else materialCells = solidObjMap.size();
     outputStream << "McCad v1.0 generated MC input files." <<
                     "\nc     * Material Cells ---- " << compoundObjMap.size() <<
                     "\nc     * Surfaces       ---- " << uniqueSurfaces.size() <<
@@ -278,40 +281,72 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
     // component name, cell range, etc. Adjust width of expression
     for(const auto& compound : compoundObjMap){
         outputStream << "c ============" <<
-                        "\nc * Component: " << compound.second->compoundName <<
-                        "\nc * Subsolids: " << compound.second->solidsList.size();
-        std::string cellExpr{boost::str(boost::format("%d") % cellNumber)};
-        if (cellExpr.size() < 5) cellExpr.resize(5, *const_cast<char*>(" "));
-        continueSpacing = cellExpr.size() + 1;
-        // Add materials.
-        if(std::get<0>(compound.second->matInfo) == "void"){
-            cellExpr += boost::str(boost::format(" %d") % 0);
-        } else{
-            cellExpr += boost::str(boost::format(" %d %9.4f")
-                                   % compound.second->matID
-                                   % std::get<1>(compound.second->matInfo));
+                        "\nc * Component  : " << compound.second->compoundName <<
+                        "\nc * Subsolids  : " << compound.second->solidsList.size() <<
+                        "\nc * Material   : " << std::get<0>(compound.second->matInfo) <<
+                        "\nc * Density    : " << std::get<1>(compound.second->matInfo);
+        Standard_Integer numCells{1};
+        if(!inputConfig.componentIsSingleCell) numCells = compound.second->solidsList.size();
+        outputStream << "\nc * Cells range: " << cellNumber << " - " << cellNumber + numCells - 1 <<
+                        "\nc ============" << std::endl;
+        if(inputConfig.componentIsSingleCell){
+            std::string cellExpr{boost::str(boost::format("%d") % cellNumber)};
+            if (cellExpr.size() < 5) cellExpr.resize(5, *const_cast<char*>(" "));
+            continueSpacing = cellExpr.size() + 1;
+            // Add materials.
+            if(std::get<0>(compound.second->matInfo) == "void"){
+                cellExpr += boost::str(boost::format(" %d") % 0);
+            } else{
+                cellExpr += boost::str(boost::format(" %d %9.5f")
+                                       % compound.second->matID
+                                       % std::get<1>(compound.second->matInfo));
+            }
+            std::string cellSolidsExpr;
+            Standard_Real compoundVolume{0};
+            for(Standard_Integer i = 0; i < compound.second->solidsList.size(); ++i){
+                if(i == 0) cellSolidsExpr += " (";
+                else cellSolidsExpr += " : (";
+                MCNPExprGenerator{}.genCellExpr(compound.second->solidsList.at(i));
+                cellSolidsExpr += compound.second->solidsList.at(i)->accessSImpl()->cellExpr;
+                cellSolidsExpr += ")";
+                compoundVolume += compound.second->solidsList.at(i)->accessSImpl()->solidVolume;
+            }
+            cellSolidsExpr += " Imp:N=1.0 Imp:P=1.0 Imp:E=0.0";
+            outputStream << adjustLineWidth(cellExpr, cellSolidsExpr, continueSpacing) << std::endl;
+            std::string compoundData{boost::str(boost::format("%d  %11.5f  %s")
+                                                 % cellNumber
+                                                 % (compoundVolume*std::pow(scalingFactor, 3))
+                                                 % compound.second->compoundName)};
+            volumeStream << compoundData << std::endl;
+            ++cellNumber;
+        } else {
+            Standard_Real solidVolume{0};
+            for(Standard_Integer i = 0; i < compound.second->solidsList.size(); ++i){
+                std::string cellExpr{boost::str(boost::format("%d") % cellNumber)};
+                if (cellExpr.size() < 5) cellExpr.resize(5, *const_cast<char*>(" "));
+                continueSpacing = cellExpr.size() + 1;
+                // Add materials.
+                if(std::get<0>(compound.second->matInfo) == "void"){
+                    cellExpr += boost::str(boost::format(" %d") % 0);
+                } else{
+                    cellExpr += boost::str(boost::format(" %d %9.4f")
+                                           % compound.second->matID
+                                           % std::get<1>(compound.second->matInfo));
+                }
+                std::string cellSolidsExpr;
+                solidVolume = compound.second->solidsList.at(i)->accessSImpl()->solidVolume;
+                MCNPExprGenerator{}.genCellExpr(compound.second->solidsList.at(i));
+                cellSolidsExpr += compound.second->solidsList.at(i)->accessSImpl()->cellExpr;
+                cellSolidsExpr += " Imp:N=1.0 Imp:P=1.0 Imp:E=0.0";
+                outputStream << adjustLineWidth(cellExpr, cellSolidsExpr, continueSpacing) << std::endl;
+                std::string solidData{boost::str(boost::format("%d %11.5f %s")
+                                                    % cellNumber
+                                                    % (solidVolume*std::pow(scalingFactor, 3))
+                                                    % compound.second->compoundName)};
+                volumeStream << solidData << std::endl;
+                ++cellNumber;
+            }
         }
-        outputStream << "\nc * Material : " << std::get<0>(compound.second->matInfo);
-        outputStream << "\nc * Density  : " << std::get<1>(compound.second->matInfo);
-        outputStream << "\nc ============" << std::endl;
-        std::string cellSolidsExpr;
-        Standard_Real compoundVolume{0};
-        for(Standard_Integer i = 0; i < compound.second->solidsList.size(); ++i){
-            if(i == 0) cellSolidsExpr += " (";
-            else cellSolidsExpr += " : (";
-            MCNPExprGenerator{}.genCellExpr(compound.second->solidsList.at(i));
-            cellSolidsExpr += compound.second->solidsList.at(i)->accessSImpl()->cellExpr;
-            cellSolidsExpr += ")";
-            compoundVolume += compound.second->solidsList.at(i)->accessSImpl()->solidVolume;
-        }
-        cellSolidsExpr += " Imp:N=1 Imp:P=1";
-        outputStream << adjustLineWidth(cellExpr, cellSolidsExpr, continueSpacing) << std::endl;
-        std::string compoundData{boost::str(boost::format("%d %11.5f %s")
-                                             % cellNumber
-                                             % (compoundVolume*std::pow(scalingFactor, 3))
-                                             % compound.second->compoundName)};
-        volumeStream << compoundData << std::endl;
-        ++cellNumber;
     }
 }
 
@@ -333,7 +368,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
             voidSolidsExpr += boost::str(boost::format(" #%d") %index);
             ++index;
         }
-        voidSolidsExpr += " Imp:N=1 Imp:P=1";
+        voidSolidsExpr += " Imp:N=1.0 Imp:P=1.0 Imp:E=0.0";
         outputStream << adjustLineWidth(voidExpr, voidSolidsExpr, continueSpacing) << std::endl;
         ++voidNumber;
         goto writeGraveYard;
@@ -366,7 +401,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
                 voidSolidsExpr += solidObjMap[solidID]->accessSImpl()->complimentExpr;
             }
         }
-        voidSolidsExpr += " Imp:N=1 Imp:P=1";
+        voidSolidsExpr += " Imp:N=1.0 Imp:P=1.0 Imp:E=0.0";
         outputStream << adjustLineWidth(voidExpr, voidSolidsExpr, continueSpacing) << std::endl;
         ++voidNumber;
     }
@@ -378,7 +413,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
     continueSpacing = graveYardExpr.size() + 1;
     graveYardExpr += boost::str(boost::format(" %d") % 0);
     graveYardExpr += boost::str(boost::format(" %d") % voidSurfNumber);
-    graveYardExpr += " Imp:N=0 Imp:P=0 $Graveyard";
+    graveYardExpr += " Imp:N=0.0 Imp:P=0.0 Imp:E=0.0 $Graveyard";
     outputStream << graveYardExpr << std::endl;
     uniqueSurfaces[voidSurfNumber] = voidCellsMap[std::make_tuple(0,0,"r")]->voidSurfExpr;
     // Add cell to calculate volumes.
@@ -387,7 +422,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
     if (volumeCellExpr.size() < 5) volumeCellExpr.resize(5, *const_cast<char*>(" "));
     continueSpacing = volumeCellExpr.size() + 1;
     volumeCellExpr += boost::str(boost::format(" %d") % 0);
-    volumeCellExpr += boost::str(boost::format(" -%d %d Imp:N=1 Imp:P=1")
+    volumeCellExpr += boost::str(boost::format(" -%d %d Imp:N=1.0 Imp:P=1.0 Imp:E=0.0")
                                  % (uniqueSurfaces.size() + inputConfig.startSurfNum)
                                  % voidSurfNumber);
     outputStream << "c " << volumeCellExpr << std::endl;
@@ -395,7 +430,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
     if (volumeCellGYExpr.size() < 5) volumeCellGYExpr.resize(5, *const_cast<char*>(" "));
     continueSpacing = volumeCellGYExpr.size() + 1;
     volumeCellGYExpr += boost::str(boost::format(" %d") % 0);
-    volumeCellGYExpr += boost::str(boost::format(" %d Imp:N=0 Imp:P=0")
+    volumeCellGYExpr += boost::str(boost::format(" %d Imp:N=0.0 Imp:P=0.0 Imp:E=0.0")
                                  % (uniqueSurfaces.size() + inputConfig.startSurfNum));
     outputStream << "c " << volumeCellGYExpr << std::endl;
     outputStream << "c ========== End of volume calculation parameters ==========" << std::endl;
@@ -455,10 +490,14 @@ McCAD::Conversion::MCNPWriter::writeDataCard(std::ofstream& outputStream){
                     % (inputConfig.PI * std::pow(radius, 2)))};
     outputStream << sourceExpr << std::endl;
     if(compoundObjMap.size() > 1){
+        Standard_Integer numCells{1};
+        if(inputConfig.componentIsSingleCell) numCells = compoundObjMap.size();
+        else numCells = solidObjMap.size();
         std::string volTallyExpr{boost::str(boost::format("F4:N %d %di %d")
-                        % inputConfig.startCellNum % (compoundObjMap.size() - 2)
-                        % (inputConfig.startCellNum + compoundObjMap.size() - 1))};
-        volTallyExpr += boost::str(boost::format("\nc SD4 1 %dr") % (compoundObjMap.size() - 1));
+                                            % inputConfig.startCellNum
+                                            % (numCells - 2)
+                                            % (inputConfig.startCellNum + numCells - 1))};
+        volTallyExpr += boost::str(boost::format("\nc SD4 1 %dr") % (numCells - 1));
         outputStream << "c " << volTallyExpr << std::endl;
     } else {
         std::string volTallyExpr{boost::str(boost::format("F4:N %d")
