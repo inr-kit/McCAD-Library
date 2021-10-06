@@ -266,8 +266,8 @@ McCAD::Conversion::MCNPWriter::writeHeader(std::ofstream& outputStream){
     Standard_Integer materialCells{0};
     if(inputConfig.componentIsSingleCell) materialCells = compoundObjMap.size();
     else materialCells = solidObjMap.size();
-    outputStream << "McCad v1.0 generated MC input files." <<
-                    "\nc     * Material Cells ---- " << compoundObjMap.size() <<
+    outputStream << "McCad v1.0 generated " << inputConfig.MCcode << " input file." <<
+                    "\nc     * Material Cells ---- " << materialCells <<
                     "\nc     * Surfaces       ---- " << uniqueSurfaces.size() <<
                     "\nc     * Void cells     ---- " << voidCellsMap.size() << std::endl;
 }
@@ -281,13 +281,13 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
     // component name, cell range, etc. Adjust width of expression
     for(const auto& compound : compoundObjMap){
         outputStream << "c ============" <<
-                        "\nc * Component  : " << compound.second->compoundName <<
-                        "\nc * Subsolids  : " << compound.second->solidsList.size() <<
-                        "\nc * Material   : " << std::get<0>(compound.second->matInfo) <<
-                        "\nc * Density    : " << std::get<1>(compound.second->matInfo);
+                        "\nc * Component: " << compound.second->compoundName <<
+                        "\nc * Subsolids: " << compound.second->solidsList.size() <<
+                        "\nc * Material : " << std::get<0>(compound.second->matInfo) <<
+                        "\nc * Density  : " << std::get<1>(compound.second->matInfo);
         Standard_Integer numCells{1};
         if(!inputConfig.componentIsSingleCell) numCells = compound.second->solidsList.size();
-        outputStream << "\nc * Cells range: " << cellNumber << " - " << cellNumber + numCells - 1 <<
+        outputStream << "\nc * Cells    : " << cellNumber << " - " << cellNumber + numCells - 1 <<
                         "\nc ============" << std::endl;
         if(inputConfig.componentIsSingleCell){
             std::string cellExpr{boost::str(boost::format("%d") % cellNumber)};
@@ -333,7 +333,7 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
                                            % compound.second->matID
                                            % std::get<1>(compound.second->matInfo));
                 }
-                std::string cellSolidsExpr;
+                std::string cellSolidsExpr{" "};
                 solidVolume = compound.second->solidsList.at(i)->accessSImpl()->solidVolume;
                 MCNPExprGenerator{}.genCellExpr(compound.second->solidsList.at(i));
                 cellSolidsExpr += compound.second->solidsList.at(i)->accessSImpl()->cellExpr;
@@ -352,7 +352,9 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
 
 void
 McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
-    Standard_Integer voidNumber = inputConfig.startCellNum + compoundObjMap.size();
+    Standard_Integer voidNumber{inputConfig.startCellNum};
+    if(inputConfig.componentIsSingleCell) voidNumber += compoundObjMap.size();
+    else voidNumber += solidObjMap.size();
     outputStream << "c ==================== Void Cells ====================" << std::endl;
     if(!inputConfig.voidGeneration) {
         // Generate a single void cell.
@@ -482,7 +484,7 @@ McCAD::Conversion::MCNPWriter::writeDataCard(std::ofstream& outputStream){
                         "\nM" << mat.second << std::endl;
     }
     // add tallies and source to calculate volumes.
-    outputStream << "Mode N" << "\nNPS 1e8" << "\nPRDMP 1e7 1e7 j 1 j" << std::endl;
+    outputStream << "Mode N" << "\nNPS 5e8" << "\nPRDMP 1e7 1e7 j 1 j" << std::endl;
     outputStream << "c ========== Start of volume calculation parameters ==========" << std::endl;
     std::string sourceExpr{boost::str(
                     boost::format("c Void \nc SDEF ERG=14.1 SUR=%d PAR=1 NRM=-1 WGT=%6.3f $Pi*r^2")
