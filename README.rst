@@ -21,7 +21,7 @@ Decomposition:
 
 Prerequisites:
 --------------
-1- OpenCascade (OCCT version 7.5.0): https://www.opencascade.com/content/latest-release
+1- OpenCascade (OCCT version 7.5.0): https://dev.opencascade.org/release
    * Geometry engine for manipulating and decomposing solids.
 
 2- CMake (version 3.14 or above): https://cmake.org/download/
@@ -38,7 +38,7 @@ Installation (Linux):
    * cd cmake-3.17.3
    * mkdir build
    * cd build
-   * cmake .. -DCMAKE_USE_OPENSSL=OFF && make && make install
+   * cmake .. -DCMAKE_USE_OPENSSL=OFF -DCMAKE_INSTALL_PREFIX=. && make && make install
 
 2- Install Boost C++ lirary
    * Download boost_1_73_0.tar.gz from https://dl.bintray.com/boostorg/release/1.73.0/source/
@@ -47,7 +47,7 @@ Installation (Linux):
    * ./bootstrap.sh
    * ./b2 install --prefix=<install Dir>
 
-3- Install OpenCascade
+3- Install OpenCascade (OCCT)
    * Download occt-7.5.0.tgz from https://www.opencascade.com/content/latest-release
    * tar -xzvf occt-7.5.0.tgz
    * cd occt-7.5.0
@@ -62,8 +62,9 @@ Installation (Linux):
 
 Installation (Windows 10):
 --------------------------
+1- Install CMake, Boost, and OCCT
    * Same steps 1 - 3 can be followed by downloading the install files that is suitable for Windows 10
-4- Install McCAD
+2- Install McCAD
    * Building a static executable is recommended.
    * Path to OCC should be provided through -DOCC_CUSTOM_ROOT=<path to OCC> CMake flag.
    * Path to Boost should be provided though -DBOOST_CUSTOM_ROOT=<path to Boost> CMake flag.
