@@ -14,9 +14,9 @@ McCAD::Decomposition::Decompose::Impl::Impl(const General::InputData& inputData,
     // Get input solids map from the Input Data object.
     inputShapesMap = inputData.accessImpl()->inputShapesMap;
     if (!inputShapesMap.size() > 0)
-        throw std::runtime_error("Error reading input STEP file!");
+        throw std::runtime_error("Error reading input STEP file(s)!");
     std::cout << " > Decomposing " << inputShapesMap.size() <<
-                 " shape(s) from the input STEP file" << std::endl;
+                 " shape(s) from the input STEP file(s)" << std::endl;
     perform();
 }
 

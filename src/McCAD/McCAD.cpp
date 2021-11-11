@@ -26,7 +26,7 @@ int main (int argc, char* argv[]){
         if (std::string(argv[1]) == "help") {
             std::cout << "Usage:\n"
                          "   [ ] creates parameters file McCADInputConfig.txt\n"
-                         "[read] Test loading input STEP file\n"
+                         "[read] Test loading the input STEP file\n"
                          " [run] Executes McCAD" << std::endl;
             timeEnd = std::chrono::high_resolution_clock::now();
         } else if (std::string(argv[1]) == "read") {

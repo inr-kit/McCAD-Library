@@ -47,8 +47,9 @@ namespace McCAD::IO{
       double parameterTolerance = 1.0e-7;
       double angularTolerance = 1.0e-4 * PI;
       double distanceTolerance = 1.0e-5;
+      bool simplifyTori = false;
+      bool simplifyAllTori = false;
       double torusSplitAngle = 0.25 * PI;
-      bool simplifyTori = true;
       // Void generation and conversion
       bool convert = false;
       bool voidGeneration = false;

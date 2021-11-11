@@ -30,7 +30,6 @@ McCAD::Decomposition::TorusConvertor::operator()(
     scalingFactor = aScalingFactor;
     auto& solidsList = *solid->accessSImpl()->splitSolidList;
     for(Standard_Integer index = 1; index <= solidsList.Length(); ++index){
-        //std::cout << "TorusConvertor" << std::endl;
         if (Preprocessor{}.determineSolidType(TopoDS::Solid(solidsList(index))) ==
                 Tools::SolidType{}.toroidal){
             auto newShape = convertTorusToCylinder(solidsList(index));
@@ -44,11 +43,9 @@ McCAD::Decomposition::TorusConvertor::operator()(
 std::optional<TopoDS_Shape>
 McCAD::Decomposition::TorusConvertor::convertTorusToCylinder(
         const TopoDS_Shape& shape, Standard_Real scaleFactor){
-    //std::cout << "convertTorusToCylinder" << std::endl;
     std::vector<TopoDS_Face> planesList;
     std::set<Standard_Real> radii;
     gp_Dir torDir;
-    //gp_Ax3 torCoor, cylCoor;
     for(const auto& face : detail::ShapeView<TopAbs_FACE>{shape}){
         if (BRepAdaptor_Surface(face).GetType() == GeomAbs_Plane){
             planesList.push_back(face);
@@ -56,22 +53,26 @@ McCAD::Decomposition::TorusConvertor::convertTorusToCylinder(
         else if (BRepAdaptor_Surface(face).GetType() == GeomAbs_Torus){
             radii.insert(BRepAdaptor_Surface(face).Torus().MinorRadius());
             torDir = BRepAdaptor_Surface(face).Torus().Axis().Direction();
-            //torCoor = BRepAdaptor_Surface(face).Torus().Position();
         }
     }
     if (planesList.size() != 2 || radii.size() > 2) return shape;
     // Create cylinder
-    gp_Vec vector(BRepAdaptor_Surface(planesList[0]).Plane().Location(),
-            BRepAdaptor_Surface(planesList[1]).Plane().Location());
+    gp_Pnt vecStart{BRepAdaptor_Surface(planesList[0]).Plane().Location()},
+           vecEnd{BRepAdaptor_Surface(planesList[1]).Plane().Location()};
+    gp_Vec vector(vecStart, vecEnd);
+    // check the direction of the vector.
+    //gp_Pnt testPoint = vecStart;
+    //testPoint.Translate(100*vector.Magnitude()*vector);
+    //if()
     if (!PointInSolid{}(shape, BRepAdaptor_Surface(planesList[0]).Plane().Location()) ||
             !PointInSolid{}(shape, BRepAdaptor_Surface(planesList[1]).Plane().Location())){
         return shape;
     }
-    //if (gp_Dir(vector).Angle(torDir) != 1.5708) return shape;
-    gp_Ax2 axis(BRepAdaptor_Surface(planesList[0]).Plane().Location(), gp_Dir(vector));
-    axis.Translate(0.5*(1 - scaleFactor)*vector);
+    gp_Ax2 axis(vecStart, gp_Dir(vector));
+    //axis.Translate(0.5*(1 - scaleFactor)*vector);
+    axis.Translate(-1*vector.Magnitude()*vector);
     TopoDS_Solid cylinder = BRepPrimAPI_MakeCylinder(axis, *radii.rbegin(),
-                                                     scaleFactor*vector.Magnitude());
+                                                     3*vector.Magnitude());
     /*
     for(const auto& face : detail::ShapeView<TopAbs_FACE>{cylinder}){
         if (BRepAdaptor_Surface(face).GetType() == GeomAbs_Cylinder){
