@@ -39,11 +39,11 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "faceTolerance = 1.0e-8 [cm]\n"
                    "edgeTolerance = 1.0e-8 [cm]\n"
                    "parameterTolerance = 1.0e-8 [cm]\n"
-                   "angularTolerance = 1.0e-4\n"
+                   "angularTolerance = 1.0e-4 [radian/PI]\n"
                    "distanceTolerance = 1.0e-6 [cm]\n"
                    "simplifyTori = false\n"
                    "simplifyAllTori = false\n"
-                   "torusSplitAngle = 45.0\n" << std::endl;
+                   "torusSplitAngle = 30.0 [degrees]\n" << std::endl;
     inputConfig << "# Conversion\n"
                    "# ==========\n"
                    "convert = false\n"
