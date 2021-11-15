@@ -13,6 +13,7 @@
 #include "surfaceObjCerator.hpp"
 #include "ShapeView.hpp"
 #include "surfacesMerger.hpp"
+#include "torusConvertor.hpp"
 //OCC
 #include <Standard.hxx>
 #include <PrsDim_AngleDimension.hxx>
@@ -64,6 +65,7 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& sol
     auto& planesList = solidObj.accessSImpl()->planesList;
     auto& toriList = solidObj.accessSImpl()->toriList;
     if (planesList.size() != 2) return;
+    if(!TorusConvertor{inputConfig}.convertCondition(solidObj.accessSImpl()->solidShape)) return;
     // Measure angle between extended surfaces
     PrsDim_AngleDimension angleDimension{planesList[0]->accessSImpl()->extendedFace,
                 planesList[1]->accessSImpl()->extendedFace};

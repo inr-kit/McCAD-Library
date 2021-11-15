@@ -38,14 +38,40 @@ McCAD::Decomposition::TorusConvertor::operator()(
                 Tools::SolidType{}.toroidal){
             auto newShape = convertTorusToCylinder(solidsList(index));
             if (!newShape.has_value()) continue;
+            // Check whether the simplificstion was successful or not.
             solidsList.InsertAfter(index, *newShape);
             solidsList.Remove(index);
         }
     }
 }
 
+Standard_Boolean
+McCAD::Decomposition::TorusConvertor::convertCondition(const TopoDS_Shape& shape){
+    // Check whether to simplify all tori or just the non-coaxial.
+    if(inputConfig.simplifyTori){
+        if (inputConfig.simplifyAllTori) return Standard_True;
+        else{
+            // Simplify only non-coaxial tori.
+            for(const auto& face : detail::ShapeView<TopAbs_FACE>{shape}){
+                if (BRepAdaptor_Surface(face).GetType() == GeomAbs_Torus){
+                    gp_Dir torDir = BRepAdaptor_Surface(face).Torus().Axis().Direction();
+                    if ((std::abs(torDir.X()) < inputConfig.precision &&
+                         std::abs(torDir.Y()) < inputConfig.precision) ||
+                        (std::abs(torDir.X()) < inputConfig.precision &&
+                         std::abs(torDir.Z()) < inputConfig.precision) ||
+                        (std::abs(torDir.Y()) < inputConfig.precision &&
+                         std::abs(torDir.Z()) < inputConfig.precision))
+                        return Standard_False;
+                    else return Standard_True;
+                }
+            }
+        }
+    } else return Standard_False;
+}
+
 std::optional<TopoDS_Shape>
 McCAD::Decomposition::TorusConvertor::convertTorusToCylinder(const TopoDS_Shape& shape){
+    if(!convertCondition(shape)) return std::nullopt;
     std::vector<TopoDS_Face> planesList;
     std::set<Standard_Real> radii;
     gp_Dir torDir;
@@ -58,13 +84,13 @@ McCAD::Decomposition::TorusConvertor::convertTorusToCylinder(const TopoDS_Shape&
             torDir = BRepAdaptor_Surface(face).Torus().Axis().Direction();
         }
     }
-    if (planesList.size() != 2 || radii.size() > 2) return shape;
+    if (planesList.size() != 2 || radii.size() > 2) return std::nullopt;
     // Create cylinder
     gp_Pnt vecStart{BRepAdaptor_Surface(planesList[0]).Plane().Location()},
            vecEnd{BRepAdaptor_Surface(planesList[1]).Plane().Location()};
     gp_Vec vector(vecStart, vecEnd);
     if (!PointInSolid{}(shape, vecStart) || !PointInSolid{}(shape, vecEnd)){
-        return shape;
+        return std::nullopt;
     }
     gp_Ax2 axis(vecStart.Translated(-1*vector.Magnitude()*gp_Dir(vector)), gp_Dir(vector));
     //axis.Translate(0.5*(1 - scaleFactor)*vector);
@@ -104,7 +130,6 @@ McCAD::Decomposition::TorusConvertor::convertTorusToCylinder(const TopoDS_Shape&
         cylinder = solid;
     }*/
     auto newSolid = fitCylinder(cylinder, planesList);
-    if(!newSolid.has_value()) return shape;
     return *newSolid;
 }
 

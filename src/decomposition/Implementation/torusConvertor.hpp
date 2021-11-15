@@ -22,6 +22,7 @@ namespace McCAD::Decomposition{
 
       IO::InputConfig inputConfig;
       void operator()(const std::shared_ptr<Geometry::Solid>& solid);
+      Standard_Boolean convertCondition(const TopoDS_Shape& shape);
       std::optional<TopoDS_Shape> convertTorusToCylinder(const TopoDS_Shape& shape);
       void retrieveSolid(TopoDS_Solid& cylinder,
                          const std::vector<TopoDS_Face>& planesList,
