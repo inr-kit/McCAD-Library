@@ -4,6 +4,8 @@
 #include <boost/format.hpp>
 #include <boost/algorithm/string.hpp>
 #include <cmath>
+#include <chrono>
+#include <ctime>
 // McCAD
 #include "mcnpWriter.hpp"
 #include "TaskQueue.hpp"
@@ -266,10 +268,13 @@ McCAD::Conversion::MCNPWriter::writeHeader(std::ofstream& outputStream){
     Standard_Integer materialCells{0};
     if(inputConfig.componentIsSingleCell) materialCells = compoundObjMap.size();
     else materialCells = solidObjMap.size();
-    outputStream << "McCad v1.0 generated " << inputConfig.MCcode << " input file." <<
-                    "\nc     * Material Cells ---- " << materialCells <<
-                    "\nc     * Surfaces       ---- " << uniqueSurfaces.size() <<
-                    "\nc     * Void cells     ---- " << voidCellsMap.size() << std::endl;
+    auto timeStart{std::chrono::system_clock::now()};
+    std::time_t timeStart_t = std::chrono::system_clock::to_time_t(timeStart);
+    outputStream << "McCad v1.0 generated " << inputConfig.MCcode << " input file. " <<
+                    std::ctime(&timeStart_t) <<
+                    "C     * Material Cells ---- " << materialCells <<
+                    "\nC     * Surfaces       ---- " << uniqueSurfaces.size() <<
+                    "\nC     * Void cells     ---- " << voidCellsMap.size() << std::endl;
 }
 
 void
@@ -294,8 +299,9 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
             if (cellExpr.size() < 5) cellExpr.resize(5, *const_cast<char*>(" "));
             continueSpacing = cellExpr.size() + 1;
             // Add materials.
-            if(std::get<0>(compound.second->matInfo) == "void"){
-                cellExpr += boost::str(boost::format(" %d") % 0);
+            if(std::get<0>(compound.second->matInfo) == "void" ||
+                    std::get<1>(compound.second->matInfo) == 0.0){
+                cellExpr += boost::str(boost::format(" %9.4f") % 0.0);
             } else{
                 cellExpr += boost::str(boost::format(" %d %9.5f")
                                        % compound.second->matID
@@ -326,8 +332,9 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
                 if (cellExpr.size() < 5) cellExpr.resize(5, *const_cast<char*>(" "));
                 continueSpacing = cellExpr.size() + 1;
                 // Add materials.
-                if(std::get<0>(compound.second->matInfo) == "void"){
-                    cellExpr += boost::str(boost::format(" %d") % 0);
+                if(std::get<0>(compound.second->matInfo) == "void" ||
+                        std::get<1>(compound.second->matInfo) == 0.0){
+                    cellExpr += boost::str(boost::format(" %9.4f") % 0.0);
                 } else{
                     cellExpr += boost::str(boost::format(" %d %9.4f")
                                            % compound.second->matID

@@ -47,15 +47,15 @@ namespace McCAD::IO{
       double parameterTolerance = 1.0e-7;
       double angularTolerance = 1.0e-4 * PI;
       double distanceTolerance = 1.0e-5;
-      bool simplifyTori = false;
+      bool simplifyTori = true;
       bool simplifyAllTori = false;
-      double torusSplitAngle = 0.25 * PI;
+      double torusSplitAngle = PI / 6.0;
       // Void generation and conversion
       bool convert = false;
       bool voidGeneration = false;
       bool componentIsSingleCell = false;
       double minVoidVolume = 1000.0; // in mm^3
-      int maxSolidsPerVoidCell = 20;
+      int maxSolidsPerVoidCell = 40;
       bool BVHVoid = false;
       std::string MCcode = "mcnp";
       int startCellNum = 1;

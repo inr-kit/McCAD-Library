@@ -3,6 +3,7 @@
 #include <string>
 #include <chrono>
 #include <filesystem>
+#include <ctime>
 // McCAD
 #include "inputconfig.hpp"
 #include "inputdata.hpp"
@@ -12,23 +13,24 @@
 #include "conversion.hpp"
 
 int main (int argc, char* argv[]){
-    auto timeStart{std::chrono::high_resolution_clock::now()},
-         timeEnd{std::chrono::high_resolution_clock::now()};
-    std::cerr << "Running McCAD v1.0" << std::endl;
+    auto timeStart{std::chrono::system_clock::now()},
+         timeEnd{std::chrono::system_clock::now()};
+    std::time_t timeStart_t = std::chrono::system_clock::to_time_t(timeStart);
+    std::cerr << "Running McCAD v1.0 / " << std::ctime(&timeStart_t) << std::endl;
     std::filesystem::path currentPath = std::filesystem::current_path();
     McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
         inputConfig.writeTemplate();
         std::cerr << "A template file, McCADInputConfig.txt, with run parameters "
                      "has been created in\n" << currentPath.string() << std::endl;
-        timeEnd = std::chrono::high_resolution_clock::now();
+        timeEnd = std::chrono::system_clock::now();
     } else if(argc == 2) {
         if (std::string(argv[1]) == "help") {
             std::cout << "Usage:\n"
                          "   [ ] creates parameters file McCADInputConfig.txt\n"
                          "[read] Test loading the input STEP file\n"
                          " [run] Executes McCAD" << std::endl;
-            timeEnd = std::chrono::high_resolution_clock::now();
+            timeEnd = std::chrono::system_clock::now();
         } else if (std::string(argv[1]) == "read") {
             inputConfig.readTemplate();
             // Load the input file.
@@ -39,7 +41,7 @@ int main (int argc, char* argv[]){
                 inputConfig.inputFileName = inputConfig.inputFileNames[i];
                 McCAD::IO::STEPReader reader{inputConfig};
             }
-            timeEnd = std::chrono::high_resolution_clock::now();
+            timeEnd = std::chrono::system_clock::now();
         } else if (std::string(argv[1]) == "run") {
             inputConfig.readTemplate();
             bool decomposeCondition{inputConfig.decompose},
@@ -86,14 +88,14 @@ int main (int argc, char* argv[]){
                 std::cout << "*************************" << std::endl;
                 McCAD::Conversion::Convert{inputConfig};
             };
-            timeEnd = std::chrono::high_resolution_clock::now();
+            timeEnd = std::chrono::system_clock::now();
         } else goto usageError;
     } else {
         usageError:;
         std::cerr << "Usage Error!. Only [], [help], [read], or [run] are "
                      "acceptable arguments!" << std::endl;
-        timeEnd = std::chrono::high_resolution_clock::now();
+        timeEnd = std::chrono::system_clock::now();
     }
-    std::chrono::duration<double, std::milli> elapsed = timeEnd - timeStart;
-    std::cout << "Execuion time [ms]: " << elapsed.count() << std::endl;
+    std::chrono::duration<double, std::ratio<60>> elapsed = timeEnd - timeStart;
+    std::cout << "Execuion time [m]: " << elapsed.count() << std::endl;
 }

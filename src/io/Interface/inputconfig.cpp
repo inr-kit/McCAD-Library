@@ -54,7 +54,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "# > Minimum acceptable void volume shouldn;t be less than minSolidVolume;\n"
                    "minVoidVolume = 1.0 [cm3]\n"
                    "# > A larger number will result in fewer void cells but longer cell expressions;\n"
-                   "maxSolidsPerVoidCell = 20\n"
+                   "maxSolidsPerVoidCell = 40\n"
                    "# > Choose whether or not to generate Bound Volume Heirarchy void cells;\n"
                    "BVHVoid = false\n"
                    "# > Choose the desired MC code for conversion;\n"

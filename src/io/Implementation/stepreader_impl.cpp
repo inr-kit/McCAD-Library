@@ -37,7 +37,7 @@ McCAD::IO::STEPReader::Impl::~Impl(){}
 
 void
 McCAD::IO::STEPReader::Impl::readSTEP(){
-    std::cout << " > Populating the input solids list: " << std::endl;
+    std::cout << " > Loading input solids." << std::endl;
     STEPCAFControl_Reader reader;
     STEPControl_Reader STEPReader = reader.Reader();
     // Create an application
@@ -60,7 +60,7 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
         Standard_Boolean failsOnly = Standard_False;
         STEPReader.PrintCheckLoad(failsOnly, IFSelect_ItemsByEntity);
         STEPReader.PrintCheckTransfer(failsOnly, IFSelect_ItemsByEntity);
-        throw std::runtime_error("Error reading input STEP file!");
+        throw std::runtime_error("Error reading the input STEP file!");
     }
 }
 
