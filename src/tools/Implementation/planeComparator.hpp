@@ -17,9 +17,9 @@ namespace McCAD::Tools{
                       const Standard_Real& distanceTolerance);
       ~PlaneComparator();
   private:
-      Standard_Real precision{1.0e-7};
-      Standard_Real angularTolerance{1.0e-4};
-      Standard_Real distanceTolerance{1.0e-5};
+      Standard_Real precision{1.0e-6};
+      Standard_Real angularTolerance{1.0e-4 * M_PI};
+      Standard_Real distanceTolerance{1.0e-6};
   public:
       std::optional<Standard_Boolean> operator()(const GeomAdaptor_Surface& firstAdaptor,
                                                  const GeomAdaptor_Surface& secondAdaptor);

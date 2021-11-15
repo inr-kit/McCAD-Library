@@ -19,7 +19,7 @@ namespace McCAD::Conversion{
         ~MCNPExprGenerator();
 
     private:
-        Standard_Real precision{1.0e-7}, scalingFactor{1.0};
+        Standard_Real precision{1.0e-6}, scalingFactor{1.0};
     public:
         void operator()(const std::shared_ptr<Geometry::Solid>& solidObj);
         void operator()(const std::shared_ptr<VoidCell>& voidCell);

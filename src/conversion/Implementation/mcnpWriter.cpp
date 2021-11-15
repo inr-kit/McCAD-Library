@@ -78,13 +78,25 @@ McCAD::Conversion::MCNPWriter::findDuplicate(
     for (const auto& member : uniqueMap){
         if (surface->accessSImpl()->surfSymb == member.second->accessSImpl()->surfSymb){
             // compare parameters.
-            Standard_Boolean equalParmts{Standard_True};
+            //Standard_Boolean equalParmts{Standard_True};
+            std::vector<Standard_Boolean> equalParmts;
             for (Standard_Integer i = 0; i < surface->accessSImpl()->surfParameters.size(); ++i){
                 if (std::abs(surface->accessSImpl()->surfParameters[i] -
-                             member.second->accessSImpl()->surfParameters[i]) > inputConfig.precision)
-                    equalParmts = Standard_False;
+                              member.second->accessSImpl()->surfParameters[i]) > inputConfig.precision){
+                    equalParmts.push_back(Standard_False);
+                } else equalParmts.push_back(Standard_True);
             }
-            if (equalParmts) return member.first;
+            if(surface->accessSImpl()->surfSymb == "GQ"){
+                // Check if only the last parameter in the cylinder coefficients is different.
+                if (std::none_of(equalParmts.cbegin(), equalParmts.cend() - 1, std::logical_not<bool>()) &&
+                        equalParmts.back() == Standard_False){
+                    if (std::abs(surface->accessSImpl()->surfParameters.back() -
+                                  member.second->accessSImpl()->surfParameters.back()) < 1.0e4 * inputConfig.precision)
+                        equalParmts.back() = Standard_True;
+                }
+            }
+            if (std::none_of(equalParmts.cbegin(), equalParmts.cend(), std::logical_not<bool>()))
+                return member.first;
         }
     }
     return std::nullopt;

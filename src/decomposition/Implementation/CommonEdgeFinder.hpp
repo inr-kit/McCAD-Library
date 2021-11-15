@@ -18,8 +18,8 @@ namespace McCAD::Decomposition{
       ~CommonEdgeFinder();
   private:
       Standard_Real angularTolerance{1.0e-4 * M_PI},
-                    distanceTolerance{1.0e-5},
-                    precision{1.0e-7};
+                    distanceTolerance{1.0e-6},
+                    precision{1.0e-6};
   public:
     std::vector<std::shared_ptr<McCAD::Geometry::Edge>> operator()(
             const std::shared_ptr<McCAD::Geometry::BoundSurface> firstFace,

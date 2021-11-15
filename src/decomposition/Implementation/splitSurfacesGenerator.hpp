@@ -21,7 +21,7 @@ namespace McCAD::Decomposition{
                             const Standard_Real& angularTolerance);
       ~SplitSurfaceGenerator();
   private:
-      Standard_Real edgeTolerance{1.0e-7}, precision{1.0e-7},
+      Standard_Real edgeTolerance{1.0e-8}, precision{1.0e-6},
                     angularTolerance{1.0e-4 * M_PI};
   public:
       std::optional<TopoDS_Face> generatePlaneOnLine(

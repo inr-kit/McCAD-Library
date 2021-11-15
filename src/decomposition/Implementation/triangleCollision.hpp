@@ -15,7 +15,7 @@ namespace McCAD::Decomposition{
                         const Standard_Real& distanceTolerance);
       ~TriangleCollision();
     private:
-      Standard_Real precision{1.0e-7}, distanceTolerance{1.0e-5};
+      Standard_Real precision{1.0e-6}, distanceTolerance{1.0e-6};
     public:
       Standard_Boolean operator()(const McCAD::Geometry::BoundSurface& iFace,
                                   const McCAD::Geometry::MeshTriangle& aTriangle,

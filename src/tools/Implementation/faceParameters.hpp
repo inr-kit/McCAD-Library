@@ -27,7 +27,7 @@ namespace McCAD::Tools{
       FaceParameters(const Standard_Real& precision, const Standard_Real& scalingFactor);
       ~FaceParameters();
   private:
-      Standard_Real precision{1.0e-7}, scalingFactor{1.0};
+      Standard_Real precision{1.0e-6}, scalingFactor{1.0};
       struct PositionUV{Standard_Real u;
                         Standard_Real v;
                        };

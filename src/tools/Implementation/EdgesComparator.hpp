@@ -18,8 +18,8 @@ namespace McCAD::Tools{
       ~EdgesComparator();
   private:
       Standard_Real angularTolerance{1.0e-4 * M_PI},
-                    distanceTolerance{1.0e-5},
-                    precision{1.0e-7};
+                    distanceTolerance{1.0e-6},
+                    precision{1.0e-6};
   public:
       Standard_Boolean operator()(const TopoDS_Edge& firstEdge,
                                   const TopoDS_Edge& secondEdge);
