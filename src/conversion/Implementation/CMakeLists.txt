@@ -14,5 +14,6 @@ include_directories(${PROJECT_SOURCE_DIR}/src/conversion/Implementation
     ${PROJECT_SOURCE_DIR}/src/tools/Interface
     ${PROJECT_SOURCE_DIR}/src/decomposition/Implementation
     ${PROJECT_SOURCE_DIR}/src/geometry/Interface
-    ${PROJECT_SOURCE_DIR}/src/geometry/Implementation)
+    ${PROJECT_SOURCE_DIR}/src/geometry/Implementation
+    ${PROJECT_BINARY_DIR}/src/info)
 McCAD_build_lib(CONVERSION_IMPL)

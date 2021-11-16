@@ -1,0 +1,13 @@
+#ifndef INFO_HPP
+#define INFO_HPP
+
+#include <boost/format.hpp>
+#include <boost/algorithm/string.hpp>
+
+namespace McCAD::Info{
+    std::string getMcCADVersion(){
+        return boost::str(boost::format("%2.1f") %@McCAD_VERSION@);
+    }
+}
+
+#endif // INFO_HPP

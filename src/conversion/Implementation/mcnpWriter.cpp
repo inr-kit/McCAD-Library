@@ -7,6 +7,7 @@
 #include <chrono>
 #include <ctime>
 // McCAD
+#include "info.hpp"
 #include "mcnpWriter.hpp"
 #include "TaskQueue.hpp"
 #include "mcnpExpressionGenerator.hpp"
@@ -91,7 +92,7 @@ McCAD::Conversion::MCNPWriter::findDuplicate(
                 if (std::none_of(equalParmts.cbegin(), equalParmts.cend() - 1, std::logical_not<bool>()) &&
                         equalParmts.back() == Standard_False){
                     if (std::abs(surface->accessSImpl()->surfParameters.back() -
-                                  member.second->accessSImpl()->surfParameters.back()) < 1.0e4 * inputConfig.precision)
+                                  member.second->accessSImpl()->surfParameters.back()) < 1.0e-2)
                         equalParmts.back() = Standard_True;
                 }
             }
@@ -256,7 +257,7 @@ std::string
 McCAD::Conversion::MCNPWriter::adjustLineWidth(const std::string& mainExpr,
                                                const std::string& bodyExpr,
                                                Standard_Integer& continueSpacing){
-    // Adjust cell solids expression to 80 columns max.
+    // Adjust cell solids expression to the chosen maximum number of columns.
     std::string finalExpr = mainExpr;
     std::vector<std::string> splitExpr;
     boost::split(splitExpr, bodyExpr, [](char c) {return c == ' ';});
@@ -282,7 +283,9 @@ McCAD::Conversion::MCNPWriter::writeHeader(std::ofstream& outputStream){
     else materialCells = solidObjMap.size();
     auto timeStart{std::chrono::system_clock::now()};
     std::time_t timeStart_t = std::chrono::system_clock::to_time_t(timeStart);
-    outputStream << "McCad v1.0 generated " << inputConfig.MCcode << " input file. " <<
+    outputStream << boost::str(boost::format("McCAD v%s generated %s input file. ")
+                               % McCAD::Info::getMcCADVersion()
+                               % inputConfig.MCcode) <<
                     std::ctime(&timeStart_t) <<
                     "C     * Material Cells ---- " << materialCells <<
                     "\nC     * Surfaces       ---- " << uniqueSurfaces.size() <<
