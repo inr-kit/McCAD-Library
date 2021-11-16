@@ -419,7 +419,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
                 }
             }
         } else{
-            if(member.first == std::make_tuple(0,0,"r")) continue;
+            if(member.first == std::make_tuple(0,0,"r") && voidCellsMap.size() > 1) continue;
             // Write leaf nodes only.
             for(const Standard_Integer& solidID : member.second->solidIDList){
                 voidSolidsExpr += solidObjMap[solidID]->accessSImpl()->complimentExpr;
