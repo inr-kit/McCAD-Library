@@ -49,6 +49,7 @@ namespace McCAD::Geometry{
       std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
 
       // Conversion variables
+      Standard_Boolean solidIsFillet{Standard_False};
       Standard_Integer solidID{0}, compoundID{0};
       gp_Pnt aabbCenter;
       std::vector<std::shared_ptr<BoundSurface>> intersectionList;
@@ -58,7 +59,7 @@ namespace McCAD::Geometry{
       void initiate(const TopoDS_Shape& aSolidShape);
       void createBB(Standard_Real bndBoxGap = 0.0);
       void calcMeshDeflection(Standard_Real scalingFactor = 100.0);
-      void updateEdgesConvexity(Standard_Real angularTolerance = 1.0e-4,
+      void updateEdgesConvexity(Standard_Real angularTolerance = 1.0e-4 * M_PI,
                                 Standard_Real precision = 1.0e-6);
       void repairSolid(Standard_Real precision = 1.0e-6, Standard_Real faceTolerance = 1.0e-8);
       void generateSurfacesList();

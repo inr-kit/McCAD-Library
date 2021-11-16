@@ -48,6 +48,7 @@ namespace McCAD::Tools{
                                   const PositionUV& position);
       planePrmts genPlSurfParmts(const TopoDS_Face& face);
       cylinderPrmts genCylSurfParmts(const TopoDS_Face& face);
+      Standard_Real getRadian(const TopoDS_Face& cylinder);
       torusPrmts genTorSurfParmts(const TopoDS_Face& face);
   };
 }

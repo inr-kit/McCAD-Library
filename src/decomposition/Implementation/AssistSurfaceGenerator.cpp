@@ -14,6 +14,7 @@
 #include "ShapeView.hpp"
 #include "surfacesMerger.hpp"
 #include "torusConvertor.hpp"
+#include "faceParameters.hpp"
 //OCC
 #include <Standard.hxx>
 #include <PrsDim_AngleDimension.hxx>
@@ -39,6 +40,8 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& sol
     // Generate assistant surface that splits cylinders first.
     if (solidObj.accessSImpl()->cylindersList.size() >= 2){
         AssistCylCylSurfaceGenerator{inputConfig}(solidObj);
+        if(checkFillet(solidObj))
+            solidObj.accessSImpl()->solidIsFillet = Standard_True;
     }
     if (solidObj.accessSImpl()->cylindersList.size() >= 1 &&
             solidObj.accessSImpl()->planesList.size() >= 1){
@@ -117,4 +120,26 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& sol
     filename += suffix;
     writer9.Write(filename.c_str());
     *///debug
+}
+
+Standard_Boolean
+McCAD::Decomposition::AssistSurfaceGenerator::checkFillet(Geometry::CYLSolid& solidObj){
+    // Mark solid as fillet if it consists of two cylinders with no common edge,
+    // and at least three planar surfaces.
+    if(solidObj.accessSImpl()->cylindersList.size() == 2 &&
+            solidObj.accessSImpl()->planesList.size() >= 3 &&
+            solidObj.accessSImpl()->assistFacesList.size() == 0){
+        auto& cylindersList = solidObj.accessSImpl()->cylindersList;
+        // If any cylinder is more than 90 degrees, not a fillet.
+        for(Standard_Integer i = 0; i < cylindersList.size(); ++i){
+            if(std::abs(Tools::FaceParameters{}.getRadian(cylindersList[i]->accessSImpl()->face)
+                    - inputConfig.PI/2.0) > inputConfig.precision) goto goback;
+        }
+        // Sense of surfaces should not be the same.
+        if(cylindersList[0]->accessSImpl()->face.Orientation() ==
+                cylindersList[1]->accessSImpl()->face.Orientation()) goto goback;
+        return Standard_True;
+    }
+    goback:;
+    return Standard_False;
 }

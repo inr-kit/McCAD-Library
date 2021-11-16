@@ -60,6 +60,10 @@ McCAD::Conversion::MCNPWriter::processSolids(
                 // Generate assist conversion surfaces.
                 for(const auto& cylSolidObj : compound->cylSolidsList){
                     Decomposition::AssistSurfaceGenerator{inputConfig}(*cylSolidObj);
+                    // If the solid is fillet, don't use assist surfaces for conversion.
+                    if(cylSolidObj->accessSImpl()->solidIsFillet){
+                        cylSolidObj->accessSImpl()->assistFacesList.clear();
+                    }
                 }
             }
             for(const auto& solidObj : compound->solidsList){
@@ -419,6 +423,8 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
                 }
             }
         } else{
+            // Only ignore the root cell is th map size is > 1. In some cases a
+            // single void cell is generated hich in turn would be the root one.
             if(member.first == std::make_tuple(0,0,"r") && voidCellsMap.size() > 1) continue;
             // Write leaf nodes only.
             for(const Standard_Integer& solidID : member.second->solidIDList){

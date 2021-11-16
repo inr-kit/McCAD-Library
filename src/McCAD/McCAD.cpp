@@ -99,5 +99,5 @@ int main (int argc, char* argv[]){
         timeEnd = std::chrono::system_clock::now();
     }
     std::chrono::duration<double, std::ratio<60>> elapsed = timeEnd - timeStart;
-    std::cout << "Execuion time [m]: " << elapsed.count() << std::endl;
+    std::cout << "Execution time [m]: " << elapsed.count() << std::endl;
 }

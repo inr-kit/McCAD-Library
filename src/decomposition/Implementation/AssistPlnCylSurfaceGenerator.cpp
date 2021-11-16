@@ -7,6 +7,7 @@
 #include "CurveUtilities.hpp"
 #include "splitSurfacesGenerator.hpp"
 #include "surfaceObjCerator.hpp"
+#include "faceParameters.hpp"
 //OCC
 #include <GeomAbs_CurveType.hxx>
 #include <BRep_Tool.hxx>
@@ -31,7 +32,7 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
     edgesMap commonLineEdgesMap, commonCurveEdgesMap;
     for(Standard_Integer i = 0; i < cylindersList.size(); ++i){
         // If cylinder is closed, then ignore the cylindrical surface.
-        if(getRadian(cylindersList[i]->accessSImpl()->face) >= 2*inputConfig.PI) continue;
+        if(Tools::FaceParameters{}.getRadian(cylindersList[i]->accessSImpl()->face) >= 2*inputConfig.PI) continue;
         for(Standard_Integer j = 0; j < planesList.size(); ++j){
             commonEdges = CommonEdgeFinder{inputConfig.angularTolerance,
                     inputConfig.distanceTolerance, inputConfig.precision}(
@@ -85,7 +86,7 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
                     goto useBothEdges;
                 } else if(cylindersList[i]->accessSImpl()->face.Orientation() == TopAbs_FORWARD){
                     // Cylinder is convex.
-                    if(getRadian(cylindersList[i]->accessSImpl()->face) > inputConfig.PI/2.0){
+                    if(Tools::FaceParameters{}.getRadian(cylindersList[i]->accessSImpl()->face) > inputConfig.PI/2.0){
                         useBothEdges:;
                         // Generate split surface through the two edges.
                         if(commonEdgesToUse.size() == 2){
@@ -131,15 +132,6 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
         commonLineEdgesMap.clear();
         commonCurveEdgesMap.clear();
     }
-}
-
-Standard_Real
-McCAD::Decomposition::AssistPlnCylSurfaceGenerator::getRadian(const TopoDS_Face& cylinder){
-    std::array<Standard_Real, 4> uvParameters;
-    // UV parameters in class grom_Cylindrical_Surface: U1 = 0 and U2 = 2*PI.
-    BRepTools::UVBounds(cylinder, uvParameters[0], uvParameters[1], uvParameters[2],
-            uvParameters[3]);
-    return std::abs(uvParameters[1] - uvParameters[0]);
 }
 
 std::optional<std::shared_ptr<McCAD::Geometry::BoundSurface>>

@@ -6,6 +6,7 @@
 #include <CSLib.hxx>
 #include <ElSLib.hxx>
 #include <TColStd_Array1OfReal.hxx>
+#include <BRepTools.hxx>
 
 McCAD::Tools::FaceParameters::FaceParameters(){
 }
@@ -137,6 +138,15 @@ McCAD::Tools::FaceParameters::genCylSurfParmts(const TopoDS_Face& face){
                                       symmetryAxis.Direction(), cylinderParameters,
                                       radius, sense);
     return generatedParmts;
+}
+
+Standard_Real
+McCAD::Tools::FaceParameters::getRadian(const TopoDS_Face& cylinder){
+    std::array<Standard_Real, 4> uvParameters;
+    // UV parameters in class grom_Cylindrical_Surface: U1 = 0 and U2 = 2*PI.
+    BRepTools::UVBounds(cylinder, uvParameters[0], uvParameters[1], uvParameters[2],
+            uvParameters[3]);
+    return std::abs(uvParameters[1] - uvParameters[0]);
 }
 
 McCAD::Tools::FaceParameters::torusPrmts
