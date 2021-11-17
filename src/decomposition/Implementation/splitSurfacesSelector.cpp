@@ -18,11 +18,12 @@ void
 McCAD::Decomposition::SplitSurfacesSelector::generateSplitFacesList(
         std::vector<std::shared_ptr<Geometry::BoundSurface>>& splitFacesList,
         std::vector<std::shared_ptr<Geometry::BoundSurface>>& selectedSplitFacesList){
+    /*
     for(const auto& face : splitFacesList){
         if(face->accessSImpl()->repeatedSurface > 0)
             selectedSplitFacesList.push_back(face);
     }
-    if(!selectedSplitFacesList.empty()) goto sort;
+    if(!selectedSplitFacesList.empty()) goto sort;*/
     // 1st step: Select surfaces that go through 0 boundary surfaces.
     /*
     for(const auto& face : splitFacesList){
@@ -63,6 +64,7 @@ McCAD::Decomposition::SplitSurfacesSelector::sortSplitFaces(
     // Faces which go through more concave edges have a higher priority.
     // If two faces go through the same number of concave edges, the face with
     // less colliding surfaces has a higher priority.
+    std::cout << splitFacesList.size() << std::endl;
     auto comparator = [](const std::shared_ptr<Geometry::BoundSurface>& first,
             const std::shared_ptr<Geometry::BoundSurface>& second){
         const auto& fst = *first->accessSImpl();

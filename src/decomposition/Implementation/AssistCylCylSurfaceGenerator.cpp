@@ -35,6 +35,7 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
                         cylindersList[i], cylindersList[j]);
             if(!commonEdges.empty()){
                 for(Standard_Integer k = 0; k < commonEdges.size(); ++k){
+                    // Only accept edges that are not spot or seem edges.
                     if(!BRep_Tool::IsClosed(commonEdges[k]->accessEImpl()->edge,
                                             cylindersList[i]->accessSImpl()->face) &&
                        !BRep_Tool::Degenerated(commonEdges[k]->accessEImpl()->edge)){
@@ -82,7 +83,7 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::operator()(
                     }
                 }
             } else if (commonLineEdgesMap.size() == 2){
-                // // Cylinder has common edges with more than one cylinder.
+                // Cylinder has common edges with two cylinder.
                 std::vector<std::shared_ptr<Geometry::Edge>> commonEdgesToUse;
                 for(const auto& member : commonLineEdgesMap){
                     if(member.second.size() == 1) commonEdgesToUse.push_back(member.second[0]);

@@ -60,10 +60,6 @@ McCAD::Conversion::MCNPWriter::processSolids(
                 // Generate assist conversion surfaces.
                 for(const auto& cylSolidObj : compound->cylSolidsList){
                     Decomposition::AssistSurfaceGenerator{inputConfig}(*cylSolidObj);
-                    // If the solid is fillet, don't use assist surfaces for conversion.
-                    if(cylSolidObj->accessSImpl()->solidIsFillet){
-                        cylSolidObj->accessSImpl()->assistFacesList.clear();
-                    }
                 }
             }
             for(const auto& solidObj : compound->solidsList){

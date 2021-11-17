@@ -124,10 +124,10 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& sol
 
 Standard_Boolean
 McCAD::Decomposition::AssistSurfaceGenerator::checkFillet(Geometry::CYLSolid& solidObj){
-    // Mark solid as fillet if it consists of two cylinders with no common edge,
-    // and at least three planar surfaces.
+    // Mark solid as fillet if it consists of two cylinders with no common edges
+    // and four planar surfaces.
     if(solidObj.accessSImpl()->cylindersList.size() == 2 &&
-            solidObj.accessSImpl()->planesList.size() >= 3 &&
+            solidObj.accessSImpl()->planesList.size() == 4 &&
             solidObj.accessSImpl()->assistFacesList.size() == 0){
         auto& cylindersList = solidObj.accessSImpl()->cylindersList;
         // If any cylinder is more than 90 degrees, not a fillet.

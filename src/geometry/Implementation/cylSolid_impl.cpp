@@ -6,6 +6,8 @@
 #include "SurfaceUtilities.hpp"
 // OCC
 #include <GeomAbs_SurfaceType.hxx>
+#include <STEPControl_Writer.hxx>
+#include <filesystem>
 
 void
 McCAD::Geometry::CYLSolid::Impl::judgeDecomposeSurfaces(Solid::Impl* solidImpl,
@@ -61,6 +63,21 @@ McCAD::Geometry::CYLSolid::Impl::judgeAssistDecomposeSurfaces(Solid::Impl* solid
         Standard_Integer positiveFaces{0}, negativeFaces{0},
                          numberCollidingSurfaces{0},
                          numberCollidingCurvedSurfaces{0};
+        std::cout << "assist" << std::endl;
+        //debug
+        STEPControl_Writer writer2;
+        writer2.Transfer(iFace->face,
+                         STEPControl_StepModelType::STEPControl_AsIs);
+        Standard_Integer kk = 0;
+        std::string filename = "surface";
+        std::string suffix = ".stp";
+        while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
+            ++kk;
+        }
+        filename += std::to_string(kk);
+        filename += suffix;
+        writer2.Write(filename.c_str());
+        //debug
         for (Standard_Integer j = 0; j < secondfacesList.size(); ++j){
             Standard_Integer side{0};
             if (Decomposition::FaceCollision{precision, distanceTolerance}.operator()(
@@ -74,10 +91,12 @@ McCAD::Geometry::CYLSolid::Impl::judgeAssistDecomposeSurfaces(Solid::Impl* solid
                 if (side == 1) ++positiveFaces;
                 else if (side == -1) ++negativeFaces;
             }
+            std::cout << "side: " << side << std::endl;
         }
         if (positiveFaces > 0 && negativeFaces > 0){
             iFace->splitSurface = Standard_True;
         }
+        std::cout << iFace->splitSurface << std::endl;
         if (iFace->splitSurface){
             iFace->numberCollidingSurfaces = numberCollidingSurfaces;
             iFace->numberCollidingCurvedSurfaces = numberCollidingCurvedSurfaces;

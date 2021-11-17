@@ -39,6 +39,7 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
                         cylindersList[i], planesList[j]);
             if(!commonEdges.empty()){
                 for(Standard_Integer k = 0; k < commonEdges.size(); ++k){
+                    // Only accept edges that are not spot or seem edges
                     if(!BRep_Tool::IsClosed(commonEdges[k]->accessEImpl()->edge,
                                             cylindersList[i]->accessSImpl()->face) &&
                        !BRep_Tool::Degenerated(commonEdges[k]->accessEImpl()->edge)){
@@ -54,7 +55,7 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
             if (commonLineEdgesMap.size() == 1){
                 // The Cylinder has common line edges with a single plane.
                 for(const auto& member : commonLineEdgesMap){
-                    if(!planesList[member.first]->accessSImpl()->splitSurface) continue;
+                    //if(!planesList[member.first]->accessSImpl()->splitSurface) continue;
                     if(member.second.size() == 1){
                         // The cylinder has a single common line edge with a single plane.
                         auto assistSurface = generateThroughLineAxis(
@@ -75,9 +76,9 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
             } else if (commonLineEdgesMap.size() == 2){
                 std::vector<std::shared_ptr<Geometry::Edge>> commonEdgesToUse;
                 for(const auto& member : commonLineEdgesMap){
-                    if(member.second.size() == 1 &&
-                            !planesList[member.first]->accessSImpl()->splitSurface &&
-                            member.second[0]->accessEImpl()->edge.Convex() == 1){
+                    if(member.second.size() == 1 // &&
+                            // !planesList[member.first]->accessSImpl()->splitSurface &&
+                            /* member.second[0]->accessEImpl()->edge.Convex() == 1*/){
                         commonEdgesToUse.push_back(member.second[0]);
                     }
                 }
@@ -86,7 +87,7 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
                     goto useBothEdges;
                 } else if(cylindersList[i]->accessSImpl()->face.Orientation() == TopAbs_FORWARD){
                     // Cylinder is convex.
-                    if(Tools::FaceParameters{}.getRadian(cylindersList[i]->accessSImpl()->face) > inputConfig.PI/2.0){
+                    if(Tools::FaceParameters{}.getRadian(cylindersList[i]->accessSImpl()->face) > 3*inputConfig.PI/4.0){
                         useBothEdges:;
                         // Generate split surface through the two edges.
                         if(commonEdgesToUse.size() == 2){
