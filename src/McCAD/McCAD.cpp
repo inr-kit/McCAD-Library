@@ -17,7 +17,7 @@ int main (int argc, char* argv[]){
     auto timeStart{std::chrono::system_clock::now()},
          timeEnd{std::chrono::system_clock::now()};
     std::time_t timeStart_t = std::chrono::system_clock::to_time_t(timeStart);
-    std::cerr << "Running McCAD v" << McCAD::Info::getMcCADVersion() << " / " <<
+    std::cerr << "Running McCAD v" << McCAD::Info::McCADVersion << " / " <<
                  std::ctime(&timeStart_t) << std::endl;
     std::filesystem::path currentPath = std::filesystem::current_path();
     McCAD::IO::InputConfig inputConfig{currentPath};

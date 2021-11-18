@@ -5,9 +5,7 @@
 #include <boost/algorithm/string.hpp>
 
 namespace McCAD::Info{
-    std::string getMcCADVersion(){
-        return boost::str(boost::format("%2.1f") %@McCAD_VERSION@);
-    }
+    const std::string McCADVersion = boost::str(boost::format("%2.1f") %@McCAD_VERSION@);
 }
 
 #endif // INFO_HPP

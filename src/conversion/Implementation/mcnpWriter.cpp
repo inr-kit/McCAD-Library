@@ -284,7 +284,7 @@ McCAD::Conversion::MCNPWriter::writeHeader(std::ofstream& outputStream){
     auto timeStart{std::chrono::system_clock::now()};
     std::time_t timeStart_t = std::chrono::system_clock::to_time_t(timeStart);
     outputStream << boost::str(boost::format("McCAD v%s generated %s input file. ")
-                               % McCAD::Info::getMcCADVersion()
+                               % McCAD::Info::McCADVersion
                                % inputConfig.MCcode) <<
                     std::ctime(&timeStart_t) <<
                     "C     * Material Cells ---- " << materialCells <<
