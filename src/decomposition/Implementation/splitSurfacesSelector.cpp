@@ -19,18 +19,12 @@ McCAD::Decomposition::SplitSurfacesSelector::generateSplitFacesList(
         std::vector<std::shared_ptr<Geometry::BoundSurface>>& splitFacesList,
         std::vector<std::shared_ptr<Geometry::BoundSurface>>& selectedSplitFacesList){
     /*
-    for(const auto& face : splitFacesList){
-        if(face->accessSImpl()->repeatedSurface > 0)
-            selectedSplitFacesList.push_back(face);
-    }
-    if(!selectedSplitFacesList.empty()) goto sort;*/
     // 1st step: Select surfaces that go through 0 boundary surfaces.
-    /*
     for(const auto& face : splitFacesList){
         if(face->accessSImpl()->numberCollidingSurfaces == 0)
             selectedSplitFacesList.push_back(face);
     }
-    if(!selectedSplitFacesList.empty()) goto sort;
+    if(selectedSplitFacesList.size() >= 2) goto sort;
 
     // 2nd step: select planar surfaces that go through 0 curved surfaces.
     for(const auto& face : splitFacesList){
@@ -38,7 +32,7 @@ McCAD::Decomposition::SplitSurfacesSelector::generateSplitFacesList(
             && face->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Plane))
             selectedSplitFacesList.push_back(face);
     }
-    if(!selectedSplitFacesList.empty()) goto sort;
+    if(selectedSplitFacesList.size() >= 2) goto sort;
 
     // 3th step: select cylindrical surfaces.
     for(const auto& face : splitFacesList){
@@ -46,11 +40,14 @@ McCAD::Decomposition::SplitSurfacesSelector::generateSplitFacesList(
                 !face->accessSImpl()->hasAssistSurface)
             selectedSplitFacesList.push_back(face);
     }
-    if(!selectedSplitFacesList.empty()) goto sort;*/
+    if(selectedSplitFacesList.size() >= 2) goto sort;*/
 
     // 4th step: select the other surfaces
     for(const auto& face : splitFacesList){
         if(face->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Plane))
+            selectedSplitFacesList.push_back(face);
+        else if(face->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Cylinder) &&
+                !face->accessSImpl()->hasAssistSurface)
             selectedSplitFacesList.push_back(face);
     }
     sort:;
@@ -64,7 +61,6 @@ McCAD::Decomposition::SplitSurfacesSelector::sortSplitFaces(
     // Faces which go through more concave edges have a higher priority.
     // If two faces go through the same number of concave edges, the face with
     // less colliding surfaces has a higher priority.
-    std::cout << splitFacesList.size() << std::endl;
     auto comparator = [](const std::shared_ptr<Geometry::BoundSurface>& first,
             const std::shared_ptr<Geometry::BoundSurface>& second){
         const auto& fst = *first->accessSImpl();
@@ -81,7 +77,20 @@ McCAD::Decomposition::SplitSurfacesSelector::sortSplitFaces(
                 (fst.throughConcaveEdges == snd.throughConcaveEdges &&
                  fst.numberCollidingSurfaces == snd.numberCollidingSurfaces &&
                  fst.numberCollidingCurvedSurfaces == snd.numberCollidingCurvedSurfaces &&
-                 fst.repeatedSurface > snd.repeatedSurface);
+                 fst.repeatedSurface > snd.repeatedSurface)
+                ||
+                (fst.throughConcaveEdges == snd.throughConcaveEdges &&
+                 fst.numberCollidingSurfaces == snd.numberCollidingSurfaces &&
+                 fst.numberCollidingCurvedSurfaces == snd.numberCollidingCurvedSurfaces &&
+                 fst.repeatedSurface == snd.repeatedSurface &&
+                 (fst.isAssistSurface && !snd.isAssistSurface))
+                ||
+                (fst.throughConcaveEdges == snd.throughConcaveEdges &&
+                 fst.numberCollidingSurfaces == snd.numberCollidingSurfaces &&
+                 fst.numberCollidingCurvedSurfaces == snd.numberCollidingCurvedSurfaces &&
+                 fst.repeatedSurface == snd.repeatedSurface &&
+                 (fst.isAssistSurface && snd.isAssistSurface) &&
+                 fst.internalLoops > snd.internalLoops);
     };
     std::sort(splitFacesList.begin(), splitFacesList.end(), comparator);
 }

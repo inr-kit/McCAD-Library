@@ -27,6 +27,7 @@ namespace McCAD::Geometry{
     Standard_Integer surfaceNumber;
     Standard_Boolean splitSurface = Standard_False;
     Standard_Boolean hasAssistSurface = Standard_False;
+    Standard_Boolean isAssistSurface = Standard_False;
     Standard_Integer numberCollidingSurfaces = 0;
     Standard_Integer numberCollidingCurvedSurfaces = 0;
     Standard_Integer throughConcaveEdges = 0;

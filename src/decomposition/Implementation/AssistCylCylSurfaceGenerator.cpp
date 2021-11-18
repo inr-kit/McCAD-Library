@@ -152,6 +152,7 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughLine(
         }
         assistSurface->accessBSImpl()->assistEdgesList.push_back(commonEdge);
         assistSurface->accessSImpl()->throughConcaveEdges += 1;
+        assistSurface->accessSImpl()->isAssistSurface = Standard_True;
         // Set the assist surface reference to the original surfaces.
         firstFace->accessSImpl()->hasAssistSurface = Standard_True;
         secondFace->accessSImpl()->hasAssistSurface = Standard_True;
@@ -192,6 +193,7 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughCurve(
         }
         assistSurface->accessBSImpl()->assistEdgesList.push_back(commonEdge);
         assistSurface->accessSImpl()->throughConcaveEdges += 1;
+        assistSurface->accessSImpl()->isAssistSurface = Standard_True;
         // Set the assist surface reference to the original surfaces.
         firstFace->accessSImpl()->hasAssistSurface = Standard_True;
         secondFace->accessSImpl()->hasAssistSurface = Standard_True;
@@ -237,6 +239,7 @@ McCAD::Decomposition::AssistCylCylSurfaceGenerator::generateThroughTwoLines(
         assistSurface->accessBSImpl()->assistEdgesList.push_back(firstEdge);
         assistSurface->accessBSImpl()->assistEdgesList.push_back(secondEdge);
         assistSurface->accessSImpl()->throughConcaveEdges += 2;
+        assistSurface->accessSImpl()->isAssistSurface = Standard_True;
         // Set the assist surface reference to the original surfaces.
         firstFace->accessSImpl()->hasAssistSurface = Standard_True;
         firstEdge->accessEImpl()->useForSplitSurface = Standard_True;
