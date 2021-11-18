@@ -106,6 +106,7 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
                         }
                     } else{
                         // Generate split surfaces through the axis and the edges.
+                        Standard_Integer increment{0};
                         if(commonEdgesToUse.size() >= 1){
                             for(const auto& edge : commonEdgesToUse){
                                 auto assistSurface = generateThroughLineAxis(
@@ -113,9 +114,11 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
                                             solidObj.accessSImpl()->boxDiagonalLength,
                                             solidObj.accessSImpl()->meshDeflection);
                                 if(assistSurface){
+                                    assistSurface.value()->accessSImpl()->surfaceNumber += increment;
                                     solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
                                     solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
                                 }
+                                ++increment;
                             }
                             if(!solidObj.accessSImpl()->assistFacesMap[cylindersList[i]]){
                                 // If there exists a common edge between cylindrical surfaces,

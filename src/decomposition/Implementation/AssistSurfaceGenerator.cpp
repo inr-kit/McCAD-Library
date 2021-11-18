@@ -40,8 +40,6 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& sol
     // Generate assistant surface that splits cylinders first.
     if (solidObj.accessSImpl()->cylindersList.size() >= 2){
         AssistCylCylSurfaceGenerator{inputConfig}(solidObj);
-        if(checkFillet(solidObj))
-            solidObj.accessSImpl()->solidIsFillet = Standard_True;
     }
     if (solidObj.accessSImpl()->cylindersList.size() >= 1 &&
             solidObj.accessSImpl()->planesList.size() >= 1){

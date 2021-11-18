@@ -65,7 +65,7 @@ McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOnLine(
         splitSurfNormal = midwayNormal.Crossed(firstNormal.Crossed(secondNormal));
     }
     gp_Pln splitSurf(splitSurfPoint, splitSurfNormal);
-    return BRepBuilderAPI_MakeFace(splitSurf);
+    return BRepBuilderAPI_MakeFace(splitSurf).Face();
 }
 
 std::optional<TopoDS_Face>
@@ -112,7 +112,7 @@ McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOnCurve(
         splitSurfNormal = firstDir.Crossed(secondDir);
     }
     gp_Pln splitSurf(splitSurfPoint, splitSurfNormal);
-    return BRepBuilderAPI_MakeFace(splitSurf);
+    return BRepBuilderAPI_MakeFace(splitSurf).Face();
 }
 
 std::optional<TopoDS_Face>
@@ -142,7 +142,7 @@ McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOn2Lines(
     gp_Dir firstDir(firstVec), secondDir(secondVec);
     gp_Dir splitSurfNormal = firstDir.Crossed(secondDir);
     gp_Pln splitSurf(secondEdgeMid, splitSurfNormal);
-    return BRepBuilderAPI_MakeFace(splitSurf);
+    return BRepBuilderAPI_MakeFace(splitSurf).Face();
 }
 
 std::optional<TopoDS_Face>
@@ -151,11 +151,12 @@ McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOnLineAxis(
         const std::shared_ptr<Geometry::Edge>& edge){
     gp_Pnt edgeStart{edge->accessEImpl()->startPoint},
            edgeMid{edge->accessEImpl()->middlePoint},
-           edgeEnd{edge->accessEImpl()->endPoint};
-    gp_Vec firstVec(edgeStart, cylinder.Location()),
-           secondVec(edgeEnd, cylinder.Location());
+           edgeEnd{edge->accessEImpl()->endPoint},
+           cylinderOrigin{cylinder.Location()};
+    gp_Vec firstVec(edgeStart, cylinderOrigin),
+           secondVec(edgeEnd, cylinderOrigin);
     gp_Dir firstDir(firstVec), secondDir(secondVec);
     gp_Dir splitSurfNormal = firstDir.Crossed(secondDir);
     gp_Pln splitSurf(edgeMid, splitSurfNormal);
-    return BRepBuilderAPI_MakeFace(splitSurf);
+    return BRepBuilderAPI_MakeFace(splitSurf).Face();
 }

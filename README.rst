@@ -75,5 +75,4 @@ General notes on Usage:
    While in theory the library won't report an error with intersections/overlappings as solids are processed individually,
    it will cause problems for void generation and conversion later on.
 2- There are known issues with the decomposition algorithm which are currently being investigated. Those issues include:
-   * Simplification of tori sometimes results in displaced segments. It is advised to check the pipe bends after decomposition
-     and manually replace the faulty solids.
+   * A list of issues and possible fixes can be found in the manual.
