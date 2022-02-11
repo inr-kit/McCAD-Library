@@ -19,7 +19,7 @@ McCAD::IO::InputConfig::~InputConfig(){
 void
 McCAD::IO::InputConfig::writeTemplate(){
     std::ofstream inputConfig;
-    std::filesystem::path templateName = currentPath / "McCADInputConfig.txt";
+    std::filesystem::path templateName = currentPath / "McCADInputConfig.i";
     inputConfig.open(templateName.string());
     inputConfig << "# McCAD Run Parameters\n"
                    "# ====================\n" << std::endl;
@@ -70,10 +70,10 @@ McCAD::IO::InputConfig::writeTemplate(){
 
 void
 McCAD::IO::InputConfig::readTemplate(){
-    std::ifstream inputConfig("McCADInputConfig.txt");
+    std::ifstream inputConfig("McCADInputConfig.i");
     if (!inputConfig){
         inputFileNames.push_back("input.stp");
-        std::cout << "[WARNING] McCADInputConfig.txt is missing!, proceeding with default parameters:"
+        std::cout << "[WARNING] McCADInputConfig.i is missing!, proceeding with default parameters:"
                      "\nInput  = input.stp" <<
                      "\nResult = inputDecomposed.stp" <<
                      "\nReject = inputRejected.stp" << std::endl;

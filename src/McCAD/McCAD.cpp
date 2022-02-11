@@ -23,13 +23,13 @@ int main (int argc, char* argv[]){
     McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
         inputConfig.writeTemplate();
-        std::cerr << "A template file, McCADInputConfig.txt, with run parameters "
+        std::cerr << "A template file, McCADInputConfig.i, with run parameters "
                      "has been created in\n" << currentPath.string() << std::endl;
         timeEnd = std::chrono::system_clock::now();
     } else if(argc == 2) {
         if (std::string(argv[1]) == "help") {
             std::cout << "Usage:\n"
-                         "   [ ] creates parameters file McCADInputConfig.txt\n"
+                         "   [ ] creates parameters file McCADInputConfig.i\n"
                          "[read] Test loading the input STEP file\n"
                          " [run] Executes McCAD" << std::endl;
             timeEnd = std::chrono::system_clock::now();

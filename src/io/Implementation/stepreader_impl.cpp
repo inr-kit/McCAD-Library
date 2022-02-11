@@ -29,7 +29,7 @@ McCAD::IO::STEPReader::Impl::Impl(const IO::InputConfig& inputConfig) :
     } else fileName = inputConfig.inputFileName;
     if(!std::filesystem::exists(fileName)){
         throw std::runtime_error("The specified input STEP file couldn't be found!"
-                                 "\nHINT: check inputFileName on McCADInputConfig.txt");
+                                 "\nHINT: check inputFileName on McCADInputConfig.i");
     }
 }
 
