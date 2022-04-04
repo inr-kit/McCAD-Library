@@ -9,11 +9,13 @@
 #include "torusConvertor.hpp"
 
 /** ********************************************************************
-* @brief  The main function that executes McCAD decomposition.
-* @param  inputData: object containing list of solids.
-*         inputConfig: object containing configuration parameters from McCADInputConfig file.
-* @date   01/04/2022
-* @author Moataz Harb
+* @brief   The main function that executes McCAD decomposition.
+* @details 
+* @param   inputData is an object containing list[s] of solids from the input STEP file[s]. 
+* @param   inputConfig is an object containing the values of the configuration parameters.
+* @return  
+* @date    01/01/2020
+* @author  Moataz Harb
 * **********************************************************************/
 McCAD::Decomposition::Decompose::Impl::Impl(const General::InputData& inputData,
                                             const IO::InputConfig& inputConfig)
