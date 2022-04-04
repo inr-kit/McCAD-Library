@@ -13,14 +13,12 @@
 #include "decomposition.hpp"
 #include "conversion.hpp"
 
-/*
-* ********************************************************************
-* @brief Main function that executes McCAD per user entered arguments.
-* @param [ ], [help], [read], or [run]
-* @date 01/04/2022
+/** ********************************************************************
+* @brief  Main function that executes McCAD per user entered arguments.
+* @Usage  [ ], [help], [read], or [run]
+* @date   01/04/2022
 * @author Moataz Harb
-* *********************************************************************
-*/
+* **********************************************************************/
 int main (int argc, char* argv[]){
     auto timeStart{std::chrono::system_clock::now()},
          timeEnd{std::chrono::system_clock::now()};

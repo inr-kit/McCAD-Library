@@ -8,6 +8,12 @@
 #include "torSolid_impl.hpp"
 #include "torusConvertor.hpp"
 
+/** ********************************************************************
+* @brief  Main function that executes McCAD per user entered arguments.
+* @Usage  [ ], [help], [read], or [run]
+* @date   01/04/2022
+* @author Moataz Harb
+* **********************************************************************/
 McCAD::Decomposition::Decompose::Impl::Impl(const General::InputData& inputData,
                                             const IO::InputConfig& inputConfig)
   : inputConfig{inputConfig}{
