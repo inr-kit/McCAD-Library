@@ -9,8 +9,9 @@
 #include "torusConvertor.hpp"
 
 /** ********************************************************************
-* @brief  Main function that executes McCAD per user entered arguments.
-* @Usage  [ ], [help], [read], or [run]
+* @brief  The main function that executes McCAD decomposition.
+* @param  inputData: object containing list of solids.
+*         inputConfig: object containing configuration parameters from McCADInputConfig file.
 * @date   01/04/2022
 * @author Moataz Harb
 * **********************************************************************/
