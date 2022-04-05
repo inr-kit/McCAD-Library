@@ -14,10 +14,13 @@
 #include "conversion.hpp"
 
 /** ********************************************************************
-* @brief  The main function that executes McCAD per user arguments.
-* @param  [ ], [help], [read], or [run]
-* @date   01/04/2022
-* @author Moataz Harb
+* @brief   The main function that executes McCAD per user arguments.
+* @details
+* @param   argc is the number of arguments entered.
+* @param   argv is a list of arguments: [], [help], [read], or [run].
+* @return  int
+* @date    01/01/2021
+* @author  Moataz Harb
 * **********************************************************************/
 int main (int argc, char* argv[]){
     auto timeStart{std::chrono::system_clock::now()},
@@ -35,27 +38,27 @@ int main (int argc, char* argv[]){
         timeEnd = std::chrono::system_clock::now();
     } else if(argc == 2) {
         if (std::string(argv[1]) == "help") {
-            // "help" used as argument, print out the menu to screen.
+            // "help" used as argument, print out the available arguments to screen.
             std::cout << "Usage:\n"
                          "   [ ] Creates parameters file McCADInputConfig.i\n"
-                         "[help] Prints out this menu\n"
-                         "[read] Test loading the input STEP file\n"
+                         "[help] Prints out this list\n"
+                         "[read] Test loading the input STEP file[s]\n"
                          " [run] Executes McCAD" << std::endl;
             timeEnd = std::chrono::system_clock::now();
         } else if (std::string(argv[1]) == "read") {
-            // "read" used as argument, load the input STEP file.
+            // "read" used as argument, load the input STEP file[s].
             inputConfig.readTemplate();
             std::cout << "**************************" << std::endl;
             std::cout << "** Loading STEP file(s) **" << std::endl;
             std::cout << "**************************" << std::endl;
-            // Loop over the list of file names and load then consequetively.
+            // Loop over the list of file names and load them consequetively.
             for(int i = 0; i < inputConfig.inputFileNames.size(); ++i){
                 inputConfig.inputFileName = inputConfig.inputFileNames[i];
                 McCAD::IO::STEPReader reader{inputConfig};
             }
             timeEnd = std::chrono::system_clock::now();
         } else if (std::string(argv[1]) == "run") {
-            // "read" used as argument, read the config file.
+            // "run" used as argument, read the config file and then run McCAD.
             inputConfig.readTemplate();
             bool decomposeCondition{inputConfig.decompose},
                  convertCondition{inputConfig.convert};
@@ -85,6 +88,7 @@ int main (int argc, char* argv[]){
                     McCAD::IO::STEPWriter{inputConfig, outputData_result};
                     inputConfig.outputFileName = inputConfig.rejectedFileNames[i];
                     McCAD::IO::STEPWriter{inputConfig, outputData_reject};
+                    // Set the condition on conversion.
                     rejectConversion = outputData_reject.getSize() == 0 ? false : true;
                 }
                 if (convertCondition && !rejectConversion){

@@ -11,18 +11,26 @@
 #include "voidCellManager.hpp"
 #include "conversionWriter.hpp"
 
+/** ********************************************************************
+* @brief   Executes McCAD conversion.
+* @details
+* @param   inputConfig is an object containing the values of the configuration parameters.
+* @return
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 McCAD::Conversion::Convert::Impl::Impl(IO::InputConfig& inputConfig) :
     inputConfig{inputConfig}{
-    inputConfig.readConversion = Standard_True;
-    Standard_Integer componentCounter{0}, solidCounter{0};
-    for(Standard_Integer i = 0; i < inputConfig.conversionFileNames.size(); ++i){
+    inputConfig.readConversion = true;
+    int componentCounter{0}, solidCounter{0};
+    for(int i = 0; i < inputConfig.conversionFileNames.size(); ++i){
         inputConfig.conversionFileName = inputConfig.conversionFileNames[i];
-        IO::STEPReader reader{inputConfig}; //inputConfig.conversionFileName
+        IO::STEPReader reader{inputConfig}; //loads the solids from inputConfig.conversionFileName file.
         inputShapesMap = reader.getInputData().accessImpl()->inputShapesMap;
         if (!inputShapesMap.size() > 0)
             throw std::runtime_error("Error loading STEP file, " + inputConfig.conversionFileName);
         std::cout << "> Found " << inputShapesMap.size() <<
-                     " shapes(s) in the input STEP file" << std::endl;
+                     " shape(s) in the input STEP file" << std::endl;
         solidCounter = getGeomData(inputConfig.materialsInfo[i], componentCounter, solidCounter);
         if (rejectCondition){
             // Write rejected solids to a STEP file.
@@ -44,13 +52,23 @@ McCAD::Conversion::Convert::Impl::Impl(IO::InputConfig& inputConfig) :
 McCAD::Conversion::Convert::Impl::~Impl(){
 }
 
-Standard_Integer
-McCAD::Conversion::Convert::Impl::getGeomData(const std::tuple<std::string, Standard_Real>& matInfo,
-                                              const Standard_Integer& componentIndex,
-                                              const Standard_Integer& solidIndex){
-    // Loop over inputhapesMap and create compound objects.
-    Standard_Integer index{componentIndex};
-    std::map<Standard_Integer, std::shared_ptr<Geometry::Impl::Compound>> tempCompoundMap;
+/** ********************************************************************
+* @brief   Populates rthe components list with input solids.
+* @details
+* @param   matInfo is a tiple of material name and density
+* @param   componentIndex is the order of components/compounds loaded so far from all input files.
+* @param   solidIndex is the order of solids loaded so far from all input files.
+* @return  appended solid index to be used as ID for new solids.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
+int
+McCAD::Conversion::Convert::Impl::getGeomData(const std::tuple<std::string, double>& matInfo,
+                                              const int& componentIndex,
+                                              const int& solidIndex){
+    // Loop over inputShapesMap and create compound objects.
+    int index{componentIndex};
+    std::map<int, std::shared_ptr<Geometry::Impl::Compound>> tempCompoundMap;
     TaskQueue<Policy::Parallel> taskQueue;
     for(const auto& member : inputShapesMap){
         taskQueue.submit([this, index, matInfo, &tempCompoundMap, &member](){
@@ -75,8 +93,10 @@ McCAD::Conversion::Convert::Impl::getGeomData(const std::tuple<std::string, Stan
             ++index;
         }
         if(member.second->rejectedInputShapesList->Length() > 0){
-            rejectCondition = Standard_True;
+            rejectCondition = true;
+            /*//debug
             std::cout << member.second->compoundName << std::endl;
+            */
             rejectConversion.push_back(std::make_tuple(
                                            member.second->compoundName,
                                            *member.second->rejectedInputShapesList));
