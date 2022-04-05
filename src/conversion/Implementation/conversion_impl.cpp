@@ -13,14 +13,12 @@
 
 /** ********************************************************************
 * @brief   Executes McCAD conversion.
-* @details
 * @param   inputConfig is an object containing the values of the configuration parameters.
-* @return
 * @date    01/01/2021
 * @author  Moataz Harb
 * **********************************************************************/
 McCAD::Conversion::Convert::Impl::Impl(IO::InputConfig& inputConfig) :
-    inputConfig{inputConfig}{
+    inputConfig{ inputConfig }, debugLevel{inputConfig.debugLevel }{
     inputConfig.readConversion = true;
     int componentCounter{0}, solidCounter{0};
     for(int i = 0; i < inputConfig.conversionFileNames.size(); ++i){
@@ -54,7 +52,6 @@ McCAD::Conversion::Convert::Impl::~Impl(){
 
 /** ********************************************************************
 * @brief   Populates rthe components list with input solids.
-* @details
 * @param   matInfo is a tiple of material name and density
 * @param   componentIndex is the order of components/compounds loaded so far from all input files.
 * @param   solidIndex is the order of solids loaded so far from all input files.
@@ -94,9 +91,9 @@ McCAD::Conversion::Convert::Impl::getGeomData(const std::tuple<std::string, doub
         }
         if(member.second->rejectedInputShapesList->Length() > 0){
             rejectCondition = true;
-            /*//debug
-            std::cout << member.second->compoundName << std::endl;
-            */
+            if (debugLevel >= 1) {
+                std::cout << member.second->compoundName << std::endl;
+            }
             rejectConversion.push_back(std::make_tuple(
                                            member.second->compoundName,
                                            *member.second->rejectedInputShapesList));

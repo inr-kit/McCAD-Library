@@ -22,6 +22,7 @@ namespace McCAD::Conversion {
         Impl(IO::InputConfig& inputConfig);
         ~Impl();
     private:
+        int debugLevel;
         Tools::SolidType solidType;
         using shapeTuple = std::tuple<TopoDS_Shape, TCollection_ExtendedString>;
         using shapesMap = std::vector<shapeTuple>;

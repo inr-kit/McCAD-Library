@@ -32,6 +32,7 @@ namespace McCAD::IO{
       void populateMatList();
 
       // General input
+      int debugLevel{0};
       std::string units = "cm";
       std::vector<std::string> inputFileNames, decomposedFileNames, rejectedFileNames,
                                rejectedConvFileNames;

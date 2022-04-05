@@ -4,6 +4,8 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <chrono>
+#include <ctime>
 // McCAD
 #include "inputconfig.hpp"
 
@@ -16,15 +18,25 @@ McCAD::IO::InputConfig::InputConfig(const std::filesystem::path& currentPath)
 McCAD::IO::InputConfig::~InputConfig(){
 }
 
+/** ********************************************************************
+* @brief   Writes a template file of run parameters to disk.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::IO::InputConfig::writeTemplate(){
+    auto timeStart{std::chrono::system_clock::now()};
+    std::time_t timeStart_t = std::chrono::system_clock::to_time_t(timeStart);
     std::ofstream inputConfig;
     std::filesystem::path templateName = currentPath / "McCADInputConfig.i";
     inputConfig.open(templateName.string());
-    inputConfig << "# McCAD Run Parameters\n"
+    inputConfig << "# McCAD Run Parameters    " << std::ctime(&timeStart_t) <<
                    "# ====================\n" << std::endl;
     inputConfig << "# Input\n"
                    "# =====\n"
+                   "# > Debug level: 0, 1, 2, 3. [0] provides no debugging outputs.\n"
+                   "debugLevel = 0\n"
+                   "# > The unit used for the input STEP file(s).\n"
                    "units = cm\n"
                    "# > Path to the input STEP file;\n"
                    "inputFileName = input.stp\n" << std::endl;
@@ -68,6 +80,11 @@ McCAD::IO::InputConfig::writeTemplate(){
     inputConfig.close();
 }
 
+/** ********************************************************************
+* @brief   Reads the config file of run parameters.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::IO::InputConfig::readTemplate(){
     std::ifstream inputConfig("McCADInputConfig.i");
@@ -78,7 +95,7 @@ McCAD::IO::InputConfig::readTemplate(){
                      "\nResult = inputDecomposed.stp" <<
                      "\nReject = inputRejected.stp" << std::endl;
     } else {
-        // Read file and populate parameters
+        // Read the file and populate the parameters
         while (!inputConfig.eof()){
             std::string line;
             getline(inputConfig, line);
@@ -86,7 +103,9 @@ McCAD::IO::InputConfig::readTemplate(){
            if (lineSplit.size() == 0 || lineSplit[0] == "#") continue;
            else {
                // General input.
-               if (lineSplit[0] == "units"){
+               if (lineSplit[0] == "debugLevel")
+                   debugLevel = std::stoi(lineSplit[2]);
+               else if (lineSplit[0] == "units"){
                    units = stringToLowerCase(lineSplit[2]);
                    if (units == "cm") conversionFactor = 10.0;
                    else if (units == "m") conversionFactor = 1000.0;
@@ -158,6 +177,14 @@ McCAD::IO::InputConfig::readTemplate(){
     if(convert) populateMatList();
 }
 
+/** ********************************************************************
+* @brief   Splits a line with a specified delimiter.
+* @param   A string to split.
+* @param   A character delimiter.
+* @return  A vector of strings.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 std::vector<std::string>
 McCAD::IO::InputConfig::splitLine(const std::string& line, char delimiter){
     std::istringstream ss(line);
@@ -169,6 +196,13 @@ McCAD::IO::InputConfig::splitLine(const std::string& line, char delimiter){
     return lineSplit;
 }
 
+/** ********************************************************************
+* @brief   Converts a string to lower case.
+* @param   A string to convert to lower case.
+* @return  A lower case string.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 std::string
 McCAD::IO::InputConfig::stringToLowerCase(std::string& string){
     std::transform(string.begin(), string.end(), string.begin(),
@@ -176,6 +210,11 @@ McCAD::IO::InputConfig::stringToLowerCase(std::string& string){
     return string;
 }
 
+/** ********************************************************************
+* @brief   Populates a list of file names for writing output STEP files.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::IO::InputConfig::populateNamesLists(){
     for(int i = 0; i < inputFileNames.size(); ++i){
@@ -185,6 +224,11 @@ McCAD::IO::InputConfig::populateNamesLists(){
     }
 }
 
+/** ********************************************************************
+* @brief   Populates materials list with material info extracted from STEP input files names.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::IO::InputConfig::populateMatList(){
     for(int i = 0; i < inputFileNames.size(); ++i){

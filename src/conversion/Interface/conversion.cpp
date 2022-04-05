@@ -6,7 +6,6 @@
 * @brief   Constructor for the conversion class.
 * @details The constructor passes the inputConfig parameters to the conversion implementation class and creates a unique pointer.
 * @param   inputConfig object.
-* @return  
 * @date    01/01/2021
 * @author  Moataz Harb
 * **********************************************************************/
@@ -19,8 +18,6 @@ McCAD::Conversion::Convert::~Convert(){
 
 /** ********************************************************************
 * @brief   This function is a gateway to access the implementation of the conversion algorithm.
-* @details
-* @param   
 * @return  a unique pointer to the conversion implementation, Convert::Impl, class.
 * @date    01/01/2021
 * @author  Moataz Harb
