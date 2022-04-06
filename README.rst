@@ -1,62 +1,67 @@
 McCAD v1.0
 -----------
-McCAD is an interface library that aides in the conversion of CAD solid models, BRep, to MCNP, CSG.
-The library is written in C++ and can be decomposed into three main parts:
+McCAD is an interface library for the conversion of CAD solid models, Boundary Representation "BRep", to MCNP, Constructive Solid Geometry "CSG".
+The library is written in C++ and can be decomposed into two main parts:
 
 1- Decompostion:
-   * carries tasks related to simplification of complex solids by means of decomposition into
+   * carries tasks related to the simplification of complex solids by means of decomposition into
      primitive convex solids.
 2- Void generation and Conversion:
-   * the main responsibility is the generation of void and conversion of the resulting primitive
-     solids into MCNP input syntax, and later on other MC codes.
+   * the main responsibility is the generation of void and conversion of the primitive solids into
+     MCNP input syntax, and later on to other MC codes.
 
 Decomposition:
 --------------
 * The last working version of McCAD is McCAD-SALOME:
-   * source: https://github.com/moatazharb/McCad-Salome-Source
-   * binary: https://github.com/moatazharb/McCad-Salome-Binaries
+   * docs  : https://github.com/inr-kit/McCad-Salome-Docs
+   * source: https://github.com/inr-kit/McCad-Salome-Source
+   * binary: https://github.com/inr-kit/McCad-Salome-Binaries
  
 * The current library is an isolated and improved algorithm based on the latest updates/changes:
    * source: https://github.com/McCadKIT/FreeCAD-McCad.
 
 Prerequisites:
 --------------
-1- OpenCascade (OCCT version 7.5.0): https://dev.opencascade.org/release
+1- Open CASCADE Technology (version 7.6.0): https://dev.opencascade.org/release
    * Geometry engine for manipulating and decomposing solids.
 
-2- CMake (version 3.14 or above): https://cmake.org/download/
+2- CMake (version 3.23.0): https://cmake.org/download/
    * Standard build system for McCAD library.
 
-3- Boost C++ Library: https://www.boost.org/
+3- Boost C++ Library (Version 1.78.0): https://www.boost.org/
    * Used for multiprocessing.
 
-Installation (Linux):
+Installation (Linux: Ubuntu20.04.3LTS):
 ---------------------
-1- Install CMake
-   * Download CMake tar file https://cmake.org/download/
-   * tar -xzvf cmake-3.17.3.tar.gz
-   * cd cmake-3.17.3
+1- CMake
+   * Download cmake-3.23.0.tar.gz from https://cmake.org/download/
+   * tar -xzvf cmake-3.23.0.tar.gz
+   * cd cmake-3.23.0
    * mkdir build
    * cd build
-   * cmake .. -DCMAKE_USE_OPENSSL=OFF -DCMAKE_INSTALL_PREFIX=. && make && make install
+   * cmake .. -DCMAKE_USE_OPENSSL=OFF -DCMAKE_INSTALL_PREFIX=.
+   * make && make install
 
-2- Install Boost C++ lirary
-   * Download boost_1_73_0.tar.gz from https://dl.bintray.com/boostorg/release/1.73.0/source/
-   * tar -xvzf boost_1_73_0.tar.gz
-   * cd /tools/build
+2- Boost C++ lirary
+   * Download boost_1_78_0.tar.gz from https://www.boost.org/users/download/
+   * tar -xvzf boost_1_78_0.tar.gz
+   * cd boost_1_78_0
+   * mkdir build
+   * cd tools/build
    * ./bootstrap.sh
-   * ./b2 install --prefix=<install Dir>
+   * ./b2 install --prefix=../../build/
 
-3- Install OpenCascade (OCCT)
-   * Download occt-7.5.0.tgz from https://www.opencascade.com/content/latest-release
-   * tar -xzvf occt-7.5.0.tgz
-   * cd occt-7.5.0
+3- Open CASCADE Technology
+   * NOTE: instructions on dependencies installation can be found in https://dev.opencascade.org/doc/occt-7.6.0/overview/html/build_upgrade_building_3rdparty.html
+   * Download opencascade-7.6.0.tgz from https://dev.opencascade.org/release
+   * tar -xzvf opencascade-7.6.0.tgz
+   * cd opencascade-7.6.0
    * mkdir build
    * cd build
-   * cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_LIBRARY_TYPE=Shared -DCMAKE_INSTALL_PREFIX=. 
-              -DINSTALL_TEST_CASES=TRUE -DINSTALL_DOC_Overview=TRUE 
+   * cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_LIBRARY_TYPE=Shared -DCMAKE_INSTALL_PREFIX=. -DINSTALL_TEST_CASES=TRUE -DINSTALL_DOC_Overview=TRUE
+   * make && make install
 
-4- Install McCAD
+4- McCAD
    * McCAD library and executable installation can proceed by providing the custom CMake flags.
    * Building a shared executable is recommended.
 
