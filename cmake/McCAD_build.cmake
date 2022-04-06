@@ -9,7 +9,7 @@ macro (McCAD_CMake_setup)
   option(BUILD_STATIC_EXE "Build static McCAD executable Default: OFF" OFF)
   option(BUILD_SHARED "Build shared McCAD library. Default: ON" ON)
   option(BOOST_CUSTOM_ROOT "Path to BOOST root directory where include and lib dirs can be found")
-  option(OCC_CUSTOM_ROOT "Path to OpenCascade root directory where include and lib dirs can be found")
+  option(OCC_CUSTOM_ROOT "Path to OpenCascade build directory where include and lib dirs can be found")
   option(BUILD_RPATH "Build McCAD Libraries and executables with RPATH. CMAKE_DEFAULT_BUILD_TYPE: OFF" OFF)
 
   if (NOT CMAKE_BUILD_TYPE)
