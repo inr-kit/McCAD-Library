@@ -1,6 +1,6 @@
 McCAD v1.0
 -----------
-McCAD is an interface library for the conversion of CAD solid models, Boundary Representation "BRep", to MCNP, Constructive Solid Geometry "CSG".
+McCAD is an interface library for the conversion of CAD solid models to MCNP input syntax, from Boundary Representation "BRep" to Constructive Solid Geometry "CSG".
 The library is written in C++ and consists of two main algorithms:
 
 1- Decompostion:
@@ -8,7 +8,7 @@ The library is written in C++ and consists of two main algorithms:
 2- Void generation and Conversion:
    * the main responsibility is the generation of void cells and conversion of the primitive solids into MCNP input syntax, and later on to other MC codes.
 
-Decomposition:
+General Notes:
 --------------
 * The latest working version of McCAD is McCAD-SALOME:
    * docs  : https://github.com/inr-kit/McCad-Salome-Docs
@@ -16,9 +16,9 @@ Decomposition:
    * binary: https://github.com/inr-kit/McCad-Salome-Binaries
  
 * The current decomposition algorithm is an isolated and improved algorithm based on the latest updates/changes:
-   * source: https://github.com/McCadKIT/McCad
+   * source: https://github.com/chengcunhan/FreeCAD-McCad
 
-Prerequisites:
+Dependencies:
 --------------
 1- CMake (version 3.23.0): https://cmake.org/download/
    * The standard build system for McCAD library.
@@ -26,7 +26,7 @@ Prerequisites:
 2- Boost C++ Library (Version 1.78.0): https://www.boost.org/
    * Used for multiprocessing.
 
-3- Open CASCADE Technology (version 7.5.0): https://dev.opencascade.org/release
+3- Open CASCADE Technology (version 7.5.0): https://dev.opencascade.org/release/previous
    * The geometry engine used for manipulating and decomposing solids.
 
 Installation (Linux: Ubuntu20.04.3LTS):
@@ -73,14 +73,13 @@ Installation (Windows 10):
 1- Install CMake, Boost, and OCCT
    * Same steps 1 - 3 can be followed by downloading the install files that is suitable for Windows 10
 2- Install McCAD
-   * Building a static executable is recommended.
-   * Path to OCC should be provided through -DOCC_CUSTOM_ROOT=<path to OCC> CMake flag.
-   * Path to Boost should be provided though -DBOOST_CUSTOM_ROOT=<path to Boost> CMake flag.
+   * NOTE: building a static library is recommended!.
+   * Path to OCC should be provided through -DOCC_CUSTOM_ROOT=<PATH to opencascade-7.5.0/build_static> CMake flag.
+   * Path to Boost should be provided though -DBOOST_CUSTOM_ROOT=<PATH to boost_1_78_0> CMake flag.
 
 General notes on Usage:
 -----------------------
-1- The library assumes a clean CAD model (one with no intersections or overlapping).
-   While in theory the library won't report an error with intersections/overlappings as solids are processed individually,
-   it will cause problems for void generation and conversion later on.
-2- There are known issues with the decomposition algorithm which are currently being investigated. Those issues include:
-   * A list of issues and possible fixes can be found in the manual.
+1- The library assumes a clean CAD model, one with no intersections or overlapping.
+   * While in theory the library won't report an error with intersections/overlappings as solids are processed individually, it will cause problems for void generation and conversion later on.
+2- There are known bugs with the decomposition algorithm which are currently being investigated.
+   * A list of bugs and proposed fixes can be found in the manual.
