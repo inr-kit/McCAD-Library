@@ -26,7 +26,7 @@ Prerequisites:
 2- Boost C++ Library (Version 1.78.0): https://www.boost.org/
    * Used for multiprocessing.
 
-3- Open CASCADE Technology (version 7.6.0): https://dev.opencascade.org/release
+3- Open CASCADE Technology (version 7.5.0): https://dev.opencascade.org/release
    * The geometry engine used for manipulating and decomposing solids.
 
 Installation (Linux: Ubuntu20.04.3LTS):
@@ -50,10 +50,10 @@ Installation (Linux: Ubuntu20.04.3LTS):
    * $ ./b2 install --prefix=../../build/
 
 3- Open CASCADE Technology
-   * NOTE: instructions on the installation of dependencies can be found in https://dev.opencascade.org/doc/occt-7.6.0/overview/html/build_upgrade_building_3rdparty.html
-   * Download opencascade-7.6.0.tgz from https://dev.opencascade.org/release and then run the commands below in a terminal.
-   * $ tar -xzvf opencascade-7.6.0.tgz
-   * $ cd opencascade-7.6.0
+   * NOTE: instructions on the installation of dependencies can be found in https://dev.opencascade.org/doc/occt-7.5.0/overview/html/index.html#intro_install_windows
+   * Download opencascade-7.5.0.tgz from https://dev.opencascade.org/release/previous and then run the commands below in a terminal.
+   * $ tar -xzvf opencascade-7.5.0.tgz
+   * $ cd opencascade-7.5.0
    * $ mkdir build
    * $ cd build
    * $ cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_LIBRARY_TYPE=Shared -DCMAKE_INSTALL_PREFIX=. -DINSTALL_TEST_CASES=TRUE -DINSTALL_DOC_Overview=TRUE
@@ -65,7 +65,7 @@ Installation (Linux: Ubuntu20.04.3LTS):
    * $ cd McCAD_refactor
    * $ mkdir build
    * $ cd build
-   * $ CMake .. -DBUILD_STATIC=OFF -DBOOST_CUSTOM_ROOT=<PATH to boost_1_78_0/build> -DOCC_CUSTOM_ROOT=<PATH to opencascade-7.6.0/build_shared> -DBUILD_RPATH=ON
+   * $ CMake .. -DCMAKE_INSTALL_PREFIX=. -DBUILD_STATIC=OFF -DBOOST_CUSTOM_ROOT=<PATH to boost_1_78_0> -DOCC_CUSTOM_ROOT=<PATH to opencascade-7.5.0/build_shared> -DBUILD_RPATH=ON
    * $ make && make install
 
 Installation (Windows 10):
