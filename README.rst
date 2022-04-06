@@ -60,8 +60,13 @@ Installation (Linux: Ubuntu20.04.3LTS):
    * $ make && make install
 
 4- McCAD
-   * McCAD library and executable installation can proceed by providing the custom CMake flags.
-   * Building a shared executable is recommended.
+   * NOTE: building a shared library is recommended!. Should a static library be needed, the user has to insure a compliant installation of Open CASCADE Technology by changing the byuld type, -DBUILD_LIBRARY_TYPE=STATIC.
+   * $ git clone https://github.com/moatazharb/McCAD_refactor
+   * $ cd McCAD_refactor
+   * $ mkdir build
+   * $ cd build
+   * $ CMake .. -DBUILD_STATIC=OFF -DBOOST_CUSTOM_ROOT=<PATH to boost_1_78_0/build> -DOCC_CUSTOM_ROOT=<PATH to opencascade-7.6.0/build_shared> -DBUILD_RPATH=ON
+   * $ make && make install
 
 Installation (Windows 10):
 --------------------------
