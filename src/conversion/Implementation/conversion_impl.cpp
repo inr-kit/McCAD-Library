@@ -41,7 +41,7 @@ McCAD::Conversion::Convert::Impl::Impl(IO::InputConfig& inputConfig) :
         }
         componentCounter += inputShapesMap.size();
     }
-    std::cout << " > Converting " << compoundList.size() << " solid(s)" << std::endl;
+    std::cout << " > Converting " << compoundList.size() << " compound(s)" << std::endl;
     auto voidCell = VoidCellManager{inputConfig}(solidObjList);
     std::cout << "   - Writing MC input file" << std::endl;
     Writer{inputConfig}(compoundList, voidCell);
@@ -92,7 +92,7 @@ McCAD::Conversion::Convert::Impl::getGeomData(const std::tuple<std::string, doub
         if(member.second->rejectedInputShapesList->Length() > 0){
             rejectCondition = true;
             if (debugLevel >= 1) {
-                std::cout << member.second->compoundName << std::endl;
+                std::cout << "Compound with rejected solids: " << member.second->compoundName << std::endl;
             }
             rejectConversion.push_back(std::make_tuple(
                                            member.second->compoundName,

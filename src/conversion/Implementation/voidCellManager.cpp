@@ -9,16 +9,24 @@ McCAD::Conversion::VoidCellManager::VoidCellManager(const IO::InputConfig& input
     voidGeneration{inputConfig.voidGeneration}{
 }
 
-McCAD::Conversion::VoidCellManager::VoidCellManager(const Standard_Boolean& BVHVoid,
-                                                    const Standard_Real& minVoidVolume,
-                                                    const Standard_Integer& maxSolidsPerVoidCell,
-                                                    const Standard_Boolean& voidGeneration) :
+McCAD::Conversion::VoidCellManager::VoidCellManager(const bool& BVHVoid,
+                                                    const double& minVoidVolume,
+                                                    const int& maxSolidsPerVoidCell,
+                                                    const bool& voidGeneration) :
     BVHVoid{BVHVoid}, minVoidVolume{minVoidVolume}, maxSolidsPerVoidCell{maxSolidsPerVoidCell},
     voidGeneration{voidGeneration}{
 }
 
 McCAD::Conversion::VoidCellManager::~VoidCellManager(){}
 
+/** ********************************************************************
+* @brief   Creates the root voide cell.
+* @detail  The operator is used to create the root void cell which includes all solids. If voidGeneration id false, the root cell is used to define the graveyard.
+* @param   solidObjList is a vector of pointers to loaded solids, Geometry::Solid.
+* @returns a shared pointer to the created root void cell, McCAD::Conversion::VoidCell.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 std::shared_ptr<McCAD::Conversion::VoidCell>
 McCAD::Conversion::VoidCellManager::operator()(
         const McCAD::Conversion::VoidCellManager::solidsList& solidObjList){

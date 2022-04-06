@@ -11,8 +11,8 @@
 McCAD::Conversion::VoidCell::VoidCell() : depth{0}, width{0}, key{"r"} {
 }
 
-McCAD::Conversion::VoidCell::VoidCell(const Standard_Integer& depth,
-                                      const Standard_Integer& width,
+McCAD::Conversion::VoidCell::VoidCell(const int& depth,
+                                      const int& width,
                                       const std::string& key) :
     depth{depth}, width{width}, key{key}{
 }
@@ -68,12 +68,12 @@ McCAD::Conversion::VoidCell::updateAABB(){
     zAxis = std::make_tuple(minZ, minZ + std::abs(maxZ-minZ)/2.0, maxZ);
 }
 
-Standard_Real
+double
 McCAD::Conversion::VoidCell::getAABBVolume(){
     GProp_GProps geometryProperties;
     BRepGProp::VolumeProperties(aabbSolid, geometryProperties);
     return geometryProperties.Mass();
-    // Standard_Real volume = std::abs(maxX - minX) * std::abs(maxY - minY) *
+    // double volume = std::abs(maxX - minX) * std::abs(maxY - minY) *
     //        std::abs(maxZ - minZ);
     //return volume;
 }
