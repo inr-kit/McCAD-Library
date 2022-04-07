@@ -9,49 +9,41 @@
 #include <optional>
 // McCAD
 #include <voidCell.hpp>
-// OCC
-#include <Standard.hxx>
 
 namespace McCAD::Conversion{
     class SplitSurfaceSelector{
     public:
-        SplitSurfaceSelector(const Standard_Integer& maxSolidsPerVoidCell,
-                             const Standard_Real& minVoidVolume);
+        SplitSurfaceSelector(const int& maxSolidsPerVoidCell,
+                             const double& minVoidVolume);
         ~SplitSurfaceSelector();
     private:
         // dimMap format: (SolidID, <AABB min, AABB center, AABB max>)
-        using dimMap = std::map<Standard_Integer, std::tuple<Standard_Real,
-                                                             Standard_Real,
-                                                             Standard_Real>>;
+        using dimMap = std::map<int, std::tuple<double, double, double>>;
         // centersDist format: <mu, std>
-        using centersDist = std::vector<std::tuple<Standard_Real, Standard_Real>>;
+        using centersDist = std::vector<std::tuple<double, double>>;
         // centerTuple format: <AABB min, AABB center, AABB max>
-        using centerTuple = std::tuple<Standard_Real, Standard_Real, Standard_Real>;
+        using centerTuple = std::tuple<double, double, double>;
         // candidateTuple format: <solids to the left, position along axis,
         //                         solids to the right, intersections,
         //                         expected numbers of splittings>
-        using candidateTuple = std::tuple<Standard_Integer, Standard_Real,
-                                          Standard_Integer, Standard_Integer,
-                                          Standard_Integer>;
+        using candidateTuple = std::tuple<int, double, int, int, int>;
         using candidateVec = std::vector<candidateTuple>;
         // surfaceTuple format: <cutting plane axis tag, position along the axis
         //                       number of intersections, number of expected splittings>
-        using surfaceTuple = std::tuple<std::string, Standard_Real, Standard_Integer,
-                                        Standard_Integer>;
+        using surfaceTuple = std::tuple<std::string, double, int, int>;
         using surfaceVec = std::vector<surfaceTuple>;
     public:
-        Standard_Integer maxSolidsPerVoidCell;
-        Standard_Real minVoidVolume;
-        Standard_Real xTolerance, yTolerance, zTolerance;
+        int maxSolidsPerVoidCell;
+        double minVoidVolume, xTolerance, yTolerance, zTolerance;
         std::optional<surfaceTuple> process(const dimMap& xMap,
                                             const dimMap& yMap,
                                             const dimMap& zMap,
                                             const std::shared_ptr<VoidCell>& voidCell);
         void calcDimTolerances(const std::shared_ptr<VoidCell>& voidCell);
-        std::tuple<Standard_Real, Standard_Real> calcCentersParameters(const dimMap& aMap);
+        std::tuple<double, double> calcCentersParameters(const dimMap& aMap);
         std::optional<candidateTuple> selectAxisSplitSurface(
                 const dimMap& aMap, const centerTuple& aabbList,
-                const Standard_Real& dimTolerance);
+                const double& dimTolerance);
         candidateTuple checkSplitSurfacePriority(candidateVec& candidates,
                                                  const dimMap& aMap);
     };

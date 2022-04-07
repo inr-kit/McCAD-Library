@@ -1,6 +1,6 @@
 // McCAD
 #include "voidCell.hpp"
-// OCC
+// OCCT
 #include <BRepBndLib.hxx>
 #include <BRepPrimAPI_MakeBox.hxx>
 #include <STEPControl_Writer.hxx>
@@ -19,6 +19,12 @@ McCAD::Conversion::VoidCell::VoidCell(const int& depth,
 
 McCAD::Conversion::VoidCell::~VoidCell(){}
 
+/** ********************************************************************
+* @brief   The function adds solid IDs to a list.
+* @param   members: a map of solids.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::Conversion::VoidCell::addSolidIDs(
         const McCAD::Conversion::VoidCell::membersMap& members){
@@ -27,12 +33,19 @@ McCAD::Conversion::VoidCell::addSolidIDs(
     }
 }
 
+/** ********************************************************************
+* @brief   The function adds solids to the AABB of the void cell.
+* @param   members: a map of solids.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::Conversion::VoidCell::addSolids(
         const McCAD::Conversion::VoidCell::membersMap& members){
     for(const auto& member : members){
         aabb.Add(std::get<0>(member.second));
     }
+    // If the void cell is root then expand the gap so that the graveyard doesn't overlap with solids.
     if(depth == 0) aabb.SetGap(100.0);
     else aabb.SetGap(0.0);
     aabb.Get(minX, minY, minZ, maxX, maxY, maxZ);
@@ -46,6 +59,15 @@ McCAD::Conversion::VoidCell::addSolids(
     zAxis = std::make_tuple(minZ, minZ + std::abs(maxZ-minZ)/2.0, maxZ);
 }
 
+/** ********************************************************************
+* @brief   The function updates the extent of the AABB per the passed coord. from the parent.
+* @detail  The function is needed since after adding the solids to the AABB the extent will
+*          be different from the splittted parent. To avoid having undefined space, the
+*          coordinates of the splitted void cell is saved and used to update the daugher
+*          after adding the solids.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::Conversion::VoidCell::updateAABB(){
     if(depth == 0) return;
@@ -68,23 +90,31 @@ McCAD::Conversion::VoidCell::updateAABB(){
     zAxis = std::make_tuple(minZ, minZ + std::abs(maxZ-minZ)/2.0, maxZ);
 }
 
+/** ********************************************************************
+* @brief   The function calculates the volume of the AABB.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 double
 McCAD::Conversion::VoidCell::getAABBVolume(){
     GProp_GProps geometryProperties;
     BRepGProp::VolumeProperties(aabbSolid, geometryProperties);
     return geometryProperties.Mass();
-    // double volume = std::abs(maxX - minX) * std::abs(maxY - minY) *
-    //        std::abs(maxZ - minZ);
-    //return volume;
 }
 
+/** ********************************************************************
+* @brief   The function writes the AABB to a STEP file.
+* @detail  The key designates the position of the AABB in the binary tree of all void cells.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::Conversion::VoidCell::outputAABB(){
-    STEPControl_Writer writer0;
-    writer0.Transfer(aabbSolid, STEPControl_StepModelType::STEPControl_AsIs);
+    STEPControl_Writer writer;
+    writer.Transfer(aabbSolid, STEPControl_StepModelType::STEPControl_AsIs);
     std::string filename = "./aabb";
     std::string suffix = ".stp";
     filename += "_" + key + std::to_string(depth) + std::to_string(width);
     filename += suffix;
-    writer0.Write(filename.c_str());
+    writer.Write(filename.c_str());
 }

@@ -7,35 +7,80 @@ McCAD::Conversion::SolidsSorter::SolidsSorter(){}
 
 McCAD::Conversion::SolidsSorter::~SolidsSorter(){}
 
-Standard_Boolean
+/** ********************************************************************
+* @details The function compares two candidate split surface tuples based 
+*          on the number of solids on the left.
+* @param   first: a candidate split surface.
+* @param   second: a candidate split surface.
+* @returns true or false.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
+bool
 McCAD::Conversion::SolidsSorter::byLeft(
         const McCAD::Conversion::SolidsSorter::elementTuple& first,
         const McCAD::Conversion::SolidsSorter::elementTuple& second){
     return (std::get<0>(first) < std::get<0>(second));
 }
 
-Standard_Boolean
+/** ********************************************************************
+* @details The function compares two candidate split surface tuples based
+*          on the number of solids on the right.
+* @param   first: a candidate split surface.
+* @param   second: a candidate split surface.
+* @returns true or false.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
+bool
 McCAD::Conversion::SolidsSorter::byRight(
         const McCAD::Conversion::SolidsSorter::elementTuple& first,
         const McCAD::Conversion::SolidsSorter::elementTuple& second){
     return (std::get<2>(first) < std::get<2>(second));
 }
 
-Standard_Boolean
+/** ********************************************************************
+* @details The function compares two candidate split surface tuples based
+*          on the number of intersections with the solids AABBs.
+* @param   first: a candidate split surface.
+* @param   second: a candidate split surface.
+* @returns true or false.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
+bool
 McCAD::Conversion::SolidsSorter::byIntersection(
         const McCAD::Conversion::SolidsSorter::elementTuple& first,
         const McCAD::Conversion::SolidsSorter::elementTuple& second){
     return (std::get<3>(first) < std::get<3>(second));
 }
 
-Standard_Boolean
+/** ********************************************************************
+* @details The function compares two candidate split surface tuples based
+*          on the number of intersections with the solids AABBs.
+* @param   first: a candidate split surface tuple.
+* @param   second: a candidate split surface tuple.
+* @returns true or false.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
+bool
 McCAD::Conversion::SolidsSorter::byIntersection2(
         const McCAD::Conversion::SolidsSorter::elementTuple2& first,
         const McCAD::Conversion::SolidsSorter::elementTuple2& second){
     return (std::get<2>(first) < std::get<2>(second));
 }
 
-Standard_Boolean
+/** ********************************************************************
+* @details The function compares two candidate split surface tuples based
+*          on the number of intersections with the solids AABBs.
+* @param   first: a candidate split surface tuple.
+* @param   second: a candidate split surface tuple.
+* @returns true or false.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
+bool
 McCAD::Conversion::SolidsSorter::bySplitting2(
         const McCAD::Conversion::SolidsSorter::elementTuple2& first,
         const McCAD::Conversion::SolidsSorter::elementTuple2& second){

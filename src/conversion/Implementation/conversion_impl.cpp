@@ -18,9 +18,11 @@
 * @author  Moataz Harb
 * **********************************************************************/
 McCAD::Conversion::Convert::Impl::Impl(IO::InputConfig& inputConfig) :
-    inputConfig{ inputConfig }, debugLevel{inputConfig.debugLevel }{
+    inputConfig{ inputConfig }{
+    // readConversion needs to be set to tru so that the STEP reader knows to get the file
+    // name from the conversion names list not from the input names list.
     inputConfig.readConversion = true;
-    int componentCounter{0}, solidCounter{0};
+    int compoundCounter{0}, solidCounter{0};
     for(int i = 0; i < inputConfig.conversionFileNames.size(); ++i){
         inputConfig.conversionFileName = inputConfig.conversionFileNames[i];
         IO::STEPReader reader{inputConfig}; //loads the solids from inputConfig.conversionFileName file.
@@ -29,17 +31,18 @@ McCAD::Conversion::Convert::Impl::Impl(IO::InputConfig& inputConfig) :
             throw std::runtime_error("Error loading STEP file, " + inputConfig.conversionFileName);
         std::cout << "> Found " << inputShapesMap.size() <<
                      " shape(s) in the input STEP file" << std::endl;
-        solidCounter = getGeomData(inputConfig.materialsInfo[i], componentCounter, solidCounter);
+        solidCounter = getGeomData(inputConfig.materialsInfo[i], compoundCounter, solidCounter);
         if (rejectCondition){
             // Write rejected solids to a STEP file.
             General::InputData outputData;
             outputData.accessImpl()->outputShapesMap = rejectConversion;
             inputConfig.outputFileName = inputConfig.rejectedConvFileNames[i];
             McCAD::IO::STEPWriter{inputConfig, outputData};
-            throw std::runtime_error("Rejected solids have been written to "
-                                     "rejectedConversion.stp. Conversion terminated!");
+            throw std::runtime_error("Rejected solids have been written to " + 
+                                     inputConfig.rejectedConvFileNames[i] +
+                                     ". Conversion terminated!");
         }
-        componentCounter += inputShapesMap.size();
+        compoundCounter += inputShapesMap.size();
     }
     std::cout << " > Converting " << compoundList.size() << " compound(s)" << std::endl;
     auto voidCell = VoidCellManager{inputConfig}(solidObjList);
@@ -51,20 +54,20 @@ McCAD::Conversion::Convert::Impl::~Impl(){
 }
 
 /** ********************************************************************
-* @brief   Populates rthe components list with input solids.
-* @param   matInfo is a tiple of material name and density
-* @param   componentIndex is the order of components/compounds loaded so far from all input files.
-* @param   solidIndex is the order of solids loaded so far from all input files.
-* @return  appended solid index to be used as ID for new solids.
+* @brief   Populates the list of compounds with input solids.
+* @param   matInfo is a tuple of material name and density
+* @param   compoundIndex is the order of compounds loaded so far from all input files. Used to set a unique compound ID.
+* @param   solidIndex is the order of solids loaded so far from all input files. Used to set a unique solid ID.
+* @return  New solid index to be used as ID for new solids.
 * @date    01/01/2021
 * @author  Moataz Harb
 * **********************************************************************/
 int
 McCAD::Conversion::Convert::Impl::getGeomData(const std::tuple<std::string, double>& matInfo,
-                                              const int& componentIndex,
+                                              const int& compoundIndex,
                                               const int& solidIndex){
     // Loop over inputShapesMap and create compound objects.
-    int index{componentIndex};
+    int index{compoundIndex};
     std::map<int, std::shared_ptr<Geometry::Impl::Compound>> tempCompoundMap;
     TaskQueue<Policy::Parallel> taskQueue;
     for(const auto& member : inputShapesMap){
@@ -91,7 +94,8 @@ McCAD::Conversion::Convert::Impl::getGeomData(const std::tuple<std::string, doub
         }
         if(member.second->rejectedInputShapesList->Length() > 0){
             rejectCondition = true;
-            if (debugLevel >= 1) {
+            // Debug level >= 1
+            if (inputConfig.debugLevel >= 1) {
                 std::cout << "Compound with rejected solids: " << member.second->compoundName << std::endl;
             }
             rejectConversion.push_back(std::make_tuple(

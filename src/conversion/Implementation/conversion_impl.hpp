@@ -12,7 +12,7 @@
 #include "SolidType.hpp"
 #include "solid_impl.hpp"
 #include "compound.hpp"
-// OCC
+// OCCT
 #include <TopoDS_Shape.hxx>
 #include <TCollection_ExtendedString.hxx>
 
@@ -22,7 +22,6 @@ namespace McCAD::Conversion {
         Impl(IO::InputConfig& inputConfig);
         ~Impl();
     private:
-        int debugLevel;
         Tools::SolidType solidType;
         using shapeTuple = std::tuple<TopoDS_Shape, TCollection_ExtendedString>;
         using shapesMap = std::vector<shapeTuple>;
@@ -36,7 +35,7 @@ namespace McCAD::Conversion {
         solidsMap rejectConversion;
         std::vector<std::shared_ptr<Geometry::Solid>> solidObjList;
         int getGeomData(const std::tuple<std::string, double>& matInfo,
-                        const int& componentIndex, const int& solidIndex);
+                        const int& compoundIndex, const int& solidIndex);
     };
 }
 

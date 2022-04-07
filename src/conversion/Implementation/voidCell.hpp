@@ -7,7 +7,7 @@
 #include <map>
 // McCAD
 #include "solid_impl.hpp"
-// OCC
+// OCCT
 #include <Bnd_Box.hxx>
 #include <TopoDS_Solid.hxx>
 

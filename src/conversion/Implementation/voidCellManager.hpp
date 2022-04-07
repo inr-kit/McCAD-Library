@@ -10,8 +10,7 @@
 #include "solid_impl.hpp"
 #include "inputconfig.hpp"
 #include "voidCell.hpp"
-// OCC
-#include <Standard.hxx>
+// OCCT
 #include <Bnd_Box.hxx>
 
 namespace McCAD::Conversion{
@@ -21,13 +20,14 @@ namespace McCAD::Conversion{
         VoidCellManager(const bool& BVHVoid,
                         const double& minVoidVolume,
                         const int& maxSolidsPerVoidCell,
-                        const bool& voidGeneration);
+                        const bool& voidGeneration,
+                        const int& debugLevel);
         ~VoidCellManager();
     private:
         using solidsList = std::vector<std::shared_ptr<Geometry::Solid>>;
         // dimMap format: (SolidID, <AABB min, AABB center, AABB max>)
         using dimMap = std::map<int, std::tuple<double, double, double>>;
-        // surfaceTuple format: <cutting plane axis tag, position along the axis
+        // surfaceTuple format: <cutting plane axis tag, position along the axis,
         //                       number of intersections, number of expected splittings>
         using surfaceTuple = std::tuple<std::string, double, int, int>;
         // membersMap format: (SolidID, <AABB, cutting plane axis tag,
@@ -37,9 +37,8 @@ namespace McCAD::Conversion{
         using aabbTuple = std::tuple<double, double>;
         using aabbVec = std::vector<aabbTuple>;
     public:
-        bool voidGeneration;
-        bool BVHVoid;
-        int maxSolidsPerVoidCell;
+        bool voidGeneration, BVHVoid;
+        int maxSolidsPerVoidCell, debugLevel{0};
         double minVoidVolume;
         dimMap xAxis, yAxis, zAxis;
         std::shared_ptr<VoidCell> voidCell;
