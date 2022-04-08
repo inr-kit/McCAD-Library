@@ -63,8 +63,9 @@ namespace McCAD::IO{
       int startSurfNum = 1;
       int startMatNum = 1;
       int maxLineWidth = 80;
-      std::string MCOutputFileName = "MCFile.i";
+      std::string MCFileName = "MCFile.i";
       std::string volumesFileName = "volumes.i";
+      std::string voidCellsFileName = "voidCells.i";
   };
 }
 

@@ -75,8 +75,9 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "startSurfNum = 1\n"
                    "startMatNum = 1\n"
                    "maxLineWidth = 80\n"
-                   "MCOutputFileName = MCFile.i\n"
-                   "volumesFileName = volumes.i\n" << std::endl;
+                   "MCFileName = MCFile.i\n"
+                   "volumesFileName = volumes.i\n" 
+                   "voidCellsFileName = voidCells.i\n" << std::endl;
     inputConfig.close();
 }
 
@@ -165,10 +166,12 @@ McCAD::IO::InputConfig::readTemplate(){
                    startMatNum = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "maxLineWidth")
                    maxLineWidth = std::stoi(lineSplit[2]);
-               else if (lineSplit[0] == "MCOutputFileName")
-                   MCOutputFileName = lineSplit[2];
+               else if (lineSplit[0] == "MCFileName")
+                   MCFileName = lineSplit[2];
                else if (lineSplit[0] == "volumesFileName")
                    volumesFileName = lineSplit[2];
+               else if (lineSplit[0] == "voidCellsFileName")
+                   voidCellsFileName = lineSplit[2];
                else continue;
            }
         }
@@ -179,8 +182,8 @@ McCAD::IO::InputConfig::readTemplate(){
 
 /** ********************************************************************
 * @brief   Splits a line with a specified delimiter.
-* @param   A string to split.
-* @param   A character delimiter.
+* @param   line is a string to split.
+* @param   delimiter is a character delimiter.
 * @return  A vector of strings.
 * @date    01/01/2021
 * @author  Moataz Harb
@@ -198,7 +201,7 @@ McCAD::IO::InputConfig::splitLine(const std::string& line, char delimiter){
 
 /** ********************************************************************
 * @brief   Converts a string to lower case.
-* @param   A string to convert to lower case.
+* @param   string is a string to convert to lower case.
 * @return  A lower case string.
 * @date    01/01/2021
 * @author  Moataz Harb

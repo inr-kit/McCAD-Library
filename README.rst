@@ -50,7 +50,7 @@ Installation (Linux: Ubuntu20.04.3LTS):
    * $ ./b2 install --prefix=../../build/
 
 3- Open CASCADE Technology
-   * NOTE: instructions on the installation of dependencies can be found in https://dev.opencascade.org/doc/occt-7.5.0/overview/html/index.html#intro_install_windows
+   * NOTE: instructions on the installation of dependencies can be found in the side menu by navigating to "Build, Debug and Upgrade > Build 3rd-parties" then following the instructions under "Installation from Official Repositories" in https://dev.opencascade.org/doc/occt-7.5.0/overview/html/index.html#intro_install_windows
    * Download opencascade-7.5.0.tgz from https://dev.opencascade.org/release/previous and then run the commands below in a terminal.
    * $ tar -xzvf opencascade-7.5.0.tgz
    * $ cd opencascade-7.5.0

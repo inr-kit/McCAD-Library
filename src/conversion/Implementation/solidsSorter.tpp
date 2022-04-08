@@ -3,6 +3,14 @@
 // McCAD
 #include "solidsSorter.hpp"
 
+/** ********************************************************************
+* @brief   The function sorts a list of tuples using a given element index.
+* @param   aList is a list of tuples to be sorted.
+* @param   elementIndex is the index of element in a tuple to be used for sorting.
+* @returns A sorted list of tuples.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 template<typename listType>
 listType
 McCAD::Conversion::SolidsSorter::sortByElement(listType& aList, const int& elementIndex){
@@ -12,6 +20,14 @@ McCAD::Conversion::SolidsSorter::sortByElement(listType& aList, const int& eleme
     return aList;
 }
 
+/** ********************************************************************
+* @brief   The function sorts a list of tuples using a given element index.
+* @param   aList is a list of tuples to be sorted.
+* @param   elementIndex is the index of element in a tuple to be used for sorting.
+* @returns A sorted list of tuples.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 template<typename listType>
 listType
 McCAD::Conversion::SolidsSorter::sortByElement2(listType& aList, const int& elementIndex){

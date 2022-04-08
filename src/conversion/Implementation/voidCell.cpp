@@ -21,7 +21,7 @@ McCAD::Conversion::VoidCell::~VoidCell(){}
 
 /** ********************************************************************
 * @brief   The function adds solid IDs to a list.
-* @param   members: a map of solids.
+* @param   members is a map of solids.
 * @date    01/01/2021
 * @author  Moataz Harb
 * **********************************************************************/
@@ -35,7 +35,7 @@ McCAD::Conversion::VoidCell::addSolidIDs(
 
 /** ********************************************************************
 * @brief   The function adds solids to the AABB of the void cell.
-* @param   members: a map of solids.
+* @param   members is a map of solids.
 * @date    01/01/2021
 * @author  Moataz Harb
 * **********************************************************************/
@@ -60,7 +60,7 @@ McCAD::Conversion::VoidCell::addSolids(
 }
 
 /** ********************************************************************
-* @brief   The function updates the extent of the AABB per the passed coord. from the parent.
+* @brief   The function updates the extent of the AABB per the passed coordinates from the parent.
 * @detail  The function is needed since after adding the solids to the AABB the extent will
 *          be different from the splittted parent. To avoid having undefined space, the
 *          coordinates of the splitted void cell is saved and used to update the daugher

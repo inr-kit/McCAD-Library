@@ -10,8 +10,8 @@ McCAD::Conversion::SolidsSorter::~SolidsSorter(){}
 /** ********************************************************************
 * @details The function compares two candidate split surface tuples based 
 *          on the number of solids on the left.
-* @param   first: a candidate split surface.
-* @param   second: a candidate split surface.
+* @param   first is a candidate split surface.
+* @param   second is a candidate split surface.
 * @returns true or false.
 * @date    01/01/2021
 * @author  Moataz Harb
@@ -26,8 +26,8 @@ McCAD::Conversion::SolidsSorter::byLeft(
 /** ********************************************************************
 * @details The function compares two candidate split surface tuples based
 *          on the number of solids on the right.
-* @param   first: a candidate split surface.
-* @param   second: a candidate split surface.
+* @param   first is a candidate split surface.
+* @param   second is a candidate split surface.
 * @returns true or false.
 * @date    01/01/2021
 * @author  Moataz Harb
@@ -42,8 +42,8 @@ McCAD::Conversion::SolidsSorter::byRight(
 /** ********************************************************************
 * @details The function compares two candidate split surface tuples based
 *          on the number of intersections with the solids AABBs.
-* @param   first: a candidate split surface.
-* @param   second: a candidate split surface.
+* @param   first is a candidate split surface.
+* @param   second is a candidate split surface.
 * @returns true or false.
 * @date    01/01/2021
 * @author  Moataz Harb
@@ -58,8 +58,8 @@ McCAD::Conversion::SolidsSorter::byIntersection(
 /** ********************************************************************
 * @details The function compares two candidate split surface tuples based
 *          on the number of intersections with the solids AABBs.
-* @param   first: a candidate split surface tuple.
-* @param   second: a candidate split surface tuple.
+* @param   first is a candidate split surface tuple.
+* @param   second is a candidate split surface tuple.
 * @returns true or false.
 * @date    01/01/2021
 * @author  Moataz Harb
@@ -74,8 +74,8 @@ McCAD::Conversion::SolidsSorter::byIntersection2(
 /** ********************************************************************
 * @details The function compares two candidate split surface tuples based
 *          on the number of intersections with the solids AABBs.
-* @param   first: a candidate split surface tuple.
-* @param   second: a candidate split surface tuple.
+* @param   first is a candidate split surface tuple.
+* @param   second is a candidate split surface tuple.
 * @returns true or false.
 * @date    01/01/2021
 * @author  Moataz Harb

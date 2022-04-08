@@ -15,7 +15,7 @@ McCAD::Conversion::SplitSurfaceSelector::~SplitSurfaceSelector(){}
 /** ********************************************************************
 * @brief   The function adds solids to the AABB of the void cell.
 * @param   xMap, yMap, zMap: maps of solids.
-* @param   voidCell: the void cell to be split.
+* @param   voidCell is the void cell to be split.
 * @returns A selected split surface.
 * @date    01/01/2021
 * @author  Moataz Harb
@@ -60,7 +60,7 @@ McCAD::Conversion::SplitSurfaceSelector::process(
 * @detal   Since the splitting will take place along one of the axes, the minimum void volume criteria
 *          has to be translated to 1D. This is achieved by calculating the extent along each axis that 
 *          corresponced to a minimum volume with the remaining axiex extents fixed.
-* @param   voidCell: the void cell to be split.
+* @param   voidCell is the void cell to be split.
 * @date    01/01/2021
 * @author  Moataz Harb
 * **********************************************************************/
@@ -78,8 +78,8 @@ McCAD::Conversion::SplitSurfaceSelector::calcDimTolerances(
 /** ********************************************************************
 * @brief   The function selects candidate split surfaces.
 * @param   aMap: a map of type McCAD::Conversion::SplitSurfaceSelector::dimMap.
-* @param   aabbList: a tuple of the extent and center of the AABB of the void cell along a single axis.
-* @param   dimTolerance: the 1D equivalent of the minimum void cell condition.
+* @param   aabbList is a tuple of the extent and center of the AABB of the void cell along a single axis.
+* @param   dimTolerance is the 1D equivalent of the minimum void cell condition.
 * @returns An optional selected split surface.
 * @date    01/01/2021
 * @author  Moataz Harb
@@ -131,7 +131,7 @@ McCAD::Conversion::SplitSurfaceSelector::selectAxisSplitSurface(
 
 /** ********************************************************************
 * @brief   The function calculates the mean and standard deviation of the centers of solids' AABB.
-* @param   aMap: a map of solids.
+* @param   aMap is a map of solids.
 * @returns A tuple of the mean and standard deviation.
 * @date    01/01/2021
 * @author  Moataz Harb
@@ -155,7 +155,7 @@ McCAD::Conversion::SplitSurfaceSelector::calcCentersParameters(
 /** ********************************************************************
 * @brief   The function selects candidate split surfaces.
 * @param   candidates: the candidate split surfaces.
-* @param   aMap: a map of solids.
+* @param   aMap is a map of solids.
 * @returns A selected split surface.
 * @date    01/01/2021
 * @author  Moataz Harb

@@ -10,8 +10,6 @@
 #include "compound.hpp"
 #include "voidCell.hpp"
 #include "inputconfig.hpp"
-// OCC
-#include <Standard.hxx>
 
 namespace McCAD::Conversion{
     class Writer {

@@ -3,7 +3,7 @@
 // McCAD
 #include "mcnpExpressionGenerator.hpp"
 #include "senseEvaluator.hpp"
-// OCC
+// OCCT
 #include <gp_Dir.hxx>
 #include <GProp_GProps.hxx>
 #include <BRepGProp.hxx>
@@ -11,18 +11,24 @@
 McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(){}
 
 McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(
-        const Standard_Real& precision, const Standard_Real& scalingFactor) :
+        const double& precision, const double& scalingFactor) :
     precision{precision}, scalingFactor{scalingFactor}{
 }
 
 McCAD::Conversion::MCNPExprGenerator::~MCNPExprGenerator(){
 }
 
+/** ********************************************************************
+* @brief   The operator calls the specialized writer functions of cell, surface, and data cards.
+* @param   solidObj is a solid object.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::Conversion::MCNPExprGenerator::operator()(
         const std::shared_ptr<Geometry::Solid>& solidObj){
     // Generate surface expressions
-    // Calculate point to get sense of surfaces of the solid.
+    // Calculate center of mass to get a sense of surfaces of the solid.
     GProp_GProps geoProps;
     BRepGProp::VolumeProperties(solidObj->accessSImpl()->solidShape, geoProps);
     gp_Pnt solidCenter = geoProps.CentreOfMass();
@@ -32,9 +38,9 @@ McCAD::Conversion::MCNPExprGenerator::operator()(
         solidCenter = solidObj->accessSImpl()->aabbCenter;
     }
     // All generated parameters of surfaces are scaled to the output units specified
-    // by the user in the config file. solidCenter need to be scaled accordingly.
+    // by the user in the config file. solidCenter needs to be scaled accordingly.
     if(scalingFactor != 1.0){
-        // Scale solid center.
+        // Scale the solid center.
         solidCenter.Scale(gp_Pnt{0.0, 0.0, 0.0}, scalingFactor);
     }
     if(solidObj->accessSImpl()->planesList.size() > 0){
@@ -68,10 +74,16 @@ McCAD::Conversion::MCNPExprGenerator::operator()(
             } else throw(std::runtime_error("Error in generating surface expression!"));
         }
     }
-    // Generate cell description
+    // Generate cell description.
     createSurfacesList(solidObj);
 }
 
+/** ********************************************************************
+* @brief   The operator calls the specialized writer functions of void cells.
+* @param   voidCell is a void cell to generate the surface expressions for.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::Conversion::MCNPExprGenerator::operator()(
         const std::shared_ptr<VoidCell>& voidCell){
@@ -79,27 +91,34 @@ McCAD::Conversion::MCNPExprGenerator::operator()(
     genVoidExpr(voidCell);
 }
 
+/** ********************************************************************
+* @brief   The function updates surface parameters so that normals point in the positive half space in the X direction.
+* @param   plSurface is a planar surface.
+* @param   precision is the precision specified on the config file.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::Conversion::MCNPExprGenerator::updateSurfParmts(
         const std::shared_ptr<Geometry::BoundSurface>& plSurface,
-        const Standard_Real& precision){
+        const double& precision){
     // This function aims to adjust the normals to the planes so that they are
     // pointing in the direction of increase of all axes, MCNP style.
-    Standard_Real x, y, z;
+    double x, y, z;
     plSurface->accessSImpl()->normal.Coord(x, y, z);
     if (std::signbit(y) && std::abs(x) < precision && std::abs(z) < precision) {
         // Plane perpendicular to Y axis.
-        plSurface->accessSImpl()->updated = Standard_True;
+        plSurface->accessSImpl()->updated = true;
     } else if (std::signbit(z) && std::abs(x) < precision && std::abs(y) < precision) {
         // Plane perpendicular to Z axis.
-        plSurface->accessSImpl()->updated = Standard_True;
+        plSurface->accessSImpl()->updated = true;
     } else if (std::signbit(x)) {
         if (std::abs(y) < precision && std::abs(z) < precision){
             // Plane perpendicular to X axis.
-            plSurface->accessSImpl()->updated = Standard_True;
+            plSurface->accessSImpl()->updated = true;
         } else {
             // General plane.
-            plSurface->accessSImpl()->updated = Standard_True;
+            plSurface->accessSImpl()->updated = true;
         }
     }
     if(plSurface->accessSImpl()->updated){
@@ -115,11 +134,19 @@ McCAD::Conversion::MCNPExprGenerator::updateSurfParmts(
     }
 }
 
+/** ********************************************************************
+* @brief   The function generates the MCNP surface expression of a planar surface.
+* @param   plSurface is a planar surface.
+* @param   solidCenter is the center of mass of the solid.
+* @param   precision is the precision specified on the config file.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::Conversion::MCNPExprGenerator::genPlSurfExpr(
         const std::shared_ptr<Geometry::BoundSurface>& plSurface,
-        const gp_Pnt& solidCenter, const Standard_Real& precision){
-    // Parameters calculated in OpenCascade:
+        const gp_Pnt& solidCenter, const double& precision){
+    // Parameters calculated in Open Cascade:
     // A * X + B * Y + C * Z + D = 0.0
     // Parameters used by MCNP.
     // AX + BY + CZ - D = 0.0
@@ -128,11 +155,11 @@ McCAD::Conversion::MCNPExprGenerator::genPlSurfExpr(
                      plSurface->accessSImpl()->plane, solidCenter)) ? -1 : 1;
     std::string surfExpr;
     // Generate planar surface expression and store in surface object.
-    Standard_Real parmtA{plSurface->accessSImpl()->surfParameters[0]},
+    //Note that the sifn of parameter D is changed!
+    double parmtA{plSurface->accessSImpl()->surfParameters[0]},
                   parmtB{plSurface->accessSImpl()->surfParameters[1]},
                   parmtC{plSurface->accessSImpl()->surfParameters[2]},
                   parmtD{-1.0*plSurface->accessSImpl()->surfParameters[3]};
-    //if(std::abs(parmtD) >= precision) parmtD *= -1;
     if ((std::abs(parmtA) >= precision) && (std::abs(parmtB) < precision) &&
             (std::abs(parmtC) < precision)){
         plSurface->accessSImpl()->surfSymb = "PX";
@@ -151,10 +178,17 @@ McCAD::Conversion::MCNPExprGenerator::genPlSurfExpr(
     plSurface->accessSImpl()->surfExpr = surfExpr;
 }
 
+/** ********************************************************************
+* @brief   The function generates the MCNP surface expression of a cylindrical surface.
+* @param   cylSurface is a cylindrical surface.
+* @param   precision is the precision specified on the config file.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
         const std::shared_ptr<Geometry::BoundSurface>& cylSurface,
-        const Standard_Real& precision){
+        const double& precision){
     // Parameters calculated in OpenCascade:
     // A1.X**2 + A2.Y**2 + A3.Z**2 + 2.(B1.X.Y + B2.X.Z + B3.Y.Z) + 2.(C1.X + C2.Y + C3.Z) + D = 0.0
     // Parameters used by MCNP.
@@ -192,8 +226,7 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
             // Cylinder parallel to Y-axis.
             cylSurface->accessSImpl()->surfSymb = "C/Y";
             surfExpr += boost::str(boost::format("C/Y %13.7f  %13.7f  %13.7f")
-                                   % cylLocation.X()
-                                   % cylLocation.Z()
+                                   % cylLocation.X() % cylLocation.Z()
                                    % cylSurface->accessSImpl()->radius);
         }
     } else if (std::abs(cylAxisDir.X()) < precision && std::abs(cylAxisDir.Y()) < precision) {
@@ -208,13 +241,12 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
             // Cylinder parallel to Z-axis.
             cylSurface->accessSImpl()->surfSymb = "C/Z";
             surfExpr += boost::str(boost::format("C/Z %13.7f  %13.7f  %13.7f")
-                                   % cylLocation.X()
-                                   % cylLocation.Y()
+                                   % cylLocation.X() % cylLocation.Y()
                                    % cylSurface->accessSImpl()->radius);
         }
     } else {
         // General cylinder.
-        Standard_Real parmtA{cylSurface->accessSImpl()->surfParameters[0]},
+        double parmtA{cylSurface->accessSImpl()->surfParameters[0]},
                       parmtB{cylSurface->accessSImpl()->surfParameters[1]},
                       parmtC{cylSurface->accessSImpl()->surfParameters[2]},
                       parmtD{2*cylSurface->accessSImpl()->surfParameters[3]},
@@ -233,10 +265,17 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
     cylSurface->accessSImpl()->surfExpr = surfExpr;
 }
 
+/** ********************************************************************
+* @brief   The function generates the MCNP surface expression of a toroidal surface.
+* @param   torSurface is a toroidal surface.
+* @param   precision is the precision specified on the config file.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::Conversion::MCNPExprGenerator::genTorSurfExpr(
         const std::shared_ptr<Geometry::BoundSurface>& torSurface,
-        const Standard_Real& precision){
+        const double& precision){
     std::string surfExpr;
     // Generate toroidal surface expression and store in surface object.
     // Get the diretion of the symmetry axis of the torus.
@@ -270,12 +309,19 @@ McCAD::Conversion::MCNPExprGenerator::genTorSurfExpr(
                                % torSurface->accessSImpl()->majorRadius
                                % torSurface->accessSImpl()->minorRadius
                                % torSurface->accessSImpl()->minorRadius);
-    } else throw std::runtime_error("Tori with symmetry axis not parallel to X/Y/Z "
-                                    "isnot yet supported. Please, turn on simplifyTori"
-                                    "option on the input config. Conversion terminated!");
+    } else throw std::runtime_error("Tori with a symmetry axis not parallel to X/Y/Z "
+                                    "is not supported in MCNP. Please turn on simplifyTori"
+                                    "option on the input config and rerun decomposition."
+                                    "Conversion terminated!");
     torSurface->accessSImpl()->surfExpr = surfExpr;
 }
 
+/** ********************************************************************
+* @brief   The function adds the surfaces of the solid to a list to be used for cell expression generation.
+* @param   solidObj is a solid object.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::Conversion::MCNPExprGenerator::createSurfacesList(
         const std::shared_ptr<Geometry::Solid>& solidObj){
@@ -323,6 +369,12 @@ McCAD::Conversion::MCNPExprGenerator::genCellExpr(
     solidObj->accessSImpl()->complimentExpr = complimentExpr;
 }
 
+/** ********************************************************************
+* @brief   The function genrates the surface expression of the void cells.
+* @param   voidCell is a void cell to generate the surface expressions for.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::Conversion::MCNPExprGenerator::genVoidExpr(const std::shared_ptr<VoidCell>& voidCell){
     std::string voidSurfExpr;
