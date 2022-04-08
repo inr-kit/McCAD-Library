@@ -61,8 +61,8 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "convert = false\n"
                    "# > Choose whether or not to generate void cells;\n"
                    "voidGeneration = false\n"
-                   "# > Condition to treat a component as a single cell or a group of cells.\n"
-                   "componentIsSingleCell = false\n"
+                   "# > Condition to treat a compound as a single cell or a group of cells.\n"
+                   "compoundIsSingleCell = false\n"
                    "# > Minimum acceptable void volume shouldn;t be less than minSolidVolume;\n"
                    "minVoidVolume = 1.0 [cm3]\n"
                    "# > A larger number will result in fewer void cells but longer cell expressions;\n"
@@ -148,8 +148,8 @@ McCAD::IO::InputConfig::readTemplate(){
                    convert = stringToLowerCase(lineSplit[2]) == "false" ? false : true;
                else if (lineSplit[0] == "voidGeneration")
                    voidGeneration = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
-               else if (lineSplit[0] == "componentIsSingleCell")
-                   componentIsSingleCell = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
+               else if (lineSplit[0] == "compoundIsSingleCell")
+                   compoundIsSingleCell = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
                else if (lineSplit[0] == "minVoidVolume")
                    minVoidVolume = std::stof(lineSplit[2]) * std::pow(conversionFactor, 3);
                else if (lineSplit[0] == "maxSolidsPerVoidCell")

@@ -54,7 +54,7 @@ namespace McCAD::IO{
       // Void generation and conversion
       bool convert = false;
       bool voidGeneration = false;
-      bool componentIsSingleCell = false;
+      bool compoundIsSingleCell = false;
       double minVoidVolume = 1000.0; // in mm^3
       int maxSolidsPerVoidCell = 40;
       bool BVHVoid = false;

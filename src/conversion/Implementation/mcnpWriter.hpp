@@ -27,7 +27,7 @@ namespace McCAD::Conversion{
         using voidsMap = std::map<std::tuple<int, int, std::string>, std::shared_ptr<VoidCell>>;
     public:
         IO::InputConfig inputConfig;
-        int continueSpacing{6};
+        int continueSpacing{ 6 }, materialSurfacesCount{0};
         double scalingFactor{1.0}, radius;
         surfacesMap uniquePlanes, uniqueCylinders, uniqueTori;
         finalMap uniqueSurfaces;

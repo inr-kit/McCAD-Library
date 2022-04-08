@@ -34,6 +34,7 @@ McCAD::Conversion::MCNPWriter::operator()(
         const std::shared_ptr<VoidCell>& voidCell){
     processSolids(compoundList);
     addUniqueSurfNumbers(compoundList);
+    materialSurfacesCount = uniqueSurfaces.size();
     createMaterialsMap(inputConfig.materialsInfo);
     createSolidsMap(compoundList);
     createVoidMap(voidCell);
@@ -310,6 +311,15 @@ McCAD::Conversion::MCNPWriter::createVoidMap(
     }
 }
 
+/** ********************************************************************
+* @brief   The function adjusts the cell expression to a 80 columns maximum per line.
+* @param   mainExpr is a string of cell ID and material density.
+* @param   bodyExpr is a string of surface expressions.
+* @param   continueSpacing is the number of white spaces to prepend on the continue line.
+* @returns Adjected string.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 std::string
 McCAD::Conversion::MCNPWriter::adjustLineWidth(const std::string& mainExpr,
                                                const std::string& bodyExpr,
@@ -342,7 +352,7 @@ McCAD::Conversion::MCNPWriter::adjustLineWidth(const std::string& mainExpr,
 void
 McCAD::Conversion::MCNPWriter::writeHeader(std::ofstream& outputStream){
     int materialCells{0};
-    if(inputConfig.componentIsSingleCell) materialCells = compoundObjMap.size();
+    if(inputConfig.compoundIsSingleCell) materialCells = compoundObjMap.size();
     else materialCells = solidObjMap.size();
     auto timeStart{std::chrono::system_clock::now()};
     std::time_t timeStart_t = std::chrono::system_clock::to_time_t(timeStart);
@@ -350,9 +360,10 @@ McCAD::Conversion::MCNPWriter::writeHeader(std::ofstream& outputStream){
                                % McCAD::Info::McCADVersion
                                % inputConfig.MCcode) <<
                     std::ctime(&timeStart_t) <<
-                    "C     * Material Cells ---- " << materialCells <<
-                    "\nC     * Surfaces       ---- " << uniqueSurfaces.size() <<
-                    "\nC     * Void cells     ---- " << voidCellsMap.size() << std::endl;
+                    "C   * Material Cells    ---- " << materialCells <<
+                    "\nC   * Material Surfaces ---- " << materialSurfacesCount <<
+                    "\nC   * Void cells        ---- " << voidCellsMap.size() << 
+                    "\nC   * Void Surfaces     ---- " << uniqueSurfaces.size() - materialSurfacesCount << std::endl;
 }
 
 /** ********************************************************************
@@ -367,26 +378,26 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
                                              std::ofstream& volumeStream){
     outputStream << "c ==================== Cell Cards ====================" << std::endl;
     int cellNumber = inputConfig.startCellNum;
-    // Need to loop over all solids in a compSolid, write header with maerial,
-    // component name, cell range, etc. Adjust width of expression
+    // Need to loop over all solids in a compSolid, write header with material,
+    // component name, cell range, etc. Adjust width of expression to 80 columns.
     for(const auto& compound : compoundObjMap){
         outputStream << "c ============" <<
-                        "\nc * Component: " << compound.second->compoundName <<
+                        "\nc * Compound : " << compound.second->compoundName <<
                         "\nc * Subsolids: " << compound.second->solidsList.size() <<
                         "\nc * Material : " << std::get<0>(compound.second->matInfo) <<
                         "\nc * Density  : " << std::get<1>(compound.second->matInfo);
         int numCells{1};
-        if(!inputConfig.componentIsSingleCell) numCells = compound.second->solidsList.size();
+        if(!inputConfig.compoundIsSingleCell) numCells = compound.second->solidsList.size();
         outputStream << "\nc * Cells    : " << cellNumber << " - " << cellNumber + numCells - 1 <<
                         "\nc ============" << std::endl;
-        if(inputConfig.componentIsSingleCell){
+        if(inputConfig.compoundIsSingleCell){
             std::string cellExpr{boost::str(boost::format("%d") % cellNumber)};
             if (cellExpr.size() < 5) cellExpr.resize(5, *const_cast<char*>(" "));
             continueSpacing = cellExpr.size() + 1;
             // Add materials.
             if(std::get<0>(compound.second->matInfo) == "void" ||
                     std::get<1>(compound.second->matInfo) == 0.0){
-                cellExpr += boost::str(boost::format(" %9.4f") % 0.0);
+                cellExpr += boost::str(boost::format(" %9.5f") % 0.0);
             } else{
                 cellExpr += boost::str(boost::format(" %d %9.5f")
                                        % compound.second->matID
@@ -402,9 +413,9 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
                 cellSolidsExpr += ")";
                 compoundVolume += compound.second->solidsList.at(i)->accessSImpl()->solidVolume;
             }
-            cellSolidsExpr += " Imp:N=1.0 Imp:P=1.0 Imp:E=0.0";
+            cellSolidsExpr += " Imp:N=1.0 Imp:P=1.0 Imp:E=0.0 $U=1";
             outputStream << adjustLineWidth(cellExpr, cellSolidsExpr, continueSpacing) << std::endl;
-            std::string compoundData{boost::str(boost::format("%d  %11.5f  %s")
+            std::string compoundData{boost::str(boost::format("%d %9.5E %s")
                                                  % cellNumber
                                                  % (compoundVolume*std::pow(scalingFactor, 3))
                                                  % compound.second->compoundName)};
@@ -419,9 +430,9 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
                 // Add materials.
                 if(std::get<0>(compound.second->matInfo) == "void" ||
                         std::get<1>(compound.second->matInfo) == 0.0){
-                    cellExpr += boost::str(boost::format(" %9.4f") % 0.0);
+                    cellExpr += boost::str(boost::format(" %9.5f") % 0.0);
                 } else{
-                    cellExpr += boost::str(boost::format(" %d %9.4f")
+                    cellExpr += boost::str(boost::format(" %d %9.5f")
                                            % compound.second->matID
                                            % std::get<1>(compound.second->matInfo));
                 }
@@ -429,9 +440,9 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
                 solidVolume = compound.second->solidsList.at(i)->accessSImpl()->solidVolume;
                 MCNPExprGenerator{}.genCellExpr(compound.second->solidsList.at(i));
                 cellSolidsExpr += compound.second->solidsList.at(i)->accessSImpl()->cellExpr;
-                cellSolidsExpr += " Imp:N=1.0 Imp:P=1.0 Imp:E=0.0";
+                cellSolidsExpr += " Imp:N=1.0 Imp:P=1.0 Imp:E=0.0 $U=1";
                 outputStream << adjustLineWidth(cellExpr, cellSolidsExpr, continueSpacing) << std::endl;
-                std::string solidData{boost::str(boost::format("%d %11.5f %s")
+                std::string solidData{boost::str(boost::format("%d %9.5E %s")
                                                     % cellNumber
                                                     % (solidVolume*std::pow(scalingFactor, 3))
                                                     % compound.second->compoundName)};
@@ -445,7 +456,7 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
 void
 McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream){
     int voidNumber{inputConfig.startCellNum};
-    if(inputConfig.componentIsSingleCell) voidNumber += compoundObjMap.size();
+    if(inputConfig.compoundIsSingleCell) voidNumber += compoundObjMap.size();
     else voidNumber += solidObjMap.size();
     outputStream << "c ==================== Void Cells ====================" << std::endl;
     if(!inputConfig.voidGeneration) {
@@ -587,7 +598,7 @@ McCAD::Conversion::MCNPWriter::writeDataCard(std::ofstream& outputStream){
     outputStream << sourceExpr << std::endl;
     if(compoundObjMap.size() > 1){
         int numCells{1};
-        if(inputConfig.componentIsSingleCell) numCells = compoundObjMap.size();
+        if(inputConfig.compoundIsSingleCell) numCells = compoundObjMap.size();
         else numCells = solidObjMap.size();
         std::string volTallyExpr{boost::str(boost::format("F4:N %d %di %d")
                                             % inputConfig.startCellNum

@@ -337,32 +337,36 @@ McCAD::Conversion::MCNPExprGenerator::createSurfacesList(
     }
 }
 
+/** ********************************************************************
+* @brief   The function genrates the cell expression of the material cells.
+* @param   solidObj is a solid object.
+* @date    01/01/2021
+* @author  Moataz Harb
+* **********************************************************************/
 void
 McCAD::Conversion::MCNPExprGenerator::genCellExpr(
         const std::shared_ptr<Geometry::Solid>& solidObj){
     std::string cellExpr, complimentExpr;
     complimentExpr += " (";
     for(const auto& surface : solidObj->accessSImpl()->intersectionList){
-        // add surface number and expression to surfacesList.
         auto surfaceIDSigned = surface->accessSImpl()->surfSense *
                 surface->accessSImpl()->uniqueID;
         cellExpr += boost::str(boost::format("%d ") % surfaceIDSigned);
         complimentExpr += boost::str(boost::format("%d : ") % (-1*surfaceIDSigned));
     }
-    cellExpr.resize(cellExpr.size() - 1);
-    complimentExpr.resize(complimentExpr.size() - 3);
+    cellExpr.resize(cellExpr.size() - 1);             // Remove the last space.
+    complimentExpr.resize(complimentExpr.size() - 3); // Remove the last three spaces.
     complimentExpr += ")";
     if(solidObj->accessSImpl()->unionList.size() > 1){
         cellExpr += " (";
         for(const auto& surface : solidObj->accessSImpl()->unionList){
-            // add surface number and expression to surfacesList.
             auto surfaceIDSigned = surface->accessSImpl()->surfSense *
                     surface->accessSImpl()->uniqueID;
             cellExpr += boost::str(boost::format("%d : ") % surfaceIDSigned);
             complimentExpr += boost::str(boost::format("%d ") % (-1*surfaceIDSigned));
         }
-        cellExpr.resize(cellExpr.size() - 3);     // Remove the last character
-        cellExpr += ")";
+        cellExpr.resize(cellExpr.size() - 3);     // Remove the last three spaces.
+        cellExpr += ")";                          // Remove the last space.
         complimentExpr.resize(complimentExpr.size() - 1);
     }
     solidObj->accessSImpl()->cellExpr = cellExpr;
