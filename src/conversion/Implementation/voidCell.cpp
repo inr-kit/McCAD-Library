@@ -22,7 +22,7 @@ McCAD::Conversion::VoidCell::~VoidCell(){}
 /** ********************************************************************
 * @brief   The function adds solid IDs to a list.
 * @param   members is a map of solids.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -36,7 +36,7 @@ McCAD::Conversion::VoidCell::addSolidIDs(
 /** ********************************************************************
 * @brief   The function adds solids to the AABB of the void cell.
 * @param   members is a map of solids.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -65,7 +65,7 @@ McCAD::Conversion::VoidCell::addSolids(
 *          be different from the splittted parent. To avoid having undefined space, the
 *          coordinates of the splitted void cell is saved and used to update the daugher
 *          after adding the solids.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -92,7 +92,7 @@ McCAD::Conversion::VoidCell::updateAABB(){
 
 /** ********************************************************************
 * @brief   The function calculates the volume of the AABB.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 double
@@ -105,7 +105,7 @@ McCAD::Conversion::VoidCell::getAABBVolume(){
 /** ********************************************************************
 * @brief   The function writes the AABB to a STEP file.
 * @detail  The key designates the position of the AABB in the binary tree of all void cells.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void

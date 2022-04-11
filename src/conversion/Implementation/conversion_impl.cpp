@@ -14,7 +14,7 @@
 /** ********************************************************************
 * @brief   Executes McCAD conversion.
 * @param   inputConfig is an object containing the values of the configuration parameters.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 McCAD::Conversion::Convert::Impl::Impl(IO::InputConfig& inputConfig) :
@@ -59,7 +59,7 @@ McCAD::Conversion::Convert::Impl::~Impl(){
 * @param   compoundIndex is the order of compounds loaded so far from all input files. Used to set a unique compound ID.
 * @param   solidIndex is the order of solids loaded so far from all input files. Used to set a unique solid ID.
 * @return  New solid index to be used as ID for new solids.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 int

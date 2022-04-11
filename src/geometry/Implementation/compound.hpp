@@ -10,8 +10,7 @@
 #include "cylSolid_impl.hpp"
 #include "torSolid_impl.hpp"
 #include "mixedSolid_impl.hpp"
-// OCC
-#include <Standard.hxx>
+// OCCT
 #include <TopoDS_Shape.hxx>
 #include <TopTools_HSequenceOfShape.hxx>
 #include <TCollection_ExtendedString.hxx>
@@ -24,8 +23,8 @@ namespace McCAD::Geometry::Impl{
 
     TopoDS_Shape compoundShape;
     TCollection_ExtendedString compoundName;
-    Standard_Integer matID{0}, compoundID{0};
-    std::tuple<std::string, Standard_Real> matInfo;
+    int matID{0}, compoundID{0};
+    std::tuple<std::string, double> matInfo;
 
     std::vector<std::shared_ptr<Geometry::Solid>> solidsList;
     std::vector<std::shared_ptr<Geometry::PLSolid>> planarSolidsList;
@@ -37,6 +36,8 @@ namespace McCAD::Geometry::Impl{
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputShapesList;
     std::unique_ptr<TopTools_HSequenceOfShape> subSolidsList;
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
+    // Conversion variables
+    int MCCellID{ 0 };
   };
 }
 

@@ -29,15 +29,13 @@ namespace McCAD::Conversion{
       Bnd_Box aabb;
       TopoDS_Solid aabbSolid;
       bool splitted{Standard_False};
-      int depth, width;
-      std::string key;
+      int depth, width, voidSurfNumber, MCCellID{0};
+      std::string key, voidExpr, voidSurfExpr;
       std::vector<int> solidIDList;
       std::vector<std::shared_ptr<VoidCell>> daughterVoidCells;
       double minX{0}, minY{0}, minZ{0}, maxX{0}, maxY{0}, maxZ{0};
       centerTuple xAxis, yAxis, zAxis;
       updateTuple xAxisUpdate, yAxisUpdate, zAxisUpdate;
-      std::string voidExpr, voidSurfExpr;
-      int voidSurfNumber;
 
       void addSolidIDs(const membersMap& members);
       void addSolids(const membersMap& members);

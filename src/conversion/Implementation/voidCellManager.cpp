@@ -26,7 +26,7 @@ McCAD::Conversion::VoidCellManager::~VoidCellManager(){}
 *          If voidGeneration is false, the root cell is used to define the graveyard.
 * @param   solidObjList is a vector of pointers to loaded solids objects.
 * @returns voidCell is a shared pointer to the created root void cell.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 std::shared_ptr<McCAD::Conversion::VoidCell>
@@ -49,7 +49,7 @@ McCAD::Conversion::VoidCellManager::operator()(
 * @param   width is the width of the void cell in the binary tree, 0 means left and 1 means right.
 * @param   key is string identifies whether the void cell is the left or right half.
 * @returns voidCell is a shared pointer to the created void cell.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 std::shared_ptr<McCAD::Conversion::VoidCell>
@@ -71,7 +71,7 @@ McCAD::Conversion::VoidCellManager::operator()(
 * @param   key is string identifies whether the void cell is the left or right half.
 * @param   xAxisAABB, yAxisAABB, zAxisAABB are the updated extent of the void cell.
 * @returns voidCell is a shared pointer to the created void cell.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 std::shared_ptr<McCAD::Conversion::VoidCell>
@@ -92,7 +92,7 @@ McCAD::Conversion::VoidCellManager::operator()(
 * @brief   Creates a map with solids AABB as values and the solids IDs as keys.
 * @param   solidObjList is a vector of pointers to loaded solids objects.
 * @returns members is the created maps of solids.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 McCAD::Conversion::VoidCellManager::membersMap
@@ -111,7 +111,7 @@ McCAD::Conversion::VoidCellManager::createLists(
 * @detail  The function operates on the list of solids and selects and splits voide
 *          cells recursively.
 * @param   members is a map of solids.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -180,7 +180,7 @@ McCAD::Conversion::VoidCellManager::perform(
 /** ********************************************************************
 * @brief   The function creates list of AABB extension along the 3 axises.
 * @param   members is a map of solids.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -198,7 +198,7 @@ McCAD::Conversion::VoidCellManager::populateLists(
 /** ********************************************************************
 * @brief   The function adds solids and solids IDs to the void cell object.
 * @param   members is a map of solids.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -213,7 +213,7 @@ McCAD::Conversion::VoidCellManager::updateVoidCell(
 * @param   members is a map of solids in the void cell.
 * @param   surface is the selected splitting surface.
 * @returns A pair of solid maps.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 std::pair<McCAD::Conversion::VoidCellManager::membersMap,
@@ -238,7 +238,7 @@ McCAD::Conversion::VoidCellManager::splitVoidCell(
 * @param   members is a map of solids in the void cell.
 * @param   axis is a map of the extent of the solids AABBS along a specifid axis.
 * @returns A pair of solid maps.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 std::pair<McCAD::Conversion::VoidCellManager::membersMap,
@@ -278,7 +278,7 @@ McCAD::Conversion::VoidCellManager::splitMembersList(
 * @param   surface is the selected splitting surface.
 * @param   sense is the position of the updated AABB relative to the splitting surface.
 * @returns Updated AABB coordinates of the void cell.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 McCAD::Conversion::VoidCellManager::aabbVec
@@ -329,7 +329,7 @@ McCAD::Conversion::VoidCellManager::updateBoundaries(
 * @param   surface is the selected splitting surface.
 * @param   sense is the desired position of the updated AABB relative to the splitting surface. 
 * @returns An updated AABB.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 Bnd_Box

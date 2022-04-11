@@ -10,8 +10,7 @@
 #include "solid.hpp"
 #include "tools_impl.hpp"
 #include "boundSurface_impl.hpp"
-// OCC
-#include <Standard.hxx>
+// OCCT
 #include <Bnd_OBB.hxx>
 #include <Bnd_Box.hxx>
 #include <TopoDS_Solid.hxx>
@@ -32,8 +31,8 @@ namespace McCAD::Geometry{
       Bnd_Box aabb;
       TopoDS_Solid solid;
       TopoDS_Shape solidShape;
-      Standard_Real meshDeflection, boxDiagonalLength, solidVolume;
-      Standard_Boolean splitSurface{Standard_False}, rejectSolid{Standard_False};
+      double meshDeflection, boxDiagonalLength, solidVolume;
+      bool splitSurface{false}, rejectSolid{false};
 
       std::vector<std::shared_ptr<BoundSurface>> facesList;
       std::vector<std::shared_ptr<BoundSurface>> planesList;
@@ -49,22 +48,22 @@ namespace McCAD::Geometry{
       std::unique_ptr<TopTools_HSequenceOfShape> rejectedsubSolidsList;
 
       // Conversion variables
-      Standard_Boolean solidIsFillet{Standard_False};
-      Standard_Integer solidID{0}, compoundID{0};
+      bool solidIsFillet{false};
+      int solidID{ 0 }, compoundID{ 0 }, MCCellID{ 0 };
       gp_Pnt aabbCenter;
       std::vector<std::shared_ptr<BoundSurface>> intersectionList;
       std::vector<std::shared_ptr<BoundSurface>> unionList;
       std::string cellExpr, complimentExpr;
 
       void initiate(const TopoDS_Shape& aSolidShape);
-      void createBB(Standard_Real bndBoxGap = 0.0);
-      void calcMeshDeflection(Standard_Real scalingFactor = 100.0);
-      void updateEdgesConvexity(Standard_Real angularTolerance = 1.0e-4 * M_PI,
-                                Standard_Real precision = 1.0e-6);
-      void repairSolid(Standard_Real precision = 1.0e-6, Standard_Real faceTolerance = 1.0e-8);
+      void createBB(double bndBoxGap = 0.0);
+      void calcMeshDeflection(double scalingFactor = 100.0);
+      void updateEdgesConvexity(double angularTolerance = 1.0e-4 * M_PI,
+                                double precision = 1.0e-6);
+      void repairSolid(double precision = 1.0e-6, double faceTolerance = 1.0e-8);
       void generateSurfacesList();
       std::unique_ptr<BoundSurface> generateSurface(const TopoDS_Face& face,
-                                                    Standard_Integer mode = 0);
+                                                    int mode = 0);
       void mergeSurfaces(std::vector<std::unique_ptr<BoundSurface>>& planesList);
       void calcAABBCenter();
       void calcVolume();

@@ -17,7 +17,7 @@ McCAD::Conversion::SplitSurfaceSelector::~SplitSurfaceSelector(){}
 * @param   xMap, yMap, zMap: maps of solids.
 * @param   voidCell is the void cell to be split.
 * @returns A selected split surface.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 std::optional<McCAD::Conversion::SplitSurfaceSelector::surfaceTuple>
@@ -61,7 +61,7 @@ McCAD::Conversion::SplitSurfaceSelector::process(
 *          has to be translated to 1D. This is achieved by calculating the extent along each axis that 
 *          corresponced to a minimum volume with the remaining axiex extents fixed.
 * @param   voidCell is the void cell to be split.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -81,7 +81,7 @@ McCAD::Conversion::SplitSurfaceSelector::calcDimTolerances(
 * @param   aabbList is a tuple of the extent and center of the AABB of the void cell along a single axis.
 * @param   dimTolerance is the 1D equivalent of the minimum void cell condition.
 * @returns An optional selected split surface.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 std::optional<McCAD::Conversion::SplitSurfaceSelector::candidateTuple>
@@ -133,7 +133,7 @@ McCAD::Conversion::SplitSurfaceSelector::selectAxisSplitSurface(
 * @brief   The function calculates the mean and standard deviation of the centers of solids' AABB.
 * @param   aMap is a map of solids.
 * @returns A tuple of the mean and standard deviation.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 std::tuple<double, double>
@@ -157,7 +157,7 @@ McCAD::Conversion::SplitSurfaceSelector::calcCentersParameters(
 * @param   candidates: the candidate split surfaces.
 * @param   aMap is a map of solids.
 * @returns A selected split surface.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 McCAD::Conversion::SplitSurfaceSelector::candidateTuple

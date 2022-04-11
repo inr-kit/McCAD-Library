@@ -50,9 +50,9 @@ namespace McCAD::Conversion{
         std::string adjustLineWidth(const std::string& mainExpr,
                                     const std::string& bodyExpr,
                                     int& continueSpacing);
-        void writeHeader(std::ofstream& outputStream);
+        void writeHeaders(std::ofstream& outputStream, std::ofstream& volumeStream, std::ofstream& voidCellsStream);
         void writeCellCard(std::ofstream& outputStream, std::ofstream& volumeStream);
-        void writeVoidCard(std::ofstream& outputStream);
+        void writeVoidCard(std::ofstream& outputStream, std::ofstream& voidCellsStream);
         void writeSurfCard(std::ofstream& outputStream);
         void writeDataCard(std::ofstream& outputStream);
     };

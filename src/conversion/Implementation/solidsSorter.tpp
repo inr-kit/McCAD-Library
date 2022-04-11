@@ -8,7 +8,7 @@
 * @param   aList is a list of tuples to be sorted.
 * @param   elementIndex is the index of element in a tuple to be used for sorting.
 * @returns A sorted list of tuples.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 template<typename listType>
@@ -25,7 +25,7 @@ McCAD::Conversion::SolidsSorter::sortByElement(listType& aList, const int& eleme
 * @param   aList is a list of tuples to be sorted.
 * @param   elementIndex is the index of element in a tuple to be used for sorting.
 * @returns A sorted list of tuples.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 template<typename listType>

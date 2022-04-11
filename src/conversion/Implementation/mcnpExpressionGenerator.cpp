@@ -21,7 +21,7 @@ McCAD::Conversion::MCNPExprGenerator::~MCNPExprGenerator(){
 /** ********************************************************************
 * @brief   The operator calls the specialized writer functions of cell, surface, and data cards.
 * @param   solidObj is a solid object.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -81,7 +81,7 @@ McCAD::Conversion::MCNPExprGenerator::operator()(
 /** ********************************************************************
 * @brief   The operator calls the specialized writer functions of void cells.
 * @param   voidCell is a void cell to generate the surface expressions for.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -95,7 +95,7 @@ McCAD::Conversion::MCNPExprGenerator::operator()(
 * @brief   The function updates surface parameters so that normals point in the positive half space in the X direction.
 * @param   plSurface is a planar surface.
 * @param   precision is the precision specified on the config file.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -139,7 +139,7 @@ McCAD::Conversion::MCNPExprGenerator::updateSurfParmts(
 * @param   plSurface is a planar surface.
 * @param   solidCenter is the center of mass of the solid.
 * @param   precision is the precision specified on the config file.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -182,7 +182,7 @@ McCAD::Conversion::MCNPExprGenerator::genPlSurfExpr(
 * @brief   The function generates the MCNP surface expression of a cylindrical surface.
 * @param   cylSurface is a cylindrical surface.
 * @param   precision is the precision specified on the config file.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -269,7 +269,7 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
 * @brief   The function generates the MCNP surface expression of a toroidal surface.
 * @param   torSurface is a toroidal surface.
 * @param   precision is the precision specified on the config file.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -319,7 +319,7 @@ McCAD::Conversion::MCNPExprGenerator::genTorSurfExpr(
 /** ********************************************************************
 * @brief   The function adds the surfaces of the solid to a list to be used for cell expression generation.
 * @param   solidObj is a solid object.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -340,7 +340,7 @@ McCAD::Conversion::MCNPExprGenerator::createSurfacesList(
 /** ********************************************************************
 * @brief   The function genrates the cell expression of the material cells.
 * @param   solidObj is a solid object.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -376,7 +376,7 @@ McCAD::Conversion::MCNPExprGenerator::genCellExpr(
 /** ********************************************************************
 * @brief   The function genrates the surface expression of the void cells.
 * @param   voidCell is a void cell to generate the surface expressions for.
-* @date    01/01/2021
+* @date    31/12/2021
 * @author  Moataz Harb
 * **********************************************************************/
 void
