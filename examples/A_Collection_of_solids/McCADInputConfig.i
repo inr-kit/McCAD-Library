@@ -8,7 +8,7 @@ debugLevel = 0
 # > The unit used for the input STEP file(s).
 units = cm
 # > Path to the input STEP file;
-inputFileName = SolidsCollection_-793e-2.stp
+inputFileName = SS_-793e-2.stp
 
 # Decomposition
 # =============
