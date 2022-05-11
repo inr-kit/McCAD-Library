@@ -370,7 +370,7 @@ c * Density  : -7.93
 c ============
 c M1
 c =================== Start of volume calculation parameters ===================
-c Void 
+Void 
 c SDEF ERG=14.1 SUR=121 PAR=1 NRM=-1 WGT=3500.98038 $Pi*r^2
 c F4:N 1 49i 51 t
 c SD4 1 51r
