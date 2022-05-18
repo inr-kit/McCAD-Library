@@ -1,0 +1,16 @@
+\contentsline {section}{\numberline {0.1}Introduction}{2}{section.0.1}%
+\contentsline {section}{\numberline {0.2}Installation from Source}{2}{section.0.2}%
+\contentsline {subsection}{\numberline {0.2.1}Linux}{2}{subsection.0.2.1}%
+\contentsline {subsection}{\numberline {0.2.2}Windows}{3}{subsection.0.2.2}%
+\contentsline {section}{\numberline {0.3}I/O}{4}{section.0.3}%
+\contentsline {subsection}{\numberline {0.3.1}Decomposition}{4}{subsection.0.3.1}%
+\contentsline {subsection}{\numberline {0.3.2}Conversion}{4}{subsection.0.3.2}%
+\contentsline {section}{\numberline {0.4}Notes on Usage}{4}{section.0.4}%
+\contentsline {subsection}{\numberline {0.4.1}Decomposition}{5}{subsection.0.4.1}%
+\contentsline {subsection}{\numberline {0.4.2}Conversion}{5}{subsection.0.4.2}%
+\contentsline {section}{\numberline {0.5}Known Issues}{5}{section.0.5}%
+\contentsline {subsection}{\numberline {0.5.1}Decomposition}{5}{subsection.0.5.1}%
+\contentsline {subsection}{\numberline {0.5.2}Conversion}{5}{subsection.0.5.2}%
+\contentsline {section}{\numberline {0.6}Theory of McCAD Conversion}{5}{section.0.6}%
+\contentsline {subsection}{\numberline {0.6.1}Decomposition}{5}{subsection.0.6.1}%
+\contentsline {subsection}{\numberline {0.6.2}Conversion}{5}{subsection.0.6.2}%

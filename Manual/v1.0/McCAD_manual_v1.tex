@@ -1,0 +1,177 @@
+\documentclass[letterpaper, 10 pt]{report}
+
+\usepackage{geometry}
+\geometry{a4paper}
+\usepackage{color}
+\usepackage{lineno}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks,
+	linktoc=all,
+	citecolor=blue,
+	filecolor=black,
+	linkcolor=black,
+	urlcolor=blue
+}
+
+\begin{document}
+\title{McCAD v1.0 \\ User Manual}
+\author{Moataz Harb \\ moataz.harb@kit.edu \\ Karlsruhe Institute of Technology (KIT), Hermann-von-Helmholtz-Platz 1, \\ 76344 Eggenstein-Leopoldshafen, Germany}
+\maketitle
+\pagestyle{empty}
+
+% -------------------------------------------------------------------------------------
+% TABLE OF CONTENTS
+% -------------------------------------------------------------------------------------
+\tableofcontents
+\newpage
+
+% -------------------------------------------------------------------------------------
+% INTRODUCTION
+% -------------------------------------------------------------------------------------
+\section{Introduction}
+McCAD is an interface library for the conversion of CAD solid models to MCNP input syntax, from Boundary Representation "BREP" to Constructive Solid Geometry "CSG".
+
+% -------------------------------------------------------------------------------------
+% Installation
+% -------------------------------------------------------------------------------------
+\section{Installation from Source}
+McCAD library is supported on both Linux and Windows operating systems. The library has three 3rd-party dependencies: CMake, Boost C++ libraries, and Open CASCADE Technology. CMake is the standard build system for McCAD and it comes by default with most Linux distributions as well as in Windows OS. Boost C++ libraries consists of header files that are used for parallel processing in McCAD. Open CASCADE Technology (OCT) is used as a geometry engine for geometry solids manipulation and decomposition. Below are guiding steps for installation on both Linux and Win systems. 
+  \subsection{Linux}
+  Listed below are the currently supported Linux distributions:
+  \begin{itemize}
+  	\item Ubuntu 20.04 LTS
+  	\item Ubuntu 18.04 LTS
+  \end{itemize} 
+  Testing of installation on other distributions is still underway! thus Ubuntu is recommended as a distribution to build McCAD library. Below are general steps to build McCAD library and its dependencies.
+  \begin{itemize}
+  	\item \textbf{CMake}
+  	\begin{itemize}
+  		\item Download cmake-3.23.0.tar.gz from \url{https://cmake.org/download/} then execute the commands below in a terminal.
+  		\item \$ tar -xzvf cmake-3.23.0.tar.gz
+  		\item \$ cd cmake-3.23.0
+  		\item \$ mkdir build
+  		\item \$ cd build
+  		\item \$ cmake .. -DCMAKE\_USE\_OPENSSL=OFF -DCMAKE\_INSTALL\_PREFIX=.
+  		\item \$ make
+  		\item \$ make install
+  	\end{itemize}
+    \item \textbf{Boost C++ liraries}
+    \begin{itemize}
+    	\item Download boost\_1\_78\_0.tar.gz from \url{https://www.boost.org/users/download/} then execute the commands below in a terminal.
+    	\item \$ tar -xvzf boost\_1\_78\_0.tar.gz
+    	\item \$ cd boost\_1\_78\_0
+    	\item \$ mkdir build
+    	\item \$ cd tools/build
+    	\item \$ ./bootstrap.sh
+    	\item \$ ./b2 install -\--prefix=../../build/
+    \end{itemize}
+    \item \textbf{Open CASCADE Technology (OCCT)}
+    \begin{itemize}
+        \item \emph{NOTE}: the instructions on the installation of dependencies can be found in the side menu by navigating to "Build, Debug and Upgrade $>$ Build 3rd-parties" then following the instructions under "Installation from Official Repositories" in \url{https://dev.opencascade.org/doc/occt-7.5.0/overview/html/index.html}
+    	\item Download opencascade-7.5.0.tgz from \url{https://dev.opencascade.org/release/previous} then execute the commands below in a terminal.
+    	\item \$ tar -xzvf opencascade-7.5.0.tgz
+    	\item \$ cd opencascade-7.5.0
+    	\item \$ mkdir build
+    	\item \$ cd build
+    	\item \$ cmake .. -DCMAKE\_BUILD\_TYPE=Release -DBUILD\_LIBRARY\_TYPE=Shared \\ -DCMAKE\_INSTALL\_PREFIX=. -DINSTALL\_TEST\_CASES=TRUE \\ -DINSTALL\_DOC\_Overview=TRUE
+    	\item \$ make
+    	\item \$ make install
+    \end{itemize}
+	\item \textbf{McCAD}
+	\begin{itemize}
+		\item \emph{NOTE}: building a shared library is recommended! Should a static library be needed, the user has to insure a compliant build of Open CASCADE Technology by changing the build type; -DBUILD\_LIBRARY\_TYPE=STATIC.
+		\item \$ git clone \url{https://github.com/inr-kit/McCAD}
+		\item \$ cd McCAD
+		\item \$ mkdir build
+		\item \$ cd build
+		\item \$ CMake .. -DCMAKE\_INSTALL\_PREFIX=. -DBUILD\_STATIC=OFF \\ -DBOOST\_CUSTOM\_ROOT=$<$PATH to boost\_1\_78\_0$>$ -DOCC\_CUSTOM\_ROOT=$<$PATH to opencascade-7.5.0/build$>$ \\ -DBUILD\_RPATH=ON
+		\item \$ make
+		\item \$ make install
+	\end{itemize}
+  \end{itemize}
+
+  \subsection{Windows}
+  Listed below are the currently supported Windows versions:
+  \begin{itemize}
+  	\item Windows 10
+  \end{itemize} 
+  Testing of installation on other versions is still underway! Below are general steps to build McCAD library and its dependencies.
+  \begin{itemize}
+	\item \textbf{CMake} (optional)
+ 	\begin{itemize}
+    	\item \emph{NOTE}: If usage of IDE - such Microsoft Visual Studio (VS) - is intended, then installing CMake can be skipped since most IDE builds CMake by default.
+ 		\item Download and run the installer cmake-3.23.1-windows-x86\_64.msi from \url{https://cmake.org/download/}.
+  	\end{itemize}
+	\item \textbf{Microsoft Visual Studio} (optional)
+	\begin{itemize}
+		\item Download and run the "community" installer from \url{https://visualstudio.microsoft.com/downloads/}.
+	\end{itemize}
+    \item \textbf{Boost C++ liraries}
+    \begin{itemize}
+    	\item Download boost\_1\_78\_0.zip from \url{https://www.boost.org/users/download/}.
+    	\item Unzip boost\_1\_78\_0.zip.
+    	\item Documentation can be found in index.html in the unzipped folder.
+    \end{itemize}
+    \item \textbf{Open CASCADE Technology (OCCT)}
+	\begin{itemize}
+		\item Download and run the installer opencascade-7.5.0-vc14-64.exe from \url{https://dev.opencascade.org/release/previous}.
+	\end{itemize}
+	\item \textbf{McCAD}
+	\begin{itemize}
+		\item Download source code from \url{https://github.com/inr-kit/McCAD} by selecting Code $>$ Download ZIP.
+		\item Unzip McCAD.
+		\item Open MSVC and select the folder containing McCAD source code.
+		\item From the "Solution Explorer - Folder Review" double click CMakeSettings.json file. This will open the file in IDE. \item Set a "Configuration name". 
+		\item Ensure that "Configuration type" is set to "Release" and "Toolset" is set to msvc\_x64\_x64.
+		\item On "CMake command arguments" set -DBOOST\_CUSTOM\_ROOT="$<$PATH to boost\_1\_78\_0$>$"
+		\item On "CMake command arguments" set -DOCC\_CUSTOM\_ROOT="$<$PATH to OpenCASCADE-7.5.0-vc14-64\textbackslash opencascade-7.5.0$>$".
+		\item From the top menu select "Build $>$ Build All".
+		\item From the top menu select "Build $>$ Install McCAD".
+	\end{itemize}
+  \end{itemize}
+
+% -------------------------------------------------------------------------------------
+% I/O
+% -------------------------------------------------------------------------------------
+\section{I/O}
+Input and output file formats. Coming soon ...
+\subsection{Decomposition}
+\subsection{Conversion}
+
+
+% -------------------------------------------------------------------------------------
+% Notes on Usage
+% -------------------------------------------------------------------------------------
+\section{Notes on Usage}
+General notes on how to use McCAD. Coming soon ...
+\subsection{Decomposition}
+\subsection{Conversion}
+
+
+% -------------------------------------------------------------------------------------
+% Knows Issues
+% -------------------------------------------------------------------------------------
+\section{Known Issues}
+A list of known issues and how to manually fix it in solid models. Coming soon ...
+\subsection{Decomposition}
+\subsection{Conversion}
+
+
+% -------------------------------------------------------------------------------------
+% Theory of McCAD Conversion
+% -------------------------------------------------------------------------------------
+\section{Theory of McCAD Conversion}
+Comperhensive details on the inner workings of McCAD classes for developers. Coming soon ...
+\subsection{Decomposition}
+\subsection{Conversion}
+\newpage
+% -------------------------------------------------------------------------------------
+% REFERENCES
+% -------------------------------------------------------------------------------------
+%\bibliography{}
+
+% -------------------------------------------------------------------------------------
+% END DOCUMENT
+% -------------------------------------------------------------------------------------
+\end{document}
