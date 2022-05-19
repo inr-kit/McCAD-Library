@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.7 32-bit) (preloaded format=pdflatex 2021.8.5)  18 MAY 2022 17:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.7 32-bit) (preloaded format=pdflatex 2021.8.5)  18 MAY 2022 17:49
 entering extended mode
 **./McCAD_manual_v1.tex
 (McCAD_manual_v1.tex
@@ -384,7 +384,7 @@ Package rerunfilecheck Info: File `McCAD_manual_v1.out' has not changed.
  ) 
 Here is how much of TeX's memory you used:
  8326 strings out of 478836
- 125508 string characters out of 2852497
+ 125417 string characters out of 2852497
  440901 words of memory out of 3000000
  26157 multiletter control sequences out of 15000+600000
  409140 words of font info for 46 fonts, out of 8000000 for 9000
