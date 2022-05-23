@@ -42,6 +42,6 @@ General notes on Usage:
    
 Reporting issues:
 -----------------
-Please, don't hesitate to report any issues with running the code or errors in the manual by:
+Please don't hesitate to report any issues with running the code or errors in the manual by:
    * Raising issues in the github repo.
    * sending an email to moataz.harb@kit.edu.
