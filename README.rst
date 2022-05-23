@@ -1,6 +1,6 @@
 McCAD v1.0
------------
-McCAD is an interface library for the conversion of CAD solid models to MCNP input syntax, from Boundary Representation "BRep" to Constructive Solid Geometry "CSG".
+----------
+McCAD is a library for the conversion of CAD solid models to MCNP input syntax, from Boundary Representation "BREP" to Constructive Solid Geometry "CSG".
 The library is written in C++ and consists of two main algorithms:
 
 1- Decompostion:
@@ -16,7 +16,7 @@ General Notes:
    * binary: https://github.com/inr-kit/McCad-Salome-Binaries
  
 * The current decomposition algorithm is an isolated and improved algorithm based on the latest updates/changes:
-   * source: https://github.com/chengcunhan/FreeCAD-McCad
+   * source: https://github.com/McCadKIT/McCad
 
 Dependencies:
 --------------
@@ -29,57 +29,19 @@ Dependencies:
 3- Open CASCADE Technology (version 7.5.0): https://dev.opencascade.org/release/previous
    * The geometry engine used for manipulating and decomposing solids.
 
-Installation (Linux: Ubuntu20.04.3LTS):
----------------------
-1- CMake
-   * Download cmake-3.23.0.tar.gz from https://cmake.org/download/ and then run the commands below in a terminal.
-   * $ tar -xzvf cmake-3.23.0.tar.gz
-   * $ cd cmake-3.23.0
-   * $ mkdir build
-   * $ cd build
-   * $ cmake .. -DCMAKE_USE_OPENSSL=OFF -DCMAKE_INSTALL_PREFIX=.
-   * $ make && make install
-
-2- Boost C++ lirary
-   * Download boost_1_78_0.tar.gz from https://www.boost.org/users/download/ and then run the commands below in a terminal.
-   * $ tar -xvzf boost_1_78_0.tar.gz
-   * $ cd boost_1_78_0
-   * $ mkdir build
-   * $ cd tools/build
-   * $ ./bootstrap.sh
-   * $ ./b2 install --prefix=../../build/
-
-3- Open CASCADE Technology
-   * NOTE: instructions on the installation of dependencies can be found in the side menu by navigating to "Build, Debug and Upgrade > Build 3rd-parties" then following the instructions under "Installation from Official Repositories" in https://dev.opencascade.org/doc/occt-7.5.0/overview/html/index.html#intro_install_windows
-   * Download opencascade-7.5.0.tgz from https://dev.opencascade.org/release/previous and then run the commands below in a terminal.
-   * $ tar -xzvf opencascade-7.5.0.tgz
-   * $ cd opencascade-7.5.0
-   * $ mkdir build
-   * $ cd build
-   * $ cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_LIBRARY_TYPE=Shared -DCMAKE_INSTALL_PREFIX=. -DINSTALL_TEST_CASES=TRUE -DINSTALL_DOC_Overview=TRUE
-   * $ make && make install
-
-4- McCAD
-   * NOTE: building a shared library is recommended!. Should a static library be needed, the user has to insure a compliant installation of Open CASCADE Technology by changing the byuld type, -DBUILD_LIBRARY_TYPE=STATIC.
-   * $ git clone https://github.com/moatazharb/McCAD_refactor
-   * $ cd McCAD_refactor
-   * $ mkdir build
-   * $ cd build
-   * $ CMake .. -DCMAKE_INSTALL_PREFIX=. -DBUILD_STATIC=OFF -DBOOST_CUSTOM_ROOT=<PATH to boost_1_78_0> -DOCC_CUSTOM_ROOT=<PATH to opencascade-7.5.0/build_shared> -DBUILD_RPATH=ON
-   * $ make && make install
-
-Installation (Windows 10):
---------------------------
-1- Install CMake, Boost, and OCCT
-   * Same steps 1 - 3 can be followed by downloading the install files that is suitable for Windows 10
-2- Install McCAD
-   * NOTE: building a static library is recommended!.
-   * Path to OCC should be provided through -DOCC_CUSTOM_ROOT=<PATH to opencascade-7.5.0/build_static> CMake flag.
-   * Path to Boost should be provided though -DBOOST_CUSTOM_ROOT=<PATH to boost_1_78_0> CMake flag.
+Installation:
+-------------
+Please refer to "Installation from Source" section in the manual in docs/Manual v1.0/McCAD_manual_v1.pdf.
 
 General notes on Usage:
 -----------------------
 1- The library assumes a clean CAD model, one with no intersections or overlapping.
    * While in theory the library won't report an error with intersections/overlappings as solids are processed individually, it will cause problems for void generation and conversion later on.
 2- There are known bugs with the decomposition algorithm which are currently being investigated.
-   * A list of bugs and proposed fixes can be found in the manual.
+   * A list of bugs and proposed fixes can be found in the docs/Manual v1.0/McCAD_manual_v1.pdf.
+   
+Reporting issues:
+-----------------
+Please, don't hesitate to report any issues with running the code or errors in the manual by:
+   * Raising issues in the github repo.
+   * sending an email to moataz.harb@kit.edu.
