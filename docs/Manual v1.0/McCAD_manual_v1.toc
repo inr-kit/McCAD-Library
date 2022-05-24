@@ -4,17 +4,17 @@
 \contentsline {subsection}{\numberline {0.2.2}Windows}{4}{subsection.0.2.2}%
 \contentsline {section}{\numberline {0.3}I/O}{5}{section.0.3}%
 \contentsline {subsection}{\numberline {0.3.1}General}{5}{subsection.0.3.1}%
-\contentsline {subsection}{\numberline {0.3.2}Decomposition}{7}{subsection.0.3.2}%
+\contentsline {subsection}{\numberline {0.3.2}Decomposition}{6}{subsection.0.3.2}%
 \contentsline {subsection}{\numberline {0.3.3}Conversion}{8}{subsection.0.3.3}%
 \contentsline {section}{\numberline {0.4}Running McCAD}{9}{section.0.4}%
 \contentsline {subsection}{\numberline {0.4.1}Command Line}{10}{subsection.0.4.1}%
 \contentsline {subsection}{\numberline {0.4.2}SpaceClaim Plugin}{10}{subsection.0.4.2}%
 \contentsline {section}{\numberline {0.5}Example}{10}{section.0.5}%
-\contentsline {subsection}{\numberline {0.5.1}Decomposition}{10}{subsection.0.5.1}%
-\contentsline {subsection}{\numberline {0.5.2}Conversion}{10}{subsection.0.5.2}%
-\contentsline {section}{\numberline {0.6}Known Issues}{10}{section.0.6}%
+\contentsline {subsection}{\numberline {0.5.1}Decomposition}{11}{subsection.0.5.1}%
+\contentsline {subsection}{\numberline {0.5.2}Conversion}{11}{subsection.0.5.2}%
+\contentsline {section}{\numberline {0.6}Known Issues}{11}{section.0.6}%
 \contentsline {subsection}{\numberline {0.6.1}Decomposition}{11}{subsection.0.6.1}%
-\contentsline {subsection}{\numberline {0.6.2}Conversion}{11}{subsection.0.6.2}%
-\contentsline {section}{\numberline {0.7}Theory of McCAD Conversion}{11}{section.0.7}%
-\contentsline {subsection}{\numberline {0.7.1}Decomposition}{11}{subsection.0.7.1}%
-\contentsline {subsection}{\numberline {0.7.2}Conversion}{11}{subsection.0.7.2}%
+\contentsline {subsection}{\numberline {0.6.2}Conversion}{12}{subsection.0.6.2}%
+\contentsline {section}{\numberline {0.7}Theory of McCAD Conversion}{12}{section.0.7}%
+\contentsline {subsection}{\numberline {0.7.1}Decomposition}{12}{subsection.0.7.1}%
+\contentsline {subsection}{\numberline {0.7.2}Conversion}{12}{subsection.0.7.2}%
