@@ -8,6 +8,7 @@
 #include <ctime>
 // McCAD
 #include "inputconfig.hpp"
+#include "StringUtilities.hpp"
 
 McCAD::IO::InputConfig::InputConfig(){}
 
@@ -100,14 +101,14 @@ McCAD::IO::InputConfig::readTemplate(){
         while (!inputConfig.eof()){
             std::string line;
             getline(inputConfig, line);
-           std::vector<std::string> lineSplit = splitLine(line, ' ');
+           std::vector<std::string> lineSplit = Tools::splitLine(line, ' ');
            if (lineSplit.size() == 0 || lineSplit[0] == "#") continue;
            else {
                // General input.
                if (lineSplit[0] == "debugLevel")
                    debugLevel = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "units"){
-                   units = stringToLowerCase(lineSplit[2]);
+                   units = Tools::stringToLowerCase(lineSplit[2]);
                    if (units == "cm") conversionFactor = 10.0;
                    else if (units == "m") conversionFactor = 1000.0;
                } else if (lineSplit[0] == "inputFileName"){
@@ -116,7 +117,7 @@ McCAD::IO::InputConfig::readTemplate(){
                    }
                // Decompositions
                } else if (lineSplit[0] == "decompose")
-                   decompose = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
+                   decompose = Tools::stringToLowerCase(lineSplit[2]) == "true" ? true : false;
                else if (lineSplit[0] == "recurrenceDepth")
                    recurrenceDepth = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "minSolidVolume")
@@ -138,26 +139,26 @@ McCAD::IO::InputConfig::readTemplate(){
                else if (lineSplit[0] == "distanceTolerance")
                    distanceTolerance = std::stof(lineSplit[2]) * conversionFactor;
                else if (lineSplit[0] == "simplifyTori")
-                   simplifyTori = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
+                   simplifyTori = Tools::stringToLowerCase(lineSplit[2]) == "true" ? true : false;
                else if (lineSplit[0] == "simplifyAllTori")
-                   simplifyAllTori = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
+                   simplifyAllTori = Tools::stringToLowerCase(lineSplit[2]) == "true" ? true : false;
                else if (lineSplit[0] == "torusSplitAngle")
                    torusSplitAngle = std::stof(lineSplit[2]) * PI / 180.0;
                // Conversion
                else if (lineSplit[0] == "convert")
-                   convert = stringToLowerCase(lineSplit[2]) == "false" ? false : true;
+                   convert = Tools::stringToLowerCase(lineSplit[2]) == "false" ? false : true;
                else if (lineSplit[0] == "voidGeneration")
-                   voidGeneration = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
+                   voidGeneration = Tools::stringToLowerCase(lineSplit[2]) == "true" ? true : false;
                else if (lineSplit[0] == "compoundIsSingleCell")
-                   compoundIsSingleCell = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
+                   compoundIsSingleCell = Tools::stringToLowerCase(lineSplit[2]) == "true" ? true : false;
                else if (lineSplit[0] == "minVoidVolume")
                    minVoidVolume = std::stof(lineSplit[2]) * std::pow(conversionFactor, 3);
                else if (lineSplit[0] == "maxSolidsPerVoidCell")
                    maxSolidsPerVoidCell = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "BVHVoid")
-                   BVHVoid = stringToLowerCase(lineSplit[2]) == "true" ? true : false;
+                   BVHVoid = Tools::stringToLowerCase(lineSplit[2]) == "true" ? true : false;
                else if (lineSplit[0] == "MCcode")
-                   MCcode = stringToLowerCase(lineSplit[2]);
+                   MCcode = Tools::stringToLowerCase(lineSplit[2]);
                else if (lineSplit[0] == "startCellNum")
                    startCellNum = std::stoi(lineSplit[2]);
                else if (lineSplit[0] == "startSurfNum")
@@ -181,39 +182,6 @@ McCAD::IO::InputConfig::readTemplate(){
 }
 
 /** ********************************************************************
-* @brief   Splits a line with a specified delimiter.
-* @param   line is a string to split.
-* @param   delimiter is a character delimiter.
-* @return  A vector of strings.
-* @date    01/01/2021
-* @author  Moataz Harb
-* **********************************************************************/
-std::vector<std::string>
-McCAD::IO::InputConfig::splitLine(const std::string& line, char delimiter){
-    std::istringstream ss(line);
-    std::vector<std::string> lineSplit;
-    std::string s;
-    while (std::getline(ss, s, delimiter)){
-        lineSplit.push_back(s);
-    }
-    return lineSplit;
-}
-
-/** ********************************************************************
-* @brief   Converts a string to lower case.
-* @param   string is a string to convert to lower case.
-* @return  A lower case string.
-* @date    01/01/2021
-* @author  Moataz Harb
-* **********************************************************************/
-std::string
-McCAD::IO::InputConfig::stringToLowerCase(std::string& string){
-    std::transform(string.begin(), string.end(), string.begin(),
-                   [](unsigned char c){ return std::tolower(c); });
-    return string;
-}
-
-/** ********************************************************************
 * @brief   Populates a list of file names for writing output STEP files.
 * @date    01/01/2021
 * @author  Moataz Harb
@@ -221,7 +189,7 @@ McCAD::IO::InputConfig::stringToLowerCase(std::string& string){
 void
 McCAD::IO::InputConfig::populateNamesLists(){
     for(int i = 0; i < inputFileNames.size(); ++i){
-        std::string splitName = splitLine(inputFileNames[i], '.')[0];
+        std::string splitName = Tools::splitLine(inputFileNames[i], '.')[0];
         decomposedFileNames.push_back(splitName + std::string("Decomposed.stp"));
         rejectedFileNames.push_back(splitName + std::string("Rejected.stp"));
     }
@@ -235,12 +203,12 @@ McCAD::IO::InputConfig::populateNamesLists(){
 void
 McCAD::IO::InputConfig::populateMatList(){
     for(int i = 0; i < inputFileNames.size(); ++i){
-        std::string splitName = splitLine(inputFileNames[i], '.')[0];
+        std::string splitName = McCAD::Tools::splitLine(inputFileNames[i], '.')[0];
         rejectedConvFileNames.push_back(splitName + std::string("RejectedConv.stp"));
-        std::string matName = stringToLowerCase(splitLine(splitName, '_')[0]);
+        std::string matName = Tools::stringToLowerCase(Tools::splitLine(splitName, '_')[0]);
         double matDensity{0.0};
-        if(matName != "void" && splitLine(splitName, '_').size() > 1)
-            matDensity = std::stof(splitLine(splitName, '_')[1]);
+        if(matName != "void" && Tools::splitLine(splitName, '_').size() > 1)
+            matDensity = std::stof(Tools::splitLine(splitName, '_')[1]);
         materialsInfo.push_back(std::make_tuple(matName, matDensity));
     }
 }

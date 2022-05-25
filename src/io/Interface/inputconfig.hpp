@@ -25,8 +25,6 @@ namespace McCAD::IO{
       std::vector<std::tuple<std::string, double>> materialsInfo;
       bool readConversion = false;
       void writeTemplate();
-      std::string stringToLowerCase(std::string& string);
-      std::vector<std::string> splitLine(const std::string& line, char delimiter);
       void readTemplate();
       void populateNamesLists();
       void populateMatList();

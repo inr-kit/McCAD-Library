@@ -5,6 +5,7 @@
 // McCAD
 #include "solid_impl.hpp"
 #include "faceParameters.hpp"
+#include "ShapeUtilities.hpp"
 // OCC
 #include <TopoDS.hxx>
 #include <BRepBndLib.hxx>
@@ -134,8 +135,5 @@ McCAD::Geometry::Solid::Impl::calcAABBCenter(){
 
 void
 McCAD::Geometry::Solid::Impl::calcVolume(){
-    // Volume in mm3
-    GProp_GProps geometryProperties;
-    BRepGProp::VolumeProperties(solid, geometryProperties);
-    solidVolume = geometryProperties.Mass();
+    solidVolume = Tools::calcVolume(solid);
 }
