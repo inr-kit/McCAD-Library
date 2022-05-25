@@ -34,14 +34,23 @@
 % INTRODUCTION
 % -------------------------------------------------------------------------------------
 \section{Introduction} \label{sec:Introduction}
-McCAD is a C++ library for the conversion of CAD solid models to MCNP input syntax, from Boundary Representation "BREP" to Constructive Solid Geometry "CSG". The library is written in C++ and uses CMake as a build system. It relies on Open CASCADE Technology and Boost C++ libraries. Currenlty the library is a ble to process:
+McCAD is a C++ library for the conversion of CAD solid models to MCNP input syntax, from Boundary Representation "BREP" to Constructive Solid Geometry "CSG". The library is written in C++ and uses CMake as a build system. It relies on Open CASCADE Technology and Boost C++ libraries. Currenlty the library is capable of processing the following:
 \begin{itemize}
-	\item Planar solids
-	\item cylindrical solids
-	\item toroidal solids
+	\item Planar solids.
+	\item cylindrical solids.
+	\item toroidal solids.
 \end{itemize}
-
-The library is capable of decomposing complex solids into their constituent primitives. It produces a mapping of cell IDs on the Monte Carlo input file to the CAD volume and name of the solid as loaded from the STEP file. It also produces a mapping of void to material cells in the produced Monte Carlo input file.
+\\
+The general capabilities/output of the library includes:
+\begin{itemize}
+	\item producing a list of the volumes of solids in a STEP file.
+	\item decomposing complex solids into their constituent primitives.
+	\item converting decomposed solids into Monte Carlo input syntax, currently only to MCNP.
+	\item void generation.
+	\item generating entries, surface source and cell tallies, to calculate stochastic cell volumes on the generated Monte Carlo input file.
+	\item producing a mapping of cell IDs on the generated Monte Carlo input file to the volumes and names of the CAD solids as loaded from the decomposed STEP file(s).
+	\item producing a mapping of void to material cells in the generated Monte Carlo input file.
+\end{itemize}
 
 % -------------------------------------------------------------------------------------
 % Installation
@@ -216,7 +225,7 @@ There are two ways to run McCAD, via a command line or the SpaceClaim plugin. Mc
     \begin{itemize}
       \item \textbf{[]}: running McCAD without arguments will result in writing McCAD template input configuration file, McCADInputConfig.i.
       \item \textbf{[help]}: lists all the acceptable arguments.
-      \item \textbf{[read]}: test loading the solids from the input STEP file(s). This is used to test if the OCCT reader will fail to load any STEP file(s).
+      \item \textbf{[read]}: test loading the solids from the input STEP file(s). This is used to test if the OCCT reader will fail to load any STEP file(s). McCAD will generate a text file per input STEP file that contains the volumes of shapes contained in the file.
       \item \textbf{[run]}: executes McCAD according to the selected running mode: decomposition, conversion, or both. 
     \end{itemize}
 
@@ -246,7 +255,7 @@ This section will discuss how to run McCAD. The example input STEP file as well 
 
   \item On McCADInputConfig.i file, the \emph{inputFileName} should be changed to SS\_-793e-2.stp. Also, \emph{convert} and \emph{voidGeneration} parameters should be set to "true".
   
-  \item McCAD is then run via the command "McCAD run". After successfully running McCAD there should be a total of 4 new files generated on disk. Figure (\ref{fig:McCAD Decomposition and Conversion Outputs}) shows the displayed output of McCAD on screen for decomposition and conversion.
+  \item McCAD is then run via the command "McCAD run". After successfully running McCAD there should be a total of five new files generated on disk. Figure (\ref{fig:McCAD Decomposition and Conversion Outputs}) shows the displayed output of McCAD on screen for decomposition and conversion.
   \begin{figure}[h]
   	\centering
   	\begin{subfigure}{.5\textwidth}
@@ -266,7 +275,9 @@ This section will discuss how to run McCAD. The example input STEP file as well 
   \end{figure}
 
   \begin{itemize}
-    \item The first file is produced by McCAD decomposition algorithm, SS\_-793e-2Decomposed.stp, and contains the decomposed input solids. Upon loading the file into any CAD software we could see the decomposed solids, as shown in figure (\ref{fig:Decomposed Solids}).
+  	\item The first file is produced by McCAD STEP file reading algorithm, volumes\_SS\_-793e-2.i, and containes a list of solid volumes and their names as read from the input STEP file, SS\_-793e-2.stp.
+  	
+    \item The second file is produced by McCAD decomposition algorithm, SS\_-793e-2Decomposed.stp, and contains the decomposed input solids. Upon loading the file into any CAD software we could see the decomposed solids, as shown in figure (\ref{fig:Decomposed Solids}).
 	\begin{figure}[h]
 		\centering
 		\includegraphics[scale=0.4]{figures/decomposedSolids.png}
@@ -274,7 +285,7 @@ This section will discuss how to run McCAD. The example input STEP file as well 
 		\label{fig:Decomposed Solids}
 	\end{figure}
 
-	\item The second file is produced by McCAD conversion algorithm, MCFile.i. The file is the MCNP input file and contains cell, surface,data cards in MCNP format, figure (\ref{fig:MCFile}).
+	\item The third file is produced by McCAD conversion algorithm, MCFile.i. The file is the MCNP input file and contains cell, surface,data cards in MCNP format, figure (\ref{fig:MCFile}).
 	\begin{figure}[h]
 		\centering
 		\includegraphics[scale=0.4]{figures/cellCards.png}
@@ -282,7 +293,7 @@ This section will discuss how to run McCAD. The example input STEP file as well 
 		\label{fig:MCFile}
 	\end{figure}
 
-	\item The third file is produced by McCAD conversion algorithm, volumes.i. The file lists cell IDs, volumes of solids, and name on the CAD STEP file, figure (\ref{fig:volumes file}).
+	\item The fourth file is produced by McCAD conversion algorithm, volumes.i. The file lists cell IDs, volumes of solids, and name on the CAD STEP file, figure (\ref{fig:volumes file}).
 	\begin{figure}[h]
 		\centering
 		\includegraphics[scale=0.4]{figures/volumesFile.png}
@@ -290,7 +301,7 @@ This section will discuss how to run McCAD. The example input STEP file as well 
 		\label{fig:volumes file}
 	\end{figure}
 
-	\item The fourth file is produced by McCAD conversion algorithm, voidCells.i. The file maps void to material cell IDs, figure (\ref{fig:void cells file}).
+	\item The fifth file is produced by McCAD conversion algorithm, voidCells.i. The file maps void to material cell IDs, figure (\ref{fig:void cells file}).
 	\begin{figure}[h]
 		\centering
 		\includegraphics[scale=0.4]{figures/voidCellFile.png}
