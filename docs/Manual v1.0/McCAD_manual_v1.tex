@@ -33,16 +33,30 @@
 % -------------------------------------------------------------------------------------
 % INTRODUCTION
 % -------------------------------------------------------------------------------------
-\section{Introduction}
-McCAD is a C++ library for the conversion of CAD solid models to MCNP input syntax, from Boundary Representation "BREP" to Constructive Solid Geometry "CSG".
+\section{Introduction} \label{sec:Introduction}
+McCAD is a C++ library for the conversion of CAD solid models to MCNP input syntax, from Boundary Representation "BREP" to Constructive Solid Geometry "CSG". The library is written in C++ and uses CMake as a build system. It relies on Open CASCADE Technology and Boost C++ libraries. Currenlty the library is a ble to process:
+\begin{itemize}
+	\item Planar solids
+	\item cylindrical solids
+	\item toroidal solids
+\end{itemize}
 
-Capabilities: solids processed, void-cell mapping, volumes, void generation.
-refer to known issue section
+The library is capable of decomposing complex solids into their constituent primitives. It produces a mapping of cell IDs on the Monte Carlo input file to the CAD volume and name of the solid as loaded from the STEP file. It also produces a mapping of void to material cells in the produced Monte Carlo input file.
+
+General notes on usage, will become more relevant after reading sections \ref{sec:Introduction} \& \ref{sec:Running McCAD}:
+\begin{itemize}
+	\item It is advised to run decomposition and conversion separately!. This is the main reason why the conversion is disabled by default on the McCADInputConfig.i file. Checking the decomposed CAD solids for errors or interference is always advised! 
+	\item A good practice is to decompose the model few solids at a time. This ensures a smotther decomposition, as well as makes it easier to locate the troubling solid or part of the model.
+	\item Currently, complex hollow planar solids might result in large STEP files. It is a good practice to aid the decomposition by manually cutting the solid in two, three, or more subsolids then run McCAD on the subsolids.
+	\item Before running the conversion, it is better to check in CAD for any interference in the model. This is especially needed if simplification of tori is enabled. A clean model will result in a conversion with less errors.
+	\item Before running McCAD, test the conversion on parts of the model. A good practice is to convert the solids that belong to a single material together. Test converting solids with another material. Then test converting both together. This way it is much easier to trace back the source of error and correct it in CAD rather than converting the entire model and try to figure out a solution to geometry errors.
+	\item In the volumes.i file, if the user wants a list of the CAD volumes, set \emph{compoundIsSingleCell} to "true". While it is not desirable for the transport calculations, it gives the volume of each solid in the decomposed STEP file summed over the constituent subsolids that resulted from the decomposition.
+\end{itemize}
 
 % -------------------------------------------------------------------------------------
 % Installation
 % -------------------------------------------------------------------------------------
-\section{Installation from Source}
+\section{Installation from Source} \label{sec:Installation from Source}
 Building of the McCAD library is supported on both Linux and Windows operating systems. The library has three 3rd-party dependencies: CMake, Boost C++ libraries, and Open CASCADE Technology. CMake is the standard build system for McCAD and it comes by default with most Linux distributions as well as Windows OS. Boost C++ libraries consist of header files that are utilized for parallel processing in McCAD. Open CASCADE Technology (OCCT) is used as a geometry engine for geometrical solids manipulation and decomposition. Below are guiding steps for installation on both Linux and Win systems. 
   \subsection{Linux}
     Listed below are the currently supported Linux distributions:
@@ -140,7 +154,7 @@ Building of the McCAD library is supported on both Linux and Windows operating s
 % -------------------------------------------------------------------------------------
 % I/O
 % -------------------------------------------------------------------------------------
-\section{I/O}
+\section{I/O} \label{sec:I/O}
 In general, there are three types of information that need to be provided to McCAD: geometry model(s), materials assignment, and running parameters. Below, the input pertinent to the decomposition and conversion will be highlighted. The output from McCAD will depend on the mode of execution, as will be described in the following sections.
   \subsection{General}
 	The first input to be provided is the input configuration file, McCADInputConfig.i.  When run via a command line \emph{without arguments}, McCAD will generate a template configuration file, figure (\ref{fig:config}), with the default values of the run parameters. In both run modes, decomposition and conversion, McCAD input parameters are needed. The run parameters are assigned values by default and can be modified by the user. Below is a description of the general input parameters.
@@ -201,54 +215,105 @@ In general, there are three types of information that need to be provided to McC
 	  \item \textbf{voidCellsFileName}: the desired name of the void to material cells mapping file. \emph{Default} is voidCells.i.
     \end{itemize}
 
-\section{Running McCAD}
+% -------------------------------------------------------------------------------------
+% Running McCAD
+% -------------------------------------------------------------------------------------
+\section{Running McCAD} \label{sec:Running McCAD}
 There are two ways to run McCAD, via a command line or the SpaceClaim plugin. McCAD can be run from a command line either in a Linux terminal or a Windows command prompt.
 
   \subsection{Command Line}
     On a linux termial of Windows command prompt McCAD can be run by typing in the path to the executable followed by the desired argument. A good practice is to add the path to the McCAD executable to the PATH environment variable then simply call McCAD with the acceptable desired command line arguments. The arguments could be displayed on the screen by running "McCAD help". The acceptable McCAD arguments are listed below.
     \begin{itemize}
-    	\item \textbf{[]}: running McCAD without arguments will result in writing McCAD template input configuration file, McCADInputConfig.i.
-    	\item \textbf{[help]}: lists all the acceptable arguments.
-    	\item \textbf{[read]}: test loading the solids from the input STEP file(s). This is used to test if the OCCT reader will fail to load any STEP file(s).
-    	\item \textbf{[run]}: executes McCAD according to the selected running mode: decomposition, conversion, or both. 
+      \item \textbf{[]}: running McCAD without arguments will result in writing McCAD template input configuration file, McCADInputConfig.i.
+      \item \textbf{[help]}: lists all the acceptable arguments.
+      \item \textbf{[read]}: test loading the solids from the input STEP file(s). This is used to test if the OCCT reader will fail to load any STEP file(s).
+      \item \textbf{[run]}: executes McCAD according to the selected running mode: decomposition, conversion, or both. 
     \end{itemize}
 
   \subsection{SpaceClaim Plugin}
-    The python script located in SpaceClaim\_interface can be loaded into SpaceClaim and used directly to call McCAD to perform decomposition on selected solid(s).  The script can be loaded in SPaceClaim by selecting "File $>$ New $>$ Script". Select the desired solid(s) to decompose and on the "Script Editor" select "Run Script", the green arrow.
+    The python script located in plugins/SpaceClaim\_interface can be loaded into SpaceClaim and used directly to call McCAD to perform decomposition on selected solid(s).  The script can be loaded in SPaceClaim by selecting "File $>$ New $>$ Script". Select the desired solid(s) to decompose and on the "Script Editor" select "Run Script", the green arrow.
 
 % -------------------------------------------------------------------------------------
-% Notes on Usage
+% Example
 % -------------------------------------------------------------------------------------
-\section{Example} \label{sec:example}
-This section will discuss how to run McCAD. The example input STEP file as well as the output files can be found in examples/A\_Collection\_of\_solids folder. \\
-\\
-The input file, SS\_-793e-2.stp, contains a collection of random solids, as shown in figure (\ref{fig:ExampleSolids}), with steps, cylinders, tori, protrusions, depressions, etc. The solids from the file are assigned stainless steel material (SS) with a density of 7.93 g/cm\textsuperscript{3}. \\
-\\
-With the path to McCAD executable added to the PATH environment variable, the McCADInputConfig.i file was generated by running McCAD without any arguments. on the config. file, the \emph{inputFileName} was changed to SS\_-793e-2.stp. Also, \emph{convert} and \emph{voidGeneration} parameters were set to "true".
+\section{Example} \label{sec:Example}
+This section will discuss how to run McCAD. The example input STEP file as well as the output files can be found in examples/collection\_of\_solids folder. The input file, SS\_-793e-2.stp, contains a collection of random solids, as shown in figure (\ref{fig:ExampleSolids}); with steps, cylinders, tori, protrusions, depressions, etc. The solids from the file are assigned stainless steel material (SS) with a density of 7.93 g/cm\textsuperscript{3}.
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.5]{figures/InputSolids.png}
+	\includegraphics[scale=0.42]{figures/InputSolids.png}
 	\caption{Example Input Solids}
 	\label{fig:ExampleSolids}
 \end{figure}
 
-  \subsection{Decomposition}
-    After running McCAD decomposition, by executing the command "McCAD run", an output file was generated. The file contains the decomposed input solids and is named SS\_-793e-2Decomposed.stp. Upon loading the file into any CAD software we would see the decomposed solids, as shown in figure (\ref{fig:DecomposedSolids}).
-    \begin{figure}[h]
-    	\centering
-    	\includegraphics[scale=0.5]{figures/decomposedSolids.png}
-    	\caption{Example Input Solids}
-    	\label{fig:DecomposedSolids}
-    \end{figure}
+\begin{enumerate}
+  \item With the path to McCAD executable added to the PATH environment variable, the McCADInputConfig.i file could be generated by running McCAD, without any arguments, figure (\ref{fig:McCAD_output}).
+  \begin{figure}[h]
+  	\centering
+  	\includegraphics[scale=0.75]{figures/McCAD_output.png}
+  	\caption{McCAD Output}
+  	\label{fig:McCAD_output}
+  \end{figure}
 
-  \subsection{Conversion}
-    Conversion resulted in the generation of three files: MCFile.i, volumes.i, and voidCells.i.
+  \item On McCADInputConfig.i file, the \emph{inputFileName} should be changed to SS\_-793e-2.stp. Also, \emph{convert} and \emph{voidGeneration} parameters should be set to "true".
+  
+  \item McCAD is then run via the command "McCAD run". After successfully running McCAD there should be a total of 4 new files generated on disk. Figure (\ref{fig:McCAD Decomposition and Conversion Outputs}) shows the displayed output of McCAD on screen for decomposition and conversion.
+  \begin{figure}[h]
+  	\centering
+  	\begin{subfigure}{.5\textwidth}
+  		\centering
+  		\includegraphics[width=.8\linewidth]{figures/McCAD_output_decomposition.png}
+  		\caption{}
+  		\label{fig:a}
+  	\end{subfigure}%
+  	\begin{subfigure}{.5\textwidth}
+  		\centering
+  		\includegraphics[width=.8\linewidth]{figures/McCAD_output_conversion.png}
+  		\caption{}
+  		\label{fig:b}
+  	\end{subfigure}
+  	\caption{McCAD Decomposition (a) and Conversion (b) Displayed Outputs}
+  	\label{fig:McCAD Decomposition and Conversion Outputs}
+  \end{figure}
 
+  \begin{itemize}
+    \item The first file is produced by McCAD decomposition algorithm, SS\_-793e-2Decomposed.stp, and contains the decomposed input solids. Upon loading the file into any CAD software we could see the decomposed solids, as shown in figure (\ref{fig:Decomposed Solids}).
+	\begin{figure}[h]
+		\centering
+		\includegraphics[scale=0.4]{figures/decomposedSolids.png}
+		\caption{McCAD Decomposed Input Solids}
+		\label{fig:Decomposed Solids}
+	\end{figure}
+
+	\item The second file is produced by McCAD conversion algorithm, MCFile.i. The file is the MCNP input file and contains cell, surface,data cards in MCNP format, figure (\ref{fig:MCFile}).
+	\begin{figure}[h]
+		\centering
+		\includegraphics[scale=0.4]{figures/cellCards.png}
+		\caption{McCAD Generated MCFile.i File}
+		\label{fig:MCFile}
+	\end{figure}
+
+	\item The third file is produced by McCAD conversion algorithm, volumes.i. The file lists cell IDs, volumes of solids, and name on the CAD STEP file, figure (\ref{fig:volumes file}).
+	\begin{figure}[h]
+		\centering
+		\includegraphics[scale=0.4]{figures/volumesFile.png}
+		\caption{McCAD Generated volumes.i File}
+		\label{fig:volumes file}
+	\end{figure}
+
+	\item The fourth file is produced by McCAD conversion algorithm, voidCells.i. The file maps void to material cell IDs, figure (\ref{fig:void cells file}).
+	\begin{figure}[h]
+		\centering
+		\includegraphics[scale=0.4]{figures/voidCellFile.png}
+		\caption{McCAD Generated voidCells.i File}
+		\label{fig:void cells file}
+	\end{figure}
+  \end{itemize} 
+\end{enumerate}
 
 % -------------------------------------------------------------------------------------
 % Knows Issues
 % -------------------------------------------------------------------------------------
-\section{Known Issues}
+\section{Known Issues} \label{Known Issues}
 A list of known issues and how to manually fix it in solid models. Coming soon ...
 \subsection{Decomposition}
 \begin{itemize}
@@ -263,8 +328,8 @@ A list of known issues and how to manually fix it in solid models. Coming soon .
 % -------------------------------------------------------------------------------------
 % Theory of McCAD Conversion
 % -------------------------------------------------------------------------------------
-\section{Theory of McCAD Conversion} \label{sec:theory}
-Comperhensive details on the inner workings of McCAD classes for developers. Coming soon ...
+\section{Theory of McCAD Conversion} \label{Theory of McCAD Conversion}
+A comperhensive discussion on the inner workings of McCAD algorithm/classes for developers. Coming soon ...
 \subsection{Decomposition}
 \subsection{Conversion}
 \newpage
