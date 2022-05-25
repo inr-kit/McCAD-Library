@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.7 32-bit) (preloaded format=pdflatex 2021.8.5)  25 MAY 2022 12:30
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.7 32-bit) (preloaded format=pdflatex 2021.8.5)  25 MAY 2022 12:34
 entering extended mode
 **./McCAD_manual_v1.tex
 (McCAD_manual_v1.tex
@@ -636,7 +636,11 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 Package hyperref Info: Option `colorlinks' set `true' on input line 19.
 Package translations Info: No language package found. I am going to use `englis
 h' as default language. on input line 21.
- (McCAD_manual_v1.aux)
+ (McCAD_manual_v1.aux
+
+LaTeX Warning: Label `Known Issues' multiply defined.
+
+)
 \openout1 = `McCAD_manual_v1.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
@@ -777,192 +781,191 @@ been already used, duplicate ignored
 l.31 \newpage
               [1
 
-] [2]
-Overfull \hbox (10.45892pt too wide) in paragraph at lines 71--72
+]
+Overfull \hbox (10.45892pt too wide) in paragraph at lines 61--62
 []\OT1/cmr/m/n/12 Download cmake-3.23.0.tar.gz from [][]$\OT1/cmtt/m/n/12 https
  : / / cmake . org / download/$[][] \OT1/cmr/m/n/12 then
  []
 
-
-Overfull \hbox (46.65982pt too wide) in paragraph at lines 76--77
+[2]
+Overfull \hbox (46.65982pt too wide) in paragraph at lines 66--67
 []\TS1/cmr/m/n/12 $ \OT1/cmr/m/n/12 cmake .. -DCMAKE[]USE[]OPENSSL=OFF -DCMAKE[
 ]INSTALL[]PREFIX=. 
  []
 
-[3]
-Overfull \hbox (2.66463pt too wide) in paragraph at lines 93--94
+
+Overfull \hbox (2.66463pt too wide) in paragraph at lines 83--84
 []\OT1/cmr/m/n/12 Download opencascade-7.5.0.tgz from [][]$\OT1/cmtt/m/n/12 htt
 ps : / / dev . opencascade . org /
  []
 
 
-Overfull \hbox (69.24701pt too wide) in paragraph at lines 98--99
+Overfull \hbox (69.24701pt too wide) in paragraph at lines 88--89
 []\TS1/cmr/m/n/12 $ \OT1/cmr/m/n/12 cmake .. -DCMAKE[]BUILD[]TYPE=Release -DBUI
 LD[]LIBRARY[]TYPE=Shared 
  []
 
 
-Overfull \hbox (1.13379pt too wide) in paragraph at lines 98--99
+Overfull \hbox (1.13379pt too wide) in paragraph at lines 88--89
 \OT1/cmr/m/n/12 -DCMAKE[]INSTALL[]PREFIX=. -DINSTALL[]TEST[]CASES=TRUE 
  []
 
-
-Overfull \hbox (75.32541pt too wide) in paragraph at lines 104--105
+[3]
+Overfull \hbox (75.32541pt too wide) in paragraph at lines 94--95
 \OT1/cmr/m/n/12 CADE Tech-nol-ogy by chang-ing the build type; -DBUILD[]LIBRARY
 []TYPE=STATIC. 
  []
 
 
-Overfull \hbox (6.7505pt too wide) in paragraph at lines 109--110
+Overfull \hbox (6.7505pt too wide) in paragraph at lines 99--100
 []\TS1/cmr/m/n/12 $ \OT1/cmr/m/n/12 CMake .. -DCMAKE[]INSTALL[]PREFIX=. -DBUILD
 []STATIC=OFF 
  []
 
 
-Overfull \hbox (114.56058pt too wide) in paragraph at lines 109--110
+Overfull \hbox (114.56058pt too wide) in paragraph at lines 99--100
 \OT1/cmr/m/n/12 -DBOOST[]CUSTOM[]ROOT=$\OML/cmm/m/it/12 <$\OT1/cmr/m/n/12 PATH 
 to boost[]1[]78[]0$\OML/cmm/m/it/12 >$ \OT1/cmr/m/n/12 -DOCC[]CUSTOM[]ROOT=$\OM
 L/cmm/m/it/12 <$\OT1/cmr/m/n/12 PATH
  []
 
-[4]
-Overfull \hbox (22.75839pt too wide) in paragraph at lines 129--130
+
+Overfull \hbox (22.75839pt too wide) in paragraph at lines 119--120
 []\OT1/cmr/m/n/12 Download and run the "com-mu-nity" in-staller from [][]$\OT1/
 cmtt/m/n/12 https : / / visualstudio .
  []
 
 
-Overfull \hbox (34.04794pt too wide) in paragraph at lines 133--134
+Overfull \hbox (34.04794pt too wide) in paragraph at lines 123--124
 []\OT1/cmr/m/n/12 Download boost[]1[]78[]0.zip from [][]$\OT1/cmtt/m/n/12 https
  : / / www . boost . org / users / download/$[][]\OT1/cmr/m/n/12 . 
  []
 
-
-Overfull \hbox (14.73247pt too wide) in paragraph at lines 139--140
+[4]
+Overfull \hbox (14.73247pt too wide) in paragraph at lines 129--130
 []\OT1/cmr/m/n/12 Download and run the in-staller opencascade-7.5.0-vc14-64.exe
  from [][]$\OT1/cmtt/m/n/12 https :
  []
 
 
-Overfull \hbox (25.04298pt too wide) in paragraph at lines 143--144
+Overfull \hbox (25.04298pt too wide) in paragraph at lines 133--134
 []\OT1/cmr/m/n/12 Download source code from [][]$\OT1/cmtt/m/n/12 https : / / g
 ithub . com / inr-[]kit / McCAD _ Library$[][]
  []
 
-[5]
 LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 1
-48.
- (C:\Program Files (x86)\MiKTeX 2.9\tex/latex/base\omscmr.fd
+38.
+(C:\Program Files (x86)\MiKTeX 2.9\tex/latex/base\omscmr.fd
 File: omscmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 148.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 138.
 
-Overfull \hbox (81.50587pt too wide) in paragraph at lines 148--149
+Overfull \hbox (81.50587pt too wide) in paragraph at lines 138--139
 []\OT1/cmr/m/n/12 Add -DBUILD[]RPATH=ON -DBUILD[]STATIC[]EXE=ON -DBUILD[]SHARED
 =OFF
  []
 
 
-Overfull \hbox (132.1854pt too wide) in paragraph at lines 148--149
+Overfull \hbox (132.1854pt too wide) in paragraph at lines 138--139
 \OT1/cmr/m/n/12 -DBOOST[]CUSTOM[]ROOT="$\OML/cmm/m/it/12 <$\OT1/cmr/m/n/12 PATH
  to boost[]1[]78[]0$\OML/cmm/m/it/12 >$\OT1/cmr/m/n/12 " -DOCC[]CUSTOM[]ROOT="$
 \OML/cmm/m/it/12 <$\OT1/cmr/m/n/12 PATH
  []
 
 
-Overfull \hbox (3.67532pt too wide) in paragraph at lines 148--149
+Overfull \hbox (3.67532pt too wide) in paragraph at lines 138--139
 \OT1/cmr/m/n/12 to OpenCASCADE-7.5.0-vc14-64\OMS/cmsy/m/n/12 n\OT1/cmr/m/n/12 o
 pencascade-7.5.0$\OML/cmm/m/it/12 >$\OT1/cmr/m/n/12 " to "CMake com-
  []
 
-<figures/configFile.png, id=164, 579.96675pt x 709.4505pt>
+[5]
+<figures/configFile.png, id=169, 579.96675pt x 709.4505pt>
 File: figures/configFile.png Graphic file (type png)
 <use figures/configFile.png>
-Package pdftex.def Info: figures/configFile.png  used on input line 169.
+Package pdftex.def Info: figures/configFile.png  used on input line 159.
 (pdftex.def)             Requested size: 347.98273pt x 425.67358pt.
+
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 175--178
+Underfull \hbox (badness 10000) in paragraph at lines 165--168
 
  []
+
+
+LaTeX Warning: Reference `sec:theory' on page 6 undefined on input line 173.
 
 [6]
 
-LaTeX Warning: Reference `sec:theory' on page 7 undefined on input line 183.
+LaTeX Warning: Reference `sec:theory' on page 7 undefined on input line 175.
 
 
-LaTeX Warning: Reference `sec:theory' on page 7 undefined on input line 185.
+LaTeX Warning: Reference `sec:theory' on page 7 undefined on input line 176.
 
 
-LaTeX Warning: Reference `sec:theory' on page 7 undefined on input line 186.
+LaTeX Warning: Reference `sec:theory' on page 7 undefined on input line 177.
 
 
-LaTeX Warning: Reference `sec:theory' on page 7 undefined on input line 187.
+LaTeX Warning: Reference `sec:theory' on page 7 undefined on input line 178.
 
 
-LaTeX Warning: Reference `sec:theory' on page 7 undefined on input line 188.
+LaTeX Warning: Reference `sec:theory' on page 7 undefined on input line 179.
 
 
-LaTeX Warning: Reference `sec:theory' on page 7 undefined on input line 189.
-
-[7]
-
-LaTeX Warning: Reference `sec:example' on page 8 undefined on input line 196.
+LaTeX Warning: Reference `sec:example' on page 7 undefined on input line 186.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 196--201
+Underfull \hbox (badness 10000) in paragraph at lines 186--191
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 196--201
+Underfull \hbox (badness 10000) in paragraph at lines 186--191
 
  []
 
-[8] [9]
+[7] [8]
 <figures/InputSolids.png, id=190, 692.5875pt x 447.92343pt>
 File: figures/InputSolids.png Graphic file (type png)
 <use figures/InputSolids.png>
-Package pdftex.def Info: figures/InputSolids.png  used on input line 243.
+Package pdftex.def Info: figures/InputSolids.png  used on input line 233.
 (pdftex.def)             Requested size: 290.88477pt x 188.12656pt.
-
+ [9]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/McCAD_output.png, id=192, 415.5525pt x 64.44075pt>
+<figures/McCAD_output.png, id=196, 415.5525pt x 64.44075pt>
 File: figures/McCAD_output.png Graphic file (type png)
 <use figures/McCAD_output.png>
-Package pdftex.def Info: figures/McCAD_output.png  used on input line 252.
+Package pdftex.def Info: figures/McCAD_output.png  used on input line 242.
 (pdftex.def)             Requested size: 311.6636pt x 48.33043pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/McCAD_output_decomposition.png, id=194, 295.70474pt x 361.95226pt>
+<figures/McCAD_output_decomposition.png, id=198, 295.70474pt x 361.95226pt>
 File: figures/McCAD_output_decomposition.png Graphic file (type png)
 <use figures/McCAD_output_decomposition.png>
 Package pdftex.def Info: figures/McCAD_output_decomposition.png  used on input 
-line 264.
+line 254.
 (pdftex.def)             Requested size: 167.3021pt x 204.77954pt.
-<figures/McCAD_output_conversion.png, id=195, 232.4685pt x 115.02975pt>
+<figures/McCAD_output_conversion.png, id=199, 232.4685pt x 115.02975pt>
 File: figures/McCAD_output_conversion.png Graphic file (type png)
 <use figures/McCAD_output_conversion.png>
 Package pdftex.def Info: figures/McCAD_output_conversion.png  used on input lin
-e 270.
+e 260.
 (pdftex.def)             Requested size: 167.3021pt x 82.788pt.
-[10]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/decomposedSolids.png, id=205, 686.565pt x 443.40656pt>
+<figures/decomposedSolids.png, id=201, 686.565pt x 443.40656pt>
 File: figures/decomposedSolids.png Graphic file (type png)
 <use figures/decomposedSolids.png>
-Package pdftex.def Info: figures/decomposedSolids.png  used on input line 282.
+Package pdftex.def Info: figures/decomposedSolids.png  used on input line 272.
 (pdftex.def)             Requested size: 274.62112pt x 177.35948pt.
 
-Overfull \hbox (2.897pt too wide) in paragraph at lines 279--286
+Overfull \hbox (2.897pt too wide) in paragraph at lines 269--276
 \OT1/cmr/m/n/12 793e-2Decomposed.stp, and con-tains the de-com-posed in-put sol
 ids. Upon
  []
@@ -970,57 +973,60 @@ ids. Upon
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/cellCards.png, id=207, 727.21687pt x 592.46344pt>
+<figures/cellCards.png, id=203, 727.21687pt x 592.46344pt>
 File: figures/cellCards.png Graphic file (type png)
 <use figures/cellCards.png>
-Package pdftex.def Info: figures/cellCards.png  used on input line 290.
+Package pdftex.def Info: figures/cellCards.png  used on input line 280.
 (pdftex.def)             Requested size: 290.88159pt x 236.98117pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/volumesFile.png, id=209, 863.47594pt x 720.44156pt>
+<figures/volumesFile.png, id=205, 863.47594pt x 720.44156pt>
 File: figures/volumesFile.png Graphic file (type png)
 <use figures/volumesFile.png>
-Package pdftex.def Info: figures/volumesFile.png  used on input line 298.
+Package pdftex.def Info: figures/volumesFile.png  used on input line 288.
 (pdftex.def)             Requested size: 345.38426pt x 288.17151pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/voidCellFile.png, id=211, 959.08313pt x 70.01157pt>
+<figures/voidCellFile.png, id=207, 959.08313pt x 70.01157pt>
 File: figures/voidCellFile.png Graphic file (type png)
 <use figures/voidCellFile.png>
-Package pdftex.def Info: figures/voidCellFile.png  used on input line 306.
+Package pdftex.def Info: figures/voidCellFile.png  used on input line 296.
 (pdftex.def)             Requested size: 383.62645pt x 28.00412pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/ConvertedSolids.png, id=213, 1232.2035pt x 416.757pt>
+<figures/ConvertedSolids.png, id=209, 1232.2035pt x 416.757pt>
 File: figures/ConvertedSolids.png Graphic file (type png)
 <use figures/ConvertedSolids.png>
-Package pdftex.def Info: figures/ConvertedSolids.png  used on input line 315.
+Package pdftex.def Info: figures/ConvertedSolids.png  used on input line 305.
 (pdftex.def)             Requested size: 394.31319pt x 133.36496pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[11] [12] [13 <./figures/configFile.png>] [14 <./figures/InputSolids.png> <./fi
-gures/McCAD_output.png> <./figures/McCAD_output_decomposition.png> <./figures/M
-cCAD_output_conversion.png>] [15 <./figures/decomposedSolids.png> <./figures/ce
-llCards.png>] [16 <./figures/volumesFile.png> <./figures/voidCellFile.png> <./f
-igures/ConvertedSolids.png>] (McCAD_manual_v1.aux)
+[10] [11] [12] [13 <./figures/configFile.png>] [14 <./figures/InputSolids.png> 
+<./figures/McCAD_output.png> <./figures/McCAD_output_decomposition.png> <./figu
+res/McCAD_output_conversion.png>] [15 <./figures/decomposedSolids.png> <./figur
+es/cellCards.png>] [16 <./figures/volumesFile.png> <./figures/voidCellFile.png>
+ <./figures/ConvertedSolids.png>] (McCAD_manual_v1.aux)
 
 LaTeX Warning: There were undefined references.
 
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package rerunfilecheck Info: File `McCAD_manual_v1.out' has not changed.
-(rerunfilecheck)             Checksum: 3EF3D75762F465B24670E1387A69A283;2092.
+(rerunfilecheck)             Checksum: 82EC37DBDC54F31F072F87B0B02DB795;2239.
  ) 
 Here is how much of TeX's memory you used:
- 24100 strings out of 478836
- 488863 string characters out of 2852497
- 743872 words of memory out of 3000000
- 41620 multiletter control sequences out of 15000+600000
+ 24102 strings out of 478836
+ 488887 string characters out of 2852497
+ 744911 words of memory out of 3000000
+ 41621 multiletter control sequences out of 15000+600000
  410357 words of font info for 50 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,9n,89p,681b,892s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 84i,9n,89p,681b,890s stack positions out of 5000i,500n,10000p,200000b,80000s
  <C:\Users\po9264\AppData\Local\MiKTeX\2.9\fonts/pk/ljfour/jknappen/ec/dpi600
 \tcrm1200.pk><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
 cmbx12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
@@ -1032,9 +1038,9 @@ fb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb>
 gram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Progr
 am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program
  Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on McCAD_manual_v1.pdf (17 pages, 2104927 bytes).
+Output written on McCAD_manual_v1.pdf (17 pages, 2105796 bytes).
 PDF statistics:
- 314 PDF objects out of 1000 (max. 8388607)
- 49 named destinations out of 1000 (max. 500000)
- 207 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 320 PDF objects out of 1000 (max. 8388607)
+ 50 named destinations out of 1000 (max. 500000)
+ 215 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -43,16 +43,6 @@ McCAD is a C++ library for the conversion of CAD solid models to MCNP input synt
 
 The library is capable of decomposing complex solids into their constituent primitives. It produces a mapping of cell IDs on the Monte Carlo input file to the CAD volume and name of the solid as loaded from the STEP file. It also produces a mapping of void to material cells in the produced Monte Carlo input file.
 
-General notes on usage, will become more relevant after reading sections \ref{sec:Introduction} \& \ref{sec:Running McCAD}:
-\begin{itemize}
-	\item It is advised to run decomposition and conversion separately!. This is the main reason why the conversion is disabled by default on the McCADInputConfig.i file. Checking the decomposed CAD solids for errors or interference is always advised! 
-	\item A good practice is to decompose the model few solids at a time. This ensures a smotther decomposition, as well as makes it easier to locate the troubling solid or part of the model.
-	\item Currently, complex hollow planar solids might result in large STEP files. It is a good practice to aid the decomposition by manually cutting the solid in two, three, or more subsolids then run McCAD on the subsolids.
-	\item Before running the conversion, it is better to check in CAD for any interference in the model. This is especially needed if simplification of tori is enabled. A clean model will result in a conversion with less errors.
-	\item Before running McCAD, test the conversion on parts of the model. A good practice is to convert the solids that belong to a single material together. Test converting solids with another material. Then test converting both together. This way it is much easier to trace back the source of error and correct it in CAD rather than converting the entire model and try to figure out a solution to geometry errors.
-	\item In the volumes.i file, if the user wants a list of the CAD volumes, set \emph{compoundIsSingleCell} to "true". While it is not desirable for the transport calculations, it gives the volume of each solid in the decomposed STEP file summed over the constituent subsolids that resulted from the decomposition.
-\end{itemize}
-
 % -------------------------------------------------------------------------------------
 % Installation
 % -------------------------------------------------------------------------------------
@@ -317,6 +307,20 @@ This section will discuss how to run McCAD. The example input STEP file as well 
   	\label{fig:MCFile.i plot}
   \end{figure}
 \end{enumerate}
+
+% -------------------------------------------------------------------------------------
+% Knows Issues
+% -------------------------------------------------------------------------------------
+\section{General Usage Notes} \label{Known Issues}
+General notes on usage, will become more relevant after reading sections \ref{sec:I/O} \& \ref{sec:Running McCAD}:
+\begin{itemize}
+	\item It is advised to run decomposition and conversion separately!. This is the main reason why the conversion is disabled by default on the McCADInputConfig.i file. Checking the decomposed CAD solids for errors or interference is always advised! 
+	\item A good practice is to decompose the model few solids at a time. This ensures a smotther decomposition, as well as makes it easier to locate the troubling solid or part of the model.
+	\item Currently, complex hollow planar solids might result in large STEP files. It is a good practice to aid the decomposition by manually cutting the solid in two, three, or more subsolids then run McCAD on the subsolids.
+	\item Before running the conversion, it is better to check in CAD for any interference in the model. This is especially needed if simplification of tori is enabled. A clean model will result in a conversion with less errors.
+	\item Before running McCAD, test the conversion on parts of the model. A good practice is to convert the solids that belong to a single material together. Test converting solids with another material. Then test converting both together. This way it is much easier to trace back the source of error and correct it in CAD rather than converting the entire model and try to figure out a solution to geometry errors.
+	\item In the volumes.i file, if the user wants a list of the CAD volumes, set \emph{compoundIsSingleCell} to "true". While it is not desirable for the transport calculations, it gives the volume of each solid in the decomposed STEP file summed over the constituent subsolids that resulted from the decomposition.
+\end{itemize}
 
 % -------------------------------------------------------------------------------------
 % Knows Issues
