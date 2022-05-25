@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.7 32-bit) (preloaded format=pdflatex 2021.8.5)  25 MAY 2022 12:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.7 32-bit) (preloaded format=pdflatex 2021.8.5)  25 MAY 2022 12:30
 entering extended mode
 **./McCAD_manual_v1.tex
 (McCAD_manual_v1.tex
@@ -994,11 +994,19 @@ Package pdftex.def Info: figures/voidCellFile.png  used on input line 306.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
+<figures/ConvertedSolids.png, id=213, 1232.2035pt x 416.757pt>
+File: figures/ConvertedSolids.png Graphic file (type png)
+<use figures/ConvertedSolids.png>
+Package pdftex.def Info: figures/ConvertedSolids.png  used on input line 315.
+(pdftex.def)             Requested size: 394.31319pt x 133.36496pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 [11] [12] [13 <./figures/configFile.png>] [14 <./figures/InputSolids.png> <./fi
 gures/McCAD_output.png> <./figures/McCAD_output_decomposition.png> <./figures/M
 cCAD_output_conversion.png>] [15 <./figures/decomposedSolids.png> <./figures/ce
-llCards.png>] [16 <./figures/volumesFile.png> <./figures/voidCellFile.png>]
-(McCAD_manual_v1.aux)
+llCards.png>] [16 <./figures/volumesFile.png> <./figures/voidCellFile.png> <./f
+igures/ConvertedSolids.png>] (McCAD_manual_v1.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -1006,10 +1014,10 @@ Package rerunfilecheck Info: File `McCAD_manual_v1.out' has not changed.
 (rerunfilecheck)             Checksum: 3EF3D75762F465B24670E1387A69A283;2092.
  ) 
 Here is how much of TeX's memory you used:
- 24090 strings out of 478836
- 488609 string characters out of 2852497
- 742818 words of memory out of 3000000
- 41613 multiletter control sequences out of 15000+600000
+ 24100 strings out of 478836
+ 488863 string characters out of 2852497
+ 743872 words of memory out of 3000000
+ 41620 multiletter control sequences out of 15000+600000
  410357 words of font info for 50 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,9n,89p,681b,892s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1024,9 +1032,9 @@ fb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb>
 gram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Progr
 am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program
  Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on McCAD_manual_v1.pdf (17 pages, 683787 bytes).
+Output written on McCAD_manual_v1.pdf (17 pages, 2104927 bytes).
 PDF statistics:
- 308 PDF objects out of 1000 (max. 8388607)
- 47 named destinations out of 1000 (max. 500000)
- 202 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 314 PDF objects out of 1000 (max. 8388607)
+ 49 named destinations out of 1000 (max. 500000)
+ 207 words of extra memory for PDF output out of 10000 (max. 10000000)
 
