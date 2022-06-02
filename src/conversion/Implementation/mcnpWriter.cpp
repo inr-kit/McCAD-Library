@@ -97,6 +97,7 @@ McCAD::Conversion::MCNPWriter::processSolids(
 * @param   uniqueMap is a map of unique surfaces IDs and surfaces.
 * @returns An optional integer ID of the duplicate surface.
 * @date    31/12/2021
+* @modified 06/02/2022
 * @author  Moataz Harb
 * **********************************************************************/
 std::optional<int>
@@ -116,12 +117,18 @@ McCAD::Conversion::MCNPWriter::findDuplicate(
                 } else equalParmts.push_back(true);
             }
             if(surface->accessSImpl()->surfSymb == "GQ"){
-                // Check if only the last parameter in the cylinder coefficients is different.
-                if (std::none_of(equalParmts.cbegin(), equalParmts.cend() - 1, std::logical_not<bool>()) &&
-                        equalParmts.back() == false){
-                    if (std::abs(surface->accessSImpl()->surfParameters.back() -
-                                  member.second->accessSImpl()->surfParameters.back()) < 1.0e-2)
-                        equalParmts.back() = true;
+                // Some GQs result from tori simplification. For pipes with fillings, the difference in some
+                // coefficients is neglegible.
+                // Check if any of the cylinder coefficients is different.
+                for (int i = 0; i < equalParmts.size(); ++i) {
+                    if (equalParmts[i] == false) {
+                        if (std::abs(surface->accessSImpl()->surfParameters[i] -
+                            member.second->accessSImpl()->surfParameters[i]) < 1.0e-1 &&
+                            std::abs((surface->accessSImpl()->surfParameters[i] -
+                                member.second->accessSImpl()->surfParameters[i]) /
+                                surface->accessSImpl()->surfParameters[i]) < inputConfig.precision)
+                            equalParmts[i] = true;
+                    }
                 }
             }
             if (std::none_of(equalParmts.cbegin(), equalParmts.cend(), std::logical_not<bool>()))
