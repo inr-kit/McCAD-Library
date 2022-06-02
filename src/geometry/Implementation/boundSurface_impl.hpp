@@ -19,8 +19,8 @@ namespace McCAD::Geometry{
     ~Impl();
 
     BoundSurface* boundSurface;
-    
     std::vector<std::shared_ptr<Edge>> edgesList;
+    std::vector<std::shared_ptr<Edge>> assistEdgesList;
     std::vector<std::shared_ptr<MeshTriangle>> meshTrianglesList;
 
     Standard_Boolean isEqual(const BoundSurface& that);
@@ -28,9 +28,10 @@ namespace McCAD::Geometry{
     Standard_Boolean faceCollision(const BoundSurface& aFace,
                                    Standard_Integer& aSide);
     Standard_Boolean generateMesh(const Standard_Real& meshDeflection);
-    void generateEdges(Standard_Real uvTolerance = 1.0e-3);
+    void generateEdges(const Standard_Real& parameterTolerance);
     void combineEdges(std::vector<std::shared_ptr<Edge>>& aEdgesList);
-    bool generateParmts();
+    Standard_Boolean generateParmts(Standard_Real precision = 1.0e-6,
+                                    Standard_Real scalingFactor = 1.0);
   };
 }
 #endif //BOUNDSURFACE_IMPL_HPP

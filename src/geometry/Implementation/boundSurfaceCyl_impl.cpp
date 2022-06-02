@@ -8,8 +8,7 @@
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRep_Tool.hxx>
 
-McCAD::Geometry::BoundSurfaceCyl::Impl::Impl(
-        McCAD::Geometry::BoundSurfaceCyl* backReference)
+McCAD::Geometry::BoundSurfaceCyl::Impl::Impl(McCAD::Geometry::BoundSurfaceCyl* backReference)
     : boundSurfaceCyl{backReference}{
 }
 

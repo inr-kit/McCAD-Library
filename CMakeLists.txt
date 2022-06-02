@@ -27,6 +27,7 @@ add_subdirectory(src)
 
 # Make config file
 message("")
+configure_file (${PROJECT_SOURCE_DIR}/src/info/info.hpp.in ${INSTALL_DIR}/src/info/info.hpp)
 configure_file (${PROJECT_SOURCE_DIR}/cmake/McCADConfig.cmake.in ${INSTALL_DIR}/McCADConfig.cmake)
 install(FILES ${INSTALL_DIR}/McCADConfig.cmake DESTINATION ${INSTALL_LIB_DIR})
 install(EXPORT McCADTargets DESTINATION ${INSTALL_LIB_DIR})

@@ -10,51 +10,47 @@
 #include "solid_impl.hpp"
 #include "inputconfig.hpp"
 #include "voidCell.hpp"
-// OCC
-#include <Standard.hxx>
+// OCCT
 #include <Bnd_Box.hxx>
 
 namespace McCAD::Conversion{
     class VoidCellManager {
     public:
         VoidCellManager(const IO::InputConfig& inputConfig);
-        VoidCellManager(const Standard_Boolean& BVHVoid,
-                        const Standard_Real& minVoidVolume,
-                        const Standard_Integer& maxSolidsPerVoidCell,
-                        const Standard_Boolean& voidGeneration);
+        VoidCellManager(const bool& BVHVoid,
+                        const double& minVoidVolume,
+                        const int& maxSolidsPerVoidCell,
+                        const bool& voidGeneration,
+                        const int& debugLevel);
         ~VoidCellManager();
     private:
         using solidsList = std::vector<std::shared_ptr<Geometry::Solid>>;
         // dimMap format: (SolidID, <AABB min, AABB center, AABB max>)
-        using dimMap = std::map<Standard_Integer, std::tuple<Standard_Real,
-                                                             Standard_Real,
-                                                             Standard_Real>>;
-        // surfaceTuple format: <cutting plane axis tag, position along the axis
+        using dimMap = std::map<int, std::tuple<double, double, double>>;
+        // surfaceTuple format: <cutting plane axis tag, position along the axis,
         //                       number of intersections, number of expected splittings>
-        using surfaceTuple = std::tuple<std::string, Standard_Real, Standard_Integer,
-                                        Standard_Integer>;
+        using surfaceTuple = std::tuple<std::string, double, int, int>;
         // membersMap format: (SolidID, <AABB, cutting plane axis tag,
         //                               position along the axis>)
-        using membersMap = std::map<Standard_Integer, std::tuple<Bnd_Box,
-                                                                 std::string,
-                                                                 Standard_Real>>;
+        using membersMap = std::map<int, std::tuple<Bnd_Box, std::string, double>>;
         // aabbTuple format: <AABB min, AABB max>
-        using aabbTuple = std::tuple<Standard_Real, Standard_Real>;
+        using aabbTuple = std::tuple<double, double>;
         using aabbVec = std::vector<aabbTuple>;
     public:
-        Standard_Boolean voidGeneration;
-        Standard_Boolean BVHVoid;
-        Standard_Integer maxSolidsPerVoidCell;
-        Standard_Real minVoidVolume;
+        bool voidGeneration, BVHVoid;
+        int maxSolidsPerVoidCell, debugLevel{0};
+        double minVoidVolume;
         dimMap xAxis, yAxis, zAxis;
         std::shared_ptr<VoidCell> voidCell;
         std::shared_ptr<VoidCell> operator()(const solidsList& solidObjList);
         std::shared_ptr<VoidCell> operator()(const membersMap& members,
-                                             const Standard_Integer& depth,
-                                             const Standard_Integer& width);
+                                             const int& depth,
+                                             const int& width,
+                                             const std::string& key);
         std::shared_ptr<VoidCell> operator()(const membersMap& members,
-                                             const Standard_Integer& depth,
-                                             const Standard_Integer& width,
+                                             const int& depth,
+                                             const int& width,
+                                             const std::string& key,
                                              const aabbTuple& xAxisAABB,
                                              const aabbTuple& yAxisAABB,
                                              const aabbTuple& zAxisAABB);
@@ -67,9 +63,9 @@ namespace McCAD::Conversion{
         std::pair<membersMap, membersMap> splitMembersList(const surfaceTuple& surface,
                                                            const membersMap& members,
                                                            const dimMap& axis);
-        aabbVec updateBoundaries(surfaceTuple& surface, const Standard_Integer& sense);
+        aabbVec updateBoundaries(surfaceTuple& surface, const int& sense);
         Bnd_Box updateOverlapAABB(const Bnd_Box& aAABB, const surfaceTuple& surface,
-                                  const Standard_Integer& sense);
+                                  const int& sense);
     };
 }
 #endif //VOIDCELLMANAGER_HPP

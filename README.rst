@@ -1,75 +1,47 @@
 McCAD v1.0
------------
-McCAD is an interface library that aides in the conversion of CAD solid models, BRep, to MCNP, CSG.
-The library is written in C++ and can be decomposed into three main parts:
+----------
+McCAD is a library for the conversion of CAD solid models to MCNP input syntax; from Boundary Representation "BREP" to Constructive Solid Geometry "CSG".
+The library is written in C++ and consists of two main algorithms:
 
 1- Decompostion:
-   * carries tasks related to simplification of complex solids by means of decomposition into
-     primitive convex solids.
+   * carries out tasks related to the simplification of complex solids by means of decomposition into primitive convex subsolids.
 2- Void generation and Conversion:
-   * the main responsibility is the generation of void and conversion of the resulting primitive
-     solids into MCNP input syntax, and later on other MC codes.
+   * carries out tasks related to the generation of void cells and conversion of the primitive solids into MCNP input syntax, and later on to other MC codes.
 
-Decomposition:
+General Notes:
 --------------
-* The last working version of McCAD is McCAD-SALOME:
-   * source: https://github.com/moatazharb/McCad-Salome-Source
-   * binary: https://github.com/moatazharb/McCad-Salome-Binaries
+* The latest working version of McCAD is McCAD-SALOME:
+   * docs  : https://github.com/inr-kit/McCad-Salome-Docs
+   * source: https://github.com/inr-kit/McCad-Salome-Source
+   * binary: https://github.com/inr-kit/McCad-Salome-Binaries
  
-* The current library is an isolated and improved algorithm based on the latest updates/changes:
-   * source: https://github.com/McCadKIT/FreeCAD-McCad.
+* The current decomposition algorithm is an isolated and improved algorithm based on the latest updates/changes:
+   * source: https://github.com/McCadKIT/McCad
 
-Prerequisites:
+Dependencies:
 --------------
-1- OpenCascade (OCCT version 7.5.0): https://www.opencascade.com/content/latest-release
-   * Geometry engine for manipulating and decomposing solids.
+1- CMake (version 3.23.0): https://cmake.org/download/
+   * The standard build system for McCAD library.
 
-2- CMake (version 3.14 or above): https://cmake.org/download/
-   * Standard build system for McCAD library.
-
-3- Boost C++ Library: https://www.boost.org/
+2- Boost C++ Library (Version 1.78.0): https://www.boost.org/
    * Used for multiprocessing.
 
-Installation (Linux):
----------------------
-1- Install CMake
-   * Download CMake tar file https://cmake.org/download/
-   * tar -xzvf cmake-3.17.3.tar.gz
-   * cd cmake-3.17.3
-   * mkdir build
-   * cd build
-   * cmake .. -DCMAKE_USE_OPENSSL=OFF && make && make install
+3- Open CASCADE Technology (version 7.5.0): https://dev.opencascade.org/release/previous
+   * The geometry engine used for manipulating and decomposing solids.
 
-2- Install Boost C++ lirary
-   * Download boost_1_73_0.tar.gz from https://dl.bintray.com/boostorg/release/1.73.0/source/
-   * tar -xvzf boost_1_73_0.tar.gz
-   * cd /tools/build
-   * ./bootstrap.sh
-   * ./b2 install --prefix=<install Dir>
-
-3- Install OpenCascade
-   * Download occt-7.5.0.tgz from https://www.opencascade.com/content/latest-release
-   * tar -xzvf occt-7.5.0.tgz
-   * cd occt-7.5.0
-   * mkdir build
-   * cd build
-   * cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_LIBRARY_TYPE=Shared -DCMAKE_INSTALL_PREFIX=. 
-              -DINSTALL_TEST_CASES=TRUE -DINSTALL_DOC_Overview=TRUE 
-
-4- Install McCAD
-   * McCAD library and executable installation can proceed by providing the custom CMake flags.
-   * Building a shared executable is recommended.
-
-Installation (Windows 10):
---------------------------
-   * Same steps 1 - 3 can be followed by downloading the install files that is suitable for Windows 10
-4- Install McCAD
-   * Building a static executable is recommended.
-   * Path to OCC should be provided through -DOCC_CUSTOM_ROOT=<path to OCC> CMake flag.
-   * Path to Boost should be provided though -DBOOST_CUSTOM_ROOT=<path to Boost> CMake flag.
+Installation:
+-------------
+Please refer to the "Installation from Source" section in the manual in docs/Manual v1.0/McCAD_manual_v1.pdf.
 
 General notes on Usage:
 -----------------------
-1- The library assumes a clean CAD model (one with no intersections or overlapping).
-   While in theory the library won't report an error with intersections/overlappings as solids are processed individually,
-   it will cause problems for void generation and conversion later on.
+1- The library assumes a clean CAD model, one with no intersections or overlapping.
+   * While in theory the library won't report an error with intersections/overlappings as solids are processed individually, it will cause problems for void generation and conversion later on.
+2- There are known bugs with the decomposition algorithm which are currently being investigated.
+   * A list of bugs and proposed fixes can be found in the docs/Manual v1.0/McCAD_manual_v1.pdf.
+   
+Reporting issues:
+-----------------
+Please don't hesitate to report any issues with running the code or errors in the manual by:
+   * Raising issues in the github repo.
+   * sending an email to moataz.harb@kit.edu.

@@ -10,8 +10,6 @@
 #include "compound.hpp"
 #include "voidCell.hpp"
 #include "inputconfig.hpp"
-// OCC
-#include <Standard.hxx>
 
 namespace McCAD::Conversion{
     class Writer {
@@ -20,7 +18,6 @@ namespace McCAD::Conversion{
         ~Writer();
 
         IO::InputConfig inputConfig;
-        std::string MCcode;
         void operator()(
                 const std::vector<std::shared_ptr<Geometry::Impl::Compound>> compoundList,
                 const std::shared_ptr<VoidCell>& voidCell);

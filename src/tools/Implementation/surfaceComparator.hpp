@@ -13,9 +13,9 @@ namespace McCAD::Tools{
                         const Standard_Real& distanceTolerance);
       ~SurfaceComparator();
   private:
-      Standard_Real precision{1.0e-7};
-      Standard_Real angularTolerance{1.0e-4};
-      Standard_Real distanceTolerance{1.0e-5};
+      Standard_Real precision{1.0e-6};
+      Standard_Real angularTolerance{1.0e-4 * M_PI};
+      Standard_Real distanceTolerance{1.0e-6};
   public:
       Standard_Boolean operator()(const TopoDS_Face& firstFace,
                                   const TopoDS_Face& secondFace) const;

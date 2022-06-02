@@ -8,15 +8,24 @@
 #include "torSolid_impl.hpp"
 #include "torusConvertor.hpp"
 
+/** ********************************************************************
+* @brief   The main function that executes McCAD decomposition.
+* @details 
+* @param   inputData is an object containing list[s] of solids from the input STEP file[s]. 
+* @param   inputConfig is an object containing the values of the configuration parameters.
+* @return  
+* @date    01/01/2020
+* @author  Moataz Harb
+* **********************************************************************/
 McCAD::Decomposition::Decompose::Impl::Impl(const General::InputData& inputData,
                                             const IO::InputConfig& inputConfig)
   : inputConfig{inputConfig}{
     // Get input solids map from the Input Data object.
     inputShapesMap = inputData.accessImpl()->inputShapesMap;
     if (!inputShapesMap.size() > 0)
-        throw std::runtime_error("Error reading input STEP file!");
+        throw std::runtime_error("Error reading input STEP file(s)!");
     std::cout << " > Decomposing " << inputShapesMap.size() <<
-                 " shape(s) from the input STEP file" << std::endl;
+                 " shape(s) from the input STEP file(s)" << std::endl;
     perform();
 }
 
@@ -50,10 +59,18 @@ McCAD::Decomposition::Decompose::Impl::perform(
         std::cout << "   - Decomposing toroidal solid" << std::endl;
         if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(torSolid)){
             // Convert tori to cylinders.
-            TorusConvertor{}(torSolid, inputConfig.scalingFactor);
+            if(inputConfig.simplifyTori) TorusConvertor{inputConfig}(torSolid);
             extractSolids(compoundObj, torSolid);
         } else compoundObj->rejectedInputShapesList->Append(
                     torSolid->accessSImpl()->solid);
+    }
+    for(auto& mxdSolid : compoundObj->mixedSolidsList){
+        std::cout << "   - Decomposing mixed solid" << std::endl;
+        if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(mxdSolid)){
+            if(inputConfig.simplifyTori) TorusConvertor{inputConfig}(mxdSolid);
+            extractSolids(compoundObj, mxdSolid);
+        } else compoundObj->rejectedInputShapesList->Append(
+                    mxdSolid->accessSImpl()->solid);
     }
     compoundList.push_back(std::move(compoundObj));
 }

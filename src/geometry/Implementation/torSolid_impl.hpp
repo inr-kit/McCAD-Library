@@ -10,8 +10,13 @@ namespace McCAD::Geometry{
   public:
     Impl() = default;
 
-    void judgeDecomposeSurfaces(Solid::Impl*& solidImpl);
+    void judgeDecomposeSurfaces(Solid::Impl*& solidImpl,
+                                Standard_Real precision = 1.0e-6,
+                                Standard_Real distanceTolerance = 1.0e-6);
     void judgeThroughConcaveEdges(Solid::Impl*& solidImpl);
+    void judgeAssistDecomposeSurfaces(Solid::Impl* solidImpl,
+                                      Standard_Real precision = 1.0e-6,
+                                      Standard_Real distanceTolerance = 1.0e-6);
   };
 }
 

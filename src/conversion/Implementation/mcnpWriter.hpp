@@ -12,8 +12,6 @@
 #include "compound.hpp"
 #include "voidCell.hpp"
 #include "inputconfig.hpp"
-// OCC
-#include <Standard.hxx>
 
 namespace McCAD::Conversion{
     class MCNPWriter {
@@ -21,43 +19,40 @@ namespace McCAD::Conversion{
         MCNPWriter(const IO::InputConfig& inputConfig);
         ~MCNPWriter();
     private:
-        using surfacesMap = std::map<Standard_Integer, std::shared_ptr<Geometry::BoundSurface>>;
-        using finalMap = std::map<Standard_Integer, std::string>;
-        using solidsMap = std::map<Standard_Integer, std::shared_ptr<Geometry::Solid>>;
-        using compoundsMap = std::map<Standard_Integer, std::shared_ptr<Geometry::Impl::Compound>>;
-        using voidsMap = std::map<std::tuple<Standard_Integer, Standard_Integer>,
-                                  std::shared_ptr<VoidCell>>;
+        using surfacesMap = std::map<int, std::shared_ptr<Geometry::BoundSurface>>;
+        using finalMap = std::map<int, std::string>;
+        using matMap = std::map<std::tuple<std::string, double>, int>;
+        using solidsMap = std::map<int, std::shared_ptr<Geometry::Solid>>;
+        using compoundsMap = std::map<int, std::shared_ptr<Geometry::Impl::Compound>>;
+        using voidsMap = std::map<std::tuple<int, int, std::string>, std::shared_ptr<VoidCell>>;
     public:
-        Standard_Real PI;
-        Standard_Integer maxLineWidth;
-        Standard_Real precision;
-        std::string MCOutputFileName, volumesFileName;
-        Standard_Integer startCellNum, startSurfNum;
-        surfacesMap uniquePlanes, uniqueCylinders, uniqueSpheres;
+        IO::InputConfig inputConfig;
+        int continueSpacing{ 6 }, materialSurfacesCount{0};
+        double scalingFactor{1.0}, radius;
+        surfacesMap uniquePlanes, uniqueCylinders, uniqueTori;
         finalMap uniqueSurfaces;
+        matMap materialsMap;
         solidsMap solidObjMap;
         compoundsMap compoundObjMap;
         voidsMap voidCellsMap;
-        Standard_Boolean voidGeneration, BVHVoid;
-        Standard_Real radius;
 
-        void operator()(
-                const std::vector<std::shared_ptr<Geometry::Impl::Compound>>& compoundList,
-                const std::shared_ptr<VoidCell>& voidCell);
+        void operator()(const std::vector<std::shared_ptr<Geometry::Impl::Compound>>& compoundList,
+                        const std::shared_ptr<VoidCell>& voidCell);
         void processSolids(const std::vector<std::shared_ptr<Geometry::Impl::Compound>>& compoundList);
         void processVoids(const std::shared_ptr<VoidCell>& voidCell);
         void addUniqueSurfNumbers(const std::vector<std::shared_ptr<Geometry::Impl::Compound>>& compoundList);
-        std::optional<Standard_Integer> findDuplicate(
-                const std::shared_ptr<Geometry::BoundSurface>& surface,
-                surfacesMap& uniqueMap);
+        std::optional<int> findDuplicate(const std::shared_ptr<Geometry::BoundSurface>& surface,
+                                         surfacesMap& uniqueMap);
         void createSolidsMap(const std::vector<std::shared_ptr<Geometry::Impl::Compound>>& compoundList);
+        void createMaterialsMap(const std::vector<std::tuple<std::string, double>>& materialsInfo);
         void addDaughterVoids(const std::shared_ptr<VoidCell>& voidCell);
         void createVoidMap(const std::shared_ptr<VoidCell>& voidCell);
         std::string adjustLineWidth(const std::string& mainExpr,
-                                    const std::string& bodyExpr);
-        void writeHeader(std::ofstream& outputStream);
+                                    const std::string& bodyExpr,
+                                    int& continueSpacing);
+        void writeHeaders(std::ofstream& outputStream, std::ofstream& volumeStream, std::ofstream& voidCellsStream);
         void writeCellCard(std::ofstream& outputStream, std::ofstream& volumeStream);
-        void writeVoidCard(std::ofstream& outputStream);
+        void writeVoidCard(std::ofstream& outputStream, std::ofstream& voidCellsStream);
         void writeSurfCard(std::ofstream& outputStream);
         void writeDataCard(std::ofstream& outputStream);
     };

@@ -9,6 +9,7 @@
 #include "CurveUtilities.hpp"
 #include "SurfaceUtilities.hpp"
 #include "faceParameters.hpp"
+#include "EdgesComparator.hpp"
 //OCC
 #include <TopoDS_Face.hxx>
 #include <TopLoc_Location.hxx>
@@ -23,6 +24,7 @@
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepTools.hxx>
 #include <BRepAdaptor_Curve.hxx>
+#include <GeomAbs_CurveType.hxx>
 #include <STEPControl_Writer.hxx>
 
 McCAD::Geometry::BoundSurface::Impl::Impl(BoundSurface* backReference)
@@ -41,26 +43,10 @@ McCAD::Geometry::BoundSurface::Impl::isEqual(const McCAD::Geometry::BoundSurface
 Standard_Boolean
 McCAD::Geometry::BoundSurface::Impl::canFuse(const McCAD::Geometry::BoundSurface& that){
     // Check common edges of the two faces.
-    for (Standard_Integer i = 0; i <= edgesList.size() - 2; ++i){
-        for (Standard_Integer j = i+1; j <= that.accessBSImpl()->edgesList.size() - 1;
-             ++j){
-            if (*edgesList[i] == *that.accessBSImpl()->edgesList[j]){
-                /* //debug
-                STEPControl_Writer writer3;
-                writer3.Transfer(edgesList[i]->accessEImpl()->edge,
-                                 STEPControl_StepModelType::STEPControl_AsIs);
-                writer3.Transfer(that.accessBSImpl()->edgesList[j]->accessEImpl()->edge,
-                                 STEPControl_StepModelType::STEPControl_AsIs);
-                Standard_Integer kk = 0;
-                std::string filename = "/home/mharb/Documents/McCAD_refactor/examples/bbox/edge";
-                std::string suffix = ".stp";
-                while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
-                    ++kk;
-                }
-                filename += std::to_string(kk);
-                filename += suffix;
-                writer3.Write(filename.c_str());
-                */ //debug
+    for (Standard_Integer i = 0; i < edgesList.size(); ++i){
+        for (Standard_Integer j = 0; j < that.accessBSImpl()->edgesList.size(); ++j){
+            if(Tools::EdgesComparator{}(edgesList[i]->accessEImpl()->edge,
+                                        that.accessBSImpl()->edgesList[j]->accessEImpl()->edge)){
                 return Standard_True;
             }
         }
@@ -91,10 +77,6 @@ McCAD::Geometry::BoundSurface::Impl::generateMesh(const Standard_Real& meshDefle
           std::array<Standard_Integer, 3> triangleNodes;
           for (const auto& Triangle : Triangles){
               Triangle.Get(triangleNodes[0], triangleNodes[1], triangleNodes[2]);
-              //std::cout << triangleNodes[0] << std::endl;
-              //std::cout	<< triangleNodes[1] << std::endl;
-              //std::cout	<< triangleNodes[2] << std::endl;
-              //std::cout << "=====" << std::endl;
               std::array<gp_Pnt, 3> points = {
                   meshNodes(triangleNodes[0]).Transformed(Transformation),
                   meshNodes(triangleNodes[1]).Transformed(Transformation),
@@ -116,9 +98,11 @@ McCAD::Geometry::BoundSurface::Impl::generateMesh(const Standard_Real& meshDefle
 }
 
 void
-McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
+McCAD::Geometry::BoundSurface::Impl::generateEdges(const Standard_Real& parameterTolerance){
     TopoDS_Face face = boundSurface->accessSImpl()->face;
     for (const auto& tempEdge : detail::ShapeView<TopAbs_EDGE>{face}){
+        // Ignore degenerated edges.
+        if(BRep_Tool::Degenerated(tempEdge)) continue;
         // more specific edge types as with surfaces and solids
         std::shared_ptr<Edge> edge = std::make_shared<Edge>();
         edge->accessEImpl()->initiate(tempEdge);
@@ -137,8 +121,8 @@ McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
                     edgeUV[3]);
             BRepTools::UVBounds(face, surfaceUV[0], surfaceUV[1], surfaceUV[2],
                     surfaceUV[3]);
-            if (std::abs(edgeUV[0] - surfaceUV[0]) < uvTolerance ||
-                    std::abs(edgeUV[1] - surfaceUV[1]) < uvTolerance){
+            if (std::abs(edgeUV[0] - surfaceUV[0]) < parameterTolerance ||
+                    std::abs(edgeUV[1] - surfaceUV[1]) < parameterTolerance){
                 edge->accessEImpl()->useForSplitSurface = Standard_True;
             }
         }
@@ -148,20 +132,15 @@ McCAD::Geometry::BoundSurface::Impl::generateEdges(Standard_Real uvTolerance){
 
 void
 McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Edge>>& aEdgesList){
-    //std::cout << "combineEdges" << std::endl;
     if (edgesList.size() == 0){
         // If the current list is empty, append to it the new one.
-        for (Standard_Integer i = 0; i <= aEdgesList.size() - 1; ++i){
-            //std::cout << "combineEdges, add all" << std::endl;
+        for (Standard_Integer i = 0; i < aEdgesList.size(); ++i){
             edgesList.push_back(aEdgesList[i]);
         }
     } else{
         // Compare and add only if different.
-        //std::cout << "combineEdges, add different" << std::endl;
-        for (Standard_Integer i = 0; i <= aEdgesList.size() - 1; ++i){
-            Standard_Integer sameEdge = 0;
-            for (Standard_Integer j = 0; j <= edgesList.size() - 1; ++j){
-                //std::cout << "i: " << i << ", j: " << j << std::endl;
+        for (Standard_Integer i = 0; i < aEdgesList.size(); ++i){
+            for (Standard_Integer j = 0; j < edgesList.size(); ++j){
                 if (*(edgesList[j]) == *(aEdgesList[i])){
                     /* //debug
                     STEPControl_Writer writer1;
@@ -179,35 +158,57 @@ McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Ed
                     filename += suffix;
                     writer1.Write(filename.c_str());
                     */ //debug
-                    //std::cout << "combineEdges, equal, erase" << std::endl;
                     edgesList.erase(edgesList.begin() + j);
-                    ++sameEdge;
                     --j;
-                    //std::cout << edgesList.size() << ", j: " << j << std::endl;
                 }
             }
-            if (sameEdge == 0){
-                edgesList.push_back(aEdgesList[i]);
-            }
+            edgesList.push_back(aEdgesList[i]);
         }
     }
 }
 
 Standard_Boolean
-McCAD::Geometry::BoundSurface::Impl::generateParmts(){
+McCAD::Geometry::BoundSurface::Impl::generateParmts(Standard_Real precision,
+                                                    Standard_Real scalingFactor){
     if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
         // std::vector<gp_Pln, gp_Pnt, gp_Dir, parameters>
-        auto generatedParmts = Tools::FaceParameters{1.0e-7}.genPlSurfParmts(
+        auto generatedParmts = Tools::FaceParameters{precision, scalingFactor}.genPlSurfParmts(
                     boundSurface->accessSImpl()->face);
         boundSurface->accessSImpl()->plane = std::get<0>(generatedParmts);
         boundSurface->accessSImpl()->location = std::get<1>(generatedParmts);
         boundSurface->accessSImpl()->normal = std::get<2>(generatedParmts);
-        boundSurface->accessSImpl()->surfParameters = std::get<3>(generatedParmts);
-                //Tools::genPlSurfParmts(boundSurface->accessSImpl()->face);
-    } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder))
-        Tools::FaceParameters{1.0e-7}.genCylSurfParmts(boundSurface->accessSImpl()->face);
-    else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Torus))
-        Tools::FaceParameters{1.0e-7}.genTorSurfParmts(boundSurface->accessSImpl()->face);
+        boundSurface->accessSImpl()->surfParameters.insert(
+                    boundSurface->accessSImpl()->surfParameters.end(),
+                    std::get<3>(generatedParmts).begin(),
+                    std::get<3>(generatedParmts).end());
+    } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder)){
+        // std::vector<gp_Cylinder, gp_Pnt, gp_Dir, parameters, radius, sense>
+        auto generatedParmts = Tools::FaceParameters{precision, scalingFactor}.genCylSurfParmts(
+                    boundSurface->accessSImpl()->face);
+        boundSurface->accessSImpl()->cylinder = std::get<0>(generatedParmts);
+        boundSurface->accessSImpl()->location = std::get<1>(generatedParmts);
+        boundSurface->accessSImpl()->symmetryAxis = std::get<2>(generatedParmts);
+        boundSurface->accessSImpl()->surfParameters.insert(
+                    boundSurface->accessSImpl()->surfParameters.end(),
+                    std::get<3>(generatedParmts).begin(),
+                    std::get<3>(generatedParmts).end());
+        boundSurface->accessSImpl()->radius = std::get<4>(generatedParmts);
+        boundSurface->accessSImpl()->surfSense = std::get<5>(generatedParmts);
+    } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Torus)){
+        // std::tuple<gp_Torus, gp_Pnt, gp_Dir, parameters, minorRadius, majorRadius, sense>
+        auto generatedParmts = Tools::FaceParameters{precision, scalingFactor}.genTorSurfParmts(
+                    boundSurface->accessSImpl()->face);
+        boundSurface->accessSImpl()->torus = std::get<0>(generatedParmts);
+        boundSurface->accessSImpl()->location = std::get<1>(generatedParmts);
+        boundSurface->accessSImpl()->symmetryAxis = std::get<2>(generatedParmts);
+        boundSurface->accessSImpl()->surfParameters.insert(
+                    boundSurface->accessSImpl()->surfParameters.end(),
+                    std::get<3>(generatedParmts).begin(),
+                    std::get<3>(generatedParmts).end());
+        boundSurface->accessSImpl()->minorRadius = std::get<4>(generatedParmts);
+        boundSurface->accessSImpl()->majorRadius = std::get<5>(generatedParmts);
+        boundSurface->accessSImpl()->surfSense = std::get<6>(generatedParmts);
+    }
     else return Standard_False;
     return Standard_True;
 }

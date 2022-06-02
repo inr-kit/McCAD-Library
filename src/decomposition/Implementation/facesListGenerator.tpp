@@ -23,7 +23,8 @@ McCAD::Decomposition::FacesListGenerator::operator()(solidObjType& solidObj,
                                                      const Standard_Real& edgeTolerance,
                                                      const Standard_Real& faceTolerance,
                                                      const Standard_Real& angularTolerance,
-                                                     const Standard_Real& distanceTolerance){
+                                                     const Standard_Real& distanceTolerance,
+                                                     const Standard_Real& parameterTolerance){
     Tools::Preprocessor preproc{precision, faceTolerance};
     TopoDS_Face face;
     TopoDS_Solid solid = solidObj->accessSImpl()->solid;
@@ -41,7 +42,7 @@ McCAD::Decomposition::FacesListGenerator::operator()(solidObjType& solidObj,
             boundSurface->accessSImpl()->surfaceNumber = faceNumber;
             if (boundSurface->accessBSImpl()->generateMesh(
                         solidObj->accessSImpl()->meshDeflection)){
-                boundSurface->accessBSImpl()->generateEdges();
+                boundSurface->accessBSImpl()->generateEdges(parameterTolerance);
                 if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
                     planesList.push_back(std::move(boundSurface));
                 } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder)){
@@ -80,6 +81,16 @@ McCAD::Decomposition::FacesListGenerator::addListsToSolidObj(solidObjType& solid
         mergeToriList(solidObj->accessSImpl()->boxDiagonalLength, precision,
                       edgeTolerance, angularTolerance, distanceTolerance);
         solidObj->accessSImpl()->planesList = planesList;
+        solidObj->accessSImpl()->toriList = toriList;
+    } else if (typeid(solidObjType) == typeid(std::shared_ptr<McCAD::Geometry::MXDSolid>)){
+        mergePlanesList(solidObj->accessSImpl()->boxDiagonalLength, precision,
+                        edgeTolerance, angularTolerance, distanceTolerance);
+        mergeCylindersList(solidObj->accessSImpl()->boxDiagonalLength, precision,
+                           edgeTolerance, angularTolerance, distanceTolerance);
+        mergeToriList(solidObj->accessSImpl()->boxDiagonalLength, precision,
+                      edgeTolerance, angularTolerance, distanceTolerance);
+        solidObj->accessSImpl()->planesList = planesList;
+        solidObj->accessSImpl()->cylindersList = cylindersList;
         solidObj->accessSImpl()->toriList = toriList;
     } else return;
 }

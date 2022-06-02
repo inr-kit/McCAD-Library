@@ -5,6 +5,7 @@
 // McCAD
 #include "solid_impl.hpp"
 #include "faceParameters.hpp"
+#include "ShapeUtilities.hpp"
 // OCC
 #include <TopoDS.hxx>
 #include <BRepBndLib.hxx>
@@ -114,7 +115,7 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(Standard_Real angularToleranc
         } else if(angle > Standard_Real(0) && edge.Orientation() == TopAbs_FORWARD){
             edge.Convex(1);
         } else if (angle == Standard_Real(0)){
-            // edge if flat
+            // edge is flat
             edge.Convex(2);
         } else{
             // edge is concave
@@ -134,7 +135,5 @@ McCAD::Geometry::Solid::Impl::calcAABBCenter(){
 
 void
 McCAD::Geometry::Solid::Impl::calcVolume(){
-    GProp_GProps geometryProperties;
-    BRepGProp::VolumeProperties(solid, geometryProperties);
-    solidVolume = geometryProperties.Mass();
+    solidVolume = Tools::calcVolume(solid);
 }

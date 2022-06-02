@@ -7,6 +7,7 @@
 #include <vector>
 // McCAD
 #include "solid_impl.hpp"
+#include "inputconfig.hpp"
 // OCC
 #include <Standard.hxx>
 #include <TopoDS_Shape.hxx>
@@ -16,21 +17,20 @@
 namespace McCAD::Decomposition{
   class TorusConvertor{
   public:
-    TorusConvertor() = default;
+      TorusConvertor(const IO::InputConfig& inputConfig);
+      ~TorusConvertor();
 
-    Standard_Real scalingFactor;
-    void operator()(const std::shared_ptr<Geometry::Solid>& solid,
-                    const Standard_Real& scalingFactor);
-    std::optional<TopoDS_Shape> convertTorusToCylinder(const TopoDS_Shape& shape,
-                                                       Standard_Real scaleFactor = 1.6);
-    void retrieveSolid(TopoDS_Solid& cylinder,
-                       const std::vector<TopoDS_Face>& planesList,
-                       Standard_Real innerRadius,
-                       const Standard_Real& scaleFactor);
-    std::optional<TopoDS_Shape> fitCylinder(TopoDS_Solid& cylinder,
+      IO::InputConfig inputConfig;
+      void operator()(const std::shared_ptr<Geometry::Solid>& solid);
+      Standard_Boolean convertCondition(const TopoDS_Shape& shape);
+      std::optional<TopoDS_Shape> convertTorusToCylinder(const TopoDS_Shape& shape);
+      void retrieveSolid(TopoDS_Solid& cylinder,
+                         const std::vector<TopoDS_Face>& planesList,
+                         Standard_Real innerRadius);
+      std::optional<TopoDS_Shape> fitCylinder(TopoDS_Solid& cylinder,
                                               std::vector<TopoDS_Face>& planesList);
-    std::optional<std::pair<TopoDS_Shape, TopoDS_Shape>> splitSolid(TopoDS_Solid& solid,
-                                                                    TopoDS_Face& splitFace);
+      std::optional<std::pair<TopoDS_Shape, TopoDS_Shape>> splitSolid(
+              TopoDS_Solid& solid, TopoDS_Face& splitFace);
   };
 }
 

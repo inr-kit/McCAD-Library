@@ -12,8 +12,7 @@
 #include "SolidType.hpp"
 #include "solid_impl.hpp"
 #include "compound.hpp"
-// OCC
-#include <Standard.hxx>
+// OCCT
 #include <TopoDS_Shape.hxx>
 #include <TCollection_ExtendedString.hxx>
 
@@ -32,10 +31,11 @@ namespace McCAD::Conversion {
         IO::InputConfig inputConfig;
         shapesMap inputShapesMap;
         std::vector<std::shared_ptr<Geometry::Impl::Compound>> compoundList;
-        Standard_Boolean rejectCondition = Standard_False;
+        bool rejectCondition = false;
         solidsMap rejectConversion;
         std::vector<std::shared_ptr<Geometry::Solid>> solidObjList;
-        void getGeomData();
+        int getGeomData(const std::tuple<std::string, double>& matInfo,
+                        const int& compoundIndex, const int& solidIndex);
     };
 }
 

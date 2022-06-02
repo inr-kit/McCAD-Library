@@ -13,8 +13,8 @@ public:
         planar = 1,
         cylindrical,
         toroidal,
-        spherical,
         mixed,
+        spherical,
         unKnown
     };
 };

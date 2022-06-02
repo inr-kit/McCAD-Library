@@ -16,8 +16,8 @@ McCAD::Decomposition::SurfacesMerger::operator()(
         const Standard_Real& angularTolerance,
         const Standard_Real& distanceTolerance){
     if (surfacesList.size() < 2) return;
-    for (Standard_Integer i = 0; i <= surfacesList.size() - 2; ++i){
-        for (Standard_Integer j = i+1; j <= surfacesList.size() - 1; ++j){
+    for (Standard_Integer i = 0; i < surfacesList.size() - 1; ++i){
+        for (Standard_Integer j = i+1; j < surfacesList.size(); ++j){
             if(Tools::SurfaceComparator{precision, angularTolerance, distanceTolerance}(
                         surfacesList[i]->accessSImpl()->face,
                         surfacesList[j]->accessSImpl()->face)){
@@ -25,7 +25,6 @@ McCAD::Decomposition::SurfacesMerger::operator()(
                         surfacesList[i]->accessSImpl()->surfaceNumber;
                 // Test if the two surfaces can be fused.
                 if (*surfacesList[i] << *surfacesList[j]){
-                    //std::cout << "*** equal, fuse" << std::endl;
                     TopoDS_Face newFace = Tools::SurfacesFuser{}(
                                 surfacesList[i]->accessSImpl()->face,
                                 surfacesList[j]->accessSImpl()->face).value();
@@ -64,21 +63,10 @@ McCAD::Decomposition::SurfacesMerger::operator()(
                                     std::move(surfacesList[j]->accessBSImpl()->meshTrianglesList[k]));
                     }
                     // Combine edges.
-                    //std::cout << "combin edges" << std::endl;
-                    //std::cout << "edges list of surface i: " <<
-                    //             surfacesList[i]->accessBSImpl()->edgesList.size()
-                    //          << std::endl;
                     newboundSurface->accessBSImpl()->combineEdges(
                                 surfacesList[i]->accessBSImpl()->edgesList);
-                    //std::cout << "combined edges of surface i" << std::endl;
-                    //std::cout << "edges list of surface j: " <<
-                    //             surfacesList[j]->accessBSImpl()->edgesList.size()
-                    //          << std::endl;
                     newboundSurface->accessBSImpl()->combineEdges(
                                 surfacesList[j]->accessBSImpl()->edgesList);
-                    //std::cout << "combined edges of surface j" << std::endl;
-                    // Erase pointer surfacesList[j] & [i] from surfacesList.
-                    //std::cout << "erase pointers to surfaces i and j" << std::endl;
                     surfacesList.erase(surfacesList.begin() + j);
                     --j;
                     surfacesList.erase(surfacesList.begin() + i);
@@ -86,7 +74,9 @@ McCAD::Decomposition::SurfacesMerger::operator()(
                     surfacesList.push_back(std::move(newboundSurface));
                     break;
                 } else{
-                    //std::cout << "*** equal, erase one" << std::endl;
+                    surfacesList[i]->accessSImpl()->repeatedSurface += 1;
+                    surfacesList[i]->accessSImpl()->throughConcaveEdges +=
+                            surfacesList[j]->accessSImpl()->throughConcaveEdges;
                     surfacesList.erase(surfacesList.begin() + j);
                     --j;
                 }

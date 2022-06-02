@@ -46,6 +46,9 @@ McCAD::Decomposition::Preprocessor::operator()(
             case solidType.toroidal:
                 compound->torSolidsList.push_back(std::get<solidType.toroidal>(solidObj));
                 break;
+            case solidType.mixed:
+                compound->mixedSolidsList.push_back(std::get<solidType.mixed>(solidObj));
+                break;
             default:;
             }
         }
@@ -63,6 +66,10 @@ McCAD::Decomposition::Preprocessor::operator()(
         compound->solidsList.insert(compound->solidsList.end(),
                                     compound->torSolidsList.begin(),
                                     compound->torSolidsList.end());
+    if(compound->mixedSolidsList.size() > 0)
+        compound->solidsList.insert(compound->solidsList.end(),
+                                    compound->mixedSolidsList.begin(),
+                                    compound->mixedSolidsList.end());
 }
 
 McCAD::Decomposition::Preprocessor::VariantType
@@ -77,6 +84,9 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
         break;
     case solidType.toroidal:
         solidVariant = SolidObjCreator{inputConfig}.createObj<Geometry::TORSolid>(shape);
+        break;
+    case solidType.mixed:
+        solidVariant = SolidObjCreator{inputConfig}.createObj<Geometry::MXDSolid>(shape);
         break;
     default:;
         // Unknown Type

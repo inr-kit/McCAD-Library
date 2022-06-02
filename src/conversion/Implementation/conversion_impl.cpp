@@ -1,5 +1,6 @@
 // C++
 #include <iostream>
+#include <map>
 // McCAD
 #include "conversion_impl.hpp"
 #include "stepreader.hpp"
@@ -10,26 +11,40 @@
 #include "voidCellManager.hpp"
 #include "conversionWriter.hpp"
 
+/** ********************************************************************
+* @brief   Executes McCAD conversion.
+* @param   inputConfig is an object containing the values of the configuration parameters.
+* @date    31/12/2021
+* @author  Moataz Harb
+* **********************************************************************/
 McCAD::Conversion::Convert::Impl::Impl(IO::InputConfig& inputConfig) :
-    inputConfig{inputConfig}{
-    inputConfig.readConversion = Standard_True;
-    IO::STEPReader reader{inputConfig}; //inputConfig.conversionFileName
-    inputShapesMap = reader.getInputData().accessImpl()->inputShapesMap;
-    if (!inputShapesMap.size() > 0)
-        throw std::runtime_error("Error loading STEP file, " + inputConfig.conversionFileName);
-    std::cout << "> Found " << inputShapesMap.size() <<
-                 " shapes(s) in the input STEP file" << std::endl;
-    getGeomData();
-    if (rejectCondition){
-        // Write rejected solids to a STEP file.
-        General::InputData outputData;
-        outputData.accessImpl()->outputShapesMap = rejectConversion;
-        inputConfig.outputFileName = inputConfig.rejectConvFileName;
-        McCAD::IO::STEPWriter{inputConfig, outputData};
-        throw std::runtime_error("Rejected solids have been written to "
-                                 "rejectedConversion.stp. Conversion terminated!");
+    inputConfig{ inputConfig }{
+    // readConversion needs to be set to tru so that the STEP reader knows to get the file
+    // name from the conversion names list not from the input names list.
+    inputConfig.readConversion = true;
+    int compoundCounter{0}, solidCounter{0};
+    for(int i = 0; i < inputConfig.conversionFileNames.size(); ++i){
+        inputConfig.conversionFileName = inputConfig.conversionFileNames[i];
+        IO::STEPReader reader{inputConfig}; //loads the solids from inputConfig.conversionFileName file.
+        inputShapesMap = reader.getInputData().accessImpl()->inputShapesMap;
+        if (!inputShapesMap.size() > 0)
+            throw std::runtime_error("Error loading STEP file, " + inputConfig.conversionFileName);
+        std::cout << "> Found " << inputShapesMap.size() <<
+                     " shape(s) in the input STEP file" << std::endl;
+        solidCounter = getGeomData(inputConfig.materialsInfo[i], compoundCounter, solidCounter);
+        if (rejectCondition){
+            // Write rejected solids to a STEP file.
+            General::InputData outputData;
+            outputData.accessImpl()->outputShapesMap = rejectConversion;
+            inputConfig.outputFileName = inputConfig.rejectedConvFileNames[i];
+            McCAD::IO::STEPWriter{inputConfig, outputData};
+            throw std::runtime_error("Rejected solids have been written to " + 
+                                     inputConfig.rejectedConvFileNames[i] +
+                                     ". Conversion terminated!");
+        }
+        compoundCounter += inputShapesMap.size();
     }
-    std::cout << " > Converting " << solidObjList.size() << " solid(s)" << std::endl;
+    std::cout << " > Converting " << compoundList.size() << " compound(s)" << std::endl;
     auto voidCell = VoidCellManager{inputConfig}(solidObjList);
     std::cout << "   - Writing MC input file" << std::endl;
     Writer{inputConfig}(compoundList, voidCell);
@@ -38,36 +53,57 @@ McCAD::Conversion::Convert::Impl::Impl(IO::InputConfig& inputConfig) :
 McCAD::Conversion::Convert::Impl::~Impl(){
 }
 
-void
-McCAD::Conversion::Convert::Impl::getGeomData(){
-    // Loop over inputhapesMap and create compound objects.
+/** ********************************************************************
+* @brief   Populates the list of compounds with input solids.
+* @param   matInfo is a tuple of material name and density
+* @param   compoundIndex is the order of compounds loaded so far from all input files. Used to set a unique compound ID.
+* @param   solidIndex is the order of solids loaded so far from all input files. Used to set a unique solid ID.
+* @return  New solid index to be used as ID for new solids.
+* @date    31/12/2021
+* @author  Moataz Harb
+* **********************************************************************/
+int
+McCAD::Conversion::Convert::Impl::getGeomData(const std::tuple<std::string, double>& matInfo,
+                                              const int& compoundIndex,
+                                              const int& solidIndex){
+    // Loop over inputShapesMap and create compound objects.
+    int index{compoundIndex};
+    std::map<int, std::shared_ptr<Geometry::Impl::Compound>> tempCompoundMap;
     TaskQueue<Policy::Parallel> taskQueue;
-    Standard_Integer counter = 0;
     for(const auto& member : inputShapesMap){
-        taskQueue.submit([this, counter, &member](){
+        taskQueue.submit([this, index, matInfo, &tempCompoundMap, &member](){
             std::shared_ptr<Geometry::Impl::Compound> compoundObj =
                     std::make_unique<Geometry::Impl::Compound>(
                     std::get<0>(member), std::get<1>(member));
             Decomposition::Preprocessor{inputConfig}(compoundObj);
-            compoundObj->compoundID = counter;
-            compoundList.push_back(std::move(compoundObj));
+            compoundObj->compoundID = index;
+            compoundObj->matInfo = matInfo;
+            tempCompoundMap[index] = std::move(compoundObj);
         });
-        ++counter;
+        ++index;
     }
     taskQueue.complete();
-    // Loop over list of compounds, add solid ID, compoundID, and add rejected solids to list.
-    counter = 0;
-    for(Standard_Integer i = 0; i < compoundList.size(); ++i){
-        for(const auto& solidObj : compoundList[i]->solidsList){
-            solidObj->accessSImpl()->solidID = counter;
-            solidObj->accessSImpl()->compoundID = compoundList[i]->compoundID;
+    // Loop over list of compounds; add solid ID, compoundID, and rejected solids to list.
+    index = solidIndex;
+    for(const auto& member : tempCompoundMap){
+        for(const auto& solidObj : member.second->solidsList){
+            solidObj->accessSImpl()->solidID = index;
+            solidObj->accessSImpl()->compoundID = member.second->compoundID;
             solidObjList.push_back(solidObj);
-            ++counter;
+            ++index;
         }
-        if(compoundList[i]->rejectedInputShapesList->Length() > 0)
-            rejectCondition = Standard_True;
+        if(member.second->rejectedInputShapesList->Length() > 0){
+            rejectCondition = true;
+            // Debug level >= 1
+            if (inputConfig.debugLevel >= 1) {
+                std::cout << "Compound with rejected solids: " << member.second->compoundName << std::endl;
+            }
             rejectConversion.push_back(std::make_tuple(
-                                           compoundList[i]->compoundName,
-                                           *compoundList[i]->rejectedInputShapesList));
+                                           member.second->compoundName,
+                                           *member.second->rejectedInputShapesList));
+        }
+        // Add compound to compound list.
+        compoundList.push_back(member.second);
     }
+    return index + 1;
 }
