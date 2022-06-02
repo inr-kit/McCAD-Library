@@ -1,12 +1,12 @@
 McCAD v1.0
 ----------
-McCAD is a library for the conversion of CAD solid models to MCNP input syntax, from Boundary Representation "BREP" to Constructive Solid Geometry "CSG".
+McCAD is a library for the conversion of CAD solid models to MCNP input syntax; from Boundary Representation "BREP" to Constructive Solid Geometry "CSG".
 The library is written in C++ and consists of two main algorithms:
 
 1- Decompostion:
-   * carries tasks related to the simplification of complex solids by means of decomposition into primitive convex solids.
+   * carries out tasks related to the simplification of complex solids by means of decomposition into primitive convex subsolids.
 2- Void generation and Conversion:
-   * the main responsibility is the generation of void cells and conversion of the primitive solids into MCNP input syntax, and later on to other MC codes.
+   * carries out tasks related to the generation of void cells and conversion of the primitive solids into MCNP input syntax, and later on to other MC codes.
 
 General Notes:
 --------------
@@ -31,7 +31,7 @@ Dependencies:
 
 Installation:
 -------------
-Please refer to "Installation from Source" section in the manual in docs/Manual v1.0/McCAD_manual_v1.pdf.
+Please refer to the "Installation from Source" section in the manual in docs/Manual v1.0/McCAD_manual_v1.pdf.
 
 General notes on Usage:
 -----------------------
