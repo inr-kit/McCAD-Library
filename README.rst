@@ -1,4 +1,4 @@
-McCAD: Monte Carlo to CAD conversion library
+McCAD: CAD to Monte Carlo conversion library
 --------------------------------------------
 McCAD is a library for the conversion of CAD solid models to the input syntax of a variety of Monte Carlo codes; from Boundary Representation "BREP" to Constructive Solid Geometry "CSG".
 The library is written in C++ and consists of two main algorithms:
@@ -8,15 +8,18 @@ The library is written in C++ and consists of two main algorithms:
 2- Void generation and Conversion:
    * carries out tasks related to the generation of void cells and conversion of the primitive solids into MCNP input syntax, and later on to other MC codes.
 
-General Notes:
---------------
-* The latest working version of McCAD is McCAD-SALOME, McCAD library integrated with the Salome platform:
+Useful links:
+-------------
+* McCAD-SALOME: McCAD library integrated with the `Salome <https://www.salome-platform.org/>`_ platform:
    * `docs <https://github.com/inr-kit/McCad-Salome-Docs>`_
    * `source <https://github.com/inr-kit/McCad-Salome-Source>`_
    * `binaries <https://github.com/inr-kit/McCad-Salome-Binaries>`_
  
-* The current decomposition algorithm is an isolated and improved algorithm based on the latest updates/changes:
+* McCAD-FreeCAD: an improved McCAD library integrated with the opensource CAD software `FreeCAD <https://www.freecadweb.org/>`_:
    * `source <https://github.com/inr-kit/McCAD-FreeCAD>`_
+   
+* csg2csg: a tool for the translation between a variety of Monte Carlo code formats: 
+   * `source <https://github.com/makeclean/csg2csg>`_.
 
 Dependencies:
 --------------
