@@ -1,0 +1,19 @@
+\contentsline {section}{\numberline {0.1}Introduction}{2}{section.0.1}%
+\contentsline {section}{\numberline {0.2}Installation from Source}{2}{section.0.2}%
+\contentsline {subsection}{\numberline {0.2.1}Linux}{3}{subsection.0.2.1}%
+\contentsline {subsection}{\numberline {0.2.2}Windows}{4}{subsection.0.2.2}%
+\contentsline {section}{\numberline {0.3}I/O}{6}{section.0.3}%
+\contentsline {subsection}{\numberline {0.3.1}General}{6}{subsection.0.3.1}%
+\contentsline {subsection}{\numberline {0.3.2}Decomposition}{6}{subsection.0.3.2}%
+\contentsline {subsection}{\numberline {0.3.3}Conversion}{8}{subsection.0.3.3}%
+\contentsline {section}{\numberline {0.4}Running McCAD}{9}{section.0.4}%
+\contentsline {subsection}{\numberline {0.4.1}Command Line}{9}{subsection.0.4.1}%
+\contentsline {subsection}{\numberline {0.4.2}SpaceClaim Plugin}{10}{subsection.0.4.2}%
+\contentsline {section}{\numberline {0.5}Example}{10}{section.0.5}%
+\contentsline {section}{\numberline {0.6}General Usage Notes}{11}{section.0.6}%
+\contentsline {section}{\numberline {0.7}Known Issues}{12}{section.0.7}%
+\contentsline {subsection}{\numberline {0.7.1}Decomposition}{12}{subsection.0.7.1}%
+\contentsline {subsection}{\numberline {0.7.2}Conversion}{12}{subsection.0.7.2}%
+\contentsline {section}{\numberline {0.8}Theory of McCAD Conversion}{12}{section.0.8}%
+\contentsline {subsection}{\numberline {0.8.1}Decomposition}{12}{subsection.0.8.1}%
+\contentsline {subsection}{\numberline {0.8.2}Conversion}{12}{subsection.0.8.2}%

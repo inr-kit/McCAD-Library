@@ -1,0 +1,21 @@
+﻿{
+    "configurations": [
+        {
+            "name": "McCAD_T1",
+            "generator": "Visual Studio 17 2022 Win64",
+            "configurationType": "Release",
+            "inheritEnvironments": [ "msvc_x64_x64" ],
+            "buildRoot": "${projectDir}\\build",
+            "installRoot": "${projectDir}\\build",
+            "cmakeCommandArgs": "-DLINUX_OS=OFF -DBUILD_RPATH=ON -DBUILD_STATIC_EXE=ON -DBUILD_SHARED=OFF -DBOOST_CUSTOM_ROOT=\"D:\\inst\\boost_1_78_0\" -DOCC_CUSTOM_ROOT=\"C:\\OpenCASCADE-7.5.0-vc14-64\\opencascade-7.5.0\"",
+            "ctestCommandArgs": "",
+            "variables": [
+                {
+                    "name": "BUILD_STATIC",
+                    "value": "true",
+                    "type": "BOOL"
+                }
+            ]
+        }
+    ]
+}
