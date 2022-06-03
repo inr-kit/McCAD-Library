@@ -34,7 +34,7 @@ Dependencies:
 
 Installation:
 -------------
-Please refer to the 'Installation from Source <https://github.com/moatazharb/McCAD/tree/develop/docs/Manual%20v1.0.>'_ section in the manual.
+Please refer to the `Installation from Source <https://github.com/moatazharb/McCAD/tree/develop/docs/Manual%20v1.0.>`_ section in the manual.
 
 General notes on Usage:
 -----------------------
@@ -46,5 +46,5 @@ General notes on Usage:
 Reporting issues:
 -----------------
 Please don't hesitate to report any issues with running the code or errors in the manual by:
-   * Raising issues in the github repo.
+   * raising issues in the github repo.
    * sending an email to moataz.harb@kit.edu.
