@@ -23,13 +23,13 @@ General Notes:
 
 Dependencies:
 --------------
-1- CMake (version 3.23.0): https://cmake.org/download/
+1- CMake (version `3.23.0 <https://cmake.org/download/>`):
    * The standard build system for McCAD library.
 
-2- Boost C++ Library (Version 1.78.0): https://www.boost.org/
+2- Boost C++ Library (version `1.78.0 <https://www.boost.org/>`):
    * Used for multiprocessing.
 
-3- Open CASCADE Technology (version 7.5.0): https://dev.opencascade.org/release/previous
+3- Open CASCADE Technology (version `7.5.0 <https://dev.opencascade.org/release/previous>`):
    * The geometry engine used for manipulating and decomposing solids.
 
 Installation:
