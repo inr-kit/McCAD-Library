@@ -23,14 +23,14 @@ General Notes:
 
 Dependencies:
 --------------
-1- CMake (version `3.23.0 <https://cmake.org/download/>`):
-   * The standard build system for McCAD library.
+1- CMake (version `3.23.0 <https://cmake.org/download/>`_):
+   * the standard build system for McCAD library.
 
-2- Boost C++ Library (version `1.78.0 <https://www.boost.org/>`):
-   * Used for multiprocessing.
+2- Boost C++ Library (version `1.78.0 <https://www.boost.org/>`_):
+   * used for multiprocessing.
 
-3- Open CASCADE Technology (version `7.5.0 <https://dev.opencascade.org/release/previous>`):
-   * The geometry engine used for manipulating and decomposing solids.
+3- Open CASCADE Technology (version `7.5.0 <https://dev.opencascade.org/release/previous>`_):
+   * the geometry engine used for manipulating and decomposing solids.
 
 Installation:
 -------------
@@ -39,9 +39,9 @@ Please refer to the "Installation from Source" section in the `manual <https://g
 General notes on Usage:
 -----------------------
 1- The library assumes a clean CAD model, one with no intersections or overlapping.
-   * While in theory the library won't report an error with intersections/overlappings as solids are processed individually, it will cause problems for void generation and conversion later on.
+   * while in theory the library won't report an error with intersections/overlappings as solids are processed individually, it will cause problems for void generation and conversion later on.
 2- There are known bugs with the decomposition algorithm which are currently being investigated.
-   * A list of bugs and proposed fixes can be found in the docs/Manual v1.0/McCAD_manual_v1.pdf.
+   * a list of bugs and proposed fixes can be found in the "Known issues" section in the `manual <https://github.com/moatazharb/McCAD/blob/develop/docs/Manual%20v1.0/McCAD_manual_v1.pdf>`_.
    
 Reporting issues:
 -----------------
