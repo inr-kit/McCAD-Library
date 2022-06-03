@@ -14,12 +14,12 @@ The library is written in C++ and consists of two main algorithms:
 General Notes:
 --------------
 * The latest working version of McCAD is McCAD-SALOME, McCAD library integrated with the Salome platform:
-   * docs  : https://github.com/inr-kit/McCad-Salome-Docs
-   * source: https://github.com/inr-kit/McCad-Salome-Source
-   * binary: https://github.com/inr-kit/McCad-Salome-Binaries
+   * `docs <https://github.com/inr-kit/McCad-Salome-Docs>`_
+   * `source <https://github.com/inr-kit/McCad-Salome-Source>`_
+   * `binaries <https://github.com/inr-kit/McCad-Salome-Binaries>`_
  
 * The current decomposition algorithm is an isolated and improved algorithm based on the latest updates/changes:
-   * source: https://github.com/inr-kit/McCAD-FreeCAD
+   * `source <https://github.com/inr-kit/McCAD-FreeCAD>`_
 
 Dependencies:
 --------------
@@ -34,7 +34,7 @@ Dependencies:
 
 Installation:
 -------------
-Please refer to the `Installation from Source <https://github.com/moatazharb/McCAD/tree/develop/docs/Manual%20v1.0.>`_ section in the manual.
+Please refer to the "Installation from Source" section in the `manual <https://github.com/moatazharb/McCAD/blob/develop/docs/Manual%20v1.0/McCAD_manual_v1.pdf>`_.
 
 General notes on Usage:
 -----------------------
