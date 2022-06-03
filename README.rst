@@ -1,7 +1,6 @@
 McCAD: Monte Carlo to CAD conversion library.
 ---------------------------------------------
 ..  image:: https://gitlab.kitware.com/cmake/cmake/-/blob/master/CMakeLogo.gif
-    :target: https://github.com/moatazharb/McCAD/
 
 
 McCAD is a library for the conversion of CAD solid models to the input syntax of a variety of Monte Carlo codes; from Boundary Representation "BREP" to Constructive Solid Geometry "CSG".
@@ -35,7 +34,7 @@ Dependencies:
 
 Installation:
 -------------
-Please refer to the "Installation from Source <https://github.com/moatazharb/McCAD/tree/develop/docs/Manual%20v1.0.>" section in the manual.
+Please refer to the 'Installation from Source <https://github.com/moatazharb/McCAD/tree/develop/docs/Manual%20v1.0.>'_ section in the manual.
 
 General notes on Usage:
 -----------------------
