@@ -1,6 +1,10 @@
-McCAD v1.0
-----------
-McCAD is a library for the conversion of CAD solid models to MCNP input syntax; from Boundary Representation "BREP" to Constructive Solid Geometry "CSG".
+McCAD: Monte Carlo to CAD conversion library.
+---------------------------------------------
+..  image:: https://gitlab.kitware.com/cmake/cmake/-/blob/master/CMakeLogo.gif
+    :target: https://gitlab.kitware.com/cmake/cmake/-/blob/master/CMakeLogo.gif
+
+
+McCAD is a library for the conversion of CAD solid models to the input syntax of a variety of Monte Carlo codes; from Boundary Representation "BREP" to Constructive Solid Geometry "CSG".
 The library is written in C++ and consists of two main algorithms:
 
 1- Decompostion:
@@ -10,13 +14,13 @@ The library is written in C++ and consists of two main algorithms:
 
 General Notes:
 --------------
-* The latest working version of McCAD is McCAD-SALOME:
+* The latest working version of McCAD is McCAD-SALOME, McCAD library integrated with the Salome platform:
    * docs  : https://github.com/inr-kit/McCad-Salome-Docs
    * source: https://github.com/inr-kit/McCad-Salome-Source
    * binary: https://github.com/inr-kit/McCad-Salome-Binaries
  
 * The current decomposition algorithm is an isolated and improved algorithm based on the latest updates/changes:
-   * source: https://github.com/McCadKIT/McCad
+   * source: https://github.com/inr-kit/McCAD-FreeCAD
 
 Dependencies:
 --------------
@@ -31,7 +35,7 @@ Dependencies:
 
 Installation:
 -------------
-Please refer to the "Installation from Source" section in the manual in docs/Manual v1.0/McCAD_manual_v1.pdf.
+Please refer to the "Installation from Source" section in the manual in https://github.com/moatazharb/McCAD/tree/develop/docs/Manual%20v1.0.
 
 General notes on Usage:
 -----------------------
