@@ -1,7 +1,6 @@
-\documentclass[letterpaper, 12 pt]{report}
+\documentclass[12pt, a4paper, titlepage]{article}
 
-\usepackage{geometry}
-\geometry{a4paper}
+\usepackage{authblk}
 \usepackage{siunitx}
 \usepackage{graphics}
 \usepackage{subcaption}
@@ -18,30 +17,31 @@
 	urlcolor=blue
 }
 
-\begin{document}
-\title{McCAD v1.0\\User Manual}
-\author{Moataz Harb\\ moataz.harb@kit.edu\\ \\Karlsruhe Institute of Technology (KIT), Hermann-von-Helmholtz-Platz 1,\\ 76344 Eggenstein-Leopoldshafen, Germany}
-\maketitle
-\pagestyle{empty}
+\title{McCAD v1.0}
+\author{Moataz Harb\\moataz.harb@kit.edu}
+\affil{Karlsruhe Institute of Technology (KIT), Hermann-von-Helmholtz-Platz 1, 76344 Eggenstein-Leopoldshafen, Germany}
 
+\begin{document}
+\maketitle
+\clearpage
 % -------------------------------------------------------------------------------------
 % TABLE OF CONTENTS
 % -------------------------------------------------------------------------------------
 \tableofcontents
-\newpage
+\clearpage
 
 % -------------------------------------------------------------------------------------
 % INTRODUCTION
 % -------------------------------------------------------------------------------------
 \section{Introduction} \label{sec:Introduction}
-McCAD is a C++ library for the conversion of CAD solid models to MCNP input syntax, from Boundary Representation "BREP" to Constructive Solid Geometry "CSG". The library is written in C++ and uses CMake as a build system. It relies on Open CASCADE Technology and Boost C++ libraries. Currenlty the library is capable of processing the following:
+McCAD is a C++ library for the conversion of CAD solid models to MCNP input syntax, from Boundary Representation "BREP" to Constructive Solid Geometry "CSG". The library is written in C++ and uses CMake as a build system. It relies on Open CASCADE Technology and Boost C++ libraries. Currenlty, the library is capable of processing solids with any/all of the following surface types:
 \begin{itemize}
-	\item Planar solids.
-	\item cylindrical solids.
-	\item toroidal solids.
+	\item planar
+	\item cylindrical
+	\item toroidal
 \end{itemize}
 \\
-The general capabilities/output of the library includes:
+The general capabilities/output of the library include:
 \begin{itemize}
 	\item producing a list of the volumes of solids in a STEP file.
 	\item decomposing complex solids into their constituent primitives.
@@ -94,18 +94,18 @@ Building of the McCAD library is supported on both Linux and Windows operating s
     	\item \$ cd opencascade-7.5.0
     	\item \$ mkdir build
     	\item \$ cd build
-    	\item \$ cmake .. -DCMAKE\_BUILD\_TYPE=Release -DBUILD\_LIBRARY\_TYPE=Shared \\ -DCMAKE\_INSTALL\_PREFIX=. -DINSTALL\_TEST\_CASES=TRUE \\ -DINSTALL\_DOC\_Overview=TRUE
+    	\item \$ cmake .. -DCMAKE\_BUILD\_TYPE=Release \\-DBUILD\_LIBRARY\_TYPE=Shared \\ -DCMAKE\_INSTALL\_PREFIX=. -DINSTALL\_TEST\_CASES=TRUE \\ -DINSTALL\_DOC\_Overview=TRUE
     	\item \$ make
     	\item \$ make install
       \end{itemize}
 	  \item \textbf{McCAD}
 	  \begin{itemize}
-		\item \emph{NOTE}: building a shared library is recommended! Should a static library be needed, the user has to insure a compliant build of Open CASCADE Technology by changing the build type; -DBUILD\_LIBRARY\_TYPE=STATIC.
+		\item \emph{NOTE}: building a shared library is recommended! Should a static library be needed, the user has to insure a compliant build of Open CASCADE Technology by changing the build type; \\ -DBUILD\_LIBRARY\_TYPE=STATIC.
 		\item \$ git clone \url{https://github.com/inr-kit/McCAD_Library}
 		\item \$ cd McCAD\_Library
 		\item \$ mkdir build
 		\item \$ cd build
-		\item \$ CMake .. -DCMAKE\_INSTALL\_PREFIX=. -DBUILD\_STATIC=OFF \\ -DBOOST\_CUSTOM\_ROOT=$<$PATH to boost\_1\_78\_0$>$ -DOCC\_CUSTOM\_ROOT=$<$PATH to opencascade-7.5.0/build$>$ -DBUILD\_RPATH=ON
+		\item \$ CMake .. -DCMAKE\_INSTALL\_PREFIX=. -DBUILD\_STATIC=OFF \\ -DBOOST\_CUSTOM\_ROOT=$<$PATH to boost\_1\_78\_0$>$ \\-DOCC\_CUSTOM\_ROOT=$<$PATH to opencascade-7.5.0/build$>$ -DBUILD\_RPATH=ON
 		\item \$ make
 		\item \$ make install
 	  \end{itemize}
@@ -144,7 +144,7 @@ Building of the McCAD library is supported on both Linux and Windows operating s
 		\item Open MSVC and select the McCAD\_Library.
 		\item From the "Solution Explorer - Folder Review" double click CMakeSettings.json file. This will open the file in IDE. \item Set a "Configuration name". 
 		\item Ensure that "Configuration type" is set to "Release" and "Toolset" is set to msvc\_x64\_x64.
-		\item Add -DBUILD\_RPATH=ON -DBUILD\_STATIC\_EXE=ON -DBUILD\_SHARED=OFF -DBOOST\_CUSTOM\_ROOT="$<$PATH to boost\_1\_78\_0$>$" -DOCC\_CUSTOM\_ROOT="$<$PATH to OpenCASCADE-7.5.0-vc14-64\textbackslash opencascade-7.5.0$>$" to "CMake command arguments".
+		\item Add -DBUILD\_RPATH=ON -DBUILD\_STATIC\_EXE=ON \\ -DBUILD\_SHARED=OFF -DBOOST\_CUSTOM\_ROOT="$<$PATH to boost\_1\_78\_0$>$" -DOCC\_CUSTOM\_ROOT="$<$PATH to OpenCASCADE-7.5.0-vc14-64\textbackslash opencascade-7.5.0$>$" to "CMake command arguments".
 		\item From the top menu select "Build $>$ Build All".
 		\item From the top menu select "Build $>$ Install McCAD".
 	  \end{itemize}
@@ -163,7 +163,7 @@ In general, there are three types of information that need to be provided to McC
 		\item \textbf{inputFileName}: the input STEP file(s) name(s). \emph{Default} is input.stp.
 	\end{itemize}
 
-	\begin{figure}[h]
+	\begin{figure}[h!]
 		\centering
 		\includegraphics[scale=0.6]{figures/configFile.png}
 		\caption{McCAD Input Configuration File}
@@ -237,7 +237,7 @@ There are two ways to run McCAD, via a command line or the SpaceClaim plugin. Mc
 % -------------------------------------------------------------------------------------
 \section{Example} \label{sec:Example}
 This section will discuss how to run McCAD. The example input STEP file as well as the output files can be found in examples/collection\_of\_solids folder. The input file, SS\_-793e-2.stp, contains a collection of random solids, as shown in figure (\ref{fig:ExampleSolids}); with steps, cylinders, tori, protrusions, depressions, etc. The solids from the file are assigned stainless steel material (SS) with a density of 7.93 g/cm\textsuperscript{3}.
-\begin{figure}[h]
+\begin{figure}[h!]
 	\centering
 	\includegraphics[scale=0.42]{figures/InputSolids.png}
 	\caption{Example Input Solids}
@@ -246,7 +246,7 @@ This section will discuss how to run McCAD. The example input STEP file as well 
 
 \begin{enumerate}
   \item With the path to McCAD executable added to the PATH environment variable, the McCADInputConfig.i file could be generated by running McCAD, without any arguments, figure (\ref{fig:McCAD_output}).
-  \begin{figure}[h]
+  \begin{figure}[h!]
   	\centering
   	\includegraphics[scale=0.75]{figures/McCAD_output.png}
   	\caption{McCAD Output}
@@ -256,7 +256,7 @@ This section will discuss how to run McCAD. The example input STEP file as well 
   \item On McCADInputConfig.i file, the \emph{inputFileName} should be changed to SS\_-793e-2.stp. Also, \emph{convert} and \emph{voidGeneration} parameters should be set to "true".
   
   \item McCAD is then run via the command "McCAD run". After successfully running McCAD there should be a total of five new files generated on disk. Figure (\ref{fig:McCAD Decomposition and Conversion Outputs}) shows the displayed output of McCAD on screen for decomposition and conversion.
-  \begin{figure}[h]
+  \begin{figure}[h!]
   	\centering
   	\begin{subfigure}{.5\textwidth}
   		\centering
@@ -278,7 +278,7 @@ This section will discuss how to run McCAD. The example input STEP file as well 
   	\item The first file is produced by McCAD STEP file reading algorithm, volumes\_SS\_-793e-2.i, and containes a list of solid volumes and their names as read from the input STEP file, SS\_-793e-2.stp.
   	
     \item The second file is produced by McCAD decomposition algorithm, SS\_-793e-2Decomposed.stp, and contains the decomposed input solids. Upon loading the file into any CAD software we could see the decomposed solids, as shown in figure (\ref{fig:Decomposed Solids}).
-	\begin{figure}[h]
+	\begin{figure}[h!]
 		\centering
 		\includegraphics[scale=0.4]{figures/decomposedSolids.png}
 		\caption{McCAD Decomposed Input Solids}
@@ -286,7 +286,7 @@ This section will discuss how to run McCAD. The example input STEP file as well 
 	\end{figure}
 
 	\item The third file is produced by McCAD conversion algorithm, MCFile.i. The file is the MCNP input file and contains cell, surface,data cards in MCNP format, figure (\ref{fig:MCFile}).
-	\begin{figure}[h]
+	\begin{figure}[h!]
 		\centering
 		\includegraphics[scale=0.4]{figures/cellCards.png}
 		\caption{McCAD Generated MCFile.i File}
@@ -294,7 +294,7 @@ This section will discuss how to run McCAD. The example input STEP file as well 
 	\end{figure}
 
 	\item The fourth file is produced by McCAD conversion algorithm, volumes.i. The file lists cell IDs, volumes of solids, and name on the CAD STEP file, figure (\ref{fig:volumes file}).
-	\begin{figure}[h]
+	\begin{figure}[h!]
 		\centering
 		\includegraphics[scale=0.4]{figures/volumesFile.png}
 		\caption{McCAD Generated volumes.i File}
@@ -302,7 +302,7 @@ This section will discuss how to run McCAD. The example input STEP file as well 
 	\end{figure}
 
 	\item The fifth file is produced by McCAD conversion algorithm, voidCells.i. The file maps void to material cell IDs, figure (\ref{fig:void cells file}).
-	\begin{figure}[h]
+	\begin{figure}[h!]
 		\centering
 		\includegraphics[scale=0.4]{figures/voidCellFile.png}
 		\caption{McCAD Generated voidCells.i File}
@@ -311,7 +311,7 @@ This section will discuss how to run McCAD. The example input STEP file as well 
   \end{itemize}
 
   \item Using MCNP plotter, figure (\ref{fig:MCFile.i plot}) shows a plot of the MCFile.i and the corresponding CAD cross-section.
-  \begin{figure}[h]
+  \begin{figure}[h!]
   	\centering
   	\includegraphics[scale=0.32]{figures/ConvertedSolids.png}
   	\caption{MCNP Plot of MCFile.i}
@@ -337,13 +337,23 @@ General notes on usage, will become more relevant after reading sections \ref{se
 % Knows Issues
 % -------------------------------------------------------------------------------------
 \section{Known Issues} \label{Known Issues}
-A list of known issues and how to manually fix it in solid models. Coming soon ...
+Through extensive testing of McCAD decomposition and conversion core algorithms, some issues were found in relation to processing of solids. While some issues were fixed, not reported here, through debugging, others persist and are in line for debugging. Below is a list of the current known issues and how to manually fix it to produce a clean decomposed model to proceed with conversion. PLease, keep in mind that you might not experience such issues in your model, but it is worth checking out.
 \subsection{Decomposition}
 \begin{itemize}
-	\item coordinates
-	\item simplifying of tori
-	\item hollow solids
-	\item splitting of cylinders and tori
+	\item \textbf{Coordinate systems}: 
+	\begin{itemize}
+		\item \emph{Description}: the decomposition algorithm processes each of the input solids separately. This means that solids are decomposed according to their own local coordinate systems. When writing the output STEP file, the default coordinate system is used. As a result, if not all input solids have the same coordinate system that would result in some solids being displaced after decomposition.
+		\item \emph{Solution}: in SpaceClaim, one can check the local coordinate system by expanding the structure tree, selecting "Design $>$ Move", then selecting solids, as shown in figure (\ref{fig:Solid Coord}). Selected solids will display their system which can be compared to the global system of the model. If needed, by creating a new component and cope \& paste the troubling solid, its new coordinate system will be aligned with the global one. Keep in mind that when creating components, the coordinate system is inherited from the parent, which means that sometimes one might need to replace a whole assembly to fix a coordinate system misalignment! Checking the whole structure tree is then advised. 
+		\begin{figure}[h!]
+			\centering
+			\includegraphics[scale=0.4]{figures/issue_Coordinates.png}
+			\caption{Coordinate System of a Solid in SpaceClaim}
+			\label{fig:Solid Coord}
+		\end{figure}
+	\end{itemize}
+	\item \textbf{Tori simplification}: 
+	\item \textbf{Splitting of cylinders and tori}:
+	\item \textbf{Hollow solids}:
 \end{itemize}
 \subsection{Conversion}
 
