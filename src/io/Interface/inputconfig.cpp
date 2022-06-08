@@ -39,7 +39,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "debugLevel = 0\n"
                    "# > The unit used for the input STEP file(s).\n"
                    "units = cm\n"
-                   "# > Path to the input STEP file;\n"
+                   "# > Name(s) of the input STEP file;\n"
                    "inputFileName = input.stp\n" << std::endl;
     inputConfig << "# Decomposition\n"
                    "# =============\n"
