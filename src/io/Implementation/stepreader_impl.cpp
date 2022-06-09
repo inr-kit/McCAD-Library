@@ -179,22 +179,24 @@ McCAD::IO::STEPReader::Impl::basicReader(const std::string& fileName){
 }
 
 /** ********************************************************************
-* @brief   Writes volumes of shaped in the input STEP file to a text file
-* @date    25/05/2022
-* @author  Moataz Harb
+* @brief    Writes volumes of shaped in the input STEP file to a text file
+* @date     25/05/2022
+* @modified 09/06/2022
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::IO::STEPReader::Impl::writeVolumes() {
     // Write solid volumes to a text file.
     std::string splitName = Tools::splitLine(fileName, '.')[0];
-    std::string volumesFileName{ boost::str(boost::format("volumes_%s.i") % splitName) };
+    std::string volumesFileName{ boost::str(boost::format("%sVolumes.i") % splitName) };
     std::ofstream volumeStream(volumesFileName.c_str());
-    // Write volume file header
+    // Write volumes file header
     auto timeStart{ std::chrono::system_clock::now() };
     std::time_t timeStart_t = std::chrono::system_clock::to_time_t(timeStart);
-    volumeStream << boost::str(boost::format("McCAD v%s generated volumes file. ")
-                               % McCAD::Info::McCADVersion) << std::ctime(&timeStart_t) <<
-                    boost::str(boost::format("Column 1 is the volume [cubic %s] and column 2 is the shape name.")
+    volumeStream << boost::str(boost::format("McCAD v%s generated volumes file / ") % McCAD::Info::McCADVersion) << 
+                    std::ctime(&timeStart_t) <<
+                    boost::str(boost::format("File contents : a list of CAD solid volumes from the input STEP file as loaded by OCCT.")) <<
+                    boost::str(boost::format("\nColumn 1 is the volume [cubic %s] and column 2 is the shape name.")
                                              % inputConfig.units) << std::endl;
     std::string shapeData{};
     double shapeVolume;

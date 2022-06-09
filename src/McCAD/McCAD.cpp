@@ -14,13 +14,13 @@
 #include "conversion.hpp"
 
 /** ********************************************************************
-* @brief   The main function that executes McCAD per user arguments.
-* @details
-* @param   argc is the number of arguments entered.
-* @param   argv is a list of arguments: [], [help], [read], or [run].
-* @return  int
-* @date    01/01/2021
-* @author  Moataz Harb
+* @brief    The main function that executes McCAD per user arguments.
+* @param    argc is the number of arguments entered.
+* @param    argv is a list of arguments: [], [help], [read], or [run].
+* @return   int
+* @date     01/01/2021
+* @modified 09/06/2022
+* @author   Moataz Harb
 * **********************************************************************/
 int main (int argc, char* argv[]){
     auto timeStart{std::chrono::system_clock::now()},
@@ -42,7 +42,7 @@ int main (int argc, char* argv[]){
             std::cout << "Usage:\n"
                          "   [ ] Creates parameters file McCADInputConfig.i\n"
                          "[help] Prints out this list\n"
-                         "[read] Test loading the input STEP file[s]\n"
+                         "[read] Tests loading the input STEP file(s)\n"
                          " [run] Executes McCAD" << std::endl;
             timeEnd = std::chrono::system_clock::now();
         } else if (std::string(argv[1]) == "read") {

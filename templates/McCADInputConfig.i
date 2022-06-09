@@ -1,13 +1,13 @@
-# McCAD Run Parameters    Mon May 23 17:10:46 2022
-# ====================
+# McCAD v1.0 run parameters / Thu Jun  9 14:37:50 2022
+# =========================
 
 # Input
 # =====
-# > Debug level: 0, 1, 2, 3. [0] provides no debugging outputs.
+# > Debugging level: 0, 1, 2, 3. [0] provides no debugging outputs.
 debugLevel = 0
-# > The unit used for the input STEP file(s).
+# > The unit used in the input STEP file(s). Only a single unit for all input STEP files!
 units = cm
-# > Path to the input STEP file;
+# > Name(s) of the input STEP file(s) separated by a space;
 inputFileName = input.stp
 
 # Decomposition
@@ -30,15 +30,15 @@ torusSplitAngle = 30.0 [degrees]
 # Conversion
 # ==========
 convert = false
-# > Choose whether or not to generate void cells;
+# > Choose whether to generate void cells;
 voidGeneration = false
 # > Condition to treat a compound as a single cell or a group of cells.
 compoundIsSingleCell = false
-# > Minimum acceptable void volume shouldn;t be less than minSolidVolume;
+# > Minimum acceptable void volume should not be less than minSolidVolume;
 minVoidVolume = 1.0 [cm3]
 # > A larger number will result in fewer void cells but longer cell expressions;
 maxSolidsPerVoidCell = 40
-# > Choose whether or not to generate Bound Volume Heirarchy void cells;
+# > Choose whether to generate Bound Volume Heirarchy void cells;
 BVHVoid = false
 # > Choose the desired MC code for conversion;
 MCcode = mcnp
