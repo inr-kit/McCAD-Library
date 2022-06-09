@@ -1,0 +1,16 @@
+McCAD v1.0 generated volumes file / Thu Jun  9 14:27:26 2022
+File contents : a list of CAD solid volumes from the input STEP file as loaded by OCCT.
+Column 1 is the volume [cubic cm] and column 2 is the shape name.
+1.20162E+00 COMPOUND
+1.01400E+00 COMPOUND
+1.78125E+00 COMPOUND
+2.46390E+00 COMPOUND
+2.38030E+00 COMPOUND
+4.02803E+00 COMPOUND
+7.90187E-01 COMPOUND
+7.10530E+00 COMPOUND
+7.98511E-01 COMPOUND
+1.44184E+00 COMPOUND
+1.10163E+01 COMPOUND
+3.70979E+00 COMPOUND
+7.55120E-01 COMPOUND

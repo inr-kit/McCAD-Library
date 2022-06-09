@@ -92,13 +92,13 @@ McCAD::Conversion::MCNPWriter::processSolids(
 }
 
 /** ********************************************************************
-* @brief   The function checks if the surface already exists in the unique surfaces list.
-* @param   surface is a surface to check for in the unique list of surfaces.
-* @param   uniqueMap is a map of unique surfaces IDs and surfaces.
-* @returns An optional integer ID of the duplicate surface.
-* @date    31/12/2021
-* @modified 06/02/2022
-* @author  Moataz Harb
+* @brief    The function checks if the surface already exists in the unique surfaces list.
+* @param    surface is a surface to check for in the unique list of surfaces.
+* @param    uniqueMap is a map of unique surfaces IDs and surfaces.
+* @returns  An optional integer ID of the duplicate surface.
+* @date     31/12/2021
+* @modified 02/06/2022
+* @author   Moataz Harb
 * **********************************************************************/
 std::optional<int>
 McCAD::Conversion::MCNPWriter::findDuplicate(
@@ -351,10 +351,11 @@ McCAD::Conversion::MCNPWriter::adjustLineWidth(const std::string& mainExpr,
 }
 
 /** ********************************************************************
-* @brief   The function writes the header of the MC file.
-* @param   outputStream is a string stream to write to.
-* @date    31/12/2021
-* @author  Moataz Harb
+* @brief    The function writes the header of the MC file.
+* @param    outputStream is a string stream to write to.
+* @date     31/12/2021
+* @modified 09/06/2022
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Conversion::MCNPWriter::writeHeaders(std::ofstream& outputStream, 
@@ -366,7 +367,7 @@ McCAD::Conversion::MCNPWriter::writeHeaders(std::ofstream& outputStream,
     else materialCells = solidObjMap.size();
     auto timeStart{std::chrono::system_clock::now()};
     std::time_t timeStart_t = std::chrono::system_clock::to_time_t(timeStart);
-    outputStream << boost::str(boost::format("McCAD v%s generated %s input file. ")
+    outputStream << boost::str(boost::format("McCAD v%s generated %s input file / ")
                                % McCAD::Info::McCADVersion
                                % inputConfig.MCcode) <<
                     std::ctime(&timeStart_t) <<
@@ -375,14 +376,16 @@ McCAD::Conversion::MCNPWriter::writeHeaders(std::ofstream& outputStream,
                     "\nC   * Void cells        ---- " << voidCellsMap.size() << 
                     "\nC   * Void Surfaces     ---- " << uniqueSurfaces.size() - materialSurfacesCount << std::endl;
     // Write volumes file header.
-    volumeStream << boost::str(boost::format("McCAD v%s generated volumes file. ")
+    volumeStream << boost::str(boost::format("McCAD v%s generated volumes file / ")
                                % McCAD::Info::McCADVersion) << std::ctime(&timeStart_t) << 
-                    boost::str(boost::format("Column 1 is the cell ID, column 2 is the volume [cubic %s], and column 3 is the compound name.")
+                    boost::str(boost::format("File contents: a map of cell IDs to CAD volume and name of the corresponding solid.")) <<
+                    boost::str(boost::format("\nColumn 1 is the cell ID, column 2 is the volume [cubic %s], and column 3 is the compound name.")
                                              % inputConfig.units) << std::endl;
     // Write voidCells file header.
-    voidCellsStream << boost::str(boost::format("McCAD v%s generated void - material cell IDs mapping file. ")
+    voidCellsStream << boost::str(boost::format("McCAD v%s generated void-to-material cell IDs mapping file / ")
                                   % McCAD::Info::McCADVersion) << std::ctime(&timeStart_t) <<
-                       "Column 1 is the void cell ID and column(s) 2(+) is(are) the material cell ID(s)." << std::endl;
+                       boost::str(boost::format("File contents: a map of void cell IDs to the material cell IDs contained within.")) <<
+                       "\nColumn 1 is the void cell ID and column(s) 2(+) is(are) the material cell ID(s)." << std::endl;
 }
 
 /** ********************************************************************
