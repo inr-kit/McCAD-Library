@@ -5,6 +5,8 @@
 #include <memory>
 #include <deque>
 #include <variant>
+#include <vector>
+#include <tuple>
 // McCAD
 #include "decomposition.hpp"
 #include "inputdata_impl.hpp"
@@ -15,7 +17,6 @@
 #include "SolidType.hpp"
 #include "tools_impl.hpp"
 // OCC
-#include <Standard.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TopTools_HSequenceOfShape.hxx>
 #include <TCollection_ExtendedString.hxx>
@@ -37,7 +38,7 @@ namespace McCAD::Decomposition{
         std::vector<std::shared_ptr<Geometry::Impl::Compound>> compoundList;
         solidsMap successDecomposition, rejectDecomposition;
         void perform();
-        void perform(const shapeTuple& inputShape, const Standard_Integer& compoundID);
+        void perform(const shapeTuple& inputShape, const int& compoundID);
         void extractSolids(
                 const std::shared_ptr<Geometry::Impl::Compound>& compound,
                 const std::shared_ptr<Geometry::Solid>& solid);

@@ -9,13 +9,11 @@
 #include "torusConvertor.hpp"
 
 /** ********************************************************************
-* @brief   The main function that executes McCAD decomposition.
-* @details 
-* @param   inputData is an object containing list[s] of solids from the input STEP file[s]. 
-* @param   inputConfig is an object containing the values of the configuration parameters.
-* @return  
-* @date    01/01/2020
-* @author  Moataz Harb
+* @brief   The main function that executes McCAD decomposition. 
+* @param   inputData is an object containing list(s) of solids from the input STEP file(s). 
+* @param   inputConfig is an object containing the values of the configuration parameters. 
+* @date    31/12/2020
+* @author  Moataz Harb & Christian Wegmann
 * **********************************************************************/
 McCAD::Decomposition::Decompose::Impl::Impl(const General::InputData& inputData,
                                             const IO::InputConfig& inputConfig)
@@ -23,7 +21,7 @@ McCAD::Decomposition::Decompose::Impl::Impl(const General::InputData& inputData,
     // Get input solids map from the Input Data object.
     inputShapesMap = inputData.accessImpl()->inputShapesMap;
     if (!inputShapesMap.size() > 0)
-        throw std::runtime_error("Error reading input STEP file(s)!");
+        throw std::runtime_error("Error loading shape(s) from the input STEP file(s)!");
     std::cout << " > Decomposing " << inputShapesMap.size() <<
                  " shape(s) from the input STEP file(s)" << std::endl;
     perform();
@@ -32,10 +30,17 @@ McCAD::Decomposition::Decompose::Impl::Impl(const General::InputData& inputData,
 McCAD::Decomposition::Decompose::Impl::~Impl(){
 }
 
+/** ********************************************************************
+* @brief   The main function that executes McCAD decomposition on an input solid.
+* @param   inputShape is a tuple containing the input shape and its name. 
+* @param   compoundID is a unique ID, counter, to assing to the compound object to be created.
+* @date    31/12/2020
+* @author  Moataz Harb & Christian Wegmann
+* **********************************************************************/
 void
 McCAD::Decomposition::Decompose::Impl::perform(
         const McCAD::Decomposition::Decompose::Impl::shapeTuple& inputShape,
-        const Standard_Integer& compoundID){
+        const int& compoundID){
     std::shared_ptr<Geometry::Impl::Compound> compoundObj =
             std::make_unique<Geometry::Impl::Compound>(
             std::get<0>(inputShape), std::get<1>(inputShape));
@@ -67,6 +72,7 @@ McCAD::Decomposition::Decompose::Impl::perform(
     for(auto& mxdSolid : compoundObj->mixedSolidsList){
         std::cout << "   - Decomposing mixed solid" << std::endl;
         if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(mxdSolid)){
+            // Convert tori to cylinders.
             if(inputConfig.simplifyTori) TorusConvertor{inputConfig}(mxdSolid);
             extractSolids(compoundObj, mxdSolid);
         } else compoundObj->rejectedInputShapesList->Append(
@@ -75,10 +81,15 @@ McCAD::Decomposition::Decompose::Impl::perform(
     compoundList.push_back(std::move(compoundObj));
 }
 
+/** ********************************************************************
+* @brief   The main function that performs decomposition in parallel on input solids.
+* @date    31/12/2020
+* @author  Moataz Harb & Christian Wegmann
+* **********************************************************************/
 void
 McCAD::Decomposition::Decompose::Impl::perform(){
     TaskQueue<Policy::Parallel> taskQueue;
-    Standard_Integer counter = 0;
+    int counter = 0;
     for(const auto& member : inputShapesMap){
         taskQueue.submit([this, counter, &member](){
             perform(member, counter);
@@ -99,7 +110,7 @@ McCAD::Decomposition::Decompose::Impl::perform(){
             if(compound->rejectedsubSolidsList->Length() > 0)
                 rejected.Append(*compound->rejectedsubSolidsList);
             rejectDecomposition.push_back(std::make_tuple(compound->compoundName,
-                                                      rejected));
+                                                          rejected));
         }
     }
     std::cout << " > Results:" << std::endl;
@@ -109,6 +120,13 @@ McCAD::Decomposition::Decompose::Impl::perform(){
                  " input shape(s)." << std::endl;
 }
 
+/** ********************************************************************
+* @brief   A function that extracts the resultant subsolids and adds it to the compound object.
+* @param   solid is the solid object that was processed by decomposition.
+* @param   compound is a compound object.
+* @date    31/12/2020
+* @author  Moataz Harb & Christian Wegmann
+* **********************************************************************/
 void
 McCAD::Decomposition::Decompose::Impl::extractSolids(
         const std::shared_ptr<Geometry::Impl::Compound>& compound,
