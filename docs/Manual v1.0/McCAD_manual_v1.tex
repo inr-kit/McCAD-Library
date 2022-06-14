@@ -232,6 +232,16 @@ There are two ways to run McCAD, via a command line or the SpaceClaim plugin. Mc
 
   \subsection{SpaceClaim Plugin}
     The python script located in plugins/SpaceClaim\_interface can be loaded into SpaceClaim and used directly to call McCAD to perform decomposition on selected solid(s).  The script can be loaded in SpaceClaim by selecting "File $>$ New $>$ Script". Select the desired solid(s) to decompose and on the "Script Editor" select "Run Script", the green arrow.
+    \\\\
+    Figure (\ref{fig:SCPlugin}) shows a screenshot from a loaded script in SpaceClaim. After loading the script into SpaceClaim, the user should modify \emph{McCADExecutable} and \emph{workPath} variables according. The former should be modifyied to point to McCAD executable that will be called by the script. The latter is the desired work directory that the temporary files will be created in. The user then can select solid(s) from the model and run the plugin using the green arrow at the top right corner. After running McCAD, a summary will be printed in the "Interpreter" as shown at the bottom of figure (\ref{fig:SCPlugin}).
+    \\\\
+    If the user which to modify the input configuration file, McCADInputConfig.i, there are two way to do so. The first is to copy the template from the templates folder and place it in the "workPath" folder. Another way is by running the script without selecting any solids. This way McCAD will generate the McCADInputConfig.i file which the user can modify.
+    \begin{figure}[h!]
+    	\centering
+    	\includegraphics[scale=0.5]{figures/SC_plugin.png}
+    	\caption{Example Input Solids}
+    	\label{fig:SCPlugin}
+    \end{figure}
 
 % -------------------------------------------------------------------------------------
 % Example
