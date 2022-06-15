@@ -1,19 +1,18 @@
 #ifndef SURFACETYPENAME_HPP
 #define SURFACETYPENAME_HPP
 
-// OCC
+// C++
+#include <string>
+// OCCT
 #include <GeomAbs_SurfaceType.hxx>
 #include <gp.hxx>
 #include <BRepAdaptor_Surface.hxx>
-
-// C++
-#include <string>
 
 namespace McCAD::Tools{
 
     std::string toTypeName(
             GeomAbs_SurfaceType surfaceType);
-
+    bool checkSupported(GeomAbs_SurfaceType surfaceType);
 
     template<GeomAbs_SurfaceType surfaceType>
     struct gpSurfaceType;

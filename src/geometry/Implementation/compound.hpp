@@ -4,8 +4,9 @@
 // C++
 #include <vector>
 #include <memory>
+#include <tuple>
 // McCAD
-#include <solid_impl.hpp>
+#include "solid_impl.hpp"
 #include "planarSolid_impl.hpp"
 #include "cylSolid_impl.hpp"
 #include "torSolid_impl.hpp"

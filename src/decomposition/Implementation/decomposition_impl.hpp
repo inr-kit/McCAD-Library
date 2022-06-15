@@ -16,7 +16,7 @@
 #include "decomposeSolid_impl.hpp"
 #include "SolidType.hpp"
 #include "tools_impl.hpp"
-// OCC
+// OCCT
 #include <TopoDS_Shape.hxx>
 #include <TopTools_HSequenceOfShape.hxx>
 #include <TCollection_ExtendedString.hxx>

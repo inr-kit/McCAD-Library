@@ -3,8 +3,7 @@
 // McCAD
 #include "heirarchyFlatter.hpp"
 #include "ShapeView.hpp"
-// OCC
-#include <Standard.hxx>
+// OCCT
 #include <TopoDS_Solid.hxx>
 #include <TopoDS_CompSolid.hxx>
 #include <TopoDS_Compound.hxx>
@@ -17,6 +16,13 @@ McCAD::Tools::HeirarchyFlatter::HeirarchyFlatter() :
 McCAD::Tools::HeirarchyFlatter::~HeirarchyFlatter(){
 }
 
+/** ********************************************************************
+* @brief   An operator that flattens compound shapes.
+* @param   inputShapesList is a list of OCCT shapes.
+* @return  A pair of lists containing the accepted and rejected solids.
+* @date    31/12/2020
+* @author  Moataz Harb & Christian Wegmann
+* **********************************************************************/
 McCAD::Tools::HeirarchyFlatter::output_pair
 McCAD::Tools::HeirarchyFlatter::operator()(
         const std::shared_ptr<TopTools_HSequenceOfShape>& inputShapesList){
@@ -27,6 +33,13 @@ McCAD::Tools::HeirarchyFlatter::operator()(
                           std::move(rejectedInputSolidsList));
 }
 
+/** ********************************************************************
+* @brief   An operator that flattens compound shapes.
+* @param   shape is a OCCT shape.
+* @return  A pair of lists containing the accepted and rejected solids.
+* @date    31/12/2020
+* @author  Moataz Harb & Christian Wegmann
+* **********************************************************************/
 McCAD::Tools::HeirarchyFlatter::output_pair
 McCAD::Tools::HeirarchyFlatter::operator()(const TopoDS_Shape& shape){
     process(shape);
@@ -34,6 +47,12 @@ McCAD::Tools::HeirarchyFlatter::operator()(const TopoDS_Shape& shape){
                           std::move(rejectedInputSolidsList));
 }
 
+/** ********************************************************************
+* @brief   A function that processes shapes.
+* @param   shape is a OCCT shape.
+* @date    31/12/2020
+* @author  Moataz Harb & Christian Wegmann
+* **********************************************************************/
 void
 McCAD::Tools::HeirarchyFlatter::process(const TopoDS_Shape& shape){
     switch(shape.ShapeType()){
