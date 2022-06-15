@@ -9,11 +9,11 @@
 \contentsline {section}{\numberline {4}Running McCAD}{11}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Command Line}{11}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}SpaceClaim Plugin}{11}{subsection.4.2}%
-\contentsline {section}{\numberline {5}Example}{11}{section.5}%
-\contentsline {section}{\numberline {6}General Usage Notes}{14}{section.6}%
-\contentsline {section}{\numberline {7}Known Issues}{17}{section.7}%
-\contentsline {subsection}{\numberline {7.1}Decomposition}{17}{subsection.7.1}%
-\contentsline {subsection}{\numberline {7.2}Conversion}{20}{subsection.7.2}%
-\contentsline {section}{\numberline {8}Theory of McCAD Conversion}{20}{section.8}%
-\contentsline {subsection}{\numberline {8.1}Decomposition}{20}{subsection.8.1}%
-\contentsline {subsection}{\numberline {8.2}Conversion}{20}{subsection.8.2}%
+\contentsline {section}{\numberline {5}Example}{13}{section.5}%
+\contentsline {section}{\numberline {6}General Usage Notes}{15}{section.6}%
+\contentsline {section}{\numberline {7}Known Issues}{18}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Decomposition}{18}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Conversion}{21}{subsection.7.2}%
+\contentsline {section}{\numberline {8}Theory of McCAD Conversion}{21}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Decomposition}{21}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Conversion}{21}{subsection.8.2}%

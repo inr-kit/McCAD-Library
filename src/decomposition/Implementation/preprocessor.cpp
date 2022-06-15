@@ -1,9 +1,12 @@
+// C++
+#include <boost/format.hpp>
 // McCAD
 #include "preprocessor.hpp"
 #include "heirarchyFlatter.hpp"
 #include "solidObjCreator.hpp"
 #include "ShapeView.hpp"
-// OCC
+#include "ShapeUtilities.hpp"
+// OCCT
 #include <TopoDS_Face.hxx>
 #include <BRep_Tool.hxx>
 #include <BRepTools.hxx>
@@ -19,6 +22,12 @@ McCAD::Decomposition::Preprocessor::Preprocessor(const IO::InputConfig& inputCon
 
 McCAD::Decomposition::Preprocessor::~Preprocessor(){}
 
+/** ********************************************************************
+* @brief   The main function that cheks the volume and boundary surfaces and assigns solid type.
+* @param   compound is compound object containing a shape and name.
+* @date    31/12/2020
+* @author  Moataz Harb & Christian Wegmann
+* **********************************************************************/
 void
 McCAD::Decomposition::Preprocessor::operator()(
         const std::shared_ptr<Geometry::Impl::Compound>& compound){
@@ -36,7 +45,7 @@ McCAD::Decomposition::Preprocessor::operator()(
         } else {
             // Using switch for now. Should be separated in a separate class an called
             // for each specific type of solid object.
-            switch (Standard_Integer(solidObj.index())){
+            switch (int(solidObj.index())){
             case solidType.planar:
                 compound->planarSolidsList.push_back(std::get<solidType.planar>(solidObj));
                 break;
@@ -72,6 +81,13 @@ McCAD::Decomposition::Preprocessor::operator()(
                                     compound->mixedSolidsList.end());
 }
 
+/** ********************************************************************
+* @brief   A function that determines the solid type and creates a corresponding solid object.
+* @param   shape is a OCCT shape.
+* @return  variant.
+* @date    31/12/2020
+* @author  Moataz Harb & Christian Wegmann
+* **********************************************************************/
 McCAD::Decomposition::Preprocessor::VariantType
 McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
     VariantType solidVariant;
@@ -94,49 +110,68 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
     return solidVariant;
 }
 
-Standard_Boolean
+/** ********************************************************************
+* @brief   A function that checks if the volume of a solid contains unsupported surfaces.
+* @param   shape is a OCCT shape.
+* @return  bool. True if the surface is not supported.
+* @date    31/12/2020
+* @author  Moataz Harb & Christian Wegmann
+* **********************************************************************/
+bool
 McCAD::Decomposition::Preprocessor::checkBndSurfaces(const TopoDS_Shape& shape){
     for(const auto& face : detail::ShapeView<TopAbs_FACE>{TopoDS::Solid(shape)}){
         GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
-        if (surfAdaptor.GetType() == GeomAbs_BSplineSurface){
-            std::cout << "    -- The current verion doesn't support processing "
-                         "of splines. Solid will be rejected!" << std::endl;
-            return Standard_True;
+        if (!Tools::checkSupported(surfAdaptor.GetType())){
+            std::cout << boost::str(boost::format("    -- The current verion doesn't support processing "
+                                                  "of surfaces of type %s. Solid will be rejected!") 
+                                    % Tools::toTypeName(surfAdaptor.GetType())) << std::endl;
+            return true;
         }
     }
-    return Standard_False;
+    return false;
 }
 
-Standard_Boolean
+/** ********************************************************************
+* @brief   A function that checks if the volume of a solid is less than a limit.
+* @param   shape is a OCCT shape.
+* @return  bool. True if the solid volume is below the limit.
+* @date    31/12/2020
+* @author  Moataz Harb & Christian Wegmann
+* **********************************************************************/
+bool
 McCAD::Decomposition::Preprocessor::checkVolume(const TopoDS_Shape& shape){
-    GProp_GProps geometryProperties;
-    BRepGProp::VolumeProperties(TopoDS::Solid(shape), geometryProperties);
-    if (geometryProperties.Mass() < inputConfig.minSolidVolume) return Standard_True;
-    else return Standard_False;
+    double shapeVolume{ Tools::calcVolume(shape) };
+    if (shapeVolume < inputConfig.minSolidVolume) return true;
+    else return false;
 }
 
-Standard_Integer
+/** ********************************************************************
+* @brief   A function that determines the solid type.
+* @param   solid is a OCCT solid.
+* @return  variant.
+* @date    31/12/2020
+* @author  Moataz Harb & Christian Wegmann
+* **********************************************************************/
+int
 McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid){
-    Standard_Boolean planar{Standard_False}, cylindrical{Standard_False},
-                     toroidal{Standard_False}, spherical{Standard_False},
-                     mixed{Standard_False};
+    bool planar{false}, cylindrical{false}, toroidal{false}, spherical{false}, mixed{false};
     for(const auto& face : detail::ShapeView<TopAbs_FACE>{solid}){
         GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
         switch (surfAdaptor.GetType()){
         case  GeomAbs_Plane:
-            planar = Standard_True;
+            planar = true;
             break;
         case GeomAbs_Cylinder:
-            cylindrical = Standard_True;
+            cylindrical = true;
             break;
         case GeomAbs_Torus:
-            toroidal = Standard_True;
+            toroidal = true;
             break;
         case GeomAbs_Sphere:
-            spherical = Standard_True;
+            spherical = true;
             break;
         default:
-            mixed = Standard_True;
+            mixed = true;
         }
     }
     // Determine custom solid type based on surfaces types.

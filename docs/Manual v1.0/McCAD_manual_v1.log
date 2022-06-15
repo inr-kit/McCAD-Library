@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.7 32-bit) (preloaded format=pdflatex 2021.8.5)  9 JUN 2022 15:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.7 32-bit) (preloaded format=pdflatex 2021.8.5)  14 JUN 2022 13:54
 entering extended mode
 **./McCAD_manual_v1.tex
 (McCAD_manual_v1.tex
@@ -809,124 +809,141 @@ Underfull \hbox (badness 10000) in paragraph at lines 196--201
  []
 
 [9] [10]
-<figures/InputSolids.png, id=204, 692.5875pt x 447.92343pt>
+<figures/SC_plugin.png, id=205, 641.9985pt x 685.96275pt>
+File: figures/SC_plugin.png Graphic file (type png)
+<use figures/SC_plugin.png>
+Package pdftex.def Info: figures/SC_plugin.png  used on input line 241.
+(pdftex.def)             Requested size: 320.99846pt x 342.98053pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 234--245
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 234--245
+
+ []
+
+[11]
+<figures/InputSolids.png, id=212, 692.5875pt x 447.92343pt>
 File: figures/InputSolids.png Graphic file (type png)
 <use figures/InputSolids.png>
-Package pdftex.def Info: figures/InputSolids.png  used on input line 243.
+Package pdftex.def Info: figures/InputSolids.png  used on input line 253.
 (pdftex.def)             Requested size: 290.88477pt x 188.12656pt.
- [11]
-<figures/McCAD_output.png, id=210, 507.69675pt x 63.8385pt>
+ [12 <./figures/SC_plugin.png>]
+<figures/McCAD_output.png, id=220, 507.69675pt x 63.8385pt>
 File: figures/McCAD_output.png Graphic file (type png)
 <use figures/McCAD_output.png>
-Package pdftex.def Info: figures/McCAD_output.png  used on input line 252.
+Package pdftex.def Info: figures/McCAD_output.png  used on input line 262.
 (pdftex.def)             Requested size: 355.3853pt x 44.68663pt.
-<figures/McCAD_output_decomposition.png, id=212, 295.1025pt x 360.1455pt>
+<figures/McCAD_output_decomposition.png, id=222, 295.1025pt x 360.1455pt>
 File: figures/McCAD_output_decomposition.png Graphic file (type png)
 <use figures/McCAD_output_decomposition.png>
 Package pdftex.def Info: figures/McCAD_output_decomposition.png  used on input 
-line 264.
+line 274.
 (pdftex.def)             Requested size: 156.0006pt x 190.3871pt.
-<figures/McCAD_output_conversion.png, id=213, 233.673pt x 110.21175pt>
+<figures/McCAD_output_conversion.png, id=223, 233.673pt x 110.21175pt>
 File: figures/McCAD_output_conversion.png Graphic file (type png)
 <use figures/McCAD_output_conversion.png>
 Package pdftex.def Info: figures/McCAD_output_conversion.png  used on input lin
-e 270.
+e 280.
 (pdftex.def)             Requested size: 156.0006pt x 73.57745pt.
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-[12 <./figures/InputSolids.png> <./figures/McCAD_output.png>]
-<figures/decomposedSolids.png, id=227, 686.565pt x 443.40656pt>
+ [13 <./figures/InputSolids.png> <./figures/McCAD_output.png>]
+<figures/decomposedSolids.png, id=234, 686.565pt x 443.40656pt>
 File: figures/decomposedSolids.png Graphic file (type png)
 <use figures/decomposedSolids.png>
-Package pdftex.def Info: figures/decomposedSolids.png  used on input line 284.
+Package pdftex.def Info: figures/decomposedSolids.png  used on input line 294.
 (pdftex.def)             Requested size: 274.62112pt x 177.35948pt.
-<figures/cellCards.png, id=229, 578.76225pt x 555.2745pt>
-File: figures/cellCards.png Graphic file (type png)
-<use figures/cellCards.png>
-Package pdftex.def Info: figures/cellCards.png  used on input line 292.
-(pdftex.def)             Requested size: 289.38042pt x 277.63657pt.
- [13 <./figures/McCAD_output_decomposition.png> <./figures/McCAD_output_convers
-ion.png> <./figures/decomposedSolids.png>]
-<figures/volumesFile.png, id=239, 684.156pt x 626.94225pt>
-File: figures/volumesFile.png Graphic file (type png)
-<use figures/volumesFile.png>
-Package pdftex.def Info: figures/volumesFile.png  used on input line 300.
-(pdftex.def)             Requested size: 342.07716pt x 313.47035pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<figures/voidCellFile.png, id=241, 767.2665pt x 68.6565pt>
+<figures/cellCards.png, id=236, 578.76225pt x 555.2745pt>
+File: figures/cellCards.png Graphic file (type png)
+<use figures/cellCards.png>
+Package pdftex.def Info: figures/cellCards.png  used on input line 302.
+(pdftex.def)             Requested size: 289.38042pt x 277.63657pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<figures/volumesFile.png, id=238, 684.156pt x 626.94225pt>
+File: figures/volumesFile.png Graphic file (type png)
+<use figures/volumesFile.png>
+Package pdftex.def Info: figures/volumesFile.png  used on input line 310.
+(pdftex.def)             Requested size: 342.07716pt x 313.47035pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<figures/voidCellFile.png, id=240, 767.2665pt x 68.6565pt>
 File: figures/voidCellFile.png Graphic file (type png)
 <use figures/voidCellFile.png>
-Package pdftex.def Info: figures/voidCellFile.png  used on input line 308.
+Package pdftex.def Info: figures/voidCellFile.png  used on input line 318.
 (pdftex.def)             Requested size: 306.90115pt x 27.4621pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<figures/ConvertedSolids.png, id=243, 1232.2035pt x 416.757pt>
+<figures/ConvertedSolids.png, id=242, 1232.2035pt x 416.757pt>
 File: figures/ConvertedSolids.png Graphic file (type png)
 <use figures/ConvertedSolids.png>
-Package pdftex.def Info: figures/ConvertedSolids.png  used on input line 317.
+Package pdftex.def Info: figures/ConvertedSolids.png  used on input line 327.
 (pdftex.def)             Requested size: 394.31319pt x 133.36496pt.
 
-Overfull \hbox (4.31319pt too wide) in paragraph at lines 317--318
+Overfull \hbox (4.31319pt too wide) in paragraph at lines 327--328
  [][] 
  []
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[14 <./figures/cellCards.png>]
+[14 <./figures/McCAD_output_decomposition.png> <./figures/McCAD_output_conversi
+on.png>] [15 <./figures/decomposedSolids.png> <./figures/cellCards.png>]
 
-LaTeX Warning: Text page 15 contains only floats.
+LaTeX Warning: Text page 16 contains only floats.
 
-[15 <./figures/volumesFile.png> <./figures/voidCellFile.png> <./figures/Convert
-edSolids.png>] [16]
-<figures/issues_Coordinates.png, id=266, 944.93025pt x 755.2215pt>
+[16 <./figures/volumesFile.png> <./figures/voidCellFile.png> <./figures/Convert
+edSolids.png>] [17]
+<figures/issues_Coordinates.png, id=275, 944.93025pt x 755.2215pt>
 File: figures/issues_Coordinates.png Graphic file (type png)
 <use figures/issues_Coordinates.png>
-Package pdftex.def Info: figures/issues_Coordinates.png  used on input line 351
+Package pdftex.def Info: figures/issues_Coordinates.png  used on input line 361
 .
 (pdftex.def)             Requested size: 359.07722pt x 286.98715pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<figures/issues_pipe_torus_a.png, id=268, 926.86275pt x 408.3255pt>
+<figures/issues_pipe_torus_a.png, id=277, 926.86275pt x 408.3255pt>
 File: figures/issues_pipe_torus_a.png Graphic file (type png)
 <use figures/issues_pipe_torus_a.png>
-Package pdftex.def Info: figures/issues_pipe_torus_a.png  used on input line 36
+Package pdftex.def Info: figures/issues_pipe_torus_a.png  used on input line 37
 4.
 (pdftex.def)             Requested size: 146.25pt x 64.42375pt.
-<figures/issues_pipe_torus_b.png, id=269, 927.465pt x 407.121pt>
+<figures/issues_pipe_torus_b.png, id=278, 927.465pt x 407.121pt>
 File: figures/issues_pipe_torus_b.png Graphic file (type png)
 <use figures/issues_pipe_torus_b.png>
-Package pdftex.def Info: figures/issues_pipe_torus_b.png  used on input line 37
+Package pdftex.def Info: figures/issues_pipe_torus_b.png  used on input line 38
 0.
 (pdftex.def)             Requested size: 146.25pt x 64.19644pt.
-[17] [18 <./figures/issues_Coordinates.png> <./figures/issues_pipe_torus_a.png>
+[18] [19 <./figures/issues_Coordinates.png> <./figures/issues_pipe_torus_a.png>
  <./figures/issues_pipe_torus_b.png>]
-<figures/issues_Hollow.png, id=285, 886.512pt x 529.98pt>
+<figures/issues_Hollow.png, id=294, 886.512pt x 529.98pt>
 File: figures/issues_Hollow.png Graphic file (type png)
 <use figures/issues_Hollow.png>
-Package pdftex.def Info: figures/issues_Hollow.png  used on input line 384.
+Package pdftex.def Info: figures/issues_Hollow.png  used on input line 394.
 (pdftex.def)             Requested size: 310.28384pt x 185.49577pt.
 
-Overfull \hbox (2.28035pt too wide) in paragraph at lines 391--392
+Overfull \hbox (2.28035pt too wide) in paragraph at lines 401--402
 []\OT1/cmr/m/it/12 description\OT1/cmr/m/n/12 : when run-ning de-com-po-si-tion
  solid names are re-trieved
  []
 
-[19 <./figures/issues_Hollow.png>]
-Overfull \hbox (8.53217pt too wide) in paragraph at lines 403--404
+[20 <./figures/issues_Hollow.png>]
+Overfull \hbox (8.53217pt too wide) in paragraph at lines 413--414
 \OT1/cmr/m/n/12 A com-pre-hen-sive dis-cus-sion on the in-ner work-ings of Mc-C
 AD al-go-rithm/classes
  []
 
-[20] (McCAD_manual_v1.aux)
+[21] (McCAD_manual_v1.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -934,13 +951,13 @@ Package rerunfilecheck Info: File `McCAD_manual_v1.out' has not changed.
 (rerunfilecheck)             Checksum: F07B7EA6CAE544A8110B3D801F231B05;2179.
  ) 
 Here is how much of TeX's memory you used:
- 23725 strings out of 478836
- 483477 string characters out of 2852497
- 728559 words of memory out of 3000000
- 41237 multiletter control sequences out of 15000+600000
+ 23735 strings out of 478836
+ 483685 string characters out of 2852497
+ 728613 words of memory out of 3000000
+ 41244 multiletter control sequences out of 15000+600000
  409136 words of font info for 46 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,9n,89p,760b,920s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 84i,9n,89p,760b,898s stack positions out of 5000i,500n,10000p,200000b,80000s
  <C:\Users\po9264\AppData\Local\MiKTeX\2.9\fonts/pk/ljfour/jknappen/ec/dpi600
 \tcrm1200.pk><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
 cmbx12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
@@ -951,9 +968,9 @@ fb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb>
 Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Pr
 ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Prog
 ram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on McCAD_manual_v1.pdf (21 pages, 2786795 bytes).
+Output written on McCAD_manual_v1.pdf (22 pages, 2859247 bytes).
 PDF statistics:
- 354 PDF objects out of 1000 (max. 8388607)
- 57 named destinations out of 1000 (max. 500000)
- 235 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 363 PDF objects out of 1000 (max. 8388607)
+ 59 named destinations out of 1000 (max. 500000)
+ 240 words of extra memory for PDF output out of 10000 (max. 10000000)
 

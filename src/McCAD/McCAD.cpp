@@ -6,6 +6,7 @@
 #include <ctime>
 // McCAD
 #include "info.hpp"
+#include "StringUtilities.hpp"
 #include "inputconfig.hpp"
 #include "inputdata.hpp"
 #include "stepreader.hpp"
@@ -37,15 +38,15 @@ int main (int argc, char* argv[]){
                      "has been created in\n" << currentPath.string() << std::endl;
         timeEnd = std::chrono::system_clock::now();
     } else if(argc == 2) {
-        if (std::string(argv[1]) == "help") {
+        if (McCAD::Tools::stringToLowerCase(std::string(argv[1])) == "help") {
             // "help" used as argument, print out the available arguments to screen.
-            std::cout << "Usage:\n"
+            std::cout << "Usage, case insensitive:\n"
                          "   [ ] Creates parameters file McCADInputConfig.i\n"
                          "[help] Prints out this list\n"
                          "[read] Tests loading the input STEP file(s)\n"
                          " [run] Executes McCAD" << std::endl;
             timeEnd = std::chrono::system_clock::now();
-        } else if (std::string(argv[1]) == "read") {
+        } else if (McCAD::Tools::stringToLowerCase(std::string(argv[1])) == "read") {
             // "read" used as argument, load the input STEP file[s].
             inputConfig.readTemplate();
             std::cout << "**************************" << std::endl;
@@ -54,10 +55,11 @@ int main (int argc, char* argv[]){
             // Loop over the list of file names and load them consequetively.
             for(int i = 0; i < inputConfig.inputFileNames.size(); ++i){
                 inputConfig.inputFileName = inputConfig.inputFileNames[i];
+                std::cout << "> Processing " << inputConfig.inputFileName << std::endl;
                 McCAD::IO::STEPReader reader{inputConfig};
             }
             timeEnd = std::chrono::system_clock::now();
-        } else if (std::string(argv[1]) == "run") {
+        } else if (McCAD::Tools::stringToLowerCase(std::string(argv[1])) == "run") {
             // "run" used as argument, read the config file and then run McCAD.
             inputConfig.readTemplate();
             bool decomposeCondition{inputConfig.decompose},

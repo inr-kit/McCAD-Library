@@ -535,11 +535,10 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream,
                 // Write inner nodes.
                 for(const auto& daughterVoid : member.second->daughterVoidCells){
                     voidSolidsExpr += boost::str(boost::format(" %d")
-                                                 % voidCellsMap[std::make_tuple(
-                                daughterVoid->depth, daughterVoid->width, daughterVoid->key)]->voidSurfNumber);
+                                                 % daughterVoid->voidSurfNumber);
                 }
             } else{
-                // Write leaf node. Write complement of solids in the void cell.
+                // Write leaf nodes. Write complement of solids in the void cell.
                 int ID;
                 for(const int& solidID : member.second->solidIDList){
                     voidSolidsExpr += solidObjMap[solidID]->accessSImpl()->complimentExpr;

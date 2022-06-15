@@ -17,14 +17,20 @@ McCAD::Decomposition::DecomposeSolid::Impl::Impl(const IO::InputConfig& inputCon
 }
 
 McCAD::Decomposition::DecomposeSolid::Impl::Impl(const IO::InputConfig& inputConfig,
-                                                 const Standard_Integer& recurrenceDepth)
+                                                 const int& recurrenceDepth)
     : recurrenceDepth{recurrenceDepth}, inputConfig{inputConfig}{
 }
 
 McCAD::Decomposition::DecomposeSolid::Impl::~Impl(){
 }
 
-Standard_Boolean
+/** ********************************************************************
+* @brief   Operator that performs decomposition on a planar solid.
+* @param   solidObj is a planar solid object.
+* @date    31/12/2020
+* @author  Moataz Harb & Christian Wegmann
+* **********************************************************************/
+bool
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         std::shared_ptr<Geometry::PLSolid>& solidObj){
     // Increment the recurrence depth by 1.
@@ -45,7 +51,13 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
      return perform(*solidImpl);
 }
 
-Standard_Boolean
+/** ********************************************************************
+* @brief   Operator that performs decomposition on a cylindrical solid.
+* @param   solidObj is a cylindrical solid object.
+* @date    31/12/2020
+* @author  Moataz Harb & Christian Wegmann
+* **********************************************************************/
+bool
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         std::shared_ptr<Geometry::CYLSolid>& solidObj){
     // Increment the recurrence depth by 1.
@@ -72,7 +84,13 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     return perform(*solidImpl);
 }
 
-Standard_Boolean
+/** ********************************************************************
+* @brief   Operator that performs decomposition on a toroidal solid.
+* @param   solidObj is a toroidal solid object.
+* @date    31/12/2020
+* @author  Moataz Harb & Christian Wegmann
+* **********************************************************************/
+bool
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         std::shared_ptr<Geometry::TORSolid>& solidObj){
     // Increment the recurrence depth by 1.
@@ -99,7 +117,13 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     return perform(*solidImpl);
 }
 
-Standard_Boolean
+/** ********************************************************************
+* @brief   Operator that performs decomposition on solids that contain a mix of all the acceptable surface types; planar, cylindrical, and toroidal.
+* @param   solidObj is a mixed solid object.
+* @date    31/12/2020
+* @author  Moataz Harb & Christian Wegmann
+* **********************************************************************/
+bool
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         std::shared_ptr<Geometry::MXDSolid>& solidObj){
     // Increment the recurrence depth by 1.
@@ -126,7 +150,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     return perform(*solidImpl);
 }
 
-Standard_Boolean
+bool
 McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solidImpl){
     if(solidImpl.splitSurface){
         if (!selectSplitSurface(solidImpl)){
@@ -191,7 +215,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
     return Standard_True;
 }
 
-Standard_Boolean
+bool
 McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(
         Geometry::Solid::Impl& solidImpl){
     SplitSurfacesSelector{}.generateSplitFacesList(solidImpl.splitFacesList,
@@ -199,7 +223,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::selectSplitSurface(
     return !solidImpl.selectedSplitFacesList.empty();
 }
 
-Standard_Boolean
+bool
 McCAD::Decomposition::DecomposeSolid::Impl::throughNoBoundarySurfaces(
         const std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList){
     return std::any_of(facesList.cbegin(), facesList.cend(),
@@ -208,7 +232,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::throughNoBoundarySurfaces(
     });
 }
 
-Standard_Boolean
+bool
 McCAD::Decomposition::DecomposeSolid::Impl::planeSplitOnlyPlane(
         const std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList){
     return std::any_of(facesList.cbegin(), facesList.cend(),
@@ -222,7 +246,7 @@ void
 McCAD::Decomposition::DecomposeSolid::Impl::extractSolids(
         Geometry::Solid::Impl& solidImpl,
         const Geometry::Solid::Impl& subSolidImpl,
-        Standard_Integer& i){
+        int& i){
     if (subSolidImpl.splitSolidList->Length() >= 1){
         for(const auto& resultsubSolid : *subSolidImpl.splitSolidList){
             solidImpl.splitSolidList->InsertAfter(i, resultsubSolid);
