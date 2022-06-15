@@ -12,8 +12,7 @@
 #include "cylSolid_impl.hpp"
 #include "torSolid_impl.hpp"
 #include "mixedSolid_impl.hpp"
-// OCC
-#include <Standard.hxx>
+// OCCT
 #include <TopoDS_Solid.hxx>
 #include <TopoDS_Shape.hxx>
 
@@ -25,7 +24,7 @@ namespace McCAD::Decomposition{
       ~Preprocessor();
   private:
     Tools::SolidType solidType;
-    Standard_Real minSolidVolume{10.0};
+    double minSolidVolume{10.0};
     // WARNING!!
     // The order of solid object types should be synched with Tools::SolidType;
     using VariantType = std::variant<std::monostate,
@@ -37,9 +36,9 @@ namespace McCAD::Decomposition{
     IO::InputConfig inputConfig;
     void operator()(const std::shared_ptr<Geometry::Impl::Compound>& compound);
     VariantType perform(const TopoDS_Shape& shape);
-    Standard_Boolean checkBndSurfaces(const TopoDS_Shape& shape);
-    Standard_Boolean checkVolume(const TopoDS_Shape& shape);
-    Standard_Integer determineSolidType(const TopoDS_Solid& solid);
+    bool checkBndSurfaces(const TopoDS_Shape& shape);
+    bool checkVolume(const TopoDS_Shape& shape);
+    int determineSolidType(const TopoDS_Solid& solid);
   };
 }
 

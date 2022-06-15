@@ -3,7 +3,7 @@
 
 // C++
 #include <memory>
-// OCC
+// OCCT
 #include <TopTools_HSequenceOfShape.hxx>
 #include <TopoDS_Shape.hxx>
 
