@@ -1,5 +1,6 @@
 // McCAD
 #include "voidCell.hpp"
+#include "ShapeUtilities.hpp"
 // OCCT
 #include <BRepBndLib.hxx>
 #include <BRepPrimAPI_MakeBox.hxx>
@@ -97,9 +98,10 @@ McCAD::Conversion::VoidCell::updateAABB(){
 * **********************************************************************/
 double
 McCAD::Conversion::VoidCell::getAABBVolume(){
-    GProp_GProps geometryProperties;
-    BRepGProp::VolumeProperties(aabbSolid, geometryProperties);
-    return geometryProperties.Mass();
+    return Tools::calcVolume(aabbSolid);
+    //GProp_GProps geometryProperties;
+    //BRepGProp::VolumeProperties(aabbSolid, geometryProperties);
+    //return geometryProperties.Mass();
 }
 
 /** ********************************************************************
