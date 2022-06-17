@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.7 32-bit) (preloaded format=pdflatex 2021.8.5)  14 JUN 2022 13:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.7 32-bit) (preloaded format=pdflatex 2021.8.5)  17 JUN 2022 11:35
 entering extended mode
 **./McCAD_manual_v1.tex
 (McCAD_manual_v1.tex
@@ -624,7 +624,7 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 Package hyperref Info: Option `colorlinks' set `true' on input line 18.
 Package translations Info: No language package found. I am going to use `englis
-h' as default language. on input line 24.
+h' as default language. on input line 20.
  (McCAD_manual_v1.aux
 
 LaTeX Warning: Label `fig:a' multiply defined.
@@ -641,24 +641,24 @@ LaTeX Warning: Label `sub@fig:b' multiply defined.
 )
 \openout1 = `McCAD_manual_v1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
 
 (C:\Users\po9264\AppData\Roaming\MiKTeX\2.9\tex/latex/translations/dicts\transl
 ations-basic-dictionary-english.trsl
@@ -666,7 +666,7 @@ File: translations-basic-dictionary-english.trsl (english translation file `tra
 nslations-basic-dictionary')
 )
 Package translations Info: loading dictionary `translations-basic-dictionary' f
-or `english'. on input line 24.
+or `english'. on input line 20.
 
 (C:\Program Files (x86)\MiKTeX 2.9\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -693,7 +693,7 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 24.
+Package hyperref Info: Link coloring ON on input line 20.
 
 (C:\Program Files (x86)\MiKTeX 2.9\tex/latex/hyperref\nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
@@ -707,17 +707,22 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count318
 )
-LaTeX Info: Redefining \ref on input line 24.
-LaTeX Info: Redefining \pageref on input line 24.
-LaTeX Info: Redefining \nameref on input line 24.
+LaTeX Info: Redefining \ref on input line 20.
+LaTeX Info: Redefining \pageref on input line 20.
+LaTeX Info: Redefining \nameref on input line 20.
  (McCAD_manual_v1.out) (McCAD_manual_v1.out)
 \@outlinefile=\write4
 \openout4 = `McCAD_manual_v1.out'.
 
+<figures/KIT-logo.png, id=82, 917.22675pt x 423.38174pt>
+File: figures/KIT-logo.png Graphic file (type png)
+<use figures/KIT-logo.png>
+Package pdftex.def Info: figures/KIT-logo.png  used on input line 26.
+(pdftex.def)             Requested size: 275.17014pt x 127.0155pt.
  [1
 
-{C:/Users/po9264/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] (McCAD_man
-ual_v1.toc
+{C:/Users/po9264/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <./figures/
+KIT-logo.png (PNG copy)>] (McCAD_manual_v1.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <12> on input line 3.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -732,51 +737,51 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.31 \clearpage
+l.43 \clearpage
                 [1
 
 ] [2
 
 ]
-Overfull \hbox (10.80872pt too wide) in paragraph at lines 69--70
+Overfull \hbox (10.80872pt too wide) in paragraph at lines 81--82
 []\OT1/cmr/m/n/12 download cmake-3.23.0.tar.gz from [][]$\OT1/cmtt/m/n/12 https
  : / / cmake . org / download/$[][]
  []
 
 
-Overfull \hbox (15.37788pt too wide) in paragraph at lines 80--81
+Overfull \hbox (15.37788pt too wide) in paragraph at lines 92--93
 []\OT1/cmr/m/n/12 download boost[]1[]78[]0.tar.gz from [][]$\OT1/cmtt/m/n/12 ht
 tps : / / www . boost . org / users /
  []
 
 [3]
-Overfull \hbox (3.77248pt too wide) in paragraph at lines 92--93
+Overfull \hbox (3.77248pt too wide) in paragraph at lines 104--105
 []\OT1/cmr/m/n/12 download opencascade-7.5.0.tgz from [][]$\OT1/cmtt/m/n/12 htt
 ps : / / dev . opencascade .
  []
 
 [4]
-Overfull \hbox (1.01692pt too wide) in paragraph at lines 133--134
+Overfull \hbox (1.01692pt too wide) in paragraph at lines 145--146
 []\OT1/cmr/m/n/12 download boost[]1[]78[]0.zip from [][]$\OT1/cmtt/m/n/12 https
  : / / www . boost . org / users /
  []
 
 
-Overfull \hbox (0.87923pt too wide) in paragraph at lines 139--140
+Overfull \hbox (0.87923pt too wide) in paragraph at lines 151--152
 []\OT1/cmr/m/n/12 download and run the in-staller opencascade-7.5.0-vc14-64.exe
  from
  []
 
 [5]
 LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 1
-48.
+60.
  (C:\Program Files (x86)\MiKTeX 2.9\tex/latex/base\omscmr.fd
 File: omscmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 148.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 160.
 
-Overfull \hbox (16.51558pt too wide) in paragraph at lines 148--149
+Overfull \hbox (16.51558pt too wide) in paragraph at lines 160--161
 \OT1/cmr/m/n/12 -DOCC[]CUSTOM[]ROOT="$\OML/cmm/m/it/12 <$\OT1/cmr/m/n/12 PATH t
 o OpenCASCADE-7.5.0-vc14-
  []
@@ -784,27 +789,27 @@ o OpenCASCADE-7.5.0-vc14-
 <figures/configFile.png, id=167, 647.41875pt x 708.84825pt>
 File: figures/configFile.png Graphic file (type png)
 <use figures/configFile.png>
-Package pdftex.def Info: figures/configFile.png  used on input line 164.
+Package pdftex.def Info: figures/configFile.png  used on input line 176.
 (pdftex.def)             Requested size: 323.70857pt x 354.42326pt.
 [6]
-Underfull \hbox (badness 10000) in paragraph at lines 175--178
+Underfull \hbox (badness 10000) in paragraph at lines 187--190
 
  []
 
 [7 <./figures/configFile.png>] [8]
-Underfull \hbox (badness 10000) in paragraph at lines 196--201
+Underfull \hbox (badness 10000) in paragraph at lines 208--213
 
  []
 
 
-Overfull \hbox (5.10378pt too wide) in paragraph at lines 196--201
+Overfull \hbox (5.10378pt too wide) in paragraph at lines 208--213
 \OT1/cmr/m/n/12 The name of the in-put STEP files takes the for-mat $\OML/cmm/m
 /it/12 <$\OT1/cmr/m/n/12 material name$\OML/cmm/m/it/12 >$[]$<$\OT1/cmr/m/n/12 
 density
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 196--201
+Underfull \hbox (badness 10000) in paragraph at lines 208--213
 
  []
 
@@ -812,15 +817,15 @@ Underfull \hbox (badness 10000) in paragraph at lines 196--201
 <figures/SC_plugin.png, id=205, 641.9985pt x 685.96275pt>
 File: figures/SC_plugin.png Graphic file (type png)
 <use figures/SC_plugin.png>
-Package pdftex.def Info: figures/SC_plugin.png  used on input line 241.
+Package pdftex.def Info: figures/SC_plugin.png  used on input line 253.
 (pdftex.def)             Requested size: 320.99846pt x 342.98053pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 234--245
+Underfull \hbox (badness 10000) in paragraph at lines 246--257
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 234--245
+Underfull \hbox (badness 10000) in paragraph at lines 246--257
 
  []
 
@@ -828,31 +833,31 @@ Underfull \hbox (badness 10000) in paragraph at lines 234--245
 <figures/InputSolids.png, id=212, 692.5875pt x 447.92343pt>
 File: figures/InputSolids.png Graphic file (type png)
 <use figures/InputSolids.png>
-Package pdftex.def Info: figures/InputSolids.png  used on input line 253.
+Package pdftex.def Info: figures/InputSolids.png  used on input line 265.
 (pdftex.def)             Requested size: 290.88477pt x 188.12656pt.
  [12 <./figures/SC_plugin.png>]
 <figures/McCAD_output.png, id=220, 507.69675pt x 63.8385pt>
 File: figures/McCAD_output.png Graphic file (type png)
 <use figures/McCAD_output.png>
-Package pdftex.def Info: figures/McCAD_output.png  used on input line 262.
+Package pdftex.def Info: figures/McCAD_output.png  used on input line 274.
 (pdftex.def)             Requested size: 355.3853pt x 44.68663pt.
 <figures/McCAD_output_decomposition.png, id=222, 295.1025pt x 360.1455pt>
 File: figures/McCAD_output_decomposition.png Graphic file (type png)
 <use figures/McCAD_output_decomposition.png>
 Package pdftex.def Info: figures/McCAD_output_decomposition.png  used on input 
-line 274.
+line 286.
 (pdftex.def)             Requested size: 156.0006pt x 190.3871pt.
 <figures/McCAD_output_conversion.png, id=223, 233.673pt x 110.21175pt>
 File: figures/McCAD_output_conversion.png Graphic file (type png)
 <use figures/McCAD_output_conversion.png>
 Package pdftex.def Info: figures/McCAD_output_conversion.png  used on input lin
-e 280.
+e 292.
 (pdftex.def)             Requested size: 156.0006pt x 73.57745pt.
  [13 <./figures/InputSolids.png> <./figures/McCAD_output.png>]
 <figures/decomposedSolids.png, id=234, 686.565pt x 443.40656pt>
 File: figures/decomposedSolids.png Graphic file (type png)
 <use figures/decomposedSolids.png>
-Package pdftex.def Info: figures/decomposedSolids.png  used on input line 294.
+Package pdftex.def Info: figures/decomposedSolids.png  used on input line 306.
 (pdftex.def)             Requested size: 274.62112pt x 177.35948pt.
 
 
@@ -861,7 +866,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <figures/cellCards.png, id=236, 578.76225pt x 555.2745pt>
 File: figures/cellCards.png Graphic file (type png)
 <use figures/cellCards.png>
-Package pdftex.def Info: figures/cellCards.png  used on input line 302.
+Package pdftex.def Info: figures/cellCards.png  used on input line 314.
 (pdftex.def)             Requested size: 289.38042pt x 277.63657pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -869,7 +874,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <figures/volumesFile.png, id=238, 684.156pt x 626.94225pt>
 File: figures/volumesFile.png Graphic file (type png)
 <use figures/volumesFile.png>
-Package pdftex.def Info: figures/volumesFile.png  used on input line 310.
+Package pdftex.def Info: figures/volumesFile.png  used on input line 322.
 (pdftex.def)             Requested size: 342.07716pt x 313.47035pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -877,7 +882,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <figures/voidCellFile.png, id=240, 767.2665pt x 68.6565pt>
 File: figures/voidCellFile.png Graphic file (type png)
 <use figures/voidCellFile.png>
-Package pdftex.def Info: figures/voidCellFile.png  used on input line 318.
+Package pdftex.def Info: figures/voidCellFile.png  used on input line 330.
 (pdftex.def)             Requested size: 306.90115pt x 27.4621pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -885,10 +890,10 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <figures/ConvertedSolids.png, id=242, 1232.2035pt x 416.757pt>
 File: figures/ConvertedSolids.png Graphic file (type png)
 <use figures/ConvertedSolids.png>
-Package pdftex.def Info: figures/ConvertedSolids.png  used on input line 327.
+Package pdftex.def Info: figures/ConvertedSolids.png  used on input line 339.
 (pdftex.def)             Requested size: 394.31319pt x 133.36496pt.
 
-Overfull \hbox (4.31319pt too wide) in paragraph at lines 327--328
+Overfull \hbox (4.31319pt too wide) in paragraph at lines 339--340
  [][] 
  []
 
@@ -905,7 +910,7 @@ edSolids.png>] [17]
 <figures/issues_Coordinates.png, id=275, 944.93025pt x 755.2215pt>
 File: figures/issues_Coordinates.png Graphic file (type png)
 <use figures/issues_Coordinates.png>
-Package pdftex.def Info: figures/issues_Coordinates.png  used on input line 361
+Package pdftex.def Info: figures/issues_Coordinates.png  used on input line 373
 .
 (pdftex.def)             Requested size: 359.07722pt x 286.98715pt.
 
@@ -915,32 +920,32 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <figures/issues_pipe_torus_a.png, id=277, 926.86275pt x 408.3255pt>
 File: figures/issues_pipe_torus_a.png Graphic file (type png)
 <use figures/issues_pipe_torus_a.png>
-Package pdftex.def Info: figures/issues_pipe_torus_a.png  used on input line 37
-4.
+Package pdftex.def Info: figures/issues_pipe_torus_a.png  used on input line 38
+6.
 (pdftex.def)             Requested size: 146.25pt x 64.42375pt.
 <figures/issues_pipe_torus_b.png, id=278, 927.465pt x 407.121pt>
 File: figures/issues_pipe_torus_b.png Graphic file (type png)
 <use figures/issues_pipe_torus_b.png>
-Package pdftex.def Info: figures/issues_pipe_torus_b.png  used on input line 38
-0.
+Package pdftex.def Info: figures/issues_pipe_torus_b.png  used on input line 39
+2.
 (pdftex.def)             Requested size: 146.25pt x 64.19644pt.
 [18] [19 <./figures/issues_Coordinates.png> <./figures/issues_pipe_torus_a.png>
  <./figures/issues_pipe_torus_b.png>]
 <figures/issues_Hollow.png, id=294, 886.512pt x 529.98pt>
 File: figures/issues_Hollow.png Graphic file (type png)
 <use figures/issues_Hollow.png>
-Package pdftex.def Info: figures/issues_Hollow.png  used on input line 394.
+Package pdftex.def Info: figures/issues_Hollow.png  used on input line 406.
 (pdftex.def)             Requested size: 310.28384pt x 185.49577pt.
 
-Overfull \hbox (2.28035pt too wide) in paragraph at lines 401--402
+Overfull \hbox (2.28035pt too wide) in paragraph at lines 413--414
 []\OT1/cmr/m/it/12 description\OT1/cmr/m/n/12 : when run-ning de-com-po-si-tion
  solid names are re-trieved
  []
 
 [20 <./figures/issues_Hollow.png>]
-Overfull \hbox (8.53217pt too wide) in paragraph at lines 413--414
+Overfull \hbox (13.16684pt too wide) in paragraph at lines 424--425
 \OT1/cmr/m/n/12 A com-pre-hen-sive dis-cus-sion on the in-ner work-ings of Mc-C
-AD al-go-rithm/classes
+AD al-go-rithms/classes
  []
 
 [21] (McCAD_manual_v1.aux)
@@ -951,11 +956,11 @@ Package rerunfilecheck Info: File `McCAD_manual_v1.out' has not changed.
 (rerunfilecheck)             Checksum: F07B7EA6CAE544A8110B3D801F231B05;2179.
  ) 
 Here is how much of TeX's memory you used:
- 23735 strings out of 478836
- 483685 string characters out of 2852497
- 728613 words of memory out of 3000000
- 41244 multiletter control sequences out of 15000+600000
- 409136 words of font info for 46 fonts, out of 8000000 for 9000
+ 23743 strings out of 478836
+ 483869 string characters out of 2852497
+ 728191 words of memory out of 3000000
+ 41251 multiletter control sequences out of 15000+600000
+ 409790 words of font info for 48 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,9n,89p,760b,898s stack positions out of 5000i,500n,10000p,200000b,80000s
  <C:\Users\po9264\AppData\Local\MiKTeX\2.9\fonts/pk/ljfour/jknappen/ec/dpi600
@@ -963,14 +968,13 @@ Here is how much of TeX's memory you used:
 cmbx12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
 mi12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr1
 0.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.p
-fb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/
-Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Pr
-ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Prog
-ram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on McCAD_manual_v1.pdf (22 pages, 2859247 bytes).
+fb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><
+C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:
+/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/P
+rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on McCAD_manual_v1.pdf (22 pages, 2953969 bytes).
 PDF statistics:
- 363 PDF objects out of 1000 (max. 8388607)
+ 359 PDF objects out of 1000 (max. 8388607)
  59 named destinations out of 1000 (max. 500000)
- 240 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 245 words of extra memory for PDF output out of 10000 (max. 10000000)
 
