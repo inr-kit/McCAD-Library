@@ -17,13 +17,25 @@
 	urlcolor=blue
 }
 
-\title{McCAD v1.0}
-\author{Moataz Harb\\moataz.harb@kit.edu}
-\affil{Karlsruhe Institute of Technology (KIT), Hermann-von-Helmholtz-Platz 1, 76344 Eggenstein-Leopoldshafen, Germany}
-
 \begin{document}
-\maketitle
+% -------------------------------------------------------------------------------------
+% TITLE PAGE
+% -------------------------------------------------------------------------------------
+\begin{titlepage}
+	\centering
+	\includegraphics[scale=0.3]{figures/KIT-logo.png} \\
+	\vspace{2cm}
+	{\huge\bfseries McCAD v1.0\par}
+	\vspace{1.5cm}
+	{\Large\itshape Moataz Harb\\moataz.harb@kit.edu\par}
+	\vspace{1cm}
+	{\Large\itshape Karlsruhe Institute of Technology (KIT), Hermann-von-Helmholtz-Platz 1, 76344 Eggenstein-Leopoldshafen, Germany\par}
+	\vfill
+	% Bottom of the page
+	{\large \today\par}
+\end{titlepage}
 \clearpage
+
 % -------------------------------------------------------------------------------------
 % TABLE OF CONTENTS
 % -------------------------------------------------------------------------------------
@@ -75,7 +87,7 @@ Building of the McCAD library is supported on both Linux and Windows operating s
 		\item \$ make
 		\item \$ make install
   	  \end{itemize}
-      \item \textbf{Boost C++ liraries}
+      \item \textbf{Boost C++ libraries}
       \begin{itemize}
     	\item download boost\_1\_78\_0.tar.gz from \url{https://www.boost.org/users/download/} then execute the commands below in a terminal.
     	\item \$ tar -xvzf boost\_1\_78\_0.tar.gz
@@ -172,7 +184,7 @@ In general, there are three types of information that need to be provided to McC
 	\end{itemize}
 
   \subsection{Decomposition}
-    Currently McCAD supports input files in the STEP format (protocol 214). McCAD accepts both single and multiple input STEP files. For ech input STEP file, after successfully running McCAD decomposition two STEP output files will be written to disk. The first will contain the decomposed input solids and the second will contain the rejected/failed input solids. If the latter is absent, this means no input solids were rejected and no solids failed to be decomposed. \\
+    Currently McCAD supports input files in the STEP format (protocol 214). McCAD accepts both single and multiple input STEP files. For each input STEP file, after successfully running McCAD decomposition two STEP output files will be written to disk. The first will contain the decomposed input solids and the second will contain the rejected/failed input solids. If the latter is absent, this means no input solids were rejected and no solids failed to be decomposed. \\
     \\
     Before running McCAD in the decomposition mode, the user is advised to review the input parameters on the decomposition section on the input configuration file, figure (\ref{fig:config}). Below is a description of the decomposition input parameters.
 	\begin{itemize}
@@ -233,7 +245,7 @@ There are two ways to run McCAD, via a command line or the SpaceClaim plugin. Mc
   \subsection{SpaceClaim Plugin}
     The python script located in plugins/SpaceClaim\_interface can be loaded into SpaceClaim and used directly to call McCAD to perform decomposition on selected solid(s).  The script can be loaded in SpaceClaim by selecting "File $>$ New $>$ Script". Select the desired solid(s) to decompose and on the "Script Editor" select "Run Script", the green arrow.
     \\\\
-    Figure (\ref{fig:SCPlugin}) shows a screenshot from a loaded script in SpaceClaim. After loading the script into SpaceClaim, the user should modify \emph{McCADExecutable} and \emph{workPath} variables according. The former should be modifyied to point to McCAD executable that will be called by the script. The latter is the desired work directory that the temporary files will be created in. The user then can select solid(s) from the model and run the plugin using the green arrow at the top right corner. After running McCAD, a summary will be printed in the "Interpreter" as shown at the bottom of figure (\ref{fig:SCPlugin}).
+    Figure (\ref{fig:SCPlugin}) shows a screen shot from a loaded script in SpaceClaim. After loading the script into SpaceClaim, the user should modify \emph{McCADExecutable} and \emph{workPath} variables according. The former should be modifyied to point to McCAD executable that will be called by the script. The latter is the desired work directory that the temporary files will be created in. The user then can select solid(s) from the model and run the plugin using the green arrow at the top right corner. After running McCAD, a summary will be printed in the "Interpreter" as shown at the bottom of figure (\ref{fig:SCPlugin}).
     \\\\
     If the user which to modify the input configuration file, McCADInputConfig.i, there are two way to do so. The first is to copy the template from the templates folder and place it in the "workPath" folder. Another way is by running the script without selecting any solids. This way McCAD will generate the McCADInputConfig.i file which the user can modify.
     \begin{figure}[h!]
@@ -403,14 +415,13 @@ Through extensive testing of McCAD decomposition and conversion core algorithms,
     \end{itemize} 
 \end{itemize}
 \subsection{Conversion}
-None thus far.
-
+None thus far!
 
 % -------------------------------------------------------------------------------------
 % Theory of McCAD Conversion
 % -------------------------------------------------------------------------------------
 \section{Theory of McCAD Conversion} \label{sec:Theory of McCAD Conversion}
-A comprehensive discussion on the inner workings of McCAD algorithm/classes for developers. Coming soon ...
+A comprehensive discussion on the inner workings of McCAD algorithms/classes for developers. Coming soon ...
 \subsection{Decomposition}
 \subsection{Conversion}
 \newpage
