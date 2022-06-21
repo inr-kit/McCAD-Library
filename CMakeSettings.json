@@ -19,6 +19,16 @@
                     "name": "BUILD_STATIC_EXE",
                     "value": "True",
                     "type": "BOOL"
+                },
+                {
+                    "name": "BUILD_SHARED",
+                    "value": "False",
+                    "type": "BOOL"
+                },
+                {
+                    "name": "BUILD_SHARED_EXE",
+                    "value": "False",
+                    "type": "BOOL"
                 }
             ]
         }

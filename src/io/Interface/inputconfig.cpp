@@ -211,7 +211,7 @@ McCAD::IO::InputConfig::populateNamesLists(){
 void
 McCAD::IO::InputConfig::populateMatList(){
     for(int i = 0; i < inputFileNames.size(); ++i){
-        std::string splitName = McCAD::Tools::splitLine(inputFileNames[i], '.')[0];
+        std::string splitName = Tools::splitLine(inputFileNames[i], '.')[0];
         rejectedConvFileNames.push_back(boost::str(boost::format("%sRejectedConv.stp") % splitName));
         std::string matName = Tools::stringToLowerCase(Tools::splitLine(splitName, '_')[0]);
         double matDensity{0.0};
