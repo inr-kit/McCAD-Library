@@ -4,6 +4,7 @@
 #include <chrono>
 #include <filesystem>
 #include <ctime>
+#include <list>
 // McCAD
 #include "info.hpp"
 #include "StringUtilities.hpp"
@@ -38,7 +39,7 @@ int main (int argc, char* argv[]){
                      "has been created in\n" << currentPath.string() << std::endl;
         timeEnd = std::chrono::system_clock::now();
     } else if(argc == 2) {
-        if (McCAD::Tools::stringToLowerCase(std::string(argv[1])) == "help") {
+      if (McCAD::Tools::stringToLowerCase(std::string(argv[1])) == "help") {
             // "help" used as argument, print out the available arguments to screen.
             std::cout << "Usage, case insensitive:\n"
                          "   [ ] Creates parameters file McCADInputConfig.i\n"

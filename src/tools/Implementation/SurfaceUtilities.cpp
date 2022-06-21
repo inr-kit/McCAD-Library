@@ -1,5 +1,6 @@
 // C++
 #include <list>
+#include <algorithm>
 // McCAD
 #include "SurfaceUtilities.hpp"
 
