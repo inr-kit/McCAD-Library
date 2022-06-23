@@ -4,7 +4,6 @@
 // C++
 #include <memory>
 // McCAD
-#include <Standard.hxx>
 #include "inputconfig.hpp"
 // OCC
 

@@ -10,6 +10,15 @@ enable_language(CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 List(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
+
+# Detect operating system
+if(UNIX)
+  set(LINUX_OS true)
+endif(UNIX)
+if(WIN32)
+  set(LINUX_OS false)
+endif(WIN32)
+
 include(McCAD_build)
 # Build options
 McCAD_CMake_setup()

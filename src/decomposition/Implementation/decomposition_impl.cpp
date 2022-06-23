@@ -1,5 +1,6 @@
 // McCAD
 #include "decomposition_impl.hpp"
+#include "decomposeSolid_impl.hpp"
 #include "ShapeView.hpp"
 #include "TaskQueue.hpp"
 #include "preprocessor.hpp"
