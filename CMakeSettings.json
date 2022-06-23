@@ -9,33 +9,6 @@
             "installRoot": "${projectDir}\\build",
             "cmakeCommandArgs": "-DBUILD_RPATH=true -DBUILD_STATIC=true -DBUILD_STATIC_EXE=true -DBOOST_CUSTOM_ROOT=\"D:\\inst\\boost_1_78_0\" -DOCC_CUSTOM_ROOT=\"C:\\OpenCASCADE-7.5.0-vc14-64\\opencascade-7.5.0\"",
             "ctestCommandArgs": "",
-            "variables": [
-                {
-                    "name": "BUILD_STATIC",
-                    "value": "True",
-                    "type": "BOOL"
-                },
-                {
-                    "name": "BUILD_STATIC_EXE",
-                    "value": "True",
-                    "type": "BOOL"
-                },
-                {
-                    "name": "BUILD_SHARED",
-                    "value": "False",
-                    "type": "BOOL"
-                },
-                {
-                    "name": "BUILD_SHARED_EXE",
-                    "value": "False",
-                    "type": "BOOL"
-                },
-                {
-                    "name": "LINUX_OS",
-                    "value": "",
-                    "type": "STRING"
-                }
-            ]
         }
     ]
 }
