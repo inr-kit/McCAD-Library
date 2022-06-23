@@ -4,9 +4,10 @@
 #include <chrono>
 #include <filesystem>
 #include <ctime>
+#include <list>
+#include <algorithm>
 // McCAD
 #include "info.hpp"
-#include "StringUtilities.hpp"
 #include "inputconfig.hpp"
 #include "inputdata.hpp"
 #include "stepreader.hpp"
@@ -27,18 +28,21 @@ int main (int argc, char* argv[]){
     auto timeStart{std::chrono::system_clock::now()},
          timeEnd{std::chrono::system_clock::now()};
     std::time_t timeStart_t = std::chrono::system_clock::to_time_t(timeStart);
-    std::cerr << "Running McCAD v" << McCAD::Info::McCADVersion << " / " <<
+    std::cout << "Running McCAD v" << McCAD::Info::McCADVersion << " / " <<
                  std::ctime(&timeStart_t) << std::endl;
     std::filesystem::path currentPath = std::filesystem::current_path();
     McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
         // No arguments given, write the config file to desk.
         inputConfig.writeTemplate();
-        std::cerr << "A template file, McCADInputConfig.i, with run parameters "
+        std::cout << "A template file, McCADInputConfig.i, with run parameters "
                      "has been created in\n" << currentPath.string() << std::endl;
         timeEnd = std::chrono::system_clock::now();
     } else if(argc == 2) {
-        if (McCAD::Tools::stringToLowerCase(std::string(argv[1])) == "help") {
+      std::string arg1 = std::string(argv[1]);
+      std::transform(arg1.begin(), arg1.end(), arg1.begin(),
+                     [](unsigned char c) { return std::tolower(c); });
+      if (arg1 == "help") {
             // "help" used as argument, print out the available arguments to screen.
             std::cout << "Usage, case insensitive:\n"
                          "   [ ] Creates parameters file McCADInputConfig.i\n"
@@ -46,7 +50,7 @@ int main (int argc, char* argv[]){
                          "[read] Tests loading the input STEP file(s)\n"
                          " [run] Executes McCAD" << std::endl;
             timeEnd = std::chrono::system_clock::now();
-        } else if (McCAD::Tools::stringToLowerCase(std::string(argv[1])) == "read") {
+        } else if (arg1 == "read") {
             // "read" used as argument, load the input STEP file[s].
             inputConfig.readTemplate();
             std::cout << "**************************" << std::endl;
@@ -59,7 +63,7 @@ int main (int argc, char* argv[]){
                 McCAD::IO::STEPReader reader{inputConfig};
             }
             timeEnd = std::chrono::system_clock::now();
-        } else if (McCAD::Tools::stringToLowerCase(std::string(argv[1])) == "run") {
+        } else if (arg1 == "run") {
             // "run" used as argument, read the config file and then run McCAD.
             inputConfig.readTemplate();
             bool decomposeCondition{inputConfig.decompose},

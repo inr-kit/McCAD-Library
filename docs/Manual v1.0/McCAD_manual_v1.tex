@@ -46,7 +46,7 @@
 % INTRODUCTION
 % -------------------------------------------------------------------------------------
 \section{Introduction} \label{sec:Introduction}
-McCAD is a library with an executable for the conversion of CAD solid models to the input syntax of the Monte Carlo (MC) code MCNP; from Boundary Representation "BREP" to Constructive Solid Geometry "CSG". The library is written in C++ and uses CMake as a build system. It relies on Open CASCADE Technology and Boost C++ libraries. Currently, the library is capable of processing solids with any/all of the following surface types:
+McCAD is a library with an executable for the conversion of CAD solid models to the input syntax of the Monte Carlo (MC) code MCNP; from Boundary Representation "BREP" to Constructive Solid Geometry "CSG". The library is written in C++ and uses CMake as a build system. It has Open CASCADE Technology and Boost C++ libraries as dependencies. Currently, the library is capable of processing solids with the following surface types and their combinations:
 \begin{itemize}
 	\item planar
 	\item cylindrical
@@ -55,10 +55,10 @@ McCAD is a library with an executable for the conversion of CAD solid models to 
 The general capabilities/output of the library include:
 \begin{itemize}
 	\item producing a list of volumes of CAD solids as loaded from the input STEP file(s).
-	\item decomposing complex solids into their constituent primitives.
-	\item converting decomposed solids into MC input syntax, currently only to MCNP.
+	\item decomposing complex solids into their constituent convex primitives.
+	\item converting decomposed solids into the input syntax the MC code MCNP.
 	\item void generation.
-	\item generating entries, surface source and cell tallies to calculate stochastic cell volumes on the generated MC input file.
+	\item generating entries, surface source and cell tallies, to calculate stochastic cell volumes on the generated MC input file.
 	\item producing a mapping of cell IDs on the generated MC input file to the corresponding volumes and names of CAD solids as loaded from the decomposed STEP file(s).
 	\item producing a mapping of void-to-material cells in the generated MC input file.
 \end{itemize}
@@ -74,7 +74,7 @@ Building of the McCAD library is supported on both Linux and Windows operating s
   	  \item Ubuntu 20.04 LTS
   	  \item Ubuntu 18.04 LTS
     \end{itemize} 
-    Testing of installation on other distributions is still underway! thus Ubuntu is recommended as a distribution to install McCAD. Below are general steps to install McCAD code and its dependencies.
+    Testing of installation on other distributions is still underway! thus Ubuntu is recommended as a distribution to install McCAD. Below are general steps to install McCAD and its dependencies.
     \begin{itemize}
   	  \item \textbf{CMake}
   	  \begin{itemize}
@@ -106,21 +106,29 @@ Building of the McCAD library is supported on both Linux and Windows operating s
     	\item \$ cd opencascade-7.5.0
     	\item \$ mkdir build
     	\item \$ cd build
-    	\item \$ cmake .. -DCMAKE\_BUILD\_TYPE=Release \\-DBUILD\_LIBRARY\_TYPE=Shared \\-DCMAKE\_INSTALL\_PREFIX=. \\-DINSTALL\_TEST\_CASES=TRUE \\-DINSTALL\_DOC\_Overview=TRUE
+    	\item \$ cmake .. -DCMAKE\_BUILD\_TYPE=Release \\-DBUILD\_LIBRARY\_TYPE=Shared \\-DCMAKE\_INSTALL\_PREFIX=. \\-DINSTALL\_TEST\_CASES=true \\-DINSTALL\_DOC\_Overview=true
     	\item \$ make
     	\item \$ make install
       \end{itemize}
 	  \item \textbf{McCAD}
 	  \begin{itemize}
-		\item \emph{NOTE}: building a shared library is recommended! Should a static library be needed, the user has to ensure a compliant build of Open CASCADE Technology by changing the build type; \\ -DBUILD\_LIBRARY\_TYPE=STATIC.
+		\item \emph{NOTE}: building a shared library is recommended! Should a static library be needed, the user has to ensure a compliant build of Open CASCADE Technology by changing "Shared" to "Static" in the build type; -DBUILD\_LIBRARY\_TYPE=STATIC.
 		\item \$ git clone \url{https://github.com/inr-kit/McCAD_Library}
 		\item \$ cd McCAD\_Library
 		\item \$ mkdir build
 		\item \$ cd build
-		\item \$ CMake .. -DCMAKE\_INSTALL\_PREFIX=. \\-DBUILD\_STATIC=OFF \\-DBOOST\_CUSTOM\_ROOT=$<$PATH to boost\_1\_78\_0$>$ \\-DOCC\_CUSTOM\_ROOT=$<$PATH to opencascade-7.5.0/build$>$ \\-DBUILD\_RPATH=ON
+		\item to build a shared library (\emph{recommended}):
+		  \begin{itemize}
+			\item \$ CMake .. \\-DCMAKE\_INSTALL\_PREFIX=. \\-DBUILD\_RPATH=true \\-DBUILD\_SHARED=true \\-DBUILD\_SHARED\_EXE=true \\-DBOOST\_CUSTOM\_ROOT=$<$Path to boost\_1\_78\_0$>$ \\-DOCC\_CUSTOM\_ROOT=$<$Path to opencascade-7.5.0/build$>$ 
+			\\-DCMAKE\_EXE\_LINKER\_FLAGS="-m64 -fPIC" \\ -DCMAKE\_CXX\_FLAGS="-fPIC"
+		  \end{itemize}
+		\item to building a static library:
+		\begin{itemize}
+			\item replace "SHARED" by "STATIC" in "\\-DBUILD\_SHARED \\-DBUILD\_SHARED\_EXE in the above commands.
+		\end{itemize}
 		\item \$ make
 		\item \$ make install
-		\item add the full path to McCAD/build/bin to .bashrc file or create an alias for McCAD to run from command line.
+		\item add the absolute path to McCAD/build/bin to .bashrc file or create an alias for McCAD to run from command line.
 	  \end{itemize}
     \end{itemize}
 
@@ -156,8 +164,15 @@ Building of the McCAD library is supported on both Linux and Windows operating s
 		\item unzip McCAD\_Library.
 		\item open MSVC and select the McCAD\_Library folder.
 		\item from the "Solution Explorer - Folder Review" double click CMakeSettings.json file. This will open the file in IDE. \item Set a "Configuration name". 
-		\item ensure that "Configuration type" is set to "Release" and "Toolset" is set to msvc\_x64\_x64.
-		\item add the following to "CMake command arguments" \\-DBUILD\_RPATH=ON \\-DBUILD\_STATIC\_EXE=ON \\-DBUILD\_SHARED=OFF \\-DBOOST\_CUSTOM\_ROOT="$<$PATH to boost\_1\_78\_0$>$" \\-DOCC\_CUSTOM\_ROOT="$<$PATH to OpenCASCADE-7.5.0-vc14-64\textbackslash opencascade-7.5.0$>$"
+		\item ensure that "Configuration type" is set to "Release" and "Toolset" is set to "msvc\_x64\_x64".
+		\item to build a static library (\emph{recommended}):
+		  \begin{itemize}
+		  	\item ensure that the following is on "CMake command arguments" \\-DLINUX\_OS=false \\-DBUILD\_RPATH=true \\-DBUILD\_STATIC=true \\-DBUILD\_STATIC\_EXE=true \\-DBOOST\_CUSTOM\_ROOT="$<$Path to boost\_1\_78\_0$>$" \\-DOCC\_CUSTOM\_ROOT="$<$Path to OpenCASCADE-7.5.0-vc14-64\textbackslash opencascade-7.5.0$>$"
+		  \end{itemize}
+		\item to build a shared library:
+		\begin{itemize}
+			\item replace the word "STATIC" by "SHARED" in \\-DBUILD\_STATIC \\-DBUILD\_STATIC\_EXE in the above commands.
+		\end{itemize}
 		\item from the top menu select "Build $>$ Build All".
 		\item after successful completion of the previous step, from the top menu select "Build $>$ Install McCAD".
 		\item add full path to McCAD\_Library/build/bin to the PATH environment variable. 

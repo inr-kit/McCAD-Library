@@ -24,30 +24,6 @@ if(LINUX_OS)
         endif()
     endif()
 
-    if(Boost_FOUND)
-        if(BUILD_SHARED)
-            set(BOOST_LIBRARIES_SHARED "")
-            foreach (Boost_lib ${Boost_LIBRARIES})
-                set(BOOST_LIB "BOOST_LIB-NOTFOUND")
-                find_library(BOOST_LIB
-                    NAMES ${Boost_lib}
-                    HINTS ${BOOST_LIBRARY_DIRS}
-                    NO_DEFAULT_PATH)
-                list(APPEND BOOST_LIBRARIES_SHARED ${BOOST_LIB})
-            endforeach ()
-        endif()
-        if(BUILD_STATIC)
-            set(BOOST_LIBRARIES_STATIC "")
-            foreach (Boost_lib ${Boost_LIBRARIES})
-                set(BOOST_LIB "BOOST_LIB-NOTFOUND")
-                find_library(BOOST_LIB
-                    NAMES ${Boost_lib}
-                    HINTS ${BOOST_LIBRARY_DIRS}
-                    NO_DEFAULT_PATH)
-                list(APPEND BOOST_LIBRARIES_STATIC ${BOOST_LIB})
-            endforeach ()
-        endif()
-    endif()
 else(LINUX_OS)
     if(DEFINED BOOST_CUSTOM_ROOT)
         set(Boost_FOUND True)
@@ -66,11 +42,5 @@ endif()
 
 message(STATUS "BOOST_INCLUDE_DIRS: ${BOOST_INCLUDE_DIRS}")
 message(STATUS "BOOST_LIBRARY_DIRS: ${BOOST_LIBRARY_DIRS}")
-if (BUILD_SHARED)
-    message(STATUS "BOOST_LIBRARIES_SHARED: ${BOOST_LIBRARIES_SHARED}")
-endif()
-if (BUILD_STATIC)
-    message(STATUS "BOOST_LIBRARIES_STATIC: ${BOOST_LIBRARIES_STATIC}")
-endif()
 message("")
 

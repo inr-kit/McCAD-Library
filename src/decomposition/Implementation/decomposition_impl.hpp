@@ -13,7 +13,6 @@
 #include "inputconfig.hpp"
 #include "compound.hpp"
 #include "solid_impl.hpp"
-#include "decomposeSolid_impl.hpp"
 #include "SolidType.hpp"
 #include "tools_impl.hpp"
 // OCCT

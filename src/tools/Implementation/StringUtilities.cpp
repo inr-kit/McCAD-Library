@@ -31,7 +31,7 @@ McCAD::Tools::splitLine(const std::string& line, char delimiter){
 * @author  Moataz Harb
 * **********************************************************************/
 std::string
-McCAD::Tools::stringToLowerCase(std::string& string){
+McCAD::Tools::stringToLowerCase(std::string string){
     std::transform(string.begin(), string.end(), string.begin(),
                    [](unsigned char c){ return std::tolower(c); });
     return string;
