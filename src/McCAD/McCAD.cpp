@@ -8,7 +8,6 @@
 #include <algorithm>
 // McCAD
 #include "info.hpp"
-//#include "StringUtilities.hpp"
 #include "inputconfig.hpp"
 #include "inputdata.hpp"
 #include "stepreader.hpp"
@@ -29,14 +28,14 @@ int main (int argc, char* argv[]){
     auto timeStart{std::chrono::system_clock::now()},
          timeEnd{std::chrono::system_clock::now()};
     std::time_t timeStart_t = std::chrono::system_clock::to_time_t(timeStart);
-    std::cerr << "Running McCAD v" << McCAD::Info::McCADVersion << " / " <<
+    std::cout << "Running McCAD v" << McCAD::Info::McCADVersion << " / " <<
                  std::ctime(&timeStart_t) << std::endl;
     std::filesystem::path currentPath = std::filesystem::current_path();
     McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
         // No arguments given, write the config file to desk.
         inputConfig.writeTemplate();
-        std::cerr << "A template file, McCADInputConfig.i, with run parameters "
+        std::cout << "A template file, McCADInputConfig.i, with run parameters "
                      "has been created in\n" << currentPath.string() << std::endl;
         timeEnd = std::chrono::system_clock::now();
     } else if(argc == 2) {
