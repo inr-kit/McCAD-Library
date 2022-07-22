@@ -4,12 +4,12 @@
 \contentsline {subsection}{\numberline {2.2}Windows}{5}{subsection.2.2}%
 \contentsline {section}{\numberline {3}I/O}{7}{section.3}%
 \contentsline {subsection}{\numberline {3.1}General}{7}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Decomposition}{7}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Conversion}{9}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.2}Decomposition}{8}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Conversion}{10}{subsection.3.3}%
 \contentsline {section}{\numberline {4}Running McCAD}{11}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Command Line}{11}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}SpaceClaim Plugin}{12}{subsection.4.2}%
-\contentsline {section}{\numberline {5}Example}{12}{section.5}%
+\contentsline {section}{\numberline {5}Example}{13}{section.5}%
 \contentsline {section}{\numberline {6}General Usage Notes}{16}{section.6}%
 \contentsline {section}{\numberline {7}Known Issues}{18}{section.7}%
 \contentsline {subsection}{\numberline {7.1}Decomposition}{18}{subsection.7.1}%
