@@ -1,5 +1,6 @@
 // C++
 #include <boost/format.hpp>
+#include <boost/algorithm/string.hpp>
 // McCAD
 #include "mcnpExpressionGenerator.hpp"
 #include "senseEvaluator.hpp"

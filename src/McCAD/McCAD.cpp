@@ -6,6 +6,7 @@
 #include <ctime>
 #include <list>
 #include <algorithm>
+#include <iomanip>
 // McCAD
 #include "info.hpp"
 #include "inputconfig.hpp"
@@ -29,7 +30,7 @@ int main (int argc, char* argv[]){
          timeEnd{std::chrono::system_clock::now()};
     std::time_t timeStart_t = std::chrono::system_clock::to_time_t(timeStart);
     std::cout << "Running McCAD v" << McCAD::Info::McCADVersion << " / " <<
-                 std::ctime(&timeStart_t) << std::endl;
+                 std::put_time(std::localtime(&timeStart_t), "%F %T") << std::endl;
     std::filesystem::path currentPath = std::filesystem::current_path();
     McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){

@@ -1,5 +1,6 @@
 // C++
 #include <boost/format.hpp>
+#include <boost/algorithm/string.hpp>
 // McCAD
 #include "preprocessor.hpp"
 #include "heirarchyFlatter.hpp"
