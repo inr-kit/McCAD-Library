@@ -8,5 +8,4 @@
 namespace McCAD::Info{
     const std::string McCADVersion = boost::str(boost::format("%2.1f") %@McCAD_VERSION@);
 }
-
 #endif // INFO_HPP
