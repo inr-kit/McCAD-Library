@@ -43,13 +43,13 @@ McCAD::Tools::toTypeName(GeomAbs_SurfaceType surfaceType){
 * @brief   A function that checks if a surface type is supported by McCAD.
 * @param   surfaceType is a OCCT surface type, GeomAbs_SurfaceType.
 * @param   bool.
-* @date    31/12/2020
+* @date    22/08/2022
 * @author  Moataz Harb & Christian Wegmann
 * **********************************************************************/
 bool
 McCAD::Tools::checkSupported(GeomAbs_SurfaceType surfaceType) {
     // Create a list of supported surfaces.
-    std::list<GeomAbs_SurfaceType> supportedSurfaces = { GeomAbs_Plane , GeomAbs_Cylinder , GeomAbs_Torus };
+    std::list<GeomAbs_SurfaceType> supportedSurfaces = { GeomAbs_Plane , GeomAbs_Cylinder , GeomAbs_Torus, GeomAbs_Cone };
     if (std::find(supportedSurfaces.begin(), supportedSurfaces.end(), surfaceType) != supportedSurfaces.end()) return true;
     else return false;
 }

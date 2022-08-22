@@ -35,7 +35,7 @@ McCAD::Tools::HeirarchyFlatter::operator()(
 
 /** ********************************************************************
 * @brief   An operator that flattens compound shapes.
-* @param   shape is a OCCT shape.
+* @param   shape is an OCCT shape.
 * @return  A pair of lists containing the accepted and rejected solids.
 * @date    31/12/2020
 * @author  Moataz Harb & Christian Wegmann

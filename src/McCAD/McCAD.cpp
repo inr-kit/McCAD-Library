@@ -34,7 +34,7 @@ int main (int argc, char* argv[]){
     std::filesystem::path currentPath = std::filesystem::current_path();
     McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
-        // No arguments given, write the config file to desk.
+        // No arguments given, write the config file to disk.
         inputConfig.writeTemplate();
         std::cout << "A template file, McCADInputConfig.i, with run parameters "
                      "has been created in\n" << currentPath.string() << std::endl;

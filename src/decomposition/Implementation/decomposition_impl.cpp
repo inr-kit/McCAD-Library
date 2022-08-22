@@ -10,7 +10,7 @@
 #include "torusConvertor.hpp"
 
 /** ********************************************************************
-* @brief   The main function that executes McCAD decomposition. 
+* @brief   The main constructor that executes McCAD decomposition. 
 * @param   inputData is an object containing list(s) of solids from the input STEP file(s). 
 * @param   inputConfig is an object containing the values of the configuration parameters. 
 * @date    31/12/2020

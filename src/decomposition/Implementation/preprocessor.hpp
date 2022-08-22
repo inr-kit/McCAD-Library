@@ -12,6 +12,7 @@
 #include "cylSolid_impl.hpp"
 #include "torSolid_impl.hpp"
 #include "mixedSolid_impl.hpp"
+#include "conSolid_impl.hpp"
 // OCCT
 #include <TopoDS_Solid.hxx>
 #include <TopoDS_Shape.hxx>
@@ -31,7 +32,8 @@ namespace McCAD::Decomposition{
                                      std::shared_ptr<McCAD::Geometry::PLSolid>,
                                      std::shared_ptr<McCAD::Geometry::CYLSolid>,
                                      std::shared_ptr<McCAD::Geometry::TORSolid>,
-                                     std::shared_ptr<McCAD::Geometry::MXDSolid>>;
+                                     std::shared_ptr<McCAD::Geometry::MXDSolid>,
+                                     std::shared_ptr<McCAD::Geometry::CONSolid>>;
   public:
     IO::InputConfig inputConfig;
     void operator()(const std::shared_ptr<Geometry::Impl::Compound>& compound);

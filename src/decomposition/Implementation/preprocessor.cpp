@@ -59,11 +59,14 @@ McCAD::Decomposition::Preprocessor::operator()(
             case solidType.mixed:
                 compound->mixedSolidsList.push_back(std::get<solidType.mixed>(solidObj));
                 break;
+            case solidType.conical:
+                compound->conSolidsList.push_back(std::get<solidType.conical>(solidObj));
+                break;
             default:;
             }
         }
     }
-    // Add solids to solids list. Planar, then cylindrical, then toroidal.
+    // Add solids to solids list. Planar, then cylindrical, then toroidal, then mixed, then conical.
     if(compound->planarSolidsList.size() > 0)
         compound->solidsList.insert(compound->solidsList.end(),
                                     compound->planarSolidsList.begin(),
@@ -80,6 +83,10 @@ McCAD::Decomposition::Preprocessor::operator()(
         compound->solidsList.insert(compound->solidsList.end(),
                                     compound->mixedSolidsList.begin(),
                                     compound->mixedSolidsList.end());
+    if (compound->conSolidsList.size() > 0)
+        compound->solidsList.insert(compound->solidsList.end(),
+            compound->conSolidsList.begin(),
+            compound->conSolidsList.end());
 }
 
 /** ********************************************************************
@@ -101,6 +108,9 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
         break;
     case solidType.toroidal:
         solidVariant = SolidObjCreator{inputConfig}.createObj<Geometry::TORSolid>(shape);
+        break;
+    case solidType.conical:
+        solidVariant = SolidObjCreator{ inputConfig }.createObj<Geometry::CONSolid>(shape);
         break;
     case solidType.mixed:
         solidVariant = SolidObjCreator{inputConfig}.createObj<Geometry::MXDSolid>(shape);
@@ -150,12 +160,13 @@ McCAD::Decomposition::Preprocessor::checkVolume(const TopoDS_Shape& shape){
 * @brief   A function that determines the solid type.
 * @param   solid is a OCCT solid.
 * @return  variant.
-* @date    31/12/2020
+* @date    22/08/2022
 * @author  Moataz Harb & Christian Wegmann
 * **********************************************************************/
 int
 McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid){
-    bool planar{false}, cylindrical{false}, toroidal{false}, spherical{false}, mixed{false};
+    bool planar{false}, cylindrical{false}, toroidal{false}, spherical{false}, 
+         conical{false}, mixed{false};
     for(const auto& face : detail::ShapeView<TopAbs_FACE>{solid}){
         GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
         switch (surfAdaptor.GetType()){
@@ -171,16 +182,24 @@ McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid
         case GeomAbs_Sphere:
             spherical = true;
             break;
+        case GeomAbs_Cone:
+            conical = true;
+            break;
         default:
             mixed = true;
         }
     }
-    // Determine custom solid type based on surfaces types.
-    if (mixed || (cylindrical && spherical) || (cylindrical && toroidal) ||
-            (toroidal && spherical) || (cylindrical && spherical && toroidal))
+    // Determine custom solid type based on surfaces types. If the solid contains a
+    // unique surface type, besides planar, then it is labeled according to that surface.
+    // If any mix of surfaces exists, asde from planes, label the solid as mixed.
+    if (mixed || (cylindrical && toroidal) || (cylindrical && spherical) ||
+       (cylindrical && conical) || (toroidal && spherical) || (toroidal && conical) ||
+       (spherical && conical))
         return solidType.mixed;
+    // The solid is either a mix a planar and another type or pure planar.
     else if (cylindrical) return solidType.cylindrical;
     else if (toroidal) return solidType.toroidal;
+    else if (conical) return solidType.conical;
     else if (spherical) return solidType.spherical;
     else if (planar) return solidType.planar;
     else return solidType.unKnown;
