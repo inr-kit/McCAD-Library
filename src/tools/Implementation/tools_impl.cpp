@@ -11,12 +11,19 @@
 
 McCAD::Tools::Preprocessor::Impl::Impl(){}
 
-McCAD::Tools::Preprocessor::Impl::Impl(const Standard_Real& precision,
-                                       const Standard_Real& faceTolerance) :
+McCAD::Tools::Preprocessor::Impl::Impl(const double& precision,
+                                       const double& faceTolerance) :
     precision{precision}, maxTolerance{faceTolerance}{}
 
 McCAD::Tools::Preprocessor::Impl::~Impl(){}
 
+/** ********************************************************************
+* @brief    A function that uses OCCT tools to remove small faces.
+* @param    solidShape is a OCCT shape.
+* @date     23/08/2022
+* @modified
+* @author   Moataz Harb & Christian Wegmann
+* **********************************************************************/
 void
 McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape){
     Handle_ShapeFix_FixSmallFace smallFaceFix = new ShapeFix_FixSmallFace;
@@ -27,6 +34,13 @@ McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape){
     solidShape = smallFaceFix->FixShape();
 }
 
+/** ********************************************************************
+* @brief    A function that uses OCCT ShapeFix tool to fix solids.
+* @param    solid is a OCCT solid.
+* @date     23/08/2022
+* @modified
+* @author   Moataz Harb & Christian Wegmann
+* **********************************************************************/
 void
 McCAD::Tools::Preprocessor::Impl::repairSolid(TopoDS_Solid& solid){
     Handle_ShapeFix_Solid solidFix = new ShapeFix_Solid(solid);

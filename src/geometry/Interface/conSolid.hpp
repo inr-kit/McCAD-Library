@@ -7,16 +7,16 @@
 #include "solid.hpp"
 
 namespace McCAD::Geometry{
-  class CONSolid : public Solid{
-  public:
-    class Impl;
-    CONSolid();
-    ~CONSolid();
+    class CONSolid : public Solid{
+    public:
+        class Impl;
+        CONSolid();
+        ~CONSolid();
 
-    Impl* accessCONSImpl() const;
+        Impl* accessCONSImpl() const;
     
-  private:
-    std::unique_ptr<Impl> pCONSImpl;
-  };
+    private:
+        std::unique_ptr<Impl> pCONSImpl;
+    };
 }
 #endif //CONSOLID_HPP

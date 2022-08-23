@@ -4,7 +4,6 @@
 // McCAD
 #include "tools.hpp"
 // OCC
-#include <Standard.hxx>
 #include <TopoDS_Solid.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Face.hxx>
@@ -13,10 +12,10 @@ namespace McCAD::Tools{
   class Preprocessor::Impl{
   public:
       Impl();
-      Impl(const Standard_Real& precision, const Standard_Real& faceTolerance);
+      Impl(const double& precision, const double& faceTolerance);
       ~Impl();
 
-      Standard_Real precision{1.0e-6}, maxTolerance{1.0e-3};
+      double precision{1.0e-6}, maxTolerance{1.0e-3};
       void removeSmallFaces(TopoDS_Shape& solidShape);
       void repairSolid(TopoDS_Solid& solid);
       Standard_Boolean checkFace(const TopoDS_Face& face);

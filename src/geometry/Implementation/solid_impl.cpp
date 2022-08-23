@@ -30,23 +30,44 @@ McCAD::Geometry::Solid::Impl::Impl() :
 McCAD::Geometry::Solid::Impl::~Impl(){
 }
 
+/** ********************************************************************
+* @brief    A function that adds the shape to the soid object.
+* @param    aSolidShape is a OCCT shape.
+* @date     23/08/2022
+* @modified
+* @author   Moataz Harb & Christian Wegmann
+* **********************************************************************/
 void
 McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
     solidShape = aSolidShape;
     solid = TopoDS::Solid(solidShape);
 }
 
+/** ********************************************************************
+* @brief    A function that repairs the solid by removing small faces.
+* @param    precision is the numerical precission set on the inputConfig file.
+* @param    faceTolerance is the maximum tolerance to be used by OCCT to fix the face.
+* @date     23/08/2022
+* @modified
+* @author   Moataz Harb & Christian Wegmann
+* **********************************************************************/
 void
-McCAD::Geometry::Solid::Impl::repairSolid(Standard_Real precision,
-                                          Standard_Real faceTolerance){
+McCAD::Geometry::Solid::Impl::repairSolid(double precision, double faceTolerance){
     Tools::Preprocessor preproc{precision, faceTolerance};
     preproc.accessImpl()->removeSmallFaces(solidShape);
     solid = TopoDS::Solid(solidShape);
     preproc.accessImpl()->repairSolid(solid);
 }
 
+/** ********************************************************************
+* @brief    A function that creates OBB and AABB.
+* @param    bndBoxGap sets the tightness of the BB around the solid.
+* @date     23/08/2022
+* @modified
+* @author   Moataz Harb & Christian Wegmann
+* **********************************************************************/
 void
-McCAD::Geometry::Solid::Impl::createBB(Standard_Real bndBoxGap){
+McCAD::Geometry::Solid::Impl::createBB(double bndBoxGap){
     // Build OBB
     BRepBndLib::AddOBB(solid, obb);
     obb.Enlarge(bndBoxGap);
@@ -55,8 +76,15 @@ McCAD::Geometry::Solid::Impl::createBB(Standard_Real bndBoxGap){
     aabb.Enlarge(bndBoxGap);
 }
 
+/** ********************************************************************
+* @brief    A function that calculates mesh size and the BB diagonal length.
+* @param    scalingFactor controls the size of the mesh, set on inputConfig file.
+* @date     23/08/2022
+* @modified
+* @author   Moataz Harb & Christian Wegmann
+* **********************************************************************/
 void
-McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real scalingFactor){
+McCAD::Geometry::Solid::Impl::calcMeshDeflection(double scalingFactor){
     meshDeflection = 2 * std::min({obb.XHSize(), obb.YHSize(), obb.ZHSize()}) /
             scalingFactor;
     // error in Bnd_OBB.hxx. calculate it till the method is fixed
@@ -66,9 +94,17 @@ McCAD::Geometry::Solid::Impl::calcMeshDeflection(Standard_Real scalingFactor){
                                  std::pow(obb.ZHSize(), 2));
 }
 
+/** ********************************************************************
+* @brief    A function that updates the convexity of solid edges.
+* @param    angularTolerance is a tolerance used in determining the convexity of edges.
+* @param    precision is the numerical precission set on the inputConfig file.
+* @date     23/08/2022
+* @modified
+* @author   Moataz Harb & Christian Wegmann
+* **********************************************************************/
 void
-McCAD::Geometry::Solid::Impl::updateEdgesConvexity(Standard_Real angularTolerance,
-                                                   Standard_Real precision){
+McCAD::Geometry::Solid::Impl::updateEdgesConvexity(double angularTolerance,
+                                                   double precision){
     TopTools_IndexedDataMapOfShapeListOfShape mapEdgeFace;
     TopExp::MapShapesAndAncestors(solid, TopAbs_EDGE, TopAbs_FACE, mapEdgeFace);
     TopTools_ListOfShape facesList;

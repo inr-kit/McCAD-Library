@@ -40,11 +40,12 @@ McCAD::Tools::toTypeName(GeomAbs_SurfaceType surfaceType){
 }
 
 /** ********************************************************************
-* @brief   A function that checks if a surface type is supported by McCAD.
-* @param   surfaceType is a OCCT surface type, GeomAbs_SurfaceType.
-* @param   bool.
-* @date    22/08/2022
-* @author  Moataz Harb & Christian Wegmann
+* @brief    A function that checks if a surface type is supported by McCAD.
+* @param    surfaceType is a OCCT surface type, GeomAbs_SurfaceType.
+* @param    bool.
+* @date     31/12/2020
+* @modified 22/08/2022
+* @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 bool
 McCAD::Tools::checkSupported(GeomAbs_SurfaceType surfaceType) {

@@ -10,8 +10,8 @@
 
 std::shared_ptr<McCAD::Geometry::BoundSurface>
 McCAD::Decomposition::SurfaceObjCreator::operator()(const TopoDS_Face& face,
-                                                    const Standard_Real& boxDiagonalLength,
-                                                    const Standard_Real& edgeTolerance,
+                                                    const double& boxDiagonalLength,
+                                                    const double& edgeTolerance,
                                                     Standard_Integer mode){
     if (mode == Standard_Integer(0)){
         BRepAdaptor_Surface surface(face, Standard_True);

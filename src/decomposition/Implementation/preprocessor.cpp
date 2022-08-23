@@ -24,10 +24,11 @@ McCAD::Decomposition::Preprocessor::Preprocessor(const IO::InputConfig& inputCon
 McCAD::Decomposition::Preprocessor::~Preprocessor(){}
 
 /** ********************************************************************
-* @brief   The main function that cheks the volume and boundary surfaces and assigns solid type.
-* @param   compound is compound object containing a shape and name.
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    The main function that cheks the volume and boundary surfaces and assigns solid type.
+* @param    compound is compound object containing a shape and name.
+* @date     31/12/2020
+* @modified 22/08/2022
+* @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 void
 McCAD::Decomposition::Preprocessor::operator()(
@@ -109,11 +110,12 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
     case solidType.toroidal:
         solidVariant = SolidObjCreator{inputConfig}.createObj<Geometry::TORSolid>(shape);
         break;
-    case solidType.conical:
-        solidVariant = SolidObjCreator{ inputConfig }.createObj<Geometry::CONSolid>(shape);
-        break;
     case solidType.mixed:
         solidVariant = SolidObjCreator{inputConfig}.createObj<Geometry::MXDSolid>(shape);
+        break;
+    case solidType.conical:
+        puts("conical");
+        //solidVariant = SolidObjCreator{ inputConfig }.createObj<Geometry::CONSolid>(shape);
         break;
     default:;
         // Unknown Type
@@ -157,16 +159,17 @@ McCAD::Decomposition::Preprocessor::checkVolume(const TopoDS_Shape& shape){
 }
 
 /** ********************************************************************
-* @brief   A function that determines the solid type.
-* @param   solid is a OCCT solid.
-* @return  variant.
-* @date    22/08/2022
-* @author  Moataz Harb & Christian Wegmann
+* @brief    A function that determines the solid type.
+* @param    solid is a OCCT solid.
+* @return   variant.
+* @date     31/12/2020
+* @modified 22/08/2022
+* @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 int
 McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid){
-    bool planar{false}, cylindrical{false}, toroidal{false}, spherical{false}, 
-         conical{false}, mixed{false};
+    bool planar{false}, cylindrical{false}, toroidal{false}, mixed{false}, 
+         conical{false}, spherical{false};
     for(const auto& face : detail::ShapeView<TopAbs_FACE>{solid}){
         GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
         switch (surfAdaptor.GetType()){
@@ -179,11 +182,11 @@ McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid
         case GeomAbs_Torus:
             toroidal = true;
             break;
-        case GeomAbs_Sphere:
-            spherical = true;
-            break;
         case GeomAbs_Cone:
             conical = true;
+            break;
+        case GeomAbs_Sphere:
+            spherical = true;
             break;
         default:
             mixed = true;
@@ -197,10 +200,10 @@ McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid
        (spherical && conical))
         return solidType.mixed;
     // The solid is either a mix a planar and another type or pure planar.
-    else if (cylindrical) return solidType.cylindrical;
-    else if (toroidal) return solidType.toroidal;
-    else if (conical) return solidType.conical;
     else if (spherical) return solidType.spherical;
+    else if (conical) return solidType.conical;
+    else if (toroidal) return solidType.toroidal;
+    else if (cylindrical) return solidType.cylindrical;
     else if (planar) return solidType.planar;
     else return solidType.unKnown;
 }

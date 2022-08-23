@@ -32,11 +32,12 @@ McCAD::Decomposition::Decompose::Impl::~Impl(){
 }
 
 /** ********************************************************************
-* @brief   The main function that executes McCAD decomposition on an input solid.
-* @param   inputShape is a tuple containing the input shape and its name. 
-* @param   compoundID is a unique ID, counter, to assing to the compound object to be created.
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    The main function that executes McCAD decomposition on an input solid.
+* @param    inputShape is a tuple containing the input shape and its name. 
+* @param    compoundID is a unique ID, counter, to assing to the compound object to be created.
+* @date     31/12/2022
+* @modified 23/08/2022
+* @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 void
 McCAD::Decomposition::Decompose::Impl::perform(
@@ -78,6 +79,9 @@ McCAD::Decomposition::Decompose::Impl::perform(
             extractSolids(compoundObj, mxdSolid);
         } else compoundObj->rejectedInputShapesList->Append(
                     mxdSolid->accessSImpl()->solid);
+    }
+    for (auto& conSolid : compoundObj->conSolidsList) {
+        std::cout << "   - Decomposing conical solid" << std::endl;
     }
     compoundList.push_back(std::move(compoundObj));
 }
