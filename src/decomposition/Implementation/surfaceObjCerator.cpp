@@ -3,18 +3,29 @@
 #include "boundSurfacePlane_impl.hpp"
 #include "boundSurfaceCyl_impl.hpp"
 #include "boundSurfaceTor_impl.hpp"
+#include "boundSurfaceCone_impl.hpp"
 #include "SurfaceUtilities.hpp"
 // OCC
 #include <BRepAdaptor_Surface.hxx>
 #include <GeomAdaptor_Surface.hxx>
 
+/** ********************************************************************
+* @brief    This operator creates surface objects per the surface type.
+* @param    face is a OCCT face.
+* @param    boxDiagonalLength is the calculated diagonal length of the solid OBB.
+* @param    edgeTolerance is set on inputConfig file.
+* @param    mode is defaulted to 0.
+* @date     23/08/2022
+* @modified
+* @author   Moataz Harb & Christian Wegmann
+* **********************************************************************/
 std::shared_ptr<McCAD::Geometry::BoundSurface>
 McCAD::Decomposition::SurfaceObjCreator::operator()(const TopoDS_Face& face,
                                                     const double& boxDiagonalLength,
                                                     const double& edgeTolerance,
-                                                    Standard_Integer mode){
-    if (mode == Standard_Integer(0)){
-        BRepAdaptor_Surface surface(face, Standard_True);
+                                                    int mode){
+    if (mode == int(0)){
+        BRepAdaptor_Surface surface(face, true);
         GeomAdaptor_Surface AdaptorSurface = surface.Surface();
         if (AdaptorSurface.GetType() == GeomAbs_Plane){
             std::shared_ptr<Geometry::BoundSurfacePlane> boundSurfacePlane =
@@ -39,6 +50,14 @@ McCAD::Decomposition::SurfaceObjCreator::operator()(const TopoDS_Face& face,
             boundSurfaceTor->accessSImpl()->initiate(face);
             //boundSurfaceTor->accessBSTImpl()->generateExtendedTor(boxDiagonalLength, edgeTolerance);
             return boundSurfaceTor;
+        } else if (AdaptorSurface.GetType() == GeomAbs_Cone) {
+            std::shared_ptr<Geometry::BoundSurfaceCone> boundSurfaceCone =
+                std::make_shared<Geometry::BoundSurfaceCone>();
+            boundSurfaceCone->setSurfaceType(Tools::toTypeName(GeomAbs_Cone));
+            boundSurfaceCone->accessSImpl()->initiate(face);
+            boundSurfaceCone->accessBSConImpl()->generateExtendedCone(boxDiagonalLength,
+                edgeTolerance);
+            return boundSurfaceCone;
         }
     }
     return nullptr;

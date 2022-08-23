@@ -108,14 +108,13 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(double angularTolerance,
     TopTools_IndexedDataMapOfShapeListOfShape mapEdgeFace;
     TopExp::MapShapesAndAncestors(solid, TopAbs_EDGE, TopAbs_FACE, mapEdgeFace);
     TopTools_ListOfShape facesList;
-    for (Standard_Integer edgeNumber = 1; edgeNumber <= mapEdgeFace.Extent();
-         ++edgeNumber){
+    for (int edgeNumber = 1; edgeNumber <= mapEdgeFace.Extent(); ++edgeNumber){
         TopoDS_Edge edge = TopoDS::Edge(mapEdgeFace.FindKey(edgeNumber));
         BRepAdaptor_Curve curveAdaptor;
         curveAdaptor.Initialize(edge);
         facesList = mapEdgeFace.FindFromKey(edge);
-        if(facesList.Extent() != Standard_Integer(2)){
-            // Ignore edge
+        if(facesList.Extent() != int(2)){
+            // Ignore edge if it is not shared between two surfaces.
             edge.Convex(3);
             continue;
         }
@@ -124,7 +123,7 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(double angularTolerance,
         iterFace.Next();
         TopoDS_Face secondFace = TopoDS::Face(iterFace.Value());
 
-        Standard_Real start, end;
+        double start, end;
         Handle_Geom_Curve curve = BRep_Tool::Curve(edge, start, end);
         gp_Pnt startPoint;
         gp_Vec vector;
@@ -138,24 +137,24 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(double angularTolerance,
                 precision}.normalOnFace(secondFace, startPoint);
         if(!firstNormal || !secondNormal){
             // Ignore edge
-            edge.Convex(3);
+            edge.Convex(EdgeType.ignore);
             continue;
         }
-        Standard_Real angle = (*firstNormal).AngleWithRef(*secondNormal, direction);
+        double angle = (*firstNormal).AngleWithRef(*secondNormal, direction);
         if(std::abs(angle) < angularTolerance){
-            angle = Standard_Real(0);
+            angle = double(0);
         }
         // The edge is convex.
-        if( angle < Standard_Real(0) && edge.Orientation() == TopAbs_REVERSED){
-            edge.Convex(1);
-        } else if(angle > Standard_Real(0) && edge.Orientation() == TopAbs_FORWARD){
-            edge.Convex(1);
-        } else if (angle == Standard_Real(0)){
+        if( angle < double(0) && edge.Orientation() == TopAbs_REVERSED){
+            edge.Convex(EdgeType.convex);
+        } else if(angle > double(0) && edge.Orientation() == TopAbs_FORWARD){
+            edge.Convex(EdgeType.convex);
+        } else if (angle == double(0)){
             // edge is flat
-            edge.Convex(2);
+            edge.Convex(EdgeType.flat);
         } else{
             // edge is concave
-            edge.Convex(0);
+            edge.Convex(EdgeType.concave);
         }
     }
 }

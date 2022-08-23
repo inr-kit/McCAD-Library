@@ -8,13 +8,13 @@
 #include "surface.hpp"
 #include "tools_impl.hpp"
 // OCC
-#include <Standard.hxx>
 #include <TopoDS_Face.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Cylinder.hxx>
 #include <gp_Torus.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Dir.hxx>
+#include <gp_Cone.hxx>
 
 namespace McCAD::Geometry{
   class Surface::Impl {
@@ -24,38 +24,38 @@ namespace McCAD::Geometry{
     TopoDS_Face face;
     TopoDS_Face extendedFace;
     std::string surfaceType;
-    Standard_Integer surfaceNumber;
-    Standard_Boolean splitSurface = Standard_False;
-    Standard_Boolean hasAssistSurface = Standard_False;
-    Standard_Boolean isAssistSurface = Standard_False;
-    Standard_Integer numberCollidingSurfaces = 0;
-    Standard_Integer numberCollidingCurvedSurfaces = 0;
-    Standard_Integer throughConcaveEdges = 0;
-    Standard_Integer internalLoops = 0;
-    Standard_Integer repeatedSurface = 0;
+    int surfaceNumber;
+    bool splitSurface = Standard_False;
+    bool hasAssistSurface = Standard_False;
+    bool isAssistSurface = Standard_False;
+    int numberCollidingSurfaces = 0;
+    int numberCollidingCurvedSurfaces = 0;
+    int throughConcaveEdges = 0;
+    int internalLoops = 0;
+    int repeatedSurface = 0;
 
     void initiate(const TopoDS_Face& aFace);
     void countInternalLoops();
 
     // Conversion variables.
-    Standard_Boolean updated{Standard_False};
+    bool updated{Standard_False};
     std::string surfSymb;
-    Standard_Integer uniqueID;
+    int uniqueID;
     std::string surfExpr;
     // Shared between surfaces.
     signed int surfSense;
     gp_Pnt location;
     gp_Dir symmetryAxis;
-    std::vector<Standard_Real> surfParameters;
+    std::vector<double> surfParameters;
     // Plane
     gp_Pln plane;
     gp_Dir normal;
     // Cylinder
     gp_Cylinder cylinder;
-    Standard_Real radius;
+    double radius;
     // Torus
     gp_Torus torus;
-    Standard_Real minorRadius, majorRadius;
+    double minorRadius, majorRadius;
   };
 }
 

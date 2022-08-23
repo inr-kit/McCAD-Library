@@ -10,6 +10,7 @@
 #include "solid.hpp"
 #include "tools_impl.hpp"
 #include "boundSurface_impl.hpp"
+#include "EdgeType.hpp"
 // OCCT
 #include <Bnd_OBB.hxx>
 #include <Bnd_Box.hxx>
@@ -26,6 +27,7 @@ namespace McCAD::Geometry{
       ~Impl();
   private:
       using facesMap = std::map<std::shared_ptr<BoundSurface>, std::shared_ptr<BoundSurface>>;
+      Tools::EdgeType EdgeType;
   public:
       Bnd_OBB obb;
       Bnd_Box aabb;

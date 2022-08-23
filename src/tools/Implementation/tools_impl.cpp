@@ -49,17 +49,31 @@ McCAD::Tools::Preprocessor::Impl::repairSolid(TopoDS_Solid& solid){
     solid = TopoDS::Solid(solidFix->Solid());
 }
 
-Standard_Boolean
+/** ********************************************************************
+* @brief    A function that checks that the face isn't a strip or spot one.
+* @param    face is a OCCT face.
+* @date     23/08/2022
+* @modified
+* @author   Moataz Harb & Christian Wegmann
+* **********************************************************************/
+bool
 McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face){
     ShapeAnalysis_CheckSmallFace shapeAnalysis;
     TopoDS_Edge edge1, edge2;
     if( shapeAnalysis.CheckSpotFace(face, maxTolerance) ||
             shapeAnalysis.CheckStripFace(face, edge1, edge2, maxTolerance)){
-        return Standard_True;
+        return true;
     }
-    return Standard_False;
+    return false;
 }
 
+/** ********************************************************************
+* @brief    A function that fixes a face.
+* @param    face is a OCCT face.
+* @date     23/08/2022
+* @modified
+* @author   Moataz Harb & Christian Wegmann
+* **********************************************************************/
 void
 McCAD::Tools::Preprocessor::Impl::fixFace(TopoDS_Face& face){
     Handle_ShapeFix_Shape shapeFixer = new ShapeFix_Shape(face);
