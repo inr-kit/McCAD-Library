@@ -50,6 +50,8 @@ McCAD::Decomposition::FacesListGenerator::operator()(solidObjType& solidObj,
                     cylindersList.push_back(std::move(boundSurface));
                 } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Torus)){
                     toriList.push_back(std::move(boundSurface));
+                } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cone)){
+                    conesList.push_back(std::move(boundSurface));
                 }
             } else continue;
         }

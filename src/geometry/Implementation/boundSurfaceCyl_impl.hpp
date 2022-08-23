@@ -6,8 +6,6 @@
 // McCAD
 #include "boundSurfaceCyl.hpp"
 #include "surface_impl.hpp"
-// OCC
-#include <Standard.hxx>
 
 namespace McCAD::Geometry{
   class BoundSurfaceCyl::Impl {
@@ -18,9 +16,9 @@ namespace McCAD::Geometry{
     BoundSurfaceCyl* boundSurfaceCyl;
 
     std::string surfaceType = "Cylinder";
-    Standard_Real rangeRadian;
-    void generateExtendedCyl(const Standard_Real& boxDiagonalLength,
-                             Standard_Real tolerance = 1.0e-7);
+    double rangeRadian;
+    void generateExtendedCyl(const double& boxDiagonalLength,
+                             double tolerance = 1.0e-7);
   };
 }
 
