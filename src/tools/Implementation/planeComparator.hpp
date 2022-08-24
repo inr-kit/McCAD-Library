@@ -4,8 +4,7 @@
 // C++
 #include <array>
 #include <optional>
-// OCC
-#include <Standard.hxx>
+// OCCT
 #include <gp_Pln.hxx>
 #include <GeomAdaptor_Surface.hxx>
 
@@ -13,19 +12,18 @@ namespace McCAD::Tools{
   class PlaneComparator{
   public:
       PlaneComparator();
-      PlaneComparator(const Standard_Real& precision, const Standard_Real& angularTolerance,
-                      const Standard_Real& distanceTolerance);
+      PlaneComparator(const double& precision, const double& angularTolerance,
+                      const double& distanceTolerance);
       ~PlaneComparator();
   private:
-      Standard_Real precision{1.0e-6};
-      Standard_Real angularTolerance{1.0e-4 * M_PI};
-      Standard_Real distanceTolerance{1.0e-6};
+      double precision{1.0e-6};
+      double angularTolerance{1.0e-4 * M_PI};
+      double distanceTolerance{1.0e-6};
   public:
-      std::optional<Standard_Boolean> operator()(const GeomAdaptor_Surface& firstAdaptor,
-                                                 const GeomAdaptor_Surface& secondAdaptor);
-      std::array<Standard_Real, 4> planeParameters(const gp_Pln& plane) const;
-      std::optional<Standard_Boolean> equivalentPlaneParameters(const gp_Pln& first,
-                                                                const gp_Pln& second) const;
+      std::optional<bool> operator()(const GeomAdaptor_Surface& firstAdaptor,
+                                     const GeomAdaptor_Surface& secondAdaptor);
+      std::array<double, 4> planeCoefficients(const gp_Pln& plane) const;
+      std::optional<bool> equivalentPlaneCoefficients(const gp_Pln& first, const gp_Pln& second) const;
     };
 }
 

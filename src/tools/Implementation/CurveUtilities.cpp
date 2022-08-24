@@ -1,5 +1,13 @@
 #include "CurveUtilities.hpp"
 
+/** ********************************************************************
+* @brief    A function that returns a string name of a given OCCT curve type.
+* @param    curveType is a OCCT curve type.
+* @return   string name of the given curve type.
+* @date     23/08/2022
+* @modified
+* @author   Moataz Harb & Christian Wegmann
+* **********************************************************************/
 std::string
 McCAD::Tools::toTypeName(
         GeomAbs_CurveType curveType){

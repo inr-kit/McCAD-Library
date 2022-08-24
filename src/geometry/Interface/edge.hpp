@@ -3,8 +3,7 @@
 
 // C++
 #include <memory>
-// McCAD
-#include <Standard.hxx>
+#include <string>
 
 namespace McCAD::Geometry{
   class Edge{
@@ -14,7 +13,7 @@ namespace McCAD::Geometry{
   public:
     Edge();
     ~Edge();
-    Standard_Boolean operator == (const Edge& that);
+    bool operator == (const Edge& that);
       
     Impl* accessEImpl() const;
 

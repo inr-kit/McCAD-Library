@@ -48,6 +48,11 @@ namespace McCAD::Decomposition{
                          const double& edgeTolerance,
                          const double& angularTolerance,
                          const double& distanceTolerance);
+      void mergeConesList(const double& boxDiagonalLength,
+                          const double& precision,
+                          const double& edgeTolerance,
+                          const double& angularTolerance,
+                          const double& distanceTolerance);
     };
 }
 

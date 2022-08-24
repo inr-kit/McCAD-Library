@@ -14,7 +14,7 @@ McCAD::Geometry::Edge::accessEImpl() const{
   return pEImpl.get();
 }
 
-Standard_Boolean
+bool
 McCAD::Geometry::Edge::operator == (const McCAD::Geometry::Edge& that){
   return pEImpl->isEqual(that);
 }

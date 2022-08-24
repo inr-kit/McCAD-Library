@@ -10,11 +10,12 @@
 #include <GeomAdaptor_Surface.hxx>
 
 /** ********************************************************************
-* @brief    This operator creates surface objects per the surface type.
+* @brief    This operator creates surface objects corresponding to the OCCT face type.
 * @param    face is a OCCT face.
 * @param    boxDiagonalLength is the calculated diagonal length of the solid OBB.
 * @param    edgeTolerance is set on inputConfig file.
 * @param    mode is defaulted to 0.
+* @return   A McCAD bound surface object.
 * @date     23/08/2022
 * @modified
 * @author   Moataz Harb & Christian Wegmann

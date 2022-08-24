@@ -20,6 +20,12 @@
 /** ********************************************************************
 * @brief    An operator that creates a list of bound surface objects.
 * @param    solidObj is a McCAD solid object.
+* @param    precision is used in comparing numerical values and is set on the inputConfig file.
+* @param    edgeTolerance is used in comparing OCCT edges and is set on the inputConfig file.
+* @param    faceTolerance is used in comparing OCCT faces and is set on the inputConfig file.
+* @param    angularTolerance is used in comparing angles and is set on the inputConfig file.
+* @param    distanceTolerance is used in comparing distances and is set on the inputConfig file.
+* @param    parameterTolerance is used in comparing UV parameters and is set on the inputConfig file.
 * @return   A vector of McCAD boundary surface objects.
 * @date     31/12/2020
 * @modified
@@ -68,6 +74,17 @@ McCAD::Decomposition::FacesListGenerator::operator()(solidObjType& solidObj,
     return facesList;
 }
 
+/** ********************************************************************
+* @brief    An function that adds the created McCAD surface objects to the parent McCAD solid object.
+* @param    solidObj is a McCAD solid object.
+* @param    precision is used in comparing numerical values and is set on the inputConfig file.
+* @param    edgeTolerance is used in comparing OCCT edges and is set on the inputConfig file.
+* @param    angularTolerance is used in comparing angles and is set on the inputConfig file.
+* @param    distanceTolerance is used in comparing distances and is set on the inputConfig file.
+* @date     31/12/2020
+* @modified
+* @author   Moataz Harb & Christian Wegmann
+* **********************************************************************/
 template <typename solidObjType>
 void
 McCAD::Decomposition::FacesListGenerator::addListsToSolidObj(solidObjType& solidObj,
@@ -100,9 +117,19 @@ McCAD::Decomposition::FacesListGenerator::addListsToSolidObj(solidObjType& solid
                            edgeTolerance, angularTolerance, distanceTolerance);
         mergeToriList(solidObj->accessSImpl()->boxDiagonalLength, precision,
                       edgeTolerance, angularTolerance, distanceTolerance);
+        mergeConesList(solidObj->accessSImpl()->boxDiagonalLength, precision,
+                           edgeTolerance, angularTolerance, distanceTolerance);
         solidObj->accessSImpl()->planesList = planesList;
         solidObj->accessSImpl()->cylindersList = cylindersList;
         solidObj->accessSImpl()->toriList = toriList;
+        solidObj->accessSImpl()->conesList = conesList;
+    } else if (typeid(solidObjType) == typeid(std::shared_ptr<McCAD::Geometry::CONSolid>)){
+        mergePlanesList(solidObj->accessSImpl()->boxDiagonalLength, precision,
+                        edgeTolerance, angularTolerance, distanceTolerance);
+        mergeConesList(solidObj->accessSImpl()->boxDiagonalLength, precision,
+                           edgeTolerance, angularTolerance, distanceTolerance);
+        solidObj->accessSImpl()->planesList = planesList;
+        solidObj->accessSImpl()->conesList = conesList;
     } else return;
 }
 
@@ -137,4 +164,15 @@ McCAD::Decomposition::FacesListGenerator::mergeToriList(const double& boxDiagona
     SurfacesMerger{}(toriList, boxDiagonalLength, precision, edgeTolerance,
                      angularTolerance, distanceTolerance);
     facesList.insert(facesList.end(), toriList.begin(), toriList.end());
+}
+
+void
+McCAD::Decomposition::FacesListGenerator::mergeConesList(const double& boxDiagonalLength,
+                                                         const double& precision,
+                                                         const double& edgeTolerance,
+                                                         const double& angularTolerance,
+                                                         const double& distanceTolerance){
+    SurfacesMerger{}(conesList, boxDiagonalLength, precision, edgeTolerance,
+                     angularTolerance, distanceTolerance);
+    facesList.insert(facesList.end(), conesList.begin(), conesList.end());
 }

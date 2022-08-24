@@ -3,7 +3,7 @@
 
 // C++
 #include <string>
-// OCC
+// OCCT
 #include <GeomAbs_CurveType.hxx>
 #include <gp.hxx>
 #include <BRepAdaptor_Curve.hxx>

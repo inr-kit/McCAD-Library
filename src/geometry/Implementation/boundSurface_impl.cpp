@@ -10,6 +10,7 @@
 #include "SurfaceUtilities.hpp"
 #include "faceParameters.hpp"
 #include "EdgesComparator.hpp"
+#include "EdgeType.hpp"
 //OCC
 #include <TopoDS_Face.hxx>
 #include <TopLoc_Location.hxx>
@@ -54,6 +55,14 @@ McCAD::Geometry::BoundSurface::Impl::canFuse(const McCAD::Geometry::BoundSurface
     return false;
 }
 
+/** ********************************************************************
+* @brief    A function that generates a McCAD triangle objects for a given OOCT face.
+* @param    meshDeflection is a calculated mesh size.
+* @return   true if mesh generation succeeded, otherwise false.
+* @date     23/08/2022
+* @modified
+* @author   Moataz Harb & Christian Wegmann
+* **********************************************************************/
 bool
 McCAD::Geometry::BoundSurface::Impl::generateMesh(const double& meshDeflection){
   TopoDS_Face face = boundSurface->accessSImpl()->face;
@@ -97,20 +106,27 @@ McCAD::Geometry::BoundSurface::Impl::generateMesh(const double& meshDeflection){
   }
 }
 
+/** ********************************************************************
+* @brief    A function that generates McCAD edge objects for edges of a OOCT face.
+* @param    parameterTolerance is a tolerance set in inputConfig file and is used to compare UV parameters.
+* @date     23/08/2022
+* @modified
+* @author   Moataz Harb & Christian Wegmann
+* **********************************************************************/
 void
 McCAD::Geometry::BoundSurface::Impl::generateEdges(const double& parameterTolerance){
     TopoDS_Face face = boundSurface->accessSImpl()->face;
     for (const auto& tempEdge : detail::ShapeView<TopAbs_EDGE>{face}){
         // Ignore degenerated edges.
         if(BRep_Tool::Degenerated(tempEdge)) continue;
-        // more specific edge types as with surfaces and solids
+        // In the fututre make more specific edge types as with surfaces and solids
         std::shared_ptr<Edge> edge = std::make_shared<Edge>();
         edge->accessEImpl()->initiate(tempEdge);
         // Get type of Edge.
         BRepAdaptor_Curve curveAdaptor(tempEdge);
         edge->setEdgeType(Tools::toTypeName(curveAdaptor.GetType()));
         edge->accessEImpl()->convexity = tempEdge.Convex();
-        if (tempEdge.Convex() == int(0)){
+        if (tempEdge.Convex() == Tools::EdgeType{}.concave) {
             boundSurface->accessSImpl()->throughConcaveEdges += 1;
         }
         // Add flag if the edge can be used for assisting splitting surface.
