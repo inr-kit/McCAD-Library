@@ -17,46 +17,44 @@
 #include <gp_Cone.hxx>
 
 namespace McCAD::Geometry{
-  class Surface::Impl {
-  public:
-    Impl() = default;
+    class Surface::Impl {
+        public:
+            Impl() = default;
+            TopoDS_Face face, extendedFace;
+            std::string surfaceType;
+            int surfaceNumber;
+            bool splitSurface{ false }, 
+                 hasAssistSurface{ false }, 
+                 isAssistSurface{false};
+            int numberCollidingSurfaces{ 0 }, 
+                numberCollidingCurvedSurfaces{ 0 }, 
+                throughConcaveEdges{ 0 }, 
+                internalLoops{ 0 }, 
+                repeatedSurface{ 0 };
 
-    TopoDS_Face face;
-    TopoDS_Face extendedFace;
-    std::string surfaceType;
-    int surfaceNumber;
-    bool splitSurface = Standard_False;
-    bool hasAssistSurface = Standard_False;
-    bool isAssistSurface = Standard_False;
-    int numberCollidingSurfaces = 0;
-    int numberCollidingCurvedSurfaces = 0;
-    int throughConcaveEdges = 0;
-    int internalLoops = 0;
-    int repeatedSurface = 0;
+            void initiate(const TopoDS_Face& aFace);
+            void countInternalLoops();
 
-    void initiate(const TopoDS_Face& aFace);
-    void countInternalLoops();
-
-    // Conversion variables.
-    bool updated{Standard_False};
-    std::string surfSymb;
-    int uniqueID;
-    std::string surfExpr;
-    // Shared between surfaces.
-    signed int surfSense;
-    gp_Pnt location;
-    gp_Dir symmetryAxis;
-    std::vector<double> surfParameters;
-    // Plane
-    gp_Pln plane;
-    gp_Dir normal;
-    // Cylinder
-    gp_Cylinder cylinder;
-    double radius;
-    // Torus
-    gp_Torus torus;
-    double minorRadius, majorRadius;
-  };
+            // Conversion variables.
+            bool updated{false};
+            std::string surfSymb;
+            int uniqueID;
+            std::string surfExpr;
+            // Shared between surfaces.
+            signed int surfSense;
+            gp_Pnt location;
+            gp_Dir symmetryAxis;
+            std::vector<double> surfParameters;
+            // Plane
+            gp_Pln plane;
+            gp_Dir normal;
+            // Cylinder
+            gp_Cylinder cylinder;
+            double radius;
+            // Torus
+            gp_Torus torus;
+            double minorRadius, majorRadius;
+    };
 }
 
 #endif //SURFACE_IMPL_HPP

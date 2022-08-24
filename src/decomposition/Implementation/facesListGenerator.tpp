@@ -17,6 +17,14 @@
 #include <TopoDS_Solid.hxx>
 #include <BRepTools.hxx>
 
+/** ********************************************************************
+* @brief    An operator that creates a list of bound surface objects.
+* @param    solidObj is a McCAD solid object.
+* @return   A vector of McCAD boundary surface objects.
+* @date     31/12/2020
+* @modified
+* @author   Moataz Harb & Christian Wegmann
+* **********************************************************************/
 template <typename solidObjType>
 std::vector<std::shared_ptr<McCAD::Geometry::BoundSurface>>
 McCAD::Decomposition::FacesListGenerator::operator()(solidObjType& solidObj,

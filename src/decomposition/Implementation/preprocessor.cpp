@@ -24,8 +24,8 @@ McCAD::Decomposition::Preprocessor::Preprocessor(const IO::InputConfig& inputCon
 McCAD::Decomposition::Preprocessor::~Preprocessor(){}
 
 /** ********************************************************************
-* @brief    The main function that cheks the volume and boundary surfaces and assigns solid type.
-* @param    compound is compound object containing a shape and name.
+* @brief    The main function that checks the volume and boundary surfaces and assigns solid type.
+* @param    compound is a McCAD compound object containing a shape and name.
 * @date     31/12/2020
 * @modified 22/08/2022
 * @author   Moataz Harb & Christian Wegmann
@@ -194,9 +194,9 @@ McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid
     // Determine custom solid type based on surfaces types. If the solid contains a
     // unique surface type, besides planar, then it is labeled according to that surface.
     // If any mix of surfaces exists, asde from planes, label the solid as mixed.
-    if (mixed || (cylindrical && toroidal) || (cylindrical && spherical) ||
-       (cylindrical && conical) || (toroidal && spherical) || (toroidal && conical) ||
-       (spherical && conical))
+    if (mixed || (cylindrical && toroidal) || (cylindrical && conical) ||
+       (cylindrical && spherical) || (toroidal && conical) || (toroidal && spherical) ||
+       (conical && spherical))
         return solidType.mixed;
     // The solid is either a mix a planar and another type or pure planar.
     else if (spherical) return solidType.spherical;

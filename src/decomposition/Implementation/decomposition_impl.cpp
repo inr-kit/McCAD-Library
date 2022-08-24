@@ -82,6 +82,8 @@ McCAD::Decomposition::Decompose::Impl::perform(
     }
     for (auto& conSolid : compoundObj->conSolidsList) {
         std::cout << "   - Decomposing conical solid" << std::endl;
+        compoundObj->rejectedInputShapesList->Append(
+            conSolid->accessSImpl()->solid);
     }
     compoundList.push_back(std::move(compoundObj));
 }

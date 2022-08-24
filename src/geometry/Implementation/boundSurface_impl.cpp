@@ -34,47 +34,47 @@ McCAD::Geometry::BoundSurface::Impl::Impl(BoundSurface* backReference)
 McCAD::Geometry::BoundSurface::Impl::~Impl(){
 }
 
-Standard_Boolean
+bool
 McCAD::Geometry::BoundSurface::Impl::isEqual(const McCAD::Geometry::BoundSurface& that){
     return Tools::SurfaceComparator{}(boundSurface->accessSImpl()->face,
                                       that.accessSImpl()->face);
 }
 
-Standard_Boolean
+bool
 McCAD::Geometry::BoundSurface::Impl::canFuse(const McCAD::Geometry::BoundSurface& that){
     // Check common edges of the two faces.
-    for (Standard_Integer i = 0; i < edgesList.size(); ++i){
-        for (Standard_Integer j = 0; j < that.accessBSImpl()->edgesList.size(); ++j){
+    for (int i = 0; i < edgesList.size(); ++i){
+        for (int j = 0; j < that.accessBSImpl()->edgesList.size(); ++j){
             if(Tools::EdgesComparator{}(edgesList[i]->accessEImpl()->edge,
                                         that.accessBSImpl()->edgesList[j]->accessEImpl()->edge)){
-                return Standard_True;
+                return true;
             }
         }
     }
-    return Standard_False;
+    return false;
 }
 
-Standard_Boolean
-McCAD::Geometry::BoundSurface::Impl::generateMesh(const Standard_Real& meshDeflection){
+bool
+McCAD::Geometry::BoundSurface::Impl::generateMesh(const double& meshDeflection){
   TopoDS_Face face = boundSurface->accessSImpl()->face;
   // Generate mesh of the surface.
   try{
       TopLoc_Location location;
       Handle_Poly_Triangulation mesh;
-      BRepMesh_IncrementalMesh incMesh(face, meshDeflection, Standard_True);
+      BRepMesh_IncrementalMesh incMesh(face, meshDeflection, true);
       incMesh.Perform();
       mesh = BRep_Tool::Triangulation(face, location);
       if (!mesh.IsNull()){
-          BRepAdaptor_Surface surface(face, Standard_True);
+          BRepAdaptor_Surface surface(face, true);
           gp_Trsf Transformation = surface.Trsf();
           // Get mesh nodes.
-          Standard_Integer numberNodes = mesh->NbNodes();
+          int numberNodes = mesh->NbNodes();
           TColgp_Array1OfPnt meshNodes(1, numberNodes);
           meshNodes = mesh->Nodes();
           // Get mesh triangles.
-          Standard_Integer numberTriangles = mesh->NbTriangles();
+          int numberTriangles = mesh->NbTriangles();
           const Poly_Array1OfTriangle& Triangles = mesh->Triangles();
-          std::array<Standard_Integer, 3> triangleNodes;
+          std::array<int, 3> triangleNodes;
           for (const auto& Triangle : Triangles){
               Triangle.Get(triangleNodes[0], triangleNodes[1], triangleNodes[2]);
               std::array<gp_Pnt, 3> points = {
@@ -83,22 +83,22 @@ McCAD::Geometry::BoundSurface::Impl::generateMesh(const Standard_Real& meshDefle
                   meshNodes(triangleNodes[2]).Transformed(Transformation)};
               // Generate new face with the retrieved triangle points.
               TopoDS_Wire wire = BRepBuilderAPI_MakePolygon(points[0], points[1],
-                      points[2], Standard_True);
-              TopoDS_Face triangleFace = BRepBuilderAPI_MakeFace(wire, Standard_True);
+                      points[2], true);
+              TopoDS_Face triangleFace = BRepBuilderAPI_MakeFace(wire, true);
               std::shared_ptr<MeshTriangle> meshTriangle = std::make_shared<MeshTriangle>();
               meshTriangle->accessMTImpl()->initiate(triangleFace);
               meshTriangle->accessMTImpl()->points = points;
               meshTrianglesList.push_back(meshTriangle);
           }
-          return Standard_True;
-      } else return Standard_False;
+          return true;
+      } else return false;
   } catch(...) {
-      return Standard_False;
+      return false;
   }
 }
 
 void
-McCAD::Geometry::BoundSurface::Impl::generateEdges(const Standard_Real& parameterTolerance){
+McCAD::Geometry::BoundSurface::Impl::generateEdges(const double& parameterTolerance){
     TopoDS_Face face = boundSurface->accessSImpl()->face;
     for (const auto& tempEdge : detail::ShapeView<TopAbs_EDGE>{face}){
         // Ignore degenerated edges.
@@ -110,20 +110,20 @@ McCAD::Geometry::BoundSurface::Impl::generateEdges(const Standard_Real& paramete
         BRepAdaptor_Curve curveAdaptor(tempEdge);
         edge->setEdgeType(Tools::toTypeName(curveAdaptor.GetType()));
         edge->accessEImpl()->convexity = tempEdge.Convex();
-        if (tempEdge.Convex() == Standard_Integer(0)){
+        if (tempEdge.Convex() == int(0)){
             boundSurface->accessSImpl()->throughConcaveEdges += 1;
         }
         // Add flag if the edge can be used for assisting splitting surface.
         if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder) &&
                 edge->getEdgeType() == Tools::toTypeName(GeomAbs_Line)){
-            std::array<Standard_Real, 4> edgeUV, surfaceUV;
+            std::array<double, 4> edgeUV, surfaceUV;
             BRepTools::UVBounds(face, tempEdge, edgeUV[0], edgeUV[1], edgeUV[2],
                     edgeUV[3]);
             BRepTools::UVBounds(face, surfaceUV[0], surfaceUV[1], surfaceUV[2],
                     surfaceUV[3]);
             if (std::abs(edgeUV[0] - surfaceUV[0]) < parameterTolerance ||
                     std::abs(edgeUV[1] - surfaceUV[1]) < parameterTolerance){
-                edge->accessEImpl()->useForSplitSurface = Standard_True;
+                edge->accessEImpl()->useForSplitSurface = true;
             }
         }
         edgesList.push_back(edge);
@@ -134,13 +134,13 @@ void
 McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Edge>>& aEdgesList){
     if (edgesList.size() == 0){
         // If the current list is empty, append to it the new one.
-        for (Standard_Integer i = 0; i < aEdgesList.size(); ++i){
+        for (int i = 0; i < aEdgesList.size(); ++i){
             edgesList.push_back(aEdgesList[i]);
         }
     } else{
         // Compare and add only if different.
-        for (Standard_Integer i = 0; i < aEdgesList.size(); ++i){
-            for (Standard_Integer j = 0; j < edgesList.size(); ++j){
+        for (int i = 0; i < aEdgesList.size(); ++i){
+            for (int j = 0; j < edgesList.size(); ++j){
                 if (*(edgesList[j]) == *(aEdgesList[i])){
                     /* //debug
                     STEPControl_Writer writer1;
@@ -148,7 +148,7 @@ McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Ed
                                      STEPControl_StepModelType::STEPControl_AsIs);
                     writer1.Transfer(edgesList[i]->accessEImpl()->edge,
                                      STEPControl_StepModelType::STEPControl_AsIs);
-                    Standard_Integer kk = 0;
+                    int kk = 0;
                     std::string filename = "/home/mharb/opt/McCAD_refactor/examples/bbox/edges";
                     std::string suffix = ".stp";
                     while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
@@ -167,9 +167,9 @@ McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Ed
     }
 }
 
-Standard_Boolean
-McCAD::Geometry::BoundSurface::Impl::generateParmts(Standard_Real precision,
-                                                    Standard_Real scalingFactor){
+bool
+McCAD::Geometry::BoundSurface::Impl::generateParmts(double precision,
+                                                    double scalingFactor){
     if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
         // std::vector<gp_Pln, gp_Pnt, gp_Dir, parameters>
         auto generatedParmts = Tools::FaceParameters{precision, scalingFactor}.genPlSurfParmts(
@@ -209,6 +209,6 @@ McCAD::Geometry::BoundSurface::Impl::generateParmts(Standard_Real precision,
         boundSurface->accessSImpl()->majorRadius = std::get<5>(generatedParmts);
         boundSurface->accessSImpl()->surfSense = std::get<6>(generatedParmts);
     }
-    else return Standard_False;
-    return Standard_True;
+    else return false;
+    return true;
 }
