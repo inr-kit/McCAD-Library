@@ -16,7 +16,8 @@ namespace McCAD::Geometry{
     void judgeAssistDecomposeSurfaces(Solid::Impl* solidImpl,
                                       double precision = 1.0e-6,
                                       double distanceTolerance = 1.0e-6);
-    void judgeThroughConcaveEdges(Solid::Impl* solidImpl);
+    void judgeThroughConcaveEdges(Solid::Impl* solidImpl, 
+                                  const double& distanceTolerance);
   };
 }
 

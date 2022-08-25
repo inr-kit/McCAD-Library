@@ -4,6 +4,7 @@
 #include "edgeOnSurface.hpp"
 #include "faceCollision.hpp"
 #include "SurfaceUtilities.hpp"
+#include "EdgeType.hpp"
 
 /** ********************************************************************
 * @brief    A function that judges if any boundary surface can be used to split the solid.
@@ -56,3 +57,38 @@ McCAD::Geometry::CONSolid::Impl::judgeDecomposeSurfaces(Solid::Impl* solidImpl,
     }
 }
 
+/** ********************************************************************
+* @brief    A function that calculates the number of concave edges that 
+            each of the solid surfaces go through.
+* @param    solidImpl is a McCAD solid object.
+* @date     31/12/2020
+* @modified
+* @author   Moataz Harb
+* **********************************************************************/
+void
+McCAD::Geometry::CONSolid::Impl::judgeThroughConcaveEdges(Solid::Impl* solidImpl, 
+                                                          const double& distanceTolerance) {
+    // Judge how many concave edges each boundary face of solid goes through.
+    auto& facesList = solidImpl->splitFacesList;
+    if (facesList.size() < 2) return;
+    for (int i = 0; i < facesList.size(); ++i) {
+        // Don't update throughConcaveEdges if it already has a value.
+        // Only update surfaces that result from fusing others.
+        if (facesList[i]->accessSImpl()->throughConcaveEdges != 0) continue;
+        int throughConcaveEdges = 0;
+        for (int j = 0; j < facesList.size(); ++j) {
+            if (i != j && facesList[i]->accessSImpl()->surfaceNumber !=
+                facesList[j]->accessSImpl()->surfaceNumber) {
+                auto& edgesList = facesList[j]->accessBSImpl()->edgesList;
+                for (int k = 0; k < edgesList.size(); ++k) {
+                    if (edgesList[k]->accessEImpl()->convexity == Tools::EdgeType{}.concave &&
+                        Decomposition::EdgeOnSurface{}(
+                            facesList[i]->accessSImpl()->face, *(edgesList[k]), distanceTolerance)) {
+                        ++throughConcaveEdges;
+                    }
+                }
+            }
+        }
+        facesList[i]->accessSImpl()->throughConcaveEdges = throughConcaveEdges;
+    }
+}

@@ -4,7 +4,8 @@
 #include "edgeOnSurface.hpp"
 #include "faceCollision.hpp"
 #include "SurfaceUtilities.hpp"
-// OCC
+#include "EdgeType.hpp"
+// OCCT
 #include <GeomAbs_SurfaceType.hxx>
 #include <STEPControl_Writer.hxx>
 #include <filesystem>
@@ -100,8 +101,8 @@ McCAD::Geometry::CYLSolid::Impl::judgeAssistDecomposeSurfaces(Solid::Impl* solid
 }
 
 void
-McCAD::Geometry::CYLSolid::Impl::judgeThroughConcaveEdges(
-        Solid::Impl* solidImpl){
+McCAD::Geometry::CYLSolid::Impl::judgeThroughConcaveEdges(Solid::Impl* solidImpl, 
+                                                          const double& distanceTolerance){
     // Judge how many concave edges each boundary face of solid goes through.
     auto& facesList = solidImpl->splitFacesList;
     if (facesList.size() < 2) return;
@@ -115,9 +116,9 @@ McCAD::Geometry::CYLSolid::Impl::judgeThroughConcaveEdges(
                     facesList[j]->accessSImpl()->surfaceNumber){
                 auto& edgesList = facesList[j]->accessBSImpl()->edgesList;
                 for (int k = 0; k < edgesList.size(); ++k){
-                    if (edgesList[k]->accessEImpl()->convexity == 0 &&
+                    if (edgesList[k]->accessEImpl()->convexity == Tools::EdgeType{}.concave &&
                             Decomposition::EdgeOnSurface{}(
-                                facesList[i]->accessSImpl()->face, *(edgesList[k]))){
+                                facesList[i]->accessSImpl()->face, *(edgesList[k]), distanceTolerance)){
                         ++throughConcaveEdges;
                     }
                 }
