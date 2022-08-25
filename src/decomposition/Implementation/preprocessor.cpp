@@ -84,18 +84,19 @@ McCAD::Decomposition::Preprocessor::operator()(
         compound->solidsList.insert(compound->solidsList.end(),
                                     compound->mixedSolidsList.begin(),
                                     compound->mixedSolidsList.end());
-    if (compound->conSolidsList.size() > 0)
+    if(compound->conSolidsList.size() > 0)
         compound->solidsList.insert(compound->solidsList.end(),
-            compound->conSolidsList.begin(),
-            compound->conSolidsList.end());
+                                    compound->conSolidsList.begin(),
+                                    compound->conSolidsList.end());
 }
 
 /** ********************************************************************
-* @brief   A function that determines the solid type and creates a corresponding solid object.
-* @param   shape is a OCCT shape.
-* @return  variant.
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    A function that determines the solid type and creates a corresponding solid object.
+* @param    shape is a OCCT shape.
+* @return   variant.
+* @date     31/12/2020
+* @modified
+* @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 McCAD::Decomposition::Preprocessor::VariantType
 McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
@@ -117,17 +118,18 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
         solidVariant = SolidObjCreator{ inputConfig }.createObj<Geometry::CONSolid>(shape);
         break;
     default:;
-        // Unknown Type
+        // Unknown Type. Returns an empty variant.
     }
     return solidVariant;
 }
 
 /** ********************************************************************
-* @brief   A function that checks if the volume of a solid contains unsupported surfaces.
-* @param   shape is a OCCT shape.
-* @return  bool. True if the surface is not supported.
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    A function that checks if the volume of a solid contains unsupported surfaces.
+* @param    shape is a OCCT shape.
+* @return   bool. True if the surface is not supported.
+* @date     31/12/2020
+* @modified
+* @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 bool
 McCAD::Decomposition::Preprocessor::checkBndSurfaces(const TopoDS_Shape& shape){
@@ -144,11 +146,12 @@ McCAD::Decomposition::Preprocessor::checkBndSurfaces(const TopoDS_Shape& shape){
 }
 
 /** ********************************************************************
-* @brief   A function that checks if the volume of a solid is less than a limit.
-* @param   shape is a OCCT shape.
-* @return  bool. True if the solid volume is below the limit.
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    A function that checks if the volume of a solid is less than a limit.
+* @param    shape is a OCCT shape.
+* @return   bool. True if the solid volume is below the limit.
+* @date     31/12/2020
+* @modified
+* @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 bool
 McCAD::Decomposition::Preprocessor::checkVolume(const TopoDS_Shape& shape){

@@ -59,8 +59,8 @@ McCAD::Geometry::BoundSurface::Impl::canFuse(const McCAD::Geometry::BoundSurface
 * @brief    A function that generates a McCAD triangle objects for a given OOCT face.
 * @param    meshDeflection is a calculated mesh size.
 * @return   true if mesh generation succeeded, otherwise false.
-* @date     23/08/2022
-* @modified
+* @date     31/12/2020
+* @modified 23/08/2022
 * @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 bool
@@ -109,8 +109,8 @@ McCAD::Geometry::BoundSurface::Impl::generateMesh(const double& meshDeflection){
 /** ********************************************************************
 * @brief    A function that generates McCAD edge objects for edges of a OOCT face.
 * @param    parameterTolerance is a tolerance set in inputConfig file and is used to compare UV parameters.
-* @date     23/08/2022
-* @modified
+* @date     31/12/2020
+* @modified 23/08/2022
 * @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 void

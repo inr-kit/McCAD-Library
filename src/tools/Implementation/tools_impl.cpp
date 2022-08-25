@@ -20,8 +20,8 @@ McCAD::Tools::Preprocessor::Impl::~Impl(){}
 /** ********************************************************************
 * @brief    A function that uses OCCT tools to remove small faces.
 * @param    solidShape is a OCCT shape.
-* @date     23/08/2022
-* @modified
+* @date     31/12/2020
+* @modified 23/08/2022
 * @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 void
@@ -37,8 +37,8 @@ McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape){
 /** ********************************************************************
 * @brief    A function that uses OCCT ShapeFix tool to fix solids.
 * @param    solid is a OCCT solid.
-* @date     23/08/2022
-* @modified
+* @date     31/12/2020
+* @modified 23/08/2022
 * @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 void
@@ -52,8 +52,8 @@ McCAD::Tools::Preprocessor::Impl::repairSolid(TopoDS_Solid& solid){
 /** ********************************************************************
 * @brief    A function that checks that the face isn't a strip or spot one.
 * @param    face is a OCCT face.
-* @date     23/08/2022
-* @modified
+* @date     31/12/2020
+* @modified 23/08/2022
 * @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 bool
@@ -70,8 +70,8 @@ McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face){
 /** ********************************************************************
 * @brief    A function that fixes a face.
 * @param    face is a OCCT face.
-* @date     23/08/2022
-* @modified
+* @date     31/12/2020
+* @modified 23/08/2022
 * @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 void

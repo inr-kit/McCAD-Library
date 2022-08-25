@@ -16,8 +16,8 @@
 * @param    edgeTolerance is set on inputConfig file.
 * @param    mode is defaulted to 0.
 * @return   A McCAD bound surface object.
-* @date     23/08/2022
-* @modified
+* @date     31/12/2020
+* @modified 23/08/2022
 * @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 std::shared_ptr<McCAD::Geometry::BoundSurface>

@@ -25,10 +25,11 @@ McCAD::Decomposition::DecomposeSolid::Impl::~Impl(){
 }
 
 /** ********************************************************************
-* @brief   Operator that performs decomposition on a planar solid.
-* @param   solidObj is a planar solid object.
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    Operator that performs decomposition on a planar solid.
+* @param    solidObj is a McCAD planar solid object.
+* @date     31/12/2020
+* @modified 
+* @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 bool
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
@@ -36,7 +37,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
     if(recurrenceDepth > inputConfig.recurrenceDepth){
-        return Standard_False;
+        return false;
     }
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
@@ -52,10 +53,11 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
 }
 
 /** ********************************************************************
-* @brief   Operator that performs decomposition on a cylindrical solid.
-* @param   solidObj is a cylindrical solid object.
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    Operator that performs decomposition on a cylindrical solid.
+* @param    solidObj is a McCAD cylindrical solid object.
+* @date     31/12/2020
+* @modified 
+* @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 bool
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
@@ -63,7 +65,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
     if(recurrenceDepth > inputConfig.recurrenceDepth){
-        return Standard_False;
+        return false;
     }
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
@@ -85,10 +87,11 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
 }
 
 /** ********************************************************************
-* @brief   Operator that performs decomposition on a toroidal solid.
-* @param   solidObj is a toroidal solid object.
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    Operator that performs decomposition on a toroidal solid.
+* @param    solidObj is a McCAD toroidal solid object.
+* @date     31/12/2020
+* @modified 
+* @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 bool
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
@@ -96,7 +99,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
     if(recurrenceDepth > inputConfig.recurrenceDepth){
-        return Standard_False;
+        return false;
     }
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
@@ -118,18 +121,22 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
 }
 
 /** ********************************************************************
-* @brief   Operator that performs decomposition on solids that contain a mix of all the acceptable surface types; planar, cylindrical, and toroidal.
-* @param   solidObj is a mixed solid object.
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    Operator that performs decomposition on solids that contain a 
+            mix of all the acceptable surface types; planar, cylindrical, 
+            toroidal, and conical.
+* @param    solidObj is a McCAD mixed solid object.
+* @date     31/12/2020
+* @modified 
+* @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 bool
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         std::shared_ptr<Geometry::MXDSolid>& solidObj){
+    //**** Review support for conical surfaces! ****
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
     if(recurrenceDepth > inputConfig.recurrenceDepth){
-        return Standard_False;
+        return false;
     }
     auto solidImpl = solidObj->accessSImpl();
     // Judge which surfaces are decompose surfaces from the generated list.
@@ -150,26 +157,62 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     return perform(*solidImpl);
 }
 
+/** ********************************************************************
+* @brief    Operator that performs decomposition on a conical solid.
+* @param    solidObj is a McCAD conical solid object.
+* @date     31/12/2020
+* @modified 
+* @author   Moataz Harb & Christian Wegmann
+* **********************************************************************/
+bool
+McCAD::Decomposition::DecomposeSolid::Impl::operator()(
+    std::shared_ptr<Geometry::CONSolid>& solidObj) {
+    // Increment the recurrence depth by 1.
+    ++recurrenceDepth;
+    if (recurrenceDepth > inputConfig.recurrenceDepth) {
+        return false;
+    }
+    auto solidImpl = solidObj->accessSImpl();
+    /*
+    // Judge which surfaces are decompose surfaces from the generated list.
+    solidObj->accessConSImpl()->judgeDecomposeSurfaces(solidImpl,
+        inputConfig.precision,
+        inputConfig.distanceTolerance);
+    // Check if any of the boundary surfaces does split the solid. This is judged
+    // based on the numberCollidingSurfaces
+    if (!throughNoBoundarySurfaces(solidImpl->splitFacesList)) {
+        if (!planeSplitOnlyPlane(solidImpl->splitFacesList)) {
+            AssistSurfaceGenerator{ inputConfig }(*solidObj);
+            solidObj->accessConSImpl()->judgeAssistDecomposeSurfaces(solidImpl,
+                inputConfig.precision,
+                inputConfig.distanceTolerance);
+        }
+        solidObj->accessConSImpl()->judgeThroughConcaveEdges(solidImpl);
+    }
+    return perform(*solidImpl);*/
+    return false;
+}
+
 bool
 McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solidImpl){
     if(solidImpl.splitSurface){
         if (!selectSplitSurface(solidImpl)){
-            return Standard_False;
+            return false;
         }
         // Try more than one splitting surface before prompting a fail decomposition.
-        Standard_Boolean decompositionSuccess{Standard_False};
-        for(Standard_Integer surfIndex = 0; surfIndex < solidImpl.selectedSplitFacesList.size();
+        bool decompositionSuccess{false};
+        for(int surfIndex = 0; surfIndex < solidImpl.selectedSplitFacesList.size();
             ++surfIndex){
             if(SolidDecomposer{}(solidImpl.solid, solidImpl.obb,
                                  *solidImpl.selectedSplitFacesList[surfIndex],
                                  *solidImpl.splitSolidList)){
-                decompositionSuccess = Standard_True;
+                decompositionSuccess = true;
                 break;
             }
         }
-        if(!decompositionSuccess) return Standard_False;
+        if(!decompositionSuccess) return false;
         // Loop over the resulting subsolids and split each one of them recursively.
-        for (Standard_Integer i = 1; i <= solidImpl.splitSolidList->Length(); ++i){
+        for (int i = 1; i <= solidImpl.splitSolidList->Length(); ++i){
             auto subSolid = Preprocessor{inputConfig}.perform(
                         solidImpl.splitSolidList->Value(i));
             if (std::holds_alternative<std::monostate>(subSolid)){
@@ -178,7 +221,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
             }
             // Using switch for now. Should be separated in a separate class an called
             // for each specific type of solid object.
-            switch (Standard_Integer(subSolid.index())){
+            switch (int(subSolid.index())){
             case solidType.planar:{
                 auto& subSolidImpl = *std::get<solidType.planar>(subSolid)->accessSImpl();
                 // Mesh deflection is calculated for every solid in DecomposeSolid.
@@ -209,10 +252,10 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
             }
         }
     } else{
-        if(solidImpl.rejectSolid) return Standard_False;
+        if(solidImpl.rejectSolid) return false;
         else solidImpl.splitSolidList->Append(solidImpl.solid);
     }
-    return Standard_True;
+    return true;
 }
 
 bool

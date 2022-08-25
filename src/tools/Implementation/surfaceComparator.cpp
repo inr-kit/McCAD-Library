@@ -28,8 +28,8 @@ McCAD::Tools::SurfaceComparator::~SurfaceComparator(){}
 * @param    firstFace is a OCCT face.
 * @param    secondFace is a OCCT face.
 * @return   true if the two faces are equal.
-* @date     23/08/2022
-* @modified
+* @date     31/12/2020
+* @modified 23/08/2022
 * @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 bool

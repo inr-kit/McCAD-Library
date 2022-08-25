@@ -14,8 +14,7 @@
 * @param    precision is used in comparing numerical values and is set on the inputConfig file.
 * @param    edgeTolerance is used in comparing OCCT edges and is set on the inputConfig file.
 * @param    angularTolerance is used in comparing angles and is set on the inputConfig file.
-* @param    distanceTolerance is used in comparing distances and is set on the inputConfig file.
-* @return   
+* @param    distanceTolerance is used in comparing distances and is set on the inputConfig file.  
 * @date     31/12/2020
 * @modified
 * @author   Moataz Harb & Christian Wegmann
@@ -39,7 +38,7 @@ McCAD::Decomposition::SurfacesMerger::operator()(
                         surfacesList[i]->accessSImpl()->surfaceNumber;
                 // Test if the two surfaces can be fused.
                 if (*surfacesList[i] << *surfacesList[j]){
-                    TopoDS_Face newFace = Tools::SurfacesFuser{ precision }(
+                    TopoDS_Face newFace = Tools::SurfacesFuser{precision, edgeTolerance}(
                                 surfacesList[i]->accessSImpl()->face,
                                 surfacesList[j]->accessSImpl()->face).value();
                     std::shared_ptr<Geometry::BoundSurface> newboundSurface =

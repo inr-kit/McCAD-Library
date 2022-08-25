@@ -25,8 +25,8 @@ McCAD::Geometry::BoundSurfaceCone::Impl::~Impl(){
 * @brief    A function that calls the extended surface creator on the current face.
 * @param    boxDiagonalLength is a calculated diagonal length of the solid OBB.
 * @param    edgeTolerance is set on the inputComfig file.
-* @date     23/08/2022
-* @modified
+* @date     31/12/2020
+* @modified 23/08/2022
 * @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 void

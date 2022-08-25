@@ -43,8 +43,8 @@ McCAD::Tools::ExtendedFaceCreator::generateExtendedPlane(
 * @param    face is a OCCT face.
 * @param    boxDiagonalLength is the calculated diagonal length of the solid OBB.
 * @return   a OCCT face.
-* @date     23/08/2022
-* @modified
+* @date     31/12/2020
+* @modified 23/08/2022
 * @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 TopoDS_Face
