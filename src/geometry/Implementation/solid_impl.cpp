@@ -35,7 +35,7 @@ McCAD::Geometry::Solid::Impl::~Impl(){
 * @param    aSolidShape is a OCCT shape.
 * @date     31/12/2020
 * @modified 23/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
@@ -49,7 +49,7 @@ McCAD::Geometry::Solid::Impl::initiate(const TopoDS_Shape& aSolidShape){
 * @param    faceTolerance is the maximum tolerance to be used by OCCT to fix the face.
 * @date     31/12/2020
 * @modified 23/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Geometry::Solid::Impl::repairSolid(double precision, double faceTolerance){
@@ -64,7 +64,7 @@ McCAD::Geometry::Solid::Impl::repairSolid(double precision, double faceTolerance
 * @param    bndBoxGap sets the tightness of the BB around the solid.
 * @date     31/12/2020
 * @modified 23/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Geometry::Solid::Impl::createBB(double bndBoxGap){
@@ -81,7 +81,7 @@ McCAD::Geometry::Solid::Impl::createBB(double bndBoxGap){
 * @param    scalingFactor controls the size of the mesh, set on inputConfig file.
 * @date     31/12/2020
 * @modified 23/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Geometry::Solid::Impl::calcMeshDeflection(double scalingFactor){
@@ -100,7 +100,7 @@ McCAD::Geometry::Solid::Impl::calcMeshDeflection(double scalingFactor){
 * @param    precision is the numerical precission set on the inputConfig file.
 * @date     31/12/2020
 * @modified 23/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Geometry::Solid::Impl::updateEdgesConvexity(double angularTolerance,
@@ -163,7 +163,7 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(double angularTolerance,
 * @brief    A function that calculates the AABB center.
 * @date     31/12/2020
 * @modified 
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Geometry::Solid::Impl::calcAABBCenter(){
@@ -178,7 +178,7 @@ McCAD::Geometry::Solid::Impl::calcAABBCenter(){
 * @brief    A function that calculates solid volume.
 * @date     31/12/2020
 * @modified 
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Geometry::Solid::Impl::calcVolume(){

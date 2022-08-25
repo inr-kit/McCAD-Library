@@ -7,26 +7,24 @@
 //McCAD
 #include "boundSurface_impl.hpp"
 #include "meshtriangle_impl.hpp"
-//OCC
-#include <Standard.hxx>
 
 namespace McCAD::Decomposition{
     class FaceCollision{
     public:
         FaceCollision();
-        FaceCollision(const Standard_Real& precision,
-                      const Standard_Real& distanceTolerance);
+        FaceCollision(const double& precision,
+                      const double& distanceTolerance);
         ~FaceCollision();
     private:
-        Standard_Real precision{1.0e-6}, distanceTolerance{1.0e-6};
+        double precision{1.0e-6}, distanceTolerance{1.0e-6};
     public:
-      Standard_Boolean operator()(const McCAD::Geometry::BoundSurface& firstFace,
-                                  const McCAD::Geometry::BoundSurface& secondFace,
-                                  Standard_Integer& aSide);
-      Standard_Boolean faceCollision(
+      bool operator()(const McCAD::Geometry::BoundSurface& firstFace,
+                      const McCAD::Geometry::BoundSurface& secondFace,
+                      int& aSide);
+      bool faceCollision(
               const McCAD::Geometry::BoundSurface& firstFace,
               const std::vector<std::shared_ptr<McCAD::Geometry::MeshTriangle>>& meshTriangleList,
-              Standard_Integer& aSide);
+              int& aSide);
     };
 }
 

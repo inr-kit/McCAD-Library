@@ -4,31 +4,33 @@
 //McCAD
 #include "boundSurface_impl.hpp"
 #include "meshtriangle_impl.hpp"
-//OCC
-#include <Standard.hxx>
 
 namespace McCAD::Decomposition{
     class TriangleCollision{
     public:
       TriangleCollision();
-      TriangleCollision(const Standard_Real& precision,
-                        const Standard_Real& distanceTolerance);
+      TriangleCollision(const double& precision,
+                        const double& distanceTolerance);
       ~TriangleCollision();
     private:
-      Standard_Real precision{1.0e-6}, distanceTolerance{1.0e-6};
+      double precision{1.0e-6}, distanceTolerance{1.0e-6};
     public:
-      Standard_Boolean operator()(const McCAD::Geometry::BoundSurface& iFace,
-                                  const McCAD::Geometry::MeshTriangle& aTriangle,
-                                  Standard_Integer& aSide);
+      bool operator()(const McCAD::Geometry::BoundSurface& iFace,
+                      const McCAD::Geometry::MeshTriangle& aTriangle,
+                      int& aSide);
     private:
-      Standard_Boolean triangleCollisionPlane(
+      bool triangleCollisionPlane(
               const McCAD::Geometry::BoundSurface& iFace,
               const McCAD::Geometry::MeshTriangle& aTriangle,
-              Standard_Integer& aSide);
-      Standard_Boolean triangleCollisionCyl(
+              int& aSide);
+      bool triangleCollisionCyl(
               const McCAD::Geometry::BoundSurface& iFace,
               const McCAD::Geometry::MeshTriangle& aTriangle,
-              Standard_Integer& aSide);
+              int& aSide);
+      bool triangleCollisionCone(
+          const McCAD::Geometry::BoundSurface& iFace,
+          const McCAD::Geometry::MeshTriangle& aTriangle,
+          int& aSide);
     };
 }
 

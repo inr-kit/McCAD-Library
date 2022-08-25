@@ -29,7 +29,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::~Impl(){
 * @param    solidObj is a McCAD planar solid object.
 * @date     31/12/2020
 * @modified 
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 bool
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
@@ -57,7 +57,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
 * @param    solidObj is a McCAD cylindrical solid object.
 * @date     31/12/2020
 * @modified 
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 bool
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
@@ -91,7 +91,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
 * @param    solidObj is a McCAD toroidal solid object.
 * @date     31/12/2020
 * @modified 
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 bool
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
@@ -127,7 +127,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
 * @param    solidObj is a McCAD mixed solid object.
 * @date     31/12/2020
 * @modified 
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 bool
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
@@ -162,7 +162,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
 * @param    solidObj is a McCAD conical solid object.
 * @date     31/12/2020
 * @modified 
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 bool
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
@@ -173,13 +173,13 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         return false;
     }
     auto solidImpl = solidObj->accessSImpl();
-    /*
     // Judge which surfaces are decompose surfaces from the generated list.
-    solidObj->accessConSImpl()->judgeDecomposeSurfaces(solidImpl,
-        inputConfig.precision,
-        inputConfig.distanceTolerance);
+    solidObj->accessCONSImpl()->judgeDecomposeSurfaces(solidImpl,
+                                                       inputConfig.precision,
+                                                       inputConfig.distanceTolerance);
     // Check if any of the boundary surfaces does split the solid. This is judged
     // based on the numberCollidingSurfaces
+    /*
     if (!throughNoBoundarySurfaces(solidImpl->splitFacesList)) {
         if (!planeSplitOnlyPlane(solidImpl->splitFacesList)) {
             AssistSurfaceGenerator{ inputConfig }(*solidObj);
@@ -188,11 +188,17 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
                 inputConfig.distanceTolerance);
         }
         solidObj->accessConSImpl()->judgeThroughConcaveEdges(solidImpl);
-    }
-    return perform(*solidImpl);*/
-    return false;
+    }*/
+    return perform(*solidImpl);
 }
 
+/** ********************************************************************
+* @brief    A function that performs decomposition on a solid.
+* @param    solidImpl is a McCAD solid object.
+* @date     31/12/2020
+* @modified
+* @author   Moataz Harb
+* **********************************************************************/
 bool
 McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solidImpl){
     if(solidImpl.splitSurface){
