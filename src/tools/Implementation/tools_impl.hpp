@@ -3,7 +3,7 @@
 
 // McCAD
 #include "tools.hpp"
-// OCC
+// OCCT
 #include <TopoDS_Solid.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TopoDS_Face.hxx>
@@ -18,7 +18,7 @@ namespace McCAD::Tools{
       double precision{1.0e-6}, maxTolerance{1.0e-3};
       void removeSmallFaces(TopoDS_Shape& solidShape);
       void repairSolid(TopoDS_Solid& solid);
-      Standard_Boolean checkFace(const TopoDS_Face& face);
+      bool checkFace(const TopoDS_Face& face);
       void fixFace(TopoDS_Face& face);
   };
 }

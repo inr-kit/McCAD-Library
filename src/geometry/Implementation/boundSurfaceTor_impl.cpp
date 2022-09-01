@@ -11,7 +11,7 @@ McCAD::Geometry::BoundSurfaceTor::Impl::~Impl(){
 
 void
 McCAD::Geometry::BoundSurfaceTor::Impl::generateExtendedTor(
-        const Standard_Real& boxDiagonalLength,
-        Standard_Real degenerateEdgesTolerance){
+        const double& boxDiagonalLength,
+        double degenerateEdgesTolerance){
 }
 

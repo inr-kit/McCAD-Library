@@ -219,7 +219,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::perform(Geometry::Solid::Impl& solid
         bool decompositionSuccess{false};
         for(int surfIndex = 0; surfIndex < solidImpl.selectedSplitFacesList.size();
             ++surfIndex){
-            if(SolidDecomposer{}(solidImpl.solid, solidImpl.obb,
+            if(SolidDecomposer{inputConfig.debugLevel}(solidImpl.solid, solidImpl.obb,
                                  *solidImpl.selectedSplitFacesList[surfIndex],
                                  *solidImpl.splitSolidList)){
                 decompositionSuccess = true;

@@ -5,7 +5,7 @@
 #include "boundSurfacePlane_impl.hpp"
 #include "surface_impl.hpp"
 #include "extendedFaceCreator.hpp"
-//OCC
+//OCCT
 #include <TopoDS_Face.hxx>
 #include <Geom_Surface.hxx>
 #include <BRepTools.hxx>
@@ -23,8 +23,7 @@ McCAD::Geometry::BoundSurfacePlane::Impl::~Impl(){
 
 void
 McCAD::Geometry::BoundSurfacePlane::Impl::generateExtendedPlane(
-        const Standard_Real& boxDiagonalLength,
-        const Standard_Real& edgeTolerance){
+        const double& boxDiagonalLength, const double& edgeTolerance){
     TopoDS_Face face = boundSurfacePlane->accessSImpl()->face;
     boundSurfacePlane->accessSImpl()->extendedFace =
             Tools::ExtendedFaceCreator{edgeTolerance}.generateExtendedPlane(face,

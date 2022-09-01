@@ -6,7 +6,7 @@
 #include "solid_impl.hpp"
 #include "faceParameters.hpp"
 #include "ShapeUtilities.hpp"
-// OCC
+// OCCT
 #include <TopoDS.hxx>
 #include <BRepBndLib.hxx>
 #include <TopTools_IndexedDataMapOfShapeListOfShape.hxx>
@@ -167,7 +167,7 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(double angularTolerance,
 * **********************************************************************/
 void
 McCAD::Geometry::Solid::Impl::calcAABBCenter(){
-    Standard_Real minX, minY, minZ, maxX, maxY, maxZ;
+    double minX, minY, minZ, maxX, maxY, maxZ;
     aabb.Get(minX, minY, minZ, maxX, maxY, maxZ);
     aabbCenter = {(minX + std::abs(maxX-minX)/2.0),
                   (minY + std::abs(maxY-minY)/2.0),
