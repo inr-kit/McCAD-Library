@@ -12,8 +12,8 @@
 #include <BRepGProp.hxx>
 #include <STEPControl_Writer.hxx>
 
-McCAD::Decomposition::SolidDecomposer::SolidDecomposer(const int & debugLevel) 
-    : debugLevel{debugLevel} {
+McCAD::Decomposition::SolidDecomposer::SolidDecomposer(const int& debugLevel)
+    : debugLevel{ debugLevel } {
 }
 
 McCAD::Decomposition::SolidDecomposer::~SolidDecomposer(){
@@ -44,11 +44,12 @@ McCAD::Decomposition::SolidDecomposer::operator()(
     subSolidsList.Append(halfSolids->second);
     //debug
     if (debugLevel >= 2) {
+        std::filesystem::create_directories("SolidDecomposer");
         STEPControl_Writer writer;
         writer.Transfer(halfSolids->first, STEPControl_StepModelType::STEPControl_AsIs);
         writer.Transfer(halfSolids->second, STEPControl_StepModelType::STEPControl_AsIs);
         int kk = 0;
-        std::string filename = "SolidDecomposer_Result";
+        std::string filename = "SolidDecomposer/halfSolids";
         std::string suffix = ".stp";
         while (std::filesystem::exists(filename + std::to_string(kk) + suffix)) {
             ++kk;

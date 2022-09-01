@@ -40,12 +40,13 @@ McCAD::Decomposition::SolidSplitter::operator()(
     auto boundingBox = calculateOBB(obb);
     //debug
     if (debugLevel >= 2) {
+        std::filesystem::create_directories("SolidSplitter");
         STEPControl_Writer writer;
         writer.Transfer(boundingBox, STEPControl_StepModelType::STEPControl_AsIs);
         writer.Transfer(solidToSplit, STEPControl_StepModelType::STEPControl_AsIs);
         writer.Transfer(splittingFace, STEPControl_StepModelType::STEPControl_AsIs);
         int kk = 0;
-        std::string filename = "SolidSplitter_surface";
+        std::string filename = "SolidSplitter/splitSurface";
         std::string suffix = ".stp";
         while (std::filesystem::exists(filename + std::to_string(kk) + suffix)) {
             ++kk;
