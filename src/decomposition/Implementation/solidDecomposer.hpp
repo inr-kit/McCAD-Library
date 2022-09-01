@@ -11,14 +11,14 @@
 namespace McCAD::Decomposition{
   class SolidDecomposer{
   public:
-      SolidDecomposer(const int & debugLevel);
+      SolidDecomposer(const int& debugLevel);
       ~SolidDecomposer();
 
       bool operator()(const TopoDS_Solid& solid, const Bnd_OBB& obb,
                       const Geometry::BoundSurface& surface,
                       TopTools_HSequenceOfShape& subSolidsList) const;
   private:
-      int debugLevel{ 0 };
+      int debugLevel{0};
       bool filterAndRepair(TopTools_HSequenceOfShape& subSolidsList,
                            double tolerance = 1.0e-4) const;
       TopTools_HSequenceOfShape gatherSubSolids(TopTools_HSequenceOfShape& solids,

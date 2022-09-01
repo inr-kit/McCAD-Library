@@ -23,15 +23,17 @@ McCAD::Tools::ExtendedFaceCreator::~ExtendedFaceCreator(){}
 TopoDS_Face
 McCAD::Tools::ExtendedFaceCreator::generateExtendedPlane(
         const TopoDS_Face& face, const double& boxDiagonalLength){
+    // To fix the issue of some extended surfaces not extending beyound the solid
+    // BB boundaries, the ectension multiplier is introduced.
+    int extensionMultiplier{ 10 };
     Handle_Geom_Surface surface = BRep_Tool::Surface(face);
-    std::array<double, 4> uvParameters;
+    std::array<double, 4> uvParameters, newUVParameters;
     BRepTools::UVBounds(face, uvParameters[0], uvParameters[1], uvParameters[2],
                         uvParameters[3]);
-    std::array<double, 4> newUVParameters;
-    newUVParameters[0] = uvParameters[0] - boxDiagonalLength;
-    newUVParameters[1] = uvParameters[1] + boxDiagonalLength;
-    newUVParameters[2] = uvParameters[2] - boxDiagonalLength;
-    newUVParameters[3] = uvParameters[3] + boxDiagonalLength;
+    newUVParameters[0] = uvParameters[0] - extensionMultiplier * boxDiagonalLength;
+    newUVParameters[1] = uvParameters[1] + extensionMultiplier * boxDiagonalLength;
+    newUVParameters[2] = uvParameters[2] - extensionMultiplier * boxDiagonalLength;
+    newUVParameters[3] = uvParameters[3] + extensionMultiplier * boxDiagonalLength;
     TopoDS_Face newFace = BRepBuilderAPI_MakeFace(surface, newUVParameters[0],
             newUVParameters[1], newUVParameters[2], newUVParameters[3],
             edgeTolerance);
