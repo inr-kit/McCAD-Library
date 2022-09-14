@@ -30,6 +30,8 @@ namespace McCAD::Conversion{
                             const double& precision);
         void genTorSurfExpr(const std::shared_ptr<Geometry::BoundSurface>& torSurface,
                             const double& precision);
+        void genConeSurfExpr(const std::shared_ptr<Geometry::BoundSurface>& coneSurface,
+                             const double& precision);
         void createSurfacesList(const std::shared_ptr<Geometry::Solid>& solidObj);
         void genCellExpr(const std::shared_ptr<Geometry::Solid>& solidObj);
         void genVoidExpr(const std::shared_ptr<VoidCell>& voidCell);

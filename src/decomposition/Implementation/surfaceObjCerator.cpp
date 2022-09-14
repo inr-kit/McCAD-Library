@@ -18,7 +18,7 @@
 * @return   A McCAD bound surface object.
 * @date     31/12/2020
 * @modified 23/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 std::shared_ptr<McCAD::Geometry::BoundSurface>
 McCAD::Decomposition::SurfaceObjCreator::operator()(const TopoDS_Face& face,

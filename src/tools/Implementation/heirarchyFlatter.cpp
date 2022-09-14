@@ -22,7 +22,7 @@ McCAD::Tools::HeirarchyFlatter::~HeirarchyFlatter(){
 * @return   A pair of lists containing the accepted and rejected solids.
 * @date     31/12/2020
 * @modified 
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 McCAD::Tools::HeirarchyFlatter::output_pair
 McCAD::Tools::HeirarchyFlatter::operator()(
@@ -40,7 +40,7 @@ McCAD::Tools::HeirarchyFlatter::operator()(
 * @return   A pair of lists containing the accepted and rejected solids.
 * @date     31/12/2020
 * @modified 
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 McCAD::Tools::HeirarchyFlatter::output_pair
 McCAD::Tools::HeirarchyFlatter::operator()(const TopoDS_Shape& shape){
@@ -54,7 +54,7 @@ McCAD::Tools::HeirarchyFlatter::operator()(const TopoDS_Shape& shape){
 * @param    shape is a OCCT shape.
 * @date     31/12/2020
 * @modified 
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Tools::HeirarchyFlatter::process(const TopoDS_Shape& shape){

@@ -29,7 +29,7 @@
 * @return   A vector of McCAD boundary surface objects.
 * @date     31/12/2020
 * @modified
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 template <typename solidObjType>
 std::vector<std::shared_ptr<McCAD::Geometry::BoundSurface>>
@@ -83,7 +83,7 @@ McCAD::Decomposition::FacesListGenerator::operator()(solidObjType& solidObj,
 * @param    distanceTolerance is used in comparing distances and is set on the inputConfig file.
 * @date     31/12/2020
 * @modified
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 template <typename solidObjType>
 void

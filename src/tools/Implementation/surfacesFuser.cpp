@@ -13,7 +13,7 @@ McCAD::Tools::SurfacesFuser::SurfacesFuser(double precision,
 * @return   A new OCCT face.
 * @date     31/12/2020
 * @modified 25/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 std::optional<TopoDS_Face>
 McCAD::Tools::SurfacesFuser::operator()(const TopoDS_Face& firstFace,
@@ -32,7 +32,7 @@ McCAD::Tools::SurfacesFuser::operator()(const TopoDS_Face& firstFace,
 * @return   An array of UV bounds.
 * @date     31/12/2020
 * @modified 25/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 std::array<double, 4>
 McCAD::Tools::SurfacesFuser::uvBounds(const TopoDS_Face& face) const{
@@ -50,7 +50,7 @@ McCAD::Tools::SurfacesFuser::uvBounds(const TopoDS_Face& face) const{
 * @return   A new OCCT face.
 * @date     31/12/2020
 * @modified 25/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 TopoDS_Face
 McCAD::Tools::SurfacesFuser::fusePlanes(const TopoDS_Face& first,
@@ -76,7 +76,7 @@ McCAD::Tools::SurfacesFuser::fusePlanes(const TopoDS_Face& first,
 * @return   A new OCCT face.
 * @date     31/12/2020
 * @modified 25/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 TopoDS_Face
 McCAD::Tools::SurfacesFuser::fuseCyls(const TopoDS_Face& first,
@@ -109,7 +109,7 @@ McCAD::Tools::SurfacesFuser::fuseCyls(const TopoDS_Face& first,
 * @return   A new OCCT face.
 * @date     25/08/2022
 * @modified 
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 TopoDS_Face
 McCAD::Tools::SurfacesFuser::fuseCones(const TopoDS_Face& first,

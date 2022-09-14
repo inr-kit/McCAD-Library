@@ -21,7 +21,7 @@ McCAD::Tools::PlaneComparator::~PlaneComparator(){}
 * @return   true if the two are equal.
 * @date     24/08/2022
 * @modified
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 std::optional<bool>
 McCAD::Tools::PlaneComparator::operator()(const GeomAdaptor_Surface& firstAdaptor,
@@ -45,7 +45,7 @@ McCAD::Tools::PlaneComparator::operator()(const GeomAdaptor_Surface& firstAdapto
 * @return   an array of the coefficients of the plane.
 * @date     24/08/2022
 * @modified
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 std::array<double, 4>
 McCAD::Tools::PlaneComparator::planeCoefficients(const gp_Pln& plane) const{
@@ -65,7 +65,7 @@ McCAD::Tools::PlaneComparator::planeCoefficients(const gp_Pln& plane) const{
 * @return   true if the two planes have equal coefficients.
 * @date     24/08/2022
 * @modified
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 std::optional<bool>
 McCAD::Tools::PlaneComparator::equivalentPlaneCoefficients(const gp_Pln& first,

@@ -20,10 +20,11 @@ McCAD::Conversion::MCNPExprGenerator::~MCNPExprGenerator(){
 }
 
 /** ********************************************************************
-* @brief   The operator calls the specialized writer functions of cell, surface, and data cards.
-* @param   solidObj is a solid object.
-* @date    31/12/2021
-* @author  Moataz Harb
+* @brief    The operator calls the specialized writer functions of cell, surface, and data cards.
+* @param    solidObj is a McCAD solid object.
+* @date     31/12/2021
+* @modified 14/09/2022
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Conversion::MCNPExprGenerator::operator()(
@@ -49,21 +50,28 @@ McCAD::Conversion::MCNPExprGenerator::operator()(
             if(plSurface->accessBSImpl()->generateParmts(precision, scalingFactor)){
                 updateSurfParmts(plSurface, precision);
                 genPlSurfExpr(plSurface, solidCenter, precision);
-            } else throw(std::runtime_error("Error in generating surface expression!"));
+            } else throw(std::runtime_error("Error in generating planar surface expression!"));
         }
     }
     if(solidObj->accessSImpl()->cylindersList.size() > 0){
         for (const auto& cylSurface : solidObj->accessSImpl()->cylindersList){
             if(cylSurface->accessBSImpl()->generateParmts(precision, scalingFactor))
                 genCylSurfExpr(cylSurface, precision);
-            else throw(std::runtime_error("Error in generating surface expression!"));
+            else throw(std::runtime_error("Error in generating cylindrical surface expression!"));
         }
     }
     if(solidObj->accessSImpl()->toriList.size() > 0){
         for (const auto& torSurface : solidObj->accessSImpl()->toriList){
             if(torSurface->accessBSImpl()->generateParmts(precision, scalingFactor))
                 genTorSurfExpr(torSurface, precision);
-            else throw(std::runtime_error("Error in generating surface expression!"));
+            else throw(std::runtime_error("Error in generating toroidal surface expression!"));
+        }
+    }
+    if (solidObj->accessSImpl()->conesList.size() > 0){
+        for (const auto& coneSurface : solidObj->accessSImpl()->conesList) {
+            if (coneSurface->accessBSImpl()->generateParmts(precision, scalingFactor))
+                genConeSurfExpr(coneSurface, precision);
+            else throw(std::runtime_error("Error in generating conical surface expression!"));
         }
     }
     // Process assisting surfaces.
@@ -315,6 +323,100 @@ McCAD::Conversion::MCNPExprGenerator::genTorSurfExpr(
                                     "option on the input config and rerun decomposition."
                                     "Conversion terminated!");
     torSurface->accessSImpl()->surfExpr = surfExpr;
+}
+
+/** ********************************************************************
+* @brief    The function generates the MCNP surface expression of a conical surface.
+* @param    coneSurface is a McCAD surface object.
+* @param    precision is the precision specified on the config file.
+* @date     14/09/2022
+* @modified 
+* @author   Moataz Harb
+* **********************************************************************/
+void
+McCAD::Conversion::MCNPExprGenerator::genConeSurfExpr(
+        const std::shared_ptr<Geometry::BoundSurface>& coneSurface,
+        const double& precision) {
+    // Parameters calculated in OpenCascade:
+    // A1.X**2 + A2.Y**2 + A3.Z**2 + 2.(B1.X.Y + B2.X.Z + B3.Y.Z) + 2.(C1.X + C2.Y + C3.Z) + D = 0.0
+    // Parameters used by MCNP.
+    // A.X**2 + B.Y**2 + C.Z**2 + D.XY + E.YZ + F.ZX + G.X + H.Y + J.Z + K = 0.0
+    std::string surfExpr;
+    // Generate conical surface expression and store in surface object.
+    // Get the diretion of the symmetry axis of the cone.
+    gp_Dir coneAxisDir = coneSurface->accessSImpl()->symmetryAxis;
+    gp_Pnt coneLocation = coneSurface->accessSImpl()->location;
+    // Check if parallet to X-axis
+    if (std::abs(coneAxisDir.Y()) < precision && std::abs(coneAxisDir.Z()) < precision) {
+        // Cone is parallel to X-axis.
+        // Check location.
+        if (std::abs(coneLocation.Y()) < precision && std::abs(coneLocation.Z()) < precision) {
+            // Cone is on X-axis.
+            coneSurface->accessSImpl()->surfSymb = "KX";
+            surfExpr += boost::str(boost::format("KX %13.7f %13.7f")
+                                   % coneSurface->accessSImpl()->radius);
+        }
+        else {
+            // Cone is parallel to X-axis.
+            coneSurface->accessSImpl()->surfSymb = "K/X";
+            surfExpr += boost::str(boost::format("K/X %13.7f  %13.7f  %13.7f %13.7f")
+                                   % coneLocation.Y() % coneLocation.Z()
+                                   % coneSurface->accessSImpl()->radius);
+        }
+    }
+    else if (std::abs(cylAxisDir.X()) < precision && std::abs(cylAxisDir.Z()) < precision) {
+        // Cylinder parallel to Y-axis.
+        // Check location.
+        if (std::abs(cylLocation.X()) < precision && std::abs(cylLocation.Z()) < precision) {
+            // Cylinder on Y-axis.
+            coneSurface->accessSImpl()->surfSymb = "CY";
+            surfExpr += boost::str(boost::format("CY %13.7f")
+                % coneSurface->accessSImpl()->radius);
+        }
+        else {
+            // Cylinder parallel to Y-axis.
+            coneSurface->accessSImpl()->surfSymb = "C/Y";
+            surfExpr += boost::str(boost::format("C/Y %13.7f  %13.7f  %13.7f")
+                % cylLocation.X() % cylLocation.Z()
+                % coneSurface->accessSImpl()->radius);
+        }
+    }
+    else if (std::abs(cylAxisDir.X()) < precision && std::abs(cylAxisDir.Y()) < precision) {
+        // Cylinder parallel to Z-axis.
+        // Check location.
+        if (std::abs(cylLocation.X()) < precision && std::abs(cylLocation.Y()) < precision) {
+            // Cylinder on Z-axis.
+            coneSurface->accessSImpl()->surfSymb = "CZ";
+            surfExpr += boost::str(boost::format("CZ %13.7f")
+                % coneSurface->accessSImpl()->radius);
+        }
+        else {
+            // Cylinder parallel to Z-axis.
+            coneSurface->accessSImpl()->surfSymb = "C/Z";
+            surfExpr += boost::str(boost::format("C/Z %13.7f  %13.7f  %13.7f")
+                % cylLocation.X() % cylLocation.Y()
+                % coneSurface->accessSImpl()->radius);
+        }
+    }
+    else {
+        // General cylinder.
+        double parmtA{ coneSurface->accessSImpl()->surfParameters[0] },
+            parmtB{ coneSurface->accessSImpl()->surfParameters[1] },
+            parmtC{ coneSurface->accessSImpl()->surfParameters[2] },
+            parmtD{ 2 * coneSurface->accessSImpl()->surfParameters[3] },
+            parmtE{ 2 * coneSurface->accessSImpl()->surfParameters[5] },
+            parmtF{ 2 * coneSurface->accessSImpl()->surfParameters[4] },
+            parmtG{ 2 * coneSurface->accessSImpl()->surfParameters[6] },
+            parmtH{ 2 * coneSurface->accessSImpl()->surfParameters[7] },
+            parmtJ{ 2 * coneSurface->accessSImpl()->surfParameters[8] },
+            parmtK{ coneSurface->accessSImpl()->surfParameters[9] };
+        coneSurface->accessSImpl()->surfSymb = "GQ";
+        surfExpr += boost::str(boost::format("GQ %13.7f  %13.7f  %13.7f %13.7f  %13.7f  "
+            "%13.7f %13.7f  %13.7f  %13.7f  %13.7f")
+            % parmtA % parmtB % parmtC % parmtD % parmtE
+            % parmtF % parmtG % parmtH % parmtJ % parmtK);
+    }
+    coneSurface->accessSImpl()->surfExpr = surfExpr;
 }
 
 /** ********************************************************************

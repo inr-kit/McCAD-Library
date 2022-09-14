@@ -28,7 +28,7 @@ McCAD::Decomposition::Preprocessor::~Preprocessor(){}
 * @param    compound is a McCAD compound object containing a shape and name.
 * @date     31/12/2020
 * @modified 22/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Decomposition::Preprocessor::operator()(
@@ -96,7 +96,7 @@ McCAD::Decomposition::Preprocessor::operator()(
 * @return   variant.
 * @date     31/12/2020
 * @modified
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 McCAD::Decomposition::Preprocessor::VariantType
 McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
@@ -129,7 +129,7 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
 * @return   bool. True if the surface is not supported.
 * @date     31/12/2020
 * @modified
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 bool
 McCAD::Decomposition::Preprocessor::checkBndSurfaces(const TopoDS_Shape& shape){
@@ -151,7 +151,7 @@ McCAD::Decomposition::Preprocessor::checkBndSurfaces(const TopoDS_Shape& shape){
 * @return   bool. True if the solid volume is below the limit.
 * @date     31/12/2020
 * @modified
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 bool
 McCAD::Decomposition::Preprocessor::checkVolume(const TopoDS_Shape& shape){
@@ -166,7 +166,7 @@ McCAD::Decomposition::Preprocessor::checkVolume(const TopoDS_Shape& shape){
 * @return   variant.
 * @date     31/12/2020
 * @modified 22/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 int
 McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid){

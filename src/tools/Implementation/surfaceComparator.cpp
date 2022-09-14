@@ -30,7 +30,7 @@ McCAD::Tools::SurfaceComparator::~SurfaceComparator(){}
 * @return   true if the two faces are equal.
 * @date     31/12/2020
 * @modified 23/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 bool
 McCAD::Tools::SurfaceComparator::operator()(const TopoDS_Face& firstFace,

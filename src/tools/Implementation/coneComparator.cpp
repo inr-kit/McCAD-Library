@@ -21,7 +21,7 @@ McCAD::Tools::ConeComparator::~ConeComparator(){}
 * @return   true if the two are equal.
 * @date     24/08/2022
 * @modified
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 std::optional<bool>
 McCAD::Tools::ConeComparator::operator()(const GeomAdaptor_Surface& firstAdaptor,
@@ -57,7 +57,7 @@ McCAD::Tools::ConeComparator::operator()(const GeomAdaptor_Surface& firstAdaptor
 * @return   an array of the coefficients of the cone.
 * @date     24/08/2022
 * @modified
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 std::array<double, 10>
 McCAD::Tools::ConeComparator::conCoefficients(const gp_Cone& cone) const{
@@ -79,7 +79,7 @@ McCAD::Tools::ConeComparator::conCoefficients(const gp_Cone& cone) const{
 * @return   true if the two cones have equal coefficients.
 * @date     24/08/2022
 * @modified
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 std::optional<bool>
 McCAD::Tools::ConeComparator::equivalentConCoefficients(const gp_Cone& first,

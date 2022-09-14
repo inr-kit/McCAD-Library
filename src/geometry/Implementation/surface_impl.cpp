@@ -10,7 +10,7 @@
 * @param    aFace is a OCCT face.
 * @date     23/08/2022
 * @modified
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Geometry::Surface::Impl::initiate(const TopoDS_Face& aFace){
@@ -22,7 +22,7 @@ McCAD::Geometry::Surface::Impl::initiate(const TopoDS_Face& aFace){
 * @brief    A function that counts internal loops on a surface.
 * @date     23/08/2022
 * @modified
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Geometry::Surface::Impl::countInternalLoops(){

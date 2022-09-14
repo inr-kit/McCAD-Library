@@ -22,7 +22,7 @@ McCAD::Tools::Preprocessor::Impl::~Impl(){}
 * @param    solidShape is a OCCT shape.
 * @date     31/12/2020
 * @modified 23/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape){
@@ -39,7 +39,7 @@ McCAD::Tools::Preprocessor::Impl::removeSmallFaces(TopoDS_Shape& solidShape){
 * @param    solid is a OCCT solid.
 * @date     31/12/2020
 * @modified 23/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Tools::Preprocessor::Impl::repairSolid(TopoDS_Solid& solid){
@@ -54,7 +54,7 @@ McCAD::Tools::Preprocessor::Impl::repairSolid(TopoDS_Solid& solid){
 * @param    face is a OCCT face.
 * @date     31/12/2020
 * @modified 23/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 bool
 McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face){
@@ -72,7 +72,7 @@ McCAD::Tools::Preprocessor::Impl::checkFace(const TopoDS_Face& face){
 * @param    face is a OCCT face.
 * @date     31/12/2020
 * @modified 23/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Tools::Preprocessor::Impl::fixFace(TopoDS_Face& face){

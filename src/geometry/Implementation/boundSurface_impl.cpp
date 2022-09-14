@@ -61,7 +61,7 @@ McCAD::Geometry::BoundSurface::Impl::canFuse(const McCAD::Geometry::BoundSurface
 * @return   true if mesh generation succeeded, otherwise false.
 * @date     31/12/2020
 * @modified 23/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 bool
 McCAD::Geometry::BoundSurface::Impl::generateMesh(const double& meshDeflection){
@@ -111,7 +111,7 @@ McCAD::Geometry::BoundSurface::Impl::generateMesh(const double& meshDeflection){
 * @param    parameterTolerance is a tolerance set in inputConfig file and is used to compare UV parameters.
 * @date     31/12/2020
 * @modified 23/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Geometry::BoundSurface::Impl::generateEdges(const double& parameterTolerance){
@@ -183,11 +183,20 @@ McCAD::Geometry::BoundSurface::Impl::combineEdges(std::vector<std::shared_ptr<Ed
     }
 }
 
+/** ********************************************************************
+* @brief    A function that generates a surface parameters.
+* @param    precision is used in comparing numerical values.
+* @param    scalingFactor is used to scale shapes per user supplied units in the inputConfig file.
+* @return   true if parameters generation succeeded, otherwise false.
+* @date     31/12/2020
+* @modified 14/09/2022
+* @author   Moataz Harb
+* **********************************************************************/
 bool
 McCAD::Geometry::BoundSurface::Impl::generateParmts(double precision,
                                                     double scalingFactor){
     if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Plane)){
-        // std::vector<gp_Pln, gp_Pnt, gp_Dir, parameters>
+        // std::tuple<gp_Pln, gp_Pnt, gp_Dir, parameters>
         auto generatedParmts = Tools::FaceParameters{precision, scalingFactor}.genPlSurfParmts(
                     boundSurface->accessSImpl()->face);
         boundSurface->accessSImpl()->plane = std::get<0>(generatedParmts);
@@ -198,7 +207,7 @@ McCAD::Geometry::BoundSurface::Impl::generateParmts(double precision,
                     std::get<3>(generatedParmts).begin(),
                     std::get<3>(generatedParmts).end());
     } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cylinder)){
-        // std::vector<gp_Cylinder, gp_Pnt, gp_Dir, parameters, radius, sense>
+        // std::tuple<gp_Cylinder, gp_Pnt, gp_Dir, parameters, radius, sense>
         auto generatedParmts = Tools::FaceParameters{precision, scalingFactor}.genCylSurfParmts(
                     boundSurface->accessSImpl()->face);
         boundSurface->accessSImpl()->cylinder = std::get<0>(generatedParmts);
@@ -224,7 +233,19 @@ McCAD::Geometry::BoundSurface::Impl::generateParmts(double precision,
         boundSurface->accessSImpl()->minorRadius = std::get<4>(generatedParmts);
         boundSurface->accessSImpl()->majorRadius = std::get<5>(generatedParmts);
         boundSurface->accessSImpl()->surfSense = std::get<6>(generatedParmts);
-    }
-    else return false;
+    } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cone)) {
+        // std::tuple<gp_Cone, gp_Pnt, gp_Dir, parameters, radius, sense>
+        auto generatedParmts = Tools::FaceParameters{ precision, scalingFactor }.genConeSurfParmts(
+            boundSurface->accessSImpl()->face);
+        boundSurface->accessSImpl()->cone = std::get<0>(generatedParmts);
+        boundSurface->accessSImpl()->location = std::get<1>(generatedParmts);
+        boundSurface->accessSImpl()->symmetryAxis = std::get<2>(generatedParmts);
+        boundSurface->accessSImpl()->surfParameters.insert(
+            boundSurface->accessSImpl()->surfParameters.end(),
+            std::get<3>(generatedParmts).begin(),
+            std::get<3>(generatedParmts).end());
+        boundSurface->accessSImpl()->refRadius = std::get<4>(generatedParmts);
+        boundSurface->accessSImpl()->surfSense = std::get<5>(generatedParmts);
+    } else return false;
     return true;
 }

@@ -27,7 +27,7 @@ McCAD::Geometry::BoundSurfaceCone::Impl::~Impl(){
 * @param    edgeTolerance is set on the inputComfig file.
 * @date     31/12/2020
 * @modified 23/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Geometry::BoundSurfaceCone::Impl::generateExtendedCone(

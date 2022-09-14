@@ -60,7 +60,7 @@ int main (int argc, char* argv[]){
             // Loop over the list of file names and load them consequetively.
             for(int i = 0; i < inputConfig.inputFileNames.size(); ++i){
                 inputConfig.inputFileName = inputConfig.inputFileNames[i];
-                std::cout << "> Processing " << inputConfig.inputFileName << std::endl;
+                std::cout << "  > Processing " << inputConfig.inputFileName << std::endl;
                 McCAD::IO::STEPReader reader{inputConfig};
             }
             timeEnd = std::chrono::system_clock::now();
@@ -73,7 +73,7 @@ int main (int argc, char* argv[]){
                 bool rejectConversion;
                 for(int i = 0; i < inputConfig.inputFileNames.size(); ++i){
                     inputConfig.inputFileName = inputConfig.inputFileNames[i];
-                    std::cout << "> Processing " << inputConfig.inputFileName << std::endl;
+                    std::cout << "  > Processing " << inputConfig.inputFileName << std::endl;
                     // Load the input file.
                     std::cout << "***********************" << std::endl;
                     std::cout << "** Loading STEP file **" << std::endl;

@@ -7,13 +7,14 @@
 // McCAD
 #include "surface.hpp"
 #include "tools_impl.hpp"
-// OCC
+// OCCT
 #include <TopoDS_Face.hxx>
 #include <gp_Pln.hxx>
 #include <gp_Cylinder.hxx>
 #include <gp_Torus.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Dir.hxx>
+#include <gp_Cone.hxx>
 #include <gp_Cone.hxx>
 
 namespace McCAD::Geometry{
@@ -54,6 +55,9 @@ namespace McCAD::Geometry{
             // Torus
             gp_Torus torus;
             double minorRadius, majorRadius;
+            // Cone
+            gp_Cone cone;
+            double refRadius;
     };
 }
 

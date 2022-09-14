@@ -17,7 +17,7 @@ McCAD::Decomposition::SolidObjCreator::~SolidObjCreator(){}
 * @return   A McCAD solid object.
 * @date     31/12/2020
 * @modified 25/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 template<typename solidObjType>
 std::shared_ptr<solidObjType>

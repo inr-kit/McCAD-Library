@@ -47,7 +47,7 @@ McCAD::Tools::ExtendedFaceCreator::generateExtendedPlane(
 * @return   a OCCT face.
 * @date     31/12/2020
 * @modified 23/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 TopoDS_Face
 McCAD::Tools::ExtendedFaceCreator::generateExtendedCone(

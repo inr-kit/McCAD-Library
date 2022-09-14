@@ -45,7 +45,7 @@ McCAD::Tools::toTypeName(GeomAbs_SurfaceType surfaceType){
 * @param    bool.
 * @date     31/12/2020
 * @modified 22/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 bool
 McCAD::Tools::checkSupported(GeomAbs_SurfaceType surfaceType) {

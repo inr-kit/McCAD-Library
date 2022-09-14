@@ -21,7 +21,7 @@ McCAD::Tools::CylinderComparator::~CylinderComparator(){}
 * @return   true if the two are equal.
 * @date     24/08/2022
 * @modified
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 std::optional<bool>
 McCAD::Tools::CylinderComparator::operator()(const GeomAdaptor_Surface& firstAdaptor,
@@ -49,7 +49,7 @@ McCAD::Tools::CylinderComparator::operator()(const GeomAdaptor_Surface& firstAda
 * @return   an array of the coefficients of the cone.
 * @date     24/08/2022
 * @modified
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 std::array<double, 10>
 McCAD::Tools::CylinderComparator::cylCoefficients(const gp_Cylinder& cylinder) const{
@@ -71,7 +71,7 @@ McCAD::Tools::CylinderComparator::cylCoefficients(const gp_Cylinder& cylinder) c
 * @return   true if the two cylinders have equal coefficients.
 * @date     24/08/2022
 * @modified
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 std::optional<bool>
 McCAD::Tools::CylinderComparator::equivalentCylCoefficients(const gp_Cylinder& first,

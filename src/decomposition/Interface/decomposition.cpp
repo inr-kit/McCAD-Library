@@ -14,7 +14,7 @@ McCAD::Decomposition::Decompose::~Decompose(){
 * @brief    A function that returns a pointer the the decomposition implementation.
 * @return   unique pointer.
 * @date     31/12/2020
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 McCAD::Decomposition::Decompose::Impl*
 McCAD::Decomposition::Decompose::accessDImpl() const{
@@ -25,7 +25,7 @@ McCAD::Decomposition::Decompose::accessDImpl() const{
 * @brief    A function to retrieve the resultant subsolids from the decomposer.
 * @return   McCAD data object.
 * @date     31/12/2020
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 McCAD::General::InputData
 McCAD::Decomposition::Decompose::getResultSolids(){
@@ -38,7 +38,7 @@ McCAD::Decomposition::Decompose::getResultSolids(){
 * @brief    A function to retrieve the rejected solids from the decomposer.
 * @return   McCAD data object.
 * @date     31/12/2020
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 McCAD::General::InputData
 McCAD::Decomposition::Decompose::getRejectedSolids(){

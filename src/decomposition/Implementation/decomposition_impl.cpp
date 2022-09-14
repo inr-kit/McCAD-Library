@@ -15,7 +15,7 @@
 * @param    inputConfig is an object containing the values of the configuration parameters. 
 * @date     31/12/2020
 * @modified 
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 McCAD::Decomposition::Decompose::Impl::Impl(const General::InputData& inputData,
                                             const IO::InputConfig& inputConfig)
@@ -38,7 +38,7 @@ McCAD::Decomposition::Decompose::Impl::~Impl(){
 * @param    compoundID is a unique ID, counter, to assing to the compound object to be created.
 * @date     31/12/2020
 * @modified 23/08/2022
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Decomposition::Decompose::Impl::perform(
@@ -137,7 +137,7 @@ McCAD::Decomposition::Decompose::Impl::perform(){
 * @param    compound is a compound object.
 * @date     31/12/2020
 * @modified 
-* @author   Moataz Harb & Christian Wegmann
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Decomposition::Decompose::Impl::extractSolids(
