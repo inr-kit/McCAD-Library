@@ -115,7 +115,7 @@ McCAD::Geometry::Solid::Impl::updateEdgesConvexity(double angularTolerance,
         facesList = mapEdgeFace.FindFromKey(edge);
         if(facesList.Extent() != int(2)){
             // Ignore edge if it is not shared between two surfaces.
-            edge.Convex(3);
+            edge.Convex(EdgeType.ignore);
             continue;
         }
         TopTools_ListIteratorOfListOfShape iterFace(facesList);
