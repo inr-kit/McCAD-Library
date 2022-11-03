@@ -57,7 +57,8 @@ namespace McCAD::Geometry{
             double minorRadius, majorRadius;
             // Cone
             gp_Cone cone;
-            double refRadius;
+            double refRadius, semiAngle;
+            gp_Pnt apex;
     };
 }
 

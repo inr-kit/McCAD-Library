@@ -185,14 +185,14 @@ McCAD::Tools::FaceParameters::genTorSurfParmts(const TopoDS_Face& face){
 * @param    face is a OCCT face object.
 * @return   a tuple of face parameters.
 * @date     14/09/2022
-* @modified 
+* @modified 03/11/2022
 * @author   Moataz Harb
 * **********************************************************************/
 McCAD::Tools::FaceParameters::conePrmts
 McCAD::Tools::FaceParameters::genConeSurfParmts(const TopoDS_Face& face) {
     // This function is currently only used for conversion. It implements scaling
     // of the face per the user desired units as specified in the config file.
-    // std::tuple<gp_Cylinder, gp_Pnt, gp_Dir, parameters, radius, sense>
+    // std::tuple<gp_Cone, gp_Pnt, gp_Dir, gp_Pnt, semiAngle, parameters, radius, sense>
     std::array<double, 10> coneParameters;
     BRepAdaptor_Surface surface{ face, true };
     gp_Cone cone = surface.Cone();
@@ -214,7 +214,7 @@ McCAD::Tools::FaceParameters::genConeSurfParmts(const TopoDS_Face& face) {
         if (std::abs(parameter) < precision) parameter = 0.0;
     }
     conePrmts generatedParmts;
-    generatedParmts = std::make_tuple(cone, cone.Location(), symmetryAxis.Direction(), 
-                                      coneParameters, radius, sense);
+    generatedParmts = std::make_tuple(cone, cone.Location(), symmetryAxis.Direction(), cone.Apex(),
+                                      cone.SemiAngle(), coneParameters, radius, sense);
     return generatedParmts;
 }

@@ -115,7 +115,7 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
         solidVariant = SolidObjCreator{inputConfig}.createObj<Geometry::MXDSolid>(shape);
         break;
     case solidType.conical:
-        solidVariant = SolidObjCreator{ inputConfig }.createObj<Geometry::CONSolid>(shape);
+        solidVariant = SolidObjCreator{inputConfig}.createObj<Geometry::CONSolid>(shape);
         break;
     default:;
         // Unknown Type. Returns an empty variant.

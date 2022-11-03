@@ -39,7 +39,7 @@ namespace McCAD::Tools{
                                        double, int>;
       using torusPrmts = std::tuple<gp_Torus, gp_Pnt, gp_Dir, std::vector<double>,
                                     double, double, int>;
-      using conePrmts = std::tuple<gp_Cone, gp_Pnt, gp_Dir, std::array<double, 10>,
+      using conePrmts = std::tuple<gp_Cone, gp_Pnt, gp_Dir, gp_Pnt, double, std::array<double, 10>,
                                    double, int>;
   public:
       std::optional<PositionUV> getSurfPositionUV(

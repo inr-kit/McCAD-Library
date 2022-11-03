@@ -12,8 +12,9 @@
 McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(){}
 
 McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(
-        const double& precision, const double& scalingFactor) :
-    precision{precision}, scalingFactor{scalingFactor}{
+        const double& precision, const double& scalingFactor, 
+        const double& angularTolerance) :
+    precision{precision}, scalingFactor{scalingFactor}, angularTolerance{angularTolerance} {
 }
 
 McCAD::Conversion::MCNPExprGenerator::~MCNPExprGenerator(){
@@ -80,7 +81,7 @@ McCAD::Conversion::MCNPExprGenerator::operator()(
             if(assistPlnSurface->accessBSImpl()->generateParmts(precision, scalingFactor)){
                 updateSurfParmts(assistPlnSurface, precision);
                 genPlSurfExpr(assistPlnSurface, solidCenter, precision);
-            } else throw(std::runtime_error("Error in generating surface expression!"));
+            } else throw(std::runtime_error("Error in generating assisting surface expression!"));
         }
     }
     // Generate cell description.
@@ -349,57 +350,69 @@ McCAD::Conversion::MCNPExprGenerator::genConeSurfExpr(
     // Check if parallet to X-axis
     if (std::abs(coneAxisDir.Y()) < precision && std::abs(coneAxisDir.Z()) < precision) {
         // Cone is parallel to X-axis.
+        // Determine which sheet of the cone to include in MCNP.
+        gp_Dir unitX{ 1, 0, 0 };
+        coneAxisDir.IsOpposite(unitX, angularTolerance) = true ? -1 : +1;
         // Check location.
         if (std::abs(coneLocation.Y()) < precision && std::abs(coneLocation.Z()) < precision) {
             // Cone is on X-axis.
             coneSurface->accessSImpl()->surfSymb = "KX";
-            surfExpr += boost::str(boost::format("KX %13.7f %13.7f")
-                                   % coneSurface->accessSImpl()->radius);
+            surfExpr += boost::str(boost::format("KX %13.7f  %13.7f")
+                                   % coneSurface->accessSImpl()->apex.X()
+                                   % coneSurface->accessSImpl()->semiAngle);
         }
         else {
             // Cone is parallel to X-axis.
             coneSurface->accessSImpl()->surfSymb = "K/X";
-            surfExpr += boost::str(boost::format("K/X %13.7f  %13.7f  %13.7f %13.7f")
-                                   % coneLocation.Y() % coneLocation.Z()
-                                   % coneSurface->accessSImpl()->radius);
+            surfExpr += boost::str(boost::format("K/X %13.7f  %13.7f  %13.7f  %13.7f")
+                                   % coneSurface->accessSImpl()->apex.X() 
+                                   % coneSurface->accessSImpl()->apex.Y()
+                                   % coneSurface->accessSImpl()->apex.Z()
+                                   % coneSurface->accessSImpl()->semiAngle);
         }
     }
-    else if (std::abs(cylAxisDir.X()) < precision && std::abs(cylAxisDir.Z()) < precision) {
-        // Cylinder parallel to Y-axis.
+    else if (std::abs(coneAxisDir.X()) < precision && std::abs(coneAxisDir.Z()) < precision) {
+        // Cone is parallel to Y-axis.
         // Check location.
-        if (std::abs(cylLocation.X()) < precision && std::abs(cylLocation.Z()) < precision) {
-            // Cylinder on Y-axis.
-            coneSurface->accessSImpl()->surfSymb = "CY";
-            surfExpr += boost::str(boost::format("CY %13.7f")
-                % coneSurface->accessSImpl()->radius);
+        if (std::abs(coneLocation.X()) < precision && std::abs(coneLocation.Z()) < precision) {
+            // Cone is on Y-axis.
+            coneSurface->accessSImpl()->surfSymb = "KY";
+            surfExpr += boost::str(boost::format("KY %13.7f  %13.7f")
+                % coneSurface->accessSImpl()->apex.Y()
+                % coneSurface->accessSImpl()->semiAngle);
         }
         else {
-            // Cylinder parallel to Y-axis.
-            coneSurface->accessSImpl()->surfSymb = "C/Y";
-            surfExpr += boost::str(boost::format("C/Y %13.7f  %13.7f  %13.7f")
-                % cylLocation.X() % cylLocation.Z()
-                % coneSurface->accessSImpl()->radius);
+            // Cone is parallel to Y-axis.
+            coneSurface->accessSImpl()->surfSymb = "K/Y";
+            surfExpr += boost::str(boost::format("K/Y %13.7f  %13.7f  %13.7f  %13.7f")
+                % coneSurface->accessSImpl()->apex.X()
+                % coneSurface->accessSImpl()->apex.Y()
+                % coneSurface->accessSImpl()->apex.Z()
+                % coneSurface->accessSImpl()->semiAngle);
         }
     }
-    else if (std::abs(cylAxisDir.X()) < precision && std::abs(cylAxisDir.Y()) < precision) {
-        // Cylinder parallel to Z-axis.
+    if (std::abs(coneAxisDir.X()) < precision && std::abs(coneAxisDir.Y()) < precision) {
+        // Cone is parallel to Z-axis.
         // Check location.
-        if (std::abs(cylLocation.X()) < precision && std::abs(cylLocation.Y()) < precision) {
-            // Cylinder on Z-axis.
-            coneSurface->accessSImpl()->surfSymb = "CZ";
-            surfExpr += boost::str(boost::format("CZ %13.7f")
-                % coneSurface->accessSImpl()->radius);
+        if (std::abs(coneLocation.X()) < precision && std::abs(coneLocation.Y()) < precision) {
+            // Cone is on Z-axis.
+            coneSurface->accessSImpl()->surfSymb = "KZ";
+            surfExpr += boost::str(boost::format("KZ %13.7f  %13.7f")
+                % coneSurface->accessSImpl()->apex.Z()
+                % coneSurface->accessSImpl()->semiAngle);
         }
         else {
-            // Cylinder parallel to Z-axis.
-            coneSurface->accessSImpl()->surfSymb = "C/Z";
-            surfExpr += boost::str(boost::format("C/Z %13.7f  %13.7f  %13.7f")
-                % cylLocation.X() % cylLocation.Y()
-                % coneSurface->accessSImpl()->radius);
+            // Cone is parallel to Z-axis.
+            coneSurface->accessSImpl()->surfSymb = "K/Z";
+            surfExpr += boost::str(boost::format("K/Z %13.7f  %13.7f  %13.7f  %13.7f")
+                % coneSurface->accessSImpl()->apex.X()
+                % coneSurface->accessSImpl()->apex.Y()
+                % coneSurface->accessSImpl()->apex.Z()
+                % coneSurface->accessSImpl()->semiAngle);
         }
     }
     else {
-        // General cylinder.
+        // General coner.
         double parmtA{ coneSurface->accessSImpl()->surfParameters[0] },
             parmtB{ coneSurface->accessSImpl()->surfParameters[1] },
             parmtC{ coneSurface->accessSImpl()->surfParameters[2] },
@@ -411,10 +424,10 @@ McCAD::Conversion::MCNPExprGenerator::genConeSurfExpr(
             parmtJ{ 2 * coneSurface->accessSImpl()->surfParameters[8] },
             parmtK{ coneSurface->accessSImpl()->surfParameters[9] };
         coneSurface->accessSImpl()->surfSymb = "GQ";
-        surfExpr += boost::str(boost::format("GQ %13.7f  %13.7f  %13.7f %13.7f  %13.7f  "
-            "%13.7f %13.7f  %13.7f  %13.7f  %13.7f")
-            % parmtA % parmtB % parmtC % parmtD % parmtE
-            % parmtF % parmtG % parmtH % parmtJ % parmtK);
+        surfExpr += boost::str(boost::format("GQ %13.7f  %13.7f  %13.7f  %13.7f  %13.7f  "
+                                             "%13.7f  %13.7f  %13.7f  %13.7f  %13.7f")
+                               % parmtA % parmtB % parmtC % parmtD % parmtE
+                               % parmtF % parmtG % parmtH % parmtJ % parmtK);
     }
     coneSurface->accessSImpl()->surfExpr = surfExpr;
 }
