@@ -140,11 +140,19 @@ McCAD::Tools::FaceParameters::genCylSurfParmts(const TopoDS_Face& face){
     return generatedParmts;
 }
 
+/** ********************************************************************
+* @brief    Operator that performs main operations for assist surface generation.
+* @param    solidObj is a McCAD conical solid object.
+* @return   The angle of the face (cylinder or cone) in radian.
+* @date     31/12/2020
+* @modified 04/11/2022
+* @author   Moataz Harb
+* **********************************************************************/
 double
-McCAD::Tools::FaceParameters::getRadian(const TopoDS_Face& cylinder){
+McCAD::Tools::FaceParameters::getRadian(const TopoDS_Face& aFace){
     std::array<double, 4> uvParameters;
-    // UV parameters in class grom_Cylindrical_Surface: U1 = 0 and U2 = 2*PI.
-    BRepTools::UVBounds(cylinder, uvParameters[0], uvParameters[1], uvParameters[2],
+    // UV parameters in class Geom_CylindricalSurface and Geom_ConicalSurface: U1 = 0 and U2 = 2*PI.
+    BRepTools::UVBounds(aFace, uvParameters[0], uvParameters[1], uvParameters[2],
             uvParameters[3]);
     return std::abs(uvParameters[1] - uvParameters[0]);
 }

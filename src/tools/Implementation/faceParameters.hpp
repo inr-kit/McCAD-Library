@@ -50,7 +50,7 @@ namespace McCAD::Tools{
                                   const PositionUV& position);
       planePrmts genPlSurfParmts(const TopoDS_Face& face);
       cylinderPrmts genCylSurfParmts(const TopoDS_Face& face);
-      double getRadian(const TopoDS_Face& cylinder);
+      double getRadian(const TopoDS_Face& aFace);
       torusPrmts genTorSurfParmts(const TopoDS_Face& face);
       conePrmts genConeSurfParmts(const TopoDS_Face& face);
   };

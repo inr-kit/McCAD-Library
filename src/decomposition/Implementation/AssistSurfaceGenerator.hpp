@@ -6,8 +6,7 @@
 #include "cylSolid_impl.hpp"
 #include "torSolid_impl.hpp"
 #include "mixedSolid_impl.hpp"
-// OCCT
-#include <Standard.hxx>
+#include "conSolid_impl.hpp"
 
 namespace McCAD::Decomposition{
   class AssistSurfaceGenerator{
@@ -19,7 +18,8 @@ namespace McCAD::Decomposition{
       void operator()(Geometry::CYLSolid& solidObj);
       void operator()(Geometry::TORSolid& solidObj);
       void operator()(Geometry::MXDSolid& solidObj);
-      Standard_Boolean checkFillet(Geometry::CYLSolid& solidObj);
+      bool checkFillet(Geometry::CYLSolid& solidObj);
+      void operator()(Geometry::CONSolid& solidObj);
   };
 }
 

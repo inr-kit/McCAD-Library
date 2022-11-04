@@ -7,6 +7,7 @@
 #include "AssistCylCylSurfaceGenerator.hpp"
 #include "AssistCylTorSurfaceGenerator.hpp"
 #include "AssistPlnCylSurfaceGenerator.hpp"
+#include "AssistPlnConeSurfaceGenerator.hpp"
 #include "edge_impl.hpp"
 #include "CommonEdgeFinder.hpp"
 #include "EdgesCombiner.hpp"
@@ -16,7 +17,6 @@
 #include "torusConvertor.hpp"
 #include "faceParameters.hpp"
 //OCC
-#include <Standard.hxx>
 #include <PrsDim_AngleDimension.hxx>
 #include <gp_Ax1.hxx>
 #include <BRepAdaptor_Surface.hxx>
@@ -53,6 +53,7 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& sol
 
 void
 McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::MXDSolid& solidObj){
+    // *** Review support for conical solids *** //
     // Generate assistant surface that splits cylinders first.
     if (solidObj.accessSImpl()->cylindersList.size() >= 1 &&
             solidObj.accessSImpl()->toriList.size() >= 1){
@@ -83,7 +84,7 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& sol
                                   planesList[1]->accessSImpl()->face).Plane().Location()).XYZ();
     gp_Dir crossProd = gp_Dir(firstVec).Crossed(gp_Dir(secondVec));
     auto sense = axis.Direction().Dot(crossProd);
-    Standard_Real rotationSense = signbit(sense) ? -1.0 : 1.0;
+    double rotationSense = signbit(sense) ? -1.0 : 1.0;
     gp_Trsf rotation;
     rotation.SetRotation(axis, rotationSense*radianAngle/2.0);
     BRepBuilderAPI_Transform transform{rotation};
@@ -95,7 +96,7 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& sol
                                                     inputConfig.edgeTolerance);
         solidObj.accessSImpl()->assistFacesList.push_back(std::move(assistSurfaceObj));
     }
-    solidObj.accessSImpl()->splitSurface = Standard_True;
+    solidObj.accessSImpl()->splitSurface = true;
     /*//debug
     std::cout << "angle: " << radianAngle << std::endl;
     auto plane0 = BRepAdaptor_Surface(planesList[0]->accessSImpl()->face).Plane().Location();
@@ -108,7 +109,7 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& sol
     writer9.Transfer(planesList[0]->accessSImpl()->face, STEPControl_StepModelType::STEPControl_AsIs);
     writer9.Transfer(planesList[1]->accessSImpl()->face, STEPControl_StepModelType::STEPControl_AsIs);
     writer9.Transfer(assistShape, STEPControl_StepModelType::STEPControl_AsIs);
-    Standard_Integer kk = 0;
+    int kk = 0;
     std::string filename = "/home/mharb/Documents/McCAD_refactor/examples/bbox/cyltor";
     std::string suffix = ".stp";
     while (std::filesystem::exists(filename + std::to_string(kk) + suffix)){
@@ -120,7 +121,7 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::TORSolid& sol
     *///debug
 }
 
-Standard_Boolean
+bool
 McCAD::Decomposition::AssistSurfaceGenerator::checkFillet(Geometry::CYLSolid& solidObj){
     // Mark solid as fillet if it consists of two cylinders with no common edges
     // and four planar surfaces.
@@ -129,15 +130,38 @@ McCAD::Decomposition::AssistSurfaceGenerator::checkFillet(Geometry::CYLSolid& so
             solidObj.accessSImpl()->assistFacesList.size() == 0){
         auto& cylindersList = solidObj.accessSImpl()->cylindersList;
         // If any cylinder is more than 90 degrees, not a fillet.
-        for(Standard_Integer i = 0; i < cylindersList.size(); ++i){
+        for(int i = 0; i < cylindersList.size(); ++i){
             if(std::abs(Tools::FaceParameters{}.getRadian(cylindersList[i]->accessSImpl()->face)
                     - inputConfig.PI/2.0) > inputConfig.precision) goto goback;
         }
         // Sense of surfaces should not be the same.
         if(cylindersList[0]->accessSImpl()->face.Orientation() ==
                 cylindersList[1]->accessSImpl()->face.Orientation()) goto goback;
-        return Standard_True;
+        return true;
     }
     goback:;
-    return Standard_False;
+    return false;
+}
+
+/** ********************************************************************
+* @brief    This function deligates the creation of split surfaces to specialized functions.
+* @param    solidObj is a McCAD conical solid object.
+* @date     04/11/2022
+* @modified 
+* @author   Moataz Harb
+* **********************************************************************/
+void
+McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CONSolid & solidObj) {
+    // Generate assistant surface that splits ccones.
+    //if (solidObj.accessSImpl()->conesListt.size() >= 2) {
+    //    AssistConeConeSurfaceGenerator{ inputConfig }(solidObj);
+    //}
+    if (solidObj.accessSImpl()->conesList.size() >= 1 &&
+        solidObj.accessSImpl()->planesList.size() >= 1) {
+        AssistPlnConeSurfaceGenerator{inputConfig}(solidObj);
+    }
+    //SurfacesMerger{}(solidObj.accessSImpl()->assistFacesList,
+    //    solidObj.accessSImpl()->boxDiagonalLength, inputConfig.precision,
+    //   inputConfig.edgeTolerance, inputConfig.angularTolerance,
+    //    inputConfig.distanceTolerance);
 }

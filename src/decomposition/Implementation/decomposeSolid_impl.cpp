@@ -190,7 +190,7 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     // based on the numberCollidingSurfaces
     if (!throughNoBoundarySurfaces(solidImpl->splitFacesList)) {
         if (!planeSplitOnlyPlane(solidImpl->splitFacesList)) {
-            //AssistSurfaceGenerator{ inputConfig }(*solidObj);
+            AssistSurfaceGenerator{ inputConfig }(*solidObj);
             //solidObj->accessConSImpl()->judgeAssistDecomposeSurfaces(solidImpl,
             //    inputConfig.precision,
             //    inputConfig.distanceTolerance);
