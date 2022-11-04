@@ -347,72 +347,85 @@ McCAD::Conversion::MCNPExprGenerator::genConeSurfExpr(
     // Get the diretion of the symmetry axis of the cone.
     gp_Dir coneAxisDir = coneSurface->accessSImpl()->symmetryAxis;
     gp_Pnt coneLocation = coneSurface->accessSImpl()->location;
+    // Create unie vectors
+    gp_Dir unitX{1, 0, 0}, unitY{ 0, 1, 0 }, unitZ{ 0, 0, 1 };
     // Check if parallet to X-axis
     if (std::abs(coneAxisDir.Y()) < precision && std::abs(coneAxisDir.Z()) < precision) {
         // Cone is parallel to X-axis.
         // Determine which sheet of the cone to include in MCNP.
-        gp_Dir unitX{ 1, 0, 0 };
-        coneAxisDir.IsOpposite(unitX, angularTolerance) = true ? -1 : +1;
+        std::string coneSheet = coneAxisDir.IsOpposite(unitX, angularTolerance) == true ? "-1" : "+1";
         // Check location.
         if (std::abs(coneLocation.Y()) < precision && std::abs(coneLocation.Z()) < precision) {
             // Cone is on X-axis.
             coneSurface->accessSImpl()->surfSymb = "KX";
-            surfExpr += boost::str(boost::format("KX %13.7f  %13.7f")
+            surfExpr += boost::str(boost::format("KX %13.7f  %13.7f  %s")
                                    % coneSurface->accessSImpl()->apex.X()
-                                   % coneSurface->accessSImpl()->semiAngle);
+                                   % coneSurface->accessSImpl()->semiAngle
+                                   % coneSheet);
         }
         else {
             // Cone is parallel to X-axis.
             coneSurface->accessSImpl()->surfSymb = "K/X";
-            surfExpr += boost::str(boost::format("K/X %13.7f  %13.7f  %13.7f  %13.7f")
+            surfExpr += boost::str(boost::format("K/X %13.7f  %13.7f  %13.7f  %13.7f  %s")
                                    % coneSurface->accessSImpl()->apex.X() 
                                    % coneSurface->accessSImpl()->apex.Y()
                                    % coneSurface->accessSImpl()->apex.Z()
-                                   % coneSurface->accessSImpl()->semiAngle);
+                                   % coneSurface->accessSImpl()->semiAngle
+                                   % coneSheet);
         }
     }
     else if (std::abs(coneAxisDir.X()) < precision && std::abs(coneAxisDir.Z()) < precision) {
         // Cone is parallel to Y-axis.
+        // Determine which sheet of the cone to include in MCNP.
+        std::string coneSheet = coneAxisDir.IsOpposite(unitY, angularTolerance) == true ? "-1" : "+1";
         // Check location.
         if (std::abs(coneLocation.X()) < precision && std::abs(coneLocation.Z()) < precision) {
             // Cone is on Y-axis.
             coneSurface->accessSImpl()->surfSymb = "KY";
-            surfExpr += boost::str(boost::format("KY %13.7f  %13.7f")
-                % coneSurface->accessSImpl()->apex.Y()
-                % coneSurface->accessSImpl()->semiAngle);
+            surfExpr += boost::str(boost::format("KY %13.7f  %13.7f  %s")
+                                   % coneSurface->accessSImpl()->apex.Y()
+                                   % coneSurface->accessSImpl()->semiAngle
+                                   % coneSheet);
         }
         else {
             // Cone is parallel to Y-axis.
             coneSurface->accessSImpl()->surfSymb = "K/Y";
-            surfExpr += boost::str(boost::format("K/Y %13.7f  %13.7f  %13.7f  %13.7f")
-                % coneSurface->accessSImpl()->apex.X()
-                % coneSurface->accessSImpl()->apex.Y()
-                % coneSurface->accessSImpl()->apex.Z()
-                % coneSurface->accessSImpl()->semiAngle);
+            surfExpr += boost::str(boost::format("K/Y %13.7f  %13.7f  %13.7f  %13.7f  %s")
+                                   % coneSurface->accessSImpl()->apex.X()
+                                   % coneSurface->accessSImpl()->apex.Y()
+                                   % coneSurface->accessSImpl()->apex.Z()
+                                   % coneSurface->accessSImpl()->semiAngle
+                                   % coneSheet);
         }
     }
     if (std::abs(coneAxisDir.X()) < precision && std::abs(coneAxisDir.Y()) < precision) {
         // Cone is parallel to Z-axis.
+        // Determine which sheet of the cone to include in MCNP.
+        std::string coneSheet = coneAxisDir.IsOpposite(unitZ, angularTolerance) == true ? "-1" : "+1";
         // Check location.
         if (std::abs(coneLocation.X()) < precision && std::abs(coneLocation.Y()) < precision) {
             // Cone is on Z-axis.
             coneSurface->accessSImpl()->surfSymb = "KZ";
-            surfExpr += boost::str(boost::format("KZ %13.7f  %13.7f")
-                % coneSurface->accessSImpl()->apex.Z()
-                % coneSurface->accessSImpl()->semiAngle);
+            surfExpr += boost::str(boost::format("KZ %13.7f  %13.7f  %s")
+                                   % coneSurface->accessSImpl()->apex.Z()
+                                   % coneSurface->accessSImpl()->semiAngle
+                                   % coneSheet);
         }
         else {
             // Cone is parallel to Z-axis.
             coneSurface->accessSImpl()->surfSymb = "K/Z";
-            surfExpr += boost::str(boost::format("K/Z %13.7f  %13.7f  %13.7f  %13.7f")
-                % coneSurface->accessSImpl()->apex.X()
-                % coneSurface->accessSImpl()->apex.Y()
-                % coneSurface->accessSImpl()->apex.Z()
-                % coneSurface->accessSImpl()->semiAngle);
+            surfExpr += boost::str(boost::format("K/Z %13.7f  %13.7f  %13.7f  %13.7f  %s")
+                                   % coneSurface->accessSImpl()->apex.X()
+                                   % coneSurface->accessSImpl()->apex.Y()
+                                   % coneSurface->accessSImpl()->apex.Z()
+                                   % coneSurface->accessSImpl()->semiAngle
+                                   % coneSheet);
         }
     }
     else {
-        // General coner.
+        // General cone.
+        // Determine which sheet of the cone to include in MCNP.
+        std::string coneSheet = coneAxisDir.X() >= double(0) == true ? "+1" : "-1";
         double parmtA{ coneSurface->accessSImpl()->surfParameters[0] },
             parmtB{ coneSurface->accessSImpl()->surfParameters[1] },
             parmtC{ coneSurface->accessSImpl()->surfParameters[2] },
@@ -425,9 +438,10 @@ McCAD::Conversion::MCNPExprGenerator::genConeSurfExpr(
             parmtK{ coneSurface->accessSImpl()->surfParameters[9] };
         coneSurface->accessSImpl()->surfSymb = "GQ";
         surfExpr += boost::str(boost::format("GQ %13.7f  %13.7f  %13.7f  %13.7f  %13.7f  "
-                                             "%13.7f  %13.7f  %13.7f  %13.7f  %13.7f")
+                                             "%13.7f  %13.7f  %13.7f  %13.7f  %13.7f  %s")
                                % parmtA % parmtB % parmtC % parmtD % parmtE
-                               % parmtF % parmtG % parmtH % parmtJ % parmtK);
+                               % parmtF % parmtG % parmtH % parmtJ % parmtK
+                               % coneSheet);
     }
     coneSurface->accessSImpl()->surfExpr = surfExpr;
 }
