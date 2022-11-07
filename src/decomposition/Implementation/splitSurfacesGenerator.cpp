@@ -143,21 +143,3 @@ McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOn2Lines(
     gp_Pln splitSurf(secondEdgeMid, splitSurfNormal);
     return BRepBuilderAPI_MakeFace(splitSurf).Face();
 }
-
-/*
-std::optional<TopoDS_Face>
-McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOnLineAxis(
-        const gp_Cylinder& cylinder,
-        const std::shared_ptr<Geometry::Edge>& edge){
-    gp_Pnt edgeStart{edge->accessEImpl()->startPoint},
-           edgeMid{edge->accessEImpl()->middlePoint},
-           edgeEnd{edge->accessEImpl()->endPoint},
-           cylinderOrigin{cylinder.Location()};
-    gp_Vec firstVec(edgeStart, cylinderOrigin),
-           secondVec(edgeEnd, cylinderOrigin);
-    gp_Dir firstDir(firstVec), secondDir(secondVec);
-    gp_Dir splitSurfNormal = firstDir.Crossed(secondDir);
-    gp_Pln splitSurf(edgeMid, splitSurfNormal);
-    return BRepBuilderAPI_MakeFace(splitSurf).Face();
-}
-*/

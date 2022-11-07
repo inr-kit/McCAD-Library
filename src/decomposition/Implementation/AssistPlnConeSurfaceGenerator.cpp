@@ -39,7 +39,8 @@ McCAD::Decomposition::AssistPlnConeSurfaceGenerator::operator()(Geometry::CONSol
     edgesMap commonLineEdgesMap, commonCurveEdgesMap;
     for (int i = 0; i < conesList.size(); ++i) {
         // If cone is closed, then ignore the conical surface.
-        if (Tools::FaceParameters{}.getRadian(conesList[i]->accessSImpl()->face) >= 2 * inputConfig.PI) continue;
+        // Commenting out the radian check since all cones have U1=0 and U2=2PI.
+        //if (Tools::FaceParameters{}.getRadian(conesList[i]->accessSImpl()->face) >= 2 * inputConfig.PI) continue;
         for (int j = 0; j < planesList.size(); ++j) {
             commonEdges = CommonEdgeFinder{inputConfig.angularTolerance,
                     inputConfig.distanceTolerance, inputConfig.precision }(

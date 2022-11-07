@@ -58,6 +58,56 @@ McCAD::Geometry::CONSolid::Impl::judgeDecomposeSurfaces(Solid::Impl* solidImpl,
 }
 
 /** ********************************************************************
+* @brief    A function that judges if any of the generated assist surfaces can be used to split the solid.
+* @param    solidImpl is a McCAD solid object.
+* @param    precision is used to compare numerical values and is set in the inputConfig file.
+* @param    distanceTolerance is used in edges comparison by OCCT and is set in the inputConfig file.
+* @date     07/11/2022
+* @modified
+* @author   Moataz Harb
+* **********************************************************************/
+void
+McCAD::Geometry::CONSolid::Impl::judgeAssistDecomposeSurfaces(Solid::Impl* solidImpl,
+                                                              double precision,
+                                                              double distanceTolerance) {
+    // Judge whether assist surfaces of the solid can be used for decomposition.
+    auto& firstfacesList = solidImpl->assistFacesList;
+    auto& secondfacesList = solidImpl->facesList;
+    if (firstfacesList.size() < 1 || secondfacesList.size() < 1) return;
+    for (int i = 0; i < firstfacesList.size(); ++i) {
+        auto iFace = firstfacesList[i]->accessSImpl();
+        int positiveFaces{ 0 }, negativeFaces{ 0 },
+            numberCollidingSurfaces{ 0 },
+            numberCollidingCurvedSurfaces{ 0 };
+        for (int j = 0; j < secondfacesList.size(); ++j) {
+            int side{ 0 };
+            if (Decomposition::FaceCollision{ precision, distanceTolerance }.operator()(
+                *firstfacesList[i], *secondfacesList[j], side)) {
+                ++numberCollidingSurfaces;
+                iFace->splitSurface = true;
+                if (secondfacesList[j]->accessSImpl()->surfaceType != Tools::toTypeName(GeomAbs_Plane)) {
+                    ++numberCollidingCurvedSurfaces;
+                }
+            }
+            else {
+                if (side == 1) ++positiveFaces;
+                else if (side == -1) ++negativeFaces;
+            }
+        }
+        if (positiveFaces > 0 && negativeFaces > 0) {
+            iFace->splitSurface = true;
+        }
+        if (iFace->splitSurface) {
+            iFace->numberCollidingSurfaces = numberCollidingSurfaces;
+            iFace->numberCollidingCurvedSurfaces = numberCollidingCurvedSurfaces;
+            solidImpl->splitAssistFacesList.push_back(firstfacesList[i]);
+            solidImpl->splitFacesList.push_back(firstfacesList[i]);
+            solidImpl->splitSurface = true;
+        }
+    }
+}
+
+/** ********************************************************************
 * @brief    A function that calculates the number of concave edges that 
             each of the solid surfaces go through.
 * @param    solidImpl is a McCAD solid object.

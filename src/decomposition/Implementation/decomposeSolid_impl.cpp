@@ -191,9 +191,9 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
     if (!throughNoBoundarySurfaces(solidImpl->splitFacesList)) {
         if (!planeSplitOnlyPlane(solidImpl->splitFacesList)) {
             AssistSurfaceGenerator{ inputConfig }(*solidObj);
-            //solidObj->accessConSImpl()->judgeAssistDecomposeSurfaces(solidImpl,
-            //    inputConfig.precision,
-            //    inputConfig.distanceTolerance);
+            solidObj->accessCONSImpl()->judgeAssistDecomposeSurfaces(solidImpl,
+                                                                     inputConfig.precision,
+                                                                     inputConfig.distanceTolerance);
         }
         solidObj->accessCONSImpl()->judgeThroughConcaveEdges(solidImpl, 
                                                              inputConfig.distanceTolerance);
