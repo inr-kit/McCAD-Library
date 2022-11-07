@@ -11,7 +11,7 @@
 #include "edge_impl.hpp"
 #include "conSolid_impl.hpp"
 #include "boundSurface_impl.hpp"
-//OCC
+// OCCT
 #include <TopoDS_Face.hxx>
 
 namespace McCAD::Decomposition{
@@ -24,7 +24,15 @@ namespace McCAD::Decomposition{
   public:
       IO::InputConfig inputConfig;
       void operator()(Geometry::CONSolid& solidObj);
-
+      std::optional<std::shared_ptr<McCAD::Geometry::BoundSurface>>
+      generateThroughLineAxis(const std::shared_ptr<Geometry::BoundSurface>& coneSurface,
+                              const std::shared_ptr<Geometry::Edge>& commonEdge,
+                              const double& boxDiagonalLength, const double& meshDeflection);
+      std::optional<std::shared_ptr<McCAD::Geometry::BoundSurface>>
+      generateThroughTwoLines(const std::shared_ptr<Geometry::BoundSurface>& coneSurface,
+                              const std::shared_ptr<Geometry::Edge>& firstEdge,
+                              const std::shared_ptr<Geometry::Edge>& secondEdge,
+                              const double& boxDiagonalLength, const double& meshDeflection);
   };
 }
 

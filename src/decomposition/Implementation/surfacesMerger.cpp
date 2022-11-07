@@ -4,7 +4,7 @@
 #include "surfaceObjCerator.hpp"
 #include "surfacesFuser.hpp"
 #include "EdgesComparator.hpp"
-//OCC
+// OCCT
 #include <TopoDS_Face.hxx>
 
 /** ********************************************************************

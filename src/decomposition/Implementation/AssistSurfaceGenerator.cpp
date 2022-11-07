@@ -54,10 +54,18 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& sol
 void
 McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::MXDSolid& solidObj){
     // *** Review support for conical solids *** //
-    // Generate assistant surface that splits cylinders first.
+    // Generate assistant surface that splits cylinders and tori first.
     if (solidObj.accessSImpl()->cylindersList.size() >= 1 &&
             solidObj.accessSImpl()->toriList.size() >= 1){
         AssistCylTorSurfaceGenerator{inputConfig}(solidObj);
+    }
+    if (solidObj.accessSImpl()->cylindersList.size() >= 1 &&
+        solidObj.accessSImpl()->conesList.size() >= 1) {
+        // Assist surface for splitting a cylinder and a cone.
+    }
+    if (solidObj.accessSImpl()->toriList.size() >= 1 &&
+        solidObj.accessSImpl()->conesList.size() >= 1) {
+        // Assist surface for splitting a cylinder and a cone.
     }
 }
 
@@ -152,16 +160,16 @@ McCAD::Decomposition::AssistSurfaceGenerator::checkFillet(Geometry::CYLSolid& so
 * **********************************************************************/
 void
 McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CONSolid & solidObj) {
-    // Generate assistant surface that splits ccones.
-    //if (solidObj.accessSImpl()->conesListt.size() >= 2) {
-    //    AssistConeConeSurfaceGenerator{ inputConfig }(solidObj);
-    //}
+    // Generate assistant surfaces that splits cones first.
+    if (solidObj.accessSImpl()->conesList.size() >= 2) {
+        //AssistConeConeSurfaceGenerator{ inputConfig }(solidObj);
+    }
     if (solidObj.accessSImpl()->conesList.size() >= 1 &&
         solidObj.accessSImpl()->planesList.size() >= 1) {
         AssistPlnConeSurfaceGenerator{inputConfig}(solidObj);
     }
-    //SurfacesMerger{}(solidObj.accessSImpl()->assistFacesList,
-    //    solidObj.accessSImpl()->boxDiagonalLength, inputConfig.precision,
-    //   inputConfig.edgeTolerance, inputConfig.angularTolerance,
-    //    inputConfig.distanceTolerance);
+    SurfacesMerger{}(solidObj.accessSImpl()->assistFacesList,
+        solidObj.accessSImpl()->boxDiagonalLength, inputConfig.precision,
+        inputConfig.edgeTolerance, inputConfig.angularTolerance,
+        inputConfig.distanceTolerance);
 }

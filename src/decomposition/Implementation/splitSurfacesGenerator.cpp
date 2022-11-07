@@ -12,7 +12,6 @@
 #include <gp_Pnt.hxx>
 #include <gp_Pln.hxx>
 #include <TopoDS_Face.hxx>
-#include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepAdaptor_Curve.hxx>
 #include <gp_Circ.hxx>
 #include <gp_Elips.hxx>
@@ -145,6 +144,7 @@ McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOn2Lines(
     return BRepBuilderAPI_MakeFace(splitSurf).Face();
 }
 
+/*
 std::optional<TopoDS_Face>
 McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOnLineAxis(
         const gp_Cylinder& cylinder,
@@ -160,3 +160,4 @@ McCAD::Decomposition::SplitSurfaceGenerator::generatePlaneOnLineAxis(
     gp_Pln splitSurf(edgeMid, splitSurfNormal);
     return BRepBuilderAPI_MakeFace(splitSurf).Face();
 }
+*/

@@ -23,6 +23,8 @@ McCAD::Tools::SurfacesFuser::operator()(const TopoDS_Face& firstFace,
         return fusePlanes(firstFace, secondFace);
     else if (firstAdaptor.GetType() == GeomAbs_Cylinder)
         return fuseCyls(firstFace, secondFace);
+    else if (firstAdaptor.GetType() == GeomAbs_Cone)
+        return fuseCones(firstFace, secondFace);
     return std::nullopt;
 }
 

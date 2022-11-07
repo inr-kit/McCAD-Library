@@ -4,8 +4,8 @@
 #include "EdgesCombiner.hpp"
 
 McCAD::Decomposition::CommonEdgeFinder::CommonEdgeFinder(
-        const Standard_Real& angularTolerance, const Standard_Real& distanceTolerance,
-        const Standard_Real& precision) : angularTolerance{angularTolerance},
+        const double& angularTolerance, const double& distanceTolerance,
+        const double& precision) : angularTolerance{angularTolerance},
     distanceTolerance{distanceTolerance}, precision{precision}{
 }
 
@@ -19,8 +19,8 @@ McCAD::Decomposition::CommonEdgeFinder::operator()(
     std::vector<std::shared_ptr<Geometry::Edge>> commonEdges;
     auto& firstEdgesList = firstFace->accessBSImpl()->edgesList;
     auto& secondEdgesList = secondFace->accessBSImpl()->edgesList;
-    for (Standard_Integer i = 0; i < firstEdgesList.size(); ++i){
-        for (Standard_Integer j = 0; j < secondEdgesList.size(); ++j){
+    for (int i = 0; i < firstEdgesList.size(); ++i){
+        for (int j = 0; j < secondEdgesList.size(); ++j){
             if(Tools::EdgesComparator{angularTolerance, distanceTolerance,
                     precision}(firstEdgesList[i]->accessEImpl()->edge,
                                secondEdgesList[j]->accessEImpl()->edge)){

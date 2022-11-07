@@ -7,10 +7,11 @@
 // McCAD
 #include "edge_impl.hpp"
 #include "boundSurface_impl.hpp"
-// OCC
+// OCCT
 #include <Standard.hxx>
 #include <TopoDS_Face.hxx>
 #include <gp_Cylinder.hxx>
+#include <BRepBuilderAPI_MakeFace.hxx>
 
 namespace McCAD::Decomposition{
   class SplitSurfaceGenerator{
@@ -35,10 +36,16 @@ namespace McCAD::Decomposition{
       std::optional<TopoDS_Face> generatePlaneOn2Lines(
               const std::shared_ptr<Geometry::Edge>& firstEdge,
               const std::shared_ptr<Geometry::Edge>& secondEdge);
+      //std::optional<TopoDS_Face> generatePlaneOnLineAxis(
+      //        const gp_Cylinder& cylinder,
+      //        const std::shared_ptr<Geometry::Edge>& edge);
+      template <typename gb_surfaceType>
       std::optional<TopoDS_Face> generatePlaneOnLineAxis(
-              const gp_Cylinder& cylinder,
-              const std::shared_ptr<Geometry::Edge>& edge);
+          const gb_surfaceType& surface,
+          const std::shared_ptr<Geometry::Edge>& edge);
   };
 }
+
+#include "splitSurfacesGenerator.tpp"
 
 #endif //SPLITSURFACEGENERATOR_HPP
