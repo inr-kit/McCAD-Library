@@ -1,5 +1,5 @@
-#ifndef ASSISTSURFACEGERAOR_HPP
-#define ASSISTSURFACEGERAOR_HPP
+#ifndef ASSISTSURFACEGENERATOR_HPP
+#define ASSISTSURFACEGENERATOR_HPP
 
 // McCAD
 #include "inputconfig.hpp"
@@ -23,4 +23,4 @@ namespace McCAD::Decomposition{
   };
 }
 
-#endif //ASSISTSURFACEGERAOR_HPP
+#endif //ASSISTSURFACEGENERATOR_HPP

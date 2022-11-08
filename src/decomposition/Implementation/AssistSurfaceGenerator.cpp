@@ -1,4 +1,4 @@
-//C++
+// C++
 #include <math.h>
 #include <memory>
 #include <vector>
@@ -8,6 +8,7 @@
 #include "AssistCylTorSurfaceGenerator.hpp"
 #include "AssistPlnCylSurfaceGenerator.hpp"
 #include "AssistPlnConeSurfaceGenerator.hpp"
+#include "AssistCylConSurfaceGenerator.hpp"
 #include "edge_impl.hpp"
 #include "CommonEdgeFinder.hpp"
 #include "EdgesCombiner.hpp"
@@ -16,7 +17,7 @@
 #include "surfacesMerger.hpp"
 #include "torusConvertor.hpp"
 #include "faceParameters.hpp"
-//OCC
+// OCCT
 #include <PrsDim_AngleDimension.hxx>
 #include <gp_Ax1.hxx>
 #include <BRepAdaptor_Surface.hxx>
@@ -163,6 +164,10 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CONSolid & so
     // Generate assistant surfaces that splits cones first.
     if (solidObj.accessSImpl()->conesList.size() >= 2) {
         //AssistConeConeSurfaceGenerator{ inputConfig }(solidObj);
+    }
+    if (solidObj.accessSImpl()->conesList.size() >= 1 &&
+        solidObj.accessSImpl()->cylindersList.size() >= 1) {
+        //AssistCylConSurfaceGenerator{ inputConfig }(solidObj);
     }
     if (solidObj.accessSImpl()->conesList.size() >= 1 &&
         solidObj.accessSImpl()->planesList.size() >= 1) {

@@ -1,24 +1,23 @@
-#ifndef ASSISTCYLTORSURFACEGENERATOR_HPP
-#define ASSISTCYLTORSURFACEGENERATOR_HPP
+#ifndef ASSISTCYLCONSURFACEGENERATOR_HPP
+#define ASSISTCYLCONSURFACEGENERATOR_HPP
 
 // C++
 #include <optional>
 #include <memory>
 // McCAD
 #include "inputconfig.hpp"
-#include "mixedSolid_impl.hpp"
+#include "conSolid_impl.hpp"
 #include "boundSurface_impl.hpp"
-// OCC
-#include <Standard.hxx>
 
 namespace McCAD::Decomposition{
-  class AssistCylTorSurfaceGenerator{
+  class AssistCylConSurfaceGenerator{
   public:
-      AssistCylTorSurfaceGenerator(const IO::InputConfig& inputConfig);
-      ~AssistCylTorSurfaceGenerator();
+      AssistCylConSurfaceGenerator(const IO::InputConfig& inputConfig);
+      ~AssistCylConSurfaceGenerator();
 
       IO::InputConfig inputConfig;
-      void operator()(Geometry::MXDSolid& solidObj);
+      /*
+      void operator()(Geometry::CONSolid& solidObj);
       std::optional<std::shared_ptr<Geometry::BoundSurface>>
       generateThroughLine(const std::shared_ptr<Geometry::BoundSurface>& firstFace,
                           const std::shared_ptr<Geometry::BoundSurface>& secondFace,
@@ -37,8 +36,8 @@ namespace McCAD::Decomposition{
                               const std::shared_ptr<Geometry::Edge>& firstEdge,
                               const std::shared_ptr<Geometry::Edge>& secondEdge,
                               const Standard_Real& boxDiagonalLength,
-                              const Standard_Real& meshDeflection);
+                              const Standard_Real& meshDeflection); */
   };
 }
 
-#endif //ASSISTCYLTORSURFACEGENERATOR_HPP
+#endif //ASSISTCYLCONSURFACEGENERATOR_HPP
