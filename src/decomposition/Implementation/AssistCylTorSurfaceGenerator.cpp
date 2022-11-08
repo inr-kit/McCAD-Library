@@ -162,7 +162,7 @@ McCAD::Decomposition::AssistCylTorSurfaceGenerator::generateThroughTwoLines(
         gp_Dir normalDir{firstDir.Crossed(secondDir)};
         if(!normalDir.IsNormal(firstDir, inputConfig.angularTolerance) &&
            !normalDir.IsNormal(secondDir, inputConfig.angularTolerance)){
-            // Edges are not planar!. Cannot be used to vreate surface.
+            // Edges are not planar!. Cannot be used to create surface.
             return std::nullopt;
         }
     }

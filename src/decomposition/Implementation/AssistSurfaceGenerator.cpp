@@ -52,22 +52,32 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CYLSolid& sol
             inputConfig.distanceTolerance);
 }
 
+/** ********************************************************************
+* @brief    This function deligates the creation of split surfaces to specialized functions.
+* @param    solidObj is a McCAD mixed solid object.
+* @date     08/11/2022
+* @modified
+* @author   Moataz Harb
+* **********************************************************************/
 void
 McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::MXDSolid& solidObj){
-    // *** Review support for conical solids *** //
     // Generate assistant surface that splits cylinders and tori first.
     if (solidObj.accessSImpl()->cylindersList.size() >= 1 &&
-            solidObj.accessSImpl()->toriList.size() >= 1){
+        solidObj.accessSImpl()->toriList.size() >= 1){
         AssistCylTorSurfaceGenerator{inputConfig}(solidObj);
     }
     if (solidObj.accessSImpl()->cylindersList.size() >= 1 &&
         solidObj.accessSImpl()->conesList.size() >= 1) {
-        // Assist surface for splitting a cylinder and a cone.
+        AssistCylConSurfaceGenerator{ inputConfig }(solidObj);
     }
     if (solidObj.accessSImpl()->toriList.size() >= 1 &&
         solidObj.accessSImpl()->conesList.size() >= 1) {
         // Assist surface for splitting a cylinder and a cone.
     }
+    SurfacesMerger{}(solidObj.accessSImpl()->assistFacesList,
+        solidObj.accessSImpl()->boxDiagonalLength, inputConfig.precision,
+        inputConfig.edgeTolerance, inputConfig.angularTolerance,
+        inputConfig.distanceTolerance);
 }
 
 void
@@ -164,10 +174,6 @@ McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CONSolid & so
     // Generate assistant surfaces that splits cones first.
     if (solidObj.accessSImpl()->conesList.size() >= 2) {
         //AssistConeConeSurfaceGenerator{ inputConfig }(solidObj);
-    }
-    if (solidObj.accessSImpl()->conesList.size() >= 1 &&
-        solidObj.accessSImpl()->cylindersList.size() >= 1) {
-        //AssistCylConSurfaceGenerator{ inputConfig }(solidObj);
     }
     if (solidObj.accessSImpl()->conesList.size() >= 1 &&
         solidObj.accessSImpl()->planesList.size() >= 1) {

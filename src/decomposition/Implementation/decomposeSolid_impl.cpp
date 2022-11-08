@@ -139,7 +139,6 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
 bool
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(
         std::shared_ptr<Geometry::MXDSolid>& solidObj){
-    //**** Review support for conical surfaces! ****
     // Increment the recurrence depth by 1.
     ++recurrenceDepth;
     if(recurrenceDepth > inputConfig.recurrenceDepth){
