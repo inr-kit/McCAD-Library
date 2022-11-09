@@ -9,6 +9,7 @@
 #include "AssistPlnCylSurfaceGenerator.hpp"
 #include "AssistPlnConeSurfaceGenerator.hpp"
 #include "AssistCylConSurfaceGenerator.hpp"
+#include "AssistConConSurfaceGenerator.hpp"
 #include "edge_impl.hpp"
 #include "CommonEdgeFinder.hpp"
 #include "EdgesCombiner.hpp"
@@ -173,7 +174,7 @@ void
 McCAD::Decomposition::AssistSurfaceGenerator::operator()(Geometry::CONSolid & solidObj) {
     // Generate assistant surfaces that splits cones first.
     if (solidObj.accessSImpl()->conesList.size() >= 2) {
-        //AssistConeConeSurfaceGenerator{ inputConfig }(solidObj);
+        AssistConConSurfaceGenerator{ inputConfig }(solidObj);
     }
     if (solidObj.accessSImpl()->conesList.size() >= 1 &&
         solidObj.accessSImpl()->planesList.size() >= 1) {
