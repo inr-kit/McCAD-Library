@@ -58,7 +58,6 @@ McCAD::Decomposition::AssistCylConSurfaceGenerator::operator()(Geometry::MXDSoli
                                 solidObj.accessSImpl()->boxDiagonalLength,
                                 solidObj.accessSImpl()->meshDeflection);
                     if(assistSurface){
-                        std::cout << "VIII" << std::endl;
                         solidObj.accessSImpl()->assistFacesList.push_back(assistSurface.value());
                         solidObj.accessSImpl()->assistFacesMap[cylindersList[i]] = assistSurface.value();
                         solidObj.accessSImpl()->assistFacesMap[conesList[j]] = assistSurface.value();
@@ -112,7 +111,6 @@ McCAD::Decomposition::AssistCylConSurfaceGenerator::generateThroughLine(
                 firstFace->accessSImpl()->face, secondFace->accessSImpl()->face,
                 commonEdge);
     if(splitFace){
-        std::cout << "I" << std::endl;
         std::shared_ptr<Geometry::BoundSurface> assistSurface =
                 SurfaceObjCreator{}(splitFace.value(), boxDiagonalLength,
                                     inputConfig.edgeTolerance);
@@ -130,7 +128,6 @@ McCAD::Decomposition::AssistCylConSurfaceGenerator::generateThroughLine(
         commonEdge->accessEImpl()->useForSplitSurface = true;
         return assistSurface;
     }
-    std::cout << "II" << std::endl;
     return std::nullopt;
 }
 
@@ -154,7 +151,6 @@ McCAD::Decomposition::AssistCylConSurfaceGenerator::generateThroughCurve(
     auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
             inputConfig.precision, inputConfig.angularTolerance}.generatePlaneOnCurve(commonEdge);
     if(splitFace){
-        std::cout << "III" << std::endl;
         std::shared_ptr<Geometry::BoundSurface> assistSurface =
                 SurfaceObjCreator{}(splitFace.value(), boxDiagonalLength,
                                     inputConfig.edgeTolerance);
@@ -172,7 +168,6 @@ McCAD::Decomposition::AssistCylConSurfaceGenerator::generateThroughCurve(
         commonEdge->accessEImpl()->useForSplitSurface = true;
         return assistSurface;
     }
-    std::cout << "IV" << std::endl;
     return std::nullopt;
 }
 
@@ -213,7 +208,6 @@ McCAD::Decomposition::AssistCylConSurfaceGenerator::generateThroughTwoLines(
     auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
             inputConfig.precision, inputConfig.angularTolerance}.generatePlaneOn2Lines(firstEdge, secondEdge);
     if(splitFace){
-        std::cout << "VI" << std::endl;
         std::shared_ptr<Geometry::BoundSurface> assistSurface =
                 SurfaceObjCreator{}(splitFace.value(), boxDiagonalLength,
                                     inputConfig.edgeTolerance);
@@ -233,6 +227,5 @@ McCAD::Decomposition::AssistCylConSurfaceGenerator::generateThroughTwoLines(
         secondEdge->accessEImpl()->useForSplitSurface = true;
         return assistSurface;
     }
-    std::cout << "VII" << std::endl;
     return std::nullopt;
 }

@@ -8,7 +8,7 @@
 #include "CurveUtilities.hpp"
 #include "splitSurfacesGenerator.hpp"
 #include "surfaceObjCerator.hpp"
-//OCC
+// OCCT
 #include <GeomAbs_CurveType.hxx>
 #include <STEPControl_Writer.hxx>
 
@@ -25,8 +25,8 @@ McCAD::Decomposition::AssistCylTorSurfaceGenerator::operator()(
     auto& cylindersList = solidObj.accessSImpl()->cylindersList;
     auto& toriList = solidObj.accessSImpl()->toriList;
     std::vector<std::shared_ptr<Geometry::Edge>> commonEdges;
-    for(Standard_Integer i = 0; i < cylindersList.size(); ++i){
-        for(Standard_Integer j = 0; j < toriList.size(); ++j){
+    for(int i = 0; i < cylindersList.size(); ++i){
+        for(int j = 0; j < toriList.size(); ++j){
             commonEdges = CommonEdgeFinder{inputConfig.angularTolerance,
                     inputConfig.distanceTolerance, inputConfig.precision}(
                         cylindersList[i], toriList[j]);
@@ -43,7 +43,7 @@ McCAD::Decomposition::AssistCylTorSurfaceGenerator::operator()(
                     } else{
                     // If there exists a common edge between cylindrical and tori surfaces,
                     // but failed to generate a split surface then reject solid.
-                    solidObj.accessSImpl()->rejectSolid = Standard_True;
+                    solidObj.accessSImpl()->rejectSolid = true;
                     }
                 } else{
                     // Generate surface through curved edge; circle, ellipse, parabola, hyperabola.
@@ -58,7 +58,7 @@ McCAD::Decomposition::AssistCylTorSurfaceGenerator::operator()(
                     } else{
                         // If there exists a common edge between cylindrical and tori surfaces,
                         // but failed to generate a split surface then reject solid.
-                        solidObj.accessSImpl()->rejectSolid = Standard_True;
+                        solidObj.accessSImpl()->rejectSolid = true;
                     }
                 }
             } else if (commonEdges.size() == 2){
@@ -75,7 +75,7 @@ McCAD::Decomposition::AssistCylTorSurfaceGenerator::operator()(
                     } else{
                         // If there exists a common edge between cylindrical and tori surfaces,
                         // but failed to generate a split surface then reject solid.
-                        solidObj.accessSImpl()->rejectSolid = Standard_True;
+                        solidObj.accessSImpl()->rejectSolid = true;
                     }
                 }
             }
@@ -88,7 +88,7 @@ McCAD::Decomposition::AssistCylTorSurfaceGenerator::generateThroughLine(
         const std::shared_ptr<Geometry::BoundSurface>& firstFace,
         const std::shared_ptr<Geometry::BoundSurface>& secondFace,
         const std::shared_ptr<Geometry::Edge>& commonEdge,
-        const Standard_Real& boxDiagonalLength, const Standard_Real& meshDeflection){
+        const double& boxDiagonalLength, const double& meshDeflection){
     auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
             inputConfig.precision, inputConfig.angularTolerance}.generatePlaneOnLine(
                 firstFace->accessSImpl()->face, secondFace->accessSImpl()->face,
@@ -104,11 +104,11 @@ McCAD::Decomposition::AssistCylTorSurfaceGenerator::generateThroughLine(
         }
         assistSurface->accessBSImpl()->assistEdgesList.push_back(commonEdge);
         assistSurface->accessSImpl()->throughConcaveEdges += 1;
-        assistSurface->accessSImpl()->isAssistSurface = Standard_True;
+        assistSurface->accessSImpl()->isAssistSurface = true;
         // Set the assist surface reference to the original surfaces.
-        firstFace->accessSImpl()->hasAssistSurface = Standard_True;
-        secondFace->accessSImpl()->hasAssistSurface = Standard_True;
-        commonEdge->accessEImpl()->useForSplitSurface = Standard_True;
+        firstFace->accessSImpl()->hasAssistSurface = true;
+        secondFace->accessSImpl()->hasAssistSurface = true;
+        commonEdge->accessEImpl()->useForSplitSurface = true;
         return assistSurface;
     }
     return std::nullopt;
@@ -119,7 +119,7 @@ McCAD::Decomposition::AssistCylTorSurfaceGenerator::generateThroughCurve(
         const std::shared_ptr<Geometry::BoundSurface>& firstFace,
         const std::shared_ptr<Geometry::BoundSurface>& secondFace,
         const std::shared_ptr<Geometry::Edge>& commonEdge,
-        const Standard_Real& boxDiagonalLength, const Standard_Real& meshDeflection){
+        const double& boxDiagonalLength, const double& meshDeflection){
     auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
             inputConfig.precision, inputConfig.angularTolerance}.generatePlaneOnCurve(commonEdge);
     if(splitFace){
@@ -133,11 +133,11 @@ McCAD::Decomposition::AssistCylTorSurfaceGenerator::generateThroughCurve(
         }
         assistSurface->accessBSImpl()->assistEdgesList.push_back(commonEdge);
         assistSurface->accessSImpl()->throughConcaveEdges += 1;
-        assistSurface->accessSImpl()->isAssistSurface = Standard_True;
+        assistSurface->accessSImpl()->isAssistSurface = true;
         // Set the assist surface reference to the original surfaces.
-        firstFace->accessSImpl()->hasAssistSurface = Standard_True;
-        secondFace->accessSImpl()->hasAssistSurface = Standard_True;
-        commonEdge->accessEImpl()->useForSplitSurface = Standard_True;
+        firstFace->accessSImpl()->hasAssistSurface = true;
+        secondFace->accessSImpl()->hasAssistSurface = true;
+        commonEdge->accessEImpl()->useForSplitSurface = true;
         return assistSurface;
     }
     return std::nullopt;
@@ -149,7 +149,7 @@ McCAD::Decomposition::AssistCylTorSurfaceGenerator::generateThroughTwoLines(
         const std::shared_ptr<Geometry::BoundSurface>& secondFace,
         const std::shared_ptr<Geometry::Edge>& firstEdge,
         const std::shared_ptr<Geometry::Edge>& secondEdge,
-        const Standard_Real& boxDiagonalLength, const Standard_Real& meshDeflection){
+        const double& boxDiagonalLength, const double& meshDeflection){
     // Need first to assert that the edges are planar.
     gp_Vec firstVec(firstEdge->accessEImpl()->startPoint,
                     firstEdge->accessEImpl()->endPoint),
@@ -180,12 +180,12 @@ McCAD::Decomposition::AssistCylTorSurfaceGenerator::generateThroughTwoLines(
         assistSurface->accessBSImpl()->assistEdgesList.push_back(firstEdge);
         assistSurface->accessBSImpl()->assistEdgesList.push_back(secondEdge);
         assistSurface->accessSImpl()->throughConcaveEdges += 2;
-        assistSurface->accessSImpl()->isAssistSurface = Standard_True;
+        assistSurface->accessSImpl()->isAssistSurface = true;
         // Set the assist surface reference to the original surfaces.
-        firstFace->accessSImpl()->hasAssistSurface = Standard_True;
-        secondFace->accessSImpl()->hasAssistSurface = Standard_True;
-        firstEdge->accessEImpl()->useForSplitSurface = Standard_True;
-        secondEdge->accessEImpl()->useForSplitSurface = Standard_True;
+        firstFace->accessSImpl()->hasAssistSurface = true;
+        secondFace->accessSImpl()->hasAssistSurface = true;
+        firstEdge->accessEImpl()->useForSplitSurface = true;
+        secondEdge->accessEImpl()->useForSplitSurface = true;
         return assistSurface;
     }
     return std::nullopt;
