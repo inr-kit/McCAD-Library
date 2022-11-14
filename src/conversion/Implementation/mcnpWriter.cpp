@@ -68,6 +68,7 @@ McCAD::Conversion::MCNPWriter::operator()(
 * @brief   The operator calls the proper cell expression generator of solids.
 * @param   compoundList is a list of compound objects.
 * @date    31/12/2021
+* modified 14/11/2022
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -80,6 +81,12 @@ McCAD::Conversion::MCNPWriter::processSolids(
             if(compound->cylSolidsList.size() > 0){
                 for(const auto& cylSolidObj : compound->cylSolidsList){
                     Decomposition::AssistSurfaceGenerator{inputConfig}(*cylSolidObj);
+                }
+            }
+            // If the solid contains cones, generate assisting surfaces.
+            if (compound->conSolidsList.size() > 0) {
+                for (const auto& conSolidObj : compound->conSolidsList) {
+                    Decomposition::AssistSurfaceGenerator{ inputConfig }(*conSolidObj);
                 }
             }
             // Generate MCNP expression for the solids in the compound object.
