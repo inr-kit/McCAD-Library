@@ -4,8 +4,7 @@
 // C++
 #include <optional>
 #include <utility>
-// OCC
-#include <Standard.hxx>
+// OCCT
 #include <TopoDS_Shape.hxx>
 #include <Bnd_OBB.hxx>
 #include <TopoDS_Solid.hxx>
@@ -15,12 +14,15 @@
 namespace McCAD::Decomposition{
   class SolidSplitter{
   public:
+      SolidSplitter(const int & debugLevel);
+      ~SolidSplitter();
       std::optional<std::pair<TopoDS_Shape, TopoDS_Shape>> operator()(
               const TopoDS_Solid& solidToSplit, const Bnd_OBB& obb,
               const TopoDS_Face& splittingFace) const;
       TopoDS_Shape calculateOBB(Bnd_OBB obb,
-                                Standard_Real clearanceTolerance = 0.4) const;
+                                double clearanceTolerance = 0.4) const;
   private:
+      int debugLevel{ 0 };
       using PointPair = std::pair<gp_Pnt, gp_Pnt>;
       using SolidPair = std::pair<TopoDS_Solid, TopoDS_Solid>;
       using ShapePair = std::pair<TopoDS_Shape, TopoDS_Shape>;
@@ -39,4 +41,4 @@ namespace McCAD::Decomposition{
   };
 }
 
-#endif
+#endif //SOLIDSPLITTER_HPP

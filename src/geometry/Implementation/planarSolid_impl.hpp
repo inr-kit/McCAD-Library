@@ -4,16 +4,15 @@
 // McCAD
 #include "planarSolid.hpp"
 #include "solid_impl.hpp"
-// OCC
-#include <Standard.hxx>
 
 namespace McCAD::Geometry{
   class PLSolid::Impl{
   public:
     void judgeDecomposeSurfaces(Solid::Impl*& solidImpl,
-                                Standard_Real precision = 1.0e-6,
-                                Standard_Real distanceTolerance = 1.0e-6);
-    void judgeThroughConcaveEdges(Solid::Impl*& solidImpl);
+                                double precision = 1.0e-6,
+                                double distanceTolerance = 1.0e-6);
+    void judgeThroughConcaveEdges(Solid::Impl*& solidImpl, 
+                                  const double& distanceTolerance);
   };
 }
 

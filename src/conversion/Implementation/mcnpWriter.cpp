@@ -68,6 +68,7 @@ McCAD::Conversion::MCNPWriter::operator()(
 * @brief   The operator calls the proper cell expression generator of solids.
 * @param   compoundList is a list of compound objects.
 * @date    31/12/2021
+* modified 14/11/2022
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -82,9 +83,15 @@ McCAD::Conversion::MCNPWriter::processSolids(
                     Decomposition::AssistSurfaceGenerator{inputConfig}(*cylSolidObj);
                 }
             }
+            // If the solid contains cones, generate assisting surfaces.
+            if (compound->conSolidsList.size() > 0) {
+                for (const auto& conSolidObj : compound->conSolidsList) {
+                    Decomposition::AssistSurfaceGenerator{ inputConfig }(*conSolidObj);
+                }
+            }
             // Generate MCNP expression for the solids in the compound object.
             for(const auto& solidObj : compound->solidsList){
-                MCNPExprGenerator{inputConfig.precision, scalingFactor}(solidObj);
+                MCNPExprGenerator{inputConfig.precision, scalingFactor, inputConfig.angularTolerance}(solidObj);
             }
         });
     }
@@ -97,7 +104,7 @@ McCAD::Conversion::MCNPWriter::processSolids(
 * @param    uniqueMap is a map of unique surfaces IDs and surfaces.
 * @returns  An optional integer ID of the duplicate surface.
 * @date     31/12/2021
-* @modified 02/06/2022
+* @modified 03/11/2022
 * @author   Moataz Harb
 * **********************************************************************/
 std::optional<int>
@@ -139,10 +146,11 @@ McCAD::Conversion::MCNPWriter::findDuplicate(
 }
 
 /** ********************************************************************
-* @brief   The function creates a unique ID for all surfaces of all solids in the list of compounds.
-* @param   compoundList is a list of compound objects.
-* @date    31/12/2021
-* @author  Moataz Harb
+* @brief    The function creates a unique ID for all surfaces of all solids in the list of compounds.
+* @param    compoundList is a list of compound objects.
+* @date     31/12/2021
+* @modified 03/11/2022
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Conversion::MCNPWriter::addUniqueSurfNumbers(
@@ -183,6 +191,17 @@ McCAD::Conversion::MCNPWriter::addUniqueSurfNumbers(
                         uniqueSurfaces[surfNumber] = surface->accessSImpl()->surfExpr;
                         ++surfNumber;
                     }
+                } else if (surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Cone)) {
+                    auto duplicateID = findDuplicate(surface, uniqueCones);
+                    if (duplicateID) {
+                        surface->accessSImpl()->uniqueID = *duplicateID;
+                    }
+                    else {
+                        surface->accessSImpl()->uniqueID = surfNumber;
+                        uniqueCones[surfNumber] = surface;
+                        uniqueSurfaces[surfNumber] = surface->accessSImpl()->surfExpr;
+                        ++surfNumber;
+                    }
                 }
             }
             for(const auto& surface : solidObj->accessSImpl()->unionList){
@@ -215,6 +234,17 @@ McCAD::Conversion::MCNPWriter::addUniqueSurfNumbers(
                     } else{
                         surface->accessSImpl()->uniqueID = surfNumber;
                         uniqueTori[surfNumber] = surface;
+                        uniqueSurfaces[surfNumber] = surface->accessSImpl()->surfExpr;
+                        ++surfNumber;
+                    }
+                } else if (surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Cone)) {
+                    auto duplicateID = findDuplicate(surface, uniqueCones);
+                    if (duplicateID) {
+                        surface->accessSImpl()->uniqueID = *duplicateID;
+                    }
+                    else {
+                        surface->accessSImpl()->uniqueID = surfNumber;
+                        uniqueCones[surfNumber] = surface;
                         uniqueSurfaces[surfNumber] = surface->accessSImpl()->surfExpr;
                         ++surfNumber;
                     }
@@ -311,7 +341,7 @@ McCAD::Conversion::MCNPWriter::createVoidMap(
     if(inputConfig.voidGeneration) addDaughterVoids(voidCell);
     int voidSurfNumber = inputConfig.startSurfNum + uniqueSurfaces.size();
     for (const auto& member : voidCellsMap){
-        MCNPExprGenerator{inputConfig.precision, scalingFactor}(member.second);
+        MCNPExprGenerator{inputConfig.precision, scalingFactor, inputConfig.angularTolerance}(member.second);
         member.second->voidSurfNumber = voidSurfNumber;
         uniqueSurfaces[voidSurfNumber] = member.second->voidSurfExpr;
         ++voidSurfNumber;
@@ -421,7 +451,7 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
             // Add materials.
             if(std::get<0>(compound.second->matInfo) == "void" ||
                     std::get<1>(compound.second->matInfo) == 0.0){
-                cellExpr += boost::str(boost::format(" %9.5f") % 0.0);
+                cellExpr += boost::str(boost::format(" %d") % 0.0);
             } else{
                 cellExpr += boost::str(boost::format(" %d %9.5f")
                                        % compound.second->matID
@@ -457,7 +487,7 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
                 // Add materials.
                 if(std::get<0>(compound.second->matInfo) == "void" ||
                         std::get<1>(compound.second->matInfo) == 0.0){
-                    cellExpr += boost::str(boost::format(" %9.5f") % 0.0);
+                    cellExpr += boost::str(boost::format(" %d") % 0.0);
                 } else{
                     cellExpr += boost::str(boost::format(" %d %9.5f")
                                            % compound.second->matID
@@ -501,7 +531,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream,
         std::string voidExpr{boost::str(boost::format("%d") % voidNumber)};
         if (voidExpr.size() < 5) voidExpr.resize(5, *const_cast<char*>(" "));
         continueSpacing = voidExpr.size() + 1;
-        voidExpr += boost::str(boost::format(" %9.5f") % 0.0);
+        voidExpr += boost::str(boost::format(" %d") % 0.0);
         std::string voidSolidsExpr;
         int voidSurfNumber{voidCellsMap[std::make_tuple(0, 0, "r")]->voidSurfNumber};
         voidSolidsExpr += boost::str(boost::format(" %d") % (-1 * voidSurfNumber));
@@ -524,7 +554,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream,
         std::string voidExpr{boost::str(boost::format("%d") % voidNumber)};
         if (voidExpr.size() < 5) voidExpr.resize(5, *const_cast<char*>(" "));
         continueSpacing = voidExpr.size() + 1;
-        voidExpr += boost::str(boost::format(" %9.5f") % 0.0);
+        voidExpr += boost::str(boost::format(" %d") % 0.0);
         std::string voidSolidsExpr;
         voidSolidsExpr += boost::str(boost::format(" %d") % (-1 * member.second->voidSurfNumber));
         // Initialise void cell - material cells map string stream.
@@ -582,7 +612,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream,
     std::string graveYardExpr{boost::str(boost::format("%d") % voidNumber)};
     if (graveYardExpr.size() < 5) graveYardExpr.resize(5, *const_cast<char*>(" "));
     continueSpacing = graveYardExpr.size() + 1;
-    graveYardExpr += boost::str(boost::format(" %9.5f") % 0.0);
+    graveYardExpr += boost::str(boost::format(" %d") % 0.0);
     graveYardExpr += boost::str(boost::format(" %d") % voidSurfNumber);
     graveYardExpr += " Imp:N=0.0 Imp:P=0.0 Imp:E=0.0 $U=100000";
     outputStream << graveYardExpr << std::endl;
@@ -592,7 +622,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream,
     std::string volumeCellExpr{boost::str(boost::format("%d") % (voidNumber + 1))};
     if (volumeCellExpr.size() < 5) volumeCellExpr.resize(5, *const_cast<char*>(" "));
     continueSpacing = volumeCellExpr.size() + 1;
-    volumeCellExpr += boost::str(boost::format(" %9.5f") % 0.0);
+    volumeCellExpr += boost::str(boost::format(" %d") % 0.0);
     volumeCellExpr += boost::str(boost::format(" -%d %d Imp:N=1.0 Imp:P=1.0 Imp:E=0.0")
                                  % (uniqueSurfaces.size() + inputConfig.startSurfNum)
                                  % voidSurfNumber);
@@ -600,7 +630,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream,
     std::string volumeCellGYExpr{boost::str(boost::format("%d") % (voidNumber + 2))};
     if (volumeCellGYExpr.size() < 5) volumeCellGYExpr.resize(5, *const_cast<char*>(" "));
     continueSpacing = volumeCellGYExpr.size() + 1;
-    volumeCellGYExpr += boost::str(boost::format(" %9.5f") % 0.0);
+    volumeCellGYExpr += boost::str(boost::format(" %d") % 0.0);
     volumeCellGYExpr += boost::str(boost::format(" %d Imp:N=0.0 Imp:P=0.0 Imp:E=0.0")
                                  % (uniqueSurfaces.size() + inputConfig.startSurfNum));
     outputStream << "c " << volumeCellGYExpr << std::endl;

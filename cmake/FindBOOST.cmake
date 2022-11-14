@@ -36,7 +36,7 @@ else(LINUX_OS)
         include_directories(${BOOST_INCLUDE_DIRS})
     endif()
     if(Boost_FOUND AND NOT DEFINED BOOST_LIBRARY_DIRS)
-        set(BOOST_LIBRARY_DIRS "${BOOST_CUSTOM_ROOT}/libs")
+        set(BOOST_LIBRARY_DIRS "${BOOST_CUSTOM_ROOT}\\libs")
     endif()
 endif()
 

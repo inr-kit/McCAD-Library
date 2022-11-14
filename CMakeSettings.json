@@ -1,7 +1,7 @@
 ﻿{
   "configurations": [
     {
-      "name": "McCAD_develop",
+      "name": "McCAD_conical",
       "generator": "Visual Studio 17 2022 Win64",
       "configurationType": "Release",
       "inheritEnvironments": [ "msvc_x64_x64" ],

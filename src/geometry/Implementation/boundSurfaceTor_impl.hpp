@@ -6,7 +6,6 @@
 // McCAD
 #include "boundSurfaceTor.hpp"
 #include "surface_impl.hpp"
-// OCC
 
 namespace McCAD::Geometry{
   class BoundSurfaceTor::Impl {
@@ -17,8 +16,8 @@ namespace McCAD::Geometry{
     BoundSurfaceTor* boundSurfaceTor;
 
     std::string surfaceType = "Torus";
-    void generateExtendedTor(const Standard_Real& boxDiagonalLength,
-                               Standard_Real degenerateEdgesTolerance = 1.0e-7);
+    void generateExtendedTor(const double& boxDiagonalLength,
+                             double degenerateEdgesTolerance = 1.0e-7);
   };
 }
 

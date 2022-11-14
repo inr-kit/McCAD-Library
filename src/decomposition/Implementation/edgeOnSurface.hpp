@@ -14,9 +14,9 @@ namespace McCAD::Decomposition{
     public:
       EdgeOnSurface() = default;
 
-      Standard_Boolean operator()(const TopoDS_Face& face,
-                                   const McCAD::Geometry::Edge& aEdge,
-                                   Standard_Real tolerance = 1.0e-4);
+      bool operator()(const TopoDS_Face& face,
+                      const McCAD::Geometry::Edge& aEdge,
+                      double distanceTolerance = 1.0e-6);
     };
 }
 

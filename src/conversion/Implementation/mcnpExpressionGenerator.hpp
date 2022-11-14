@@ -14,11 +14,12 @@ namespace McCAD::Conversion{
     class MCNPExprGenerator {
     public:
         MCNPExprGenerator();
-        MCNPExprGenerator(const double& precision, const double& scalingFactor);
+        MCNPExprGenerator(const double& precision, const double& scalingFactor,
+                          const double& angularTolerance);
         ~MCNPExprGenerator();
 
     private:
-        double precision{1.0e-6}, scalingFactor{1.0};
+        double precision{1.0e-6}, scalingFactor{1.0}, angularTolerance{1.0e-4 * M_PI};
     public:
         void operator()(const std::shared_ptr<Geometry::Solid>& solidObj);
         void operator()(const std::shared_ptr<VoidCell>& voidCell);
@@ -30,6 +31,8 @@ namespace McCAD::Conversion{
                             const double& precision);
         void genTorSurfExpr(const std::shared_ptr<Geometry::BoundSurface>& torSurface,
                             const double& precision);
+        void genConeSurfExpr(const std::shared_ptr<Geometry::BoundSurface>& coneSurface,
+                             const double& precision);
         void createSurfacesList(const std::shared_ptr<Geometry::Solid>& solidObj);
         void genCellExpr(const std::shared_ptr<Geometry::Solid>& solidObj);
         void genVoidExpr(const std::shared_ptr<VoidCell>& voidCell);

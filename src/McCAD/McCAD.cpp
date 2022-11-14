@@ -6,6 +6,7 @@
 #include <ctime>
 #include <list>
 #include <algorithm>
+#include <iomanip>
 // McCAD
 #include "info.hpp"
 #include "inputconfig.hpp"
@@ -29,11 +30,11 @@ int main (int argc, char* argv[]){
          timeEnd{std::chrono::system_clock::now()};
     std::time_t timeStart_t = std::chrono::system_clock::to_time_t(timeStart);
     std::cout << "Running McCAD v" << McCAD::Info::McCADVersion << " / " <<
-                 std::ctime(&timeStart_t) << std::endl;
+                 std::put_time(std::localtime(&timeStart_t), "%F %T") << std::endl;
     std::filesystem::path currentPath = std::filesystem::current_path();
     McCAD::IO::InputConfig inputConfig{currentPath};
     if (argc == 1){
-        // No arguments given, write the config file to desk.
+        // No arguments given, write the config file to disk.
         inputConfig.writeTemplate();
         std::cout << "A template file, McCADInputConfig.i, with run parameters "
                      "has been created in\n" << currentPath.string() << std::endl;
@@ -59,7 +60,7 @@ int main (int argc, char* argv[]){
             // Loop over the list of file names and load them consequetively.
             for(int i = 0; i < inputConfig.inputFileNames.size(); ++i){
                 inputConfig.inputFileName = inputConfig.inputFileNames[i];
-                std::cout << "> Processing " << inputConfig.inputFileName << std::endl;
+                std::cout << "  > Processing " << inputConfig.inputFileName << std::endl;
                 McCAD::IO::STEPReader reader{inputConfig};
             }
             timeEnd = std::chrono::system_clock::now();
@@ -72,7 +73,7 @@ int main (int argc, char* argv[]){
                 bool rejectConversion;
                 for(int i = 0; i < inputConfig.inputFileNames.size(); ++i){
                     inputConfig.inputFileName = inputConfig.inputFileNames[i];
-                    std::cout << "> Processing " << inputConfig.inputFileName << std::endl;
+                    std::cout << "  > Processing " << inputConfig.inputFileName << std::endl;
                     // Load the input file.
                     std::cout << "***********************" << std::endl;
                     std::cout << "** Loading STEP file **" << std::endl;

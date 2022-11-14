@@ -133,33 +133,36 @@ Building of the McCAD library is supported on both Linux and Windows operating s
     \end{itemize}
 
   \subsection{Windows}
-    Listed below are the currently supported Windows versions:
+    Listed below are the currently supported Windows versions (testing of installation on other versions is still underway!):
     \begin{itemize}
   	  \item Windows 10
     \end{itemize} 
-    Testing of installation on other versions is still underway! Below are general steps to build McCAD library and its dependencies.
+    Below are the general steps to build McCAD library and its dependencies.
     \begin{itemize}
 	  \item \textbf{CMake} (optional)
  	  \begin{itemize}
-    	\item \emph{NOTE}: If usage of IDE - such Microsoft Visual Studio (VS) - is intended, then installing CMake can be skipped since most IDE builds CMake by default.
+    	\item \emph{NOTE}: If usage of IDE - such Microsoft Visual Studio (VS) - is intended, then installing CMake can be skipped since most IDE builds CMake by default. However, it is recommended to update CMake and adding the full path to the bin folder to the "Path" environment variable.
  		\item download and run the installer cmake-3.23.1-windows-x86\_64.msi from \url{https://cmake.org/download/}.
   	  \end{itemize}
-	  \item \textbf{Microsoft Visual Studio} (optional)
+	  \item \textbf{Microsoft Visual Studio}
 	  \begin{itemize}
-		\item download and run the "community" installer from \\\url{https://visualstudio.microsoft.com/downloads/}.
+		\item download the "community" installer (version 17 2022) from \\\url{https://visualstudio.microsoft.com/downloads/}.
+		\item run the installer and make sure to enable "Desktop development with C++" on the main menu and ""Windows 10 SDK" on the side menu under "Desktop development with C++".
 	  \end{itemize}
       \item \textbf{Boost C++ libraries}
       \begin{itemize}
     	\item download boost\_1\_78\_0.zip from \url{https://www.boost.org/users/download/}.
     	\item unzip boost\_1\_78\_0.zip.
-    	\item \emph{NOTE}: if boost will be used for other applications then you can check the documentation in index.html in the unzipped folder.
+    	\item \emph{NOTE}: if boost will be used for other applications then you can check the documentation in index.html in the unzipped folder for instruction on building the library. Otherwise, no need to build the library since McCAD only uses the header files.
       \end{itemize}
       \item \textbf{Open CASCADE Technology (OCCT)}
 	  \begin{itemize}
 		\item download and run the installer opencascade-7.5.0-vc14-64.exe from \url{https://dev.opencascade.org/release/previous}.
+		\item after successful installation there will be different folders for the many toolkits that come with a full installation of opencascade; such as freeimage, ffmpeg, openvr, vtk, etc. It is recommended to add the full path to all bin folders to the Windows "Path" environment variable.
 	  \end{itemize}
 	  \item \textbf{McCAD}
 	  \begin{itemize}
+	  	\item It is recommended to restart the PC/Laptop before proceeding to allow the changes to the "Path" environment from above to take effect. 
 		\item download, by selecting "Code $>$ Download ZIP", source code from \\\url{https://github.com/inr-kit/McCAD-Library}.
 		\item unzip McCAD\_Library.
 		\item open MSVC and select the McCAD\_Library folder.
@@ -175,7 +178,7 @@ Building of the McCAD library is supported on both Linux and Windows operating s
 		\end{itemize}
 		\item from the top menu select "Build $>$ Build All".
 		\item after successful completion of the previous step, from the top menu select "Build $>$ Install McCAD".
-		\item add full path to McCAD\_Library/build/bin to the PATH environment variable. 
+		\item add the full path to McCAD\_Library/build/bin to the PATH environment variable. 
 	  \end{itemize}
     \end{itemize}
 

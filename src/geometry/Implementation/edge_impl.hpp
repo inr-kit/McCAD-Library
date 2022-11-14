@@ -5,8 +5,7 @@
 #include <string>
 // McCAD
 #include "edge.hpp"
-// OCC
-#include <Standard.hxx>
+// OCCT
 #include <TopoDS_Edge.hxx>
 #include <gp_Pnt.hxx>
 
@@ -16,12 +15,12 @@ namespace McCAD::Geometry{
     TopoDS_Edge edge;
     gp_Pnt startPoint, endPoint, middlePoint, extraPoint;
     std::string edgeType;
-    Standard_Integer convexity;
-    Standard_Boolean useForSplitSurface;
+    int convexity;
+    bool useForSplitSurface;
 
     void initiate(const TopoDS_Edge& edge);
     void calculatePoints();
-    Standard_Boolean isEqual(const Edge& that);
+    bool isEqual(const Edge& that);
   };
 }
 

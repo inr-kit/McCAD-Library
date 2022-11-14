@@ -11,6 +11,14 @@ McCAD::Decomposition::SolidObjCreator::SolidObjCreator(const IO::InputConfig& in
 
 McCAD::Decomposition::SolidObjCreator::~SolidObjCreator(){}
 
+/** ********************************************************************
+* @brief    A function that creates a solid object.
+* @param    shape is an OCCT shape.
+* @return   A McCAD solid object.
+* @date     31/12/2020
+* @modified 25/08/2022
+* @author   Moataz Harb
+* **********************************************************************/
 template<typename solidObjType>
 std::shared_ptr<solidObjType>
 McCAD::Decomposition::SolidObjCreator::createObj(const TopoDS_Shape& shape){

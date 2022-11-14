@@ -2,20 +2,21 @@
 #define EXTENDEDFACECREATOR_HPP
 
 // OCC
-#include <Standard.hxx>
 #include <TopoDS_Face.hxx>
 
 namespace McCAD::Tools{
   class ExtendedFaceCreator{
   public:
       ExtendedFaceCreator();
-      ExtendedFaceCreator(const Standard_Real& edgeTolerance);
+      ExtendedFaceCreator(const double& edgeTolerance);
       ~ExtendedFaceCreator();
   private:
-      Standard_Real edgeTolerance{1.0e-7};
+      double edgeTolerance{1.0e-7};
   public:
       TopoDS_Face generateExtendedPlane(const TopoDS_Face& face,
-                                        const Standard_Real& boxDiagonalLength);
+                                        const double& boxDiagonalLength);
+      TopoDS_Face generateExtendedCone(const TopoDS_Face& face,
+                                       const double& boxDiagonalLength);
     };
 }
 

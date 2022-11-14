@@ -58,14 +58,14 @@ if(LINUX_OS)
 
 else(LINUX_OS)
     if(DEFINED OCC_CUSTOM_ROOT)
-        set(OCC_INCLUDE_DIRS "${OCC_CUSTOM_ROOT}/inc")
+        set(OCC_INCLUDE_DIRS "${OCC_CUSTOM_ROOT}\\inc")
         set(OpenCASCADE_LIBRARIES   TKBin TKBinL TKBinTObj TKBinXCAF TKBO TKBool TKBRep TKCAF TKCDF TKLCAF 
                                     TKSTL TKXMesh TKernel TKMath TKService TKTObj TKXml TKFeat TKMesh TKTopAlgo 
                                     TKXmlL TKFillet TKMeshVS TKShHealing TKV3d TKXmlTObj TKG2d TKXmlXCAF TKG3d 
                                     TKOffset TKVRML TKXSBase TKGeomAlgo TKOpenGl TKSTEP TKXCAF TKGeomBase TKSTEP209 
                                     TKHLR TKSTEPAttr TKXDEIGES TKIGES TKPrim TKSTEPBase TKXDESTEP)
         if(BUILD_SHARED)
-            set(OCC_LIBRARY_DIRS "${OCC_CUSTOM_ROOT}/win64/vc14/bin")
+            set(OCC_LIBRARY_DIRS "${OCC_CUSTOM_ROOT}\\win64\\vc14\\bin")
             set(OCC_LIBRARIES_SHARED)
             foreach (OCC_lib ${OpenCASCADE_LIBRARIES})
                 set(OCC_LIB "OCC_LIB-NOTFOUND")
@@ -77,7 +77,7 @@ else(LINUX_OS)
             endforeach ()
         endif()
         if(BUILD_STATIC)
-            set(OCC_LIBRARY_DIRS "${OCC_CUSTOM_ROOT}/win64/vc14/lib")
+            set(OCC_LIBRARY_DIRS "${OCC_CUSTOM_ROOT}\\win64\\vc14\\lib")
             set(OCC_LIBRARIES_STATIC)
             foreach (OCC_lib ${OpenCASCADE_LIBRARIES})
                 set(OCC_LIB "OCC_LIB-NOTFOUND")

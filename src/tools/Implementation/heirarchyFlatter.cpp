@@ -17,11 +17,12 @@ McCAD::Tools::HeirarchyFlatter::~HeirarchyFlatter(){
 }
 
 /** ********************************************************************
-* @brief   An operator that flattens compound shapes.
-* @param   inputShapesList is a list of OCCT shapes.
-* @return  A pair of lists containing the accepted and rejected solids.
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    An operator that flattens compound shapes.
+* @param    inputShapesList is a list of OCCT shapes.
+* @return   A pair of lists containing the accepted and rejected solids.
+* @date     31/12/2020
+* @modified 
+* @author   Moataz Harb
 * **********************************************************************/
 McCAD::Tools::HeirarchyFlatter::output_pair
 McCAD::Tools::HeirarchyFlatter::operator()(
@@ -34,11 +35,12 @@ McCAD::Tools::HeirarchyFlatter::operator()(
 }
 
 /** ********************************************************************
-* @brief   An operator that flattens compound shapes.
-* @param   shape is a OCCT shape.
-* @return  A pair of lists containing the accepted and rejected solids.
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    An operator that flattens compound shapes.
+* @param    shape is an OCCT shape.
+* @return   A pair of lists containing the accepted and rejected solids.
+* @date     31/12/2020
+* @modified 
+* @author   Moataz Harb
 * **********************************************************************/
 McCAD::Tools::HeirarchyFlatter::output_pair
 McCAD::Tools::HeirarchyFlatter::operator()(const TopoDS_Shape& shape){
@@ -48,10 +50,11 @@ McCAD::Tools::HeirarchyFlatter::operator()(const TopoDS_Shape& shape){
 }
 
 /** ********************************************************************
-* @brief   A function that processes shapes.
-* @param   shape is a OCCT shape.
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    A function that processes shapes.
+* @param    shape is a OCCT shape.
+* @date     31/12/2020
+* @modified 
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Tools::HeirarchyFlatter::process(const TopoDS_Shape& shape){

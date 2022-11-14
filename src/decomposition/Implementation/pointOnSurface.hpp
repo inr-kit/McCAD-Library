@@ -1,8 +1,7 @@
 #ifndef POINTONSURFACE_HPP
 #define POINTONSURFACE_HPP
 
-//OCC
-#include <Standard.hxx>
+//OCCT
 #include <TopoDS_Face.hxx>
 #include "gp_Pnt.hxx"
 
@@ -11,9 +10,9 @@ namespace McCAD::Decomposition{
     public:
         PointOnSurface() = default;
 
-        Standard_Boolean operator()(const TopoDS_Face& face,
+        bool operator()(const TopoDS_Face& face,
                                     const gp_Pnt& aPoint,
-                                    const Standard_Real& distanceTolerance);
+                                    const double& distanceTolerance);
     };
 }
 

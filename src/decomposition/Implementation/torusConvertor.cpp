@@ -199,7 +199,7 @@ McCAD::Decomposition::TorusConvertor::splitSolid(TopoDS_Solid& solid,
     solidObj.createBB();
     solidObj.calcMeshDeflection(inputConfig.scalingFactor);
     auto extFace = SurfaceObjCreator{}(splitFace, solidObj.boxDiagonalLength, inputConfig.edgeTolerance);
-    auto resultSolids = SolidSplitter{}(solid, solidObj.obb,
+    auto resultSolids = SolidSplitter{ inputConfig.debugLevel}(solid, solidObj.obb,
                                         extFace->accessSImpl()->extendedFace);
     return resultSolids;
 }
