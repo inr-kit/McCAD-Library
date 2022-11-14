@@ -444,7 +444,7 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
             // Add materials.
             if(std::get<0>(compound.second->matInfo) == "void" ||
                     std::get<1>(compound.second->matInfo) == 0.0){
-                cellExpr += boost::str(boost::format(" %9.5f") % 0.0);
+                cellExpr += boost::str(boost::format(" %d") % 0.0);
             } else{
                 cellExpr += boost::str(boost::format(" %d %9.5f")
                                        % compound.second->matID
@@ -480,7 +480,7 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
                 // Add materials.
                 if(std::get<0>(compound.second->matInfo) == "void" ||
                         std::get<1>(compound.second->matInfo) == 0.0){
-                    cellExpr += boost::str(boost::format(" %9.5f") % 0.0);
+                    cellExpr += boost::str(boost::format(" %d") % 0.0);
                 } else{
                     cellExpr += boost::str(boost::format(" %d %9.5f")
                                            % compound.second->matID
@@ -524,7 +524,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream,
         std::string voidExpr{boost::str(boost::format("%d") % voidNumber)};
         if (voidExpr.size() < 5) voidExpr.resize(5, *const_cast<char*>(" "));
         continueSpacing = voidExpr.size() + 1;
-        voidExpr += boost::str(boost::format(" %9.5f") % 0.0);
+        voidExpr += boost::str(boost::format(" %d") % 0.0);
         std::string voidSolidsExpr;
         int voidSurfNumber{voidCellsMap[std::make_tuple(0, 0, "r")]->voidSurfNumber};
         voidSolidsExpr += boost::str(boost::format(" %d") % (-1 * voidSurfNumber));
@@ -547,7 +547,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream,
         std::string voidExpr{boost::str(boost::format("%d") % voidNumber)};
         if (voidExpr.size() < 5) voidExpr.resize(5, *const_cast<char*>(" "));
         continueSpacing = voidExpr.size() + 1;
-        voidExpr += boost::str(boost::format(" %9.5f") % 0.0);
+        voidExpr += boost::str(boost::format(" %d") % 0.0);
         std::string voidSolidsExpr;
         voidSolidsExpr += boost::str(boost::format(" %d") % (-1 * member.second->voidSurfNumber));
         // Initialise void cell - material cells map string stream.
@@ -605,7 +605,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream,
     std::string graveYardExpr{boost::str(boost::format("%d") % voidNumber)};
     if (graveYardExpr.size() < 5) graveYardExpr.resize(5, *const_cast<char*>(" "));
     continueSpacing = graveYardExpr.size() + 1;
-    graveYardExpr += boost::str(boost::format(" %9.5f") % 0.0);
+    graveYardExpr += boost::str(boost::format(" %d") % 0.0);
     graveYardExpr += boost::str(boost::format(" %d") % voidSurfNumber);
     graveYardExpr += " Imp:N=0.0 Imp:P=0.0 Imp:E=0.0 $U=100000";
     outputStream << graveYardExpr << std::endl;
@@ -615,7 +615,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream,
     std::string volumeCellExpr{boost::str(boost::format("%d") % (voidNumber + 1))};
     if (volumeCellExpr.size() < 5) volumeCellExpr.resize(5, *const_cast<char*>(" "));
     continueSpacing = volumeCellExpr.size() + 1;
-    volumeCellExpr += boost::str(boost::format(" %9.5f") % 0.0);
+    volumeCellExpr += boost::str(boost::format(" %d") % 0.0);
     volumeCellExpr += boost::str(boost::format(" -%d %d Imp:N=1.0 Imp:P=1.0 Imp:E=0.0")
                                  % (uniqueSurfaces.size() + inputConfig.startSurfNum)
                                  % voidSurfNumber);
@@ -623,7 +623,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream,
     std::string volumeCellGYExpr{boost::str(boost::format("%d") % (voidNumber + 2))};
     if (volumeCellGYExpr.size() < 5) volumeCellGYExpr.resize(5, *const_cast<char*>(" "));
     continueSpacing = volumeCellGYExpr.size() + 1;
-    volumeCellGYExpr += boost::str(boost::format(" %9.5f") % 0.0);
+    volumeCellGYExpr += boost::str(boost::format(" %d") % 0.0);
     volumeCellGYExpr += boost::str(boost::format(" %d Imp:N=0.0 Imp:P=0.0 Imp:E=0.0")
                                  % (uniqueSurfaces.size() + inputConfig.startSurfNum));
     outputStream << "c " << volumeCellGYExpr << std::endl;

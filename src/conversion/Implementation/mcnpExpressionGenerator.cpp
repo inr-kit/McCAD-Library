@@ -360,7 +360,7 @@ McCAD::Conversion::MCNPExprGenerator::genConeSurfExpr(
             coneSurface->accessSImpl()->surfSymb = "KX";
             surfExpr += boost::str(boost::format("KX %13.7f  %13.7f  %s")
                                    % coneSurface->accessSImpl()->apex.X()
-                                   % coneSurface->accessSImpl()->semiAngle
+                                   % std::pow(coneSurface->accessSImpl()->semiAngle, double(2))
                                    % coneSheet);
         }
         else {
@@ -370,7 +370,7 @@ McCAD::Conversion::MCNPExprGenerator::genConeSurfExpr(
                                    % coneSurface->accessSImpl()->apex.X() 
                                    % coneSurface->accessSImpl()->apex.Y()
                                    % coneSurface->accessSImpl()->apex.Z()
-                                   % coneSurface->accessSImpl()->semiAngle
+                                   % std::pow(coneSurface->accessSImpl()->semiAngle, double(2))
                                    % coneSheet);
         }
     }
@@ -384,7 +384,7 @@ McCAD::Conversion::MCNPExprGenerator::genConeSurfExpr(
             coneSurface->accessSImpl()->surfSymb = "KY";
             surfExpr += boost::str(boost::format("KY %13.7f  %13.7f  %s")
                                    % coneSurface->accessSImpl()->apex.Y()
-                                   % coneSurface->accessSImpl()->semiAngle
+                                   % std::pow(coneSurface->accessSImpl()->semiAngle, double(2))
                                    % coneSheet);
         }
         else {
@@ -394,7 +394,7 @@ McCAD::Conversion::MCNPExprGenerator::genConeSurfExpr(
                                    % coneSurface->accessSImpl()->apex.X()
                                    % coneSurface->accessSImpl()->apex.Y()
                                    % coneSurface->accessSImpl()->apex.Z()
-                                   % coneSurface->accessSImpl()->semiAngle
+                                   % std::pow(coneSurface->accessSImpl()->semiAngle, double(2))
                                    % coneSheet);
         }
     }
@@ -408,7 +408,7 @@ McCAD::Conversion::MCNPExprGenerator::genConeSurfExpr(
             coneSurface->accessSImpl()->surfSymb = "KZ";
             surfExpr += boost::str(boost::format("KZ %13.7f  %13.7f  %s")
                                    % coneSurface->accessSImpl()->apex.Z()
-                                   % coneSurface->accessSImpl()->semiAngle
+                                   % std::pow(coneSurface->accessSImpl()->semiAngle, double(2))
                                    % coneSheet);
         }
         else {
@@ -418,7 +418,7 @@ McCAD::Conversion::MCNPExprGenerator::genConeSurfExpr(
                                    % coneSurface->accessSImpl()->apex.X()
                                    % coneSurface->accessSImpl()->apex.Y()
                                    % coneSurface->accessSImpl()->apex.Z()
-                                   % coneSurface->accessSImpl()->semiAngle
+                                   % std::pow(coneSurface->accessSImpl()->semiAngle, double(2))
                                    % coneSheet);
         }
     }

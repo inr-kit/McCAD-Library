@@ -6,6 +6,9 @@
 #include "SurfaceUtilities.hpp"
 #include "EdgeType.hpp"
 
+#include <filesystem>
+#include <STEPControl_Writer.hxx>
+
 /** ********************************************************************
 * @brief    A function that judges if any boundary surface can be used to split the solid.
 * @param    solidImpl is a McCAD solid object.
