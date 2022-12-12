@@ -226,42 +226,43 @@ McCAD::IO::STEPReader::Impl::writeSurfacesTally() {
     int planes{0}, cylinders{0}, tori{0}, cones{0}, spheres{0}, BezierSurface{0}, BSpline{0}, 
         SurfaceOfRevolution{0}, SurfaceOfExtrusion{0}, OffsetSurface{0}, unknown{0};
     for (const auto& member : shapesInfoMap) {
-        for (const auto& face : detail::ShapeView<TopAbs_FACE>{ TopoDS::Solid(std::get<0>(member)) }) {
-            GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
-            switch(surfAdaptor.GetType()) {
-            case GeomAbs_Plane:
-                planes += 1;
-                break;
-            case GeomAbs_Cylinder:
-                cylinders += 1;
-                break;
-            case GeomAbs_Torus:
-                tori += 1;
-                break;
-            case GeomAbs_Cone:
-                cones += 1;
-                break;
-            case GeomAbs_Sphere:
-                spheres += 1;
-                break;
-            case GeomAbs_BezierSurface:
-                BezierSurface += 1;
-                break;
-            case GeomAbs_BSplineSurface:
-                BSpline += 1;
-                break;
-            case GeomAbs_SurfaceOfRevolution:
-                SurfaceOfRevolution += 1;
-                break;
-            case GeomAbs_SurfaceOfExtrusion:
-                SurfaceOfExtrusion += 1;
-                break;
-            case GeomAbs_OffsetSurface:
-                OffsetSurface += 1;
-                break;
-            default:
-                unknown += 1;
-
+        for (const auto& solid : detail::ShapeView<TopAbs_SOLID>{ std::get<0>(member) }) {
+            for (const auto& face : detail::ShapeView<TopAbs_FACE>{ solid }) {
+                GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
+                switch (surfAdaptor.GetType()) {
+                case GeomAbs_Plane:
+                    planes += 1;
+                    break;
+                case GeomAbs_Cylinder:
+                    cylinders += 1;
+                    break;
+                case GeomAbs_Torus:
+                    tori += 1;
+                    break;
+                case GeomAbs_Cone:
+                    cones += 1;
+                    break;
+                case GeomAbs_Sphere:
+                    spheres += 1;
+                    break;
+                case GeomAbs_BezierSurface:
+                    BezierSurface += 1;
+                    break;
+                case GeomAbs_BSplineSurface:
+                    BSpline += 1;
+                    break;
+                case GeomAbs_SurfaceOfRevolution:
+                    SurfaceOfRevolution += 1;
+                    break;
+                case GeomAbs_SurfaceOfExtrusion:
+                    SurfaceOfExtrusion += 1;
+                    break;
+                case GeomAbs_OffsetSurface:
+                    OffsetSurface += 1;
+                    break;
+                default:
+                    unknown += 1;
+                }
             }
         }
     }
