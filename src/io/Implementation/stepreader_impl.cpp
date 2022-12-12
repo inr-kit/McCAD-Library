@@ -11,6 +11,7 @@
 #include "stepreader_impl.hpp"
 #include "ShapeUtilities.hpp"
 #include "StringUtilities.hpp"
+#include "ShapeView.hpp"
 //OCC
 #include <STEPCAFControl_Reader.hxx>
 #include <STEPControl_Reader.hxx>
@@ -28,6 +29,9 @@
 #include <TDF_ChildIterator.hxx>
 #include <TDF_Tool.hxx>
 #include <TopLoc_Datum3D.hxx>
+#include <GeomAdaptor_Surface.hxx>
+#include <BRep_Tool.hxx>
+#include <TopoDS.hxx>
 
 McCAD::IO::STEPReader::Impl::Impl(const IO::InputConfig& inputConfig) :
     inputConfig{inputConfig},
@@ -65,20 +69,22 @@ McCAD::IO::STEPReader::Impl::readSTEP(){
         }
     } else {
         failed:
-        Standard_Boolean failsOnly = Standard_False;
+        bool failsOnly = false;
         STEPReader.PrintCheckLoad(failsOnly, IFSelect_ItemsByEntity);
         STEPReader.PrintCheckTransfer(failsOnly, IFSelect_ItemsByEntity);
         throw std::runtime_error("Error reading the input STEP file!");
     }
     // Write solid volumes to a text file.
     writeVolumes();
+    // Output surfaces tally to screen.
+    writeSurfacesTally();
 }
 
-Standard_Boolean
+bool
 McCAD::IO::STEPReader::Impl::getLabelInfo(const TDF_Label& rootLabel){
-    Standard_Boolean foundShapes = Standard_False;
+    bool foundShapes = false;
     if(rootLabel.HasChild()){
-        for(TDF_ChildIterator it1 (rootLabel, Standard_False); it1.More(); it1.Next()) {
+        for(TDF_ChildIterator it1 (rootLabel, false); it1.More(); it1.Next()) {
             TDF_Label childLabel = it1.Value();
             if (childLabel.HasAttribute()){
                 if (childLabel.IsAttribute(XCAFDoc_ShapeTool::GetID()))
@@ -86,17 +92,17 @@ McCAD::IO::STEPReader::Impl::getLabelInfo(const TDF_Label& rootLabel){
             }
         }
         if(!foundShapes || (sequenceOfShape->Length() != shapeNames.size())){
-            return Standard_False;
+            return false;
         }
-    } else return Standard_False;
+    } else return false;
     return foundShapes;
 }
 
-Standard_Boolean
+bool
 McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel){
-    Standard_Boolean foundShapes = Standard_False;
+    bool foundShapes = false;
     if(aLabel.HasChild()){
-        for(TDF_ChildIterator it2 (aLabel, Standard_False); it2.More(); it2.Next()) {
+        for(TDF_ChildIterator it2 (aLabel, false); it2.More(); it2.Next()) {
             TDF_Label childLabel = it2.Value();
             if (childLabel.HasAttribute()){
                 if (childLabel.IsAttribute(TNaming_NamedShape::GetID()))
@@ -117,7 +123,7 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel){
             sequenceOfShape->Append(shape->Get());
             shapeNames.push_back(shapeName->Get());
             shapesInfoMap.push_back(std::make_tuple(shape->Get(), shapeName->Get()));
-            foundShapes = Standard_True;
+            foundShapes = true;
             /*//
             TopLoc_Location labelLocation = XCAFDoc_ShapeTool::GetLocation(aLabel);
             std::cout << "shape vs label: " << shape->Get().Location().IsEqual(labelLocation) << std::endl;
@@ -142,7 +148,7 @@ McCAD::IO::STEPReader::Impl::iterateLabelChilds(const TDF_Label& aLabel){
     return foundShapes;
 }
 
-Standard_Boolean
+bool
 McCAD::IO::STEPReader::Impl::basicReader(const std::string& fileName){
     STEPControl_Reader STEPReader;
     // Set reader parameters per user config.
@@ -152,15 +158,15 @@ McCAD::IO::STEPReader::Impl::basicReader(const std::string& fileName){
     }
     auto readStatus = STEPReader.ReadFile(fileName.c_str());
     if(readStatus == IFSelect_RetDone){
-        Standard_Integer numberOfRoots = STEPReader.NbRootsForTransfer();
+        int numberOfRoots = STEPReader.NbRootsForTransfer();
         if (numberOfRoots != 0){
-            for(Standard_Integer i = 1; i <= numberOfRoots; ++i){
+            for(int i = 1; i <= numberOfRoots; ++i){
                 if(STEPReader.TransferRoot(i)){
                     TopoDS_Shape solidShape = STEPReader.Shape(i);
                     TopExp_Explorer explorer;
                     TopoDS_CompSolid compSolid;
                     TopoDS_Builder builder;
-                    Standard_Integer counter{0};
+                    int counter{0};
                     for(explorer.Init(solidShape, TopAbs_SOLID); explorer.More(); explorer.Next()){
                         std::string tempName = "solid_" + std::to_string(++counter);
                         TCollection_ExtendedString shapeName{tempName.c_str()};
@@ -171,15 +177,15 @@ McCAD::IO::STEPReader::Impl::basicReader(const std::string& fileName){
                     }
                 } else goto returnBack;
             }
-            return Standard_True;
+            return true;
         } else goto returnBack;
     }
     returnBack:;
-    return Standard_False;
+    return false;
 }
 
 /** ********************************************************************
-* @brief    Writes volumes of shaped in the input STEP file to a text file
+* @brief    Writes volumes of shapes in the input STEP file to a text file
 * @date     25/05/2022
 * @modified 09/06/2022
 * @author   Moataz Harb
@@ -207,4 +213,63 @@ McCAD::IO::STEPReader::Impl::writeVolumes() {
         volumeStream << shapeData << std::endl;
     }
     volumeStream.close();
+}
+
+/** ********************************************************************
+* @brief    Writes tally of surfaces count & type to screen.
+* @date     12/12/2022
+* @modified 12/12/2022
+* @author   Moataz Harb
+* **********************************************************************/
+void
+McCAD::IO::STEPReader::Impl::writeSurfacesTally() {
+    int planes{0}, cylinders{0}, tori{0}, cones{0}, spheres{0}, BezierSurface{0}, BSpline{0}, 
+        SurfaceOfRevolution{0}, SurfaceOfExtrusion{0}, OffsetSurface{0}, unknown{0};
+    for (const auto& member : shapesInfoMap) {
+        for (const auto& solid : detail::ShapeView<TopAbs_SOLID>{ std::get<0>(member) }) {
+            for (const auto& face : detail::ShapeView<TopAbs_FACE>{ solid }) {
+                GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
+                switch (surfAdaptor.GetType()) {
+                case GeomAbs_Plane:
+                    planes += 1;
+                    break;
+                case GeomAbs_Cylinder:
+                    cylinders += 1;
+                    break;
+                case GeomAbs_Torus:
+                    tori += 1;
+                    break;
+                case GeomAbs_Cone:
+                    cones += 1;
+                    break;
+                case GeomAbs_Sphere:
+                    spheres += 1;
+                    break;
+                case GeomAbs_BezierSurface:
+                    BezierSurface += 1;
+                    break;
+                case GeomAbs_BSplineSurface:
+                    BSpline += 1;
+                    break;
+                case GeomAbs_SurfaceOfRevolution:
+                    SurfaceOfRevolution += 1;
+                    break;
+                case GeomAbs_SurfaceOfExtrusion:
+                    SurfaceOfExtrusion += 1;
+                    break;
+                case GeomAbs_OffsetSurface:
+                    OffsetSurface += 1;
+                    break;
+                default:
+                    unknown += 1;
+                }
+            }
+        }
+    }
+    std::cout << boost::str(boost::format("\tSurfaces tally:\n\t===============\n\t- Planes: %d\n\t- Cylinders: %d\n\t- Tori: %d\n\t"
+                                          "- Cones: %d\n\t- Spheres: %d\n\t- Bezier Surface : %d\n\t- BSpline: %d\n\t"
+                                          "- Surface Of Revolution : %d\n\t- Surface Of Extrusion : %d\n\t"
+                                          "- OffsetSurface: %d\n\t- Uknown: %d") 
+                            % planes % cylinders % tori % cones % spheres % BezierSurface % BSpline % SurfaceOfRevolution
+                            % SurfaceOfExtrusion % OffsetSurface % unknown) << std::endl;
 }
