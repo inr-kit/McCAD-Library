@@ -511,11 +511,12 @@ McCAD::Conversion::MCNPWriter::writeCellCard(std::ofstream& outputStream,
 }
 
 /** ********************************************************************
-* @brief   The function writes voids cell cards to the MC file and writes a map of void cell ID and cell ID to thre voidCells file.
-* @param   outputStream is a string stream to write cell expressions to.
-* @param   voidCellsStream is a string stream to write void-cell ID mapping to.
-* @date    31/12/2021
-* @author  Moataz Harb
+* @brief    The function writes voids cell cards to the MC file and writes a map of void cell ID and cell ID to thre voidCells file.
+* @param    outputStream is a string stream to write cell expressions to.
+* @param    voidCellsStream is a string stream to write void-cell ID mapping to.
+* @date     31/12/2021
+* @modified 13/12/2022
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream,
@@ -531,15 +532,25 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream,
         std::string voidExpr{boost::str(boost::format("%d") % voidNumber)};
         if (voidExpr.size() < 5) voidExpr.resize(5, *const_cast<char*>(" "));
         continueSpacing = voidExpr.size() + 1;
-        voidExpr += boost::str(boost::format(" %d") % 0.0);
+        voidExpr += boost::str(boost::format(" %d") % 0);
         std::string voidSolidsExpr;
         int voidSurfNumber{voidCellsMap[std::make_tuple(0, 0, "r")]->voidSurfNumber};
         voidSolidsExpr += boost::str(boost::format(" %d") % (-1 * voidSurfNumber));
         std::string voidCellMapData{ boost::str(boost::format("%d") % voidNumber) };
         if (voidCellMapData.size() < 5) voidCellMapData.resize(5, *const_cast<char*>(" "));
         for(const auto& compound : compoundObjMap){
-            voidSolidsExpr += boost::str(boost::format(" #%d") % compound.second->MCCellID);
-            voidCellMapData += boost::str(boost::format(" %d") % compound.second->MCCellID);
+            if (inputConfig.compoundIsSingleCell) {
+                // Add compound cell ID.
+                voidSolidsExpr += boost::str(boost::format(" #%d") % compound.second->MCCellID);
+                voidCellMapData += boost::str(boost::format(" %d") % compound.second->MCCellID);
+            }
+            else {
+                // Loop over all solids in a compound to add their cell IDs.
+                for (int i = 0; i < compound.second->solidsList.size(); ++i) {
+                    voidSolidsExpr += boost::str(boost::format(" #%d") % compound.second->solidsList.at(i)->accessSImpl()->MCCellID);
+                    voidCellMapData += boost::str(boost::format(" %d") % compound.second->solidsList.at(i)->accessSImpl()->MCCellID);
+                }
+            }
         }
         voidSolidsExpr += " Imp:N=1.0 Imp:P=1.0 Imp:E=0.0 $U=100000";
         outputStream << adjustLineWidth(voidExpr, voidSolidsExpr, continueSpacing) << std::endl;
