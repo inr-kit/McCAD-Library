@@ -270,6 +270,6 @@ McCAD::IO::STEPReader::Impl::writeSurfacesTally() {
                                           "- Cones: %d\n\t- Spheres: %d\n\t- B-Splines: %d\n\t- Bezier Surfaces: %d\n\t"
                                           "- Surfaces of Revolution: %d\n\t- Surfaces of Extrusion: %d\n\t"
                                           "- Offset Surfaces: %d\n\t- Uknown Surfaces: %d") 
-                            % planes % cylinders % tori % cones % spheres % BezierSurface % BSpline % SurfaceOfRevolution
+                            % planes % cylinders % tori % cones % spheres % BSpline % BezierSurface % SurfaceOfRevolution
                             % SurfaceOfExtrusion % OffsetSurface % unknown) << std::endl;
 }
