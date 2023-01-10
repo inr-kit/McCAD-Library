@@ -629,7 +629,8 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream,
     outputStream << graveYardExpr << std::endl;
     //uniqueSurfaces[voidSurfNumber] = voidCellsMap[std::make_tuple(0, 0, "r")]->voidSurfExpr;
     // Add cell to calculate volumes.
-    outputStream << "c ==================== Start of volumes calculation cells ======================" << std::endl;
+    outputStream << "c ==================== Start of volumes calculation cells ======================" <<
+                    "\nc To start volume calculations comment out the grave yard cell above and uncomment the two cells below" << std::endl;
     std::string volumeCellExpr{boost::str(boost::format("%d") % (voidNumber + 1))};
     if (volumeCellExpr.size() < 5) volumeCellExpr.resize(5, *const_cast<char*>(" "));
     continueSpacing = volumeCellExpr.size() + 1;
@@ -642,7 +643,7 @@ McCAD::Conversion::MCNPWriter::writeVoidCard(std::ofstream& outputStream,
     if (volumeCellGYExpr.size() < 5) volumeCellGYExpr.resize(5, *const_cast<char*>(" "));
     continueSpacing = volumeCellGYExpr.size() + 1;
     volumeCellGYExpr += boost::str(boost::format(" %d") % 0.0);
-    volumeCellGYExpr += boost::str(boost::format(" %d Imp:N=1.0 Imp:P=1.0 Imp:E=0.0 TMP=2.53E-8 $U=100000")
+    volumeCellGYExpr += boost::str(boost::format(" %d Imp:N=0.0 Imp:P=0.0 Imp:E=0.0 TMP=2.53E-8 $U=100000")
                                  % (uniqueSurfaces.size() + inputConfig.startSurfNum));
     outputStream << "c " << volumeCellGYExpr << std::endl;
     outputStream << "c ====================== End of volumes calculation cells ======================" << std::endl;
@@ -696,7 +697,7 @@ McCAD::Conversion::MCNPWriter::writeSurfCard(std::ofstream& outputStream){
 void
 McCAD::Conversion::MCNPWriter::writeDataCard(std::ofstream& outputStream){
     outputStream << "\nc ================================= Data Cards =================================\n" <<
-                    "Mode N" << "\nNPS 5e8" << "\nPRDMP 1e7 1e7 j 1 j" << std::endl;
+                    "Mode N" << "\nNPS 5e8" << "\nPRDMP 1e7 1e7 j 1 j" << "\nLost 10 10" << std::endl;
     // Write Materials.
     for(const auto& mat : materialsMap){
         if(std::get<0>(mat.first) == "void") continue;
