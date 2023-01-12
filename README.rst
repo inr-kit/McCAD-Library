@@ -33,15 +33,15 @@ Dependencies:
    * the geometry engine used for manipulating and decomposing solids.
 
 Installation:
--------------
-Please refer to the "Installation from Source" section in the `manual <https://github.com/moatazharb/McCAD/blob/develop/docs/Manual%20v1.0/McCAD_manual_v1.pdf>`_.
+------------- 
+Please refer to the "Installation from Source" section in the `manual <https://github.com/inr-kit/McCAD-Library/blob/master/docs/Manual%20v1.0/McCAD_manual_v1.pdf>`_.
 
 General notes on Usage:
 -----------------------
 1- The library assumes a clean CAD model, one with no intersections/overlapping.
    * while in theory the library won't report an error with intersections/overlapping as solids are processed individually, it will cause issue for void generation and conversion!
 2- There are known bugs with the decomposition algorithm which are currently being investigated.
-   * a list of bugs and proposed workaround can be found in the "Known issues" section in the `manual <https://github.com/moatazharb/McCAD/blob/develop/docs/Manual%20v1.0/McCAD_manual_v1.pdf>`_.
+   * a list of bugs and proposed workaround can be found in the "Known issues" section in the `manual <https://github.com/inr-kit/McCAD-Library/blob/master/docs/Manual%20v1.0/McCAD_manual_v1.pdf>`_.
    
 Reporting issues:
 -----------------
