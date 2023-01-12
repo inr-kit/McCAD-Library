@@ -11,42 +11,52 @@ McCAD::Decomposition::TriangleCollision::TriangleCollision(){
 }
 
 McCAD::Decomposition::TriangleCollision::TriangleCollision(
-        const Standard_Real& precision, const Standard_Real& distanceTolerance) :
+        const double& precision, const double& distanceTolerance) :
     precision{precision}, distanceTolerance{distanceTolerance}{
 }
 
 McCAD::Decomposition::TriangleCollision::~TriangleCollision(){
 }
 
-Standard_Boolean
+/** ********************************************************************
+* @brief    An operator that deligates collision detection to specialized functions.
+* @param    iFace is a McCAD bound surface object.
+* @param    aTriangle is a McCAD mesh triangle object.
+* @return   true if collision is detected.
+* @date     31/12/2020
+* @modified
+* @author   Moataz Harb
+* **********************************************************************/
+bool
 McCAD::Decomposition::TriangleCollision::operator()(
         const McCAD::Geometry::BoundSurface& iFace,
         const McCAD::Geometry::MeshTriangle& aTriangle,
-        Standard_Integer& aSide){
+        int& aSide){
     auto surfaceType = iFace.accessSImpl()->surfaceType;
     if (surfaceType == Tools::toTypeName(GeomAbs_Plane)){
         return triangleCollisionPlane(iFace, aTriangle, aSide);
     } else if (surfaceType == Tools::toTypeName(GeomAbs_Cylinder)){
         return triangleCollisionCyl(iFace, aTriangle, aSide);
-    }
-    else return Standard_False;
+    } else if (surfaceType == Tools::toTypeName(GeomAbs_Cone)) {
+        return triangleCollisionCone(iFace, aTriangle, aSide);
+    } else return false;
 }
 
-Standard_Boolean
+bool
 McCAD::Decomposition::TriangleCollision::triangleCollisionPlane(
         const McCAD::Geometry::BoundSurface& iFace,
         const McCAD::Geometry::MeshTriangle& aTriangle,
-        Standard_Integer& aSide){
-    auto& extendedFace = iFace.accessSImpl()->extendedFace;
+        int& aSide){
+    const auto & extendedFace = iFace.accessSImpl()->extendedFace;
     // Quick check for collision using OBB
     Bnd_OBB obbFace;
     BRepBndLib::AddOBB(extendedFace, obbFace);
-    if (aTriangle.accessMTImpl()->obb.IsOut(obbFace)) return Standard_False;
-    auto& face = iFace.accessSImpl()->face;
-    Standard_Boolean collision = Standard_False;
-    Standard_Integer positivePoints{0}, negativePoints{0};
+    if (aTriangle.accessMTImpl()->obb.IsOut(obbFace)) return false;
+    const auto & face = iFace.accessSImpl()->face;
+    bool collision = false;
+    int positivePoints{0}, negativePoints{0};
     auto& points = aTriangle.accessMTImpl()->points;
-    for (Standard_Integer i = 0; i < points.size(); ++i){
+    for (int i = 0; i < points.size(); ++i){
         if (PointOnSurface{}(extendedFace, points[i], distanceTolerance)) continue;
         auto evaluate = Tools::SenseEvaluator{}(face, points[i]);
         if(evaluate){
@@ -54,7 +64,7 @@ McCAD::Decomposition::TriangleCollision::triangleCollisionPlane(
             else ++positivePoints;
         }
         if (positivePoints > 0 && negativePoints > 0){
-          collision = Standard_True;
+          collision = true;
           break;
         }
     }
@@ -66,22 +76,22 @@ McCAD::Decomposition::TriangleCollision::triangleCollisionPlane(
     return collision;
 }
 
-Standard_Boolean
+bool
 McCAD::Decomposition::TriangleCollision::triangleCollisionCyl(
         const McCAD::Geometry::BoundSurface& iFace,
         const McCAD::Geometry::MeshTriangle& aTriangle,
-        Standard_Integer& aSide){
-    auto& extendedFace = iFace.accessSImpl()->extendedFace;
+        int& aSide){
+    const auto & extendedFace = iFace.accessSImpl()->extendedFace;
     // Quick check for collision using OBB
     Bnd_OBB obbFace;
     BRepBndLib::AddOBB(extendedFace, obbFace);
-    if (aTriangle.accessMTImpl()->obb.IsOut(obbFace)) return Standard_False;
+    if (aTriangle.accessMTImpl()->obb.IsOut(obbFace)) return false;
     // Proceed to check with points of the triangle.
-    auto& face = iFace.accessSImpl()->face;
-    Standard_Boolean collision = Standard_False;
-    Standard_Integer positivePoints{0}, negativePoints{0};
+    const auto & face = iFace.accessSImpl()->face;
+    bool collision = false;
+    int positivePoints{0}, negativePoints{0};
     auto& points = aTriangle.accessMTImpl()->points;
-    for (Standard_Integer i = 0; i < points.size(); ++i){
+    for (int i = 0; i < points.size(); ++i){
         if (PointOnSurface{}(extendedFace, points[i], distanceTolerance)) continue;
         auto evaluate = Tools::SenseEvaluator{}(face, points[i]);
         if(evaluate){
@@ -89,13 +99,58 @@ McCAD::Decomposition::TriangleCollision::triangleCollisionCyl(
             else ++positivePoints;
         }
         if (positivePoints > 0 && negativePoints > 0){
-            collision = Standard_True;
+            collision = true;
             break;
         }
     }
     if (positivePoints > 0 && negativePoints == 0){
         aSide = 1;
     } else if (positivePoints == 0 && negativePoints > 0){
+        aSide = -1;
+    }
+    return collision;
+}
+
+/** ********************************************************************
+* @brief    A function that detects if a mesh triangle collides with a conical surface.
+* @param    iFace is a McCAD bound surface object.
+* @param    aTriangle is a McCAD mesh triangle object.
+* @return   true if collision is detected.
+* @date     31/12/2020
+* @modified
+* @author   Moataz Harb
+* **********************************************************************/
+bool
+McCAD::Decomposition::TriangleCollision::triangleCollisionCone(
+    const McCAD::Geometry::BoundSurface& iFace,
+    const McCAD::Geometry::MeshTriangle& aTriangle,
+    int& aSide) {
+    const auto & extendedFace = iFace.accessSImpl()->extendedFace;
+    // Quick check for collision using OBB
+    Bnd_OBB obbFace;
+    BRepBndLib::AddOBB(extendedFace, obbFace);
+    if (aTriangle.accessMTImpl()->obb.IsOut(obbFace)) return false;
+    // Proceed to check with points of the triangle.
+    const auto & face = iFace.accessSImpl()->face;
+    bool collision = false;
+    int positivePoints{ 0 }, negativePoints{ 0 };
+    const auto & points = aTriangle.accessMTImpl()->points;
+    for (int i = 0; i < points.size(); ++i) {
+        if (PointOnSurface{}(extendedFace, points[i], distanceTolerance)) continue;
+        auto evaluate = Tools::SenseEvaluator{}(face, points[i]);
+        if (evaluate) {
+            if (std::signbit(evaluate.value())) ++negativePoints;
+            else ++positivePoints;
+        }
+        if (positivePoints > 0 && negativePoints > 0) {
+            collision = true;
+            break;
+        }
+    }
+    if (positivePoints > 0 && negativePoints == 0) {
+        aSide = 1;
+    }
+    else if (positivePoints == 0 && negativePoints > 0) {
         aSide = -1;
     }
     return collision;

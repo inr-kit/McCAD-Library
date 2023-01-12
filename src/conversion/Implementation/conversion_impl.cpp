@@ -19,7 +19,7 @@
 * **********************************************************************/
 McCAD::Conversion::Convert::Impl::Impl(IO::InputConfig& inputConfig) :
     inputConfig{ inputConfig }{
-    // readConversion needs to be set to tru so that the STEP reader knows to get the file
+    // readConversion needs to be set to true so that the STEP reader knows to get the file
     // name from the conversion names list not from the input names list.
     inputConfig.readConversion = true;
     int compoundCounter{0}, solidCounter{0};
@@ -83,7 +83,7 @@ McCAD::Conversion::Convert::Impl::getGeomData(const std::tuple<std::string, doub
         ++index;
     }
     taskQueue.complete();
-    // Loop over list of compounds; add solid ID, compoundID, and rejected solids to list.
+    // Loop over the list of compounds; add solid ID, compoundID, and rejected solids to the list.
     index = solidIndex;
     for(const auto& member : tempCompoundMap){
         for(const auto& solidObj : member.second->solidsList){

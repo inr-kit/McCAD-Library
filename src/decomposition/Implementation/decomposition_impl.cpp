@@ -10,11 +10,12 @@
 #include "torusConvertor.hpp"
 
 /** ********************************************************************
-* @brief   The main function that executes McCAD decomposition. 
-* @param   inputData is an object containing list(s) of solids from the input STEP file(s). 
-* @param   inputConfig is an object containing the values of the configuration parameters. 
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    The main constructor that executes McCAD decomposition. 
+* @param    inputData is an object containing list(s) of solids from the input STEP file(s). 
+* @param    inputConfig is an object containing the values of the configuration parameters. 
+* @date     31/12/2020
+* @modified 
+* @author   Moataz Harb
 * **********************************************************************/
 McCAD::Decomposition::Decompose::Impl::Impl(const General::InputData& inputData,
                                             const IO::InputConfig& inputConfig)
@@ -32,11 +33,12 @@ McCAD::Decomposition::Decompose::Impl::~Impl(){
 }
 
 /** ********************************************************************
-* @brief   The main function that executes McCAD decomposition on an input solid.
-* @param   inputShape is a tuple containing the input shape and its name. 
-* @param   compoundID is a unique ID, counter, to assing to the compound object to be created.
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    The main function that executes McCAD decomposition on an input solid.
+* @param    inputShape is a tuple containing the input shape and its name. 
+* @param    compoundID is a unique ID, counter, to assing to the compound object to be created.
+* @date     31/12/2020
+* @modified 23/08/2022
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Decomposition::Decompose::Impl::perform(
@@ -48,21 +50,21 @@ McCAD::Decomposition::Decompose::Impl::perform(
     compoundObj->compoundID = compoundID;
     Preprocessor{inputConfig}(compoundObj);
     for(auto& plSolid : compoundObj->planarSolidsList){
-        std::cout << "   - Decomposing planar solid" << std::endl;
+        std::cout << "   - Decomposing a planar solid" << std::endl;
         if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(plSolid)){
             extractSolids(compoundObj, plSolid);
         } else compoundObj->rejectedInputShapesList->Append(
                     plSolid->accessSImpl()->solid);
     }
     for(auto& cylSolid : compoundObj->cylSolidsList){
-        std::cout << "   - Decomposing cylindrical solid" << std::endl;
+        std::cout << "   - Decomposing a cylindrical solid" << std::endl;
         if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(cylSolid)){
             extractSolids(compoundObj, cylSolid);
         } else compoundObj->rejectedInputShapesList->Append(
                     cylSolid->accessSImpl()->solid);
     }
     for(auto& torSolid : compoundObj->torSolidsList){
-        std::cout << "   - Decomposing toroidal solid" << std::endl;
+        std::cout << "   - Decomposing a toroidal solid" << std::endl;
         if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(torSolid)){
             // Convert tori to cylinders.
             if(inputConfig.simplifyTori) TorusConvertor{inputConfig}(torSolid);
@@ -71,7 +73,7 @@ McCAD::Decomposition::Decompose::Impl::perform(
                     torSolid->accessSImpl()->solid);
     }
     for(auto& mxdSolid : compoundObj->mixedSolidsList){
-        std::cout << "   - Decomposing mixed solid" << std::endl;
+        std::cout << "   - Decomposing a mixed solid" << std::endl;
         if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(mxdSolid)){
             // Convert tori to cylinders.
             if(inputConfig.simplifyTori) TorusConvertor{inputConfig}(mxdSolid);
@@ -79,13 +81,21 @@ McCAD::Decomposition::Decompose::Impl::perform(
         } else compoundObj->rejectedInputShapesList->Append(
                     mxdSolid->accessSImpl()->solid);
     }
+    for (auto& conSolid : compoundObj->conSolidsList) {
+        std::cout << "   - Decomposing a conical solid" << std::endl;
+        if (DecomposeSolid{inputConfig}.accessDSImpl()->operator()(conSolid)) {
+            extractSolids(compoundObj, conSolid);
+        } else compoundObj->rejectedInputShapesList->Append(
+            conSolid->accessSImpl()->solid);
+    }
     compoundList.push_back(std::move(compoundObj));
 }
 
 /** ********************************************************************
-* @brief   The main function that performs decomposition in parallel on input solids.
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    The main function that performs decomposition in parallel on input solids.
+* @date     31/12/2020
+* @modified
+* @author   Moataz Harb & Christian Wegmann
 * **********************************************************************/
 void
 McCAD::Decomposition::Decompose::Impl::perform(){
@@ -122,11 +132,12 @@ McCAD::Decomposition::Decompose::Impl::perform(){
 }
 
 /** ********************************************************************
-* @brief   A function that extracts the resultant subsolids and adds it to the compound object.
-* @param   solid is the solid object that was processed by decomposition.
-* @param   compound is a compound object.
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    A function that extracts the resultant subsolids and adds it to the compound object.
+* @param    solid is the solid object that was processed by decomposition.
+* @param    compound is a compound object.
+* @date     31/12/2020
+* @modified 
+* @author   Moataz Harb
 * **********************************************************************/
 void
 McCAD::Decomposition::Decompose::Impl::extractSolids(

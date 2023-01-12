@@ -1,6 +1,7 @@
 #ifndef SOLIDREPAIRER_HPP
 #define SOLIDREPAIRER_HPP
 
+// OCCT
 #include <TopoDS_Solid.hxx>
 
 namespace McCAD::Decomposition{

@@ -14,8 +14,8 @@ namespace McCAD::Geometry{
   public:
     BoundSurface();
     ~BoundSurface();
-    Standard_Boolean operator == (const BoundSurface& that);
-    Standard_Boolean operator << (const BoundSurface& that);
+    bool operator == (const BoundSurface& that);
+    bool operator << (const BoundSurface& that);
       
     Impl* accessBSImpl() const;
 

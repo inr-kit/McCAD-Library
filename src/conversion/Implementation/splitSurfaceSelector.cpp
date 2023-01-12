@@ -7,7 +7,7 @@
 
 McCAD::Conversion::SplitSurfaceSelector::SplitSurfaceSelector(
         const int& maxSolidsPerVoidCell,
-        const Standard_Real& minVoidVolume) :
+        const double& minVoidVolume) :
     maxSolidsPerVoidCell{maxSolidsPerVoidCell}, minVoidVolume{minVoidVolume} {}
 
 McCAD::Conversion::SplitSurfaceSelector::~SplitSurfaceSelector(){}

@@ -4,8 +4,6 @@
 // C++
 #include <memory>
 #include <string>
-// McCAD
-#include <Standard.hxx>
 
 namespace McCAD::Geometry {
   class MeshTriangle {

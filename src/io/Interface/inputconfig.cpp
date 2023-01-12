@@ -40,7 +40,7 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "# =========================\n" << std::endl;
     inputConfig << "# Input\n"
                    "# =====\n"
-                   "# > Debugging level: 0, 1, 2, 3. [0] provides no debugging outputs.\n"
+                   "# > Debugging level: 0, 1, 2, 3. [0] provides no debugging outputs;\n"
                    "debugLevel = 0\n"
                    "# > The unit used in the input STEP file(s). Only a single unit for all input STEP files!\n"
                    "units = cm\n"
@@ -67,12 +67,12 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "convert = false\n"
                    "# > Choose whether to generate void cells;\n"
                    "voidGeneration = false\n"
-                   "# > Condition to treat a compound as a single cell or a group of cells.\n"
+                   "# > Condition to treat a compound from the STEP file as a single cell, resulting in a unsion of subsolids cells expresseions;\n"
                    "compoundIsSingleCell = false\n"
                    "# > Minimum acceptable void volume should not be less than minSolidVolume;\n"
                    "minVoidVolume = 1.0 [cm3]\n"
                    "# > A larger number will result in fewer void cells but longer cell expressions;\n"
-                   "maxSolidsPerVoidCell = 40\n"
+                   "maxSolidsPerVoidCell = 20\n"
                    "# > Choose whether to generate Bound Volume Heirarchy void cells;\n"
                    "BVHVoid = false\n"
                    "# > Choose the desired MC code for conversion;\n"
@@ -81,8 +81,11 @@ McCAD::IO::InputConfig::writeTemplate(){
                    "startSurfNum = 1\n"
                    "startMatNum = 1\n"
                    "maxLineWidth = 80\n"
+                   "# Name of the MC input file to be generated;\n"
                    "MCFileName = MCFile.i\n"
+                   "# Name of the Cell ID to solid volume mapping text file to be generated;\n"
                    "volumesFileName = volumes.i\n" 
+                   "# Name of the void to material cell IDs mapping text file to be generated;\n"
                    "voidCellsFileName = voidCells.i\n" << std::endl;
     inputConfig.close();
 }
@@ -215,7 +218,8 @@ McCAD::IO::InputConfig::populateMatList(){
         rejectedConvFileNames.push_back(boost::str(boost::format("%sRejectedConv.stp") % splitName));
         std::string matName = Tools::stringToLowerCase(Tools::splitLine(splitName, '_')[0]);
         double matDensity{0.0};
-        if(matName != "void" && Tools::splitLine(splitName, '_').size() > 1)
+        if (Tools::splitLine(splitName, '_').size() <= 1) matName = "void";
+        else if(matName != "void" && Tools::splitLine(splitName, '_').size() > 1)
             matDensity = std::stof(Tools::splitLine(splitName, '_')[1]);
         materialsInfo.push_back(std::make_tuple(matName, matDensity));
     }

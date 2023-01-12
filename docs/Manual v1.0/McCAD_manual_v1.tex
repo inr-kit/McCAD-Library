@@ -46,21 +46,22 @@
 % INTRODUCTION
 % -------------------------------------------------------------------------------------
 \section{Introduction} \label{sec:Introduction}
-McCAD is a library with an executable for the conversion of CAD solid models to the input syntax of the Monte Carlo (MC) code MCNP; from Boundary Representation "BREP" to Constructive Solid Geometry "CSG". The library is written in C++ and uses CMake as a build system. It has Open CASCADE Technology and Boost C++ libraries as dependencies. Currently, the library is capable of processing solids with the following surface types and their combinations:
+McCAD is a library with an executable for the conversion of CAD solid models to the input syntax of the Monte Carlo (MC) code MCNP; from Boundary Representation "BREP" to Constructive Solid Geometry "CSG". The library is written in C++ and uses CMake as a build system. It has Open CASCADE Technology and Boost C++ libraries as dependencies. Currently, the library is capable of processing solids with the following surface types - and their combinations:
 \begin{itemize}
 	\item planar
 	\item cylindrical
 	\item toroidal
+         \item conical
 \end{itemize}
 The general capabilities/output of the library include:
 \begin{itemize}
 	\item producing a list of volumes of CAD solids as loaded from the input STEP file(s).
 	\item decomposing complex solids into their constituent convex primitives.
-	\item converting decomposed solids into the input syntax the MC code MCNP.
-	\item void generation.
-	\item generating entries, surface source and cell tallies, to calculate stochastic cell volumes on the generated MC input file.
+	\item converting decomposed solids into the input syntax of the MC code MCNP.
+	\item automatic void generation.
+	\item generating entries - surface source and cell tallies - for stochastic cell volume calculation on the generated MC input file.
 	\item producing a mapping of cell IDs on the generated MC input file to the corresponding volumes and names of CAD solids as loaded from the decomposed STEP file(s).
-	\item producing a mapping of void-to-material cells in the generated MC input file.
+	\item producing a mapping of void to material cells in the generated MC input file.
 \end{itemize}
 
 % -------------------------------------------------------------------------------------
@@ -191,7 +192,7 @@ In general, there are three types of information that need to be provided to McC
 	The first input to be provided is the input configuration file, McCADInputConfig.i.  When run via a command line \emph{without arguments}, McCAD will generate a template configuration file, figure (\ref{fig:config}), with the default values of the run parameters. In both run modes, decomposition and conversion, McCAD input parameters are needed. The run parameters are assigned values by default and can be modified by the user. Below is a description of the general input parameters.
 	\begin{figure}[h!]
 		\centering
-		\includegraphics[scale=0.5]{figures/configFile.png}
+		\includegraphics[scale=0.4]{figures/configFile.png}
 		\caption{McCAD Input Configuration File}
 		\label{fig:config}
 	\end{figure}

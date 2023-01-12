@@ -1,5 +1,5 @@
-#ifndef ASSISTPLNCYLSURFACEGERAOR_HPP
-#define ASSISTPLNCYLSURFACEGERAOR_HPP
+#ifndef ASSISTPLNCYLSURFACEGENERATOR_HPP
+#define ASSISTPLNCYLSURFACEGENERATOR_HPP
 
 // C++
 #include <map>
@@ -11,8 +11,7 @@
 #include "edge_impl.hpp"
 #include "cylSolid_impl.hpp"
 #include "boundSurface_impl.hpp"
-//OCC
-#include <Standard.hxx>
+// OCCT
 #include <TopoDS_Face.hxx>
 
 namespace McCAD::Decomposition{
@@ -21,22 +20,22 @@ namespace McCAD::Decomposition{
       AssistPlnCylSurfaceGenerator(const IO::InputConfig& inputConfig);
       ~AssistPlnCylSurfaceGenerator();
   private:
-      using edgesMap = std::map<Standard_Integer, std::vector<std::shared_ptr<Geometry::Edge>>>;
+      using edgesMap = std::map<int, std::vector<std::shared_ptr<Geometry::Edge>>>;
   public:
       IO::InputConfig inputConfig;
       void operator()(Geometry::CYLSolid& solidObj);
       std::optional<std::shared_ptr<Geometry::BoundSurface>>
       generateThroughLineAxis(const std::shared_ptr<Geometry::BoundSurface>& cylinderFace,
                               const std::shared_ptr<Geometry::Edge>& commonEdge,
-                              const Standard_Real& boxDiagonalLength,
-                              const Standard_Real& meshDeflection);
+                              const double& boxDiagonalLength,
+                              const double& meshDeflection);
       std::optional<std::shared_ptr<Geometry::BoundSurface>>
       generateThroughTwoLines(const std::shared_ptr<Geometry::BoundSurface>& cylinderFace,
                               const std::shared_ptr<Geometry::Edge>& firstEdge,
                               const std::shared_ptr<Geometry::Edge>& secondEdge,
-                              const Standard_Real& boxDiagonalLength,
-                              const Standard_Real& meshDeflection);
+                              const double& boxDiagonalLength,
+                              const double& meshDeflection);
   };
 }
 
-#endif //ASSISTPLNCYLSURFACEGERAOR_HPP
+#endif //ASSISTPLNCYLSURFACEGENERATOR_HPP

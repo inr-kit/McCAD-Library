@@ -12,6 +12,7 @@
 #include "cylSolid_impl.hpp"
 #include "torSolid_impl.hpp"
 #include "mixedSolid_impl.hpp"
+#include "conSolid_impl.hpp"
 #include "boundSurface_impl.hpp"
 #include "solid_impl.hpp"
 
@@ -30,6 +31,7 @@ namespace McCAD::Decomposition{
       bool operator()(std::shared_ptr<Geometry::CYLSolid>& solidObj);
       bool operator()(std::shared_ptr<Geometry::TORSolid>& solidObj);
       bool operator()(std::shared_ptr<Geometry::MXDSolid>& solidObj);
+      bool operator()(std::shared_ptr<Geometry::CONSolid>& solidObj);
       static bool throughNoBoundarySurfaces(
               const std::vector<std::shared_ptr<Geometry::BoundSurface>>& facesList);
       static bool planeSplitOnlyPlane(

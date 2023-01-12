@@ -1,15 +1,13 @@
-#include "SolidRepairer.hpp"
-
 // McCAD
+#include "SolidRepairer.hpp"
 #include "SolidRebuilder.hpp"
-
-// OCC
+// OCCT
 #include <BRepCheck_Analyzer.hxx>
 
 bool
 McCAD::Decomposition::SolidRepairer::operator()(
         TopoDS_Solid& solid) const{
-    if(BRepCheck_Analyzer{solid, Standard_True}.IsValid())
+    if(BRepCheck_Analyzer{solid, true}.IsValid())
         return true;
 
     auto rebuiltSolid = SolidRebuilder{}(solid);

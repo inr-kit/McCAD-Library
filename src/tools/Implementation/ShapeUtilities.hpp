@@ -10,4 +10,4 @@ namespace McCAD::Tools{
 
 }
 
-#endif
+#endif //SHAPEUTILITIES_HPP

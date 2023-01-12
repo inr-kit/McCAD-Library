@@ -14,12 +14,12 @@ McCAD::Geometry::BoundSurface::accessBSImpl() const{
   return pBSImpl.get();
 }
 
-Standard_Boolean
+bool
 McCAD::Geometry::BoundSurface::operator == (const McCAD::Geometry::BoundSurface& that){
   return pBSImpl->isEqual(that);
 }
 
-Standard_Boolean
+bool
 McCAD::Geometry::BoundSurface::operator << (const McCAD::Geometry::BoundSurface& that){
   return pBSImpl->canFuse(that);
 }

@@ -10,7 +10,6 @@
 #include "stepreader.hpp"
 #include "inputconfig.hpp"
 // OCC
-#include <Standard.hxx>
 #include <TopoDS_Shape.hxx>
 #include <TDF_Label.hxx>
 #include <TopTools_HSequenceOfShape.hxx>
@@ -30,10 +29,11 @@ namespace McCAD::IO{
 
     std::string fileName;
     void readSTEP();
-    Standard_Boolean getLabelInfo(const TDF_Label& aLabel);
-    Standard_Boolean iterateLabelChilds(const TDF_Label& aLabel);
-    Standard_Boolean basicReader(const std::string& fileName);
+    bool getLabelInfo(const TDF_Label& aLabel);
+    bool iterateLabelChilds(const TDF_Label& aLabel);
+    bool basicReader(const std::string& fileName);
     void writeVolumes();
+    void writeSurfacesTally();
   };
 }
 

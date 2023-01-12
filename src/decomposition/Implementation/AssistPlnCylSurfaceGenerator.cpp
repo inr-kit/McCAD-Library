@@ -8,7 +8,7 @@
 #include "splitSurfacesGenerator.hpp"
 #include "surfaceObjCerator.hpp"
 #include "faceParameters.hpp"
-//OCC
+// OCCT
 #include <GeomAbs_CurveType.hxx>
 #include <BRep_Tool.hxx>
 #include <BRepTools.hxx>
@@ -30,15 +30,15 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
     auto& planesList = solidObj.accessSImpl()->planesList;
     std::vector<std::shared_ptr<Geometry::Edge>> commonEdges;
     edgesMap commonLineEdgesMap, commonCurveEdgesMap;
-    for(Standard_Integer i = 0; i < cylindersList.size(); ++i){
+    for(int i = 0; i < cylindersList.size(); ++i){
         // If cylinder is closed, then ignore the cylindrical surface.
         if(Tools::FaceParameters{}.getRadian(cylindersList[i]->accessSImpl()->face) >= 2*inputConfig.PI) continue;
-        for(Standard_Integer j = 0; j < planesList.size(); ++j){
+        for(int j = 0; j < planesList.size(); ++j){
             commonEdges = CommonEdgeFinder{inputConfig.angularTolerance,
                     inputConfig.distanceTolerance, inputConfig.precision}(
                         cylindersList[i], planesList[j]);
             if(!commonEdges.empty()){
-                for(Standard_Integer k = 0; k < commonEdges.size(); ++k){
+                for(int k = 0; k < commonEdges.size(); ++k){
                     // Only accept edges that are not spot or seem edges
                     if(!BRep_Tool::IsClosed(commonEdges[k]->accessEImpl()->edge,
                                             cylindersList[i]->accessSImpl()->face) &&
@@ -69,7 +69,7 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
                         } else{
                             // If there exists a common edge between cylindrical surfaces,
                             // but failed to generate a split surface then reject solid.
-                            solidObj.accessSImpl()->rejectSolid = Standard_True;
+                            solidObj.accessSImpl()->rejectSolid = true;
                         }
                     }
                 }
@@ -101,12 +101,12 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
                             } else{
                                 // If there exists a common edge between cylindrical surfaces,
                                 // but failed to generate a split surface then reject solid.
-                                solidObj.accessSImpl()->rejectSolid = Standard_True;
+                                solidObj.accessSImpl()->rejectSolid = true;
                             }
                         }
                     } else{
                         // Generate split surfaces through the axis and the edges.
-                        Standard_Integer increment{0};
+                        int increment{0};
                         if(commonEdgesToUse.size() >= 1){
                             for(const auto& edge : commonEdgesToUse){
                                 auto assistSurface = generateThroughLineAxis(
@@ -123,7 +123,7 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
                             if(!solidObj.accessSImpl()->assistFacesMap[cylindersList[i]]){
                                 // If there exists a common edge between cylindrical surfaces,
                                 // but failed to generate a split surface then reject solid.
-                                solidObj.accessSImpl()->rejectSolid = Standard_True;
+                                solidObj.accessSImpl()->rejectSolid = true;
                             }
                         }
                     }
@@ -142,7 +142,7 @@ std::optional<std::shared_ptr<McCAD::Geometry::BoundSurface>>
 McCAD::Decomposition::AssistPlnCylSurfaceGenerator::generateThroughLineAxis(
         const std::shared_ptr<Geometry::BoundSurface>& cylinderFace,
         const std::shared_ptr<Geometry::Edge>& commonEdge,
-        const Standard_Real& boxDiagonalLength, const Standard_Real& meshDeflection){
+        const double& boxDiagonalLength, const double& meshDeflection){
     BRepAdaptor_Surface surfaceAdaptor(cylinderFace->accessSImpl()->face);
     auto splitFace = SplitSurfaceGenerator{inputConfig.edgeTolerance,
             inputConfig.precision, inputConfig.angularTolerance}.generatePlaneOnLineAxis(
@@ -158,10 +158,10 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::generateThroughLineAxis(
         }
         assistSurface->accessBSImpl()->assistEdgesList.push_back(commonEdge);
         assistSurface->accessSImpl()->throughConcaveEdges += 1;
-        assistSurface->accessSImpl()->isAssistSurface = Standard_True;
+        assistSurface->accessSImpl()->isAssistSurface = true;
         // Set the assist surface reference to the original surfaces.
-        cylinderFace->accessSImpl()->hasAssistSurface = Standard_True;
-        commonEdge->accessEImpl()->useForSplitSurface = Standard_True;
+        cylinderFace->accessSImpl()->hasAssistSurface = true;
+        commonEdge->accessEImpl()->useForSplitSurface = true;
         return assistSurface;
     }
     return std::nullopt;
@@ -172,7 +172,7 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::generateThroughTwoLines(
         const std::shared_ptr<Geometry::BoundSurface>& cylinderFace,
         const std::shared_ptr<Geometry::Edge>& firstEdge,
         const std::shared_ptr<Geometry::Edge>& secondEdge,
-        const Standard_Real& boxDiagonalLength, const Standard_Real& meshDeflection){
+        const double& boxDiagonalLength, const double& meshDeflection){
     // Need first to assert that the edges are planar.
     gp_Vec firstVec(firstEdge->accessEImpl()->startPoint,
                     firstEdge->accessEImpl()->endPoint),
@@ -185,7 +185,7 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::generateThroughTwoLines(
         gp_Dir normalDir{firstDir.Crossed(secondDir)};
         if(!normalDir.IsNormal(firstDir, inputConfig.angularTolerance) &&
            !normalDir.IsNormal(secondDir, inputConfig.angularTolerance)){
-            // Edges are not planar!. Cannot be used to vreate surface.
+            // Edges are not co-planar!. Cannot be used to create a split surface
             return std::nullopt;
         }
     }
@@ -203,11 +203,11 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::generateThroughTwoLines(
         assistSurface->accessBSImpl()->assistEdgesList.push_back(firstEdge);
         assistSurface->accessBSImpl()->assistEdgesList.push_back(secondEdge);
         assistSurface->accessSImpl()->throughConcaveEdges += 2;
-        assistSurface->accessSImpl()->isAssistSurface = Standard_True;
+        assistSurface->accessSImpl()->isAssistSurface = true;
         // Set the assist surface reference to the original surfaces.
-        cylinderFace->accessSImpl()->hasAssistSurface = Standard_True;
-        firstEdge->accessEImpl()->useForSplitSurface = Standard_True;
-        secondEdge->accessEImpl()->useForSplitSurface = Standard_True;
+        cylinderFace->accessSImpl()->hasAssistSurface = true;
+        firstEdge->accessEImpl()->useForSplitSurface = true;
+        secondEdge->accessEImpl()->useForSplitSurface = true;
         return assistSurface;
     }
     return std::nullopt;

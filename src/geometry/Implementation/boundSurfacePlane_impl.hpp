@@ -5,8 +5,6 @@
 #include <string>
 // McCAD
 #include "boundSurfacePlane.hpp"
-// OCC
-#include <Standard.hxx>
 
 namespace McCAD::Geometry{
   class BoundSurfacePlane::Impl {
@@ -16,8 +14,8 @@ namespace McCAD::Geometry{
 
       BoundSurfacePlane* boundSurfacePlane;
       std::string surfaceType = "Plane";
-      void generateExtendedPlane(const Standard_Real& boxDiagonalLength,
-                                 const Standard_Real& edgeTolerance);
+      void generateExtendedPlane(const double& boxDiagonalLength,
+                                 const double& edgeTolerance);
   };
 }
 

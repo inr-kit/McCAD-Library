@@ -11,6 +11,7 @@
 #include "cylSolid_impl.hpp"
 #include "torSolid_impl.hpp"
 #include "mixedSolid_impl.hpp"
+#include "conSolid_impl.hpp"
 // OCCT
 #include <TopoDS_Shape.hxx>
 #include <TopTools_HSequenceOfShape.hxx>
@@ -32,6 +33,7 @@ namespace McCAD::Geometry::Impl{
     std::vector<std::shared_ptr<Geometry::CYLSolid>> cylSolidsList;
     std::vector<std::shared_ptr<Geometry::TORSolid>> torSolidsList;
     std::vector<std::shared_ptr<Geometry::MXDSolid>> mixedSolidsList;
+    std::vector<std::shared_ptr<Geometry::CONSolid>> conSolidsList;
     // Decomposition variables
     std::unique_ptr<TopTools_HSequenceOfShape> acceptedInputShapesList;
     std::unique_ptr<TopTools_HSequenceOfShape> rejectedInputShapesList;
