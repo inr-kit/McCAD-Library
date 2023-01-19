@@ -16,7 +16,7 @@
 #include "decomposition.hpp"
 #include "conversion.hpp"
 
-/** ********************************************************************
+/* *********************************************************************
 * @brief    The main function that executes McCAD per user arguments.
 * @param    argc is the number of arguments entered.
 * @param    argv is a list of arguments: [], [help], [read], or [run].
@@ -24,7 +24,7 @@
 * @date     01/01/2021
 * @modified 09/06/2022
 * @author   Moataz Harb
-* **********************************************************************/
+* ********************************************************************* */
 int main (int argc, char* argv[]){
     auto timeStart{std::chrono::system_clock::now()},
          timeEnd{std::chrono::system_clock::now()};
