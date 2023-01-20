@@ -11,6 +11,7 @@
 #include <BRepPrimAPI_MakeHalfSpace.hxx>
 #include <BRepAdaptor_Surface.hxx>
 #include <BRepAlgoAPI_Common.hxx>
+#include <Message_ProgressRange.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
 #include <GeomAbs_SurfaceType.hxx>
 #include <gp_Pln.hxx>
