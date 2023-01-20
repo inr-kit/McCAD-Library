@@ -79,7 +79,8 @@ McCAD::Geometry::BoundSurface::Impl::generateMesh(const double& meshDeflection){
           // Get mesh nodes.
           int numberNodes = mesh->NbNodes();
           TColgp_Array1OfPnt meshNodes(1, numberNodes);
-          meshNodes = mesh->Nodes();
+          //meshNodes = mesh->Nodes();
+          meshNodes = *mesh->MapNodeArray();
           // Get mesh triangles.
           int numberTriangles = mesh->NbTriangles();
           const Poly_Array1OfTriangle& Triangles = mesh->Triangles();

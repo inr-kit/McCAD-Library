@@ -46,7 +46,7 @@
 % INTRODUCTION
 % -------------------------------------------------------------------------------------
 \section{Introduction} \label{sec:Introduction}
-McCAD is a library with an executable for the conversion of CAD solid models to the input syntax of the Monte Carlo (MC) code MCNP; from Boundary Representation "BREP" to Constructive Solid Geometry "CSG". The library is written in C++ and uses CMake as a build system. It has Open CASCADE Technology and Boost C++ libraries as dependencies. Currently, the library is capable of processing solids with the following surface types - and their combinations:
+McCAD is a library with an executable for the conversion of CAD solid models into the input syntax of the Monte Carlo (MC) code MCNP; from Boundary Representation "BRep" to Constructive Solid Geometry "CSG". The library is written in C++ and uses CMake as a build system. It has Open CASCADE Technology (OCCT) and Boost C++ libraries as dependencies. Currently, the library is capable of processing solids with the following surface types - and their combinations:
 \begin{itemize}
 	\item planar
 	\item cylindrical
@@ -55,45 +55,44 @@ McCAD is a library with an executable for the conversion of CAD solid models to 
 \end{itemize}
 The general capabilities/output of the library include:
 \begin{itemize}
-	\item producing a list of volumes of CAD solids as loaded from the input STEP file(s).
+	\item generating a list of volumes of CAD solids as loaded from the input STEP file(s).
 	\item decomposing complex solids into their constituent convex primitives.
 	\item converting decomposed solids into the input syntax of the MC code MCNP.
-	\item automatic void generation.
+	\item automatic, and adaptive, void generation.
 	\item generating entries - surface source and cell tallies - for stochastic cell volume calculation on the generated MC input file.
-	\item producing a mapping of cell IDs on the generated MC input file to the corresponding volumes and names of CAD solids as loaded from the decomposed STEP file(s).
-	\item producing a mapping of void to material cells in the generated MC input file.
+	\item generating a mapping of cell IDs on the produced MC input file to the corresponding volumes and names of CAD solids as loaded from the decomposed STEP file(s).
+	\item generating a mapping of void to material cells in the produced MC input file.
 \end{itemize}
 
 % -------------------------------------------------------------------------------------
 % Installation
 % -------------------------------------------------------------------------------------
 \section{Installation from Source} \label{sec:Installation from Source}
-Building of the McCAD library is supported on both Linux and Windows operating systems (OS). The library has three 3rd-party dependencies: CMake, Boost C++ libraries, and Open CASCADE Technology. CMake is the standard build system for McCAD and it comes by default with most Linux distributions as well as Windows OS. Boost C++ libraries consist of header files that are utilized for parallel processing in McCAD. Open CASCADE Technology (OCCT) is used as a geometry engine for geometrical solids manipulation and decomposition. Below are guiding steps for installation on both Linux and Windows OSs. 
+Building of the McCAD library is supported on both Linux and Windows operating systems (OS). The library has three 3rd-party dependencies: CMake, Boost C++ libraries, and OCCT. CMake is the standard build system for McCAD and it comes by default with most Linux distributions as well as Windows OS. Boost C++ libraries consist of header files that are utilized for parallel processing in McCAD. OCCT is used as a geometry engine for geometrical solids manipulation and decomposition. Below are guiding steps for installation on both Linux and Windows OSs. 
   \subsection{Linux}
     Listed below are the currently supported Linux distributions:
     \begin{itemize}
-  	  \item Ubuntu 20.04 LTS
-  	  \item Ubuntu 18.04 LTS
+  	  \item Ubuntu 18.04 LTS and later
     \end{itemize} 
     Testing of installation on other distributions is still underway! thus Ubuntu is recommended as a distribution to install McCAD. Below are general steps to install McCAD and its dependencies.
     \begin{itemize}
   	  \item \textbf{CMake}
   	  \begin{itemize}
-		\item download cmake-3.23.0.tar.gz from \url{https://cmake.org/download/} then execute the commands below in a terminal.
-		\item \$ tar -xzvf cmake-3.23.0.tar.gz
-		\item \$ cd cmake-3.23.0
+		\item download cmake-3.25.2.tar.gz from \url{https://cmake.org/download/} then execute the commands below in a terminal.
+		\item \$ tar -xzvf cmake-3.25.2.tar.gz
+		\item \$ cd cmake-3.25.2
 		\item \$ mkdir build
 		\item \$ cd build
-		\item \$ cmake .. -DCMAKE\_USE\_OPENSSL=OFF \\-DCMAKE\_INSTALL\_PREFIX=.
+		\item \$ cmake .. -DCMAKE\_USE\_OPENSSL=OFF
 		\item \$ make
 		\item \$ make install
   	  \end{itemize}
       \item \textbf{Boost C++ libraries}
       \begin{itemize}
-    	\item download boost\_1\_78\_0.tar.gz from \url{https://www.boost.org/users/download/} then execute the commands below in a terminal.
-    	\item \$ tar -xvzf boost\_1\_78\_0.tar.gz
+    	\item download boost\_1\_81\_0.tar.gz from \url{https://www.boost.org/users/download/} then execute the commands below in a terminal.
+    	\item \$ tar -xvzf boost\_1\_81\_0.tar.gz
     	\item \emph{NOTE}: If Boost libraries are not needed for other applications, then you can skip the remaining steps!
-    	\item \$ cd boost\_1\_78\_0
+    	\item \$ cd boost\_1\_81\_0
     	\item \$ mkdir build
     	\item \$ cd tools/build
     	\item \$ ./bootstrap.sh
@@ -101,10 +100,10 @@ Building of the McCAD library is supported on both Linux and Windows operating s
       \end{itemize}
       \item \textbf{Open CASCADE Technology (OCCT)}
       \begin{itemize}
-        \item \emph{NOTE}: the instructions on the installation of dependencies can be found on the side menu in \url{https://dev.opencascade.org/doc/occt-7.5.0/overview/html/index.html} by navigating to "Build, Debug and Upgrade $>$ Build 3rd-parties" then following the instructions under "Installation from Official Repositories".
-    	\item download opencascade-7.5.0.tgz from \url{https://dev.opencascade.org/release/previous} then execute the commands below in a terminal.
-    	\item \$ tar -xzvf opencascade-7.5.0.tgz
-    	\item \$ cd opencascade-7.5.0
+        \item \emph{NOTE}: the instructions on the installation of dependencies can be found on the side menu in \url{https://dev.opencascade.org/doc/occt-7.7.0/overview/html/index.html} by navigating to "Build, Debug and Upgrade $>$ Build 3rd-parties" then following the instructions under "Installation from Official Repositories".
+    	\item download opencascade-7.7.0.tgz from \url{https://dev.opencascade.org/release} then execute the commands below in a terminal.
+    	\item \$ tar -xzvf opencascade-7.7.0.tgz
+    	\item \$ cd opencascade-7.7.0
     	\item \$ mkdir build
     	\item \$ cd build
     	\item \$ cmake .. -DCMAKE\_BUILD\_TYPE=Release \\-DBUILD\_LIBRARY\_TYPE=Shared \\-DCMAKE\_INSTALL\_PREFIX=. \\-DINSTALL\_TEST\_CASES=true \\-DINSTALL\_DOC\_Overview=true
@@ -113,23 +112,23 @@ Building of the McCAD library is supported on both Linux and Windows operating s
       \end{itemize}
 	  \item \textbf{McCAD}
 	  \begin{itemize}
-		\item \emph{NOTE}: building a shared library is recommended! Should a static library be needed, the user has to ensure a compliant build of Open CASCADE Technology by changing "Shared" to "Static" in the build type; -DBUILD\_LIBRARY\_TYPE=STATIC.
-		\item \$ git clone \url{https://github.com/inr-kit/McCAD_Library}
-		\item \$ cd McCAD\_Library
+		\item \emph{NOTE}: building a shared library is recommended! Should a static library be needed, the user has to ensure a compliant build of OCCT by changing "Shared" to "Static" in the build type; -DBUILD\_LIBRARY\_TYPE=STATIC.
+		\item \$ git clone \url{https://github.com/inr-kit/McCAD-Library}
+		\item \$ cd McCAD-Library
 		\item \$ mkdir build
 		\item \$ cd build
 		\item to build a shared library (\emph{recommended}):
 		  \begin{itemize}
-			\item \$ CMake .. \\-DCMAKE\_INSTALL\_PREFIX=. \\-DBUILD\_RPATH=true \\-DBUILD\_SHARED=true \\-DBUILD\_SHARED\_EXE=true \\-DBOOST\_CUSTOM\_ROOT=$<$Path to boost\_1\_78\_0$>$ \\-DOCC\_CUSTOM\_ROOT=$<$Path to opencascade-7.5.0/build$>$ 
+			\item \$ cmake .. \\-DCMAKE\_INSTALL\_PREFIX=. \\-DBUILD\_RPATH=true \\-DBUILD\_SHARED=true \\-DBUILD\_SHARED\_EXE=true \\-DBOOST\_CUSTOM\_ROOT=$<$Path to boost\_1\_81\_0$>$ \\-DOCC\_CUSTOM\_ROOT=$<$Path to opencascade-7.7.0/build$>$ 
 			\\-DCMAKE\_EXE\_LINKER\_FLAGS="-m64 -fPIC" \\ -DCMAKE\_CXX\_FLAGS="-fPIC"
 		  \end{itemize}
-		\item to building a static library:
+		\item to build a static library:
 		\begin{itemize}
 			\item replace "SHARED" by "STATIC" in "\\-DBUILD\_SHARED \\-DBUILD\_SHARED\_EXE in the above commands.
 		\end{itemize}
 		\item \$ make
 		\item \$ make install
-		\item add the absolute path to McCAD/build/bin to .bashrc file or create an alias for McCAD to run from command line.
+		\item add the absolute path to McCAD/build/bin to $\sim$/.bashrc file or create an alias for McCAD to run from command line.
 	  \end{itemize}
     \end{itemize}
 
@@ -143,7 +142,7 @@ Building of the McCAD library is supported on both Linux and Windows operating s
 	  \item \textbf{CMake} (optional)
  	  \begin{itemize}
     	\item \emph{NOTE}: If usage of IDE - such Microsoft Visual Studio (VS) - is intended, then installing CMake can be skipped since most IDE builds CMake by default. However, it is recommended to update CMake and adding the full path to the bin folder to the "Path" environment variable.
- 		\item download and run the installer cmake-3.23.1-windows-x86\_64.msi from \url{https://cmake.org/download/}.
+ 		\item download and run the installer cmake-3.25.2-windows-x86\_64.msi from \url{https://cmake.org/download/}.
   	  \end{itemize}
 	  \item \textbf{Microsoft Visual Studio}
 	  \begin{itemize}
@@ -152,26 +151,26 @@ Building of the McCAD library is supported on both Linux and Windows operating s
 	  \end{itemize}
       \item \textbf{Boost C++ libraries}
       \begin{itemize}
-    	\item download boost\_1\_78\_0.zip from \url{https://www.boost.org/users/download/}.
-    	\item unzip boost\_1\_78\_0.zip.
+    	\item download boost\_1\_81\_0.zip from \url{https://www.boost.org/users/download/}.
+    	\item unzip boost\_1\_81\_0.zip.
     	\item \emph{NOTE}: if boost will be used for other applications then you can check the documentation in index.html in the unzipped folder for instruction on building the library. Otherwise, no need to build the library since McCAD only uses the header files.
       \end{itemize}
       \item \textbf{Open CASCADE Technology (OCCT)}
 	  \begin{itemize}
-		\item download and run the installer opencascade-7.5.0-vc14-64.exe from \url{https://dev.opencascade.org/release/previous}.
-		\item after successful installation there will be different folders for the many toolkits that come with a full installation of opencascade; such as freeimage, ffmpeg, openvr, vtk, etc. It is recommended to add the full path to all bin folders to the Windows "Path" environment variable.
+		\item download and run the installer opencascade-7.7.0-vc14-64.exe from \url{https://dev.opencascade.org/release}.
+		\item after successful installation there will be different folders for the toolkits that come with a full installation of opencascade; such as freeimage, ffmpeg, openvr, vtk, etc. It is recommended to add the full path to all bin folders to the Windows "Path" environment variable.
 	  \end{itemize}
 	  \item \textbf{McCAD}
 	  \begin{itemize}
 	  	\item It is recommended to restart the PC/Laptop before proceeding to allow the changes to the "Path" environment from above to take effect. 
 		\item download, by selecting "Code $>$ Download ZIP", source code from \\\url{https://github.com/inr-kit/McCAD-Library}.
-		\item unzip McCAD\_Library.
-		\item open MSVC and select the McCAD\_Library folder.
+		\item unzip McCAD-Library.
+		\item open MSVC and select the McCAD-Library folder.
 		\item from the "Solution Explorer - Folder Review" double click CMakeSettings.json file. This will open the file in IDE. \item Set a "Configuration name". 
 		\item ensure that "Configuration type" is set to "Release" and "Toolset" is set to "msvc\_x64\_x64".
 		\item to build a static library (\emph{recommended}):
 		  \begin{itemize}
-		  	\item ensure that the following is on "CMake command arguments" \\-DLINUX\_OS=false \\-DBUILD\_RPATH=true \\-DBUILD\_STATIC=true \\-DBUILD\_STATIC\_EXE=true \\-DBOOST\_CUSTOM\_ROOT="$<$Path to boost\_1\_78\_0$>$" \\-DOCC\_CUSTOM\_ROOT="$<$Path to OpenCASCADE-7.5.0-vc14-64\textbackslash opencascade-7.5.0$>$"
+		  	\item ensure that the following is on "CMake command arguments" \\-DBUILD\_RPATH=true \\-DBUILD\_STATIC=true \\-DBUILD\_STATIC\_EXE=true \\-DBOOST\_CUSTOM\_ROOT="$<$Path to boost\_1\_81\_0$>$" \\-DOCC\_CUSTOM\_ROOT="$<$Path to OpenCASCADE-7.7.0-vc14-64\textbackslash opencascade-7.7.0$>$"
 		  \end{itemize}
 		\item to build a shared library:
 		\begin{itemize}
@@ -179,7 +178,7 @@ Building of the McCAD library is supported on both Linux and Windows operating s
 		\end{itemize}
 		\item from the top menu select "Build $>$ Build All".
 		\item after successful completion of the previous step, from the top menu select "Build $>$ Install McCAD".
-		\item add the full path to McCAD\_Library/build/bin to the PATH environment variable. 
+		\item add the full path to McCAD-Library/build/bin to the PATH environment variable. 
 	  \end{itemize}
     \end{itemize}
 
@@ -192,7 +191,7 @@ In general, there are three types of information that need to be provided to McC
 	The first input to be provided is the input configuration file, McCADInputConfig.i.  When run via a command line \emph{without arguments}, McCAD will generate a template configuration file, figure (\ref{fig:config}), with the default values of the run parameters. In both run modes, decomposition and conversion, McCAD input parameters are needed. The run parameters are assigned values by default and can be modified by the user. Below is a description of the general input parameters.
 	\begin{figure}[h!]
 		\centering
-		\includegraphics[scale=0.4]{figures/configFile.png}
+		\includegraphics[scale=0.42]{figures/configFile.png}
 		\caption{McCAD Input Configuration File}
 		\label{fig:config}
 	\end{figure}
@@ -290,7 +289,7 @@ This section will discuss how to run McCAD from a command line. The example inpu
   \item with the path to McCAD executable added to the PATH environment variable, the McCADInputConfig.i file could be generated by running McCAD, without any arguments, figure (\ref{fig:McCAD_output}).
   \begin{figure}[h!]
   	\centering
-  	\includegraphics[scale=0.7]{figures/McCAD_output.png}
+  	\includegraphics[scale=0.75]{figures/McCAD_output.png}
   	\caption{McCAD Displayed Output}
   	\label{fig:McCAD_output}
   \end{figure}
@@ -330,7 +329,7 @@ This section will discuss how to run McCAD from a command line. The example inpu
 	\item the third file is produced by McCAD conversion algorithm, MCFile.i. The file is the MCNP input file and contains cells, surfaces, and data cards in MCNP format, figure (\ref{fig:MCFile}).
 	\begin{figure}[h!]
 		\centering
-		\includegraphics[scale=0.5]{figures/cellCards.png}
+		\includegraphics[scale=0.55]{figures/cellCards.png}
 		\caption{McCAD Generated MCFile.i File}
 		\label{fig:MCFile}
 	\end{figure}
@@ -338,7 +337,7 @@ This section will discuss how to run McCAD from a command line. The example inpu
 	\item the fourth file is produced by McCAD conversion algorithm, volumes.i. The file lists cell IDs, volumes of solids, and name on the CAD STEP file, figure (\ref{fig:volumes file}).
 	\begin{figure}[h!]
 		\centering
-		\includegraphics[scale=0.5]{figures/volumesFile.png}
+		\includegraphics[scale=0.55]{figures/volumesFile.png}
 		\caption{McCAD Generated volumes.i File}
 		\label{fig:volumes file}
 	\end{figure}
@@ -346,7 +345,7 @@ This section will discuss how to run McCAD from a command line. The example inpu
 	\item the fifth file is produced by McCAD conversion algorithm, voidCells.i. The file maps void to material cell IDs, figure (\ref{fig:void cells file}).
 	\begin{figure}[h!]
 		\centering
-		\includegraphics[scale=0.4]{figures/voidCellFile.png}
+		\includegraphics[scale=0.45]{figures/voidCellFile.png}
 		\caption{McCAD Generated voidCells.i File}
 		\label{fig:void cells file}
 	\end{figure}
