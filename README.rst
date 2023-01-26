@@ -34,7 +34,7 @@ Dependencies:
 
 Installation:
 ------------- 
-Please refer to the "Installation from Source" section in the `manual <https://github.com/inr-kit/McCAD-Library/blob/master/docs/Manual%20v1.0/McCAD_manual_v1.pdf>`_.
+Please refer to the "Installation from Source" section in the `manual </docs/Manual%20v1.0/McCAD_manual_v1.pdf>`_.
 
 General notes on Usage:
 -----------------------
