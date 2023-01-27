@@ -1,9 +1,9 @@
-# McCAD v1.0 run parameters / Thu Jun  9 14:37:50 2022
+# McCAD v1.1 run parameters / Wed Jan 25 22:48:43 2023
 # =========================
 
 # Input
 # =====
-# > Debugging level: 0, 1, 2, 3. [0] provides no debugging outputs.
+# > Debugging level: 0, 1, 2, 3. [0] provides no debugging outputs;
 debugLevel = 0
 # > The unit used in the input STEP file(s). Only a single unit for all input STEP files!
 units = cm
@@ -32,12 +32,12 @@ torusSplitAngle = 30.0 [degrees]
 convert = false
 # > Choose whether to generate void cells;
 voidGeneration = false
-# > Condition to treat a compound as a single cell or a group of cells.
+# > Condition to treat a compound from the STEP file as a single cell, resulting in a unsion of subsolids cells expresseions;
 compoundIsSingleCell = false
 # > Minimum acceptable void volume should not be less than minSolidVolume;
 minVoidVolume = 1.0 [cm3]
 # > A larger number will result in fewer void cells but longer cell expressions;
-maxSolidsPerVoidCell = 40
+maxSolidsPerVoidCell = 20
 # > Choose whether to generate Bound Volume Heirarchy void cells;
 BVHVoid = false
 # > Choose the desired MC code for conversion;
@@ -46,7 +46,10 @@ startCellNum = 1
 startSurfNum = 1
 startMatNum = 1
 maxLineWidth = 80
+# Name of the MC input file to be generated;
 MCFileName = MCFile.i
+# Name of the Cell ID to solid volume mapping text file to be generated;
 volumesFileName = volumes.i
+# Name of the void to material cell IDs mapping text file to be generated;
 voidCellsFileName = voidCells.i
 
