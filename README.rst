@@ -10,12 +10,12 @@ The library is written in C++ and consists of two main algorithms:
 
 Useful links:
 -------------
-* McCAD-SALOME: McCAD library integrated with the `Salome <https://www.salome-platform.org/>`_ platform:
+* [Older version] McCAD-SALOME: McCAD library integrated with the `Salome <https://www.salome-platform.org/>`_ platform:
    * `docs <https://github.com/inr-kit/McCad-Salome-Docs>`_
    * `source <https://github.com/inr-kit/McCad-Salome-Source>`_
    * `binaries <https://github.com/inr-kit/McCad-Salome-Binaries>`_
  
-* McCAD-FreeCAD: an improved McCAD library integrated with the opensource CAD software `FreeCAD <https://www.freecadweb.org/>`_:
+* [Older version] McCAD-FreeCAD: an improved McCAD library integrated with the opensource CAD software `FreeCAD <https://www.freecadweb.org/>`_:
    * `source <https://github.com/inr-kit/McCAD-FreeCAD>`_
    
 * csg2csg: a tool for the translation between a variety of Monte Carlo code formats: 
@@ -34,14 +34,14 @@ Dependencies:
 
 Installation:
 ------------- 
-Please refer to the "Installation from Source" section in the `manual </docs/Manual%20v1.0/McCAD_manual_v1.pdf>`_.
+Please refer to the "Installation from Source" section in the `manual </docs/Manual/McCAD_manual.pdf>`_.
 
 General notes on Usage:
 -----------------------
 1- The library assumes a clean CAD model, one with no intersections/overlapping.
    * while in theory the library won't report an error with intersections/overlapping as solids are processed individually, it will cause issue for void generation and conversion!
 2- There are known bugs with the decomposition algorithm which are currently being investigated.
-   * a list of bugs and proposed workaround can be found in the "Known issues" section in the `manual <https://github.com/inr-kit/McCAD-Library/blob/master/docs/Manual%20v1.0/McCAD_manual_v1.pdf>`_.
+   * a list of bugs and proposed workaround can be found in the "Known issues" section in the `manual </docs/Manual/McCAD_manual.pdf>`_.
    
 Reporting issues:
 -----------------
