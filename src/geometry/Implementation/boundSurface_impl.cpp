@@ -79,13 +79,13 @@ McCAD::Geometry::BoundSurface::Impl::generateMesh(const double& meshDeflection){
           // Get mesh nodes.
           int numberNodes = mesh->NbNodes();
           TColgp_Array1OfPnt meshNodes(1, numberNodes);
-          //meshNodes = mesh->Nodes();
           meshNodes = *mesh->MapNodeArray();
           // Get mesh triangles.
           int numberTriangles = mesh->NbTriangles();
-          const Poly_Array1OfTriangle& Triangles = mesh->Triangles();
+          Poly_HArray1OfTriangle meshTriangles(1, numberTriangles);
+          meshTriangles = *mesh->MapTriangleArray();
           std::array<int, 3> triangleNodes;
-          for (const auto& Triangle : Triangles){
+          for (const auto& Triangle : meshTriangles){
               Triangle.Get(triangleNodes[0], triangleNodes[1], triangleNodes[2]);
               std::array<gp_Pnt, 3> points = {
                   meshNodes(triangleNodes[0]).Transformed(Transformation),
