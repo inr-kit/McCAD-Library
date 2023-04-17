@@ -8,5 +8,6 @@ input_file
 /latex/*
 2git 
 runLog.txt
-.vs/*
-/build/
+.vs/
+.vscode/
+build/
