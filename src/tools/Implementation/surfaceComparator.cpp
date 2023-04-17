@@ -6,6 +6,8 @@
 #include "surfaceComparator.hpp"
 #include "planeComparator.hpp"
 #include "cylinderComparator.hpp"
+#include "coneComparator.hpp"
+#include "torusComparator.hpp"
 // OCC
 #include <TopLoc_Location.hxx>
 #include <GeomAdaptor_Surface.hxx>
@@ -46,7 +48,16 @@ McCAD::Tools::SurfaceComparator::operator()(const TopoDS_Face& firstFace,
             distanceTolerance}(firstAdaptor, secondAdaptor);
         if (condition) return condition.value();
         else return Standard_False;
-    } else if (firstAdaptor.GetType() == GeomAbs_Torus)
-        return Standard_False; //TorComparator{}(firstAdaptor, secondAdaptor);
+    } else if (firstAdaptor.GetType() == GeomAbs_Torus) {
+        auto condition = TorusComparator{ precision, angularTolerance,
+            distanceTolerance }(firstAdaptor, secondAdaptor);
+        if (condition) return condition.value();
+        else return Standard_False;
+    } else if (firstAdaptor.GetType() == GeomAbs_Cone) {
+        auto condition = ConeComparator{ precision, angularTolerance,
+            distanceTolerance }(firstAdaptor, secondAdaptor);
+        if (condition) return condition.value();
+        else return Standard_False;
+    }
     else return Standard_False;
 }

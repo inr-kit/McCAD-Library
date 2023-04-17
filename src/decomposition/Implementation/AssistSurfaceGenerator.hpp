@@ -6,6 +6,7 @@
 #include "cylSolid_impl.hpp"
 #include "torSolid_impl.hpp"
 #include "mixedSolid_impl.hpp"
+#include "coneSolid.hpp"
 // OCCT
 #include <Standard.hxx>
 

@@ -49,6 +49,8 @@ McCAD::Decomposition::FacesListGenerator::operator()(solidObjType& solidObj,
                     cylindersList.push_back(std::move(boundSurface));
                 } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Torus)){
                     toriList.push_back(std::move(boundSurface));
+                } else if(boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cone)){
+                    conesList.push_back(std::move(boundSurface));
                 }
             } else continue;
         }
@@ -89,9 +91,12 @@ McCAD::Decomposition::FacesListGenerator::addListsToSolidObj(solidObjType& solid
                            edgeTolerance, angularTolerance, distanceTolerance);
         mergeToriList(solidObj->accessSImpl()->boxDiagonalLength, precision,
                       edgeTolerance, angularTolerance, distanceTolerance);
+        mergeConeList(solidObj->accessSImpl()->boxDiagonalLength, precision,
+                      edgeTolerance, angularTolerance, distanceTolerance);
         solidObj->accessSImpl()->planesList = planesList;
         solidObj->accessSImpl()->cylindersList = cylindersList;
         solidObj->accessSImpl()->toriList = toriList;
+        solidObj->accessSImpl()->conesList = conesList;
     } else return;
 }
 
@@ -126,4 +131,15 @@ McCAD::Decomposition::FacesListGenerator::mergeToriList(const Standard_Real& box
     SurfacesMerger{}(toriList, boxDiagonalLength, precision, edgeTolerance,
                      angularTolerance, distanceTolerance);
     facesList.insert(facesList.end(), toriList.begin(), toriList.end());
+}
+
+void
+McCAD::Decomposition::FacesListGenerator::mergeConeList(const Standard_Real& boxDiagonalLength,
+                                                        const Standard_Real& precision,
+                                                        const Standard_Real& edgeTolerance,
+                                                        const Standard_Real& angularTolerance,
+                                                        const Standard_Real& distanceTolerance){
+    SurfacesMerger{}(conesList, boxDiagonalLength, precision, edgeTolerance,
+                     angularTolerance, distanceTolerance);
+    facesList.insert(facesList.end(), conesList.begin(), conesList.end());
 }

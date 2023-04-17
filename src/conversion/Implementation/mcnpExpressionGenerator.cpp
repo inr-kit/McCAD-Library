@@ -11,8 +11,8 @@
 McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(){}
 
 McCAD::Conversion::MCNPExprGenerator::MCNPExprGenerator(
-        const double& precision, const double& scalingFactor) :
-    precision{precision}, scalingFactor{scalingFactor}{
+        const double& precision, const double& angularTolerance, const double& scalingFactor) :
+    precision{ precision }, angularTolerance{ angularTolerance }, scalingFactor {scalingFactor} {
 }
 
 McCAD::Conversion::MCNPExprGenerator::~MCNPExprGenerator(){
@@ -22,6 +22,7 @@ McCAD::Conversion::MCNPExprGenerator::~MCNPExprGenerator(){
 * @brief   The operator calls the specialized writer functions of cell, surface, and data cards.
 * @param   solidObj is a solid object.
 * @date    31/12/2021
+* @modified 9/12/2022
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -62,6 +63,13 @@ McCAD::Conversion::MCNPExprGenerator::operator()(
         for (const auto& torSurface : solidObj->accessSImpl()->toriList){
             if(torSurface->accessBSImpl()->generateParmts(precision, scalingFactor))
                 genTorSurfExpr(torSurface, precision);
+            else throw(std::runtime_error("Error in generating surface expression!"));
+        }
+    }
+    if (solidObj->accessSImpl()->conesList.size() > 0) {
+        for (const auto& coneSurface : solidObj->accessSImpl()->conesList) {
+            if (coneSurface->accessBSImpl()->generateParmts(precision, scalingFactor))
+                genConeSurfExpr(coneSurface, precision, angularTolerance);
             else throw(std::runtime_error("Error in generating surface expression!"));
         }
     }
@@ -164,17 +172,27 @@ McCAD::Conversion::MCNPExprGenerator::genPlSurfExpr(
             (std::abs(parmtC) < precision)){
         plSurface->accessSImpl()->surfSymb = "PX";
         surfExpr += boost::str(boost::format("PX %13.7f") % (parmtD/parmtA));
+        plSurface->accessSImpl()->surfMcxPar = std::make_tuple("plane-x", std::to_string(parmtD / parmtA), "transmission");
     } else if ((std::abs(parmtA) < precision) && (std::abs(parmtB) >= precision) &&
                (std::abs(parmtC) < precision)){
         plSurface->accessSImpl()->surfSymb = "PY";
         surfExpr += boost::str(boost::format("PY %13.7f") % (parmtD/parmtB));
+        plSurface->accessSImpl()->surfMcxPar = std::make_tuple("plane-y", std::to_string(parmtD / parmtB), "transmission");
     } else if ((std::abs(parmtA) < precision) && (std::abs(parmtB) < precision) &&
                (std::abs(parmtC) >= precision)){
         plSurface->accessSImpl()->surfSymb = "PZ";
         surfExpr += boost::str(boost::format("PZ %13.7f") % (parmtD/parmtC));
-    } else
+        plSurface->accessSImpl()->surfMcxPar = std::make_tuple("plane-z", std::to_string(parmtD / parmtC), "transmission");
+    }
+    else {
         surfExpr += boost::str(boost::format("P %13.7f  %13.7f  %13.7f  %13.7f")
-                           % parmtA % parmtB % parmtC % parmtD);
+            % parmtA % parmtB % parmtC % parmtD);
+        std::string coeffs = std::to_string(parmtA) + " " +
+                             std::to_string(parmtB) + " " +
+                             std::to_string(parmtC) + " " +
+                             std::to_string(parmtD);
+        plSurface->accessSImpl()->surfMcxPar = std::make_tuple("plane", coeffs.c_str(), "transmission");
+    }
     plSurface->accessSImpl()->surfExpr = surfExpr;
 }
 
@@ -207,12 +225,16 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
             cylSurface->accessSImpl()->surfSymb = "CX";
             surfExpr += boost::str(boost::format("CX %13.7f")
                                    % cylSurface->accessSImpl()->radius);
+            std::string coeffs = "0.0 0.0 "  + std::to_string(cylSurface->accessSImpl()->radius);
+            cylSurface->accessSImpl()->surfMcxPar = std::make_tuple("cylinder-x", coeffs.c_str(), "transmission");
         } else {
             // Cylinder parallel to X-axis.
             cylSurface->accessSImpl()->surfSymb = "C/X";
             surfExpr += boost::str(boost::format("C/X %13.7f  %13.7f  %13.7f")
                                    % cylLocation.Y() % cylLocation.Z()
                                    % cylSurface->accessSImpl()->radius);
+            std::string coeffs = std::to_string(cylLocation.Y())+" " + std::to_string(cylLocation.Z()) + " " + std::to_string(cylSurface->accessSImpl()->radius);
+            cylSurface->accessSImpl()->surfMcxPar = std::make_tuple("cylinder-x", coeffs.c_str(), "transmission");
         }
     } else if (std::abs(cylAxisDir.X()) < precision && std::abs(cylAxisDir.Z()) < precision) {
         // Cylinder parallel to Y-axis.
@@ -222,12 +244,16 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
             cylSurface->accessSImpl()->surfSymb = "CY";
             surfExpr += boost::str(boost::format("CY %13.7f")
                                    % cylSurface->accessSImpl()->radius);
+            std::string coeffs = "0.0 0.0 " + std::to_string(cylSurface->accessSImpl()->radius);
+            cylSurface->accessSImpl()->surfMcxPar = std::make_tuple("cylinder-y", coeffs.c_str(), "transmission");
         } else {
             // Cylinder parallel to Y-axis.
             cylSurface->accessSImpl()->surfSymb = "C/Y";
             surfExpr += boost::str(boost::format("C/Y %13.7f  %13.7f  %13.7f")
                                    % cylLocation.X() % cylLocation.Z()
                                    % cylSurface->accessSImpl()->radius);
+            std::string coeffs = std::to_string(cylLocation.X()) + " " + std::to_string(cylLocation.Z()) + " " + std::to_string(cylSurface->accessSImpl()->radius);
+            cylSurface->accessSImpl()->surfMcxPar = std::make_tuple("cylinder-y", coeffs.c_str(), "transmission");
         }
     } else if (std::abs(cylAxisDir.X()) < precision && std::abs(cylAxisDir.Y()) < precision) {
         // Cylinder parallel to Z-axis.
@@ -237,12 +263,16 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
             cylSurface->accessSImpl()->surfSymb = "CZ";
             surfExpr += boost::str(boost::format("CZ %13.7f")
                                    % cylSurface->accessSImpl()->radius);
+            std::string coeffs = "0.0 0.0 " + std::to_string(cylSurface->accessSImpl()->radius);
+            cylSurface->accessSImpl()->surfMcxPar = std::make_tuple("cylinder-z", coeffs.c_str(), "transmission");
         } else {
             // Cylinder parallel to Z-axis.
             cylSurface->accessSImpl()->surfSymb = "C/Z";
             surfExpr += boost::str(boost::format("C/Z %13.7f  %13.7f  %13.7f")
                                    % cylLocation.X() % cylLocation.Y()
                                    % cylSurface->accessSImpl()->radius);
+            std::string coeffs = std::to_string(cylLocation.X()) + " " + std::to_string(cylLocation.Y()) + " " + std::to_string(cylSurface->accessSImpl()->radius);
+            cylSurface->accessSImpl()->surfMcxPar = std::make_tuple("cylinder-z", coeffs.c_str(), "transmission");
         }
     } else {
         // General cylinder.
@@ -261,6 +291,17 @@ McCAD::Conversion::MCNPExprGenerator::genCylSurfExpr(
                                              "%13.7f %13.7f  %13.7f  %13.7f  %13.7f")
                                % parmtA % parmtB % parmtC % parmtD % parmtE
                                % parmtF % parmtG % parmtH % parmtJ % parmtK);
+        std::string coeffs = std::to_string(parmtA) + " " + 
+                             std::to_string(parmtB) + " " + 
+                             std::to_string(parmtC) + " " + 
+                             std::to_string(parmtD) + " " + 
+                             std::to_string(parmtE) + " " +
+                             std::to_string(parmtF) + " " + 
+                             std::to_string(parmtG) + " " + 
+                             std::to_string(parmtH) + " " + 
+                             std::to_string(parmtJ) + " " + 
+                             std::to_string(parmtK);
+        cylSurface->accessSImpl()->surfMcxPar = std::make_tuple("gq", coeffs.c_str(), "transmission");
     }
     cylSurface->accessSImpl()->surfExpr = surfExpr;
 }
@@ -291,6 +332,14 @@ McCAD::Conversion::MCNPExprGenerator::genTorSurfExpr(
                                % torSurface->accessSImpl()->majorRadius
                                % torSurface->accessSImpl()->minorRadius
                                % torSurface->accessSImpl()->minorRadius);
+        std::string coeffs =
+            std::to_string(torLocation.X()) + " " +
+            std::to_string(torLocation.Y()) + " " +
+            std::to_string(torLocation.Z()) + " " +
+            std::to_string(torSurface->accessSImpl()->majorRadius) + " " +
+            std::to_string(torSurface->accessSImpl()->minorRadius) + " " +
+            std::to_string(torSurface->accessSImpl()->minorRadius)  ;
+        torSurface->accessSImpl()->surfMcxPar = std::make_tuple("torus-x", coeffs.c_str(), "transmission");
     } else if (std::abs(torAxisDir.X()) < precision && std::abs(torAxisDir.Z()) < precision) {
         // Torus is parallel to Y-axis.
         torSurface->accessSImpl()->surfSymb = "TY";
@@ -300,6 +349,15 @@ McCAD::Conversion::MCNPExprGenerator::genTorSurfExpr(
                                % torSurface->accessSImpl()->majorRadius
                                % torSurface->accessSImpl()->minorRadius
                                % torSurface->accessSImpl()->minorRadius);
+        std::string coeffs =
+            std::to_string(torLocation.X()) + " " +
+            std::to_string(torLocation.Y()) + " " +
+            std::to_string(torLocation.Z()) + " " +
+            std::to_string(torSurface->accessSImpl()->majorRadius) + " " +
+            std::to_string(torSurface->accessSImpl()->minorRadius) + " " +
+            std::to_string(torSurface->accessSImpl()->minorRadius);
+        torSurface->accessSImpl()->surfMcxPar = std::make_tuple("torus-y", coeffs.c_str(), "transmission");
+
     } else if (std::abs(torAxisDir.X()) < precision && std::abs(torAxisDir.Y()) < precision) {
         // Torus is parallel to Z-axis.
         torSurface->accessSImpl()->surfSymb = "TZ";
@@ -309,11 +367,205 @@ McCAD::Conversion::MCNPExprGenerator::genTorSurfExpr(
                                % torSurface->accessSImpl()->majorRadius
                                % torSurface->accessSImpl()->minorRadius
                                % torSurface->accessSImpl()->minorRadius);
+        std::string coeffs =
+            std::to_string(torLocation.X()) + " " +
+            std::to_string(torLocation.Y()) + " " +
+            std::to_string(torLocation.Z()) + " " +
+            std::to_string(torSurface->accessSImpl()->majorRadius) + " " +
+            std::to_string(torSurface->accessSImpl()->minorRadius) + " " +
+            std::to_string(torSurface->accessSImpl()->minorRadius);
+        torSurface->accessSImpl()->surfMcxPar = std::make_tuple("torus-z", coeffs.c_str(), "transmission");
     } else throw std::runtime_error("Tori with a symmetry axis not parallel to X/Y/Z "
                                     "is not supported in MCNP. Please turn on simplifyTori"
                                     "option on the input config and rerun decomposition."
                                     "Conversion terminated!");
     torSurface->accessSImpl()->surfExpr = surfExpr;
+}
+
+/** ********************************************************************
+* @brief   The function generates the MCNP surface expression of a conical surface.
+* @param   coneSurface is a conical surface.
+* @param   precision is the precision specified on the config file.
+* @date    9/12/2022
+* @author  Jiandi Guo
+* **********************************************************************/
+void
+McCAD::Conversion::MCNPExprGenerator::genConeSurfExpr(
+    const std::shared_ptr<Geometry::BoundSurface>& coneSurface,
+    const double& precision, const double& angularTolerance) {
+    std::string surfExpr;
+    // Generate toroidal surface expression and store in surface object.
+    // Get the diretion of the symmetry axis of the torus.
+    gp_Dir coneAxisDir = coneSurface->accessSImpl()->symmetryAxis;
+    Standard_Real SemiAngle = coneSurface->accessSImpl()->SemiAngle;
+    gp_Pnt coneLocation = coneSurface->accessSImpl()->location;
+    gp_Dir cone_Dir = coneSurface->accessSImpl()->cone_Dir;
+    double X, Y, Z;
+    X = coneLocation.X() / 10;
+    Y = coneLocation.Y() / 10;
+    Z = coneLocation.Z() / 10;
+
+
+    // Check if parallet to X-axis
+    if (std::abs(coneAxisDir.Y()) < precision && std::abs(coneAxisDir.Z()) < precision) {
+        //for necp-mcx surface expression
+        std::string coeffs;
+        //cone parallel to X-axis.
+        if (abs(coneLocation.X()) >= precision && abs(coneLocation.Y()) <= precision && abs(coneLocation.Z()) <= precision) {
+            coneSurface->accessSImpl()->surfSymb = "KX";
+            surfExpr += boost::str(boost::format("KX %13.7f  %13.7f")
+                % X
+                % pow(tan(SemiAngle),2.0));
+            coeffs = std::to_string(X) + " 0.0 0.0 " + std::to_string(pow(tan(SemiAngle), 2.0)) + " ";
+            if (cone_Dir.IsOpposite(gp::DX(), angularTolerance))
+            {
+                surfExpr += boost::str(boost::format("%13.7f")
+                    %-1);
+                coeffs += "-1";
+            }
+            else {
+                surfExpr += boost::str(boost::format("%13.7f")
+                    %1);
+                coeffs += "1";
+            }
+        }
+        else {
+            coneSurface->accessSImpl()->surfSymb = "K/X";
+            surfExpr += boost::str(boost::format("KX %13.7f  %13.7f  %13.7f  %13.7f")
+                % X % Y % Z
+                % pow(tan(SemiAngle), 2));
+            coeffs = std::to_string(X) + " " + std::to_string(Y) +" "+ std::to_string(Z) + " " + std::to_string(pow(tan(SemiAngle), 2.0)) + " ";
+            if (cone_Dir.IsOpposite(gp::DX(), angularTolerance))
+            {
+                surfExpr += boost::str(boost::format("%13.7f")
+                    %-1);
+                coeffs += "-1";
+            }
+            else {
+                surfExpr += boost::str(boost::format("%13.7f")
+                    %1);
+                coeffs += "1";
+            }
+        }
+        coneSurface->accessSImpl()->surfMcxPar = std::make_tuple("cone-x", coeffs.c_str(), "transmission");
+    }
+    else if(std::abs(coneAxisDir.X()) < precision && std::abs(coneAxisDir.Z()) < precision) {
+        //for necp-mcx surface expression
+        std::string coeffs;
+        //cone parallel to Y-axis.
+        if (abs(coneLocation.Y()) >= precision && abs(coneLocation.X()) <= precision && abs(coneLocation.Z()) <= precision) {
+            coneSurface->accessSImpl()->surfSymb = "KY";
+            surfExpr += boost::str(boost::format("KY %13.7f  %13.7f")
+                % Y
+                % pow(tan(SemiAngle), 2.0));
+            coeffs = "0.0 "+std::to_string(Y) + " 0.0 " + std::to_string(pow(tan(SemiAngle), 2.0)) + " ";
+            if (cone_Dir.IsOpposite(gp::DY(), angularTolerance))
+            {
+                surfExpr += boost::str(boost::format("%13.7f")
+                    %-1);
+                coeffs += "-1";
+            }
+            else {
+                surfExpr += boost::str(boost::format("%13.7f")
+                    %1);
+                coeffs += "1";
+            }
+        }
+        else {
+            coneSurface->accessSImpl()->surfSymb = "K/Y";
+            surfExpr += boost::str(boost::format("KY %13.7f  %13.7f  %13.7f  %13.7f")
+                % X % Y % Z
+                % pow(tan(SemiAngle), 2));
+            coeffs = std::to_string(X) + std::to_string(Y) + std::to_string(Z) + " " + std::to_string(pow(tan(SemiAngle), 2.0)) + " ";
+            if (cone_Dir.IsOpposite(gp::DY(), angularTolerance))
+            {
+                surfExpr += boost::str(boost::format("%13.7f")
+                    %-1);
+                coeffs += "-1";
+            }
+            else {
+                surfExpr += boost::str(boost::format("%13.7f")
+                    %1);
+                coeffs += "1";
+
+            }
+        }
+        coneSurface->accessSImpl()->surfMcxPar = std::make_tuple("cone-y", coeffs.c_str(), "transmission");
+    }
+    else if (std::abs(coneAxisDir.X()) < precision && std::abs(coneAxisDir.Y()) < precision) {
+        //for necp-mcx surface expression
+        std::string coeffs;
+        //cone parallel to  Z-axis.
+        if (abs(coneLocation.Z()) >= precision && abs(coneLocation.X()) <= precision && abs(coneLocation.Y()) <= precision) {
+            coneSurface->accessSImpl()->surfSymb = "KZ";
+                surfExpr += boost::str(boost::format("KZ %13.7f  %13.7f")
+                    % Z
+                    % pow(tan(SemiAngle), 2.0));
+                coeffs = "0.0 0.0 "+ std::to_string(Z) + " " + std::to_string(pow(tan(SemiAngle), 2.0)) + " ";
+                if (cone_Dir.IsOpposite(gp::DZ(), angularTolerance))
+                {
+                    surfExpr += boost::str(boost::format("%13.7f")
+                        %-1);
+                    coeffs += "-1";
+                }
+                else {
+                    surfExpr += boost::str(boost::format("%13.7f")
+                        %1);
+                    coeffs += "1";
+
+                }
+
+        }
+        else {
+            coneSurface->accessSImpl()->surfSymb = "K/Z";
+                surfExpr += boost::str(boost::format("KY %13.7f  %13.7f  %13.7f  %13.7f")
+                    % X % Y % Z
+                    % pow(tan(SemiAngle), 2));
+                coeffs = std::to_string(X) + std::to_string(Y) + std::to_string(Z) + " " + std::to_string(pow(tan(SemiAngle), 2.0)) + " ";
+                if (cone_Dir.IsOpposite(gp::DZ(), angularTolerance))
+                {
+                    surfExpr += boost::str(boost::format("%13.7f")
+                        %-1);
+                    coeffs += "-1";
+                }
+                else {
+                    surfExpr += boost::str(boost::format("%13.7f")
+                        %1);
+                    coeffs += "1";
+                }
+        }
+        coneSurface->accessSImpl()->surfMcxPar = std::make_tuple("cone-z", coeffs.c_str(), "transmission");
+    }
+    else {
+        double parmtA{ coneSurface->accessSImpl()->surfParameters[0] },
+            parmtB{ coneSurface->accessSImpl()->surfParameters[1] },
+            parmtC{ coneSurface->accessSImpl()->surfParameters[2] },
+            parmtD{ 2 * coneSurface->accessSImpl()->surfParameters[3] },
+            parmtE{ 2 * coneSurface->accessSImpl()->surfParameters[5] },
+            parmtF{ 2 * coneSurface->accessSImpl()->surfParameters[4] },
+            parmtG{ 2 * coneSurface->accessSImpl()->surfParameters[6] },
+            parmtH{ 2 * coneSurface->accessSImpl()->surfParameters[7] },
+            parmtJ{ 2 * coneSurface->accessSImpl()->surfParameters[8] },
+            parmtK{ coneSurface->accessSImpl()->surfParameters[9] };
+        coneSurface->accessSImpl()->surfSymb = "GQ";
+        surfExpr += boost::str(boost::format("GQ %13.7f  %13.7f  %13.7f %13.7f  %13.7f  "
+            "%13.7f %13.7f  %13.7f  %13.7f  %13.7f")
+            % parmtA % parmtB % parmtC % parmtD % parmtE
+            % parmtF % parmtG % parmtH % parmtJ % parmtK);
+        //for necp-mcx surface expression
+        std::string coeffs = std::to_string(parmtA) + " " +
+            std::to_string(parmtB) + " " +
+            std::to_string(parmtC) + " " +
+            std::to_string(parmtD) + " " +
+            std::to_string(parmtE) + " " +
+            std::to_string(parmtF) + " " +
+            std::to_string(parmtG) + " " +
+            std::to_string(parmtH) + " " +
+            std::to_string(parmtJ) + " " +
+            std::to_string(parmtK) + " ";
+        coneSurface->accessSImpl()->surfMcxPar = std::make_tuple("gq", coeffs.c_str(), "transmission");
+    }
+    coneSurface->accessSImpl()->surfExpr = surfExpr;
 }
 
 /** ********************************************************************
@@ -347,30 +599,46 @@ void
 McCAD::Conversion::MCNPExprGenerator::genCellExpr(
         const std::shared_ptr<Geometry::Solid>& solidObj){
     std::string cellExpr, complimentExpr;
+    std::string cellMcxExpr, complimentMcxExpr;
     complimentExpr += " (";
+    complimentMcxExpr += " (";
     for(const auto& surface : solidObj->accessSImpl()->intersectionList){
         auto surfaceIDSigned = surface->accessSImpl()->surfSense *
                 surface->accessSImpl()->uniqueID;
         cellExpr += boost::str(boost::format("%d ") % surfaceIDSigned);
+        cellMcxExpr += boost::str(boost::format("%d ") % surfaceIDSigned);
         complimentExpr += boost::str(boost::format("%d : ") % (-1*surfaceIDSigned));
+        complimentMcxExpr += boost::str(boost::format("%d | ") % (-1 * surfaceIDSigned));
     }
     cellExpr.resize(cellExpr.size() - 1);             // Remove the last space.
     complimentExpr.resize(complimentExpr.size() - 3); // Remove the last three spaces.
+    cellMcxExpr.resize(cellMcxExpr.size() - 1);             // Remove the last space.
+    complimentMcxExpr.resize(complimentMcxExpr.size() - 3); // Remove the last three spaces.
     complimentExpr += ")";
+    complimentMcxExpr += ")";
     if(solidObj->accessSImpl()->unionList.size() > 1){
         cellExpr += " (";
+        cellMcxExpr  += " (";
         for(const auto& surface : solidObj->accessSImpl()->unionList){
             auto surfaceIDSigned = surface->accessSImpl()->surfSense *
                     surface->accessSImpl()->uniqueID;
             cellExpr += boost::str(boost::format("%d : ") % surfaceIDSigned);
+            cellMcxExpr += boost::str(boost::format("%d | ") % surfaceIDSigned);
             complimentExpr += boost::str(boost::format("%d ") % (-1*surfaceIDSigned));
+            complimentMcxExpr += boost::str(boost::format("%d ") % (-1 * surfaceIDSigned));
         }
         cellExpr.resize(cellExpr.size() - 3);     // Remove the last three spaces.
         cellExpr += ")";                          // Remove the last space.
         complimentExpr.resize(complimentExpr.size() - 1);
+
+        cellMcxExpr.resize(cellMcxExpr.size() - 3);
+        cellMcxExpr += ")";
+        complimentMcxExpr.resize(complimentMcxExpr.size() - 1);
     }
     solidObj->accessSImpl()->cellExpr = cellExpr;
+    solidObj->accessSImpl()->cellMcxExpr = cellMcxExpr;
     solidObj->accessSImpl()->complimentExpr = complimentExpr;
+    solidObj->accessSImpl()->complimentMcxExpr = complimentMcxExpr;
 }
 
 /** ********************************************************************
@@ -387,4 +655,13 @@ McCAD::Conversion::MCNPExprGenerator::genVoidExpr(const std::shared_ptr<VoidCell
                           % (voidCell->minY * scalingFactor) % (voidCell->maxY * scalingFactor)
                           % (voidCell->minZ * scalingFactor) % (voidCell->maxZ * scalingFactor));
     voidCell->voidSurfExpr = voidSurfExpr;
+    //using for mcx input file
+    std::string coeffs =
+        std::to_string(voidCell->minX * scalingFactor) + " " +
+        std::to_string(voidCell->maxX * scalingFactor) + " " +
+        std::to_string(voidCell->minY * scalingFactor) + " " +
+        std::to_string(voidCell->maxY * scalingFactor) + " " +
+        std::to_string(voidCell->minZ * scalingFactor) + " " +
+        std::to_string(voidCell->maxZ * scalingFactor);
+        voidCell->voidParMap = std::make_tuple("box", coeffs.c_str(), "reflect");
 }

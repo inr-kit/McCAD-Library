@@ -7,6 +7,7 @@
 #include "planarSolid_impl.hpp"
 #include "cylSolid_impl.hpp"
 #include "torSolid_impl.hpp"
+#include "coneSolid_Impl.hpp"
 #include "torusConvertor.hpp"
 
 /** ********************************************************************
@@ -36,7 +37,8 @@ McCAD::Decomposition::Decompose::Impl::~Impl(){
 * @param   inputShape is a tuple containing the input shape and its name. 
 * @param   compoundID is a unique ID, counter, to assing to the compound object to be created.
 * @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @modified7/12/2022 
+* @author  Moataz Harb & Christian Wegmann & Jiandi Guo
 * **********************************************************************/
 void
 McCAD::Decomposition::Decompose::Impl::perform(

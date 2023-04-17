@@ -6,6 +6,14 @@
 #include "SurfaceUtilities.hpp"
 // OCC
 #include <GeomAbs_SurfaceType.hxx>
+#include <TopoDS_Face.hxx>
+#include <TopoDS_Vertex.hxx>
+#include <BRep_Tool.hxx>
+#include <TopExp_Explorer.hxx>
+#include <TopAbs_ShapeEnum.hxx>
+#include <gp_Pnt.hxx>
+#include <TopoDS.hxx>
+#include <BRepAdaptor_Surface.hxx>
 
 void
 McCAD::Geometry::MXDSolid::Impl::judgeDecomposeSurfaces(Solid::Impl* solidImpl,
@@ -58,6 +66,15 @@ McCAD::Geometry::MXDSolid::Impl::judgeAssistDecomposeSurfaces(Solid::Impl* solid
     if (firstfacesList.size() < 1 || secondfacesList.size() < 1) return;
     for (Standard_Integer i = 0; i < firstfacesList.size(); ++i){
         auto iFace = firstfacesList[i]->accessSImpl();
+        /*auto& face = iFace->face;
+        BRepAdaptor_Surface surfaceAdaptor(face);
+        if (surfaceAdaptor.GetType() == GeomAbs_Plane)
+        {
+            std::array<Standard_Real, 4> parameters;
+            gp_Pln plane = surfaceAdaptor.Plane();
+            plane.Coefficients(parameters[0], parameters[1], parameters[2], parameters[3]);
+            std::cout << "A: " << parameters[0] << " B: " << parameters[1] << " C: " << parameters[2] << " D: " << parameters[3] << std::endl;
+        }*/
         Standard_Integer positiveFaces{0}, negativeFaces{0},
                          numberCollidingSurfaces{0},
                          numberCollidingCurvedSurfaces{0};

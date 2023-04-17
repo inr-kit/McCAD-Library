@@ -6,6 +6,7 @@
 //OCC
 #include <Bnd_OBB.hxx>
 #include <BRepBndLib.hxx>
+#include <Bnd_Box.hxx>
 
 McCAD::Decomposition::TriangleCollision::TriangleCollision(){
 }
@@ -39,9 +40,12 @@ McCAD::Decomposition::TriangleCollision::triangleCollisionPlane(
         Standard_Integer& aSide){
     auto& extendedFace = iFace.accessSImpl()->extendedFace;
     // Quick check for collision using OBB
-    Bnd_OBB obbFace;
-    BRepBndLib::AddOBB(extendedFace, obbFace);
-    if (aTriangle.accessMTImpl()->obb.IsOut(obbFace)) return Standard_False;
+    /*Bnd_OBB obbFace;
+    BRepBndLib::AddOBB(extendedFace, obbFace);*/
+    Bnd_Box boxFace;
+    BRepBndLib::Add(extendedFace, boxFace);
+    //boxFace.SetGap(10.0);
+    if (aTriangle.accessMTImpl()->box.IsOut(boxFace)) return Standard_False;
     auto& face = iFace.accessSImpl()->face;
     Standard_Boolean collision = Standard_False;
     Standard_Integer positivePoints{0}, negativePoints{0};

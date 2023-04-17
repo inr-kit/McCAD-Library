@@ -203,11 +203,25 @@ McCAD::Geometry::BoundSurface::Impl::generateParmts(Standard_Real precision,
         boundSurface->accessSImpl()->symmetryAxis = std::get<2>(generatedParmts);
         boundSurface->accessSImpl()->surfParameters.insert(
                     boundSurface->accessSImpl()->surfParameters.end(),
-                    std::get<3>(generatedParmts).begin(),
+                    std::get<3>(generatedParmts).begin(), 
                     std::get<3>(generatedParmts).end());
         boundSurface->accessSImpl()->minorRadius = std::get<4>(generatedParmts);
         boundSurface->accessSImpl()->majorRadius = std::get<5>(generatedParmts);
         boundSurface->accessSImpl()->surfSense = std::get<6>(generatedParmts);
+    } else if (boundSurface->getSurfaceType() == Tools::toTypeName(GeomAbs_Cone)) {
+        auto generatedParmts = Tools::FaceParameters{ precision, scalingFactor }.genConeSurfParmts(
+                    boundSurface->accessSImpl()->face);
+        boundSurface->accessSImpl()->cone = std::get<0>(generatedParmts);
+        boundSurface->accessSImpl()->location = std::get<1>(generatedParmts);
+        boundSurface->accessSImpl()->symmetryAxis = std::get<2>(generatedParmts);
+        boundSurface->accessSImpl()->cone_Dir = std::get<3>(generatedParmts);
+        boundSurface->accessSImpl()->SemiAngle = std::get<4>(generatedParmts);
+        boundSurface->accessSImpl()->surfParameters.insert(
+                    boundSurface->accessSImpl()->surfParameters.end(),
+                    std::get<5>(generatedParmts).begin(),
+                    std::get<5>(generatedParmts).end());
+        boundSurface->accessSImpl()->radius = std::get<6>(generatedParmts);
+        boundSurface->accessSImpl()->surfSense = std::get<7>(generatedParmts);
     }
     else return Standard_False;
     return Standard_True;

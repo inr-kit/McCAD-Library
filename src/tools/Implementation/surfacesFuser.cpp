@@ -16,6 +16,10 @@ McCAD::Tools::SurfacesFuser::operator()(const TopoDS_Face& firstFace,
         return fusePlanes(firstFace, secondFace);
     else if (firstAdaptor.GetType() == GeomAbs_Cylinder)
         return fuseCyls(firstFace, secondFace);
+    else if (firstAdaptor.GetType() == GeomAbs_Torus)
+        return fuseTorus(firstFace, secondFace);
+    else if (firstAdaptor.GetType() == GeomAbs_Cone)
+        return fuseCones(firstFace, secondFace);
     return std::nullopt;
 }
 
@@ -65,6 +69,56 @@ McCAD::Tools::SurfacesFuser::fuseCyls(const TopoDS_Face& first,
     Handle_Geom_Surface newSurface = BRep_Tool::Surface(first);
     TopoDS_Face newFace = BRepBuilderAPI_MakeFace(newSurface, newUV[0], newUV[1],
             newUV[2], newUV[3], tolerance).Face();
+    newFace.Orientation(first.Orientation());
+    return newFace;
+}
+
+TopoDS_Face
+McCAD::Tools::SurfacesFuser::fuseCones(const TopoDS_Face& first,
+    const TopoDS_Face& second) {
+    auto firstUV = uvBounds(first);
+    auto secondUV = uvBounds(second);
+    std::array<Standard_Real, 4> newUV;
+    if (std::abs(firstUV[1] - firstUV[0]) + std::abs(secondUV[1] - secondUV[0]) >=
+        2 * M_PI) {
+        //Two surfaces form a closed cone.
+        newUV[0] = 0.0;
+        newUV[1] = 2 * M_PI;
+    }
+    else {
+        newUV[0] = (firstUV[0] <= secondUV[0]) ? firstUV[0] : secondUV[0];
+        newUV[1] = (firstUV[1] >= secondUV[1]) ? firstUV[1] : secondUV[1];
+    }
+    newUV[2] = (firstUV[2] <= secondUV[2]) ? firstUV[2] : secondUV[2];
+    newUV[3] = (firstUV[3] >= secondUV[3]) ? firstUV[3] : secondUV[3];
+    Handle_Geom_Surface newSurface = BRep_Tool::Surface(first);
+    TopoDS_Face newFace = BRepBuilderAPI_MakeFace(newSurface, newUV[0], newUV[1],
+        newUV[2], newUV[3], tolerance).Face();
+    newFace.Orientation(first.Orientation());
+    return newFace;
+}
+
+TopoDS_Face
+McCAD::Tools::SurfacesFuser::fuseTorus(const TopoDS_Face& first,
+    const TopoDS_Face& second) {
+    auto firstUV = uvBounds(first);
+    auto secondUV = uvBounds(second);
+    std::array<Standard_Real, 4> newUV;
+    if (std::abs(firstUV[1] - firstUV[0]) + std::abs(secondUV[1] - secondUV[0]) >=
+        2 * M_PI) {
+        //Two surfaces form a closed torus.
+        newUV[0] = 0.0;
+        newUV[1] = 2 * M_PI;
+    }
+    else {
+        newUV[0] = (firstUV[0] <= secondUV[0]) ? firstUV[0] : secondUV[0];
+        newUV[1] = (firstUV[1] >= secondUV[1]) ? firstUV[1] : secondUV[1];
+    }
+    newUV[2] = (firstUV[2] <= secondUV[2]) ? firstUV[2] : secondUV[2];
+    newUV[3] = (firstUV[3] >= secondUV[3]) ? firstUV[3] : secondUV[3];
+    Handle_Geom_Surface newSurface = BRep_Tool::Surface(first);
+    TopoDS_Face newFace = BRepBuilderAPI_MakeFace(newSurface, newUV[0], newUV[1],
+        newUV[2], newUV[3], tolerance).Face();
     newFace.Orientation(first.Orientation());
     return newFace;
 }

@@ -118,10 +118,11 @@ McCAD::Decomposition::DecomposeSolid::Impl::operator()(
 }
 
 /** ********************************************************************
-* @brief   Operator that performs decomposition on solids that contain a mix of all the acceptable surface types; planar, cylindrical, and toroidal.
+* @brief   Operator that performs decomposition on solids that contain a mix of all the acceptable surface types; planar, cylindrical, cone and toroidal.
 * @param   solidObj is a mixed solid object.
 * @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @modified 7/12/2022
+* @author  Moataz Harb & Christian Wegmann & Jiandi Guo
 * **********************************************************************/
 bool
 McCAD::Decomposition::DecomposeSolid::Impl::operator()(

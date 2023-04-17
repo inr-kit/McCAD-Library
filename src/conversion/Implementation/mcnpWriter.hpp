@@ -29,7 +29,7 @@ namespace McCAD::Conversion{
         IO::InputConfig inputConfig;
         int continueSpacing{ 6 }, materialSurfacesCount{0};
         double scalingFactor{1.0}, radius;
-        surfacesMap uniquePlanes, uniqueCylinders, uniqueTori;
+        surfacesMap uniquePlanes, uniqueCylinders, uniqueTori, uniqueCones;
         finalMap uniqueSurfaces;
         matMap materialsMap;
         solidsMap solidObjMap;

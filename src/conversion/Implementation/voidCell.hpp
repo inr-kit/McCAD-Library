@@ -31,6 +31,8 @@ namespace McCAD::Conversion{
       bool splitted{Standard_False};
       int depth, width, voidSurfNumber, MCCellID{0};
       std::string key, voidExpr, voidSurfExpr;
+      //using for mcx writing
+      std::tuple<std::string, std::string, std::string> voidParMap;
       std::vector<int> solidIDList;
       std::vector<std::shared_ptr<VoidCell>> daughterVoidCells;
       double minX{0}, minY{0}, minZ{0}, maxX{0}, maxY{0}, maxZ{0};

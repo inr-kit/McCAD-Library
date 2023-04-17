@@ -39,6 +39,8 @@ namespace McCAD::Tools{
                                        Standard_Real, Standard_Integer>;
       using torusPrmts = std::tuple<gp_Torus, gp_Pnt, gp_Dir, std::vector<Standard_Real>,
                                     Standard_Real, Standard_Real, Standard_Integer>;
+      using conePrmts = std::tuple<gp_Cone, gp_Pnt, gp_Dir, gp_Dir, Standard_Real, std::array<Standard_Real, 10>,
+                                    Standard_Real, Standard_Integer>;
   public:
       std::optional<PositionUV> getSurfPositionUV(
               const BRepAdaptor_Surface& surfaceAdaptor, const gp_Pnt& point);
@@ -50,6 +52,7 @@ namespace McCAD::Tools{
       cylinderPrmts genCylSurfParmts(const TopoDS_Face& face);
       Standard_Real getRadian(const TopoDS_Face& cylinder);
       torusPrmts genTorSurfParmts(const TopoDS_Face& face);
+      conePrmts genConeSurfParmts(const TopoDS_Face& face);
   };
 }
 

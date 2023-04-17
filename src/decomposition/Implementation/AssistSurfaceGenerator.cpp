@@ -7,6 +7,7 @@
 #include "AssistCylCylSurfaceGenerator.hpp"
 #include "AssistCylTorSurfaceGenerator.hpp"
 #include "AssistPlnCylSurfaceGenerator.hpp"
+#include "AssistConeSurfaceGenerator.hpp"
 #include "edge_impl.hpp"
 #include "CommonEdgeFinder.hpp"
 #include "EdgesCombiner.hpp"

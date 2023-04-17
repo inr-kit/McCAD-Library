@@ -38,6 +38,7 @@ namespace McCAD::Geometry{
       std::vector<std::shared_ptr<BoundSurface>> planesList;
       std::vector<std::shared_ptr<BoundSurface>> cylindersList;
       std::vector<std::shared_ptr<BoundSurface>> toriList;
+      std::vector<std::shared_ptr<BoundSurface>> conesList;
       std::vector<std::shared_ptr<BoundSurface>> assistFacesList;
 
       std::vector<std::shared_ptr<BoundSurface>> splitFacesList;
@@ -54,6 +55,8 @@ namespace McCAD::Geometry{
       std::vector<std::shared_ptr<BoundSurface>> intersectionList;
       std::vector<std::shared_ptr<BoundSurface>> unionList;
       std::string cellExpr, complimentExpr;
+      //using for mcx input file
+      std::string cellMcxExpr, complimentMcxExpr;
 
       void initiate(const TopoDS_Shape& aSolidShape);
       void createBB(double bndBoxGap = 0.0);

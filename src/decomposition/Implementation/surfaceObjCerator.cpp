@@ -3,6 +3,7 @@
 #include "boundSurfacePlane_impl.hpp"
 #include "boundSurfaceCyl_impl.hpp"
 #include "boundSurfaceTor_impl.hpp"
+#include "boundSurfaceCone_impl.hpp"
 #include "SurfaceUtilities.hpp"
 // OCC
 #include <BRepAdaptor_Surface.hxx>
@@ -26,7 +27,7 @@ McCAD::Decomposition::SurfaceObjCreator::operator()(const TopoDS_Face& face,
             return boundSurfacePlane;
         } else if (AdaptorSurface.GetType() == GeomAbs_Cylinder){
             std::shared_ptr<Geometry::BoundSurfaceCyl> boundSurfaceCyl =
-                    std::make_shared<Geometry::BoundSurfaceCyl>();
+                    std::make_shared<Geometry::BoundSurfaceCyl>(); 
             boundSurfaceCyl->setSurfaceType(Tools::toTypeName(GeomAbs_Cylinder));
             boundSurfaceCyl->accessSImpl()->initiate(face);
             boundSurfaceCyl->accessBSCImpl()->generateExtendedCyl(boxDiagonalLength,
@@ -39,6 +40,14 @@ McCAD::Decomposition::SurfaceObjCreator::operator()(const TopoDS_Face& face,
             boundSurfaceTor->accessSImpl()->initiate(face);
             //boundSurfaceTor->accessBSTImpl()->generateExtendedTor(boxDiagonalLength, edgeTolerance);
             return boundSurfaceTor;
+        }
+        else if (AdaptorSurface.GetType() == GeomAbs_Cone) {
+            std::shared_ptr<Geometry::BoundSurfaceCone> boundSurfaceCone =
+                std::make_shared<Geometry::BoundSurfaceCone>();
+            boundSurfaceCone->setSurfaceType(Tools::toTypeName(GeomAbs_Cone));
+            boundSurfaceCone->accessSImpl()->initiate(face);
+            
+            return boundSurfaceCone;
         }
     }
     return nullptr;

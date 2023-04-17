@@ -29,6 +29,10 @@ namespace McCAD::Tools{
                                const TopoDS_Face& second);
         TopoDS_Face fuseCyls(const TopoDS_Face& first,
                              const TopoDS_Face& second);
+        TopoDS_Face fuseTorus(const TopoDS_Face& first,
+                               const TopoDS_Face& second);
+        TopoDS_Face fuseCones(const TopoDS_Face& first,
+                               const TopoDS_Face& second);
     };
 }
 

@@ -84,7 +84,7 @@ McCAD::Conversion::MCNPWriter::processSolids(
             }
             // Generate MCNP expression for the solids in the compound object.
             for(const auto& solidObj : compound->solidsList){
-                MCNPExprGenerator{inputConfig.precision, scalingFactor}(solidObj);
+                MCNPExprGenerator{inputConfig.precision,inputConfig.angularTolerance, scalingFactor}(solidObj);
             }
         });
     }
@@ -142,6 +142,7 @@ McCAD::Conversion::MCNPWriter::findDuplicate(
 * @brief   The function creates a unique ID for all surfaces of all solids in the list of compounds.
 * @param   compoundList is a list of compound objects.
 * @date    31/12/2021
+* @modified12/12/2022
 * @author  Moataz Harb
 * **********************************************************************/
 void
@@ -183,6 +184,17 @@ McCAD::Conversion::MCNPWriter::addUniqueSurfNumbers(
                         uniqueSurfaces[surfNumber] = surface->accessSImpl()->surfExpr;
                         ++surfNumber;
                     }
+                } else if (surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Cone)) {
+                    auto duplicateID = findDuplicate(surface, uniqueCones);
+                    if (duplicateID) {
+                        surface->accessSImpl()->uniqueID = *duplicateID;
+                    }
+                    else {
+                        surface->accessSImpl()->uniqueID = surfNumber;
+                        uniqueCones[surfNumber] = surface;
+                        uniqueSurfaces[surfNumber] = surface->accessSImpl()->surfExpr;
+                        ++surfNumber;
+                    }
                 }
             }
             for(const auto& surface : solidObj->accessSImpl()->unionList){
@@ -215,6 +227,18 @@ McCAD::Conversion::MCNPWriter::addUniqueSurfNumbers(
                     } else{
                         surface->accessSImpl()->uniqueID = surfNumber;
                         uniqueTori[surfNumber] = surface;
+                        uniqueSurfaces[surfNumber] = surface->accessSImpl()->surfExpr;
+                        ++surfNumber;
+                    }
+                }
+                else if (surface->accessSImpl()->surfaceType == Tools::toTypeName(GeomAbs_Cone)) {
+                    auto duplicateID = findDuplicate(surface, uniqueCones);
+                    if (duplicateID) {
+                        surface->accessSImpl()->uniqueID = *duplicateID;
+                    }
+                    else {
+                        surface->accessSImpl()->uniqueID = surfNumber;
+                        uniqueCones[surfNumber] = surface;
                         uniqueSurfaces[surfNumber] = surface->accessSImpl()->surfExpr;
                         ++surfNumber;
                     }
@@ -311,7 +335,7 @@ McCAD::Conversion::MCNPWriter::createVoidMap(
     if(inputConfig.voidGeneration) addDaughterVoids(voidCell);
     int voidSurfNumber = inputConfig.startSurfNum + uniqueSurfaces.size();
     for (const auto& member : voidCellsMap){
-        MCNPExprGenerator{inputConfig.precision, scalingFactor}(member.second);
+        MCNPExprGenerator{inputConfig.precision, inputConfig.angularTolerance,scalingFactor}(member.second);
         member.second->voidSurfNumber = voidSurfNumber;
         uniqueSurfaces[voidSurfNumber] = member.second->voidSurfExpr;
         ++voidSurfNumber;

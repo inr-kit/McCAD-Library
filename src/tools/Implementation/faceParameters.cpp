@@ -179,3 +179,48 @@ McCAD::Tools::FaceParameters::genTorSurfParmts(const TopoDS_Face& face){
                                       torusParameters, minorRadius, majorRadius, sense);
     return generatedParmts;
 }
+
+McCAD::Tools::FaceParameters::conePrmts
+McCAD::Tools::FaceParameters::genConeSurfParmts(const TopoDS_Face& face) {
+    // This function is currently only used for conversion. It implements scaling
+    // of the face per the user desired units as specified in the config file.
+    // std::tuple<gp_Cone, gp_Pnt, gp_Dir, parameters, Radius, sense>
+    BRepAdaptor_Surface surface{ face, Standard_True };
+    GeomAdaptor_Surface AdaSurf = surface.Surface();
+    gp_Cone cone = AdaSurf.Cone();
+    //get the coordinate system Ax3
+    gp_Ax3 m_Axis = cone.Position();
+    gp_Ax1 m_Ax1 = cone.Axis();
+    // Get the semi angle of cone
+    Standard_Real m_SemiAngle = cone.SemiAngle();
+    // Get the peak point of cone
+    gp_Pnt m_Apex = cone.Apex();
+    //get the direction of axis
+    gp_Dir m_Dir = m_Axis.Direction();
+
+
+    if (scalingFactor != 1.0) {
+        // Scale the cylinder before generating parameters.
+        cone.Scale(gp_Pnt{ 0.0, 0.0, 0.0 }, scalingFactor);
+    }
+
+    Standard_Real refradius = cone.RefRadius();
+
+    Standard_Integer sense = face.Orientation() == TopAbs_FORWARD ? -1 : +1;
+
+    std::array<Standard_Real, 10> coneParameters;
+    //! A1.X**2 + A2.Y**2 + A3.Z**2 + 2.(B1.X.Y + B2.X.Z + B3.Y.Z) +2.(C1.X + C2.Y + C3.Z) + D = 0.0
+    cone.Coefficients(coneParameters[0], coneParameters[1],
+                      coneParameters[2], coneParameters[3],
+                      coneParameters[4], coneParameters[5],
+                      coneParameters[6], coneParameters[7],
+                      coneParameters[8], coneParameters[9]);
+    for (auto& parameter : coneParameters) {
+        if (std::abs(parameter) < precision) parameter = 0.0;
+    }
+
+    conePrmts generatedParmts;
+    generatedParmts = std::make_tuple(cone, m_Apex, m_Ax1.Direction(), m_Dir, m_SemiAngle ,
+        coneParameters, refradius, sense);
+    return generatedParmts;
+}

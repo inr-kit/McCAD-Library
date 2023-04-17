@@ -32,7 +32,8 @@ McCAD::Decomposition::AssistPlnCylSurfaceGenerator::operator()(
     edgesMap commonLineEdgesMap, commonCurveEdgesMap;
     for(Standard_Integer i = 0; i < cylindersList.size(); ++i){
         // If cylinder is closed, then ignore the cylindrical surface.
-        if(Tools::FaceParameters{}.getRadian(cylindersList[i]->accessSImpl()->face) >= 2*inputConfig.PI) continue;
+        std::cout << "the radian is " << Tools::FaceParameters{}.getRadian(cylindersList[i]->accessSImpl()->face) << " --guo\n";
+        //if(Tools::FaceParameters{}.getRadian(cylindersList[i]->accessSImpl()->face) >= 2*inputConfig.PI) continue;
         for(Standard_Integer j = 0; j < planesList.size(); ++j){
             commonEdges = CommonEdgeFinder{inputConfig.angularTolerance,
                     inputConfig.distanceTolerance, inputConfig.precision}(

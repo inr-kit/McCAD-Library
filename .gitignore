@@ -6,5 +6,7 @@ CMakeLists.txt.user*
 # exclude develop specific files
 input_file
 /latex/*
-2
+2git 
 runLog.txt
+.vs/*
+/build/

@@ -15,3 +15,10 @@ McCAD::Geometry::MeshTriangle::Impl::createOBB(const TopoDS_Face& aFace,
     BRepBndLib::AddOBB(aFace, obb);
     //obb.Enlarge(bndBoxGap);
 }
+
+void 
+McCAD::Geometry::MeshTriangle::Impl::createBOX(const TopoDS_Face& aFace,
+    Standard_Real bndBoxGap) {
+    BRepBndLib::Add(aFace, box);
+    box.SetGap(bndBoxGap);
+}

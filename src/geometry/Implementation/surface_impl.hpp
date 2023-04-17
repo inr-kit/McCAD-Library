@@ -13,6 +13,7 @@
 #include <gp_Pln.hxx>
 #include <gp_Cylinder.hxx>
 #include <gp_Torus.hxx>
+#include <gp_Cone.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Dir.hxx>
 
@@ -42,10 +43,16 @@ namespace McCAD::Geometry{
     std::string surfSymb;
     Standard_Integer uniqueID;
     std::string surfExpr;
+    //for mcx input file writer
+    std::tuple<std::string, std::string, std::string> surfMcxPar;
     // Shared between surfaces.
     signed int surfSense;
+    //give the X Y Z of surface parallel to axis
     gp_Pnt location;
+    //Check if parallet to axis
     gp_Dir symmetryAxis;
+    //cone direction judgement(+-1)
+    gp_Dir cone_Dir;
     std::vector<Standard_Real> surfParameters;
     // Plane
     gp_Pln plane;
@@ -56,6 +63,9 @@ namespace McCAD::Geometry{
     // Torus
     gp_Torus torus;
     Standard_Real minorRadius, majorRadius;
+    //cone
+    gp_Cone cone;
+    Standard_Real SemiAngle;
   };
 }
 

@@ -101,7 +101,7 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
     case solidType.toroidal:
         solidVariant = SolidObjCreator{inputConfig}.createObj<Geometry::TORSolid>(shape);
         break;
-    case solidType.mixed:
+    case solidType.mixed:   
         solidVariant = SolidObjCreator{inputConfig}.createObj<Geometry::MXDSolid>(shape);
         break;
     default:;
@@ -111,11 +111,12 @@ McCAD::Decomposition::Preprocessor::perform(const TopoDS_Shape& shape){
 }
 
 /** ********************************************************************
-* @brief   A function that checks if the volume of a solid contains unsupported surfaces.
-* @param   shape is a OCCT shape.
-* @return  bool. True if the surface is not supported.
-* @date    31/12/2020
-* @author  Moataz Harb & Christian Wegmann
+* @brief    A function that checks if the volume of a solid contains unsupported surfaces.
+* @param    shape is a OCCT shape.
+* @return   bool. True if the surface is not supported.
+* @date     31/12/2020
+* @modified 7/12/2022
+* @author   Moataz Harb, Christian Wegmann & Jiandi Guo
 * **********************************************************************/
 bool
 McCAD::Decomposition::Preprocessor::checkBndSurfaces(const TopoDS_Shape& shape){
@@ -154,7 +155,7 @@ McCAD::Decomposition::Preprocessor::checkVolume(const TopoDS_Shape& shape){
 * **********************************************************************/
 int
 McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid){
-    bool planar{false}, cylindrical{false}, toroidal{false}, spherical{false}, mixed{false};
+    bool planar{ false }, cylindrical{ false }, toroidal{ false }, spherical{ false }, conial{false}, mixed{ false };
     for(const auto& face : detail::ShapeView<TopAbs_FACE>{solid}){
         GeomAdaptor_Surface surfAdaptor(BRep_Tool::Surface(face));
         switch (surfAdaptor.GetType()){
@@ -170,13 +171,16 @@ McCAD::Decomposition::Preprocessor::determineSolidType(const TopoDS_Solid& solid
         case GeomAbs_Sphere:
             spherical = true;
             break;
+        case GeomAbs_Cone:
+            conial = true;
+            break;
         default:
             mixed = true;
         }
     }
     // Determine custom solid type based on surfaces types.
     if (mixed || (cylindrical && spherical) || (cylindrical && toroidal) ||
-            (toroidal && spherical) || (cylindrical && spherical && toroidal))
+            (toroidal && spherical) || (cylindrical && spherical && toroidal) || (planar && conial))
         return solidType.mixed;
     else if (cylindrical) return solidType.cylindrical;
     else if (toroidal) return solidType.toroidal;

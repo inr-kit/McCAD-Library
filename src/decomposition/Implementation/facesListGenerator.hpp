@@ -19,6 +19,7 @@ namespace McCAD::Decomposition{
       std::vector<BS> planesList;
       std::vector<BS> cylindersList;
       std::vector<BS> toriList;
+      std::vector<BS> conesList;
     public:
       template <typename solidObjType>
       std::vector<BS> operator()(solidObjType& solidObj,
@@ -45,6 +46,11 @@ namespace McCAD::Decomposition{
                               const Standard_Real& angularTolerance,
                               const Standard_Real& distanceTolerance);
       void mergeToriList(const Standard_Real& boxDiagonalLength,
+                         const Standard_Real& precision,
+                         const Standard_Real& edgeTolerance,
+                         const Standard_Real& angularTolerance,
+                         const Standard_Real& distanceTolerance);
+      void mergeConeList(const Standard_Real& boxDiagonalLength,
                          const Standard_Real& precision,
                          const Standard_Real& edgeTolerance,
                          const Standard_Real& angularTolerance,
