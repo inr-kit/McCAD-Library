@@ -48,3 +48,8 @@ Reporting issues:
 Please don't hesitate to report any issues with running the code or errors in the manual by:
    * raising issues in the github repo.
    * sending an email to moataz.harb@kit.edu & yuefeng.qiu@kit.edu.
+
+Citation:
+---------
+Please use the citation below to reference the code in published articles:
+Harb, M.; Leichtle, D.; Fischer, U. A Novel Algorithm for CAD to CSG Conversion in McCAD. J. Nucl. Eng. 2023, 4, 436-447. https://doi.org/10.3390/jne4020031
